@@ -27,9 +27,11 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      checkId(context);
-    });
+    /*WidgetsBinding.instance?.addPostFrameCallback((_) {
+      setState(() {
+        checkId(context);
+      });
+    });*/
   }
 
   @override
@@ -38,10 +40,10 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) {
         setState(() {
           checkId(context);
+          timer(context).cancel();
         });
       }
     });
-    timer(context).cancel();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -193,7 +195,7 @@ Widget ProfileBody(BuildContext context) {
                                       } else  {
                                         //회원탈퇴 바텀시트 호출
                                         if (name != "" && email != "") {
-                                          DeleteUserVerify(context);
+                                          DeleteUserVerify(context, name);
                                         } else {
                                           showDialog(
                                             context: context,
@@ -231,7 +233,7 @@ Widget ProfileBody(BuildContext context) {
       });
 }
 
-DeleteUserVerify(BuildContext context) {
+DeleteUserVerify(BuildContext context, String name) {
   showModalBottomSheet(context: context, builder: (BuildContext context) {
     return Container(
       height: 180,
@@ -269,9 +271,9 @@ DeleteUserVerify(BuildContext context) {
                 //탈퇴 로직 구현
                 Navigator.pop(context);
                 Provider.of<GoogleSignInController>
-                  (context, listen: false).logout(context);
+                  (context, listen: false).logout(context, name);
                 Provider.of<KakaoSignInController>
-                  (context, listen: false).logout(context);
+                  (context, listen: false).logout(context, name);
               },
               style: ElevatedButton.styleFrom(
                   primary: Colors.amberAccent,

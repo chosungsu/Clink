@@ -4,6 +4,7 @@ import '../DB/Subscription_db.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
-        title: const Text('Aindrop', style: TextStyle(color: Colors.blueGrey)),
+        title: const Text('Clink', style: TextStyle(color: Colors.blueGrey)),
         elevation: 0,
         actions: <Widget>[
           IconButton(

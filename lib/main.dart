@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/route.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:page_transition/page_transition.dart';
@@ -14,8 +15,9 @@ import 'Sub/LoginPage.dart';
 
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   KakaoContext.clientId = 'b5e60a90f0204c0bb09625df79a11772';
-  //await Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

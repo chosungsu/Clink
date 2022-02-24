@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,7 +8,7 @@ class KakaoSignInController with ChangeNotifier {
 
   final storage = const FlutterSecureStorage();
   late int count;
-  //FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   login(BuildContext context) async {
     count = 2;
@@ -15,8 +16,6 @@ class KakaoSignInController with ChangeNotifier {
     final installed = await isKakaoTalkInstalled();
     installed ? await UserApi.instance.loginWithKakaoTalk() :
     await UserApi.instance.loginWithKakaoAccount();
-    //String authcode = await AuthCodeClient.instance.request();
-    //await AuthApi.instance.issueAccessToken(authcode);
     User user = await UserApi.instance.me();
     //내부 저장으로 로그인 정보 저장
     if (user.kakaoAccount != null) {
@@ -35,19 +34,22 @@ class KakaoSignInController with ChangeNotifier {
                 count.toString()
         );
         //firestore 저장
-        /*await firestore.collection('User').doc('유저_login_data')
+        await firestore.collection('User').doc(nick)
             .set({
-          'name' : nick, 'email' : email, 'time' : DateTime.now(),
-        });*/
+          'name' : nick, 'email' : email, 'login_where' : 'kakao_user', 'time' : DateTime.now(),
+        });
       }
     }
 
     notifyListeners();
   }
-  logout(BuildContext context) async {
+  logout(BuildContext context, String name) async {
     count = -2;
     await storage.deleteAll();
     await UserApi.instance.logout();
+    //firestore 삭제
+    await firestore.collection('User').doc(name)
+        .delete();
     notifyListeners();
   }
 }
