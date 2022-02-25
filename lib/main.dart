@@ -79,17 +79,17 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
     scaleController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),)..addStatusListener(
+      duration: const Duration(milliseconds: 1000),)..addStatusListener(
           (status) {
         if (status == AnimationStatus.completed) {
           Navigator.of(context).pushReplacement(
             PageTransition(
               type: PageTransitionType.bottomToTop,
-              child: const MyHomePage(title: 'Clink'),
+              child: const MyHomePage(title: 'SuChip'),
             ),
           );
           Timer(
-            const Duration(milliseconds: 300),
+            const Duration(milliseconds: 1000),
                 () {
               scaleController.reset();
             },
@@ -118,22 +118,35 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffcbf6f8),
+      backgroundColor: const Color(0xff2efcff),
       body: Center(
-        child: DefaultTextStyle(
-          style: const TextStyle(fontSize: 30.0),
-          child: AnimatedTextKit(
-            animatedTexts: [
-              TyperAnimatedText(
-                'Clink',
-                speed: const Duration(milliseconds: 150),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'SuChip',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.white,
               ),
-            ],
-            isRepeatingAnimation: false,
-            repeatForever: false,
-            displayFullTextOnTap: false,
-          ),
-        ),
+            ),
+            DefaultTextStyle(
+                style: const TextStyle(fontSize: 20.0),
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    TyperAnimatedText(
+                        '내가 수집하는 취향트랙',
+                        speed: Duration(milliseconds: 200)),
+                  ],
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                  //displayFullTextOnTap: false,
+                ),
+            ),
+          ],
+        )
       ),
     );
   }

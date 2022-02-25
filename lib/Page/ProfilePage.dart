@@ -47,12 +47,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
-            '마이 데이터',
-            style: TextStyle(
-                color: Colors.blueGrey
-            )
-        ),
         elevation: 0,
       ),
       body: WillPopScope(
@@ -103,7 +97,7 @@ checkId(BuildContext context) async {
 }
 Widget ProfileBody(BuildContext context) {
   final List<String> list_title = <String>[
-    '이용안내', 'Pro 버전 구매', '회원탈퇴'
+    '이용안내', '문의하기', 'Pro 버전 구매', '회원탈퇴'
   ];
   String name = "", email = "", cnt = "";
   return StatefulBuilder(
@@ -191,6 +185,8 @@ Widget ProfileBody(BuildContext context) {
                                             )
                                         );
                                       } else if (index == 1) {
+
+                                      } else if (index == 2) {
 
                                       } else  {
                                         //회원탈퇴 바텀시트 호출
