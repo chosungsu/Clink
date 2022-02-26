@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:clickbyme/route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/all.dart';
@@ -10,8 +9,8 @@ import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
 import 'Page/FeedPage.dart';
 import 'Page/HomePage.dart';
+import 'Page/LoginSignPage.dart';
 import 'Page/ProfilePage.dart';
-import 'Sub/LoginPage.dart';
 
 
 void main() async{
@@ -30,11 +29,11 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => GoogleSignInController(),
-          child: LoginPage(),
+          child: LoginSignPage(),
         ),
         ChangeNotifierProvider(
           create: (context) => KakaoSignInController(),
-          child: LoginPage(),
+          child: LoginSignPage(),
         ),
         ChangeNotifierProvider(
           create: (context) => GoogleSignInController(),
@@ -85,7 +84,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           Navigator.of(context).pushReplacement(
             PageTransition(
               type: PageTransitionType.bottomToTop,
-              child: const MyHomePage(title: 'SuChip'),
+              child: LoginSignPage(),
             ),
           );
           Timer(

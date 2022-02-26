@@ -1,12 +1,12 @@
 import 'dart:ui';
+import 'package:clickbyme/Page/LoginSignPage.dart';
 import 'package:flutter/material.dart';
 
-import '../Sub/LoginPage.dart';
 
 showBeforeSignUp(BuildContext context) {
   //아래 변수들은 회원가입 완료한 유저분들에게 선보이는 Aindrop의 서비스목록이다.
   final List<String> itemPro = ['캠페인 참여', '구독 정보', '마이룸'];
-  final List<String> itemImg = ['assets/images/google.png', 'assets/images/kakao.png', 'assets/images/eye-scanner.png'];
+  final List<String> itemImg = ['assets/images/eye-scanner.png', 'assets/images/eye-scanner.png', 'assets/images/eye-scanner.png'];
 
   return Card(
     color: const Color(0xffd3f1ff),
@@ -42,7 +42,7 @@ showBeforeSignUp(BuildContext context) {
                         context,
                         MaterialPageRoute(
                             builder: (context)
-                            => LoginPage()
+                            => LoginSignPage()
                         ),
                       );},
                     child: Row(

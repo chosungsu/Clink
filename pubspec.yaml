@@ -77,8 +77,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/google.png
-    - assets/images/kakao.png
+    - assets/images/google_signin.png
+    - assets/images/kakao_login_medium_wide.png
     - assets/images/eye-scanner.png
     - assets/images/fingerprint.png
 
