@@ -7,9 +7,9 @@ import 'package:transition/transition.dart';
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
 import '../Sub/HowToUsePage.dart';
-import '../Sub/LoginPage.dart';
 import '../UI/AfterSignUp.dart';
 import '../UI/BeforeSignUp.dart';
+import 'LoginSignPage.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -40,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) {
         setState(() {
           checkId(context);
-          timer(context).cancel();
+          //timer(context).cancel();
         });
       }
     });
