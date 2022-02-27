@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:clickbyme/UI/UserCheck.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -71,6 +73,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
+  bool islogined = false;
 
   @override
   void initState() {
@@ -81,12 +84,12 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1000),)..addStatusListener(
           (status) {
         if (status == AnimationStatus.completed) {
-          Navigator.of(context).pushReplacement(
-            PageTransition(
-              type: PageTransitionType.bottomToTop,
-              child: LoginSignPage(),
-            ),
-          );
+          if (islogined) {
+            GoToMain(context);
+          } else {
+            GoToLogin(context);
+          }
+
           Timer(
             const Duration(milliseconds: 1000),
                 () {
@@ -131,19 +134,65 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 color: Colors.white,
               ),
             ),
+            SizedBox(height: 30,),
             DefaultTextStyle(
                 style: const TextStyle(fontSize: 20.0),
                 child: AnimatedTextKit(
                   animatedTexts: [
                     TyperAnimatedText(
                         '내가 수집하는 취향트랙',
-                        speed: Duration(milliseconds: 200)),
+                        speed: Duration(milliseconds: 150)),
                   ],
                   isRepeatingAnimation: true,
                   repeatForever: true,
                   //displayFullTextOnTap: false,
                 ),
             ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                children: [
+                  const SpinKitFadingCircle(
+                    color: Colors.greenAccent,
+                  ),
+                  FutureBuilder(
+                    builder: (context, snapshot) {
+                      islogined = snapshot.hasData;
+                      if (snapshot.hasData == false) {
+                        //GoToLogin(context);
+
+                        return const Text(
+                          '로그인 페이지 이동 중...',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 2// bold
+                          ),
+                        );
+                      }
+                      else {
+                        //String name = snapshot.data.toString().split("/")[1];
+                        //String email = snapshot.data.toString().split("/")[3];
+                        //return success(name, email, context);
+                        //GoToMain(context);
+
+                        return const Text(
+                          '어서오세요',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 2// bold
+                          ),
+                        );
+                      }
+                    },
+                    future: issuccess(context),
+                  ),
+                ],
+              ),
+            )
           ],
         )
       ),

@@ -4,6 +4,7 @@ import '../DB/AD_Home.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _HomePageState();

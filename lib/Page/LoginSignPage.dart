@@ -1,14 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
-import '../Sub/LoginPage.dart';
 import '../route.dart';
 
 
 class LoginSignPage extends StatefulWidget {
+  const LoginSignPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _LoginSignPageState();
 }
@@ -17,6 +22,7 @@ class _LoginSignPageState extends State<LoginSignPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -25,7 +31,6 @@ class _LoginSignPageState extends State<LoginSignPage> {
       body: WillPopScope(
         onWillPop: _onWillPop,
         child: Container(
-          color: Colors.white,
           child: Center(
             child: makeBody(context),
           ),
@@ -61,105 +66,170 @@ Widget makeBody(BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Container(
-            child : Center(
-                child : Column(
-                    children : <Widget>[
-                      LoginIsSuccessed(context)
-                    ]
-                )
-            )
+        Center(
+            child : LoginPlus(context)
         ),
       ],
     ),
 
   );
 }
-LoginIsSuccessed(BuildContext context) {
-  FutureBuilder(
-    builder: (context, snapshot) {
-      if (snapshot.hasData == false) {
-        return const LoginPlus();
-      }
-      else {
-        String name = snapshot.data.toString().split("/")[1];
-        String email = snapshot.data.toString().split("/")[3];
-
-        return success(name, email, context);
-      }
-    },
-    future: issuccess(context),
+LoginPlus(BuildContext context) {
+  return Column(
+    children: [
+      const Text(
+        '자신의 관심사에 맞게 고르고\n'
+            '다른 이에게 역추천의 재미까지\n'
+            'AI로 당신의 관심사를 채워드리겠습니다.',
+        style: TextStyle(
+          color: Colors.lightGreenAccent,
+          fontSize: 20,
+          fontWeight: FontWeight.w600, // bold
+        ),
+      ),
+      SizedBox(height: 100,),
+      InkWell(
+          onTap: () async {
+            await Provider.of<GoogleSignInController>
+              (context, listen: false).login(context);
+            await Navigator.of(context).pushReplacement(
+              PageTransition(
+                type: PageTransitionType.topToBottom,
+                child: const MyHomePage(title: 'SuChip'),
+              ),
+            );
+          },
+          child: SizedBox(
+            width: 250 * (MediaQuery.of(context).size.width/392),
+            child: Image.asset('assets/images/google_signin.png'),
+          )
+      ),
+      SizedBox(height: 5,),
+      InkWell(
+          onTap: () async {
+            await Provider.of<KakaoSignInController>
+              (context, listen: false).login(context);
+            await Navigator.of(context).pushReplacement(
+              PageTransition(
+                type: PageTransitionType.topToBottom,
+                child: const MyHomePage(title: 'SuChip'),
+              ),
+            );
+          },
+          child: SizedBox(
+            width: 250 * (MediaQuery.of(context).size.width/392),
+            child: Image.asset('assets/images/kakao_login_medium_wide.png'),
+          )
+      ),
+      const Divider(
+        height: 30,
+        color: Colors.grey,
+        thickness: 0.5,
+        indent: 30.0,
+        endIndent: 30.0,
+      ),
+      TextButton(
+        onPressed: () async {
+          Navigator.of(context).pushReplacement(
+            PageTransition(
+              type: PageTransitionType.bottomToTop,
+              child: const MyHomePage(title: 'SuChip'),
+            ),
+          );
+        },
+        child: const Text(
+          '익명으로 먼저 즐기기',
+          style: TextStyle(
+            color: Colors.black54,
+            fontSize: 16,
+            fontWeight: FontWeight.w600, // bold
+          ),
+        ),
+      ),
+    ],
   );
 }
-// 사용자 선택 부분(소셜 로그인)
-class LoginPlus extends StatelessWidget {
-  const LoginPlus({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-      child: Column(
-        children: [
-          const Text(
-            'SuChip Login',
-            style: TextStyle(
-              color: Colors.indigoAccent,
-              fontSize: 30,
-              fontWeight: FontWeight.w600, // bold
-            ),
-          ),
-          SizedBox(height: 100,),
-          InkWell(
-            onTap: () async {
-              await Provider.of<GoogleSignInController>
-                (context, listen: false).login(context);
-              await LoginIsSuccessed(context);
-            },
-            child: SizedBox(
-              width: 250 * (MediaQuery.of(context).size.width/392),
-              child: Image.asset('assets/images/google_signin.png'),
-            )
-          ),
-          SizedBox(height: 5,),
-          InkWell(
-            onTap: () async {
-              await Provider.of<KakaoSignInController>
-                (context, listen: false).login(context);
-              await LoginIsSuccessed(context);
-            },
-              child: SizedBox(
-                width: 250 * (MediaQuery.of(context).size.width/392),
-                child: Image.asset('assets/images/kakao_login_medium_wide.png'),
-              )
-          ),
-          const Divider(
-            height: 30,
-            color: Colors.grey,
-            thickness: 0.5,
-            indent: 30.0,
-            endIndent: 30.0,
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pushReplacement(
-                PageTransition(
-                  type: PageTransitionType.bottomToTop,
-                  child: const MyHomePage(title: 'SuChip'),
-                ),
-              );
-            },
-            child: const Text(
-              '익명으로 먼저 즐기기',
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-                fontWeight: FontWeight.w600, // bold
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+issuccess(BuildContext context) async {
+  String? userInfo = "", userInfo2 = "";
+  final storage = FlutterSecureStorage();
+  userInfo = await storage.read(
+      key: "google_login"
+  );
+  userInfo2 = await storage.read(
+      key: "kakao_login"
+  );
+  if (userInfo != null && userInfo2 == null) {
+    return userInfo;
+  } else if (userInfo2 != null && userInfo == null) {
+    return userInfo2;
+  } else {
+    return userInfo;
   }
 }
+
+/*Timer timer(BuildContext context) {
+  Timer? _time = Timer(const Duration(seconds: 3), (){
+    Navigator.of(context).pushReplacement(
+      PageTransition(
+        type: PageTransitionType.topToBottom,
+        child: const MyHomePage(title: 'SuChip'),
+      ),
+    );
+  });
+  return _time;
+}
+success(String name, String email, BuildContext context){
+  timer(context);
+  return Center(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            Text(
+              name,
+              style: const TextStyle(
+                  color: Colors.indigoAccent,
+                  fontSize: 23,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 2// bold
+              ),
+            ),
+            const Text(
+              '님',
+              style: TextStyle(
+                  color: Colors.indigoAccent,
+                  fontSize: 23,
+                  fontWeight: FontWeight.w600,
+                  wordSpacing: 3// bold
+              ),
+            ),
+          ],
+        ),
+        const Text(
+          '로그인이 정상적으로 완료되었습니다 :)',
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 2// bold
+          ),
+        ),
+        const SpinKitFadingCircle(
+          color: Colors.greenAccent,
+        ),
+        const Text(
+          '약 3초 후 메인화면으로 이동합니다.\n잠시만 기다려주세요~',
+          style: TextStyle(
+              color: Colors.red,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 2// bold
+          ),
+        ),
+
+      ],
+    ),
+  );
+}*/
