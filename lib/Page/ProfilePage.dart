@@ -9,6 +9,7 @@ import '../Auth/KakaoSignInController.dart';
 import '../Sub/HowToUsePage.dart';
 import '../UI/AfterSignUp.dart';
 import '../UI/BeforeSignUp.dart';
+import '../UI/NoBehavior.dart';
 import 'LoginSignPage.dart';
 
 
@@ -51,9 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: Center(
-          child: ProfileBody(context),
-        ),
+        child: ProfileBody(context),
       ),
     );
   }
@@ -97,134 +96,141 @@ checkId(BuildContext context) async {
 }
 Widget ProfileBody(BuildContext context) {
   final List<String> list_title = <String>[
-    '이용안내', '문의하기', 'Pro 버전 구매', '회원탈퇴'
+    '이용안내', '문의하기', 'Pro 버전 구매', '기본값 설정', '회원탈퇴'
   ];
   String name = "", email = "", cnt = "";
   return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
-        return ListView(
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
-                    child: const Text(
-                      '내 정보',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  FutureBuilder(
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData == false) {
-                          return showBeforeSignUp(context);
-                        }
-                        else {
-                          name = snapshot.data.toString().split("/")[1];
-                          email = snapshot.data.toString().split("/")[3];
-                          cnt = snapshot.data.toString().split("/")[5];
-                          return showAfterSignUp(
-                              name,
-                              email,
-                              cnt,
-                              context
-                          );
-                        }
-                      },
-                    future: checkId(context),
-                  )
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
-                    child: const Text(
-                      '부가기능',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  Card(
-                    color: const Color(0xffd3f1ff),
-                    elevation: 4.0,
-                    child: Column(
+        return ScrollConfiguration(
+          behavior: NoBehavior(),
+          child: SingleChildScrollView(
+              child: Column(
+                  children: <Widget>[
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
-                          child: ListView.separated(
-                            //physics : 스크롤 막기 기능
-                            //shrinkWrap : 리스트뷰 오버플로우 방지
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: list_title.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: InkWell(
-                                    child: Text(
-                                        '${list_title[index]}'
-                                    ),
-                                    onTap: () {
-                                      if (index == 0) {
-                                        //이용안내페이지 호출
-                                        Navigator.push(
-                                            context,
-                                            Transition(
-                                                child: HowToUsePage(),
-                                                transitionEffect: TransitionEffect.RIGHT_TO_LEFT
-                                            )
-                                        );
-                                      } else if (index == 1) {
-
-                                      } else if (index == 2) {
-
-                                      } else  {
-                                        //회원탈퇴 바텀시트 호출
-                                        if (name != "" && email != "") {
-                                          DeleteUserVerify(context, name);
-                                        } else {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              title: const Text('알림'),
-                                              content: const Text('회원님께서는 현재 미로그인 상태로\n'
-                                                  '로그아웃 기능은 사용불가하시며\n'
-                                                  '이 기능은 로그인 후 탈퇴 시 사용가능합니다.'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () => Navigator.pop(context, false),
-                                                  child: const Text('알겠습니다.'),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    },
-                                  )
-                              );
-                            },
-                            separatorBuilder: (
-                                BuildContext context, int index
-                                ) => const Divider(),
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
+                          child: const Text(
+                            '내 정보',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
+                        FutureBuilder(
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData == false) {
+                              return showBeforeSignUp(context);
+                            }
+                            else {
+                              name = snapshot.data.toString().split("/")[1];
+                              email = snapshot.data.toString().split("/")[3];
+                              cnt = snapshot.data.toString().split("/")[5];
+                              return showAfterSignUp(
+                                  name,
+                                  email,
+                                  cnt,
+                                  context
+                              );
+                            }
+                          },
+                          future: checkId(context),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            ]
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
+                          child: const Text(
+                            '부가기능',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        Card(
+                          color: const Color(0xffd3f1ff),
+                          elevation: 4.0,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+                                child: ListView.separated(
+                                  //physics : 스크롤 막기 기능
+                                  //shrinkWrap : 리스트뷰 오버플로우 방지
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: list_title.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Container(
+                                        padding: const EdgeInsets.all(10),
+                                        child: InkWell(
+                                          child: Text(
+                                              '${list_title[index]}'
+                                          ),
+                                          onTap: () {
+                                            if (index == 0) {
+                                              //이용안내페이지 호출
+                                              Navigator.push(
+                                                  context,
+                                                  Transition(
+                                                      child: HowToUsePage(),
+                                                      transitionEffect: TransitionEffect.RIGHT_TO_LEFT
+                                                  )
+                                              );
+                                            } else if (index == 1) {
+
+                                            } else if (index == 2) {
+
+                                            } else if (index == 3) {
+
+                                            } else  {
+                                              //회원탈퇴 바텀시트 호출
+                                              if (name != "" && email != "") {
+                                                DeleteUserVerify(context, name);
+                                              } else {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    title: const Text('알림'),
+                                                    content: const Text('회원님께서는 현재 미로그인 상태로\n'
+                                                        '로그아웃 기능은 사용불가하시며\n'
+                                                        '이 기능은 로그인 후 탈퇴 시 사용가능합니다.'),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () => Navigator.pop(context, false),
+                                                        child: const Text('알겠습니다.'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          },
+                                        )
+                                    );
+                                  },
+                                  separatorBuilder: (
+                                      BuildContext context, int index
+                                      ) => const Divider(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ]
+              )
+          ),
         );
       });
 }

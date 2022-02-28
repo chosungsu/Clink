@@ -50,28 +50,6 @@ showAfterSignUp(String name, String email, String whatlogin, BuildContext contex
               ),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.all(3.0),
-            decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1.3,
-                  color: Colors.orange,
-                ),
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(4.0)
-                )
-            ),
-            child: Text(
-              logged,
-              style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 18,
-                  color: Colors.yellow,
-                  letterSpacing: 2
-              ),
-            ),
-          ),
           Center(
             child: Column(
               children: const [

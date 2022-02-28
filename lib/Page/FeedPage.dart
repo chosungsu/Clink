@@ -1,3 +1,4 @@
+import 'package:clickbyme/Sub/WritePost.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -88,7 +89,11 @@ _onAddPressed(BuildContext context) {
             onTap: () => {
               //이전 바텀시트 제거 후 스택 새로 쌓기
               Navigator.pop(context),
-              _onUploadPressed(context),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => WritePost()),
+              ),
+              //_onUploadPressed(context),
             },
           ),
         ],
@@ -97,7 +102,7 @@ _onAddPressed(BuildContext context) {
   });
 }
 //바텀시트 클래스(2 : 업로드버튼 클릭시 뜨는 내용)
-_onUploadPressed(context) {
+/*_onUploadPressed(context) {
   showModalBottomSheet(
     //max로 스크롤 가능하게함.
       isScrollControlled : true,
@@ -189,7 +194,7 @@ _onUploadPressed(context) {
           ),
         );
       });
-}
+}*/
 
 // 바디 만들기
 Widget makeBody(BuildContext context) {

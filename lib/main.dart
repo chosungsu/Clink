@@ -3,6 +3,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/UI/UserCheck.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:page_transition/page_transition.dart';
@@ -78,7 +79,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
+    //화면회전 막기
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     scaleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),)..addStatusListener(
@@ -123,79 +126,87 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       backgroundColor: const Color(0xff2efcff),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'SuChip',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-                color: Colors.white,
-              ),
+            SizedBox(
+              height: 100,
             ),
-            SizedBox(height: 30,),
-            DefaultTextStyle(
-                style: const TextStyle(fontSize: 20.0),
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    TyperAnimatedText(
-                        '내가 수집하는 취향트랙',
-                        speed: Duration(milliseconds: 150)),
-                  ],
-                  isRepeatingAnimation: true,
-                  repeatForever: true,
-                  //displayFullTextOnTap: false,
-                ),
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
+            SizedBox(
+              height: 300,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SpinKitFadingCircle(
-                    color: Colors.greenAccent,
+                  const Text(
+                    'SuChip',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
                   ),
-                  FutureBuilder(
-                    builder: (context, snapshot) {
-                      islogined = snapshot.hasData;
-                      if (snapshot.hasData == false) {
-                        //GoToLogin(context);
-
-                        return const Text(
-                          '로그인 페이지 이동 중...',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 2// bold
-                          ),
-                        );
-                      }
-                      else {
-                        //String name = snapshot.data.toString().split("/")[1];
-                        //String email = snapshot.data.toString().split("/")[3];
-                        //return success(name, email, context);
-                        //GoToMain(context);
-
-                        return const Text(
-                          '어서오세요',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 2// bold
-                          ),
-                        );
-                      }
-                    },
-                    future: issuccess(context),
+                  const SizedBox(height: 30,),
+                  DefaultTextStyle(
+                    style: const TextStyle(fontSize: 20.0),
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        TyperAnimatedText(
+                            '내가 수집하는 취향트랙',
+                            speed: Duration(milliseconds: 150)),
+                      ],
+                      isRepeatingAnimation: true,
+                      repeatForever: true,
+                      //displayFullTextOnTap: false,
+                    ),
                   ),
                 ],
-              ),
-            )
+              )
+            ),
+            SizedBox(height: (MediaQuery.of(context).size.height - 600),),
+            SizedBox(
+                height: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SpinKitFadingCircle(
+                      color: Colors.greenAccent,
+                    ),
+                    FutureBuilder(
+                      builder: (context, snapshot) {
+                        islogined = snapshot.hasData;
+                        if (snapshot.hasData == false) {
+                          //GoToLogin(context);
+
+                          return const Text(
+                            '로그인 페이지 이동 중...',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 2// bold
+                            ),
+                          );
+                        }
+                        else {
+                          return const Text(
+                            '어서오세요',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 2// bold
+                            ),
+                          );
+                        }
+                      },
+                      future: issuccess(context),
+                    ),
+                  ],
+                )
+            ),
           ],
         )
-      ),
+      )
     );
   }
 }

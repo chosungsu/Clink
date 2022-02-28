@@ -94,7 +94,7 @@ LoginPlus(BuildContext context) {
               (context, listen: false).login(context);
             await Navigator.of(context).pushReplacement(
               PageTransition(
-                type: PageTransitionType.topToBottom,
+                type: PageTransitionType.bottomToTop,
                 child: const MyHomePage(title: 'SuChip'),
               ),
             );
@@ -111,7 +111,7 @@ LoginPlus(BuildContext context) {
               (context, listen: false).login(context);
             await Navigator.of(context).pushReplacement(
               PageTransition(
-                type: PageTransitionType.topToBottom,
+                type: PageTransitionType.bottomToTop,
                 child: const MyHomePage(title: 'SuChip'),
               ),
             );
@@ -166,70 +166,3 @@ issuccess(BuildContext context) async {
     return userInfo;
   }
 }
-
-/*Timer timer(BuildContext context) {
-  Timer? _time = Timer(const Duration(seconds: 3), (){
-    Navigator.of(context).pushReplacement(
-      PageTransition(
-        type: PageTransitionType.topToBottom,
-        child: const MyHomePage(title: 'SuChip'),
-      ),
-    );
-  });
-  return _time;
-}
-success(String name, String email, BuildContext context){
-  timer(context);
-  return Center(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          children: [
-            Text(
-              name,
-              style: const TextStyle(
-                  color: Colors.indigoAccent,
-                  fontSize: 23,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 2// bold
-              ),
-            ),
-            const Text(
-              '님',
-              style: TextStyle(
-                  color: Colors.indigoAccent,
-                  fontSize: 23,
-                  fontWeight: FontWeight.w600,
-                  wordSpacing: 3// bold
-              ),
-            ),
-          ],
-        ),
-        const Text(
-          '로그인이 정상적으로 완료되었습니다 :)',
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 2// bold
-          ),
-        ),
-        const SpinKitFadingCircle(
-          color: Colors.greenAccent,
-        ),
-        const Text(
-          '약 3초 후 메인화면으로 이동합니다.\n잠시만 기다려주세요~',
-          style: TextStyle(
-              color: Colors.red,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 2// bold
-          ),
-        ),
-
-      ],
-    ),
-  );
-}*/
