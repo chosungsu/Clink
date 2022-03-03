@@ -59,8 +59,6 @@ class _FeedPageState extends State<FeedPage> {
       ),
     )) ?? false;
   }
-
-
 }
 //바텀시트 클래스(1 : 추가버튼 클릭시 뜨는 내용)
 _onAddPressed(BuildContext context) {
@@ -93,7 +91,6 @@ _onAddPressed(BuildContext context) {
                 context,
                 MaterialPageRoute(builder: (context) => WritePost()),
               ),
-              //_onUploadPressed(context),
             },
           ),
         ],
@@ -101,100 +98,6 @@ _onAddPressed(BuildContext context) {
     );
   });
 }
-//바텀시트 클래스(2 : 업로드버튼 클릭시 뜨는 내용)
-/*_onUploadPressed(context) {
-  showModalBottomSheet(
-    //max로 스크롤 가능하게함.
-      isScrollControlled : true,
-      context: context,
-      builder: (BuildContext context) {
-        return GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  )
-              ),
-              child : Container(
-                padding: EdgeInsets.only(bottom: MediaQuery
-                    .of(context).viewInsets.bottom),
-                child: Column(
-                  //내부를 최소만큼 키움.
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          child: const Text(
-                            '공유할 피드 작성',
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Flexible(
-                        child: Container(
-                          margin: const EdgeInsets.all(10),
-                          child: const TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                                labelText: '제목(Title)'
-                            ),
-                          ),
-                        )
-                    ),
-                    Flexible(
-                        child: Container(
-                          height: 400,
-                          margin: const EdgeInsets.all(10),
-                          child: const TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              labelText: '본문(Text)',
-                            ),
-                          ),
-                        )
-                    ),
-                    Flexible(
-                        child: Container(
-                          margin: const EdgeInsets.all(10),
-                          child: const TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                                labelText: '태그(Tags)'
-                            ),
-                          ),
-                        )
-                    ),
-                    OutlinedButton(
-                      child: const Text("작성완료"),
-                      onPressed: () {
-                        //게시글 작성완료 버튼
-                      },
-                    )
-                  ],
-                ),
-              )
-          ),
-        );
-      });
-}*/
 
 // 바디 만들기
 Widget makeBody(BuildContext context) {

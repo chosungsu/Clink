@@ -23,39 +23,12 @@ class _LoginSignPageState extends State<LoginSignPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: Container(
-          child: Center(
-            child: makeBody(context),
-          ),
+      body: Container(
+        child: Center(
+          child: makeBody(context),
         ),
       ),
     );
-  }
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('종료'),
-        content: const Text('앱을 종료하시겠습니까?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: new Text('아니요'),
-          ),
-          TextButton(
-            onPressed: () => SystemNavigator.pop(),
-            child: new Text('네'),
-          ),
-        ],
-      ),
-    )) ?? false;
   }
 }
 // 바디 만들기

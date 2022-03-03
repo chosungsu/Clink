@@ -9,7 +9,7 @@ import '../Auth/KakaoSignInController.dart';
 import '../Sub/HowToUsePage.dart';
 import '../UI/AfterSignUp.dart';
 import '../UI/BeforeSignUp.dart';
-import '../UI/NoBehavior.dart';
+import '../Tool/NoBehavior.dart';
 import 'LoginSignPage.dart';
 
 

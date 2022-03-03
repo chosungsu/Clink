@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import '../UI/NoBehavior.dart';
+import 'package:image_picker/image_picker.dart';
+import '../Tool/NoBehavior.dart';
+import '../UI/checkhowtag.dart';
 
 
 class WritePost extends StatefulWidget {
@@ -9,21 +12,17 @@ class WritePost extends StatefulWidget {
 }
 
 class _WritePostState extends State<WritePost> {
-  //appbar에 변화주기
-  final _scrollController = ScrollController();
-  double scrollOpacity = 0;
-  @override
-  void initState() {
-    // TODO: implement initState
-    _scrollController.addListener(onScroll);
-    super.initState();
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _scrollController.removeListener(onScroll);
-    super.dispose();
-  }
+  final List<String> _list_post_where = [
+    '위치태그설정하기',
+    '영화',
+    '음악',
+    '뉴스',
+    '게임',
+    '자기계발',
+  ];
+  String _selectedVal = '위치태그설정하기';
+  final multiPicker = ImagePicker();
+  List<XFile>? images_file = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,22 +39,14 @@ class _WritePostState extends State<WritePost> {
           iconSize: 18,
         ),
         actions: <Widget>[
-          TextButton(
-            onPressed: () => {
-              checkwhoshow(),
+          IconButton(
+            onPressed: () {
+
             },
-            child: const Text(
-              "공유대상",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.blueGrey,
-                fontWeight: FontWeight.bold,
-              ),
+            icon: Icon(
+              Icons.send,
+              color: Colors.orangeAccent,
             ),
-          ),
-          const IconButton(
-            onPressed: null,
-            icon: Icon(Icons.send),
             iconSize: 18,
           ),
         ],
@@ -68,19 +59,86 @@ class _WritePostState extends State<WritePost> {
       ),
     );
   }
-  onScroll() {
-    setState(() {
-      double offset = _scrollController.offset;
-      if (offset < 0) {
-        offset = 0;
-      } else if (offset > 100) {
-        offset = 100;
-      }
-      scrollOpacity = offset / 100;
+  AddActive(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (BuildContext context) {
+      return Container(
+        height: 150,
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            )
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Card(
+                elevation: 4,
+                color: Colors.white54.withOpacity(0.8),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    choiceAdditional(context);
+                  },
+                  child: Column(
+                    children: const [
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Icon(
+                            Icons.add_a_photo
+                        ),
+                      ),
+                      Text(
+                        "사진 추가하기",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600, // bold
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                elevation: 4,
+                color: Colors.white54.withOpacity(0.8),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Column(
+                    children: const [
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Icon(
+                            Icons.add_link
+                        ),
+                      ),
+                      Text(
+                        "링크 추가하기",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600, // bold
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ),
+            ],
+          ),
+        )
+      );
     });
   }
-
-  checkwhoshow() {
+  checkDeletePicture(BuildContext context, int index) {
     showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -88,26 +146,34 @@ class _WritePostState extends State<WritePost> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             title: const Text(
-              "공개범위 설정",
+              '알림',
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.blueGrey,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            content: new Text(
-                "공개범위 설정 기본값 변경은 "
-                "부가설정 > 기본값 설정에서 변경 가능합니다.",
+            content: const Text(
+              '선택하신 사진을 삭제하시겠습니까?',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 15,
                 color: Colors.blueGrey,
                 fontWeight: FontWeight.bold,
               ),
             ),
             actions: <Widget>[
               TextButton(
-                child: new Text("Close"),
+                child: Text("아니요."),
                 onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: Text("네."),
+                onPressed: () {
+                  setState(() {
+                    images_file!.removeAt(index);
+                  });
                   Navigator.pop(context);
                 },
               ),
@@ -116,91 +182,315 @@ class _WritePostState extends State<WritePost> {
         }
     );
   }
-}
-// 바디 만들기
-Widget makeBody(BuildContext context) {
-
-  return Container(
-    child: ScrollConfiguration(
-      behavior: NoBehavior(),
-      child: SingleChildScrollView(
-          child: Column(
-            children: [
-              GestureDetector(
+  Future choiceAdditional
+      (BuildContext context) async {
+    final List<XFile>? selectedImages = await
+        multiPicker.pickMultiImage();
+    setState(() {
+      if (selectedImages !.isNotEmpty) {
+        images_file!.addAll(selectedImages);
+      }
+    });
+  }
+  Widget makeBody(BuildContext context) {
+    return Container(
+      child: ScrollConfiguration(
+        behavior: NoBehavior(),
+        child: SingleChildScrollView(
+            child: Column(
+              children: [
+                GestureDetector(
                   onTap: () {
                     FocusScope.of(context).unfocus();
                   },
-                  child: Center(
-                    child: Column(
-                      //내부를 최소만큼 키움.
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        SizedBox(
-                          height: (MediaQuery.of(context).size.height) / 5,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                child: const Text(
-                                  '공유할 피드 작성',
+                  child: Column(
+                    //내부를 최소만큼 키움.
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment : MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                              fit: FlexFit.tight,
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
+                                child: Text(
+                                  "포스팅 위치",
                                   style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.blueAccent,
+                                    fontSize: 20,
+                                    color: Colors.blueGrey,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                margin: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5,
+                              ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Theme(
+                                data: Theme.of(context).copyWith(
+                                    canvasColor: Colors.white
+                                ),
+                                child: DropdownButton<String>(
+                                  underline: Container(
+                                    height: 0.5,
+                                    color: Colors.blueGrey,
+                                  ),
+                                  value: _selectedVal,
+                                  items: _list_post_where.map(
+                                          (value) {
+                                        return DropdownMenuItem(
+                                          child: Text(
+                                              value
+                                          ),
+                                          value: value,
+                                        );
+                                      }
+                                  ).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedVal = value!;
+                                    });
+                                  },
+                                ),
+                              )
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
+                            child: Text(
+                              "제목(Title)",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                            child: TextField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                hintText: '이 곳에 제목을 작성해주세요.',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(10)),
                                 ),
                               ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
+                            child: Text(
+                              "본문(Content)",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                            child: Container(
+                              alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width,
+                                height: 300,
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 0.5),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(10)),
+                                ),
+                                child: ScrollConfiguration(
+                                    behavior: NoBehavior(),
+                                    child: const SingleChildScrollView(
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                        child: TextField(
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: null,
+                                          decoration: InputDecoration(
+                                              hintText: '이 곳에 내용을 작성해주세요.',
+                                              border: InputBorder.none,
+                                              focusedBorder: InputBorder.none
+                                          ),
+                                        ),
+                                      )
+                                    )
+                                )
+                            )
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
+                            child: Text(
+                              "부가기능(Action)",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          images_file!.isEmpty ? Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                AddActive(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.orange,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 0
+                              ),
+                              child: const Text(
+                                "가능한 부가기능은 무엇이 있나요?",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600, // bold
+                                ),
+                              ),
+                            ),
+                          ) : Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                AddActive(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.orange,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  elevation: 0
+                              ),
+                              child: const Text(
+                                "더 추가하시려면 클릭해주세요!",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600, // bold
+                                ),
+                              ),
+                            ),
+                          )
+
+                        ],
+                      ),
+                      images_file!.isEmpty
+                          ? Container(
+                        height: 0,
+                      )
+                          : SizedBox(
+                        height: 150,
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: images_file!.isEmpty
+                              ? 0
+                              : images_file!.length,
+                          itemBuilder: (context, index) => Stack(
+                            children: [
+                              SizedBox(
+                                  width: 150,
+                                  height: 150,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                    child: Image.file(
+                                      File(images_file![index].path),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      //사진을 삭제시키는 로직
+                                      checkDeletePicture(context, index);
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.remove,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              )
                             ],
                           ),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 1
+                          ),
                         ),
-                        Flexible(
-                            child: Container(
-                              margin: const EdgeInsets.all(10),
-                              child: const TextField(
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                    labelText: '제목(Title)'
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "태그(Tag)",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.blueGrey,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      checkhowtag(context);
+                                    },
+                                    icon: const Icon(Icons.info_outlined)
+                                )
+                              ],
+                            )
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                            child: TextField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                hintText: '태그 작성시 위의 안내버튼을 필히 클릭해주세요!',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(10)),
                                 ),
                               ),
-                            )
-                        ),
-                        Flexible(
-                            child: Container(
-                              height: 400,
-                              margin: const EdgeInsets.all(10),
-                              child: const TextField(
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                  labelText: '본문(Text)',
-                                ),
-                              ),
-                            )
-                        ),
-                        Flexible(
-                            child: Container(
-                              margin: const EdgeInsets.all(10),
-                              child: const TextField(
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                decoration: InputDecoration(
-                                    labelText: '태그(Tags)'
-                                ),
-                              ),
-                            )
-                        ),
-                      ],
-                    ),
-                  )
-              ),
-            ],
-          )
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 100,),
+                    ],
+                  ),
+                ),
+              ],
+            )
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

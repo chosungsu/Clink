@@ -18,6 +18,9 @@ import 'Page/ProfilePage.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  //화면회전 막기
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   KakaoContext.clientId = 'b5e60a90f0204c0bb09625df79a11772';
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -79,9 +82,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    //화면회전 막기
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     scaleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),)..addStatusListener(
@@ -131,35 +131,35 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               height: 100,
             ),
             SizedBox(
-              height: 300,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    'SuChip',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      color: Colors.white,
+                height: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'SuChip',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 30,),
-                  DefaultTextStyle(
-                    style: const TextStyle(fontSize: 20.0),
-                    child: AnimatedTextKit(
-                      animatedTexts: [
-                        TyperAnimatedText(
-                            '내가 수집하는 취향트랙',
-                            speed: Duration(milliseconds: 150)),
-                      ],
-                      isRepeatingAnimation: true,
-                      repeatForever: true,
-                      //displayFullTextOnTap: false,
+                    const SizedBox(height: 30,),
+                    DefaultTextStyle(
+                      style: const TextStyle(fontSize: 20.0),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          TyperAnimatedText(
+                              '내가 수집하는 취향트랙',
+                              speed: Duration(milliseconds: 150)),
+                        ],
+                        isRepeatingAnimation: true,
+                        repeatForever: true,
+                        //displayFullTextOnTap: false,
+                      ),
                     ),
-                  ),
-                ],
-              )
+                  ],
+                )
             ),
             SizedBox(height: (MediaQuery.of(context).size.height - 600),),
             SizedBox(
@@ -175,12 +175,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       builder: (context, snapshot) {
                         islogined = snapshot.hasData;
                         if (snapshot.hasData == false) {
-                          //GoToLogin(context);
-
                           return const Text(
                             '로그인 페이지 이동 중...',
                             style: TextStyle(
-                                color: Colors.red,
+                                color: Colors.black,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 2// bold
@@ -191,7 +189,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                           return const Text(
                             '어서오세요',
                             style: TextStyle(
-                                color: Colors.red,
+                                color: Colors.black,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 2// bold

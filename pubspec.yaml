@@ -54,6 +54,9 @@ dependencies:
   get_it: ^1.0.3+2
   provider: ^6.0.2
   firebase_core: ^1.12.0
+  image_picker: ^0.8.4
+  multi_image_picker2: ^5.0.2
+  permission_handler: ^9.2.0
 
 dev_dependencies:
   flutter_test:

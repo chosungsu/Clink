@@ -4,6 +4,10 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To Choose photo when you post photo</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To take photo when you post photo</string>
 	<key>CFBundleDisplayName</key>
 	<string>Clickbyme</string>
 	<key>CFBundleExecutable</key>
