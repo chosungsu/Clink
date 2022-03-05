@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import '../Dialogs/checkSave.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/checkhowtag.dart';
+import '../Dialogs/checkhowtag.dart';
 
 
 class WritePost extends StatefulWidget {
@@ -32,7 +34,9 @@ class _WritePostState extends State<WritePost> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            //Navigator.pop(context);
+            //저장이 안되므로 나가면 정보 사라진다고 경고하는 UI
+            checkSave(context);
           },
           icon: Icon(Icons.arrow_back),
           color: Colors.orangeAccent,
@@ -51,13 +55,19 @@ class _WritePostState extends State<WritePost> {
           ),
         ],
       ),
-      body: Container(
-        color: Colors.white,
-        child: Center(
-          child: makeBody(context),
+      body: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Container(
+          color: Colors.white,
+          child: Center(
+            child: makeBody(context),
+          ),
         ),
-      ),
+      )
     );
+  }
+  Future<bool> _onWillPop() async {
+    return (await checkSave(context)) ?? false;
   }
   AddActive(BuildContext context) {
     showModalBottomSheet(context: context, builder: (BuildContext context) {

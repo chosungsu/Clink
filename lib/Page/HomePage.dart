@@ -1,7 +1,12 @@
+import 'package:clickbyme/UI/UserPicks.dart';
+import 'package:clickbyme/UI/UserSubscription.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../DB/AD_Home.dart';
 import 'package:intl/intl.dart';
+import '../Dialogs/destroyBackKey.dart';
+import '../Sub/WritePost.dart';
+import '../Tool/NoBehavior.dart';
+import '../UI/AD.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,6 +15,55 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage> {
+  ScrollController _mainController = ScrollController();
+  ScrollController _subController = ScrollController();
+  double _removableSize = 300;
+  bool _isStickyOnTop = false;
+  final List<AD_Home> _list_subscript = [
+    AD_Home(
+      id: '1',
+      title: '일정 관리',
+      person_num: 3,
+      date: DateTime.now(),
+    ),
+    AD_Home(
+      id: '2',
+      title: '인맥 관리',
+      person_num: 4,
+      date: DateTime.now(),
+    ),
+    AD_Home(
+      id: '3',
+      title: '구독 관리',
+      person_num: 5,
+      date: DateTime.now(),
+    ),
+    AD_Home(
+      id: '4',
+      title: '포인트 관리',
+      person_num: 5,
+      date: DateTime.now(),
+    )
+  ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _mainController.addListener(() {
+      if (_mainController.offset >= _removableSize && !_isStickyOnTop) {
+        _isStickyOnTop = true;
+        setState(() {
+
+        });
+      } else if (_mainController.offset < _removableSize && !_isStickyOnTop) {
+        _isStickyOnTop = false;
+        setState(() {
+
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,253 +72,81 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         title: const Text('SuChip', style: TextStyle(color: Colors.blueGrey)),
         elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            color: Colors.black54,
+            tooltip: '추가하기',
+            onPressed: () =>
+            {
+              //bottomsheet 사용하기
+              _onAddPressed(context),
+            },
+            icon: const Icon(Icons.add_circle),
+          ),
+        ],
       ),
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.symmetric(
-                vertical: 10, horizontal: 15,
-              ),
-              child: Row(
-                children: const [
-                  Icon(
-                      Icons.push_pin
+        child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: ScrollPhysics(),
+                  child: Column(
+                    children: [
+                      UserPicks(context),
+                      AD(context),
+                      UserSubscription(context, _mainController,
+                          _subController, _isStickyOnTop, _list_subscript),
+                    ],
                   ),
-                  SizedBox(width: 10,),
-                  Text(
-                    '메인 PICK',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ],
-              )
-            ),
-            Main_Pick(context),
-            Container(
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(
-                  vertical: 10, horizontal: 15,
                 ),
-                child: Row(
-                  children: const [
-                    Icon(
-                        Icons.subscriptions
-                    ),
-                    SizedBox(width: 10,),
-                    Text(
-                      'My 구독',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ],
-                )
-            ),
-          ],
-        ),
+              );
+            })
       ),
 
     );
   }
   Future<bool> _onWillPop() async {
-    return (await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('종료'),
-        content: const Text('앱을 종료하시겠습니까?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('아니요'),
-          ),
-          TextButton(
-            onPressed: () => SystemNavigator.pop(),
-            child: const Text('네'),
-          ),
-        ],
-      ),
-    )) ?? false;
+    return (await destroyBackKey(context)) ?? false;
   }
-}
-Main_Pick(context) {
-  final List<AD_Home> _list_ad = [
-    AD_Home(
-      id: '1',
-      title: 'Netflix',
-      person_num: 3,
-      date: DateTime.now(),
-    ),
-    AD_Home(
-      id: '2',
-      title: 'Coupang Play',
-      person_num: 4,
-      date: DateTime.now(),
-    )
-  ];
-  return SizedBox(
-    height: 200,
-    child: ListView(
-      scrollDirection: Axis.horizontal,
-      children: [
-        Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          width: 300,
-          child: Card(
-            color: const Color(0xffd3f1ff),
-            shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(16.0),
-            ),
-            elevation: 4.0,
-            child: Column(
-              children: [
-                const SizedBox(height: 10,),
-                Container(
-                  child: Text(
-                    _list_ad[0].title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.red,
-                    ),
-                  ),
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 20, horizontal: 15,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.red,
-                      width: 2,
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(10),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                        DateFormat('yyyy-MM-dd')
-                            .format(_list_ad[0].date),
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 5, horizontal: 5,
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            '현재 참여중인 인원 수 : ' +
-                                _list_ad[0].person_num.toString() +
-                                '명',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+
+  _onAddPressed(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (BuildContext context) {
+      return Container(
+        height: 120,
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            )
         ),
-        Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          width: 300,
-          child: Card(
-            color: const Color(0xffd49af8),
-            shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(16.0),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.add_link_rounded),
+              title: const Text('관심태그 추가'),
+              onTap: () => {
+
+              },
             ),
-            elevation: 4.0,
-            child: Column(
-              children: [
-                SizedBox(height: 10,),
-                Container(
-                  child: Text(
-                    _list_ad[1].title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.red,
-                    ),
-                  ),
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 20, horizontal: 15,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.red,
-                      width: 2,
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(10),
+            ListTile(
+              leading: const Icon(Icons.upload_rounded),
+              title: const Text('업로드'),
+              onTap: () => {
+                //이전 바텀시트 제거 후 스택 새로 쌓기
+                Navigator.pop(context),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WritePost()),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                        DateFormat('yyyy-MM-dd')
-                            .format(_list_ad[1].date),
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 5, horizontal: 5,
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            '현재 참여중인 인원 수 : ' +
-                                _list_ad[1].person_num.toString() +
-                                '명',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+              },
             ),
-          )
-        )
-      ],
-    ),
-  );
+          ],
+        ),
+      );
+    });
+  }
 }

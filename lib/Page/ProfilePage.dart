@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:transition/transition.dart';
 
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
+import '../Dialogs/destroyBackKey.dart';
 import '../Sub/HowToUsePage.dart';
 import '../UI/AfterSignUp.dart';
 import '../UI/BeforeSignUp.dart';
 import '../Tool/NoBehavior.dart';
-import 'LoginSignPage.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -28,11 +27,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    /*WidgetsBinding.instance?.addPostFrameCallback((_) {
-      setState(() {
-        checkId(context);
-      });
-    });*/
   }
 
   @override
@@ -41,7 +35,6 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) {
         setState(() {
           checkId(context);
-          //timer(context).cancel();
         });
       }
     });
@@ -58,23 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<bool> _onWillPop() async {
-    return (await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('종료'),
-        content: const Text('앱을 종료하시겠습니까?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('아니요'),
-          ),
-          TextButton(
-            onPressed: () => SystemNavigator.pop(),
-            child: const Text('네'),
-          ),
-        ],
-      ),
-    )) ?? false;
+    return (await destroyBackKey(context)) ?? false;
   }
 }
 checkId(BuildContext context) async {
@@ -271,7 +248,10 @@ DeleteUserVerify(BuildContext context, String name) {
             ElevatedButton(
               onPressed: () async {
                 //탈퇴 로직 구현
-                Navigator.pop(context);
+                Navigator.popUntil(
+                    context,
+                        (route) => route.isFirst
+                );
                 Provider.of<GoogleSignInController>
                   (context, listen: false).logout(context, name);
                 Provider.of<KakaoSignInController>
