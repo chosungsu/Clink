@@ -7,33 +7,37 @@ import '../DB/AD_Home.dart';
 UserSubscription(BuildContext context, ScrollController mainController,
     ScrollController subController, bool isStickyOnTop,
     List<AD_Home> list_subscript) {
-  return Column(
-    children: [
-      Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(
-            vertical: 10, horizontal: 15,
-          ),
-          child: Row(
-            children: const [
-              Icon(
-                  Icons.subscriptions
-              ),
-              SizedBox(width: 10,),
-              Text(
-                'My 구독',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black54,
+  return Card(
+    color: Colors.white,
+    child: Column(
+      children: [
+        Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(
+              vertical: 10, horizontal: 15,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.subscriptions,
+                  color: Colors.deepPurpleAccent.shade100,
                 ),
-              ),
-            ],
-          )
-      ),
-      Subscript(context, mainController, subController, list_subscript),
-      //ContentSub(),
-    ],
+                SizedBox(width: 10,),
+                Text(
+                  'My 구독',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            )
+        ),
+        Subscript(context, mainController, subController, list_subscript),
+        //ContentSub(),
+      ],
+    )
   );
 }
 

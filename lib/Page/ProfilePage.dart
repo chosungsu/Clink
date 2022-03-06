@@ -22,7 +22,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   bool login_state = false;
-  String name = "null", email = "null";
+  String name = "null", email = "null", cnt = "null";
 
   @override
   void initState() {
@@ -40,8 +40,9 @@ class _ProfilePageState extends State<ProfilePage> {
     });
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade100,
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
       body: WillPopScope(
         onWillPop: _onWillPop,
@@ -133,7 +134,7 @@ Widget ProfileBody(BuildContext context) {
                           ),
                         ),
                         Card(
-                          color: const Color(0xffd3f1ff),
+                          color: Colors.blue.shade100,
                           elevation: 4.0,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,9 +203,10 @@ Widget ProfileBody(BuildContext context) {
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
+
                   ]
               )
           ),

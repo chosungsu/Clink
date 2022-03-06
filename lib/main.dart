@@ -19,8 +19,8 @@ import 'Page/ProfilePage.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   //화면회전 막기
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  /*SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);*/
   KakaoContext.clientId = 'b5e60a90f0204c0bb09625df79a11772';
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -60,11 +60,11 @@ class MyApp extends StatelessWidget {
         ),
         //home: SplashPage(),
         home: SplashPage(),
-        routes: <String, WidgetBuilder> {
-          'home' : (context) => HomePage(),
-          'feed' : (context) => FeedPage(),
-          'profile' : (context) => ProfilePage(),
-        },
+        /*routes: <String, WidgetBuilder> {
+          '/home' : (context) => HomePage(),
+          '/feed' : (context) => FeedPage(),
+          '/profile' : (context) => ProfilePage(),
+        },*/
       ),
     );
   }
@@ -123,7 +123,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff2efcff),
+      backgroundColor: Colors.deepPurpleAccent.shade100,
       body: Center(
         child: Column(
           children: [
@@ -169,7 +169,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SpinKitFadingCircle(
-                      color: Colors.greenAccent,
+                      color: Colors.white,
                     ),
                     FutureBuilder(
                       builder: (context, snapshot) {
@@ -178,7 +178,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                           return const Text(
                             '로그인 페이지 이동 중...',
                             style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 2// bold
@@ -189,7 +189,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                           return const Text(
                             '어서오세요',
                             style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 2// bold

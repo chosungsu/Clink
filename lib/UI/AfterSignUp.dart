@@ -21,7 +21,7 @@ showAfterSignUp(String name, String email, String whatlogin, BuildContext contex
       break;
   }
   return Card(
-    color: const Color(0xffd3f1ff),
+    color: Colors.blue.shade100,
     elevation: 4.0,
     child: Container(
       //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.

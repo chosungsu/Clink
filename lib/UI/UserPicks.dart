@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import '../DB/AD_Home.dart';
 
 UserPicks(BuildContext context) {
@@ -12,17 +10,18 @@ UserPicks(BuildContext context) {
             vertical: 10, horizontal: 15,
           ),
           child: Row(
-            children: const [
+            children: [
               Icon(
-                  Icons.push_pin
+                Icons.push_pin,
+                color: Colors.deepPurpleAccent.shade100,
               ),
               SizedBox(width: 10,),
-              Text(
-                '다양한 탐구',
+              const Text(
+                'Let\'s do it!',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: Colors.black54,
+                  color: Colors.grey,
                 ),
               ),
             ],
@@ -43,38 +42,38 @@ Main_Pick(context) {
     ),
     AD_Home(
       id: '2',
-      title: '인맥 관리',
-      person_num: 4,
-      date: DateTime.now(),
-    ),
-    AD_Home(
-      id: '3',
       title: '구독 관리',
       person_num: 5,
       date: DateTime.now(),
     ),
     AD_Home(
-      id: '4',
-      title: '포인트 관리',
+      id: '3',
+      title: '사이트 링크 관리',
       person_num: 5,
       date: DateTime.now(),
-    )
+    ),
+    AD_Home(
+      id: '4',
+      title: '톡톡 PLUS',
+      person_num: 4,
+      date: DateTime.now(),
+    ),
   ];
   final List<String> itemImg = [
     'assets/images/fingerprint.png',
     'assets/images/fingerprint.png',
-    'assets/images/fingerprint.png',
-    'assets/images/fingerprint.png',
+    'assets/images/icon-link.png',
+    'assets/images/icon-chat.png',
   ];
   return SizedBox(
-    height: 150,
+    height: 300,
     child: GridView.builder(
         itemCount: _list_ad.length,
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-            childAspectRatio: 3 / 1
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 3 / 2
         ),
         itemBuilder: (context, index) {
           return Card(
@@ -89,8 +88,8 @@ Main_Pick(context) {
                 },
                 child: Padding(
                   padding: EdgeInsets.all(5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
                         itemImg[index],

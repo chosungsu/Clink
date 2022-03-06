@@ -2,7 +2,6 @@ import 'package:clickbyme/UI/UserPicks.dart';
 import 'package:clickbyme/UI/UserSubscription.dart';
 import 'package:flutter/material.dart';
 import '../DB/AD_Home.dart';
-import 'package:intl/intl.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Sub/WritePost.dart';
 import '../Tool/NoBehavior.dart';
@@ -69,9 +68,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
-        title: const Text('SuChip', style: TextStyle(color: Colors.blueGrey)),
+        backgroundColor: Colors.grey.shade100,
+        title: Text(
+            'SuChip',
+            style: TextStyle(
+                color: Colors.deepPurpleAccent.shade100,
+            )
+        ),
         elevation: 0,
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
             color: Colors.black54,
@@ -95,7 +100,6 @@ class _HomePageState extends State<HomePage> {
                   physics: ScrollPhysics(),
                   child: Column(
                     children: [
-                      UserPicks(context),
                       AD(context),
                       UserSubscription(context, _mainController,
                           _subController, _isStickyOnTop, _list_subscript),

@@ -86,6 +86,8 @@ flutter:
     - assets/images/kakao_login_medium_wide.png
     - assets/images/eye-scanner.png
     - assets/images/fingerprint.png
+    - assets/images/icon-link.png
+    - assets/images/icon-chat.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

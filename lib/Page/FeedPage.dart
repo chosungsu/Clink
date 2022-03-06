@@ -1,5 +1,8 @@
+import 'package:clickbyme/UI/UserTips.dart';
 import 'package:flutter/material.dart';
 import '../Dialogs/destroyBackKey.dart';
+import '../Tool/NoBehavior.dart';
+import '../UI/UserPicks.dart';
 
 
 class FeedPage extends StatefulWidget {
@@ -12,18 +15,48 @@ class _FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        title: Text('피드', style: TextStyle(color: Colors.blueGrey)),
+        centerTitle: false,
+        backgroundColor: Colors.grey.shade100,
+        toolbarHeight: 100,
+        title: Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Row(
+            children: [
+              Text(
+                  '체크잇',
+                  style: TextStyle(
+                    color: Colors.deepPurpleAccent.shade100,
+                  )
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Icon(
+                Icons.check_circle,
+                color: Colors.deepPurpleAccent.shade100,
+              )
+            ],
+          ),
+        ),
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: Container(
-          child: Center(
-            child: makeBody(context),
-          ),
-        ),
+        child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: ScrollPhysics(),
+                  child: Column(
+                    children: [
+                      makeBody(context)
+                    ],
+                  ),
+                ),
+              );
+            })
       ),
     );
   }
@@ -35,30 +68,12 @@ class _FeedPageState extends State<FeedPage> {
 // 바디 만들기
 Widget makeBody(BuildContext context) {
 
-  return SingleChildScrollView(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(
-            child : Center(
-                child : Column(
-                    children : <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 40, left: 30, right: 30),
-                        //child: LoginBtn(),
-                        child: Column(
-                          children: [
-
-                          ],
-                        ),
-                      ),
-                    ]
-                )
-            )
-        ),
-      ],
-    ),
-
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: <Widget>[
+      UserTips(context),
+      UserPicks(context),
+    ],
   );
 }

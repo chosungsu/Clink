@@ -25,11 +25,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade100,
         bottomNavigationBar: CurvedNavigationBar(
           height: 50,
           index: _selectedIndex,
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: Colors.deepPurpleAccent.shade100,
+          color: Colors.grey.shade100,
           key: _bottomNavigationKey,
           items: const <Widget>[
             Icon(Icons.widgets, size: 25),

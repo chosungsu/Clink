@@ -51,9 +51,9 @@ LoginPlus(BuildContext context) {
   return Column(
     children: [
       const Text(
-        '자신의 관심사에 맞게 고르고\n'
-            '다른 이에게 역추천의 재미까지\n'
-            'AI로 당신의 관심사를 채워드리겠습니다.',
+        '바쁜 일상 속 쉽게 잊어버리는\n'
+            '모든 것들을 한 곳에서\n'
+            '기록하여 정리하고 관리해드리겠습니다.',
         style: TextStyle(
           color: Colors.lightGreenAccent,
           fontSize: 20,
