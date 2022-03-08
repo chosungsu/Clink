@@ -58,7 +58,8 @@ dependencies:
   multi_image_picker2: ^5.0.2
   permission_handler: ^9.2.0
   sticky_headers: ^0.2.0
-  flutter_sticky_header: ^0.6.1
+  textfield_tags: ^1.4.3
+  table_calendar: ^3.0.4
 
 dev_dependencies:
   flutter_test:

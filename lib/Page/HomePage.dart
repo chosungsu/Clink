@@ -8,8 +8,8 @@ import '../Tool/NoBehavior.dart';
 import '../UI/AD.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
+  const HomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         backgroundColor: Colors.grey.shade100,
         title: Text(
-            'SuChip',
+            widget.title,
             style: TextStyle(
                 color: Colors.deepPurpleAccent.shade100,
             )

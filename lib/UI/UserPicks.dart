@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../DB/AD_Home.dart';
+import '../Sub/GoToDoDate.dart';
 
 UserPicks(BuildContext context) {
   return Column(
@@ -68,6 +69,7 @@ Main_Pick(context) {
   return SizedBox(
     height: 300,
     child: GridView.builder(
+        physics: BouncingScrollPhysics(),
         itemCount: _list_ad.length,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
@@ -84,7 +86,21 @@ Main_Pick(context) {
               color: Colors.white60.withOpacity(0.7),
               child: InkWell(
                 onTap: () {
+                  if (index == 0) {
+                    //일정관리탭으로 이동
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GoToDoDate()),
+                    );
+                  } else if (index == 1) {
 
+                  } else if (index == 2) {
+
+                  } else {
+
+                  }
                 },
                 child: Padding(
                   padding: EdgeInsets.all(5),

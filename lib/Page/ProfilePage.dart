@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:transition/transition.dart';
 
@@ -10,6 +12,7 @@ import '../Sub/HowToUsePage.dart';
 import '../UI/AfterSignUp.dart';
 import '../UI/BeforeSignUp.dart';
 import '../Tool/NoBehavior.dart';
+import '../route.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -27,17 +30,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      setState(() {
+        checkId(context);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      if (mounted) {
-        setState(() {
-          checkId(context);
-        });
-      }
-    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey.shade100,
@@ -250,9 +251,11 @@ DeleteUserVerify(BuildContext context, String name) {
             ElevatedButton(
               onPressed: () async {
                 //탈퇴 로직 구현
-                Navigator.popUntil(
-                    context,
-                        (route) => route.isFirst
+                Navigator.of(context).pushReplacement(
+                  PageTransition(
+                    type: PageTransitionType.bottomToTop,
+                    child: const MyHomePage(title: 'HabitMind'),
+                  ),
                 );
                 Provider.of<GoogleSignInController>
                   (context, listen: false).logout(context, name);

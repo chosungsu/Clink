@@ -15,15 +15,16 @@ class _MyHomePageState extends State<MyHomePage> {
   //curved navi index
   int _selectedIndex = 1;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
-  List pages = [
-    FeedPage(),
-    HomePage(),
-    ProfilePage(),
-  ];
+
   late DateTime backbuttonpressedTime;
 
   @override
   Widget build(BuildContext context) {
+    List pages = [
+      FeedPage(),
+      HomePage(title: widget.title),
+      ProfilePage(),
+    ];
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         bottomNavigationBar: CurvedNavigationBar(

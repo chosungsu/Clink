@@ -68,7 +68,7 @@ LoginPlus(BuildContext context) {
             await Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(title: 'SuChip'),
+                child: const MyHomePage(title: 'HabitMind'),
               ),
             );
           },
@@ -85,7 +85,7 @@ LoginPlus(BuildContext context) {
             await Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(title: 'SuChip'),
+                child: const MyHomePage(title: 'HabitMind'),
               ),
             );
           },
@@ -106,7 +106,7 @@ LoginPlus(BuildContext context) {
           Navigator.of(context).pushReplacement(
             PageTransition(
               type: PageTransitionType.bottomToTop,
-              child: const MyHomePage(title: 'SuChip'),
+              child: const MyHomePage(title: 'HabitMind'),
             ),
           );
         },

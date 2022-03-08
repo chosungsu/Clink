@@ -90,7 +90,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           if (islogined) {
             GoToMain(context);
           } else {
-            GoToLogin(context);
+            //퍼미션 요청부터 하자.
+            GoToPermission(context);
+            //GoToLogin(context);
           }
 
           Timer(
@@ -137,7 +139,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      'SuChip',
+                      'HabitMind',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -150,7 +152,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       child: AnimatedTextKit(
                         animatedTexts: [
                           TyperAnimatedText(
-                              '내가 수집하는 취향트랙',
+                              '내가 수집하는 개인화 마인드트랙',
                               speed: Duration(milliseconds: 150)),
                         ],
                         isRepeatingAnimation: true,

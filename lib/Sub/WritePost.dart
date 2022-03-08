@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 import '../Dialogs/checkSave.dart';
 import '../Tool/NoBehavior.dart';
 import '../Dialogs/checkhowtag.dart';
@@ -477,19 +478,25 @@ class _WritePostState extends State<WritePost> {
                               ],
                             )
                           ),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                            child: TextField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              decoration: InputDecoration(
-                                hintText: '태그 작성시 위의 안내버튼을 필히 클릭해주세요!',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(10)),
+                            child: TextFieldTags(
+                                tagsStyler: TagsStyler(
+                                    tagTextStyle: TextStyle(fontWeight: FontWeight.normal),
+                                    tagDecoration: BoxDecoration(color: Colors.blue[300], borderRadius: BorderRadius.circular(10.0), ),
+                                    tagCancelIcon: Icon(Icons.cancel, size: 18.0, color: Colors.blue[900]),
+                                    tagPadding: const EdgeInsets.all(10.0)
                                 ),
-                              ),
-                            ),
+                                textFieldStyler: TextFieldStyler(),
+                                onTag: (tag) {},
+                                onDelete: (tag) {},
+                                validator: (tag){
+                                  if(tag.length>15){
+                                    return "이 이상 작성은 무리에요.";
+                                  }
+                                  return null;
+                                }
+                            )
                           ),
                         ],
                       ),

@@ -60,7 +60,7 @@ TipClips(context) {
     )
   ];
   return SizedBox(
-      height: 170,
+      height: MediaQuery.of(context).size.height/ 4,
       child: Padding(
         padding: EdgeInsets.only(left:20, bottom: 20, right: 20),
         child: ListView.builder(
@@ -73,8 +73,7 @@ TipClips(context) {
                 Padding(
                     padding: EdgeInsets.only(right: 15),
                     child: SizedBox(
-                      width: 180,
-                      height: 120,
+                      width: MediaQuery.of(context).size.width * 0.7,
                       child: Card(
                           color: const Color(0xffd3f1ff),
                           shape: RoundedRectangleBorder(
