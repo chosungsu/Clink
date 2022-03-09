@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import '../Dialogs/checkSave.dart';
+import '../Dialogs/checkaddwhat.dart';
 import '../Tool/NoBehavior.dart';
 import '../Dialogs/checkhowtag.dart';
+import '../UI/UserCheck.dart';
 
 
 class WritePost extends StatefulWidget {
@@ -69,6 +72,48 @@ class _WritePostState extends State<WritePost> {
   }
   Future<bool> _onWillPop() async {
     return (await checkSave(context)) ?? false;
+  }
+  checkPermissions(BuildContext context) async {
+    PermissionStatus status = await Permission
+        .storage.request();
+    if (!status.isGranted) {
+      //허용이 안된 경우
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text(
+                "알림",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600, // bold
+                ),
+              ),
+              content: const Text(
+                "[설정] > [권한 설정]을 확인해주세요",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600, // bold
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text("설정하기"),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await openAppSettings();
+                  },
+                ),
+              ],
+            );
+          }
+      );
+    } else {
+      //허용이 된 경우
+      AddActive(context);
+    }
   }
   AddActive(BuildContext context) {
     showModalBottomSheet(context: context, builder: (BuildContext context) {
@@ -274,7 +319,7 @@ class _WritePostState extends State<WritePost> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
                             child: Text(
-                              "제목(Title)",
+                              "제목",
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.blueGrey,
@@ -304,7 +349,7 @@ class _WritePostState extends State<WritePost> {
                           const Padding(
                             padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
                             child: Text(
-                              "본문(Content)",
+                              "본문",
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.blueGrey,
@@ -347,22 +392,32 @@ class _WritePostState extends State<WritePost> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.fromLTRB(20, 30, 0, 20),
-                            child: Text(
-                              "부가기능(Action)",
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "부가기능",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.blueGrey,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      checkaddwhat(context);
+                                    },
+                                    icon: const Icon(Icons.info_outlined)
+                                )
+                              ],
+                            )
                           ),
                           images_file!.isEmpty ? Padding(
                             padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
                             child: ElevatedButton(
                               onPressed: () {
-                                AddActive(context);
+                                checkPermissions(context);
                               },
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.orange,
@@ -384,7 +439,7 @@ class _WritePostState extends State<WritePost> {
                             padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
                             child: ElevatedButton(
                               onPressed: () {
-                                AddActive(context);
+                                checkPermissions(context);
                               },
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.orange,
@@ -455,6 +510,9 @@ class _WritePostState extends State<WritePost> {
                           ),
                         ),
                       ),
+
+                      //태그 sizedbox추가하기
+
                       Column(
                         children: [
                           Padding(
@@ -462,7 +520,7 @@ class _WritePostState extends State<WritePost> {
                             child: Row(
                               children: [
                                 Text(
-                                  "태그(Tag)",
+                                  "태그",
                                   style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.blueGrey,

@@ -65,7 +65,7 @@ AdClips(context) {
     )
   ];
   return SizedBox(
-    height: 70,
+    height: MediaQuery.of(context).size.height / 10,
     child: Padding(
       padding: EdgeInsets.only(bottom: 20),
       child: ListView.builder(
@@ -78,7 +78,7 @@ AdClips(context) {
               Padding(
                 padding: EdgeInsets.only(left: 15),
                 child: SizedBox(
-                  height: 30,
+                  height: MediaQuery.of(context).size.height / 15,
                   child: Card(
                       color: const Color(0xffd3f1ff),
                       shape: RoundedRectangleBorder(

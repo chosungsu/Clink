@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../Dialogs/addcalendartodo.dart';
+import '../Tool/NoBehavior.dart';
 
 
 class GoToDoDate extends StatefulWidget {
@@ -25,6 +27,7 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin{
   void initState() {
     // TODO: implement initState
     super.initState();
+    _events = {};
     _eventController = TextEditingController();
   }
   @override
@@ -59,44 +62,103 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin{
   // 바디 만들기
   Widget makeBody(BuildContext context) {
 
-    return TableCalendar(
-      startingDayOfWeek: StartingDayOfWeek.sunday,
-      focusedDay: selectDay,
-      firstDay: DateTime.utc(2000, 1, 1),
-      lastDay: DateTime.utc(10000, 12, 31),
-      calendarFormat: format,
-      eventLoader: _getEvents,
-      onFormatChanged: (CalendarFormat _format) {
-          setState(() {
-            format = _format;
-          });
-      },
-      onDaySelected: (DateTime _selectDay, DateTime _focusDay) {
-          setState(() {
-            selectDay = _selectDay;
-            focusDay = _focusDay;
-          });
-      },
-      onDayLongPressed: (DateTime date, event) {
-        addcalendartodo(context, _eventController, _events, date);
-      },
-      selectedDayPredicate: (DateTime date) {
-          return isSameDay(selectDay, date);
-      },
-      calendarStyle: CalendarStyle(
-          isTodayHighlighted: true,
-          todayDecoration: BoxDecoration(
-              color: Colors.deepPurpleAccent.shade100,
-              shape: BoxShape.circle
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          TableCalendar(
+            startingDayOfWeek: StartingDayOfWeek.sunday,
+            focusedDay: selectDay,
+            firstDay: DateTime.utc(2000, 1, 1),
+            lastDay: DateTime.utc(10000, 12, 31),
+            calendarFormat: format,
+            eventLoader: (DateTime day) {
+              /*if (day.day%2 == 0) {
+                return ['hi'];
+              } else {
+                return [];
+              }*/
+              return _getEvents(day);
+            },
+            calendarBuilders: CalendarBuilders(
+              dowBuilder: (context, day) {
+                if (day.weekday == DateTime.sunday) {
+                  final text = DateFormat.E().format(day);
+                  return Center(
+                    child: Text(
+                        text,
+                        style: TextStyle(
+                            color: Colors.red
+                        )
+                    ),
+                  );
+                }
+              },
+            ),
+            onFormatChanged: (CalendarFormat _format) {
+              setState(() {
+                format = _format;
+              });
+            },
+            onDaySelected: (DateTime _selectDay, DateTime _focusDay) {
+              setState(() {
+                selectDay = _selectDay;
+                focusDay = _focusDay;
+              });
+            },
+            onDayLongPressed: (DateTime date, event) {
+              addcalendartodo(context, _eventController, _events, date);
+            },
+            selectedDayPredicate: (DateTime date) {
+              return isSameDay(selectDay, date);
+            },
+            calendarStyle: CalendarStyle(
+                isTodayHighlighted: true,
+                todayDecoration: BoxDecoration(
+                    color: Colors.deepPurpleAccent.shade100,
+                    shape: BoxShape.circle
+                ),
+                selectedDecoration: BoxDecoration(
+                    color: Colors.blue.shade100,
+                    shape: BoxShape.circle
+                ),
+                selectedTextStyle: TextStyle(
+                    color: Colors.white
+                )
+            ),
           ),
-          selectedDecoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              shape: BoxShape.circle
-          ),
-          selectedTextStyle: TextStyle(
-              color: Colors.white
+          Container(
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                    '목록',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.deepPurpleAccent.shade100
+                    )
+                ),
+                ScrollConfiguration(
+                    behavior: NoBehavior(),
+                    child: SingleChildScrollView(
+                        child:Text(
+                            '목록',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.deepPurpleAccent.shade100
+                            )
+                        ),
+                    )
+                ),
+              ],
+            ),
           )
+        ],
       ),
     );
   }
+
 }

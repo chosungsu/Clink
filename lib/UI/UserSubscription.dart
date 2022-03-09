@@ -3,9 +3,7 @@ import 'package:sticky_headers/sticky_headers.dart';
 
 import '../DB/AD_Home.dart';
 
-UserSubscription(BuildContext context, ScrollController mainController,
-    ScrollController subController, bool isStickyOnTop,
-    List<AD_Home> list_subscript) {
+UserSubscription(BuildContext context, List<AD_Home> list_subscript) {
   return Card(
     color: Colors.white,
     child: Column(
@@ -33,7 +31,7 @@ UserSubscription(BuildContext context, ScrollController mainController,
               ],
             )
         ),
-        Subscript(context, mainController, subController, list_subscript),
+        Subscript(context, list_subscript),
         //ContentSub(),
       ],
     )
@@ -86,26 +84,24 @@ ContentSub() {
     ),
   );
 }
-Subscript(context, ScrollController mainController,
-    ScrollController subController, List<AD_Home> list_subscript) {
+Subscript(context, List<AD_Home> list_subscript) {
   return list_subscript.isEmpty
       ? Container(
     height: 0,
   ) : SizedBox(
     child: Column(
       children: [
-        Sticky(context, mainController, subController, list_subscript),
+        Sticky(context, list_subscript),
       ],
     ),
   );
 }
-Sticky(context, ScrollController mainController, ScrollController subController,
-    List<AD_Home> list_subscript) {
+Sticky(context, List<AD_Home> list_subscript) {
   return StickyHeader(
       header: Container(
         color: Colors.white,
         alignment: Alignment.topLeft,
-        height: 70,
+        height: MediaQuery.of(context).size.height / 15,
         child: ListView.builder(
           //controller: mainController,
           shrinkWrap: true,

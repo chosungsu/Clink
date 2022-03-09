@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
-import 'Page/FeedPage.dart';
-import 'Page/HomePage.dart';
 import 'Page/LoginSignPage.dart';
 import 'Page/ProfilePage.dart';
 
@@ -31,6 +29,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -74,7 +73,8 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage>
+    with TickerProviderStateMixin {
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
   bool islogined = false;
@@ -90,9 +90,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           if (islogined) {
             GoToMain(context);
           } else {
-            //퍼미션 요청부터 하자.
-            GoToPermission(context);
-            //GoToLogin(context);
+            GoToLogin(context);
           }
 
           Timer(

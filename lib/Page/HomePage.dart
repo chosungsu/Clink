@@ -1,6 +1,7 @@
 import 'package:clickbyme/UI/UserPicks.dart';
 import 'package:clickbyme/UI/UserSubscription.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import '../DB/AD_Home.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Sub/WritePost.dart';
@@ -14,10 +15,6 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage> {
-  ScrollController _mainController = ScrollController();
-  ScrollController _subController = ScrollController();
-  double _removableSize = 300;
-  bool _isStickyOnTop = false;
   final List<AD_Home> _list_subscript = [
     AD_Home(
       id: '1',
@@ -49,19 +46,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _mainController.addListener(() {
-      if (_mainController.offset >= _removableSize && !_isStickyOnTop) {
-        _isStickyOnTop = true;
-        setState(() {
-
-        });
-      } else if (_mainController.offset < _removableSize && !_isStickyOnTop) {
-        _isStickyOnTop = false;
-        setState(() {
-
-        });
-      }
-    });
   }
   @override
   Widget build(BuildContext context) {
@@ -72,7 +56,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(
             widget.title,
             style: TextStyle(
-                color: Colors.deepPurpleAccent.shade100,
+              color: Colors.deepPurpleAccent.shade100,
             )
         ),
         elevation: 0,
@@ -92,22 +76,17 @@ class _HomePageState extends State<HomePage> {
       ),
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return ScrollConfiguration(
-                behavior: NoBehavior(),
-                child: SingleChildScrollView(
-                  physics: ScrollPhysics(),
-                  child: Column(
-                    children: [
-                      AD(context),
-                      UserSubscription(context, _mainController,
-                          _subController, _isStickyOnTop, _list_subscript),
-                    ],
-                  ),
-                ),
-              );
-            })
+        child: ScrollConfiguration(
+            behavior: NoBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  AD(context),
+                  UserSubscription(context, _list_subscript),
+                ],
+              ),
+            )
+        ),
       ),
 
     );
