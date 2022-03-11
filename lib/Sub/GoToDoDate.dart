@@ -5,15 +5,12 @@ import 'package:table_calendar/table_calendar.dart';
 import '../Dialogs/addcalendartodo.dart';
 import '../Tool/NoBehavior.dart';
 
-
 class GoToDoDate extends StatefulWidget {
-
-
   @override
   State<StatefulWidget> createState() => _GoToDoDateState();
 }
 
-class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin{
+class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin {
   late Map<DateTime, List> _events;
   CalendarFormat format = CalendarFormat.month;
   DateTime selectDay = DateTime.now();
@@ -21,6 +18,7 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin{
   List _getEvents(DateTime date) {
     return _events[date] ?? [];
   }
+
   late TextEditingController _eventController;
 
   @override
@@ -30,12 +28,14 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin{
     _events = {};
     _eventController = TextEditingController();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     _eventController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,20 +48,25 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin{
           },
         ),
         backgroundColor: Colors.grey.shade100,
-        title: Text(
-            '일정관리',
-            style: TextStyle(color: Colors.blueGrey)),
+        title: Text('일정관리', style: TextStyle(color: Colors.blueGrey)),
         elevation: 0,
       ),
       body: Container(
-        color: Colors.grey.shade100,
-        child: makeBody(context),
-      ),
+          color: Colors.grey.shade100,
+          child: Column(
+            children: [
+              makeBody(context),
+              const SizedBox(
+                height: 20,
+              ),
+              listmakebody(context),
+            ],
+          )),
     );
   }
+
   // 바디 만들기
   Widget makeBody(BuildContext context) {
-
     return Container(
       color: Colors.white,
       child: Column(
@@ -85,12 +90,7 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin{
                 if (day.weekday == DateTime.sunday) {
                   final text = DateFormat.E().format(day);
                   return Center(
-                    child: Text(
-                        text,
-                        style: TextStyle(
-                            color: Colors.red
-                        )
-                    ),
+                    child: Text(text, style: TextStyle(color: Colors.red)),
                   );
                 }
               },
@@ -116,49 +116,39 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin{
                 isTodayHighlighted: true,
                 todayDecoration: BoxDecoration(
                     color: Colors.deepPurpleAccent.shade100,
-                    shape: BoxShape.circle
-                ),
+                    shape: BoxShape.circle),
                 selectedDecoration: BoxDecoration(
-                    color: Colors.blue.shade100,
-                    shape: BoxShape.circle
-                ),
-                selectedTextStyle: TextStyle(
-                    color: Colors.white
-                )
-            ),
+                    color: Colors.blue.shade100, shape: BoxShape.circle),
+                selectedTextStyle: TextStyle(color: Colors.white)),
           ),
-          Container(
-            color: Colors.white,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                    '목록',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.deepPurpleAccent.shade100
-                    )
-                ),
-                ScrollConfiguration(
-                    behavior: NoBehavior(),
-                    child: SingleChildScrollView(
-                        child:Text(
-                            '목록',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.deepPurpleAccent.shade100
-                            )
-                        ),
-                    )
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );
   }
 
+  Widget listmakebody(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text('목록',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.deepPurpleAccent.shade100)),
+          ScrollConfiguration(
+              behavior: NoBehavior(),
+              child: SingleChildScrollView(
+                child: Text('목록',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.deepPurpleAccent.shade100)),
+              )),
+        ],
+      ),
+    );
+  }
 }

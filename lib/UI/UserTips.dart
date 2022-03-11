@@ -42,19 +42,19 @@ TipClips(context) {
     ),
     AD_Home(
       id: '2',
-      title: '인맥 관리',
+      title: '구독 관리',
       person_num: 4,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '3',
-      title: '구독 관리',
+      title: '링크 관리',
       person_num: 5,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '4',
-      title: '포인트 관리',
+      title: '톡톡 플러스 관리',
       person_num: 5,
       date: DateTime.now(),
     )
@@ -62,7 +62,7 @@ TipClips(context) {
   return SizedBox(
       height: MediaQuery.of(context).size.height/ 4,
       child: Padding(
-        padding: EdgeInsets.only(left:20, bottom: 20, right: 20),
+        padding: EdgeInsets.only(bottom: 20),
         child: ListView.builder(
           //controller: mainController,
             physics: BouncingScrollPhysics(),
@@ -71,11 +71,11 @@ TipClips(context) {
             itemCount: _list_ad.length,
             itemBuilder: (context, index) =>
                 Padding(
-                    padding: EdgeInsets.only(right: 15),
+                    padding: EdgeInsets.only(left:15, right: 15),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: Card(
-                          color: const Color(0xffd3f1ff),
+                          color: Color.fromARGB(255, 255, 255, 255),
                           shape: RoundedRectangleBorder(
                             borderRadius:
                             BorderRadius.circular(16.0),
@@ -96,10 +96,10 @@ TipClips(context) {
                                       ),
                                     ),
                                   ),
-                                  Center(
+                                  const Center(
                                     child: Text(
                                       'Tip 톺아보기',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
                                         color: Colors.black45,
@@ -123,7 +123,7 @@ TipClips(context) {
 
                                     }
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.arrow_forward,
                                     color: Colors.deepPurpleAccent,
                                   ),

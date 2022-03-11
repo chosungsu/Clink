@@ -18,7 +18,7 @@ UserPicks(BuildContext context) {
               ),
               SizedBox(width: 10,),
               const Text(
-                'Let\'s do it!',
+                '카테고리',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -83,7 +83,7 @@ Main_Pick(context) {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              color: Colors.white60.withOpacity(0.7),
+              color: Color.fromARGB(255, 255, 255, 255),
               child: InkWell(
                 onTap: () {
                   if (index == 0) {

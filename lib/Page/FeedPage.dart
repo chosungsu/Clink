@@ -2,6 +2,7 @@ import 'package:clickbyme/UI/UserTips.dart';
 import 'package:flutter/material.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/NoticeApps.dart';
 import '../UI/UserPicks.dart';
 
 
@@ -72,6 +73,7 @@ Widget makeBody(BuildContext context) {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
+      NoticeApps(context),
       UserTips(context),
       UserPicks(context),
     ],

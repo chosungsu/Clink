@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
           canvasColor: Colors.transparent,
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey).copyWith(secondary: const Color(0xFF012980)),
         ),
-        //home: SplashPage(),
         home: SplashPage(),
         /*routes: <String, WidgetBuilder> {
           '/home' : (context) => HomePage(),
@@ -82,6 +81,12 @@ class _SplashPageState extends State<SplashPage>
   @override
   void initState() {
     super.initState();
+    SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: [
+          SystemUiOverlay.bottom
+        ]
+    );
     scaleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),)..addStatusListener(

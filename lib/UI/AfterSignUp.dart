@@ -1,22 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:transition/transition.dart';
 
 import '../Sub/EcoproPage.dart';
 import '../Sub/showUserSetting.dart';
 
-showAfterSignUp(String name, String email, String whatlogin, BuildContext context) {
-
+showAfterSignUp(
+    String name, String email, String whatlogin, BuildContext context) {
   //아래 변수들은 회원가입 완료한 유저분들에게 선보이는 Aindrop의 서비스목록이다.
   final List<String> itemPro = ['캠페인 참여', '구독 정보', '마이룸'];
-  final List<String> itemImg = ['assets/images/eye-scanner.png', 'assets/images/eye-scanner.png', 'assets/images/eye-scanner.png'];
+  final List<String> itemImg = [
+    'assets/images/eye-scanner.png',
+    'assets/images/eye-scanner.png',
+    'assets/images/eye-scanner.png'
+  ];
   var logged = "";
 
-  switch(whatlogin) {
-    case "1" :
+  switch (whatlogin) {
+    case "1":
       logged = "Google 유저인증";
       break;
-    case "2" :
+    case "2":
       logged = "카카오 유저인증";
       break;
   }
@@ -34,14 +39,10 @@ showAfterSignUp(String name, String email, String whatlogin, BuildContext contex
               //개인정보 페이지로 이동
               Navigator.push(
                   context,
-                  Transition(
+                  PageTransition(
                       child: showUserSetting(
-                          name: name, email: email, login: logged
-                      ),
-                      transitionEffect: TransitionEffect.RIGHT_TO_LEFT
-                  )
-              );
-
+                          name: name, email: email, login: logged),
+                      type: PageTransitionType.leftToRightWithFade));
             },
             child: Padding(
               padding: EdgeInsets.all(10),
@@ -58,8 +59,7 @@ showAfterSignUp(String name, String email, String whatlogin, BuildContext contex
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
                                 color: Colors.black,
-                                letterSpacing: 2
-                            ),
+                                letterSpacing: 2),
                           ),
                           const Text(
                             '님 안녕하세요',
@@ -67,19 +67,14 @@ showAfterSignUp(String name, String email, String whatlogin, BuildContext contex
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 color: Colors.grey,
-                                letterSpacing: 2
-                            ),
+                                letterSpacing: 2),
                           ),
                         ],
-                      )
-                  ),
-                  Icon(
-                      Icons.arrow_forward_ios
-                  ),
+                      )),
+                  Icon(Icons.arrow_forward_ios),
                 ],
               ),
-            )
-        ),
+            )),
       ),
     ),
   );
