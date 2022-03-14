@@ -1,40 +1,56 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+
+import 'package:clickbyme/UI/UserDetails.dart';
+import 'package:clickbyme/UI/UserSettings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:transition/transition.dart';
-
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
 import '../Dialogs/destroyBackKey.dart';
-import '../Sub/HowToUsePage.dart';
-import '../UI/AfterSignUp.dart';
-import '../UI/BeforeSignUp.dart';
+import '../Tool/checkId.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/NoticeApps.dart';
 import '../route.dart';
 
-
 class ProfilePage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
-
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   bool login_state = false;
   String name = "null", email = "null", cnt = "null";
-
+  int current_noticepage = 0;
+  late Timer _timer_noti;
+  PageController _pcontroll = PageController(
+    initialPage: 0,
+  );
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       setState(() {
         checkId(context);
       });
     });
+    _timer_noti = Timer.periodic(Duration(seconds: 2), (timer) {
+      if (current_noticepage < 4) {
+        current_noticepage++;
+      } else {
+        current_noticepage = 0;
+      }
+      _pcontroll.animateToPage(current_noticepage,
+          duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _timer_noti.cancel();
   }
 
   @override
@@ -47,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: ProfileBody(context),
+        child: ProfileBody(context, _pcontroll),
       ),
     );
   }
@@ -56,178 +72,34 @@ class _ProfilePageState extends State<ProfilePage> {
     return (await destroyBackKey(context)) ?? false;
   }
 }
-checkId(BuildContext context) async {
-  String? userInfo = "", userInfo2 = "";
-  const storage = FlutterSecureStorage();
-  userInfo = await storage.read(
-      key: "google_login"
-  );
-  userInfo2 = await storage.read(
-      key: "kakao_login"
-  );
-  if (userInfo != null && userInfo2 == null) {
-    return userInfo;
-  } else if (userInfo2 != null && userInfo == null) {
-    return userInfo2;
-  } else {
-    return userInfo;
-  }
-}
-Widget ProfileBody(BuildContext context) {
-  final List<String> list_title = <String>[
-    '이용안내', '문의하기', 'Pro 버전 구매', '기본값 설정', '회원탈퇴'
-  ];
-  String name = "", email = "", cnt = "";
-  return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) {
-        return ScrollConfiguration(
-          behavior: NoBehavior(),
-          child: SingleChildScrollView(
-              child: Column(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
-                          child: const Text(
-                            '내 정보',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        FutureBuilder(
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData == false) {
-                              return showBeforeSignUp(context);
-                            }
-                            else {
-                              name = snapshot.data.toString().split("/")[1];
-                              email = snapshot.data.toString().split("/")[3];
-                              cnt = snapshot.data.toString().split("/")[5];
-                              return showAfterSignUp(
-                                  name,
-                                  email,
-                                  cnt,
-                                  context
-                              );
-                            }
-                          },
-                          future: checkId(context),
-                        )
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
-                          child: const Text(
-                            '부가기능',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.blue.shade100,
-                          elevation: 4.0,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
-                                child: ListView.separated(
-                                  //physics : 스크롤 막기 기능
-                                  //shrinkWrap : 리스트뷰 오버플로우 방지
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: list_title.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return Container(
-                                        padding: const EdgeInsets.all(10),
-                                        child: InkWell(
-                                          child: Text(
-                                              '${list_title[index]}'
-                                          ),
-                                          onTap: () {
-                                            if (index == 0) {
-                                              //이용안내페이지 호출
-                                              Navigator.push(
-                                                  context,
-                                                  Transition(
-                                                      child: HowToUsePage(),
-                                                      transitionEffect: TransitionEffect.RIGHT_TO_LEFT
-                                                  )
-                                              );
-                                            } else if (index == 1) {
 
-                                            } else if (index == 2) {
-
-                                            } else if (index == 3) {
-
-                                            } else  {
-                                              //회원탈퇴 바텀시트 호출
-                                              if (name != "" && email != "") {
-                                                DeleteUserVerify(context, name);
-                                              } else {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) => AlertDialog(
-                                                    title: const Text('알림'),
-                                                    content: const Text('회원님께서는 현재 미로그인 상태로\n'
-                                                        '로그아웃 기능은 사용불가하시며\n'
-                                                        '이 기능은 로그인 후 탈퇴 시 사용가능합니다.'),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () => Navigator.pop(context, false),
-                                                        child: const Text('알겠습니다.'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              }
-                                            }
-                                          },
-                                        )
-                                    );
-                                  },
-                                  separatorBuilder: (
-                                      BuildContext context, int index
-                                      ) => const Divider(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                  ]
-              )
-          ),
-        );
-      });
+Widget ProfileBody(BuildContext context, PageController pcontroll) {
+  return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    return ScrollConfiguration(
+      behavior: NoBehavior(),
+      child: SingleChildScrollView(
+          child: Column(children: <Widget>[
+        UserDetails(context),
+        NoticeApps(context, pcontroll),
+        UserSettings(context),
+      ])),
+    );
+  });
 }
 
 DeleteUserVerify(BuildContext context, String name) {
-  showModalBottomSheet(context: context, builder: (BuildContext context) {
-    return Container(
-      height: 180,
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          )
-      ),
-      child: Column(
-          children: [
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 180,
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              )),
+          child: Column(children: [
             const Text(
               '회원탈퇴',
               style: TextStyle(
@@ -239,8 +111,8 @@ DeleteUserVerify(BuildContext context, String name) {
             const SizedBox(height: 10),
             const Text(
               '회원탈퇴 진행하겠습니까?\n'
-                  '아래 버튼을 클릭하시면 회원탈퇴처리가 완료됩니다.\n'
-                  '더 좋은 서비스로 다음 기회에 찾아뵙겠습니다.',
+              '아래 버튼을 클릭하시면 회원탈퇴처리가 완료됩니다.\n'
+              '더 좋은 서비스로 다음 기회에 찾아뵙겠습니다.',
               style: TextStyle(
                 color: Colors.red,
                 fontSize: 16,
@@ -257,18 +129,17 @@ DeleteUserVerify(BuildContext context, String name) {
                     child: const MyHomePage(title: 'HabitMind'),
                   ),
                 );
-                Provider.of<GoogleSignInController>
-                  (context, listen: false).logout(context, name);
-                Provider.of<KakaoSignInController>
-                  (context, listen: false).logout(context, name);
+                Provider.of<GoogleSignInController>(context, listen: false)
+                    .logout(context, name);
+                Provider.of<KakaoSignInController>(context, listen: false)
+                    .logout(context, name);
               },
               style: ElevatedButton.styleFrom(
                   primary: Colors.amberAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  elevation: 2.0
-              ),
+                  elevation: 2.0),
               child: const Text(
                 '탈퇴하기',
                 style: TextStyle(
@@ -278,8 +149,7 @@ DeleteUserVerify(BuildContext context, String name) {
                 ),
               ),
             ),
-          ]
-      ),
-    );
-  });
+          ]),
+        );
+      });
 }

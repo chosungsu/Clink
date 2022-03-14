@@ -36,19 +36,19 @@ TipClips(context) {
   final List<AD_Home> _list_ad = [
     AD_Home(
       id: '1',
-      title: '일정 관리',
+      title: '식습관 관리',
       person_num: 3,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '2',
-      title: '구독 관리',
+      title: '데이로그 관리',
       person_num: 4,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '3',
-      title: '링크 관리',
+      title: '챌린지 관리',
       person_num: 5,
       date: DateTime.now(),
     ),

@@ -20,7 +20,7 @@ addcalendartodo(BuildContext context, TextEditingController eventController,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "내용",
                 style: TextStyle(
                   fontSize: 18,
@@ -30,7 +30,7 @@ addcalendartodo(BuildContext context, TextEditingController eventController,
               ),
               TextField(
                 controller: eventController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "일정"
                 ),
               ),

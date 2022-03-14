@@ -16,7 +16,7 @@ showBeforeSignUp(BuildContext context) {
   ];
 
   return Card(
-    color: Colors.blue.shade100,
+    color: Colors.white,
     elevation: 4.0,
     child: Container(
       //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.

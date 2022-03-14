@@ -1,5 +1,6 @@
 import 'package:clickbyme/UI/UserPicks.dart';
 import 'package:clickbyme/UI/UserSubscription.dart';
+import 'package:clickbyme/UI/UserTips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../DB/AD_Home.dart';
@@ -15,33 +16,7 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage> {
-  final List<AD_Home> _list_subscript = [
-    AD_Home(
-      id: '1',
-      title: '일정 관리',
-      person_num: 3,
-      date: DateTime.now(),
-    ),
-    AD_Home(
-      id: '2',
-      title: '인맥 관리',
-      person_num: 4,
-      date: DateTime.now(),
-    ),
-    AD_Home(
-      id: '3',
-      title: '구독 관리',
-      person_num: 5,
-      date: DateTime.now(),
-    ),
-    AD_Home(
-      id: '4',
-      title: '포인트 관리',
-      person_num: 5,
-      date: DateTime.now(),
-    )
-  ];
-
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -81,8 +56,9 @@ class _HomePageState extends State<HomePage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  UserTips(context),
                   AD(context),
-                  UserSubscription(context, _list_subscript),
+                  UserPicks(context),
                 ],
               ),
             )

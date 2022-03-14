@@ -3,35 +3,38 @@ import 'package:sticky_headers/sticky_headers.dart';
 
 import '../DB/AD_Home.dart';
 
-UserSubscription(BuildContext context, List<AD_Home> list_subscript) {
+UserSubscription(BuildContext context) {
+  final List<AD_Home> _list_subscript = [
+    AD_Home(
+      id: '1',
+      title: '일정 관리',
+      person_num: 3,
+      date: DateTime.now(),
+    ),
+    AD_Home(
+      id: '2',
+      title: '인맥 관리',
+      person_num: 4,
+      date: DateTime.now(),
+    ),
+    AD_Home(
+      id: '3',
+      title: '구독 관리',
+      person_num: 5,
+      date: DateTime.now(),
+    ),
+    AD_Home(
+      id: '4',
+      title: '포인트 관리',
+      person_num: 5,
+      date: DateTime.now(),
+    )
+  ];
   return Card(
     color: Colors.white,
     child: Column(
       children: [
-        Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(
-              vertical: 10, horizontal: 15,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.subscriptions,
-                  color: Colors.deepPurpleAccent.shade100,
-                ),
-                SizedBox(width: 10,),
-                Text(
-                  'My 구독',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black54,
-                  ),
-                ),
-              ],
-            )
-        ),
-        Subscript(context, list_subscript),
+        Subscript(context, _list_subscript),
         //ContentSub(),
       ],
     )

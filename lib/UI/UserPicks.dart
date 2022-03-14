@@ -37,19 +37,19 @@ Main_Pick(context) {
   final List<AD_Home> _list_ad = [
     AD_Home(
       id: '1',
-      title: '일정 관리',
+      title: '식습관 작성',
       person_num: 3,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '2',
-      title: '구독 관리',
+      title: '데이로그 작성',
       person_num: 5,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '3',
-      title: '사이트 링크 관리',
+      title: '챌린지 작성',
       person_num: 5,
       date: DateTime.now(),
     ),
@@ -62,7 +62,7 @@ Main_Pick(context) {
   ];
   final List<String> itemImg = [
     'assets/images/fingerprint.png',
-    'assets/images/fingerprint.png',
+    'assets/images/date.png',
     'assets/images/icon-link.png',
     'assets/images/icon-chat.png',
   ];
@@ -87,13 +87,7 @@ Main_Pick(context) {
               child: InkWell(
                 onTap: () {
                   if (index == 0) {
-                    //일정관리탭으로 이동
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              GoToDoDate()),
-                    );
+                    
                   } else if (index == 1) {
 
                   } else if (index == 2) {

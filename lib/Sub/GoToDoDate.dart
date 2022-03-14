@@ -25,7 +25,6 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _events = {};
     _eventController = TextEditingController();
   }
 
@@ -128,27 +127,30 @@ class _GoToDoDateState extends State<GoToDoDate> with TickerProviderStateMixin {
 
   Widget listmakebody(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text('목록',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.deepPurpleAccent.shade100)),
-          ScrollConfiguration(
-              behavior: NoBehavior(),
-              child: SingleChildScrollView(
-                child: Text('목록',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.deepPurpleAccent.shade100)),
-              )),
-        ],
-      ),
-    );
+        width: MediaQuery.of(context).size.width,
+        alignment: Alignment.topLeft,
+        color: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text('리스트',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurpleAccent.shade100)),
+              ScrollConfiguration(
+                  behavior: NoBehavior(),
+                  child: SingleChildScrollView(
+                    child: Text('목록',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.deepPurpleAccent.shade100)),
+                  )),
+            ],
+          ),
+        ));
   }
 }

@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:clickbyme/UI/UserTips.dart';
 import 'package:flutter/material.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/NoticeApps.dart';
 import '../UI/UserPicks.dart';
-
+import '../UI/UserSubscription.dart';
 
 class FeedPage extends StatefulWidget {
   @override
@@ -12,23 +14,22 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: false,
+        centerTitle: true,
         backgroundColor: Colors.grey.shade100,
-        toolbarHeight: 100,
+        toolbarHeight: 50,
         title: Padding(
           padding: EdgeInsets.only(left: 10),
           child: Row(
             children: [
-              Text(
-                  '체크잇',
+              Text('체크 피드',
                   style: TextStyle(
                     color: Colors.deepPurpleAccent.shade100,
-                  )
-              ),
+                  )),
               SizedBox(
                 width: 5,
               ),
@@ -43,24 +44,22 @@ class _FeedPageState extends State<FeedPage> {
         automaticallyImplyLeading: false,
       ),
       body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return ScrollConfiguration(
-                behavior: NoBehavior(),
-                child: SingleChildScrollView(
-                  physics: ScrollPhysics(),
-                  child: Column(
-                    children: [
-                      makeBody(context)
-                    ],
-                  ),
+          onWillPop: _onWillPop,
+          child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return ScrollConfiguration(
+              behavior: NoBehavior(),
+              child: SingleChildScrollView(
+                physics: ScrollPhysics(),
+                child: Column(
+                  children: [makeBody(context)],
                 ),
-              );
-            })
-      ),
+              ),
+            );
+          })),
     );
   }
+
   Future<bool> _onWillPop() async {
     return (await destroyBackKey(context)) ?? false;
   }
@@ -68,14 +67,11 @@ class _FeedPageState extends State<FeedPage> {
 
 // 바디 만들기
 Widget makeBody(BuildContext context) {
-
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
-      NoticeApps(context),
-      UserTips(context),
-      UserPicks(context),
+      UserSubscription(context),
     ],
   );
 }
