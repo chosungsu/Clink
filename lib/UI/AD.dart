@@ -66,7 +66,7 @@ AdClips(context) {
   return SizedBox(
       height: MediaQuery.of(context).size.height / 10,
       child: Padding(
-        padding: EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.only(bottom: 15),
         child: ListView.builder(
             //controller: mainController,
             physics: BouncingScrollPhysics(),

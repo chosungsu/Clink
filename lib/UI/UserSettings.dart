@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:transition/transition.dart';
 
 import '../Page/ProfilePage.dart';
@@ -29,47 +30,54 @@ UserSettings(BuildContext context) {
           ),
         ),
       ),
-      Card(
-        color: Colors.white,
-        elevation: 4.0,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
-              child: ListView.separated(
-                //physics : 스크롤 막기 기능
-                //shrinkWrap : 리스트뷰 오버플로우 방지
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: list_title.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                      padding: const EdgeInsets.all(10),
-                      child: InkWell(
-                        child: Text('${list_title[index]}'),
-                        onTap: () {
-                          if (index == 0) {
-                            //이용안내페이지 호출
-                            Navigator.push(
-                                context,
-                                Transition(
-                                    child: HowToUsePage(),
-                                    transitionEffect:
-                                        TransitionEffect.RIGHT_TO_LEFT));
-                          } else if (index == 1) {
-                          } else if (index == 2) {
-                          } else {}
-                        },
-                      ));
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-              ),
+      Padding(
+        padding: EdgeInsets.only(left: 10, right: 10),
+        child: Neumorphic(
+            style: NeumorphicStyle(
+              shape: NeumorphicShape.flat,
+              boxShape:
+                  NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
+              depth: 4,
+              intensity: 0.5,
+              color: Colors.white,
             ),
-          ],
-        ),
-      ),
+            child: Container(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+                  child: ListView.separated(
+                    //physics : 스크롤 막기 기능
+                    //shrinkWrap : 리스트뷰 오버플로우 방지
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: list_title.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                          padding: const EdgeInsets.all(10),
+                          child: InkWell(
+                            child: Text('${list_title[index]}'),
+                            onTap: () {
+                              if (index == 0) {
+                                //이용안내페이지 호출
+                                Navigator.push(
+                                    context,
+                                    Transition(
+                                        child: HowToUsePage(),
+                                        transitionEffect:
+                                            TransitionEffect.RIGHT_TO_LEFT));
+                              } else if (index == 1) {
+                              } else if (index == 2) {
+                              } else {}
+                            },
+                          ));
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
+                  ),
+                ),
+              ),
+            )),
+      )
     ],
   );
 }

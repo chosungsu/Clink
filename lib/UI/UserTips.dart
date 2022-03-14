@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../DB/AD_Home.dart';
 
 UserTips(BuildContext context) {
@@ -17,7 +18,7 @@ UserTips(BuildContext context) {
               ),
               SizedBox(width: 10,),
               const Text(
-                '알면 유용한 팁들',
+                'HabitMind가 처음이시라면?',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -59,10 +60,16 @@ TipClips(context) {
       date: DateTime.now(),
     )
   ];
+  final List _list_background_color = [
+    Colors.green.shade200,
+    Colors.blue.shade200,
+    Colors.yellow.shade200,
+    Colors.red.shade200
+  ];
   return SizedBox(
       height: MediaQuery.of(context).size.height/ 4,
       child: Padding(
-        padding: EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.only(bottom: 15),
         child: ListView.builder(
           //controller: mainController,
             physics: BouncingScrollPhysics(),
@@ -71,38 +78,50 @@ TipClips(context) {
             itemCount: _list_ad.length,
             itemBuilder: (context, index) =>
                 Padding(
-                    padding: EdgeInsets.only(left:15, right: 15),
+                    padding: EdgeInsets.only(left:10, right: 10),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.7,
-                      child: Card(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(16.0),
+                      child: Neumorphic(
+                        style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          boxShape: NeumorphicBoxShape.roundRect(
+                            BorderRadius.circular(16.0)
                           ),
-                          elevation: 4.0,
-                          child: Stack(
+                          depth: 4,
+                          intensity: 0.5,
+                          color: _list_background_color[index],
+                          lightSource: LightSource.topLeft
+                        ),
+                        child: Stack(
                             children: [
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Center(
-                                    child: Text(
+                                    child: NeumorphicText(
                                       _list_ad[index].title,
-                                      style: const TextStyle(
+                                      style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: Colors.white,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontSize: 25,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.black45,
                                       ),
                                     ),
                                   ),
-                                  const Center(
-                                    child: Text(
+                                  Center(
+                                    child: NeumorphicText(
                                       'Tip 톺아보기',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                      style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 4,
+                                        color: Colors.white,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
                                         fontSize: 15,
-                                        color: Colors.black45,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
@@ -123,15 +142,23 @@ TipClips(context) {
 
                                     }
                                   },
-                                  icon: const Icon(
+                                  icon: NeumorphicIcon(
                                     Icons.arrow_forward,
-                                    color: Colors.deepPurpleAccent,
+                                    size: 30,
+                                    style: const NeumorphicStyle(
+                                      color: Colors.white,
+                                      shape: NeumorphicShape.concave,),
+                                    curve: Neumorphic.DEFAULT_CURVE,
                                   ),
+                                  /*icon: const Icon(
+                                    Icons.arrow_forward_outlined,
+                                    color: Colors.deepPurpleAccent,
+                                  ),*/
                                 ),
                               )
                             ],
                           ),
-                      ),
+                        )
                     )
                 )
         ),

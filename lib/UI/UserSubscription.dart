@@ -30,14 +30,10 @@ UserSubscription(BuildContext context) {
       date: DateTime.now(),
     )
   ];
-  return Card(
-    color: Colors.white,
-    child: Column(
-      children: [
-        Subscript(context, _list_subscript),
-        //ContentSub(),
-      ],
-    )
+  return Column(
+    children: [
+      Subscript(context, _list_subscript),
+    ],
   );
 }
 
@@ -49,105 +45,95 @@ ContentSub() {
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
       itemCount: 35,
-      itemBuilder: (context, index) =>
-          Column(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 3,
-                child: Container(
-                    decoration:
-                    BoxDecoration(
-                      border:
-                      Border.all(
-                        width: 1,
-                        color: Colors.orangeAccent,
-                      ),
-                      borderRadius:
-                      BorderRadius.circular(10.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '구독 명수 : ' +
-                            index.toString(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.black45,
-                        ),
-                      ),
-                    )
+      itemBuilder: (context, index) => Column(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 3,
+            child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.orangeAccent,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15),
-              )
-            ],
+                child: Center(
+                  child: Text(
+                    '구독 명수 : ' + index.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Colors.black45,
+                    ),
+                  ),
+                )),
           ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15),
+          )
+        ],
+      ),
     ),
   );
 }
+
 Subscript(context, List<AD_Home> list_subscript) {
   return list_subscript.isEmpty
       ? Container(
-    height: 0,
-  ) : SizedBox(
-    child: Column(
-      children: [
-        Sticky(context, list_subscript),
-      ],
-    ),
-  );
+          height: 0,
+        )
+      : SizedBox(
+          child: Column(
+            children: [
+              Sticky(context, list_subscript),
+            ],
+          ),
+        );
 }
+
 Sticky(context, List<AD_Home> list_subscript) {
   return StickyHeader(
-      header: Container(
-        color: Colors.white,
-        alignment: Alignment.topLeft,
-        height: MediaQuery.of(context).size.height / 15,
-        child: ListView.builder(
-          //controller: mainController,
-          shrinkWrap: true,
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          scrollDirection: Axis.horizontal,
-          itemCount: list_subscript.isEmpty
-              ? 0
-              : list_subscript.length,
-          itemBuilder: (context, index) =>
-              Row(
-                children: [
-                  SizedBox(
-                    width: 130,
-                    child: Container(
-                        decoration:
-                        BoxDecoration(
-                          border:
-                          Border.all(
-                            width: 1,
-                            color: Colors.orangeAccent,
-                          ),
-                          borderRadius:
-                          BorderRadius.circular(10.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            list_subscript[index].title,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.black45,
-                            ),
-                          ),
-                        )
+    header: Container(
+      color: Colors.grey.shade100,
+      alignment: Alignment.topLeft,
+      height: MediaQuery.of(context).size.height / 15,
+      child: ListView.builder(
+        //controller: mainController,
+        shrinkWrap: true,
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        scrollDirection: Axis.horizontal,
+        itemCount: list_subscript.isEmpty ? 0 : list_subscript.length,
+        itemBuilder: (context, index) => Row(
+          children: [
+            SizedBox(
+              width: 100,
+              child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.orangeAccent,
                     ),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                  )
-                ],
-              ),
+                  child: Center(
+                    child: Text(
+                      list_subscript[index].title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.black45,
+                      ),
+                    ),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+            )
+          ],
         ),
       ),
-      content: ContentSub(),
+    ),
+    content: ContentSub(),
   );
 }

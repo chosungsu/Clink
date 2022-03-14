@@ -35,14 +35,14 @@ class _ProfilePageState extends State<ProfilePage> {
         checkId(context);
       });
     });
-    _timer_noti = Timer.periodic(Duration(seconds: 2), (timer) {
+    _timer_noti = Timer.periodic(Duration(seconds: 10), (timer) {
       if (current_noticepage < 4) {
         current_noticepage++;
       } else {
         current_noticepage = 0;
       }
       _pcontroll.animateToPage(current_noticepage,
-          duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+          duration: Duration(milliseconds: 2000), curve: Curves.easeIn);
     });
   }
 

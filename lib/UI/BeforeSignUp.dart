@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:clickbyme/Page/LoginSignPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../Sub/EcoproPage.dart';
@@ -15,12 +16,17 @@ showBeforeSignUp(BuildContext context) {
     'assets/images/eye-scanner.png'
   ];
 
-  return Card(
-    color: Colors.white,
-    elevation: 4.0,
+  return Padding(padding: EdgeInsets.only(left: 10, right: 10), child: Neumorphic(
+    style: NeumorphicStyle(
+        shape: NeumorphicShape.convex,
+        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
+        depth: 4,
+        intensity: 0.5,
+        color: Colors.white,
+        lightSource: LightSource.topLeft),
     child: Container(
       //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width*0.95,
       height: 100,
       child: Center(
           //crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,5 +84,5 @@ showBeforeSignUp(BuildContext context) {
         ),
       )),
     ),
-  );
+  ),);
 }

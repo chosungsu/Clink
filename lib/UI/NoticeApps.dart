@@ -42,41 +42,28 @@ NoticeApps(BuildContext context, PageController pcontroll) {
     )
   ];
   return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 15,
-          ),
+          padding: const EdgeInsets.only(top: 5, bottom: 5, left: 20),
           child: Row(
             children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.format_quote,
-                        color: Colors.deepPurpleAccent.shade100,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        '공지사항',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  )),
+              const Flexible(
+                fit: FlexFit.tight,
+                child: Text(
+                  '공지사항',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
               const Text(
                 'click!',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 20,
                   color: Colors.red,
                 ),
               ),
@@ -101,51 +88,51 @@ NoticeApps(BuildContext context, PageController pcontroll) {
 }
 
 NoticeClip(context, List<AD_Home> list_ad, PageController pcontroll) {
-  return SizedBox(
-    width: MediaQuery.of(context).size.width,
+  return Padding(
+    padding: EdgeInsets.only(left: 10, right: 10),
+    child: SizedBox(
       height: MediaQuery.of(context).size.height / 10,
-      child: Padding(
-        padding: EdgeInsets.only(left: 5, bottom: 20, right: 5),
-        child: Card(
-            color: Color.fromARGB(255, 255, 255, 255),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            elevation: 4.0,
-            child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: PageView.builder(
-                    scrollDirection: Axis.vertical,
-                    pageSnapping: false,
-                    itemCount: list_ad.length,
-                    controller: pcontroll,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: Text(
-                              list_ad[index].title.toString(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.black45,
-                              ),
+      child: Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          elevation: 4.0,
+          child: Padding(
+              padding: EdgeInsets.all(5.0),
+              child: PageView.builder(
+                  scrollDirection: Axis.vertical,
+                  pageSnapping: false,
+                  itemCount: list_ad.length,
+                  controller: pcontroll,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: Text(
+                            list_ad[index].title.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.black45,
                             ),
                           ),
-                          const Center(
-                            child: Text(
-                              'today',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Color.fromARGB(115, 175, 175, 175),
-                              ),
+                        ),
+                        const Center(
+                          child: Text(
+                            'today',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Color.fromARGB(115, 175, 175, 175),
                             ),
                           ),
-                        ],
-                      );
-                    }))),
-      ));
+                        ),
+                      ],
+                    );
+                  }))),
+    ),
+  );
 }

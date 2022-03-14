@@ -62,6 +62,7 @@ dependencies:
   sticky_headers: ^0.2.0
   textfield_tags: ^1.4.3
   table_calendar: ^3.0.4
+  flutter_neumorphic: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +91,8 @@ flutter:
     - assets/images/icon-link.png
     - assets/images/icon-chat.png
     - assets/images/date.png
+    - assets/images/food.png
+    - assets/images/challenge.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
