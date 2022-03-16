@@ -108,7 +108,7 @@ First(BuildContext context, String name, String login) {
                 children: [
                   Text(
                     '이름(닉네임) : ' + name,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                         color: Colors.black45,
@@ -118,7 +118,7 @@ First(BuildContext context, String name, String login) {
                   Divider(),
                   Text(
                     '로그인 인증 : ' + login,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                         color: Colors.black45,
@@ -128,7 +128,7 @@ First(BuildContext context, String name, String login) {
                   Divider(),
                   InkWell(
                       child: Row(
-                        children: [
+                        children: const [
                           Flexible(
                             fit: FlexFit.tight,
                             child: Text(
@@ -195,7 +195,7 @@ Second(BuildContext context) {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     '등급 : ' + '방문자',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -207,7 +207,7 @@ Second(BuildContext context) {
                   Divider(),
                   InkWell(
                       child: Row(
-                        children: [
+                        children: const [
                           Flexible(
                             fit: FlexFit.tight,
                             child: Text(

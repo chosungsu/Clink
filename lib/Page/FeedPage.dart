@@ -71,7 +71,7 @@ Widget makeBody(BuildContext context) {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
-      UserSubscription(context),
+      UserPicks(context),
     ],
   );
 }

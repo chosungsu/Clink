@@ -1,13 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:transition/transition.dart';
-
-import '../Page/ProfilePage.dart';
 import '../Sub/HowToUsePage.dart';
-import '../Tool/checkId.dart';
-import 'AfterSignUp.dart';
-import 'BeforeSignUp.dart';
 
 UserSettings(BuildContext context) {
   final List<String> list_title = <String>[

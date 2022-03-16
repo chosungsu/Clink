@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   UserTips(context),
                   AD(context),
-                  UserPicks(context),
+                  UserSubscription(context),
                 ],
               ),
             )

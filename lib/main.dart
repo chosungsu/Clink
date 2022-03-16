@@ -7,8 +7,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
@@ -17,11 +17,10 @@ import 'Page/ProfilePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //화면회전 막기
-  /*SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);*/
   KakaoContext.clientId = 'b5e60a90f0204c0bb09625df79a11772';
   await Firebase.initializeApp();
+  await Hive.initFlutter();
+  await Hive.openBox('user_info');
   runApp(const MyApp());
 }
 
@@ -102,7 +101,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             Timer(
               const Duration(milliseconds: 1000),
               () {
-                scaleController.reset();
+                scaleController.stop();
               },
             );
           }
@@ -122,8 +121,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     // TODO: implement dispose
-    scaleController.dispose();
     super.dispose();
+    scaleController.dispose();
   }
 
   @override

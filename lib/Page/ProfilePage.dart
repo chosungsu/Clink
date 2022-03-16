@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
 import '../Dialogs/destroyBackKey.dart';
-import '../Tool/checkId.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/NoticeApps.dart';
 import '../route.dart';
@@ -23,27 +22,24 @@ class _ProfilePageState extends State<ProfilePage> {
   String name = "null", email = "null", cnt = "null";
   int current_noticepage = 0;
   late Timer _timer_noti;
-  PageController _pcontroll = PageController(
+  final PageController _pcontroll = PageController(
     initialPage: 0,
   );
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      setState(() {
-        checkId(context);
-      });
-    });
-    _timer_noti = Timer.periodic(Duration(seconds: 10), (timer) {
-      if (current_noticepage < 4) {
-        current_noticepage++;
-      } else {
-        current_noticepage = 0;
-      }
-      _pcontroll.animateToPage(current_noticepage,
-          duration: Duration(milliseconds: 2000), curve: Curves.easeIn);
-    });
+    _timer_noti = Timer.periodic(const Duration(seconds: 5), (timer) {
+          if (current_noticepage < 4) {
+            current_noticepage++;
+          } else {
+            current_noticepage = 0;
+          }
+          if(_pcontroll.hasClients) {
+            _pcontroll.animateToPage(current_noticepage,
+              duration: const Duration(milliseconds: 2000), curve: Curves.easeIn);
+          }
+        });
   }
 
   @override
@@ -74,17 +70,17 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 Widget ProfileBody(BuildContext context, PageController pcontroll) {
-  return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    return ScrollConfiguration(
-      behavior: NoBehavior(),
-      child: SingleChildScrollView(
-          child: Column(children: <Widget>[
-        UserDetails(context),
-        NoticeApps(context, pcontroll),
-        UserSettings(context),
-      ])),
-    );
-  });
+  return ScrollConfiguration(
+    behavior: NoBehavior(),
+    child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+      UserDetails(context),
+      NoticeApps(context, pcontroll),
+      UserSettings(context),
+    ])),
+  );
 }
 
 DeleteUserVerify(BuildContext context, String name) {

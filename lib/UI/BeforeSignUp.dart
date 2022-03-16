@@ -18,7 +18,7 @@ showBeforeSignUp(BuildContext context) {
 
   return Padding(padding: EdgeInsets.only(left: 10, right: 10), child: Neumorphic(
     style: NeumorphicStyle(
-        shape: NeumorphicShape.convex,
+        shape: NeumorphicShape.flat,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
         depth: 4,
         intensity: 0.5,

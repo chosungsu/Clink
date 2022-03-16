@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../Tool/checkId.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'AfterSignUp.dart';
 import 'BeforeSignUp.dart';
 
 UserDetails(BuildContext context) {
-  String name = "", email = "", cnt = "";
+  
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -21,19 +20,13 @@ UserDetails(BuildContext context) {
           ),
         ),
       ),
-      FutureBuilder(
-        builder: (context, snapshot) {
-          if (snapshot.hasData == false) {
-            return showBeforeSignUp(context);
-          } else {
-            name = snapshot.data.toString().split("/")[1];
-            email = snapshot.data.toString().split("/")[3];
-            cnt = snapshot.data.toString().split("/")[5];
-            return showAfterSignUp(name, email, cnt, context);
-          }
-        },
-        future: checkId(context),
-      )
+      Hive.box('user_info').get('id') != null
+          ? showAfterSignUp(
+            Hive.box('user_info').get('id'), 
+            Hive.box('user_info').get('email'), 
+            Hive.box('user_info').get('email').toString(), 
+            context)
+          : showBeforeSignUp(context)
     ],
   );
 }

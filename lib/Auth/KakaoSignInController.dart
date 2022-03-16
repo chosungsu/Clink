@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 
 class KakaoSignInController with ChangeNotifier {
@@ -22,17 +23,9 @@ class KakaoSignInController with ChangeNotifier {
       if (user.kakaoAccount!.profile!.nickname != null) {
         String? nick = user.kakaoAccount!.profile!.nickname;
         String? email = user.kakaoAccount!.email;
-        await storage.write(
-            key: "kakao_login",
-            value: "id/" +
-                nick! +
-                "/" +
-                "email/" +
-                email! +
-                "/" +
-                "count/" +
-                count.toString()
-        );
+        Hive.box('user_info').put('id', nick);
+        Hive.box('user_info').put('email', email);
+        Hive.box('user_info').put('count', count);
         //firestore 저장
         await firestore.collection('User').doc(nick)
             .set({
@@ -45,7 +38,7 @@ class KakaoSignInController with ChangeNotifier {
   }
   logout(BuildContext context, String name) async {
     count = -2;
-    await storage.deleteAll();
+    Hive.box('user_info').delete('id');
     await UserApi.instance.logout();
     //firestore 삭제
     await firestore.collection('User').doc(name)
