@@ -9,13 +9,6 @@ import '../Sub/showUserSetting.dart';
 
 showAfterSignUp(
     String name, String email, String whatlogin, BuildContext context) {
-  //아래 변수들은 회원가입 완료한 유저분들에게 선보이는 Aindrop의 서비스목록이다.
-  final List<String> itemPro = ['캠페인 참여', '구독 정보', '마이룸'];
-  final List<String> itemImg = [
-    'assets/images/eye-scanner.png',
-    'assets/images/eye-scanner.png',
-    'assets/images/eye-scanner.png'
-  ];
   var logged = "";
 
   switch (whatlogin) {

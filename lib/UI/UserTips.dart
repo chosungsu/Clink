@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../DB/AD_Home.dart';
@@ -8,7 +9,8 @@ UserTips(BuildContext context) {
       Container(
           width: double.infinity,
           margin: const EdgeInsets.symmetric(
-            vertical: 10, horizontal: 15,
+            vertical: 10,
+            horizontal: 15,
           ),
           child: Row(
             children: [
@@ -16,7 +18,9 @@ UserTips(BuildContext context) {
                 Icons.tips_and_updates,
                 color: Colors.deepPurpleAccent.shade100,
               ),
-              SizedBox(width: 10,),
+              SizedBox(
+                width: 10,
+              ),
               const Text(
                 'HabitMind가 처음이시라면?',
                 style: TextStyle(
@@ -26,14 +30,31 @@ UserTips(BuildContext context) {
                 ),
               ),
             ],
-          )
-      ),
+          )),
       TipClips(context),
-
     ],
   );
 }
+
 TipClips(context) {
+  return CarouselSlider(
+      items: [
+        PageTipsCarousel(context, 0),
+        PageTipsCarousel(context, 1),
+        PageTipsCarousel(context, 2),
+        PageTipsCarousel(context, 3),
+      ],
+      options: CarouselOptions(
+          height: MediaQuery.of(context).size.height / 4.5,
+          autoPlay: true,
+          autoPlayCurve: Curves.easeInOut,
+          enlargeCenterPage: true,
+          reverse: false,
+          aspectRatio: 16/9,
+          viewportFraction: 0.8));
+}
+
+PageTipsCarousel(BuildContext context, int index) {
   final List<AD_Home> _list_ad = [
     AD_Home(
       id: '1',
@@ -66,102 +87,75 @@ TipClips(context) {
     Colors.yellow.shade200,
     Colors.red.shade200
   ];
-  return SizedBox(
-      height: MediaQuery.of(context).size.height/ 4,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 15),
-        child: ListView.builder(
-          //controller: mainController,
-            physics: BouncingScrollPhysics(),
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: _list_ad.length,
-            itemBuilder: (context, index) =>
-                Padding(
-                    padding: EdgeInsets.only(left:10, right: 10),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: Neumorphic(
-                        style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(16.0)
-                          ),
-                          depth: 4,
-                          intensity: 0.5,
-                          color: _list_background_color[index],
-                          lightSource: LightSource.topLeft
+  return Padding(
+      padding: EdgeInsets.only(bottom: 15),
+      child: SizedBox(
+          child: Neumorphic(
+            style: NeumorphicStyle(
+                shape: NeumorphicShape.convex,
+                boxShape:
+                    NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
+                depth: 4,
+                intensity: 0.5,
+                color: _list_background_color[index],
+                lightSource: LightSource.topLeft),
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: NeumorphicText(
+                        _list_ad[index].title,
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: Colors.white,
                         ),
-                        child: Stack(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: NeumorphicText(
-                                      _list_ad[index].title,
-                                      style: const NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: Colors.white,
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: NeumorphicText(
-                                      'Tip 톺아보기',
-                                      style: const NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 4,
-                                        color: Colors.white,
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: IconButton(
-                                  onPressed: () {
-                                    if(index == 1) {
-
-                                    } else if (index == 2) {
-
-                                    } else if (index == 3) {
-
-                                    } else {
-
-                                    }
-                                  },
-                                  icon: NeumorphicIcon(
-                                    Icons.arrow_forward,
-                                    size: 30,
-                                    style: const NeumorphicStyle(
-                                      color: Colors.white,
-                                      shape: NeumorphicShape.concave,),
-                                    curve: Neumorphic.DEFAULT_CURVE,
-                                  ),
-                                  /*icon: const Icon(
-                                    Icons.arrow_forward_outlined,
-                                    color: Colors.deepPurpleAccent,
-                                  ),*/
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                    )
+                        textStyle: NeumorphicTextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: NeumorphicText(
+                        'Tip 톺아보기',
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 4,
+                          color: Colors.white,
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: IconButton(
+                    onPressed: () {
+                      if (index == 1) {
+                      } else if (index == 2) {
+                      } else if (index == 3) {
+                      } else {}
+                    },
+                    icon: NeumorphicIcon(
+                      Icons.arrow_forward,
+                      size: 30,
+                      style: const NeumorphicStyle(
+                        color: Colors.white,
+                        shape: NeumorphicShape.concave,
+                      ),
+                      curve: Neumorphic.DEFAULT_CURVE,
+                    ),
+                  ),
                 )
-        ),
-      )
-  );
+              ],
+            ),
+          )));
 }

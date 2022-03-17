@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/adapters.dart';
 
-destroyBackKey (BuildContext context){
+destroyBackKey(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -13,7 +14,12 @@ destroyBackKey (BuildContext context){
           child: const Text('아니요'),
         ),
         TextButton(
-          onPressed: () => SystemNavigator.pop(),
+          onPressed: () {
+            Hive.box('user_info').get('autologin') == false
+                ? Hive.box('user_info').delete('id')
+                : null;
+            SystemNavigator.pop();
+          },
           child: const Text('네'),
         ),
       ],

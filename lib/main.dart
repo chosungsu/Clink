@@ -92,7 +92,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     )..addStatusListener(
         (status) {
           if (status == AnimationStatus.completed) {
-            if (islogined) {
+            if (Hive.box('user_info').get('id') != null) {
               GoToMain(context);
             } else {
               GoToLogin(context);
@@ -178,11 +178,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     const SpinKitFadingCircle(
                       color: Colors.white,
                     ),
-                    FutureBuilder(
-                      builder: (context, snapshot) {
-                        islogined = snapshot.hasData;
-                        if (snapshot.hasData == false) {
-                          return const Text(
+                    Hive.box('user_info').get('id') == null || Hive.box('user_info').get('autologin') == false
+                        ? const Text(
                             '로그인 페이지 이동 중...',
                             style: TextStyle(
                                 color: Colors.white,
@@ -190,9 +187,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 2 // bold
                                 ),
-                          );
-                        } else {
-                          return const Text(
+                          )
+                        : const Text(
                             '어서오세요',
                             style: TextStyle(
                                 color: Colors.white,
@@ -200,11 +196,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 2 // bold
                                 ),
-                          );
-                        }
-                      },
-                      future: issuccess(context),
-                    ),
+                          )
                   ],
                 )),
           ],

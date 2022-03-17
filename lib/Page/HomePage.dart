@@ -15,33 +15,31 @@ class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
-  
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.grey.shade100,
-        title: Text(
-            widget.title,
+        title: Text(widget.title,
             style: TextStyle(
               color: Colors.deepPurpleAccent.shade100,
-            )
-        ),
+            )),
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
             color: Colors.black54,
             tooltip: '추가하기',
-            onPressed: () =>
-            {
+            onPressed: () => {
               //bottomsheet 사용하기
               _onAddPressed(context),
             },
@@ -49,63 +47,54 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: ScrollConfiguration(
-            behavior: NoBehavior(),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  UserTips(context),
-                  AD(context),
-                  UserSubscription(context),
-                ],
-              ),
-            )
-        ),
-      ),
-
+      body: ScrollConfiguration(
+          behavior: NoBehavior(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                UserTips(context),
+                AD(context),
+                UserSubscription(context),
+              ],
+            ),
+          )),
     );
-  }
-  Future<bool> _onWillPop() async {
-    return (await destroyBackKey(context)) ?? false;
   }
 
   _onAddPressed(BuildContext context) {
-    showModalBottomSheet(context: context, builder: (BuildContext context) {
-      return Container(
-        height: 120,
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            )
-        ),
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.add_link_rounded),
-              title: const Text('관심태그 추가'),
-              onTap: () => {
-
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.upload_rounded),
-              title: const Text('업로드'),
-              onTap: () => {
-                //이전 바텀시트 제거 후 스택 새로 쌓기
-                Navigator.pop(context),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WritePost()),
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 120,
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                )),
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.add_link_rounded),
+                  title: const Text('관심태그 추가'),
+                  onTap: () => {},
                 ),
-              },
+                ListTile(
+                  leading: const Icon(Icons.upload_rounded),
+                  title: const Text('업로드'),
+                  onTap: () => {
+                    //이전 바텀시트 제거 후 스택 새로 쌓기
+                    Navigator.pop(context),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => WritePost()),
+                    ),
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      );
-    });
+          );
+        });
   }
 }

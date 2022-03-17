@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'Dialogs/destroyBackKey.dart';
 import 'Page/FeedPage.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
@@ -29,7 +30,10 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      body: pages[_selectedIndex],
+      body:  WillPopScope(
+        onWillPop: _onWillPop,
+        child: pages[_selectedIndex],
+      ),
       bottomNavigationBar: CurvedNavigationBar(
         height: 50,
         index: _selectedIndex,
@@ -50,5 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     );
   }
-
+  Future<bool> _onWillPop() async {
+    return (await destroyBackKey(context)) ?? false;
+  }
 }

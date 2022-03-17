@@ -57,16 +57,10 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: ProfileBody(context, _pcontroll),
-      ),
+      body: ProfileBody(context, _pcontroll),
     );
   }
 
-  Future<bool> _onWillPop() async {
-    return (await destroyBackKey(context)) ?? false;
-  }
 }
 
 Widget ProfileBody(BuildContext context, PageController pcontroll) {

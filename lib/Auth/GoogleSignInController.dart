@@ -1,18 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 
 class GoogleSignInController with ChangeNotifier {
   final _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? googleSignInAccount;
-  final storage = const FlutterSecureStorage();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late int count;
 
-  login(BuildContext context) async {
+  login(BuildContext context, bool ischecked) async {
     count = 1;
     googleSignInAccount = await _googleSignIn.signIn();
     String nick = googleSignInAccount!.displayName.toString();
@@ -21,12 +19,14 @@ class GoogleSignInController with ChangeNotifier {
     Hive.box('user_info').put('id', nick);
     Hive.box('user_info').put('email', email);
     Hive.box('user_info').put('count', count);
+    Hive.box('user_info').put('autologin', ischecked);
     //firestore 저장
     await firestore.collection('User').doc(nick).set({
       'name': nick,
       'email': email,
       'login_where': 'google_user',
-      'time': DateTime.now(),
+      'time': DateTime.now(), 
+      'autologin' : ischecked
     });
 
     notifyListeners();

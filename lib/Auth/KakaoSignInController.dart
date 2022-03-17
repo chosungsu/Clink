@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 
 class KakaoSignInController with ChangeNotifier {
 
-  final storage = const FlutterSecureStorage();
   late int count;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  login(BuildContext context) async {
+  login(BuildContext context, bool ischecked) async {
     count = 2;
     //설치 여부 묻기
     final installed = await isKakaoTalkInstalled();
@@ -26,10 +24,11 @@ class KakaoSignInController with ChangeNotifier {
         Hive.box('user_info').put('id', nick);
         Hive.box('user_info').put('email', email);
         Hive.box('user_info').put('count', count);
+        Hive.box('user_info').put('autologin', ischecked);
         //firestore 저장
         await firestore.collection('User').doc(nick)
             .set({
-          'name' : nick, 'email' : email, 'login_where' : 'kakao_user', 'time' : DateTime.now(),
+          'name' : nick, 'email' : email, 'login_where' : 'kakao_user', 'time' : DateTime.now(), 'autologin' : ischecked
         });
       }
     }
