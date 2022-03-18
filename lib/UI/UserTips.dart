@@ -50,7 +50,7 @@ TipClips(context) {
           autoPlayCurve: Curves.easeInOut,
           enlargeCenterPage: true,
           reverse: false,
-          aspectRatio: 16/9,
+          aspectRatio: 16 / 9,
           viewportFraction: 0.8));
 }
 
@@ -58,19 +58,19 @@ PageTipsCarousel(BuildContext context, int index) {
   final List<AD_Home> _list_ad = [
     AD_Home(
       id: '1',
-      title: '식습관 관리',
+      title: '데이로그 관리',
       person_num: 3,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '2',
-      title: '데이로그 관리',
+      title: '챌린지 관리',
       person_num: 4,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '3',
-      title: '챌린지 관리',
+      title: '관심사항 관리',
       person_num: 5,
       date: DateTime.now(),
     ),
@@ -91,71 +91,74 @@ PageTipsCarousel(BuildContext context, int index) {
       padding: EdgeInsets.only(bottom: 15),
       child: SizedBox(
           child: Neumorphic(
-            style: NeumorphicStyle(
-                shape: NeumorphicShape.convex,
-                boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
-                depth: 4,
-                intensity: 0.5,
-                color: _list_background_color[index],
-                lightSource: LightSource.topLeft),
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              style: NeumorphicStyle(
+                  shape: NeumorphicShape.convex,
+                  boxShape:
+                      NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
+                  depth: 4,
+                  intensity: 0.5,
+                  color: _list_background_color[index],
+                  lightSource: LightSource.topLeft),
+              child: InkWell(
+                onTap: () {
+                  if (index == 1) {
+                  } else if (index == 2) {
+                  } else if (index == 3) {
+                  } else {}
+                },
+                child: Stack(
                   children: [
-                    Center(
-                      child: NeumorphicText(
-                        _list_ad[index].title,
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.white,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: NeumorphicText(
+                            _list_ad[index].title,
+                            style: const NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 3,
+                              color: Colors.white,
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        textStyle: NeumorphicTextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
+                        Center(
+                          child: NeumorphicText(
+                            'Tip 톺아보기',
+                            style: const NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 4,
+                              color: Colors.white,
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    Center(
-                      child: NeumorphicText(
-                        'Tip 톺아보기',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 4,
-                          color: Colors.white,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: NeumorphicButton(
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            color: Colors.grey.withOpacity(0.2)
+                          ),
+                          child: Text(
+                            (index + 1).toString() + '/' + _list_ad.length.toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ))
                   ],
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: IconButton(
-                    onPressed: () {
-                      if (index == 1) {
-                      } else if (index == 2) {
-                      } else if (index == 3) {
-                      } else {}
-                    },
-                    icon: NeumorphicIcon(
-                      Icons.arrow_forward,
-                      size: 30,
-                      style: const NeumorphicStyle(
-                        color: Colors.white,
-                        shape: NeumorphicShape.concave,
-                      ),
-                      curve: Neumorphic.DEFAULT_CURVE,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )));
+              ))));
 }

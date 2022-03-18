@@ -1,4 +1,6 @@
+import 'package:clickbyme/Dialogs/whyshowads.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 
 import '../DB/AD_Home.dart';
@@ -29,6 +31,24 @@ AD(BuildContext context) {
                   color: Colors.grey,
                 ),
               ),
+              SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                  onTap: () {
+                    whyshowads(context);
+                  },
+                  child: Neumorphic(
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        color: Colors.white.withOpacity(0.4),
+                        lightSource: LightSource.topLeft),
+                    child: NeumorphicIcon(
+                      Icons.info_outlined,
+                      size: 20,
+                    ),
+                  ))
             ],
           )),
       AdClips(context),

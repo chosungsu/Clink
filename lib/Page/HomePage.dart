@@ -16,15 +16,25 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late TabController _tabController;
+  int tabindex = 0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      _tabController.addListener(() {
+        setState(() {
+          tabindex = _tabController.index;
+        });
+      });
+    });
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -54,7 +64,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 UserTips(context),
                 AD(context),
-                UserSubscription(context),
+                UserSubscription(context, _tabController, tabindex),
               ],
             ),
           )),

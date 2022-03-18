@@ -1,10 +1,5 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:transition/transition.dart';
-
 import '../DB/AD_Home.dart';
 import '../Sub/NoticePage.dart';
 
@@ -45,7 +40,7 @@ NoticeApps(BuildContext context, PageController pcontroll) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Container(
-          padding: const EdgeInsets.only(top: 5, bottom: 5, left: 20),
+          padding: const EdgeInsets.only(top: 5, bottom: 5, left: 20, right: 15),
           child: Row(
             children: [
               const Flexible(
@@ -59,15 +54,7 @@ NoticeApps(BuildContext context, PageController pcontroll) {
                   ),
                 ),
               ),
-              const Text(
-                'click!',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.red,
-                ),
-              ),
-              IconButton(
+              NeumorphicButton(
                   onPressed: () {
                     //공지사항뷰로 이동
                     Navigator.push(
@@ -76,9 +63,32 @@ NoticeApps(BuildContext context, PageController pcontroll) {
                             child: NoticePage(),
                             type: PageTransitionType.leftToRightWithFade));
                   },
-                  icon: Icon(
-                    Icons.arrow_circle_right_rounded,
-                    color: Colors.deepPurpleAccent.shade100,
+                  style: NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    color: Colors.white.withOpacity(0.2),
+                    border: NeumorphicBorder.none(),
+                    depth: 1,
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Click',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.amberAccent,
+                              letterSpacing: 2),
+                        ),
+                        SizedBox(width: 5,),
+                        Icon(
+                          Icons.arrow_circle_right_rounded,
+                          color: Colors.deepPurpleAccent.shade100,
+                        )
+                      ],
+                    ),
                   ))
             ],
           )),

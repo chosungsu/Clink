@@ -24,7 +24,7 @@ UserDetails(BuildContext context) {
           ? showAfterSignUp(
             Hive.box('user_info').get('id'), 
             Hive.box('user_info').get('email'), 
-            Hive.box('user_info').get('email').toString(), 
+            Hive.box('user_info').get('count').toString(), 
             context)
           : showBeforeSignUp(context)
     ],
