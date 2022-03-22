@@ -22,16 +22,19 @@ UserTips(BuildContext context) {
                 width: 10,
               ),
               const Text(
-                'HabitMind가 처음이시라면?',
+                '왓 인 HabitMind?',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.grey,
+                  fontSize: 20,
+                  color: Colors.black54,
                 ),
               ),
             ],
           )),
-      TipClips(context),
+      Container(
+        padding: EdgeInsets.only(top: 15),
+        child: TipClips(context),
+      )
     ],
   );
 }
@@ -70,7 +73,7 @@ PageTipsCarousel(BuildContext context, int index) {
     ),
     AD_Home(
       id: '3',
-      title: '관심사항 관리',
+      title: '페이지마크 관리',
       person_num: 5,
       date: DateTime.now(),
     ),
@@ -84,7 +87,7 @@ PageTipsCarousel(BuildContext context, int index) {
   final List _list_background_color = [
     Colors.green.shade200,
     Colors.blue.shade200,
-    Colors.yellow.shade200,
+    Colors.orange.shade200,
     Colors.red.shade200
   ];
   return Padding(

@@ -1,3 +1,4 @@
+import 'package:clickbyme/UI/UserChoice.dart';
 import 'package:clickbyme/UI/UserPicks.dart';
 import 'package:clickbyme/UI/UserSubscription.dart';
 import 'package:clickbyme/UI/UserTips.dart';
@@ -12,31 +13,19 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  TabController? _tabController;
-  int tabindex = 0;
-  @override
+class _HomePageState extends State<HomePage> {
+
+@override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
   }
-
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      if (_tabController != null) {
-        _tabController!.addListener(() {
-          setState(() {
-            tabindex = _tabController!.index;
-          });
-        });
-      }
-    });
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: Colors.white,
         title: Text(widget.title,
             style: TextStyle(
               color: Colors.deepPurpleAccent.shade100,
@@ -50,9 +39,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: Column(
               children: [
                 UserTips(context),
-                AD(context),
                 UserPicks(context),
-                UserSubscription(context, _tabController!, tabindex),
+                //AD(context),
+                UserChoice(context),
               ],
             ),
           )),

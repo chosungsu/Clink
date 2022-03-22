@@ -2,9 +2,10 @@ import 'package:clickbyme/Sub/YourTags.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../Dialogs/addTags.dart';
 import '../Sub/WritePost.dart';
 
-onAdd(BuildContext context) {
+onAdd(BuildContext context, TextEditingController eventController) {
   showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -24,10 +25,11 @@ onAdd(BuildContext context) {
                 onTap: () => {
                   //개인태그 페이지로 이동
                   Navigator.pop(context),
+                  addTags(context, eventController),
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.upload_rounded),
+                leading: const Icon(Icons.people),
                 title: const Text('사람 태그 추가'),
                 onTap: () => {
                   Navigator.pop(context),

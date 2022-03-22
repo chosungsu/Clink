@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           create: (context) => GoogleSignInController(),
           child: LoginSignPage(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider( 
           create: (context) => KakaoSignInController(),
           child: LoginSignPage(),
         ),
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: const Color(0xffdbf3ff),
+          primaryColor: Color.fromARGB(255, 255, 255, 255),
           canvasColor: Colors.transparent,
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey)
               .copyWith(secondary: const Color(0xFF012980)),

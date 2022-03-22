@@ -3,7 +3,7 @@ import 'package:clickbyme/sheets/onAdd.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive/hive.dart';
-import '../DB/Contents.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/UserSubscription.dart';
 
@@ -14,13 +14,23 @@ class YourTags extends StatefulWidget {
 
 class _YourTagsState extends State<YourTags> with TickerProviderStateMixin {
   late TabController _tabController_tags;
+  late TextEditingController _eventController;
   int tabindex = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _tabController_tags = TabController(length: 2, vsync: this);
+    _eventController = TextEditingController();
   }
+
+  /*@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _eventController.dispose();
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +50,7 @@ class _YourTagsState extends State<YourTags> with TickerProviderStateMixin {
             tooltip: '추가하기',
             onPressed: () => {
               //bottomsheet 사용하기
-              onAdd(context),
+              onAdd(context, _eventController),
             },
             icon: const Icon(Icons.add_circle),
           ),
@@ -53,7 +63,7 @@ class _YourTagsState extends State<YourTags> with TickerProviderStateMixin {
           isScrollable: false,
           labelPadding: const EdgeInsets.only(left: 25, right: 25),
           indicator: CircleIndicator(color: Colors.black, radius: 4),
-          tabs: [
+          tabs: const [
             Tab(
               text: '피드 태그',
             ),
@@ -66,14 +76,15 @@ class _YourTagsState extends State<YourTags> with TickerProviderStateMixin {
       ),
       body: Container(
         color: Colors.white,
-        child: makeBody(context, _tabController_tags),
+        child: makeBody(context, _tabController_tags, _eventController),
       ),
     );
   }
 }
 
 // 바디 만들기
-Widget makeBody(BuildContext context, TabController tabController_tags) {
+Widget makeBody(BuildContext context, TabController tabController_tags,
+    TextEditingController eventController) {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final List<Recommend> _list_content = [
     Recommend(sub: '추천 태그'),
@@ -125,72 +136,107 @@ Widget makeBody(BuildContext context, TabController tabController_tags) {
                       ),
                 index == 0 || index == 1
                     ? SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.13,
-                        child: StreamBuilder(
-                          stream:
-                              firebaseFirestore.collection('Tags').snapshots(),
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        child: ValueListenableBuilder(
+                          valueListenable: Hive.box('user_info').listenable(),
                           builder:
-                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            return Padding(
-                                padding: EdgeInsets.all(10.0),
-                                child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    physics: const BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    children:
-                                        snapshot.data!.docs.map((document) {
-                                      return document['name'] ==
-                                              Hive.box('user_info').get('id')
-                                          ? SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.25,
-                                              child: Neumorphic(
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .convex,
-                                                      boxShape:
-                                                          NeumorphicBoxShape
-                                                              .roundRect(
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100)),
-                                                      depth: 4,
-                                                      intensity: 0.5,
-                                                      color: Colors.white,
-                                                      lightSource:
-                                                          LightSource.topLeft),
-                                                  child: InkWell(
-                                                      onTap: () {},
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(5),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Center(
-                                                                child: Text(document[
-                                                                        'tag_content']
-                                                                    .toString()))
-                                                          ],
-                                                        ),
-                                                      ))),
-                                            )
-                                          : SizedBox(
-                                              height: 0,
-                                              width: 0,
-                                            );
-                                    }).toList()));
+                              (BuildContext context, Box box, Widget? widget) {
+                            return ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: box
+                                    .get('tag_content')
+                                    .toString()
+                                    .split(',')
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Neumorphic(
+                                          style: NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              boxShape:
+                                                  NeumorphicBoxShape.roundRect(
+                                                      BorderRadius.circular(
+                                                          60)),
+                                              depth: 1,
+                                              intensity: 0.5,
+                                              color: Colors.grey.shade100,
+                                              lightSource: LightSource.topLeft),
+                                          child: Stack(
+                                            children: [
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Center(
+                                                      child: Text('#' +
+                                                          box
+                                                              .get(
+                                                                  'tag_content')
+                                                              .toString()
+                                                              .split(
+                                                                  ',')[index]))
+                                                ],
+                                              ),
+                                              Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: IconButton(
+                                                  onPressed: () async {
+                                                    String str_snaps = '';
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Tags')
+                                                        .doc(Hive.box(
+                                                                'user_info')
+                                                            .get('id'))
+                                                        .get()
+                                                        .then((DocumentSnapshot
+                                                            ds) {
+                                                      str_snaps =
+                                                          (ds.data() as Map)[
+                                                              'tag_content'];
+                                                    });
+                                                    print(str_snaps
+                                                        .split(',')[index]);
+                                                    print(str_snaps
+                                                            .split(',')[index] +
+                                                        ',');
+                                                    str_snaps.toString().replaceAll(
+                                                        (str_snaps.split(
+                                                                ',')[index] +
+                                                            ',').toString(),
+                                                        "");
+                                                    print(str_snaps);
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Tags')
+                                                        .doc(Hive.box(
+                                                                'user_info')
+                                                            .get('id'))
+                                                        .update({
+                                                      'tag_content': str_snaps
+                                                    });
+                                                    Hive.box('user_info').put(
+                                                        'tag_content',
+                                                        str_snaps);
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.remove,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                    ),
+                                  );
+                                });
                           },
                         ),
                       )
@@ -201,7 +247,7 @@ Widget makeBody(BuildContext context, TabController tabController_tags) {
                           color: Colors.grey,
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children: const [
                                 Text('프로 버전 이상에서 가능한 기능입니다.',
                                     style: TextStyle(
                                       color: Colors.white,

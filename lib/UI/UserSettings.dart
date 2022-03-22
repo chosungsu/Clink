@@ -19,7 +19,7 @@ UserSettings(BuildContext context) {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: Colors.grey,
+            color: Colors.black54,
           ),
         ),
       ),

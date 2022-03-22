@@ -20,6 +20,11 @@ class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   late DateTime backbuttonpressedTime;
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -29,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ProfilePage(),
     ];
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.white,
       body:  WillPopScope(
         onWillPop: _onWillPop,
         child: pages[_selectedIndex],
@@ -38,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
         height: 50,
         index: _selectedIndex,
         backgroundColor: Colors.deepPurpleAccent.shade100,
-        color: Colors.grey.shade100,
+        color: Colors.white,
         key: _bottomNavigationKey,
         items: const <Widget>[
           Icon(Icons.home, size: 25),

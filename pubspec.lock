@@ -113,13 +113,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  date_picker_timeline:
+    dependency: "direct main"
+    description:
+      name: date_picker_timeline
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.3"
   dbus:
     dependency: transitive
     description:
       name: dbus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.1"
+    version: "0.7.2"
   dio:
     dependency: "direct main"
     description:
@@ -265,6 +272,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  flutter_search_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_search_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -358,7 +372,7 @@ packages:
       name: hive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.1.0"
   hive_flutter:
     dependency: "direct main"
     description:
@@ -366,6 +380,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  hive_listener:
+    dependency: "direct main"
+    description:
+      name: hive_listener
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
   http:
     dependency: transitive
     description:
@@ -805,6 +826,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.4"
+  timeline_tile:
+    dependency: "direct main"
+    description:
+      name: timeline_tile
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   timezone:
     dependency: transitive
     description:
@@ -839,7 +867,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.1"
+    version: "2.4.2"
   xdg_directories:
     dependency: transitive
     description:

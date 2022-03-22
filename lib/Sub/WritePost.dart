@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:textfield_tags/textfield_tags.dart';
@@ -9,7 +8,6 @@ import '../Dialogs/checkSave.dart';
 import '../Dialogs/checkaddwhat.dart';
 import '../Tool/NoBehavior.dart';
 import '../Dialogs/checkhowtag.dart';
-import '../UI/UserCheck.dart';
 
 class WritePost extends StatefulWidget {
   @override
@@ -17,6 +15,7 @@ class WritePost extends StatefulWidget {
 }
 
 class _WritePostState extends State<WritePost> {
+  final myTextController = TextFieldTagsController();
   final List<String> _list_post_where = [
     '위치태그설정하기',
     '영화',
@@ -28,6 +27,13 @@ class _WritePostState extends State<WritePost> {
   String _selectedVal = '위치태그설정하기';
   final multiPicker = ImagePicker();
   List<XFile>? images_file = [];
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    myTextController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -250,7 +256,9 @@ class _WritePostState extends State<WritePost> {
           children: [
             GestureDetector(
               onTap: () {
-                FocusScope.of(context).unfocus();
+                if (!FocusScope.of(context).hasPrimaryFocus) {
+                  FocusScope.of(context).unfocus();
+                }
               },
               child: Column(
                 //내부를 최소만큼 키움.
@@ -525,6 +533,7 @@ class _WritePostState extends State<WritePost> {
                       Padding(
                           padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
                           child: TextFieldTags(
+                            textFieldTagsController: myTextController,
                               tagsStyler: TagsStyler(
                                   tagTextStyle:
                                       TextStyle(fontWeight: FontWeight.normal),

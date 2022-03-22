@@ -50,7 +50,7 @@ NoticeApps(BuildContext context, PageController pcontroll) {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Colors.grey,
+                    color: Colors.black54,
                   ),
                 ),
               ),
