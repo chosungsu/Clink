@@ -70,8 +70,8 @@ dependencies:
   #sticky상태로 헤더에 붙게 하기 위함
   sticky_headers: ^0.2.0
   textfield_tags: ^1.4.3
-  table_calendar: ^3.0.4
   #UI
+  flutter_clean_calendar: ^1.1.0
   flutter_neumorphic: ^3.0.3
   timeline_tile: ^2.0.0
   flutter_search_bar: ^2.1.0

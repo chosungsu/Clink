@@ -1,11 +1,9 @@
 import 'package:clickbyme/Sub/DayLog.dart';
 import 'package:clickbyme/Sub/WritePost.dart';
-import 'package:clickbyme/sheets/onAdd.dart';
-import 'package:flutter/material.dart';
+import 'package:clickbyme/Sub/storepw.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 import '../DB/AD_Home.dart';
-import '../Sub/GoToDoDate.dart';
 import '../Sub/YourTags.dart';
 
 UserPicks(BuildContext context) {
@@ -63,7 +61,7 @@ Main_Pick(context) {
     ),
     AD_Home(
       id: '4',
-      title: '톡톡 PLUS',
+      title: '개인키 보관',
       person_num: 4,
       date: DateTime.now(),
     ),
@@ -72,7 +70,7 @@ Main_Pick(context) {
     'assets/images/date.png',
     'assets/images/challenge.png',
     'assets/images/icon-link.png',
-    'assets/images/icon-chat.png',
+    'assets/images/fingerprint.png',
   ];
   final List _list_background_color = [
     Colors.green.shade200,
@@ -130,7 +128,14 @@ Main_Pick(context) {
                                   child: YourTags(),
                                   type:
                                       PageTransitionType.leftToRightWithFade));
-                        } else {}
+                        } else {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: storepw(),
+                                  type:
+                                      PageTransitionType.leftToRightWithFade));
+                        }
                       },
                       child: Padding(
                         padding: EdgeInsets.all(20),

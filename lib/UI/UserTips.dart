@@ -79,7 +79,7 @@ PageTipsCarousel(BuildContext context, int index) {
     ),
     AD_Home(
       id: '4',
-      title: '톡톡 플러스 관리',
+      title: '개인키 관리',
       person_num: 5,
       date: DateTime.now(),
     )
