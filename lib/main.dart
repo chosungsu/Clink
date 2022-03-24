@@ -21,6 +21,7 @@ void main() async {
   await Firebase.initializeApp();
   await Hive.initFlutter();
   await Hive.openBox('user_info');
+  await Hive.openBox('user_setting');
   runApp(const MyApp());
 }
 

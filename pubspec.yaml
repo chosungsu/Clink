@@ -72,9 +72,11 @@ dependencies:
   textfield_tags: ^1.4.3
   #UI
   flutter_clean_calendar: ^1.1.0
+  calendar_view: ^0.0.4
   flutter_neumorphic: ^3.0.3
   timeline_tile: ^2.0.0
   flutter_search_bar: ^2.1.0
+  calendar_timeline: ^1.0.4
   #local db
   hive: ^2.0.6
   hive_flutter: ^1.1.0
