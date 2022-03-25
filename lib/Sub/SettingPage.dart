@@ -16,7 +16,12 @@ class _SettingPageState extends State<SettingPage> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      isSwitched_hide = Hive.box('user_setting').get('no_show_tip_page');
+      if (Hive.box('user_setting').get('no_show_tip_page') != null) {
+        isSwitched_hide = Hive.box('user_setting').get('no_show_tip_page');
+      } else {
+        isSwitched_hide = false;
+      }
+      
     });
   }
 

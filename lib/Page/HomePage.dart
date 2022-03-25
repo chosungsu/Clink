@@ -20,14 +20,22 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      show_what0 = Hive.box('user_setting').get('no_show_tip_page');
+      if (Hive.box('user_setting').get('no_show_tip_page') != null) {
+        show_what0 = Hive.box('user_setting').get('no_show_tip_page');
+      } else {
+        show_what0 = false;
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     setState(() {
-      show_what0 = Hive.box('user_setting').get('no_show_tip_page');
+      if (Hive.box('user_setting').get('no_show_tip_page') != null) {
+        show_what0 = Hive.box('user_setting').get('no_show_tip_page');
+      } else {
+        show_what0 = false;
+      }
     });
     return Scaffold(
       appBar: AppBar(
@@ -45,21 +53,21 @@ class _HomePageState extends State<HomePage> {
           child: SingleChildScrollView(
               child: StatefulBuilder(builder: (_, StateSetter setState) {
             return show_what0 == true
-                  ? Column(
-                      children: [
-                        UserPicks(context),
-                        //AD(context)
-                        UserChoice(context),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        UserTips(context),
-                        UserPicks(context),
-                        //AD(context),
-                        UserChoice(context),
-                      ],
-                    );
+                ? Column(
+                    children: [
+                      UserPicks(context),
+                      //AD(context)
+                      UserChoice(context),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      UserTips(context),
+                      UserPicks(context),
+                      //AD(context),
+                      UserChoice(context),
+                    ],
+                  );
           }))),
     );
   }

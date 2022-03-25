@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import '../Tool/NoBehavior.dart';
 
@@ -16,44 +17,26 @@ class DayLog extends StatefulWidget {
 }
 
 class _DayLogState extends State<DayLog> {
-  final Radio_cal _val = Hive.box('user_setting').get('cal_show_view') == null
+  /*final Radio_cal _val = Hive.box('user_setting').get('cal_show_view') == null
       ? Radio_cal.month
       : (Hive.box('user_setting').get('cal_show_view') == 'month'
           ? Radio_cal.month
           : (Hive.box('user_setting').get('cal_show_view') == 'week'
               ? Radio_cal.week
-              : Radio_cal.day));
+              : Radio_cal.day));*/
   List<String> todolist = <String>[];
   TextEditingController textEditingController = TextEditingController();
   DateTime selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String time_table = '';
   String todo = '';
+  final ValueNotifier<int> _daycount = ValueNotifier<int>(0);
+  bool isclickedday = false;
   @override
   void initState() {
     // TODO: implement initState
     //selectedEvent = events[selectedDay] ?? [];
     super.initState();
-    setState(() {
-      firestore
-          .collection('TODO')
-          .doc(Hive.box('user_info').get('id').toString() +
-              selectedDay.toString())
-          .get()
-          .then((DocumentSnapshot ds) {
-        if (ds.data() != null) {
-          time_table = (ds.data() as Map)['time'];
-          todo = (ds.data() as Map)['todo'];
-        } else {
-          time_table = '';
-          todo = '';
-        }
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       setState(() {
         firestore
@@ -72,6 +55,10 @@ class _DayLogState extends State<DayLog> {
         });
       });
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -232,6 +219,7 @@ class _DayLogState extends State<DayLog> {
               onDateSelected: (date) {
                 setState(() {
                   selectedDay = date!;
+                  isclickedday = false;
                   firestore
                       .collection('TODO')
                       .doc(Hive.box('user_info').get('id').toString() +
@@ -243,17 +231,12 @@ class _DayLogState extends State<DayLog> {
                       todo = (ds.data() as Map)['todo'];
                       print(time_table);
                       print(todo);
-                      time_table_ = time_table;
-                      todo_ = todo;
                     } else {
                       time_table = '';
                       todo = '';
-                      print(time_table);
-                      print(todo);
-                      time_table_ = time_table;
-                      todo_ = todo;
                     }
                   });
+                  _daycount.value++;
                   print(selectedDay);
                 });
               },
@@ -267,7 +250,49 @@ class _DayLogState extends State<DayLog> {
               locale: 'ko',
             ),
           ),
-          timelineview(context, todo_, time_table_)
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            child: NeumorphicButton(
+                onPressed: () {
+                  setState(() {
+                    isclickedday = true;
+                  });
+                },
+                style: NeumorphicStyle(
+                    shape: NeumorphicShape.concave,
+                    depth: 2,
+                    color: Colors.lightBlue,
+                    lightSource: LightSource.topLeft),
+                child: Center(
+                    child: Text(
+                  "날짜 선택 후 일정 들여다보기",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ))),
+          ),
+          /*ValueListenableBuilder(
+              valueListenable: _daycount,
+              builder: (context, value, child) {
+                return timelineview(context, todo, time_table, selectedDay);
+              })*/
+          isclickedday == true ? 
+          timelineview(context, todo, time_table, selectedDay) :
+          Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '버튼을 클릭하시면 일정이 이곳에 나타납니다.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.black45,
+                    ),
+                  ),
+                ],
+              )
         ],
       );
     });
@@ -277,81 +302,103 @@ class _DayLogState extends State<DayLog> {
     BuildContext context,
     String todo,
     String time_table,
+    DateTime selectedDay,
   ) {
+    firestore
+        .collection('TODO')
+        .doc(
+            Hive.box('user_info').get('id').toString() + selectedDay.toString())
+        .get()
+        .then((DocumentSnapshot ds) {
+      if (ds.data() != null) {
+        time_table = (ds.data() as Map)['time'];
+        todo = (ds.data() as Map)['todo'];
+        print(time_table);
+        print(todo);
+      } else {
+        time_table = '';
+        todo = '';
+      }
+    });
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 220,
-      child: todo != ''
-          ? ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: todo.toString().split(',').length,
-              itemBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                    child: TimelineTile(
-                  alignment: TimelineAlign.manual,
-                  lineXY: 0.2,
-                  endChild: Container(
-                    constraints: const BoxConstraints(
-                      minHeight: 120,
-                    ),
-                    child: Card(
-                        elevation: 10,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.white70, width: 1),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Image.asset(
-                                'assets/images/date.png',
-                                height: 30,
-                                width: 30,
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                todo.toString().split(',')[index],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.black45,
-                                ),
-                              ),
-                            ],
+        height: MediaQuery.of(context).size.height - 220,
+        child: todo != ''
+            ? ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: todo.split(',').length,
+                itemBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                      child: TimelineTile(
+                    alignment: TimelineAlign.manual,
+                    lineXY: 0.2,
+                    endChild: Container(
+                      constraints: const BoxConstraints(
+                        minHeight: 120,
+                      ),
+                      child: Card(
+                          elevation: 10,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.white70, width: 1),
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                        )),
-                  ),
-                  startChild: Container(
-                    constraints: const BoxConstraints(
-                      minWidth: 20,
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  'assets/images/date.png',
+                                  height: 30,
+                                  width: 30,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  todo.split(',')[index],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
                     ),
-                    child: Center(
-                      child: Text(
-                        time_table.toString().split(',')[index],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.black45,
+                    startChild: Container(
+                      constraints: const BoxConstraints(
+                        minWidth: 20,
+                      ),
+                      child: Center(
+                        child: Text(
+                          time_table.split(',')[index],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black45,
+                          ),
                         ),
                       ),
                     ),
+                  ));
+                })
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    Hive.box('user_info').get('id').toString() +
+                        '님 \n' +
+                        selectedDay.day.toString() +
+                        '날의 일정은 없네요',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      color: Colors.black45,
+                    ),
                   ),
-                ));
-              })
-          : Center(
-              child: Text(
-                Hive.box('user_info').get('id').toString() + '님 \n오늘의 일정은 없네요',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                  color: Colors.black45,
-                ),
-              ),
-            ),
-    );
+                ],
+              ));
   }
 }
