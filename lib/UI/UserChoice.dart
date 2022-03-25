@@ -1,12 +1,7 @@
 import 'package:clickbyme/DB/Contents.dart';
-import 'package:clickbyme/DB/DateUtils.dart';
 import 'package:clickbyme/DB/Recommend.dart';
 import 'package:clickbyme/UI/ListViewHome.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sticky_headers/sticky_headers.dart';
-
-import '../DB/AD_Home.dart';
 
 UserChoice(BuildContext context) {
   final List<Recommend> _list_recommend = [
@@ -16,7 +11,19 @@ UserChoice(BuildContext context) {
   ];
   return Column(
     children: [
-      Subscript(context, _list_recommend),
+      SizedBox(
+        height: 10,
+      ),
+      Neumorphic(
+        style: NeumorphicStyle(
+          shape: NeumorphicShape.convex,
+          border: NeumorphicBorder.none(),
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
+          depth: 5,
+          color: Colors.white,
+        ),
+        child: Subscript(context, _list_recommend),
+      ),
     ],
   );
 }

@@ -43,48 +43,59 @@ ListViewHome(BuildContext context, String string, List<Contents> list_content) {
                       Padding(
                         padding: EdgeInsets.only(left: 10, right: 10),
                         child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.3,
-                            child: Card(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      flex: 2,
-                                      child: Text(
-                                        list_content[index].title,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.black45,
+                          width: MediaQuery.of(context).size.width / 2.3,
+                          child: Neumorphic(
+                              style: NeumorphicStyle(
+                                shape: NeumorphicShape.concave,
+                                border: NeumorphicBorder.none(),
+                                boxShape: NeumorphicBoxShape.roundRect(
+                                    BorderRadius.circular(5)),
+                                depth: 5,
+                                color: Colors.white,
+                              ),
+                              child: Card(
+                                color: Colors.white,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        flex: 2,
+                                        child: Text(
+                                          list_content[index].title,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black45,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Flexible(
-                                      flex: 1,
-                                      child: Text(
-                                        list_content[index]
-                                                .date
-                                                .year
-                                                .toString() +
-                                            '-' +
-                                            list_content[index]
-                                                .date
-                                                .month
-                                                .toString() +
-                                            '-' +
-                                            list_content[index]
-                                                .date
-                                                .day
-                                                .toString(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Colors.black45,
+                                      Flexible(
+                                        flex: 1,
+                                        child: Text(
+                                          list_content[index]
+                                                  .date
+                                                  .year
+                                                  .toString() +
+                                              '-' +
+                                              list_content[index]
+                                                  .date
+                                                  .month
+                                                  .toString() +
+                                              '-' +
+                                              list_content[index]
+                                                  .date
+                                                  .day
+                                                  .toString(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.black45,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ]),
-                            )),
+                                      )
+                                    ]),
+                              )),
+                        ),
                       )
                     ],
                   ),

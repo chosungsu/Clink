@@ -1,23 +1,22 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:clickbyme/DB/Radio_cal.dart';
 import 'package:clickbyme/Dialogs/addTodos.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:date_picker_timeline/date_picker_timeline.dart';
-
 import '../Tool/NoBehavior.dart';
 
 class DayLog extends StatefulWidget {
-  get onEventTap => null;
+  //get onEventTap => null;
 
   @override
   State<StatefulWidget> createState() => _DayLogState();
 }
 
 class _DayLogState extends State<DayLog> {
-  Radio_cal _val = Hive.box('user_setting').get('cal_show_view') == null
+  final Radio_cal _val = Hive.box('user_setting').get('cal_show_view') == null
       ? Radio_cal.month
       : (Hive.box('user_setting').get('cal_show_view') == 'month'
           ? Radio_cal.month
@@ -27,51 +26,52 @@ class _DayLogState extends State<DayLog> {
   List<String> todolist = <String>[];
   TextEditingController textEditingController = TextEditingController();
   DateTime selectedDay = DateTime.now();
-  DatePickerController _controller = DatePickerController();
-  late List<CleanCalendarEvent> selectedEvent;
-  final Map<DateTime, List<CleanCalendarEvent>> events = {
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day): [
-      CleanCalendarEvent('Event A',
-          startTime: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day, 10, 0),
-          endTime: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day, 12, 0),
-          description: 'A special event',
-          color: Colors.blue),
-    ],
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 2):
-        [
-      CleanCalendarEvent('Event B',
-          startTime: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day + 2, 10, 0),
-          endTime: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day + 2, 12, 0),
-          color: Colors.orange),
-      CleanCalendarEvent('Event C',
-          startTime: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day + 2, 14, 30),
-          endTime: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day + 2, 17, 0),
-          color: Colors.pink),
-    ],
-  };
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String time_table = '';
+  String todo = '';
   @override
   void initState() {
     // TODO: implement initState
     //selectedEvent = events[selectedDay] ?? [];
     super.initState();
-  }
-
-  void _handleData(date) {
-    /*setState(() {
-      selectedDay = date;
-      selectedEvent = events[selectedDay] ?? [];
-    });*/
-    print(selectedDay);
+    setState(() {
+      firestore
+          .collection('TODO')
+          .doc(Hive.box('user_info').get('id').toString() +
+              selectedDay.toString())
+          .get()
+          .then((DocumentSnapshot ds) {
+        if (ds.data() != null) {
+          time_table = (ds.data() as Map)['time'];
+          todo = (ds.data() as Map)['todo'];
+        } else {
+          time_table = '';
+          todo = '';
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      setState(() {
+        firestore
+            .collection('TODO')
+            .doc(Hive.box('user_info').get('id').toString() +
+                selectedDay.toString())
+            .get()
+            .then((DocumentSnapshot ds) {
+          if (ds.data() != null) {
+            time_table = (ds.data() as Map)['time'];
+            todo = (ds.data() as Map)['todo'];
+          } else {
+            time_table = '';
+            todo = '';
+          }
+        });
+      });
+    });
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -194,8 +194,9 @@ class _DayLogState extends State<DayLog> {
           IconButton(
             color: Colors.black54,
             tooltip: '추가하기',
-            onPressed: () =>
-                {addTodos(context, textEditingController, todolist)},
+            onPressed: () => {
+              addTodos(context, textEditingController, todolist, selectedDay)
+            },
             icon: const Icon(Icons.add_circle),
           ),
         ],
@@ -205,158 +206,152 @@ class _DayLogState extends State<DayLog> {
       body: ScrollConfiguration(
           behavior: NoBehavior(),
           child: Container(
-            height: MediaQuery.of(context).size.height,
+              height: MediaQuery.of(context).size.height,
               color: Colors.white,
               child: SingleChildScrollView(
-                child: makeBody(context),
+                child: makeBody(context, todo, time_table),
               ))),
     );
   }
 
   // 바디 만들기
-  Widget makeBody(BuildContext context) {
+  Widget makeBody(BuildContext context, String todo_, String time_table_) {
     //DateTime _selectedValue;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(
-          height: 170,
-          child: CalendarTimeline(
-            showYears: true,
-            initialDate: selectedDay,
-            firstDate: DateTime(1900, 1, 1),
-            lastDate: DateTime(3000, 12, 31),
-            onDateSelected: (date) {
-              setState(() {
-                selectedDay = date!;
-                print(date);
-              });
-            },
-            leftMargin: 20,
-            monthColor: Colors.grey,
-            dayColor: Colors.black54,
-            dayNameColor: Colors.black54,
-            activeDayColor: Colors.white,
-            activeBackgroundDayColor: Colors.redAccent[100],
-            dotsColor: Color(0xFF333A47),
-            locale: 'ko',
+    return StatefulBuilder(builder: (_, StateSetter setState) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 170,
+            child: CalendarTimeline(
+              showYears: true,
+              initialDate: selectedDay,
+              firstDate: DateTime(1900, 1, 1),
+              lastDate: DateTime(3000, 12, 31),
+              onDateSelected: (date) {
+                setState(() {
+                  selectedDay = date!;
+                  firestore
+                      .collection('TODO')
+                      .doc(Hive.box('user_info').get('id').toString() +
+                          selectedDay.toString())
+                      .get()
+                      .then((DocumentSnapshot ds) {
+                    if (ds.data() != null) {
+                      time_table = (ds.data() as Map)['time'];
+                      todo = (ds.data() as Map)['todo'];
+                      print(time_table);
+                      print(todo);
+                      time_table_ = time_table;
+                      todo_ = todo;
+                    } else {
+                      time_table = '';
+                      todo = '';
+                      print(time_table);
+                      print(todo);
+                      time_table_ = time_table;
+                      todo_ = todo;
+                    }
+                  });
+                  print(selectedDay);
+                });
+              },
+              leftMargin: 20,
+              monthColor: Colors.grey,
+              dayColor: Colors.black54,
+              dayNameColor: Colors.black54,
+              activeDayColor: Colors.white,
+              activeBackgroundDayColor: Colors.redAccent[100],
+              dotsColor: Color(0xFF333A47),
+              locale: 'ko',
+            ),
           ),
-        ),
-        SizedBox(
-            child: TimelineTile(
-              isFirst: true,
-              alignment: TimelineAlign.manual,
-              lineXY: 0.2,
-              endChild: Container(
-                constraints: const BoxConstraints(
-                  minHeight: 120,
-                ),
-                child: Card(
-                    elevation: 10,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.white70, width: 1),
-                      borderRadius: BorderRadius.circular(5),
+          timelineview(context, todo_, time_table_)
+        ],
+      );
+    });
+  }
+
+  timelineview(
+    BuildContext context,
+    String todo,
+    String time_table,
+  ) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height - 220,
+      child: todo != ''
+          ? ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: todo.toString().split(',').length,
+              itemBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                    child: TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineXY: 0.2,
+                  endChild: Container(
+                    constraints: const BoxConstraints(
+                      minHeight: 120,
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            'assets/images/date.png',
-                            height: 30,
-                            width: 30,
+                    child: Card(
+                        elevation: 10,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.white70, width: 1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                'assets/images/date.png',
+                                height: 30,
+                                width: 30,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                todo.toString().split(',')[index],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            '오늘의 일정',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.black45,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
-              ),
-              startChild: Container(
-                constraints: const BoxConstraints(
-                  minWidth: 20,
-                ),
-                child: Center(
-                  child: Text(
-                            '09:00',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.black45,
-                            ),
-                          ),
-                ),
-              ),
-            )),
-            SizedBox(
-            child: TimelineTile(
-              alignment: TimelineAlign.manual,
-              lineXY: 0.2,
-              endChild: Container(
-                constraints: const BoxConstraints(
-                  minHeight: 120,
-                ),
-                child: Card(
-                    elevation: 10,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.white70, width: 1),
-                      borderRadius: BorderRadius.circular(5),
+                        )),
+                  ),
+                  startChild: Container(
+                    constraints: const BoxConstraints(
+                      minWidth: 20,
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            'assets/images/date.png',
-                            height: 30,
-                            width: 30,
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            '오늘의 일정',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.black45,
-                            ),
-                          ),
-                        ],
+                    child: Center(
+                      child: Text(
+                        time_table.toString().split(',')[index],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black45,
+                        ),
                       ),
-                    )),
-              ),
-              startChild: Container(
-                constraints: const BoxConstraints(
-                  minWidth: 20,
-                ),
-                child: Center(
-                  child: Text(
-                            '10:00',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.black45,
-                            ),
-                          ),
+                    ),
+                  ),
+                ));
+              })
+          : Center(
+              child: Text(
+                Hive.box('user_info').get('id').toString() + '님 \n오늘의 일정은 없네요',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: Colors.black45,
                 ),
               ),
-            )),
-      ],
+            ),
     );
   }
 }

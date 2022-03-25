@@ -12,9 +12,16 @@ showBeforeSignUp(BuildContext context) {
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
           depth: 4,
           intensity: 0.5,
-          color: Colors.white,
+          color: Colors.white.withOpacity(0.1),
           lightSource: LightSource.topLeft),
       child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: Colors.orange,
+          ),
+          borderRadius: BorderRadius.circular(16.0)
+        ),
         //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.
         width: MediaQuery.of(context).size.width * 0.95,
         height: 100,

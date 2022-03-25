@@ -39,74 +39,74 @@ NoticeApps(BuildContext context, PageController pcontroll) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
-      Container(
-          padding: const EdgeInsets.only(top: 5, bottom: 5, left: 20, right: 15),
-          child: Row(
+      SizedBox(
+        height: 15,
+      ),
+      Neumorphic(
+          style: NeumorphicStyle(
+            shape: NeumorphicShape.convex,
+            border: NeumorphicBorder.none(),
+            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
+            depth: 5,
+            color: Colors.white,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Flexible(
-                fit: FlexFit.tight,
-                child: Text(
-                  '공지사항',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-              NeumorphicButton(
-                  onPressed: () {
-                    //공지사항뷰로 이동
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: NoticePage(),
-                            type: PageTransitionType.leftToRightWithFade));
-                  },
-                  style: NeumorphicStyle(
-                    shape: NeumorphicShape.flat,
-                    color: Colors.white.withOpacity(0.2),
-                    border: NeumorphicBorder.none(),
-                    depth: 1,
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Click',
+              Container(
+                  padding: const EdgeInsets.only(
+                      top: 10, bottom: 10, left: 20, right: 20),
+                  child: Row(
+                    children: [
+                      const Flexible(
+                        fit: FlexFit.tight,
+                        child: Text(
+                          '공지사항',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.amberAccent,
-                              letterSpacing: 2),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black54,
+                          ),
                         ),
-                        SizedBox(width: 5,),
-                        Icon(
-                          Icons.arrow_circle_right_rounded,
-                          color: Colors.deepPurpleAccent.shade100,
-                        )
-                      ],
-                    ),
-                  ))
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: NoticePage(),
+                                  type:
+                                      PageTransitionType.leftToRightWithFade));
+                        },
+                        child: NeumorphicIcon(
+                          Icons.arrow_circle_right,
+                          size: 20,
+                          style: NeumorphicStyle(
+                              shape: NeumorphicShape.convex,
+                              depth: 2,
+                              color: Colors.grey.withOpacity(0.5),
+                              lightSource: LightSource.topLeft),
+                        ),
+                      ),
+                    ],
+                  )),
+              NoticeClip(context, _list_ad, pcontroll),
             ],
           )),
-      NoticeClip(context, _list_ad, pcontroll),
     ],
   );
 }
 
 NoticeClip(context, List<AD_Home> list_ad, PageController pcontroll) {
   return Padding(
-    padding: EdgeInsets.only(left: 10, right: 10),
+    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
     child: SizedBox(
       height: MediaQuery.of(context).size.height / 10,
       child: Card(
           color: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
+              borderRadius: BorderRadius.circular(16.0),
+              side: BorderSide(color: Colors.orange, width: 1)),
           elevation: 4.0,
           child: Padding(
               padding: EdgeInsets.all(5.0),

@@ -20,16 +20,23 @@ showAfterSignUp(
       break;
   }
   return Padding(
-    padding: EdgeInsets.only(left: 10, right: 10),
+    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
     child: Neumorphic(
       style: NeumorphicStyle(
         shape: NeumorphicShape.flat,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
         depth: 4,
         intensity: 0.5,
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.1),
       ),
       child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: Colors.orange,
+          ),
+          borderRadius: BorderRadius.circular(16.0)
+        ),
         //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.
         height: 100,
         child: Center(

@@ -1,40 +1,79 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
+import 'package:clickbyme/UI/UserCheck.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:hive_flutter/adapters.dart';
 import '../DB/AD_Home.dart';
 
 UserTips(BuildContext context) {
   return Column(
     children: <Widget>[
-      Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 15,
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.tips_and_updates,
-                color: Colors.deepPurpleAccent.shade100,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              const Text(
-                '왓 인 HabitMind?',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.black54,
+      SizedBox(
+        height: 10,
+      ),
+      Neumorphic(
+        style: NeumorphicStyle(
+          shape: NeumorphicShape.flat,
+          border: NeumorphicBorder.none(),
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
+          depth: 5,
+          color: Colors.white,
+        ),
+        child: Column(
+          children: [
+            Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 15,
                 ),
-              ),
-            ],
-          )),
-      Container(
-        padding: EdgeInsets.only(top: 15),
-        child: TipClips(context),
-      )
+                child: Row(
+                  children: [
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.tips_and_updates,
+                              color: Colors.deepPurpleAccent.shade100,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              '왓 인 HabitMind?',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
+                        )),
+                        InkWell(
+                  onTap: () {
+                    //사용자가 이 페이지를 보기 싫어한다는 의미로 로컬에 불린값 저장
+                          Hive.box('user_setting')
+                              .put('no_show_tip_page', true);
+                          GoToMain(context);
+                  },
+                  child: NeumorphicIcon(
+                      Icons.clear,
+                      size: 20,
+                      style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        color: Colors.deepPurpleAccent.shade100,
+                        lightSource: LightSource.topLeft),
+                    ),),
+                  ],
+                )),
+            Container(
+              padding: EdgeInsets.only(top: 15),
+              child: TipClips(context),
+            )
+          ],
+        ),
+      ),
     ],
   );
 }
@@ -79,7 +118,7 @@ PageTipsCarousel(BuildContext context, int index) {
     ),
     AD_Home(
       id: '4',
-      title: '개인키 관리',
+      title: '개인키',
       person_num: 5,
       date: DateTime.now(),
     )
@@ -149,11 +188,12 @@ PageTipsCarousel(BuildContext context, int index) {
                         right: 0,
                         child: NeumorphicButton(
                           style: NeumorphicStyle(
-                            shape: NeumorphicShape.flat,
-                            color: Colors.grey.withOpacity(0.2)
-                          ),
+                              shape: NeumorphicShape.flat,
+                              color: Colors.grey.withOpacity(0.2)),
                           child: Text(
-                            (index + 1).toString() + '/' + _list_ad.length.toString(),
+                            (index + 1).toString() +
+                                '/' +
+                                _list_ad.length.toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.w300,
                               fontSize: 16,

@@ -127,13 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
-  date_picker_timeline:
-    dependency: "direct main"
-    description:
-      name: date_picker_timeline
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.3"
   dbus:
     dependency: transitive
     description:
@@ -244,13 +237,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_clean_calendar:
-    dependency: "direct main"
-    description:
-      name: flutter_clean_calendar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -293,13 +279,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-  flutter_search_bar:
-    dependency: "direct main"
-    description:
-      name: flutter_search_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -349,6 +328,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.1.0"
+  flutter_switch:
+    dependency: "direct main"
+    description:
+      name: flutter_switch
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter

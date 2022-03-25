@@ -9,32 +9,48 @@ import '../Sub/YourTags.dart';
 UserPicks(BuildContext context) {
   return Column(
     children: <Widget>[
-      Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 15,
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.push_pin,
-                color: Colors.deepPurpleAccent.shade100,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              const Text(
-                '카테고리',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.black54,
+      SizedBox(
+        height: 10,
+      ),
+      Neumorphic(
+        style: NeumorphicStyle(
+          shape: NeumorphicShape.flat,
+          border: NeumorphicBorder.none(),
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
+          depth: 5,
+          color: Colors.white,
+        ),
+        child: Column(
+          children: [
+            Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 15,
                 ),
-              ),
-            ],
-          )),
-      Main_Pick(context),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.push_pin,
+                      color: Colors.deepPurpleAccent.shade100,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      '카테고리',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                )),
+            Main_Pick(context),
+          ],
+        ),
+      ),
     ],
   );
 }
@@ -99,12 +115,13 @@ Main_Pick(context) {
             itemBuilder: (context, index) {
               return Neumorphic(
                   style: NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      border: NeumorphicBorder.none(),
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(5)),
-                      depth: 5,
-                      color: Colors.grey.shade200,),
+                    shape: NeumorphicShape.flat,
+                    border: NeumorphicBorder.none(),
+                    boxShape:
+                        NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
+                    depth: 5,
+                    color: Colors.grey.shade200,
+                  ),
                   child: InkWell(
                       onTap: () {
                         if (index == 0) {
@@ -147,7 +164,9 @@ Main_Pick(context) {
                               height: 30,
                               width: 30,
                             ),
-                            SizedBox(width: 20,),
+                            SizedBox(
+                              width: 20,
+                            ),
                             Text(
                               _list_ad[index].title,
                               style: const TextStyle(

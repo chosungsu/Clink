@@ -71,17 +71,15 @@ dependencies:
   sticky_headers: ^0.2.0
   textfield_tags: ^1.4.3
   #UI
-  flutter_clean_calendar: ^1.1.0
   calendar_view: ^0.0.4
   flutter_neumorphic: ^3.0.3
   timeline_tile: ^2.0.0
-  flutter_search_bar: ^2.1.0
   calendar_timeline: ^1.0.4
+  flutter_switch: ^0.3.2
   #local db
   hive: ^2.0.6
   hive_flutter: ^1.1.0
   hive_listener: ^1.2.1
-  date_picker_timeline: ^1.2.3
 
 dev_dependencies:
   flutter_test:

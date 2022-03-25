@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:clickbyme/UI/UserDetails.dart';
 import 'package:clickbyme/UI/UserSettings.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
-import '../Dialogs/destroyBackKey.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/NoticeApps.dart';
 import '../route.dart';
