@@ -115,12 +115,13 @@ Main_Pick(context) {
             itemBuilder: (context, index) {
               return Neumorphic(
                   style: NeumorphicStyle(
-                    shape: NeumorphicShape.flat,
+                    shape: NeumorphicShape.concave,
                     border: NeumorphicBorder.none(),
                     boxShape:
                         NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-                    depth: 5,
-                    color: Colors.grey.shade200,
+                    depth: -5,
+                    color: Colors.white,
+                    //color: Colors.grey.shade200,
                   ),
                   child: InkWell(
                       onTap: () {

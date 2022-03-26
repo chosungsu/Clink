@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 showBeforeSignUp(BuildContext context) {
 
   return Padding(
-    padding: EdgeInsets.only(left: 10, right: 10),
+    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
     child: Neumorphic(
       style: NeumorphicStyle(
           shape: NeumorphicShape.flat,

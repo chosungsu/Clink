@@ -13,25 +13,25 @@ NoticeApps(BuildContext context, PageController pcontroll) {
     ),
     AD_Home(
       id: '1',
-      title: '일정 관리 탭이 신설되었습니다.',
+      title: '데이로그 관리 탭이 신설되었습니다.',
       person_num: 3,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '2',
-      title: '구독 관리 탭이 신설되었습니다.',
+      title: '챌린지 관리 탭이 신설되었습니다.',
       person_num: 4,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '3',
-      title: '링크 관리 탭이 신설되었습니다.',
+      title: '페이지마크 관리 탭이 신설되었습니다.',
       person_num: 5,
       date: DateTime.now(),
     ),
     AD_Home(
       id: '4',
-      title: '톡톡 플러스 탭이 신설되었습니다.',
+      title: '개인키 관리 탭이 신설되었습니다.',
       person_num: 5,
       date: DateTime.now(),
     )
@@ -40,7 +40,7 @@ NoticeApps(BuildContext context, PageController pcontroll) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       SizedBox(
-        height: 15,
+        height: 10,
       ),
       Neumorphic(
           style: NeumorphicStyle(
@@ -84,7 +84,7 @@ NoticeApps(BuildContext context, PageController pcontroll) {
                           style: NeumorphicStyle(
                               shape: NeumorphicShape.convex,
                               depth: 2,
-                              color: Colors.grey.withOpacity(0.5),
+                              color: Colors.deepPurpleAccent.shade100,
                               lightSource: LightSource.topLeft),
                         ),
                       ),

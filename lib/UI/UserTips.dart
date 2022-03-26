@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:clickbyme/Dialogs/deleteads.dart';
 import 'package:clickbyme/UI/UserCheck.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -49,22 +50,20 @@ UserTips(BuildContext context) {
                             ),
                           ],
                         )),
-                        InkWell(
-                  onTap: () {
-                    //사용자가 이 페이지를 보기 싫어한다는 의미로 로컬에 불린값 저장
-                          Hive.box('user_setting')
-                              .put('no_show_tip_page', true);
-                          GoToMain(context);
-                  },
-                  child: NeumorphicIcon(
-                      Icons.clear,
-                      size: 20,
-                      style: NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        color: Colors.deepPurpleAccent.shade100,
-                        lightSource: LightSource.topLeft),
-                    ),),
+                    InkWell(
+                      onTap: () {
+                        deleteads(context);
+                      },
+                      child: NeumorphicIcon(
+                        Icons.clear,
+                        size: 20,
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.convex,
+                            depth: 2,
+                            color: Colors.deepPurpleAccent.shade100,
+                            lightSource: LightSource.topLeft),
+                      ),
+                    ),
                   ],
                 )),
             Container(
@@ -118,7 +117,7 @@ PageTipsCarousel(BuildContext context, int index) {
     ),
     AD_Home(
       id: '4',
-      title: '개인키',
+      title: '개인키 관리',
       person_num: 5,
       date: DateTime.now(),
     )

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:intl/intl.dart';
 
 addTodos(BuildContext context, TextEditingController textEditingController,
-    List<String> todolist, DateTime selectedDay) {
+    DateTime selectedDay) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   textEditingController.text = "";
   String time = '';
@@ -98,31 +99,39 @@ addTodos(BuildContext context, TextEditingController textEditingController,
                           String str_todo = '';
                           await firestore
                               .collection('TODO')
-                              .doc(nick + selectedDay.toString())
+                              .doc(nick + DateFormat('yyyy-MM-dd').parse(selectedDay.toString().split(' ')[0]).toString())
                               .get()
                               .then((DocumentSnapshot ds) {
-                            str_snaps = (ds.data() as Map)['time'];
-                            str_todo = (ds.data() as Map)['todo'];
-                          });
-                          str_snaps == null || str_snaps == '' ? 
-                          await firestore.collection('TODO').doc(
-                            nick + selectedDay.toString()
-                          ).set({
-                            'name': nick,
-                            'date': selectedDay,
-                            'time': time,
-                            'todo': textEditingController.text
-                          }) : 
-                          await firestore
-                              .collection('TODO')
-                              .doc(nick + selectedDay.toString())
-                              .update({
-                            'time': str_snaps +
-                                ',' +
-                                time,
-                                'todo': str_todo +
-                                ',' +
-                                textEditingController.text,
+                            if (ds.data() != null) {
+                              str_snaps = (ds.data() as Map)['time'];
+                              str_todo = (ds.data() as Map)['todo'];
+                              str_snaps != '' ?
+                              firestore
+                                  .collection('TODO')
+                                  .doc(nick + DateFormat('yyyy-MM-dd').parse(selectedDay.toString().split(' ')[0]).toString())
+                                  .update({
+                                'time': str_snaps + ',' + time,
+                                'todo':
+                                    str_todo + ',' + textEditingController.text,
+                              }) :
+                              firestore
+                                  .collection('TODO')
+                                  .doc(nick + DateFormat('yyyy-MM-dd').parse(selectedDay.toString().split(' ')[0]).toString())
+                                  .update({
+                                'time': time,
+                                'todo': textEditingController.text,
+                              });
+                            } else {
+                              firestore
+                                  .collection('TODO')
+                                  .doc(nick + DateFormat('yyyy-MM-dd').parse(selectedDay.toString().split(' ')[0]).toString())
+                                  .set({
+                                'name': nick,
+                                'date': DateFormat('yyyy-MM-dd').parse(selectedDay.toString()).toString().split(' ')[0],
+                                'time': time,
+                                'todo': textEditingController.text
+                              });
+                            }
                           });
                         },
                         style: NeumorphicStyle(

@@ -93,7 +93,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     )..addStatusListener(
         (status) {
           if (status == AnimationStatus.completed) {
-            if (Hive.box('user_info').get('id') != null) {
+            if (Hive.box('user_info').get('id') != null || Hive.box('user_info').get('autologin') == true) {
               GoToMain(context);
             } else {
               GoToLogin(context);

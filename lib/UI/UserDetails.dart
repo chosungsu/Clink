@@ -8,7 +8,7 @@ UserDetails(BuildContext context) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       SizedBox(
-        height: 15,
+        height: 10,
       ),
       Neumorphic(
           style: NeumorphicStyle(

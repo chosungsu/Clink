@@ -14,7 +14,7 @@ UserSettings(BuildContext context) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       SizedBox(
-        height: 15,
+        height: 10,
       ),
       Neumorphic(
           style: NeumorphicStyle(
@@ -47,7 +47,7 @@ UserSettings(BuildContext context) {
                 child: Neumorphic(
                     style: NeumorphicStyle(
                       shape: NeumorphicShape.concave,
-                      depth: 4,
+                      depth: -3,
                       color: Colors.white,
                     ),
                     child: Container(
