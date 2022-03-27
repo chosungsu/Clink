@@ -4,7 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import '../DB/TODO.dart';
+import '../Futures/homeasync.dart';
 import '../Tool/NoBehavior.dart';
 
 class DayLog extends StatefulWidget {
@@ -18,33 +21,9 @@ class _DayLogState extends State<DayLog> {
   TextEditingController textEditingController = TextEditingController();
   DateTime selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String time_table = '';
-  String todo = '';
-  final ValueNotifier<int> _daycount = ValueNotifier<int>(0);
-  bool isclickedday = false;
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      setState(() {
-        firestore
-            .collection('TODO')
-            .doc(Hive.box('user_info').get('id').toString() +
-                DateFormat('yyyy-MM-dd')
-                    .parse(selectedDay.toString().split(' ')[0])
-                    .toString())
-            .get()
-            .then((DocumentSnapshot ds) {
-          if (ds.data() != null) {
-            time_table = (ds.data() as Map)['time'];
-            todo = (ds.data() as Map)['todo'];
-          } else {
-            time_table = '';
-            todo = '';
-          }
-        });
-      });
-    });
   }
 
   @override
@@ -63,9 +42,8 @@ class _DayLogState extends State<DayLog> {
           IconButton(
             color: Colors.black54,
             tooltip: '추가하기',
-            onPressed: () => {
-              addTodos(context, textEditingController, selectedDay)
-            },
+            onPressed: () =>
+                {addTodos(context, textEditingController, selectedDay)},
             icon: const Icon(Icons.add_circle),
           ),
         ],
@@ -78,13 +56,13 @@ class _DayLogState extends State<DayLog> {
               height: MediaQuery.of(context).size.height,
               color: Colors.white,
               child: SingleChildScrollView(
-                child: makeBody(context, todo, time_table),
+                child: makeBody(context),
               ))),
     );
   }
 
   // 바디 만들기
-  Widget makeBody(BuildContext context, String todo_, String time_table_) {
+  Widget makeBody(BuildContext context) {
     //DateTime _selectedValue;
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return Column(
@@ -101,25 +79,6 @@ class _DayLogState extends State<DayLog> {
               onDateSelected: (date) {
                 setState(() {
                   selectedDay = date!;
-                  isclickedday = false;
-                  firestore
-                      .collection('TODO')
-                      .doc(Hive.box('user_info').get('id').toString() +
-                          selectedDay.toString())
-                      .get()
-                      .then((DocumentSnapshot ds) {
-                    if (ds.data() != null) {
-                      time_table = (ds.data() as Map)['time'];
-                      todo = (ds.data() as Map)['todo'];
-                      print(time_table);
-                      print(todo);
-                    } else {
-                      time_table = '';
-                      todo = '';
-                    }
-                  });
-                  _daycount.value++;
-                  print(selectedDay);
                 });
               },
               leftMargin: 20,
@@ -132,45 +91,47 @@ class _DayLogState extends State<DayLog> {
               locale: 'ko',
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            child: NeumorphicButton(
-                onPressed: () {
-                  print(selectedDay);
-                  setState(() {
-                    isclickedday = true;
-                  });
-                },
-                style: NeumorphicStyle(
-                    shape: NeumorphicShape.concave,
-                    depth: 2,
-                    color: Colors.lightBlue,
-                    lightSource: LightSource.topLeft),
-                child: Center(
-                    child: Text(
-                  "날짜 선택 후 일정 들여다보기",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ))),
+          FutureBuilder<List<TODO>>(
+            future: homeasync(
+                selectedDay), // a previously-obtained Future<String> or null
+            builder:
+                (BuildContext context, AsyncSnapshot<List<TODO>> snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                return timelineview(context, selectedDay, snapshot.data!);
+              } else {
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 1000),
+                  child: Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height - 220,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.25,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.black),
+                            ),
+                            const SizedBox(height: 20),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              height: MediaQuery.of(context).size.height / 4,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.black),
+                            )
+                          ],
+                        ),
+                      )),
+                );
+              }
+            },
           ),
-          isclickedday == true
-              ? timelineview(context, todo, time_table, selectedDay)
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '버튼을 클릭하시면 일정이 이곳에 나타납니다.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.black45,
-                      ),
-                    ),
-                  ],
-                )
         ],
       );
     });
@@ -178,16 +139,19 @@ class _DayLogState extends State<DayLog> {
 
   timelineview(
     BuildContext context,
-    String todo,
-    String time_table,
     DateTime selectedDay,
+    List<TODO> list,
   ) {
+    List<TODO> tmp_todo_list = [];
+    List<String> todo_tmp = [];
+    List<String> time_tmp = [];
+
     return SizedBox(
         height: MediaQuery.of(context).size.height - 220,
-        child: todo != ''
+        child: list.isNotEmpty
             ? ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: todo.split(',').length,
+                itemCount: list.length,
                 itemBuilder: (BuildContext context, int index) {
                   return SizedBox(
                       height: 120,
@@ -224,7 +188,7 @@ class _DayLogState extends State<DayLog> {
                                               width: 20,
                                             ),
                                             Text(
-                                              todo.split(',')[index],
+                                              list[index].title,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
@@ -238,8 +202,25 @@ class _DayLogState extends State<DayLog> {
                                         String nick =
                                             await Hive.box('user_info')
                                                 .get('id');
-                                        todo.split(',').length > 1 ?
-                                        (index == 0 ? 
+                                        list.length == 1
+                                            ? await firestore
+                                                .collection("TODO")
+                                                .doc(nick +
+                                                    DateFormat('yyyy-MM-dd')
+                                                        .parse(selectedDay
+                                                            .toString()
+                                                            .split(' ')[0])
+                                                        .toString())
+                                                .delete()
+                                            : list.removeAt(index);
+                                        for (int i = 0; i < list.length; i++) {
+                                          tmp_todo_list.add(TODO(
+                                              title: list[i].title,
+                                              time: list[i].time));
+                                          todo_tmp.add(tmp_todo_list[i].title);
+                                          time_tmp.add(tmp_todo_list[i].time);
+                                        }
+                                        print(time_tmp.length);
                                         await firestore
                                             .collection('TODO')
                                             .doc(nick +
@@ -249,41 +230,11 @@ class _DayLogState extends State<DayLog> {
                                                         .split(' ')[0])
                                                     .toString())
                                             .update({
-                                          'time': time_table.replaceAll(
-                                              time_table.split(',')[index] + ',', ''),
-                                          'todo': todo.replaceAll(
-                                              todo.split(',')[index] + ',', ''),
-                                        }) :
-                                        await firestore
-                                            .collection('TODO')
-                                            .doc(nick +
-                                                DateFormat('yyyy-MM-dd')
-                                                    .parse(selectedDay
-                                                        .toString()
-                                                        .split(' ')[0])
-                                                    .toString())
-                                            .update({
-                                          'time': time_table.replaceAll(
-                                              ',' + time_table.split(',')[index], ''),
-                                          'todo': todo.replaceAll(
-                                              ',' + todo.split(',')[index], ''),
-                                        })) :
-                                        await firestore
-                                            .collection('TODO')
-                                            .doc(nick +
-                                                DateFormat('yyyy-MM-dd')
-                                                    .parse(selectedDay
-                                                        .toString()
-                                                        .split(' ')[0])
-                                                    .toString())
-                                            .update({
-                                          'time': time_table.replaceAll(
-                                              time_table.split(',')[index], ''),
-                                          'todo': todo.replaceAll(
-                                              todo.split(',')[index], ''),
+                                          'time': time_tmp.getRange(
+                                              0, time_tmp.length).join(','),
+                                          'todo': todo_tmp.getRange(
+                                              0, time_tmp.length).join(','),
                                         });
-                                        print(time_table);
-                                        print(todo);
                                       },
                                       child: NeumorphicIcon(
                                         Icons.delete,
@@ -306,7 +257,7 @@ class _DayLogState extends State<DayLog> {
                           ),
                           child: Center(
                             child: Text(
-                              time_table.split(',')[index],
+                              list[index].time,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
@@ -318,7 +269,7 @@ class _DayLogState extends State<DayLog> {
                       ));
                 })
             : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     Hive.box('user_info').get('id').toString() +

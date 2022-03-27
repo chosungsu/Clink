@@ -1,10 +1,12 @@
+import 'package:clickbyme/DB/TODO.dart';
 import 'package:clickbyme/UI/UserChoice.dart';
 import 'package:clickbyme/UI/UserPicks.dart';
 import 'package:clickbyme/UI/UserTips.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
+import '../Futures/homeasync.dart';
 import '../Tool/NoBehavior.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,35 +18,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool show_what0 = false;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String str_snaps = '';
-  String str_todo = '';
+  DateTime selectedDay = DateTime.now();
 
   @override
-  void initState() {
+  initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      setState(() {
-        if (Hive.box('user_setting').get('no_show_tip_page') != null) {
-          show_what0 = Hive.box('user_setting').get('no_show_tip_page');
-        } else {
-          show_what0 = false;
-        }
-        firestore
-            .collection('TODO')
-            .doc(Hive.box('user_info').get('id') +
-                DateFormat('yyyy-MM-dd')
-                    .parse(DateTime.now().toString().split(' ')[0])
-                    .toString())
-            .get()
-            .then((DocumentSnapshot ds) {
-          if (ds.data() != null) {
-            str_snaps = (ds.data() as Map)['time'];
-            str_todo = (ds.data() as Map)['todo'];
-          } else {}
-        });
-      });
+    setState(() {
+      if (Hive.box('user_setting').get('no_show_tip_page') != null) {
+        show_what0 = Hive.box('user_setting').get('no_show_tip_page');
+      } else {
+        show_what0 = false;
+      }
     });
   }
 
@@ -56,19 +41,6 @@ class _HomePageState extends State<HomePage> {
       } else {
         show_what0 = false;
       }
-      firestore
-            .collection('TODO')
-            .doc(Hive.box('user_info').get('id') +
-                DateFormat('yyyy-MM-dd')
-                    .parse(DateTime.now().toString().split(' ')[0])
-                    .toString())
-            .get()
-            .then((DocumentSnapshot ds) {
-          if (ds.data() != null) {
-            str_snaps = (ds.data() as Map)['time'];
-            str_todo = (ds.data() as Map)['todo'];
-          } else {}
-        });
     });
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +62,109 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       UserPicks(context),
                       //AD(context)
-                      UserChoice(context, str_snaps, str_todo),
+                      FutureBuilder<List<TODO>>(
+                        future: homeasync(
+                            selectedDay), // a previously-obtained Future<String> or null
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<TODO>> snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.connectionState ==
+                                  ConnectionState.done) {
+                            return UserChoice(context, snapshot.data!);
+                          } else {
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Neumorphic(
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.convex,
+                                      border: NeumorphicBorder.none(),
+                                      boxShape: NeumorphicBoxShape.roundRect(
+                                          BorderRadius.circular(5)),
+                                      depth: 5,
+                                      color: Colors.white,
+                                    ),
+                                    child: AnimatedSwitcher(
+                                      duration:
+                                          const Duration(milliseconds: 3000),
+                                      child: Shimmer.fromColors(
+                                          baseColor: Colors.grey.shade300,
+                                          highlightColor: Colors.grey.shade100,
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                3.5 *
+                                                3,
+                                            child: ListView.builder(
+                                                itemCount: 3,
+                                                itemBuilder: (context, index) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10,
+                                                            bottom: 15),
+                                                    child: Container(
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height /
+                                                              4,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.3,
+                                                            height: 20,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 20),
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height /
+                                                                5.5,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                color: Colors
+                                                                    .black),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                          )),
+                                    ))
+                              ],
+                            );
+                          }
+                        },
+                      ),
                     ],
                   )
                 : Column(
@@ -98,7 +172,108 @@ class _HomePageState extends State<HomePage> {
                       UserTips(context),
                       UserPicks(context),
                       //AD(context),
-                      UserChoice(context, str_snaps, str_todo),
+                      FutureBuilder<List<TODO>>(
+                        future: homeasync(
+                            selectedDay), // a previously-obtained Future<String> or null
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<TODO>> snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.connectionState ==
+                                  ConnectionState.done) {
+                            return UserChoice(context, snapshot.data!);
+                          } else {
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Neumorphic(
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.convex,
+                                      border: NeumorphicBorder.none(),
+                                      boxShape: NeumorphicBoxShape.roundRect(
+                                          BorderRadius.circular(5)),
+                                      depth: 5,
+                                      color: Colors.white,
+                                    ),
+                                    child: AnimatedSwitcher(
+                                      duration:
+                                          const Duration(milliseconds: 3000),
+                                      child: Shimmer.fromColors(
+                                          baseColor: Colors.grey.shade300,
+                                          highlightColor: Colors.grey.shade100,
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                3.5 *
+                                                3,
+                                            child: ListView.builder(
+                                                itemCount: 3,
+                                                itemBuilder: (context, index) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Container(
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height /
+                                                              4,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.25,
+                                                            height: 20,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 20),
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height /
+                                                                5.5,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                color: Colors
+                                                                    .black),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                          )),
+                                    ))
+                              ],
+                            );
+                          }
+                        },
+                      ),
                     ],
                   );
           }))),

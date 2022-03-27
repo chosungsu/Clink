@@ -1,9 +1,9 @@
+import 'package:clickbyme/DB/TODO.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../DB/Contents.dart';
 
 ListViewDayTimeLine(
-    BuildContext context, String string, String str_snaps, String str_todo) {
-  
+    BuildContext context, String string, List<TODO> str_todo_list) {
   return Column(
     children: [
       SizedBox(
@@ -30,63 +30,98 @@ ListViewDayTimeLine(
               SizedBox(
                 height: 20,
               ),
-              Expanded(
-                child: ListView.builder(
-                  //controller: mainController,
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: str_snaps.split(',').length,
-                  itemBuilder: (context, index) => Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.3,
-                          child: Neumorphic(
-                              style: NeumorphicStyle(
-                                shape: NeumorphicShape.concave,
-                                border: NeumorphicBorder.none(),
-                                boxShape: NeumorphicBoxShape.roundRect(
-                                    BorderRadius.circular(5)),
-                                depth: 5,
-                                color: Colors.white,
+              str_todo_list.length > 0
+                  ? Expanded(
+                      child: ListView.builder(
+                        //controller: mainController,
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: str_todo_list.length,
+                        itemBuilder: (context, index) => Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width / 2.3,
+                                child: Neumorphic(
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.concave,
+                                      border: NeumorphicBorder.none(),
+                                      boxShape: NeumorphicBoxShape.roundRect(
+                                          BorderRadius.circular(5)),
+                                      depth: -5,
+                                      color: Colors.white,
+                                      //color: Colors.grey.shade200,
+                                    ),
+                                    child: Card(
+                                      color: Colors.white,
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                              flex: 2,
+                                              child: Text(
+                                                str_todo_list[index].title,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20,
+                                                  color: Colors.black45,
+                                                ),
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 1,
+                                              child: Text(
+                                                str_todo_list[index].time,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: Colors.black45,
+                                                ),
+                                              ),
+                                            )
+                                          ]),
+                                    )),
                               ),
-                              child: Card(
-                                color: Colors.white,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        flex: 2,
-                                        child: Text(
-                                          str_todo.split(',')[index],
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            color: Colors.black45,
-                                          ),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: Text(
-                                          str_snaps.split(',')[index].toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.black45,
-                                          ),
-                                        ),
-                                      )
-                                    ]),
-                              )),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              )
+                      ),
+                    )
+                  : Expanded(
+                      child: Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Neumorphic(
+                            style: NeumorphicStyle(
+                              shape: NeumorphicShape.concave,
+                              border: NeumorphicBorder.none(),
+                              boxShape: NeumorphicBoxShape.roundRect(
+                                  BorderRadius.circular(5)),
+                              depth: -5,
+                              color: Colors.white,
+                              //color: Colors.grey.shade200,
+                            ),
+                            child: Card(
+                              color: Colors.white,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '오늘의 일정은 작성된 것이 없습니다.',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black45,
+                                      ),
+                                    ),
+                                  ]),
+                            )),
+                      ),
+                    ))
             ],
           )),
       Padding(

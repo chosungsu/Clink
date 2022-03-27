@@ -50,8 +50,9 @@ ListViewHome(BuildContext context, String string, List<Contents> list_content) {
                                 border: NeumorphicBorder.none(),
                                 boxShape: NeumorphicBoxShape.roundRect(
                                     BorderRadius.circular(5)),
-                                depth: 5,
+                                depth: -5,
                                 color: Colors.white,
+                                //color: Colors.grey.shade200,
                               ),
                               child: Card(
                                 color: Colors.white,
