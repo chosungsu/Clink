@@ -1,13 +1,9 @@
 import 'package:clickbyme/DB/Contents.dart';
-import 'package:clickbyme/DB/DateUtils.dart';
 import 'package:clickbyme/DB/Recommend.dart';
 import 'package:clickbyme/UI/ListViewFeed.dart';
-import 'package:clickbyme/UI/ListViewHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-
-import '../DB/AD_Home.dart';
 
 UserSubscription(BuildContext context, TabController tabController,
     int tabindex, List<Contents> contents) {

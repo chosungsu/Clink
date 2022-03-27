@@ -1,11 +1,15 @@
+import 'package:clickbyme/DB/ChipList.dart';
 import 'package:clickbyme/DB/Recommend.dart';
-import 'package:clickbyme/sheets/onAdd.dart';
+import 'package:clickbyme/Tool/Shimmer_Chip.dart';
+import 'package:clickbyme/sheets/addChips.dart';
+import 'package:clickbyme/Futures/chipasync.dart';
+import 'package:clickbyme/Tool/Chips.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/adapters.dart';
+import '../DB/AD_Home.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/UserSubscription.dart';
+import '../Tool/Shimmer_DayLog.dart';
 
 class YourTags extends StatefulWidget {
   @override
@@ -16,12 +20,14 @@ class _YourTagsState extends State<YourTags> with TickerProviderStateMixin {
   late TabController _tabController_tags;
   late TextEditingController _eventController;
   int tabindex = 0;
+  bool isselectedchip = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController_tags = TabController(length: 2, vsync: this);
+    _tabController_tags =
+        TabController(length: 2, vsync: this, initialIndex: tabindex);
     _eventController = TextEditingController();
   }
 
@@ -35,234 +41,143 @@ class _YourTagsState extends State<YourTags> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          color: Colors.black54,
-          icon: Icon(Icons.arrow_back_outlined),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.white,
-        actions: <Widget>[
-          IconButton(
+        appBar: AppBar(
+          leading: IconButton(
             color: Colors.black54,
-            tooltip: '추가하기',
-            onPressed: () => {
-              //bottomsheet 사용하기
-              onAdd(context, _eventController),
+            icon: Icon(Icons.arrow_back_outlined),
+            onPressed: () {
+              Navigator.pop(context);
             },
-            icon: const Icon(Icons.add_circle),
           ),
-        ],
-        title: Text('태그 관리', style: TextStyle(color: Colors.blueGrey)),
-        bottom: TabBar(
-          unselectedLabelColor: Colors.black,
-          labelColor: Colors.deepPurpleAccent,
-          controller: _tabController_tags,
-          isScrollable: false,
-          labelPadding: const EdgeInsets.only(left: 25, right: 25),
-          indicator: CircleIndicator(color: Colors.black, radius: 4),
-          tabs: const [
-            Tab(
-              text: '피드 태그',
-            ),
-            Tab(
-              text: '사람 태그',
+          backgroundColor: Colors.white,
+          actions: <Widget>[
+            IconButton(
+              color: Colors.black54,
+              tooltip: '추가하기',
+              onPressed: () => {
+                //bottomsheet 사용하기
+                addChips(context, _eventController)
+              },
+              icon: const Icon(Icons.add_circle),
             ),
           ],
+          title: Text('태그 관리', style: TextStyle(color: Colors.blueGrey)),
+          elevation: 0,
         ),
-        elevation: 0,
-      ),
-      body: Container(
-        color: Colors.white,
-        child: makeBody(context, _tabController_tags, _eventController),
-      ),
-    );
+        body: ScrollConfiguration(
+            behavior: NoBehavior(),
+            child: Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height,
+                child: SingleChildScrollView(
+                    child: makeBody(context, _tabController_tags,
+                        _eventController, isselectedchip)))));
   }
 }
 
 // 바디 만들기
 Widget makeBody(BuildContext context, TabController tabController_tags,
-    TextEditingController eventController) {
+    TextEditingController eventController, bool isselectedchip) {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final List<Recommend> _list_content = [
     Recommend(sub: '추천 태그'),
     Recommend(sub: '사용자의 태그 보관함'),
     Recommend(sub: '분석'),
   ];
-  return TabBarView(
-    controller: tabController_tags,
-    children: [
-      CustomScrollView(
-        physics: RangeMaintainingScrollPhysics(),
-        scrollBehavior: NoBehavior(),
-        slivers: [
-          SliverList(
-              delegate: SliverChildBuilderDelegate(
-            (context, index) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                index == 0
-                    ? Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 15, left: 15),
-                        child: Row(
-                          children: [
-                            Text(_list_content[index].sub.toString(),
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                )),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            const Text('Beta',
-                                style: TextStyle(
-                                  color: Colors.deepPurpleAccent,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 16,
-                                ))
-                          ],
-                        ))
-                    : Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 15, left: 15),
-                        child: Text(_list_content[index].sub.toString(),
-                            style: TextStyle(
-                              color: Colors.blueGrey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            )),
-                      ),
-                index == 0 || index == 1
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        child: ValueListenableBuilder(
-                          valueListenable: Hive.box('user_info').listenable(),
-                          builder:
-                              (BuildContext context, Box box, Widget? widget) {
-                            return ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: box
-                                    .get('tag_content')
-                                    .toString()
-                                    .split(',')
-                                    .length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(right: 10),
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.25,
-                                      child: Neumorphic(
-                                          style: NeumorphicStyle(
-                                              shape: NeumorphicShape.convex,
-                                              boxShape:
-                                                  NeumorphicBoxShape.roundRect(
-                                                      BorderRadius.circular(
-                                                          60)),
-                                              depth: 1,
-                                              intensity: 0.5,
-                                              color: Colors.grey.shade100,
-                                              lightSource: LightSource.topLeft),
-                                          child: Stack(
-                                            children: [
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Center(
-                                                      child: Text('#' +
-                                                          box
-                                                              .get(
-                                                                  'tag_content')
-                                                              .toString()
-                                                              .split(
-                                                                  ',')[index]))
-                                                ],
-                                              ),
-                                              Positioned(
-                                                top: 0,
-                                                right: 0,
-                                                child: IconButton(
-                                                  onPressed: () async {
-                                                    String str_snaps = '';
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('Tags')
-                                                        .doc(Hive.box(
-                                                                'user_info')
-                                                            .get('id'))
-                                                        .get()
-                                                        .then((DocumentSnapshot
-                                                            ds) {
-                                                      str_snaps =
-                                                          (ds.data() as Map)[
-                                                              'tag_content'];
-                                                    });
-                                                    print(str_snaps
-                                                        .split(',')[index]);
-                                                    print(str_snaps
-                                                            .split(',')[index] +
-                                                        ',');
-                                                    str_snaps.toString().replaceAll(
-                                                        (str_snaps.split(
-                                                                ',')[index] +
-                                                            ',').toString(),
-                                                        "");
-                                                    print(str_snaps);
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('Tags')
-                                                        .doc(Hive.box(
-                                                                'user_info')
-                                                            .get('id'))
-                                                        .update({
-                                                      'tag_content': str_snaps
-                                                    });
-                                                    Hive.box('user_info').put(
-                                                        'tag_content',
-                                                        str_snaps);
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.remove,
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )),
-                                    ),
-                                  );
-                                });
-                          },
-                        ),
-                      )
-                    : SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        child: Container(
-                          color: Colors.grey,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Text('프로 버전 이상에서 가능한 기능입니다.',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ))
-                              ]),
-                        )),
-              ],
-            ),
-            childCount: _list_content.length,
-          ))
+  final List<AD_Home> _list_ad = [
+    AD_Home(
+      id: '0',
+      title: '데이로그 관리 탭이 신설되었습니다.',
+      person_num: 3,
+      date: DateTime.now(),
+    ),
+    AD_Home(
+      id: '1',
+      title: '챌린지 관리 탭이 신설되었습니다.',
+      person_num: 4,
+      date: DateTime.now(),
+    ),
+  ];
+  return Column(
+      children: [
+      Row(
+        children: [
+          SizedBox(
+            width: 10,
+          ),
+          Flexible(
+              fit: FlexFit.tight,
+              child: Row(
+                children: const [
+                  Text('클립 선택',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black45)),
+                ],
+              )),
         ],
       ),
-      Icon(Icons.directions_transit),
-    ],
-  );
+      FutureBuilder<List<ChipList>>(
+        future: chipasync(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<ChipList>> snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            return ChipRow(
+                context, isselectedchip, snapshot.data!, eventController);
+          } else {
+            return Shimmer_Chip(context);
+          }
+        },
+      ),
+    ]);
+}
+
+ChipRow(BuildContext context, selected, List<ChipList> list,
+    TextEditingController eventController) {
+  List<ChipList> tmp_title_chip_list = [];
+  return SizedBox(
+      height: 80,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: NeverScrollableScrollPhysics(),
+        child: Row(
+          children: [
+            list.isNotEmpty
+                ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 80,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: list.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        height: 50,
+                        width: 150,
+                        child: Chips(list[index].title, list[index].first_word,
+                            Colors.green, selected, eventController),
+                      );
+                    }),
+                )
+                : SizedBox(
+                    height: 50,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          Hive.box('user_info').get('id').toString() +
+                              '님 \n' +
+                              '관심태그가 아직 없네요..',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black45,
+                          ),
+                        ),
+                      ],
+                    ))
+          ],
+        ),
+      ));
 }

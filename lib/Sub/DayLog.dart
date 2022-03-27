@@ -1,5 +1,6 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:clickbyme/Dialogs/addTodos.dart';
+import 'package:clickbyme/Tool/Shimmer_DayLog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -100,35 +101,7 @@ class _DayLogState extends State<DayLog> {
                   snapshot.connectionState == ConnectionState.done) {
                 return timelineview(context, selectedDay, snapshot.data!);
               } else {
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 1000),
-                  child: Shimmer.fromColors(
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height - 220,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.black),
-                            ),
-                            const SizedBox(height: 20),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              height: MediaQuery.of(context).size.height / 4,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.black),
-                            )
-                          ],
-                        ),
-                      )),
-                );
+                return Shimmer_DayLog(context);
               }
             },
           ),
@@ -230,10 +203,12 @@ class _DayLogState extends State<DayLog> {
                                                         .split(' ')[0])
                                                     .toString())
                                             .update({
-                                          'time': time_tmp.getRange(
-                                              0, time_tmp.length).join(','),
-                                          'todo': todo_tmp.getRange(
-                                              0, time_tmp.length).join(','),
+                                          'time': time_tmp
+                                              .getRange(0, time_tmp.length)
+                                              .join(','),
+                                          'todo': todo_tmp
+                                              .getRange(0, time_tmp.length)
+                                              .join(','),
                                         });
                                       },
                                       child: NeumorphicIcon(

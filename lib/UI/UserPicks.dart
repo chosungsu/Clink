@@ -88,12 +88,6 @@ Main_Pick(context) {
     'assets/images/icon-link.png',
     'assets/images/fingerprint.png',
   ];
-  final List _list_background_color = [
-    Colors.green.shade200,
-    Colors.blue.shade200,
-    Colors.yellow.shade200,
-    Colors.red.shade200
-  ];
   return SizedBox(
       height: MediaQuery.of(context).size.width / 2 / 3 * 2 + 20,
       child: Padding(
