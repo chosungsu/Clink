@@ -61,20 +61,32 @@ ListViewDayTimeLine(
                                               MainAxisAlignment.center,
                                           children: [
                                             Flexible(
-                                              flex: 2,
-                                              child: Text(
-                                                str_todo_list[index].title,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20,
-                                                  color: Colors.black45,
-                                                ),
-                                              ),
-                                            ),
+                                                flex: 2,
+                                                child: Center(
+                                                  child: Text(
+                                                    str_todo_list[index].title,
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20,
+                                                      color: Colors.black45,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                )),
                                             Flexible(
                                               flex: 1,
                                               child: Text(
-                                                str_todo_list[index].time,
+                                                '시간 : ' +
+                                                    str_todo_list[index].time +
+                                                    (int.parse(str_todo_list[
+                                                                    index]
+                                                                .time
+                                                                .split(
+                                                                    ':')[0]) >=
+                                                            12
+                                                        ? 'PM'
+                                                        : 'AM'),
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,

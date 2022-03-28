@@ -22,13 +22,19 @@ Future<List<TODO>> homeasync(DateTime selectedDay) async {
       if (ds.data() != null) {
         str_snaps = (ds.data() as Map)['time'];
         str_todo = (ds.data() as Map)['todo'];
-        for (int i = 0; i < str_snaps.toString().split(',').length; i++) {
-          str_todo_list.add(TODO(
-              title: str_todo.toString().split(',')[i],
-              time: str_snaps.toString().split(',')[i]));
+        if (str_snaps != '') {
+          for (int i = 0; i < str_snaps.toString().split(',').length; i++) {
+            str_todo_list.add(TODO(
+                title: str_todo.toString().split(',')[i],
+                time: str_snaps.toString().split(',')[i]));
+          }
+          str_todo_list.sort((a, b) =>
+              a.time.split(':')[0] != b.time.split(':')[0]
+                  ? int.parse(a.time.split(':')[0])
+                      .compareTo(int.parse(b.time.split(':')[0]))
+                  : int.parse(a.time.split(':')[1])
+                      .compareTo(int.parse(b.time.split(':')[1])));
         }
-        str_todo_list.sort((a, b) => a.time.compareTo(b.time));
-        print(str_todo_list.length);
       } else {
         print('sec : ' + str_todo_list.length.toString());
       }

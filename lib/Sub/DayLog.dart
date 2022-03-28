@@ -1,10 +1,13 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:clickbyme/Dialogs/addTodos.dart';
+import 'package:clickbyme/Dialogs/checkhowdaylog.dart';
+import 'package:clickbyme/Sub/DayDetailPage.dart';
 import 'package:clickbyme/Tool/Shimmer_DayLog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import '../DB/TODO.dart';
@@ -30,6 +33,7 @@ class _DayLogState extends State<DayLog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           color: Colors.black54,
@@ -41,6 +45,14 @@ class _DayLogState extends State<DayLog> {
         backgroundColor: Colors.white,
         actions: <Widget>[
           IconButton(
+            visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+            color: Colors.black54,
+            tooltip: '사용방법',
+            onPressed: () => {checkhowdaylog(context)},
+            icon: const Icon(Icons.settings),
+          ),
+          IconButton(
+            visualDensity: VisualDensity(horizontal: -4, vertical: -4),
             color: Colors.black54,
             tooltip: '추가하기',
             onPressed: () =>
@@ -120,7 +132,7 @@ class _DayLogState extends State<DayLog> {
     List<String> time_tmp = [];
 
     return SizedBox(
-        height: MediaQuery.of(context).size.height - 220,
+        height: MediaQuery.of(context).size.height - 250,
         child: list.isNotEmpty
             ? ListView.builder(
                 scrollDirection: Axis.vertical,
@@ -132,112 +144,100 @@ class _DayLogState extends State<DayLog> {
                         alignment: TimelineAlign.manual,
                         lineXY: 0.2,
                         endChild: Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 120,
-                          ),
-                          child: Card(
-                              elevation: 10,
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                side:
-                                    BorderSide(color: Colors.white70, width: 1),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Flexible(
-                                        fit: FlexFit.tight,
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              'assets/images/date.png',
-                                              height: 30,
-                                              width: 30,
-                                            ),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            Text(
-                                              list[index].title,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.black45,
-                                              ),
-                                            ),
-                                          ],
-                                        )),
-                                    InkWell(
-                                      onTap: () async {
-                                        String nick =
-                                            await Hive.box('user_info')
-                                                .get('id');
-                                        list.length == 1
-                                            ? await firestore
-                                                .collection("TODO")
-                                                .doc(nick +
-                                                    DateFormat('yyyy-MM-dd')
-                                                        .parse(selectedDay
-                                                            .toString()
-                                                            .split(' ')[0])
-                                                        .toString())
-                                                .delete()
-                                            : list.removeAt(index);
-                                        for (int i = 0; i < list.length; i++) {
-                                          tmp_todo_list.add(TODO(
-                                              title: list[i].title,
-                                              time: list[i].time));
-                                          todo_tmp.add(tmp_todo_list[i].title);
-                                          time_tmp.add(tmp_todo_list[i].time);
-                                        }
-                                        print(time_tmp.length);
-                                        await firestore
-                                            .collection('TODO')
-                                            .doc(nick +
-                                                DateFormat('yyyy-MM-dd')
-                                                    .parse(selectedDay
-                                                        .toString()
-                                                        .split(' ')[0])
-                                                    .toString())
-                                            .update({
-                                          'time': time_tmp
-                                              .getRange(0, time_tmp.length)
-                                              .join(','),
-                                          'todo': todo_tmp
-                                              .getRange(0, time_tmp.length)
-                                              .join(','),
-                                        });
-                                      },
-                                      child: NeumorphicIcon(
-                                        Icons.delete,
-                                        size: 25,
-                                        style: NeumorphicStyle(
-                                          shape: NeumorphicShape.concave,
-                                          depth: 5,
-                                          color:
-                                              Colors.deepPurpleAccent.shade100,
+                            constraints: const BoxConstraints(
+                              minHeight: 120,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                //새창을 띄워 상세정보를 보여준다.
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        child: DayDetailPage(
+                                          title: list[index].title,
+                                          daytime: list[index].time,
+                                          date: selectedDay,
+                                          list: list,
+                                          index: index,
                                         ),
-                                      ),
+                                        type: PageTransitionType
+                                            .leftToRightWithFade));
+                              },
+                              child: Card(
+                                  elevation: 10,
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.white70, width: 1),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Container(
+                                              padding:
+                                                  EdgeInsets.only(right: 10),
+                                              child: Row(
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/images/date.png',
+                                                    height: 30,
+                                                    width: 30,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      list[index].title,
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                        color: Colors.black45,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      softWrap: true,
+                                                      maxLines: 1,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            )),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              )),
-                        ),
+                                  )),
+                            )),
                         startChild: Container(
                           constraints: const BoxConstraints(
                             minWidth: 20,
                           ),
+                          color:
+                              (int.parse(list[index].time.split(':')[0]) >= 12
+                                  ? Colors.deepPurple.shade400
+                                  : Colors.yellow.shade400),
                           child: Center(
                             child: Text(
-                              list[index].time,
+                              list[index].time +
+                                  '\n' +
+                                  (int.parse(list[index]
+                                              .time
+                                              .split(':')[0]) >=
+                                          12
+                                      ? 'PM'
+                                      : 'AM'),
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                                fontSize: 18,
                                 color: Colors.black45,
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ),
