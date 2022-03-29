@@ -1,5 +1,6 @@
 import 'package:clickbyme/DB/TODO.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:intl/intl.dart';
 import '../DB/Contents.dart';
 
 ListViewDayTimeLine(
@@ -51,7 +52,7 @@ ListViewDayTimeLine(
                                       boxShape: NeumorphicBoxShape.roundRect(
                                           BorderRadius.circular(5)),
                                       depth: -5,
-                                      color: Colors.white,
+                                      color: Colors.black54
                                       //color: Colors.grey.shade200,
                                     ),
                                     child: Card(
@@ -121,10 +122,10 @@ ListViewDayTimeLine(
                               color: Colors.white,
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
+                                  children: const [
                                     Text(
                                       '오늘의 일정은 작성된 것이 없습니다.',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
                                         color: Colors.black45,
@@ -136,8 +137,8 @@ ListViewDayTimeLine(
                     ))
             ],
           )),
-      Padding(
-        padding: const EdgeInsets.only(bottom: 15),
+      const Padding(
+        padding: EdgeInsets.only(bottom: 15),
       )
     ],
   );

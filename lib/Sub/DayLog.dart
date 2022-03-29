@@ -143,6 +143,8 @@ class _DayLogState extends State<DayLog> {
                       child: TimelineTile(
                         alignment: TimelineAlign.manual,
                         lineXY: 0.2,
+                        isFirst: index == 0 ? true : false,
+                        isLast: index == list.length - 1 ? true : false,
                         endChild: Container(
                             constraints: const BoxConstraints(
                               minHeight: 120,
@@ -156,6 +158,7 @@ class _DayLogState extends State<DayLog> {
                                         child: DayDetailPage(
                                           title: list[index].title,
                                           daytime: list[index].time,
+                                          content: list[index].content,
                                           date: selectedDay,
                                           list: list,
                                           index: index,
@@ -223,23 +226,33 @@ class _DayLogState extends State<DayLog> {
                                   ? Colors.deepPurple.shade400
                                   : Colors.yellow.shade400),
                           child: Center(
-                            child: Text(
-                              list[index].time +
-                                  '\n' +
-                                  (int.parse(list[index]
-                                              .time
-                                              .split(':')[0]) >=
-                                          12
-                                      ? 'PM'
-                                      : 'AM'),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.black45,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              int.parse(list[index].time.split(':')[0]) >= 12
+                                  ? Icon(
+                                Icons.dark_mode
+                              ) : Icon(
+                                Icons.sunny
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                              Text(
+                                list[index].time +
+                                    '\n' +
+                                    (int.parse(list[index]
+                                                .time
+                                                .split(':')[0]) >=
+                                            12
+                                        ? 'PM'
+                                        : 'AM'),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.black45,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )),
                         ),
                       ));
                 })

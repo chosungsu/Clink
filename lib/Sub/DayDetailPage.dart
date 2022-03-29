@@ -10,11 +10,12 @@ class DayDetailPage extends StatefulWidget {
     Key? key,
     required this.title,
     required this.daytime,
+    required this.content,
     required this.date,
     required this.list,
     required this.index,
   }) : super(key: key);
-  final String title, daytime;
+  final String title, daytime, content;
   final List<TODO> list;
   final DateTime date;
   final int index;
@@ -27,8 +28,12 @@ class _DayDetailPageState extends State<DayDetailPage> {
   List<TODO> tmp_todo_list = [];
   List<String> todo_tmp = [];
   List<String> time_tmp = [];
+  List<String> content_tmp = [];
+  //Map<String, dynamic> usermap = {};
   TextEditingController tc1 = TextEditingController();
   TextEditingController tc2 = TextEditingController();
+  TextEditingController tc3 = TextEditingController();
+  //TextEditingController tc5 = TextEditingController();
 
   @override
   void dispose() {
@@ -36,6 +41,8 @@ class _DayDetailPageState extends State<DayDetailPage> {
     super.dispose();
     tc1.dispose();
     tc2.dispose();
+    tc3.dispose();
+    //tc5.dispose();
   }
 
   @override
@@ -64,14 +71,16 @@ class _DayDetailPageState extends State<DayDetailPage> {
             onPressed: () async {
               Navigator.of(context).pop();
               String nick = await Hive.box('user_info').get('id');
-              String str_snaps = '';
-              String str_todo = '';
               widget.list.removeAt(widget.index);
               for (int i = 0; i < widget.list.length; i++) {
                 tmp_todo_list.add(TODO(
-                    title: widget.list[i].title, time: widget.list[i].time));
+                  title: widget.list[i].title,
+                  time: widget.list[i].time,
+                  content: widget.list[i].content,
+                ));
                 todo_tmp.add(tmp_todo_list[i].title);
                 time_tmp.add(tmp_todo_list[i].time);
+                content_tmp.add(tmp_todo_list[i].content);
               }
               widget.list.isEmpty
                   ? await firestore
@@ -100,6 +109,7 @@ class _DayDetailPageState extends State<DayDetailPage> {
                         'todo': tc1.text.isEmpty
                             ? await Hive.box('user_setting').get('title')
                             : tc1.text,
+                        'content': tc3.text.isEmpty ? 'none' : tc3.text,
                       });
                     })
                   : await firestore
@@ -108,32 +118,22 @@ class _DayDetailPageState extends State<DayDetailPage> {
                           DateFormat('yyyy-MM-dd')
                               .parse(widget.date.toString().split(' ')[0])
                               .toString())
-                      .get()
-                      .then((DocumentSnapshot ds) async {
-                      if (ds.data() != null) {
-                        await firestore
-                            .collection('TODO')
-                            .doc(nick +
-                                DateFormat('yyyy-MM-dd')
-                                    .parse(widget.date.toString().split(' ')[0])
-                                    .toString())
-                            .update({
-                          'time': time_tmp
-                                  .getRange(0, time_tmp.length)
-                                  .join(',') +
-                              ',' +
-                              (tc2.text.isEmpty
-                                  ? await Hive.box('user_setting').get('time')
-                                  : tc2.text),
-                          'todo': todo_tmp
-                                  .getRange(0, time_tmp.length)
-                                  .join(',') +
-                              ',' +
-                              (tc1.text.isEmpty
-                                  ? await Hive.box('user_setting').get('title')
-                                  : tc1.text),
-                        });
-                      }
+                      .update({
+                      'time': time_tmp.getRange(0, time_tmp.length).join(',') +
+                          ',' +
+                          (tc2.text.isEmpty
+                              ? await Hive.box('user_setting').get('time')
+                              : tc2.text),
+                      'todo': todo_tmp.getRange(0, todo_tmp.length).join(',') +
+                          ',' +
+                          (tc1.text.isEmpty
+                              ? await Hive.box('user_setting').get('title')
+                              : tc1.text),
+                      'content': content_tmp
+                              .getRange(0, content_tmp.length)
+                              .join(',') +
+                          ',' +
+                          (tc3.text.isEmpty ? 'none' : tc3.text),
                     });
             },
             icon: Icon(
@@ -160,9 +160,13 @@ class _DayDetailPageState extends State<DayDetailPage> {
                   : widget.list.removeAt(widget.index);
               for (int i = 0; i < widget.list.length; i++) {
                 tmp_todo_list.add(TODO(
-                    title: widget.list[i].title, time: widget.list[i].time));
+                  title: widget.list[i].title,
+                  time: widget.list[i].time,
+                  content: widget.list[i].content,
+                ));
                 todo_tmp.add(tmp_todo_list[i].title);
                 time_tmp.add(tmp_todo_list[i].time);
+                content_tmp.add(tmp_todo_list[i].content);
               }
               await firestore
                   .collection('TODO')
@@ -172,7 +176,9 @@ class _DayDetailPageState extends State<DayDetailPage> {
                           .toString())
                   .update({
                 'time': time_tmp.getRange(0, time_tmp.length).join(','),
-                'todo': todo_tmp.getRange(0, time_tmp.length).join(','),
+                'todo': todo_tmp.getRange(0, todo_tmp.length).join(','),
+                'content':
+                    content_tmp.getRange(0, content_tmp.length).join(','),
               });
             },
             icon: Icon(
@@ -184,208 +190,180 @@ class _DayDetailPageState extends State<DayDetailPage> {
           ),
         ],
         backgroundColor: Colors.white,
-        title: SizedBox(
-          width: 150,
-          child: Expanded(
-              child: Container(
-            color: Colors.white,
-            child: Text(
-              widget.title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.blueGrey,
-              ),
-              overflow: TextOverflow.ellipsis,
-              softWrap: true,
-              maxLines: 1,
-            ),
-          )),
+        title: Text(
+          widget.title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Colors.blueGrey,
+          ),
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+          maxLines: 1,
         ),
         elevation: 0,
       ),
       body: Container(
+        padding: MediaQuery.of(context).viewInsets,
+        height: MediaQuery.of(context).size.height,
         alignment: Alignment.topLeft,
         color: Colors.white,
-        child: makeBody(context, tc1, tc2, widget.title, widget.daytime),
+        child: makeBody(context, tc1, tc2, tc3, widget.title,
+            widget.daytime, widget.content, firestore),
       ),
     );
   }
 }
 
 // 바디 만들기
-Widget makeBody(BuildContext context, TextEditingController tc1,
-    TextEditingController tc2, String title, String daytime) {
-  return Container(
-    height: MediaQuery.of(context).size.height,
-    child: ScrollConfiguration(
-      behavior: NoBehavior(),
-      child: SingleChildScrollView(
-          child: GestureDetector(
-        onTap: () {
+Widget makeBody(
+    BuildContext context,
+    TextEditingController tc1,
+    TextEditingController tc2,
+    TextEditingController tc3,
+    String title,
+    String daytime,
+    String content,
+    FirebaseFirestore firestore,) {
+  return ScrollConfiguration(
+    behavior: NoBehavior(),
+    child: SingleChildScrollView(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(onTap: () {
           if (!FocusScope.of(context).hasPrimaryFocus) {
             FocusScope.of(context).unfocus();
           }
-        },
-        child: Column(
-          children: [
-            //first : 일정의 제목을 보여줄것
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 10, 10),
-                    child: Text(
-                      '일정 제목',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.blueGrey,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                    child: TextField(
-                      controller: tc1,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        hintText: title,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+        }, child: StatefulBuilder(builder: (_, StateSetter setState) {
+          return Column(
+            children: [
+              //first : 일정의 제목을 보여줄것
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.15,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 10, 10),
+                      child: Text(
+                        '일정 제목',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.blueGrey,
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            //second : 일정의 날짜와 시간을 보여줄 것
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 10, 10),
-                    child: Text(
-                      '일정 시간 및 날짜',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.blueGrey,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                    child: TextField(
-                      controller: tc2,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        hintText: daytime,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            //third : 일정의 세부사항 보여줄것
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 10, 10),
-                    child: Text(
-                      '일정 세부내용',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.blueGrey,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                  ),
-                  Padding(
+                    Padding(
                       padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                      child: Container(
-                          alignment: Alignment.topLeft,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 0.5),
+                      child: TextField(
+                        controller: tc1,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          hintText: title,
+                          border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
-                          child: ScrollConfiguration(
-                              behavior: NoBehavior(),
-                              child: const SingleChildScrollView(
-                                  child: Padding(
-                                padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: TextField(
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  decoration: InputDecoration(
-                                      hintText: '이 곳에 내용을 작성해주세요.',
-                                      border: InputBorder.none,
-                                      focusedBorder: InputBorder.none),
-                                ),
-                              ))))),
-                ],
-              ),
-            ),
-            //forth : 일정을 공유하는 사람을 클립형태로 보여줄것
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 10, 10),
-                    child: Text(
-                      '공유하시는 피플',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.blueGrey,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                    child: TextField(
-                      controller: tc2,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        hintText: daytime,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      )),
-    ),
+              //second : 일정의 날짜와 시간을 보여줄 것
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.15,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 10, 10),
+                      child: Text(
+                        '일정 시작시간',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.blueGrey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                      child: TextField(
+                        controller: tc2,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          hintText: daytime,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              //third : 일정의 세부사항 보여줄것
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 10, 10),
+                      child: Text(
+                        '일정 세부내용',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.blueGrey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      ),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                        child: Container(
+                            alignment: Alignment.topLeft,
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 0.5),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: ScrollConfiguration(
+                                behavior: NoBehavior(),
+                                child: SingleChildScrollView(
+                                    child: Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: TextField(
+                                    controller: tc3,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    decoration: InputDecoration(
+                                        hintText: content == 'none'
+                                            ? '이 곳에 내용을 작성해주세요.'
+                                            : content,
+                                        border: InputBorder.none,
+                                        focusedBorder: InputBorder.none),
+                                  ),
+                                ))))),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }))
+      ],
+    )),
   );
 }

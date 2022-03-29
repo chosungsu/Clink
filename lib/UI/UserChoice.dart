@@ -22,7 +22,7 @@ UserChoice(BuildContext context, List<TODO> str_todo_list) {
           shape: NeumorphicShape.convex,
           border: NeumorphicBorder.none(),
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-          depth: 5,
+          depth: -3,
           color: Colors.white,
         ),
         child: Subscript(context, _list_recommend, str_todo_list),

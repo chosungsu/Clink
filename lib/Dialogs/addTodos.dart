@@ -97,6 +97,7 @@ addTodos(BuildContext context, TextEditingController textEditingController,
                           //firestore 저장
                           String str_snaps = '';
                           String str_todo = '';
+                          String str_content = '';
                           await firestore
                               .collection('TODO')
                               .doc(nick + DateFormat('yyyy-MM-dd').parse(selectedDay.toString().split(' ')[0]).toString())
@@ -105,6 +106,7 @@ addTodos(BuildContext context, TextEditingController textEditingController,
                             if (ds.data() != null) {
                               str_snaps = (ds.data() as Map)['time'];
                               str_todo = (ds.data() as Map)['todo'];
+                              str_content = (ds.data() as Map)['content']!;
                               str_snaps != '' ?
                               firestore
                                   .collection('TODO')
@@ -113,6 +115,7 @@ addTodos(BuildContext context, TextEditingController textEditingController,
                                 'time': str_snaps + ',' + time,
                                 'todo':
                                     str_todo + ',' + textEditingController.text,
+                                'content': str_content + ',' + 'none',
                               }) :
                               firestore
                                   .collection('TODO')
@@ -120,6 +123,7 @@ addTodos(BuildContext context, TextEditingController textEditingController,
                                   .update({
                                 'time': time,
                                 'todo': textEditingController.text,
+                                'content': 'none',
                               });
                             } else {
                               firestore
@@ -129,7 +133,8 @@ addTodos(BuildContext context, TextEditingController textEditingController,
                                 'name': nick,
                                 'date': DateFormat('yyyy-MM-dd').parse(selectedDay.toString()).toString().split(' ')[0],
                                 'time': time,
-                                'todo': textEditingController.text
+                                'todo': textEditingController.text,
+                                'content': 'none',
                               });
                             }
                           });

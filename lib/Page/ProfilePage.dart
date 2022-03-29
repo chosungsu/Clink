@@ -28,16 +28,16 @@ class _ProfilePageState extends State<ProfilePage> {
     // TODO: implement initState
     super.initState();
     _timer_noti = Timer.periodic(const Duration(seconds: 5), (timer) {
-          if (current_noticepage < 4) {
-            current_noticepage++;
-          } else {
-            current_noticepage = 0;
-          }
-          if(_pcontroll.hasClients) {
-            _pcontroll.animateToPage(current_noticepage,
-              duration: const Duration(milliseconds: 2000), curve: Curves.easeIn);
-          }
-        });
+      if (current_noticepage < 4) {
+        current_noticepage++;
+      } else {
+        current_noticepage = 0;
+      }
+      if (_pcontroll.hasClients) {
+        _pcontroll.animateToPage(current_noticepage,
+            duration: const Duration(milliseconds: 2000), curve: Curves.easeIn);
+      }
+    });
   }
 
   @override
@@ -58,20 +58,22 @@ class _ProfilePageState extends State<ProfilePage> {
       body: ProfileBody(context, _pcontroll),
     );
   }
-
 }
 
 Widget ProfileBody(BuildContext context, PageController pcontroll) {
-  return ScrollConfiguration(
-    behavior: NoBehavior(),
-    child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-      UserDetails(context),
-      NoticeApps(context, pcontroll),
-      UserSettings(context),
-    ])),
+  return Container(
+    color: Colors.grey.shade300,
+    child: ScrollConfiguration(
+      behavior: NoBehavior(),
+      child: SingleChildScrollView(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+            UserDetails(context),
+            NoticeApps(context, pcontroll),
+            UserSettings(context),
+          ])),
+    ),
   );
 }
 

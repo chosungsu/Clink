@@ -54,7 +54,10 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      body: ScrollConfiguration(
+      body: Container(
+        color: Colors.grey.shade300,
+        height: MediaQuery.of(context).size.height,
+        child: ScrollConfiguration(
           behavior: NoBehavior(),
           child: SingleChildScrollView(
               child: StatefulBuilder(builder: (_, StateSetter setState) {
@@ -133,6 +136,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   );
           }))),
+      )
     );
   }
 }

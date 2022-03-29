@@ -8,6 +8,7 @@ Future<List<TODO>> homeasync(DateTime selectedDay) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String str_snaps = '';
   String str_todo = '';
+  String str_content = '';
   List<TODO> str_todo_list = [];
   if (Hive.box('user_info').get('id') != null) {
     str_todo_list.clear();
@@ -22,11 +23,13 @@ Future<List<TODO>> homeasync(DateTime selectedDay) async {
       if (ds.data() != null) {
         str_snaps = (ds.data() as Map)['time'];
         str_todo = (ds.data() as Map)['todo'];
+        str_content = (ds.data() as Map)['content'];
         if (str_snaps != '') {
           for (int i = 0; i < str_snaps.toString().split(',').length; i++) {
             str_todo_list.add(TODO(
                 title: str_todo.toString().split(',')[i],
-                time: str_snaps.toString().split(',')[i]));
+                time: str_snaps.toString().split(',')[i], 
+                content: str_content.toString().split(',')[i],));
           }
           str_todo_list.sort((a, b) =>
               a.time.split(':')[0] != b.time.split(':')[0]
