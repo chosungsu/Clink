@@ -51,6 +51,7 @@ class _DayDetailPageState extends State<DayDetailPage> {
     super.initState();
     Hive.box('user_setting').put('time', widget.daytime);
     Hive.box('user_setting').put('title', widget.title);
+    Hive.box('user_setting').put('content', widget.content);
   }
 
   @override
@@ -71,8 +72,22 @@ class _DayDetailPageState extends State<DayDetailPage> {
             onPressed: () async {
               Navigator.of(context).pop();
               String nick = await Hive.box('user_info').get('id');
-              widget.list.removeAt(widget.index);
-              for (int i = 0; i < widget.list.length; i++) {
+              //widget.list.removeAt(widget.index);
+
+              await firestore
+                  .collection('TODO')
+                  .doc(nick +
+                      DateFormat('yyyy-MM-dd')
+                          .parse(widget.date.toString())
+                          .toString()
+                          .split(' ')[0] +
+                      widget.daytime)
+                  .update({
+                'time': tc2.text.isEmpty ? widget.daytime : tc2.text,
+                'todo': tc1.text.isEmpty ? widget.title : tc1.text,
+                'content': tc3.text.isEmpty ? widget.content : tc3.text,
+              });
+              /*for (int i = 0; i < widget.list.length; i++) {
                 tmp_todo_list.add(TODO(
                   title: widget.list[i].title,
                   time: widget.list[i].time,
@@ -134,7 +149,7 @@ class _DayDetailPageState extends State<DayDetailPage> {
                               .join(',') +
                           ',' +
                           (tc3.text.isEmpty ? 'none' : tc3.text),
-                    });
+                    });*/
             },
             icon: Icon(
               Icons.save_alt,
@@ -147,9 +162,19 @@ class _DayDetailPageState extends State<DayDetailPage> {
             visualDensity: VisualDensity(horizontal: -3, vertical: -3),
             onPressed: () async {
               Navigator.pop(context);
-              print(widget.list[widget.index].title);
+              //print(widget.list[widget.index].title);
               String nick = await Hive.box('user_info').get('id');
-              widget.list.length == 1
+              await firestore
+                        .collection('TODO')
+                        .doc(nick +
+                            DateFormat('yyyy-MM-dd')
+                                .parse(widget.date.toString())
+                                .toString()
+                                .split(' ')[0] +
+                            widget.daytime)
+                        .delete();
+
+              /*widget.list.length == 1
                   ? await firestore
                       .collection("TODO")
                       .doc(nick +
@@ -179,7 +204,7 @@ class _DayDetailPageState extends State<DayDetailPage> {
                 'todo': todo_tmp.getRange(0, todo_tmp.length).join(','),
                 'content':
                     content_tmp.getRange(0, content_tmp.length).join(','),
-              });
+              });*/
             },
             icon: Icon(
               Icons.delete,
@@ -208,8 +233,8 @@ class _DayDetailPageState extends State<DayDetailPage> {
         height: MediaQuery.of(context).size.height,
         alignment: Alignment.topLeft,
         color: Colors.white,
-        child: makeBody(context, tc1, tc2, tc3, widget.title,
-            widget.daytime, widget.content, firestore),
+        child: makeBody(context, tc1, tc2, tc3, widget.title, widget.daytime,
+            widget.content, firestore),
       ),
     );
   }
@@ -217,14 +242,15 @@ class _DayDetailPageState extends State<DayDetailPage> {
 
 // 바디 만들기
 Widget makeBody(
-    BuildContext context,
-    TextEditingController tc1,
-    TextEditingController tc2,
-    TextEditingController tc3,
-    String title,
-    String daytime,
-    String content,
-    FirebaseFirestore firestore,) {
+  BuildContext context,
+  TextEditingController tc1,
+  TextEditingController tc2,
+  TextEditingController tc3,
+  String title,
+  String daytime,
+  String content,
+  FirebaseFirestore firestore,
+) {
   return ScrollConfiguration(
     behavior: NoBehavior(),
     child: SingleChildScrollView(

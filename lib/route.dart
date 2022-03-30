@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ProfilePage(),
     ];
     return Scaffold(
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.white,
       body:  WillPopScope(
         onWillPop: _onWillPop,
         child: pages[_selectedIndex],

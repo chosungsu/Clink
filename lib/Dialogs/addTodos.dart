@@ -95,12 +95,33 @@ addTodos(BuildContext context, TextEditingController textEditingController,
                           Navigator.of(context).pop();
                           String nick = await Hive.box('user_info').get('id');
                           //firestore 저장
-                          String str_snaps = '';
-                          String str_todo = '';
-                          String str_content = '';
+                          //String str_snaps = '';
+                          //String str_todo = '';
+                          //String str_content = '';
+
                           await firestore
                               .collection('TODO')
-                              .doc(nick + DateFormat('yyyy-MM-dd').parse(selectedDay.toString().split(' ')[0]).toString())
+                              .doc(nick +
+                                  DateFormat('yyyy-MM-dd')
+                                      .parse(selectedDay.toString())
+                                      .toString()
+                                      .split(' ')[0] +
+                                  time)
+                              .set({
+                            'name': nick,
+                            'date': DateFormat('yyyy-MM-dd')
+                                .parse(selectedDay.toString())
+                                .toString()
+                                .split(' ')[0],
+                            'time': time,
+                            'todo': textEditingController.text,
+                            'content': 'none',
+                          });
+
+                          /*await firestore
+                              .collection('TODO')
+                              .doc(nick + DateFormat('yyyy-MM-dd')
+                              .parse(selectedDay.toString().split(' ')[0]).toString())
                               .get()
                               .then((DocumentSnapshot ds) {
                             if (ds.data() != null) {
@@ -137,7 +158,7 @@ addTodos(BuildContext context, TextEditingController textEditingController,
                                 'content': 'none',
                               });
                             }
-                          });
+                          });*/
                         },
                         style: NeumorphicStyle(
                             shape: NeumorphicShape.concave,

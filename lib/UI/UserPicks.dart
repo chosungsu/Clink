@@ -14,11 +14,11 @@ UserPicks(BuildContext context) {
       ),
       Neumorphic(
         style: NeumorphicStyle(
-          shape: NeumorphicShape.convex,
+          shape: NeumorphicShape.concave,
           border: NeumorphicBorder.none(),
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-          depth: -3,
-          color: Colors.white,
+          depth: -10,
+          color: Color.fromARGB(255, 243, 243, 243),
         ),
         child: Column(
           children: [

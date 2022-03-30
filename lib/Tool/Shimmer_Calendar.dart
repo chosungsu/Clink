@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:shimmer/shimmer.dart';
 
-Shimmer_DayLog(BuildContext context) {
+Shimmer_Calendar(BuildContext context) {
   return AnimatedSwitcher(
     duration: const Duration(milliseconds: 3000),
     child: Shimmer.fromColors(
         baseColor: Colors.grey.shade400,
         highlightColor: Colors.grey.shade100,
         child: Container(
-          height: MediaQuery.of(context).size.height - 220,
+          height: 200,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

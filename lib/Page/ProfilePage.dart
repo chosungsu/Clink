@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 Widget ProfileBody(BuildContext context, PageController pcontroll) {
   return Container(
-    color: Colors.grey.shade300,
+    color: Colors.white,
     child: ScrollConfiguration(
       behavior: NoBehavior(),
       child: SingleChildScrollView(

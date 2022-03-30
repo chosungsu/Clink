@@ -6,13 +6,34 @@ import '../DB/TODO.dart';
 
 Future<List<TODO>> homeasync(DateTime selectedDay) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String str_snaps = '';
-  String str_todo = '';
-  String str_content = '';
+  //String str_snaps = '';
+  //String str_todo = '';
+  //String str_content = '';
   List<TODO> str_todo_list = [];
   if (Hive.box('user_info').get('id') != null) {
     str_todo_list.clear();
     await firestore
+        .collection('TODO')
+        .where('name', isEqualTo: Hive.box('user_info').get('id'))
+        .where('date', isEqualTo: DateFormat('yyyy-MM-dd')
+                                .parse(selectedDay.toString())
+                                .toString()
+                                .split(' ')[0])
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        str_todo_list.add(TODO(
+            title: element['todo'],
+            time: element['time'],
+            content: element['content']));
+      });
+    });
+    str_todo_list.sort((a, b) => a.time.split(':')[0] != b.time.split(':')[0]
+        ? int.parse(a.time.split(':')[0])
+            .compareTo(int.parse(b.time.split(':')[0]))
+        : int.parse(a.time.split(':')[1])
+            .compareTo(int.parse(b.time.split(':')[1])));
+    /*await firestore
         .collection('TODO')
         .doc(Hive.box('user_info').get('id') +
             DateFormat('yyyy-MM-dd')
@@ -41,7 +62,7 @@ Future<List<TODO>> homeasync(DateTime selectedDay) async {
       } else {
         print('sec : ' + str_todo_list.length.toString());
       }
-    });
+    });*/
   }
   return str_todo_list;
 }

@@ -18,11 +18,11 @@ UserSettings(BuildContext context) {
       ),
       Neumorphic(
           style: NeumorphicStyle(
-            shape: NeumorphicShape.convex,
+            shape: NeumorphicShape.concave,
             border: NeumorphicBorder.none(),
             boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-            depth: -5,
-            color: Colors.white,
+            depth: -10,
+            color: Color.fromARGB(255, 252, 249, 249),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

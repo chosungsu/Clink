@@ -19,11 +19,11 @@ UserChoice(BuildContext context, List<TODO> str_todo_list) {
       ),
       Neumorphic(
         style: NeumorphicStyle(
-          shape: NeumorphicShape.convex,
+          shape: NeumorphicShape.concave,
           border: NeumorphicBorder.none(),
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-          depth: -3,
-          color: Colors.white,
+          depth: -10,
+          color: Color.fromARGB(255, 243, 243, 243),
         ),
         child: Subscript(context, _list_recommend, str_todo_list),
       ),

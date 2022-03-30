@@ -1,18 +1,20 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
-import 'package:clickbyme/Dialogs/addTodos.dart';
 import 'package:clickbyme/Dialogs/checkhowdaylog.dart';
 import 'package:clickbyme/Sub/DayDetailPage.dart';
+import 'package:clickbyme/Sub/DayEventAdd.dart';
 import 'package:clickbyme/Tool/Shimmer_DayLog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import '../DB/Meeting.dart';
 import '../DB/TODO.dart';
 import '../Futures/homeasync.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/CalendarSource.dart';
+import '../sheets/changecalendarview.dart';
 
 class DayLog extends StatefulWidget {
   //get onEventTap => null;
@@ -25,19 +27,35 @@ class _DayLogState extends State<DayLog> {
   TextEditingController textEditingController = TextEditingController();
   DateTime selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String calendarview = 'day';
+
   @override
   void initState() {
     super.initState();
+    setState(() {
+      calendarview = Hive.box('user_setting').get('radio_cal') ?? 'day';
+    });
+  }
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    setState(() {
+      calendarview = Hive.box('user_setting').get('radio_cal') ?? 'day';
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      calendarview = Hive.box('user_setting').get('radio_cal') ?? 'day';
+    });
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           color: Colors.black54,
-          icon: Icon(Icons.arrow_back_outlined),
+          icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -45,22 +63,42 @@ class _DayLogState extends State<DayLog> {
         backgroundColor: Colors.white,
         actions: <Widget>[
           IconButton(
-            visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
             color: Colors.black54,
             tooltip: '사용방법',
             onPressed: () => {checkhowdaylog(context)},
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.question_mark),
           ),
           IconButton(
-            visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            color: Colors.black54,
+            tooltip: '뷰 변경',
+            onPressed: () => {
+              calendarview = Hive.box('user_setting').get('radio_cal') ?? 'day',
+              calendarview == 'month' ? 
+              changecalendarview(context, 'month'):
+              changecalendarview(context, 'day')
+            },
+            icon: const Icon(Icons.change_circle),
+          ),
+          IconButton(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
             color: Colors.black54,
             tooltip: '추가하기',
             onPressed: () =>
-                {addTodos(context, textEditingController, selectedDay)},
+                {
+                  Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: DayEventAdd(),
+                                  type:
+                                      PageTransitionType.leftToRightWithFade))
+                  //addTodos(context, textEditingController, selectedDay)
+                },
             icon: const Icon(Icons.add_circle),
           ),
         ],
-        title: Text('데이로그', style: TextStyle(color: Colors.blueGrey)),
+        title: const Text('데이로그', style: TextStyle(color: Colors.blueGrey)),
         elevation: 0,
       ),
       body: ScrollConfiguration(
@@ -69,20 +107,30 @@ class _DayLogState extends State<DayLog> {
               height: MediaQuery.of(context).size.height,
               color: Colors.white,
               child: SingleChildScrollView(
-                child: makeBody(context),
+                child: makeBody(context, calendarview),
               ))),
     );
   }
 
   // 바디 만들기
-  Widget makeBody(BuildContext context) {
-    //DateTime _selectedValue;
+  Widget makeBody(BuildContext context, String calendarview) {
+    List<Meeting> _getDataSource() {
+    final List<Meeting> meetings = <Meeting>[];
+    final DateTime today = DateTime.now();
+    final DateTime startTime =
+    DateTime(today.year, today.month, today.day, 9, 0, 0);
+    final DateTime endTime = startTime.add(const Duration(hours: 2));
+    meetings.add(
+        Meeting('Conference', startTime, endTime, const Color(0xFF0F8644), false));
+    return meetings;
+  }
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
+          calendarview != 'month' ? 
+              SizedBox(
             height: 170,
             child: CalendarTimeline(
               showYears: true,
@@ -100,10 +148,26 @@ class _DayLogState extends State<DayLog> {
               dayNameColor: Colors.black54,
               activeDayColor: Colors.white,
               activeBackgroundDayColor: Colors.redAccent[100],
-              dotsColor: Color(0xFF333A47),
+              dotsColor: const Color(0xFF333A47),
               locale: 'ko',
             ),
+          ) : SizedBox(
+            height: 400,
+            child: SfCalendar(
+              view: CalendarView.month,
+              initialSelectedDate: DateTime.now(),
+              dataSource: MeetingDataSource(_getDataSource()),
+              monthViewSettings: MonthViewSettings(
+                appointmentDisplayMode: MonthAppointmentDisplayMode.appointment
+              ),
+              timeSlotViewSettings: const TimeSlotViewSettings(
+                startHour: 0,
+                endHour: 24,
+                nonWorkingDays: <int>[DateTime.saturday, DateTime.sunday]
+              ),
+            ),
           ),
+          
           FutureBuilder<List<TODO>>(
             future: homeasync(
                 selectedDay), // a previously-obtained Future<String> or null
@@ -128,8 +192,8 @@ class _DayLogState extends State<DayLog> {
     List<TODO> list,
   ) {
     List<TODO> tmp_todo_list = [];
-    List<String> todo_tmp = [];
-    List<String> time_tmp = [];
+    //List<String> todo_tmp = [];
+    //List<String> time_tmp = [];
 
     return SizedBox(
         height: MediaQuery.of(context).size.height - 250,
@@ -170,12 +234,12 @@ class _DayLogState extends State<DayLog> {
                                   elevation: 10,
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(
-                                    side: BorderSide(
+                                    side: const BorderSide(
                                         color: Colors.white70, width: 1),
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.all(5),
+                                    padding: const EdgeInsets.all(5),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -184,7 +248,7 @@ class _DayLogState extends State<DayLog> {
                                             fit: FlexFit.tight,
                                             child: Container(
                                               padding:
-                                                  EdgeInsets.only(right: 10),
+                                                  const EdgeInsets.only(right: 10),
                                               child: Row(
                                                 children: [
                                                   Image.asset(
@@ -192,7 +256,7 @@ class _DayLogState extends State<DayLog> {
                                                     height: 30,
                                                     width: 30,
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 20,
                                                   ),
                                                   Expanded(
@@ -227,14 +291,11 @@ class _DayLogState extends State<DayLog> {
                                   : Colors.yellow.shade400),
                           child: Center(
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               int.parse(list[index].time.split(':')[0]) >= 12
-                                  ? Icon(
-                                Icons.dark_mode
-                              ) : Icon(
-                                Icons.sunny
-                              ),
+                                  ? const Icon(Icons.dark_mode)
+                                  : const Icon(Icons.sunny),
                               Text(
                                 list[index].time +
                                     '\n' +
@@ -274,3 +335,4 @@ class _DayLogState extends State<DayLog> {
               ));
   }
 }
+

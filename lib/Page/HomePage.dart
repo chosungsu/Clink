@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         automaticallyImplyLeading: false,
       ),
       body: Container(
-        color: Colors.grey.shade300,
+        color: Colors.white,
         height: MediaQuery.of(context).size.height,
         child: ScrollConfiguration(
           behavior: NoBehavior(),
