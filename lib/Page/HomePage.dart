@@ -1,14 +1,12 @@
 import 'package:clickbyme/DB/TODO.dart';
 import 'package:clickbyme/Tool/Shimmer_home.dart';
-import 'package:clickbyme/UI/UserChoice.dart';
-import 'package:clickbyme/UI/UserPicks.dart';
-import 'package:clickbyme/UI/UserTips.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:shimmer/shimmer.dart';
 import '../Futures/homeasync.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/Home/UserChoice.dart';
+import '../UI/Home/UserPicks.dart';
+import '../UI/Home/UserTips.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);

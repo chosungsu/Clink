@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:clickbyme/Sub/DayLog.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import '../Page/LoginSignPage.dart';
-import '../route.dart';
+import '../../Page/LoginSignPage.dart';
+import '../../route.dart';
 
 
 GoToMain (BuildContext context){

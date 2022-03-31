@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import '../UI/UserCheck.dart';
+import '../UI/Sign/UserCheck.dart';
 
 deleteads(BuildContext context) {
   showDialog(

@@ -1,9 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clickbyme/Dialogs/deleteads.dart';
-import 'package:clickbyme/UI/UserCheck.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive_flutter/adapters.dart';
-import '../DB/AD_Home.dart';
+
+import '../../DB/AD_Home.dart';
 
 UserTips(BuildContext context) {
   return Column(

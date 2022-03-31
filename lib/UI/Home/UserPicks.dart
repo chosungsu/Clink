@@ -3,8 +3,9 @@ import 'package:clickbyme/Sub/WritePost.dart';
 import 'package:clickbyme/Sub/storepw.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-import '../DB/AD_Home.dart';
-import '../Sub/YourTags.dart';
+
+import '../../DB/AD_Home.dart';
+import '../../Sub/YourTags.dart';
 
 UserPicks(BuildContext context) {
   return Column(

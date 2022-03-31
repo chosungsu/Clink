@@ -1,7 +1,8 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'AfterSignUp.dart';
-import 'BeforeSignUp.dart';
+
+import 'Sign/AfterSignUp.dart';
+import 'Sign/BeforeSignUp.dart';
 
 UserDetails(BuildContext context) {
   return Column(

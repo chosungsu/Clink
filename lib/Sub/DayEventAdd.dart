@@ -1,7 +1,8 @@
+import 'package:clickbyme/DB/Event.dart';
+import 'package:clickbyme/Provider/EventProvider.dart';
 import 'package:clickbyme/Tool/dateutils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:provider/provider.dart';
 
 import '../Tool/NoBehavior.dart';
 
@@ -34,6 +35,7 @@ class _DayEventAddState extends State<DayEventAdd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           color: Colors.black54,
@@ -47,7 +49,7 @@ class _DayEventAddState extends State<DayEventAdd> {
             visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
             color: Colors.black54,
             tooltip: '추가하기',
-            onPressed: () => {},
+            onPressed: () => {saveForm()},
             icon: const Icon(Icons.check),
           ),
         ],
@@ -75,14 +77,16 @@ class _DayEventAddState extends State<DayEventAdd> {
           horizontal: 15,
         ),
         child: StatefulBuilder(builder: (_, StateSetter setState) {
-          return Column(children: [
+          return Form(
+            key: _formkey,
+              child: Column(children: [
             buildTitle(titlecontroller),
             const SizedBox(
               height: 20,
             ),
             buildDateTimePicker(fromDate, 'from'),
             buildDateTimePicker(toDate, 'to'),
-          ]);
+          ]));
         }));
   }
 
@@ -91,10 +95,11 @@ class _DayEventAddState extends State<DayEventAdd> {
       style: const TextStyle(fontSize: 24),
       decoration: const InputDecoration(
           border: UnderlineInputBorder(), hintText: '일정 제목 추가'),
-      onFieldSubmitted: (_) {},
-      validator: (title) {
-        title != null && title.isEmpty ? '제목은 필수 입력란입니다.' : null;
+      onFieldSubmitted: (_) {
+        saveForm();
       },
+      validator: (title) =>
+        title != null && title.isEmpty ? '제목은 필수 입력란입니다.' : null,
       controller: titlecontroller,
     );
   }
@@ -144,7 +149,7 @@ class _DayEventAddState extends State<DayEventAdd> {
     );
   }
 
-  buildDropdownField({required String text, required VoidCallback onClicked}) {
+  buildDropdownField({required String text, required onClicked}) {
     return ListTile(
       title: Text(text),
       trailing: const Icon(Icons.arrow_drop_down),
@@ -153,11 +158,8 @@ class _DayEventAddState extends State<DayEventAdd> {
   }
 
   pickDates({required bool pickDate, required String s}) async {
-    final date = await pick(
-      fromDate, s, 
-      pickDate: pickDate,
-      firstDate: pickDate ? fromDate : null
-    );
+    final date = await pick(fromDate, s,
+        pickDate: pickDate, firstDate: pickDate ? fromDate : null);
     if (date == null) return;
     if (date.isAfter(toDate)) {
       toDate =
@@ -216,6 +218,22 @@ class _DayEventAddState extends State<DayEventAdd> {
         final time = Duration(hours: tod.hour, minutes: tod.minute);
         return date.add(time);
       }
+    }
+  }
+
+  Future saveForm() async {
+    final isValid = _formkey.currentState!.validate();
+    if (isValid) {
+      final event = Event(
+        title: titlecontroller.text,
+        description: 'Description',
+        from: fromDate,
+        to: toDate,
+        isAllDay: false,
+      );
+      final provider = Provider.of<EventProvider>(context, listen: false);
+      provider.addEvent(event);
+      Navigator.of(context).pop();
     }
   }
 }

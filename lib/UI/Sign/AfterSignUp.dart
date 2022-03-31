@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:transition/transition.dart';
 
-import '../Sub/EcoproPage.dart';
-import '../Sub/showUserSetting.dart';
+import '../../Sub/showUserSetting.dart';
 
 showAfterSignUp(
     String name, String email, String whatlogin, BuildContext context) {

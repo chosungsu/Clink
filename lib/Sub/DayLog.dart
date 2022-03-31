@@ -1,19 +1,19 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:clickbyme/Dialogs/checkhowdaylog.dart';
-import 'package:clickbyme/Sub/DayDetailPage.dart';
+import 'package:clickbyme/Provider/EventProvider.dart';
 import 'package:clickbyme/Sub/DayEventAdd.dart';
+import 'package:clickbyme/Sub/EventViewPage.dart';
 import 'package:clickbyme/Tool/Shimmer_DayLog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:timeline_tile/timeline_tile.dart';
-import '../DB/Meeting.dart';
 import '../DB/TODO.dart';
 import '../Futures/homeasync.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/CalendarSource.dart';
+import '../Tool/CalendarSource.dart';
 import '../sheets/changecalendarview.dart';
 
 class DayLog extends StatefulWidget {
@@ -36,6 +36,7 @@ class _DayLogState extends State<DayLog> {
       calendarview = Hive.box('user_setting').get('radio_cal') ?? 'day';
     });
   }
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -75,9 +76,9 @@ class _DayLogState extends State<DayLog> {
             tooltip: '뷰 변경',
             onPressed: () => {
               calendarview = Hive.box('user_setting').get('radio_cal') ?? 'day',
-              calendarview == 'month' ? 
-              changecalendarview(context, 'month'):
-              changecalendarview(context, 'day')
+              calendarview == 'month'
+                  ? changecalendarview(context, 'month')
+                  : changecalendarview(context, 'day')
             },
             icon: const Icon(Icons.change_circle),
           ),
@@ -85,16 +86,14 @@ class _DayLogState extends State<DayLog> {
             visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
             color: Colors.black54,
             tooltip: '추가하기',
-            onPressed: () =>
-                {
-                  Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: DayEventAdd(),
-                                  type:
-                                      PageTransitionType.leftToRightWithFade))
-                  //addTodos(context, textEditingController, selectedDay)
-                },
+            onPressed: () => {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: DayEventAdd(),
+                      type: PageTransitionType.leftToRightWithFade))
+              //addTodos(context, textEditingController, selectedDay)
+            },
             icon: const Icon(Icons.add_circle),
           ),
         ],
@@ -114,7 +113,7 @@ class _DayLogState extends State<DayLog> {
 
   // 바디 만들기
   Widget makeBody(BuildContext context, String calendarview) {
-    List<Meeting> _getDataSource() {
+    /*List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
     final DateTime today = DateTime.now();
     final DateTime startTime =
@@ -123,51 +122,62 @@ class _DayLogState extends State<DayLog> {
     meetings.add(
         Meeting('Conference', startTime, endTime, const Color(0xFF0F8644), false));
     return meetings;
-  }
+  }*/
+    final _getDataSource = Provider.of<EventProvider>(context).events;
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          calendarview != 'month' ? 
-              SizedBox(
-            height: 170,
-            child: CalendarTimeline(
-              showYears: true,
-              initialDate: selectedDay,
-              firstDate: DateTime(1900, 1, 1),
-              lastDate: DateTime(3000, 12, 31),
-              onDateSelected: (date) {
-                setState(() {
-                  selectedDay = date!;
-                });
-              },
-              leftMargin: 20,
-              monthColor: Colors.grey,
-              dayColor: Colors.black54,
-              dayNameColor: Colors.black54,
-              activeDayColor: Colors.white,
-              activeBackgroundDayColor: Colors.redAccent[100],
-              dotsColor: const Color(0xFF333A47),
-              locale: 'ko',
-            ),
-          ) : SizedBox(
-            height: 400,
-            child: SfCalendar(
-              view: CalendarView.month,
-              initialSelectedDate: DateTime.now(),
-              dataSource: MeetingDataSource(_getDataSource()),
-              monthViewSettings: MonthViewSettings(
-                appointmentDisplayMode: MonthAppointmentDisplayMode.appointment
-              ),
-              timeSlotViewSettings: const TimeSlotViewSettings(
-                startHour: 0,
-                endHour: 24,
-                nonWorkingDays: <int>[DateTime.saturday, DateTime.sunday]
-              ),
-            ),
-          ),
-          
+          calendarview != 'month'
+              ? SizedBox(
+                  height: 170,
+                  child: CalendarTimeline(
+                    showYears: true,
+                    initialDate: selectedDay,
+                    firstDate: DateTime(1900, 1, 1),
+                    lastDate: DateTime(3000, 12, 31),
+                    onDateSelected: (date) {
+                      setState(() {
+                        selectedDay = date!;
+                      });
+                    },
+                    leftMargin: 20,
+                    monthColor: Colors.grey,
+                    dayColor: Colors.black54,
+                    dayNameColor: Colors.black54,
+                    activeDayColor: Colors.white,
+                    activeBackgroundDayColor: Colors.redAccent[100],
+                    dotsColor: const Color(0xFF333A47),
+                    locale: 'ko',
+                  ),
+                )
+              : SizedBox(
+                  height: 400,
+                  child: SfCalendar(
+                    view: CalendarView.month,
+                    initialSelectedDate: DateTime.now(),
+                    dataSource: MeetingDataSource(_getDataSource),
+                    onTap: (details) {
+                      final provider =
+                          Provider.of<EventProvider>(context, listen: false);
+                      provider.setDate(details.date!);
+                      setState(() {
+                        selectedDay = details.date!;
+                      });
+                    },
+                    monthViewSettings: MonthViewSettings(
+                        appointmentDisplayMode:
+                            MonthAppointmentDisplayMode.indicator),
+                    timeSlotViewSettings: const TimeSlotViewSettings(
+                        startHour: 0,
+                        endHour: 24,
+                        nonWorkingDays: <int>[
+                          DateTime.saturday,
+                          DateTime.sunday
+                        ]),
+                  ),
+                ),
           FutureBuilder<List<TODO>>(
             future: homeasync(
                 selectedDay), // a previously-obtained Future<String> or null
@@ -191,13 +201,47 @@ class _DayLogState extends State<DayLog> {
     DateTime selectedDay,
     List<TODO> list,
   ) {
+    final provider = Provider.of<EventProvider>(context, listen: false);
+    final selectEvents = provider.eventsofDate;
     List<TODO> tmp_todo_list = [];
     //List<String> todo_tmp = [];
     //List<String> time_tmp = [];
 
     return SizedBox(
         height: MediaQuery.of(context).size.height - 250,
-        child: list.isNotEmpty
+        child: selectEvents.isEmpty
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    Hive.box('user_info').get('id').toString() +
+                        '님 \n' +
+                        selectedDay.day.toString() +
+                        '일의 일정은 없네요',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      color: Colors.black45,
+                    ),
+                  ),
+                ],
+              )
+            : SfCalendar(
+                view: CalendarView.timelineDay,
+                dataSource: MeetingDataSource(provider.events),
+                initialDisplayDate: provider.selectedDate,
+                appointmentBuilder: appointBuild,
+                headerHeight: 0,
+                selectionDecoration: BoxDecoration(color: Colors.transparent),
+                onTap: (details) {
+                  if (details.appointments == null) return;
+                  final event = details.appointments!.first;
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => EventViewPage(event: event),
+                  ));
+                },
+              )
+        /*list.isNotEmpty
             ? ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: list.length,
@@ -247,8 +291,8 @@ class _DayLogState extends State<DayLog> {
                                         Flexible(
                                             fit: FlexFit.tight,
                                             child: Container(
-                                              padding:
-                                                  const EdgeInsets.only(right: 10),
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
                                               child: Row(
                                                 children: [
                                                   Image.asset(
@@ -332,7 +376,28 @@ class _DayLogState extends State<DayLog> {
                     ),
                   ),
                 ],
-              ));
+              )*/
+        );
+  }
+
+  Widget appointBuild(
+      BuildContext context, CalendarAppointmentDetails details) {
+    final event = details.appointments.first;
+    return Container(
+        width: details.bounds.width,
+        height: details.bounds.height,
+        decoration: BoxDecoration(
+          color: Colors.amber,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Center(
+          child: Text(
+            event.title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ));
   }
 }
-
