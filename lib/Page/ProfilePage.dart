@@ -9,6 +9,7 @@ import '../Auth/KakaoSignInController.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/NoticeApps.dart';
 import '../route.dart';
+import 'DrawerScreen.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -23,6 +24,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final PageController _pcontroll = PageController(
     initialPage: 0,
   );
+  double xoffset = 0;
+  double yoffset = 0;
+  double scalefactor = 1;
+  bool isdraweropen = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -50,96 +55,86 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
+        body: Stack(
+      children: [
+        DrawerScreen(),
+        ProfileBody(context, _pcontroll),
+      ],
+    ));
+  }
+
+  Widget ProfileBody(BuildContext context, PageController pcontroll) {
+    return AnimatedContainer(
+      transform: Matrix4.translationValues(xoffset, yoffset, 0)
+        ..scale(scalefactor),
+      duration: Duration(milliseconds: 250),
+      child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Container(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.02, 
+                bottom: MediaQuery.of(context).size.height * 0.02),
+              alignment: Alignment.topLeft,
+              color: Colors.deepPurple.shade200,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    child: isdraweropen
+                        ? IconButton(
+                            onPressed: () {
+                              setState(() {
+                                xoffset = 0;
+                                yoffset = 0;
+                                scalefactor = 1;
+                                isdraweropen = false;
+                              });
+                            },
+                            icon: Icon(Icons.keyboard_arrow_left),
+                            color: Colors.white,
+                            iconSize: 20,
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              setState(() {
+                                xoffset = 130;
+                                yoffset = 100;
+                                scalefactor = 0.8;
+                                isdraweropen = true;
+                              });
+                            },
+                            icon: Icon(Icons.menu),
+                            color: Colors.white,
+                            iconSize: 20,
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: Container(
+              color: Colors.white,
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                      UserDetails(context),
+                      NoticeApps(context, pcontroll),
+                      UserSettings(context),
+                    ])),
+              ),
+            ),
+          )
+        ],
       ),
-      body: ProfileBody(context, _pcontroll),
     );
   }
-}
-
-Widget ProfileBody(BuildContext context, PageController pcontroll) {
-  return Container(
-    color: Colors.white,
-    child: ScrollConfiguration(
-      behavior: NoBehavior(),
-      child: SingleChildScrollView(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-            UserDetails(context),
-            NoticeApps(context, pcontroll),
-            UserSettings(context),
-          ])),
-    ),
-  );
-}
-
-DeleteUserVerify(BuildContext context, String name) {
-  showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 180,
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              )),
-          child: Column(children: [
-            const Text(
-              '회원탈퇴',
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 22,
-                fontWeight: FontWeight.w600, // bold
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              '회원탈퇴 진행하겠습니까?\n'
-              '아래 버튼을 클릭하시면 회원탈퇴처리가 완료됩니다.\n'
-              '더 좋은 서비스로 다음 기회에 찾아뵙겠습니다.',
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 16,
-                fontWeight: FontWeight.w600, // bold
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                //탈퇴 로직 구현
-                Navigator.of(context).pushReplacement(
-                  PageTransition(
-                    type: PageTransitionType.bottomToTop,
-                    child: const MyHomePage(title: 'HabitMind'),
-                  ),
-                );
-                Provider.of<GoogleSignInController>(context, listen: false)
-                    .logout(context, name);
-                Provider.of<KakaoSignInController>(context, listen: false)
-                    .logout(context, name);
-              },
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.amberAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 2.0),
-              child: const Text(
-                '탈퇴하기',
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600, // bold
-                ),
-              ),
-            ),
-          ]),
-        );
-      });
 }

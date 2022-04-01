@@ -11,7 +11,7 @@ GoToMain (BuildContext context){
     Navigator.of(context).pushReplacement(
       PageTransition(
         type: PageTransitionType.bottomToTop,
-        child: const MyHomePage(title: 'HabitMind'),
+        child: const MyHomePage(title: 'HabitMind', index: 0,),
       ),
     );
   });

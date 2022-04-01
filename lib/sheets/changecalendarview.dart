@@ -1,4 +1,3 @@
-import 'package:clickbyme/DB/Radio_calendar.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,7 @@ changecalendarview(BuildContext context, String calendarview) {
         return Padding(
           padding: MediaQuery.of(context).viewInsets,
           child: Container(
-              height: 250,
+              height: 300,
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -44,11 +43,11 @@ changecalendarview(BuildContext context, String calendarview) {
                         height: 10,
                       ),
                       SizedBox(
-                        height: 120,
+                        height: 180,
                         child: Column(
                           children: [
                             ListTile(
-                              title: Text('월뷰'),
+                              title: Text('월 단위뷰'),
                               leading: Radio(
                                 value: 'month',
                                 groupValue: calendarview,
@@ -60,7 +59,19 @@ changecalendarview(BuildContext context, String calendarview) {
                               ),
                             ),
                             ListTile(
-                              title: Text('일뷰'),
+                              title: Text('주 단위뷰'),
+                              leading: Radio(
+                                value: 'week',
+                                groupValue: calendarview,
+                                onChanged: (value) {
+                                  setState(() {
+                                    calendarview = value.toString();
+                                  });
+                                },
+                              ),
+                            ),
+                            ListTile(
+                              title: Text('일 단위뷰'),
                               leading: Radio(
                                 value: 'day',
                                 groupValue: calendarview,

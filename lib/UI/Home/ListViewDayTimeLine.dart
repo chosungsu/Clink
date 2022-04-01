@@ -1,8 +1,6 @@
 import 'package:clickbyme/DB/TODO.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
-import '../DB/Contents.dart';
-
 ListViewDayTimeLine(
     BuildContext context, String string, List<TODO> str_todo_list) {
   return Column(

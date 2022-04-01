@@ -34,7 +34,7 @@ showAfterSignUp(
           borderRadius: BorderRadius.circular(16.0)
         ),
         //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.
-        height: 100,
+        height: 80,
         child: Center(
           //crossAxisAlignment: CrossAxisAlignment.start,
           child: InkWell(

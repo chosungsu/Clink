@@ -78,7 +78,9 @@ class _DayLogState extends State<DayLog> {
               calendarview = Hive.box('user_setting').get('radio_cal') ?? 'day',
               calendarview == 'month'
                   ? changecalendarview(context, 'month')
-                  : changecalendarview(context, 'day')
+                  : (calendarview == 'week' ? 
+                  changecalendarview(context, 'week'):
+                  changecalendarview(context, 'day'))
             },
             icon: const Icon(Icons.change_circle),
           ),
@@ -113,71 +115,154 @@ class _DayLogState extends State<DayLog> {
 
   // 바디 만들기
   Widget makeBody(BuildContext context, String calendarview) {
-    /*List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime =
-    DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(
-        Meeting('Conference', startTime, endTime, const Color(0xFF0F8644), false));
-    return meetings;
-  }*/
     final _getDataSource = Provider.of<EventProvider>(context).events;
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          calendarview != 'month'
+          calendarview == 'day'
               ? SizedBox(
-                  height: 170,
-                  child: CalendarTimeline(
-                    showYears: true,
-                    initialDate: selectedDay,
-                    firstDate: DateTime(1900, 1, 1),
-                    lastDate: DateTime(3000, 12, 31),
-                    onDateSelected: (date) {
-                      setState(() {
-                        selectedDay = date!;
-                      });
-                    },
-                    leftMargin: 20,
-                    monthColor: Colors.grey,
-                    dayColor: Colors.black54,
-                    dayNameColor: Colors.black54,
-                    activeDayColor: Colors.white,
-                    activeBackgroundDayColor: Colors.redAccent[100],
-                    dotsColor: const Color(0xFF333A47),
-                    locale: 'ko',
-                  ),
-                )
-              : SizedBox(
                   height: 400,
-                  child: SfCalendar(
-                    view: CalendarView.month,
-                    initialSelectedDate: DateTime.now(),
-                    dataSource: MeetingDataSource(_getDataSource),
-                    onTap: (details) {
-                      final provider =
-                          Provider.of<EventProvider>(context, listen: false);
-                      provider.setDate(details.date!);
-                      setState(() {
-                        selectedDay = details.date!;
-                      });
-                    },
-                    monthViewSettings: MonthViewSettings(
-                        appointmentDisplayMode:
-                            MonthAppointmentDisplayMode.indicator),
-                    timeSlotViewSettings: const TimeSlotViewSettings(
-                        startHour: 0,
-                        endHour: 24,
-                        nonWorkingDays: <int>[
-                          DateTime.saturday,
-                          DateTime.sunday
-                        ]),
-                  ),
-                ),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          left: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          right: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          bottom: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                        ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        )),
+                    child: SfCalendar(
+                      view: CalendarView.day,
+                      initialSelectedDate: DateTime.now(),
+                      dataSource: MeetingDataSource(_getDataSource),
+                      onTap: (details) {
+                        final provider =
+                            Provider.of<EventProvider>(context, listen: false);
+                        provider.setDate(details.date!);
+                        setState(() {
+                          selectedDay = details.date!;
+                        });
+                      },
+                      monthViewSettings: MonthViewSettings(
+                          appointmentDisplayMode:
+                              MonthAppointmentDisplayMode.indicator),
+                      timeSlotViewSettings: const TimeSlotViewSettings(
+                          startHour: 0,
+                          endHour: 24,
+                          nonWorkingDays: <int>[
+                            DateTime.saturday,
+                            DateTime.sunday
+                          ]),
+                    ),
+                  ))
+              : (calendarview == 'week' ? SizedBox(
+                  height: 400,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          left: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          right: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          bottom: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                        ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        )),
+                    child: SfCalendar(
+                      view: CalendarView.week,
+                      initialSelectedDate: DateTime.now(),
+                      dataSource: MeetingDataSource(_getDataSource),
+                      onTap: (details) {
+                        final provider =
+                            Provider.of<EventProvider>(context, listen: false);
+                        provider.setDate(details.date!);
+                        setState(() {
+                          selectedDay = details.date!;
+                        });
+                      },
+                      monthViewSettings: MonthViewSettings(
+                          appointmentDisplayMode:
+                              MonthAppointmentDisplayMode.indicator),
+                      timeSlotViewSettings: const TimeSlotViewSettings(
+                          startHour: 0,
+                          endHour: 24,
+                          nonWorkingDays: <int>[
+                            DateTime.saturday,
+                            DateTime.sunday
+                          ]),
+                    ),
+                  )):
+                  SizedBox(
+                  height: 400,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          left: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          right: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                          bottom: BorderSide(
+                              width: 1.0,
+                              color: Color.fromARGB(255, 255, 214, 214)),
+                        ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        )),
+                    child: SfCalendar(
+                      view: CalendarView.month,
+                      initialSelectedDate: DateTime.now(),
+                      dataSource: MeetingDataSource(_getDataSource),
+                      onTap: (details) {
+                        final provider =
+                            Provider.of<EventProvider>(context, listen: false);
+                        provider.setDate(details.date!);
+                        setState(() {
+                          selectedDay = details.date!;
+                        });
+                      },
+                      monthViewSettings: MonthViewSettings(
+                          appointmentDisplayMode:
+                              MonthAppointmentDisplayMode.indicator),
+                      timeSlotViewSettings: const TimeSlotViewSettings(
+                          startHour: 0,
+                          endHour: 24,
+                          nonWorkingDays: <int>[
+                            DateTime.saturday,
+                            DateTime.sunday
+                          ]),
+                    ),
+                  ))),
           FutureBuilder<List<TODO>>(
             future: homeasync(
                 selectedDay), // a previously-obtained Future<String> or null

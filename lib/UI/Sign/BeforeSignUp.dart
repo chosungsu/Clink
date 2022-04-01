@@ -24,7 +24,7 @@ showBeforeSignUp(BuildContext context) {
         ),
         //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.
         width: MediaQuery.of(context).size.width * 0.95,
-        height: 100,
+        height: 80,
         child: Center(
             //crossAxisAlignment: CrossAxisAlignment.start,
             child: Padding(

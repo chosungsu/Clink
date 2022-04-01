@@ -42,57 +42,48 @@ NoticeApps(BuildContext context, PageController pcontroll) {
       SizedBox(
         height: 10,
       ),
-      Neumorphic(
-          style: NeumorphicStyle(
-            shape: NeumorphicShape.concave,
-            border: NeumorphicBorder.none(),
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-            depth: -10,
-            color: Color.fromARGB(255, 252, 249, 249),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  padding: const EdgeInsets.only(
-                      top: 10, bottom: 10, left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      const Flexible(
-                        fit: FlexFit.tight,
-                        child: Text(
-                          '공지사항',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.black54,
-                          ),
-                        ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 20, right: 20),
+              child: Row(
+                children: [
+                  const Flexible(
+                    fit: FlexFit.tight,
+                    child: Text(
+                      '공지사항',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.black54,
                       ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: NoticePage(),
-                                  type:
-                                      PageTransitionType.leftToRightWithFade));
-                        },
-                        child: NeumorphicIcon(
-                          Icons.arrow_circle_right,
-                          size: 20,
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              color: Colors.deepPurpleAccent.shade100,
-                              lightSource: LightSource.topLeft),
-                        ),
-                      ),
-                    ],
-                  )),
-              NoticeClip(context, _list_ad, pcontroll),
-            ],
-          )),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child: NoticePage(),
+                              type: PageTransitionType.leftToRightWithFade));
+                    },
+                    child: NeumorphicIcon(
+                      Icons.arrow_circle_right,
+                      size: 20,
+                      style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          color: Colors.deepPurpleAccent.shade100,
+                          lightSource: LightSource.topLeft),
+                    ),
+                  ),
+                ],
+              )),
+          NoticeClip(context, _list_ad, pcontroll),
+        ],
+      )
     ],
   );
 }

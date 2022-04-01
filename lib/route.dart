@@ -8,8 +8,10 @@ import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title, required this.index})
+      : super(key: key);
   final String title;
+  final int index;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -20,11 +22,12 @@ class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   late DateTime backbuttonpressedTime;
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -35,11 +38,11 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
     return Scaffold(
       backgroundColor: Colors.white,
-      body:  WillPopScope(
+      body: WillPopScope(
         onWillPop: _onWillPop,
-        child: pages[_selectedIndex],
+        child: pages[widget.index],
       ),
-      bottomNavigationBar: CurvedNavigationBar(
+      /*bottomNavigationBar: CurvedNavigationBar(
         height: 50,
         index: _selectedIndex,
         backgroundColor: Colors.deepPurpleAccent.shade100,
@@ -56,9 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
             _selectedIndex = index;
           });
         },
-      )
+      )*/
     );
   }
+
   Future<bool> _onWillPop() async {
     return (await destroyBackKey(context)) ?? false;
   }

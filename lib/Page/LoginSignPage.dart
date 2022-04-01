@@ -108,7 +108,7 @@ LoginPlus(BuildContext context, bool ischecked) {
             await Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(title: 'HabitMind'),
+                child: const MyHomePage(title: 'HabitMind', index: 0,),
               ),
             );
           },
@@ -126,7 +126,7 @@ LoginPlus(BuildContext context, bool ischecked) {
             await Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(title: 'HabitMind'),
+                child: const MyHomePage(title: 'HabitMind', index: 0,),
               ),
             );
           },
@@ -134,24 +134,6 @@ LoginPlus(BuildContext context, bool ischecked) {
             width: 250 * (MediaQuery.of(context).size.width / 392),
             child: Image.asset('assets/images/kakao_login_medium_wide.png'),
           )),
-      TextButton(
-        onPressed: () async {
-          Navigator.of(context).pushReplacement(
-            PageTransition(
-              type: PageTransitionType.bottomToTop,
-              child: const MyHomePage(title: 'HabitMind'),
-            ),
-          );
-        },
-        child: const Text(
-          '익명으로 먼저 맛보기',
-          style: TextStyle(
-            color: Colors.black54,
-            fontSize: 16,
-            fontWeight: FontWeight.w600, // bold
-          ),
-        ),
-      ),
     ],
   );
 }

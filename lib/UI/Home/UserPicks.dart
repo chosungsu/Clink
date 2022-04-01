@@ -13,15 +13,7 @@ UserPicks(BuildContext context) {
       SizedBox(
         height: 10,
       ),
-      Neumorphic(
-        style: NeumorphicStyle(
-          shape: NeumorphicShape.concave,
-          border: NeumorphicBorder.none(),
-          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-          depth: -10,
-          color: Color.fromARGB(255, 243, 243, 243),
-        ),
-        child: Column(
+      Column(
           children: [
             Container(
                 width: double.infinity,
@@ -31,10 +23,6 @@ UserPicks(BuildContext context) {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.push_pin,
-                      color: Colors.deepPurpleAccent.shade100,
-                    ),
                     SizedBox(
                       width: 10,
                     ),
@@ -51,7 +39,6 @@ UserPicks(BuildContext context) {
             Main_Pick(context),
           ],
         ),
-      ),
     ],
   );
 }
@@ -110,11 +97,11 @@ Main_Pick(context) {
             itemBuilder: (context, index) {
               return Neumorphic(
                   style: NeumorphicStyle(
-                    shape: NeumorphicShape.concave,
+                    shape: NeumorphicShape.flat,
                     border: NeumorphicBorder.none(),
                     boxShape:
                         NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-                    depth: -5,
+                    depth: 5,
                     color: Colors.white,
                     //color: Colors.grey.shade200,
                   ),

@@ -1,9 +1,10 @@
 import 'package:clickbyme/DB/Contents.dart';
 import 'package:clickbyme/DB/Recommend.dart';
 import 'package:clickbyme/DB/TODO.dart';
-import 'package:clickbyme/UI/ListViewDayTimeLine.dart';
-import 'package:clickbyme/UI/ListViewHome.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+
+import 'ListViewDayTimeLine.dart';
+import 'ListViewHome.dart';
 
 UserChoice(BuildContext context, List<TODO> str_todo_list) {
   final List<Recommend> _list_recommend = [
@@ -17,16 +18,7 @@ UserChoice(BuildContext context, List<TODO> str_todo_list) {
       SizedBox(
         height: 10,
       ),
-      Neumorphic(
-        style: NeumorphicStyle(
-          shape: NeumorphicShape.concave,
-          border: NeumorphicBorder.none(),
-          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-          depth: -10,
-          color: Color.fromARGB(255, 243, 243, 243),
-        ),
-        child: Subscript(context, _list_recommend, str_todo_list),
-      ),
+      Subscript(context, _list_recommend, str_todo_list),
     ],
   );
 }

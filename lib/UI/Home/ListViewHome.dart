@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
-import '../DB/Contents.dart';
-import '../DB/Recommend.dart';
+import '../../DB/Contents.dart';
 
 ListViewHome(BuildContext context, String string, List<Contents> list_content) {
   return Column(
