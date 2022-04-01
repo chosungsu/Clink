@@ -101,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         : IconButton(
                             onPressed: () {
                               setState(() {
-                                xoffset = 130;
+                                xoffset = 180;
                                 yoffset = 100;
                                 scalefactor = 0.8;
                                 isdraweropen = true;

@@ -1,6 +1,7 @@
 import 'package:clickbyme/DB/TODO.dart';
 import 'package:clickbyme/Tool/Shimmer_home.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../Futures/homeasync.dart';
 import '../Tool/NoBehavior.dart';
@@ -26,11 +27,13 @@ class _HomePageState extends State<HomePage> {
   initState() {
     // TODO: implement initState
     super.initState();
+    initializeDateFormatting('ko', null);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         body: Stack(
       children: [
         DrawerScreen(),
@@ -94,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.only(left: 20),
                         child: Text(
                             '\"' +
-                                DateFormat.E('ko_KR').format(DateTime.now()) +
+                                DateFormat.E('ko').format(DateTime.now()) +
                                 '요일,',
                             style: const TextStyle(
                                 color: Colors.white,

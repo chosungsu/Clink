@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:provider/provider.dart';
 import 'Auth/GoogleSignInController.dart';
@@ -33,14 +34,13 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  Widget build(BuildContext context) {return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => GoogleSignInController(),
           child: LoginSignPage(),
         ),
-        ChangeNotifierProvider( 
+        ChangeNotifierProvider(
           create: (context) => KakaoSignInController(),
           child: LoginSignPage(),
         ),
@@ -104,7 +104,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     )..addStatusListener(
         (status) {
           if (status == AnimationStatus.completed) {
-            if (Hive.box('user_info').get('id') != null || Hive.box('user_info').get('autologin') == true) {
+            if (Hive.box('user_info').get('id') != null ||
+                Hive.box('user_info').get('autologin') == true) {
               GoToMain(context);
             } else {
               GoToLogin(context);
@@ -190,7 +191,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     const SpinKitFadingCircle(
                       color: Colors.white,
                     ),
-                    Hive.box('user_info').get('id') == null || Hive.box('user_info').get('autologin') == false
+                    Hive.box('user_info').get('id') == null ||
+                            Hive.box('user_info').get('autologin') == false
                         ? const Text(
                             '로그인 페이지 이동 중...',
                             style: TextStyle(
