@@ -1,14 +1,9 @@
 import 'dart:async';
-import 'package:clickbyme/UI/UserDetails.dart';
-import 'package:clickbyme/UI/UserSettings.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import '../Auth/GoogleSignInController.dart';
-import '../Auth/KakaoSignInController.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/NoticeApps.dart';
-import '../route.dart';
+import '../UI/Setting/NoticeApps.dart';
+import '../UI/Setting/UserDetails.dart';
+import '../UI/Setting/UserSettings.dart';
 import 'DrawerScreen.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -55,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         body: Stack(
       children: [
         DrawerScreen(),
@@ -69,57 +65,27 @@ class _ProfilePageState extends State<ProfilePage> {
         ..scale(scalefactor),
       duration: Duration(milliseconds: 250),
       child: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
+        alignment: AlignmentDirectional.topCenter,
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
             child: Container(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.02, 
-                bottom: MediaQuery.of(context).size.height * 0.02),
-              alignment: Alignment.topLeft,
-              color: Colors.deepPurple.shade200,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: isdraweropen
-                        ? IconButton(
-                            onPressed: () {
-                              setState(() {
-                                xoffset = 0;
-                                yoffset = 0;
-                                scalefactor = 1;
-                                isdraweropen = false;
-                              });
-                            },
-                            icon: Icon(Icons.keyboard_arrow_left),
-                            color: Colors.white,
-                            iconSize: 20,
-                          )
-                        : IconButton(
-                            onPressed: () {
-                              setState(() {
-                                xoffset = 180;
-                                yoffset = 100;
-                                scalefactor = 0.8;
-                                isdraweropen = true;
-                              });
-                            },
-                            icon: Icon(Icons.menu),
-                            color: Colors.white,
-                            iconSize: 20,
-                          ),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(
+                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
+                    left: BorderSide(
+                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
+                    right: BorderSide(
+                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
+                    bottom: BorderSide(
+                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
                   ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: Container(
-              color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                  )),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1,),
               child: ScrollConfiguration(
                 behavior: NoBehavior(),
                 child: SingleChildScrollView(
@@ -132,7 +98,56 @@ class _ProfilePageState extends State<ProfilePage> {
                     ])),
               ),
             ),
-          )
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.width,
+            child: Container(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.02, 
+                bottom: MediaQuery.of(context).size.height * 0.02),
+              alignment: Alignment.topLeft,
+              decoration: BoxDecoration(
+                  color: Colors.deepPurple.shade200,
+                  borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                  )),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 50,
+                    child: isdraweropen
+                        ? IconButton(
+                            onPressed: () {
+                              setState(() {
+                                xoffset = 0;
+                                yoffset = 0;
+                                scalefactor = 1;
+                                isdraweropen = false;
+                              });
+                            },
+                            icon: Icon(Icons.keyboard_arrow_left),
+                            color: Colors.white,
+                            iconSize: 30,
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              setState(() {
+                                xoffset = 180;
+                                yoffset = 100;
+                                scalefactor = 0.8;
+                                isdraweropen = true;
+                              });
+                            },
+                            icon: Icon(Icons.menu),
+                            color: Colors.white,
+                            iconSize: 30,
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

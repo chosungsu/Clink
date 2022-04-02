@@ -14,31 +14,35 @@ UserPicks(BuildContext context) {
         height: 10,
       ),
       Column(
-          children: [
-            Container(
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 15,
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 10,
+        children: [
+          Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 15,
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  NeumorphicText(
+                    '카테고리',
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: Colors.black54,
                     ),
-                    const Text(
-                      '카테고리',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.black54,
-                      ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
-                  ],
-                )),
-            Main_Pick(context),
-          ],
-        ),
+                  ),
+                ],
+              )),
+          Main_Pick(context),
+        ],
+      ),
     ],
   );
 }
@@ -59,7 +63,7 @@ Main_Pick(context) {
     ),
     AD_Home(
       id: '3',
-      title: '링크 인',
+      title: '페이지마크',
       person_num: 5,
       date: DateTime.now(),
     ),
@@ -97,14 +101,13 @@ Main_Pick(context) {
             itemBuilder: (context, index) {
               return Neumorphic(
                   style: NeumorphicStyle(
-                    shape: NeumorphicShape.flat,
-                    border: NeumorphicBorder.none(),
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(5)),
-                    depth: 5,
-                    color: Colors.white,
-                    //color: Colors.grey.shade200,
-                  ),
+                      shape: NeumorphicShape.flat,
+                      border: NeumorphicBorder(width: 1, color: Colors.grey),
+                      boxShape: NeumorphicBoxShape.roundRect(
+                          BorderRadius.circular(5)),
+                      depth: 5,
+                      color: Colors.white,
+                      lightSource: LightSource.topLeft),
                   child: InkWell(
                       onTap: () {
                         if (index == 0) {

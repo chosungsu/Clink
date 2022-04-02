@@ -3,7 +3,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 
 showBeforeSignUp(BuildContext context) {
-
   return Padding(
     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
     child: Neumorphic(
@@ -16,12 +15,11 @@ showBeforeSignUp(BuildContext context) {
           lightSource: LightSource.topLeft),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(
-            width: 1,
-            color: Colors.orange,
-          ),
-          borderRadius: BorderRadius.circular(16.0)
-        ),
+            border: Border.all(
+              width: 1,
+              color: Colors.orange,
+            ),
+            borderRadius: BorderRadius.circular(16.0)),
         //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.
         width: MediaQuery.of(context).size.width * 0.95,
         height: 80,
@@ -47,11 +45,12 @@ showBeforeSignUp(BuildContext context) {
                   height: 40,
                   child: Neumorphic(
                     style: NeumorphicStyle(
-                        shape: NeumorphicShape.flat,
-                        boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(10.0)),
-                        depth: 4,
-                        intensity: 0.5,),
+                      shape: NeumorphicShape.flat,
+                      boxShape: NeumorphicBoxShape.roundRect(
+                          BorderRadius.circular(10.0)),
+                      depth: 4,
+                      intensity: 0.5,
+                    ),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: Colors.white,
@@ -68,7 +67,7 @@ showBeforeSignUp(BuildContext context) {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               Text(
                                 '3초 로그인',
                                 style: TextStyle(
@@ -77,7 +76,15 @@ showBeforeSignUp(BuildContext context) {
                                     color: Colors.amberAccent,
                                     letterSpacing: 2),
                               ),
-                              Icon(Icons.arrow_forward_ios_sharp),
+                              NeumorphicIcon(
+                                Icons.arrow_forward_ios,
+                                size: 20,
+                                style: NeumorphicStyle(
+                                    shape: NeumorphicShape.convex,
+                                    depth: 2,
+                                    color: Colors.deepPurpleAccent.shade100,
+                                    lightSource: LightSource.topLeft),
+                              ),
                             ],
                           ),
                         )),

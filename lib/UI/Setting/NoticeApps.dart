@@ -1,8 +1,8 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-import '../DB/AD_Home.dart';
-import '../Sub/NoticePage.dart';
 
+import '../../DB/AD_Home.dart';
+import '../../Sub/NoticePage.dart';
 NoticeApps(BuildContext context, PageController pcontroll) {
   final List<AD_Home> _list_ad = [
     AD_Home(
@@ -70,7 +70,7 @@ NoticeApps(BuildContext context, PageController pcontroll) {
                               type: PageTransitionType.leftToRightWithFade));
                     },
                     child: NeumorphicIcon(
-                      Icons.arrow_circle_right,
+                      Icons.arrow_forward_ios,
                       size: 20,
                       style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,

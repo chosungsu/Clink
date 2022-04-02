@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   initState() {
     // TODO: implement initState
     super.initState();
-    initializeDateFormatting('ko', null);
   }
 
   @override
@@ -55,14 +54,14 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             child: Container(
               padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.02,),
+                top: MediaQuery.of(context).size.height * 0.01,),
               alignment: Alignment.topLeft,
               color: Colors.deepPurple.shade200,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.15,
+                    width: 50,
                     child: isdraweropen
                         ? IconButton(
                             onPressed: () {
@@ -75,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                             },
                             icon: const Icon(Icons.keyboard_arrow_left),
                             color: Colors.white,
-                            iconSize: 25,
+                            iconSize: 30,
                           )
                         : IconButton(
                             onPressed: () {
@@ -88,27 +87,13 @@ class _HomePageState extends State<HomePage> {
                             },
                             icon: const Icon(Icons.menu),
                             color: Colors.white,
-                            iconSize: 25,
+                            iconSize: 30,
                           ),
                   ),
                   SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Text(
-                            '\"' +
-                                DateFormat.E('ko').format(DateTime.now()) +
-                                '요일,',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      )),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
                       child: const Padding(
                         padding: EdgeInsets.only(left: 20),
-                        child: Text('당신의 MindBox를 실행하세요\"',
+                        child: Text('StormDot',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -119,7 +104,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.9,
             child: Container(
               padding: const EdgeInsets.only(top: 20),
               decoration: const BoxDecoration(

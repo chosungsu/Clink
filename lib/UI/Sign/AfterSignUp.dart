@@ -74,7 +74,15 @@ showAfterSignUp(
                             ),
                           ],
                         )),
-                    Icon(Icons.arrow_forward_ios),
+                    NeumorphicIcon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                      style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          color: Colors.deepPurpleAccent.shade100,
+                          lightSource: LightSource.topLeft),
+                    ),
                   ],
                 ),
               )),

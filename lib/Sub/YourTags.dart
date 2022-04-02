@@ -1,5 +1,5 @@
 import 'package:clickbyme/DB/ChipList.dart';
-import 'package:clickbyme/DB/Recommend.dart';
+import 'package:clickbyme/DB/Home_Rec_title.dart';
 import 'package:clickbyme/Tool/Shimmer_Chip.dart';
 import 'package:clickbyme/sheets/addChips.dart';
 import 'package:clickbyme/Futures/chipasync.dart';
@@ -79,10 +79,10 @@ class _YourTagsState extends State<YourTags> with TickerProviderStateMixin {
 Widget makeBody(BuildContext context, TabController tabController_tags,
     TextEditingController eventController, bool isselectedchip) {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  final List<Recommend> _list_content = [
-    Recommend(sub: '추천 태그'),
-    Recommend(sub: '사용자의 태그 보관함'),
-    Recommend(sub: '분석'),
+  final List<Home_Rec_title> _list_content = [
+    Home_Rec_title(sub: '추천 태그'),
+    Home_Rec_title(sub: '사용자의 태그 보관함'),
+    Home_Rec_title(sub: '분석'),
   ];
   final List<AD_Home> _list_ad = [
     AD_Home(

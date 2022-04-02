@@ -1,8 +1,8 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:transition/transition.dart';
-import '../Sub/HowToUsePage.dart';
-import '../Sub/SettingPage.dart';
 
+import '../../Sub/HowToUsePage.dart';
+import '../../Sub/SettingPage.dart';
 UserSettings(BuildContext context) {
   final List<String> list_title = <String>[
     '이용안내',

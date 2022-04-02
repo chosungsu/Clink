@@ -1,7 +1,7 @@
-class Recommend {
+class Home_Rec_title {
   final String sub;
 
-  Recommend({
+  Home_Rec_title({
     required this.sub,
 });
 }

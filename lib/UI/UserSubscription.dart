@@ -1,5 +1,5 @@
 import 'package:clickbyme/DB/Contents.dart';
-import 'package:clickbyme/DB/Recommend.dart';
+import 'package:clickbyme/DB/Home_Rec_title.dart';
 import 'package:clickbyme/UI/ListViewFeed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -7,9 +7,9 @@ import 'package:sticky_headers/sticky_headers.dart';
 
 UserSubscription(BuildContext context, TabController tabController,
     int tabindex, List<Contents> contents) {
-  final List<Recommend> _list_recommend = [
-    Recommend(sub: 'My 피드'),
-    Recommend(sub: 'dot 추천'),
+  final List<Home_Rec_title> _list_recommend = [
+    Home_Rec_title(sub: 'My 피드'),
+    Home_Rec_title(sub: 'dot 추천'),
   ];
   return Column(
     children: [
@@ -20,7 +20,7 @@ UserSubscription(BuildContext context, TabController tabController,
 }
 
 ContentSub(BuildContext context, TabController tabController,
-    List<Recommend> list_recommend, List<Contents> contents) {
+    List<Home_Rec_title> list_recommend, List<Contents> contents) {
   final List<Contents> _list_content = [
     Contents(content: 'aaaa', date: DateTime.now(), id: '1', title: 'a'),
     Contents(content: 'bbbb', date: DateTime.now(), id: '2', title: 'b'),
@@ -28,21 +28,21 @@ ContentSub(BuildContext context, TabController tabController,
     Contents(content: 'dddd', date: DateTime.now(), id: '4', title: 'd'),
     Contents(content: 'eeee', date: DateTime.now(), id: '5', title: 'e'),
   ];
-  final List<Recommend> _list_all = [
-    Recommend(sub: '오늘의 추천'),
-    Recommend(sub: '오늘의 일정'),
-    Recommend(sub: '읽지 않은 스크립스'),
-    Recommend(sub: '새로 생긴 챌린지'),
-    Recommend(sub: '인기 많은 데이로그'),
+  final List<Home_Rec_title> _list_all = [
+    Home_Rec_title(sub: '오늘의 추천'),
+    Home_Rec_title(sub: '오늘의 일정'),
+    Home_Rec_title(sub: '읽지 않은 스크립스'),
+    Home_Rec_title(sub: '새로 생긴 챌린지'),
+    Home_Rec_title(sub: '인기 많은 데이로그'),
   ];
-  final List<Recommend> _list_recommend = [
-    Recommend(sub: '오늘의 추천'),
-    Recommend(sub: '새로 생긴 챌린지'),
-    Recommend(sub: '인기 많은 데이로그'),
+  final List<Home_Rec_title> _list_recommend = [
+    Home_Rec_title(sub: '오늘의 추천'),
+    Home_Rec_title(sub: '새로 생긴 챌린지'),
+    Home_Rec_title(sub: '인기 많은 데이로그'),
   ];
-  final List<Recommend> _list_my = [
-    Recommend(sub: '오늘의 일정'),
-    Recommend(sub: '읽지 않은 스크립스'),
+  final List<Home_Rec_title> _list_my = [
+    Home_Rec_title(sub: '오늘의 일정'),
+    Home_Rec_title(sub: '읽지 않은 스크립스'),
   ];
   final List _list_background_color = [
     Colors.green,
@@ -57,7 +57,7 @@ ContentSub(BuildContext context, TabController tabController,
   ]);
 }
 
-Subscript(context, List<Recommend> list_recommend, TabController tabController,
+Subscript(context, List<Home_Rec_title> list_recommend, TabController tabController,
     int tabindex, List<Contents> contents) {
   return list_recommend.isEmpty
       ? Container(
@@ -72,7 +72,7 @@ Subscript(context, List<Recommend> list_recommend, TabController tabController,
           );
 }
 
-Sticky(context, List<Recommend> list_recommend, TabController tabController,
+Sticky(context, List<Home_Rec_title> list_recommend, TabController tabController,
     int tabindex, List<Contents> contents) {
   return StickyHeader(
     header: Container(

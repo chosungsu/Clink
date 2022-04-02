@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import '../DB/Contents.dart';
-import '../DB/Recommend.dart';
+import '../DB/Home_Rec_title.dart';
 import '../Tool/NoBehavior.dart';
 
 ListViewFeed(
-    BuildContext context, List<Recommend> list, List<Contents> list_content) {
+    BuildContext context, List<Home_Rec_title> list, List<Contents> list_content) {
   final List _list_background_color = [
     Colors.green,
     Colors.blue,
