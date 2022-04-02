@@ -30,7 +30,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         ),
                       ),
                     );
-                  } else if (element.containsValue(Icons.widgets)) {
+                  } else if (element.containsValue(Icons.explore)) {
                     Navigator.of(context).pushReplacement(
                       PageTransition(
                         type: PageTransitionType.rightToLeft,

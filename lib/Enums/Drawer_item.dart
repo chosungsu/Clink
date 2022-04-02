@@ -4,15 +4,15 @@ List<Map> drawerItems = [
   {
     'icon': Icons.home,
     'title': Text(
-      '홈',
+      '메인홈',
       style: TextStyle(
           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
     )
   },
   {
-    'icon': Icons.widgets,
+    'icon': Icons.explore,
     'title': Text(
-      '피드',
+      '탐색',
       style: TextStyle(
           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
     )
@@ -20,7 +20,7 @@ List<Map> drawerItems = [
   {
     'icon': Icons.account_circle,
     'title': Text(
-      '계정',
+      '전체 설정',
       style: TextStyle(
           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
     )

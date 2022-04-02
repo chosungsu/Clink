@@ -144,6 +144,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             iconSize: 30,
                           ),
                   ),
+                  SizedBox(
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text('전체 설정',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      )),
                 ],
               ),
             ),

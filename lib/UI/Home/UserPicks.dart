@@ -1,4 +1,5 @@
 import 'package:clickbyme/Sub/DayLog.dart';
+import 'package:clickbyme/Sub/QuickMenuPage.dart';
 import 'package:clickbyme/Sub/WritePost.dart';
 import 'package:clickbyme/Sub/storepw.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -17,29 +18,51 @@ UserPicks(BuildContext context) {
         children: [
           Container(
               width: double.infinity,
-              margin: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 15,
-              ),
+              padding: EdgeInsets.only(left: 20, right: 10),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  NeumorphicText(
-                    '카테고리',
-                    style: NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: Colors.black54,
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                  Flexible(
+                      fit: FlexFit.tight,
+                      child: Row(
+                        children: [
+                          NeumorphicText(
+                            '퀵메뉴',
+                            style: NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 3,
+                              color: Colors.black54,
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      )),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: QuickMenuPage(),
+                                  type:
+                                      PageTransitionType.leftToRightWithFade));
+                    },
+                    child: NeumorphicIcon(
+                      Icons.settings,
+                      size: 20,
+                      style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          color: Colors.deepPurpleAccent.shade100,
+                          lightSource: LightSource.topLeft),
                     ),
                   ),
                 ],
               )),
+          SizedBox(
+            height: 20,
+          ),
           Main_Pick(context),
         ],
       ),
@@ -69,7 +92,7 @@ Main_Pick(context) {
     ),
     AD_Home(
       id: '4',
-      title: '개인키 보관',
+      title: '탐색기록',
       person_num: 4,
       date: DateTime.now(),
     ),
@@ -78,7 +101,7 @@ Main_Pick(context) {
     'assets/images/date.png',
     'assets/images/challenge.png',
     'assets/images/icon-link.png',
-    'assets/images/fingerprint.png',
+    'assets/images/playlist.png',
   ];
   return SizedBox(
       height: MediaQuery.of(context).size.width / 2 / 3 * 2 + 20,

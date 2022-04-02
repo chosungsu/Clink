@@ -200,6 +200,15 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                             iconSize: 30,
                           ),
                   ),
+                  SizedBox(
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text('탐색',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      )),
                 ],
               ),
             ),

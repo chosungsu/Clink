@@ -112,6 +112,7 @@ flutter:
     - assets/images/date.png
     - assets/images/food.png
     - assets/images/challenge.png
+    - assets/images/playlist.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
