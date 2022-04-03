@@ -155,7 +155,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      'HabitMind',
+                      'StormDot',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
@@ -169,7 +169,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       style: const TextStyle(fontSize: 20.0),
                       child: AnimatedTextKit(
                         animatedTexts: [
-                          TyperAnimatedText('내가 수집하는 개인화 마인드트랙',
+                          TyperAnimatedText('나의 개인화 마인드트랙',
                               speed: Duration(milliseconds: 150)),
                         ],
                         isRepeatingAnimation: true,

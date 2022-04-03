@@ -1,13 +1,11 @@
-class AD_Home {
+class PageList {
   final String id;
   final String title;
-  final int person_num;
   final DateTime date;
 
-  AD_Home({
+  PageList({
     required this.id,
     required this.title,
-    required this.person_num,
     required this.date,
 });
 }

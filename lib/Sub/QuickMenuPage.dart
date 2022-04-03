@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:clickbyme/Dialogs/saveMenu.dart';
+import 'package:clickbyme/Futures/quickmenuasync.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive/hive.dart';
-
-import '../DB/AD_Home.dart';
 import '../Page/DrawerScreen.dart';
 import '../Tool/NoBehavior.dart';
 
@@ -12,6 +12,22 @@ class QuickMenuPage extends StatefulWidget {
 }
 
 class _QuickMenuPageState extends State<QuickMenuPage> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String nick = Hive.box('user_info').get('id');
+  late List<String> str_menu_list;
+  final List<String> _list_ad = [
+    '데이로그',
+    '챌린지',
+    '페이지마크',
+    '탐색기록'
+  ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    str_menu_list = [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,32 +42,6 @@ class _QuickMenuPageState extends State<QuickMenuPage> {
 
   // 바디 만들기
   Widget makeBody(BuildContext context) {
-    final List<AD_Home> _list_ad = [
-      AD_Home(
-        id: '1',
-        title: '데이로그',
-        person_num: 3,
-        date: DateTime.now(),
-      ),
-      AD_Home(
-        id: '2',
-        title: '챌린지',
-        person_num: 5,
-        date: DateTime.now(),
-      ),
-      AD_Home(
-        id: '3',
-        title: '페이지마크',
-        person_num: 5,
-        date: DateTime.now(),
-      ),
-      AD_Home(
-        id: '4',
-        title: '개인키 보관',
-        person_num: 4,
-        date: DateTime.now(),
-      ),
-    ];
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: [
@@ -91,21 +81,16 @@ class _QuickMenuPageState extends State<QuickMenuPage> {
                         )),
                       ],
                     )),
-                InkWell(
-                  onTap: () {
-                    //hive 저장
-                    Hive.box('user_setting').put('quick_menu', _list_ad);
-                  },
-                  child: NeumorphicIcon(
-                    Icons.save_alt,
-                    size: 20,
-                    style: NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        color: Colors.white,
-                        lightSource: LightSource.topLeft),
-                  ),
-                ),
+                SizedBox(
+                    width: 50,
+                    child: IconButton(
+                      onPressed: () {
+                        saveMenu(context, str_menu_list);
+                      },
+                      icon: const Icon(Icons.save_alt),
+                      color: Colors.white,
+                      iconSize: 30,
+                    )),
               ],
             ),
           ),
@@ -135,26 +120,74 @@ class _QuickMenuPageState extends State<QuickMenuPage> {
               child: SingleChildScrollView(
                   child: StatefulBuilder(builder: (_, StateSetter setState) {
                 return Container(
-                  height: MediaQuery.of(context).size.height * 0.9 - 20,
-                  child: ReorderableListView.builder(
-                      itemBuilder: (context, index) {
-                        final user_quick_menu =
-                            Hive.box('user_setting').get('quick_menu') != null
-                                ? Hive.box('user_setting')
-                                    .get('quick_menu')[index]
-                                : _list_ad[index];
-                        return buildList(index, user_quick_menu);
+                    height: MediaQuery.of(context).size.height * 0.9 - 20,
+                    child: FutureBuilder<List<String>>(
+                      future: quickmenuasync(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<String>> snapshot) {
+                        if (snapshot.hasData) {
+                          return ReorderableListView.builder(
+                              itemBuilder: (context, index) {
+                                return buildList(index, snapshot.data![index]);
+                              },
+                              itemCount: snapshot.data!.length,
+                              onReorder: (oldIndex, newIndex) {
+                                setState(() {
+                                  str_menu_list.clear();
+                                  final index = newIndex > oldIndex
+                                      ? newIndex - 1
+                                      : newIndex;
+                                  final user_quick_menu =
+                                      snapshot.data!.removeAt(oldIndex);
+                                  snapshot.data!.insert(index, user_quick_menu);
+                                  for (int i = 0;
+                                      i < snapshot.data!.length;
+                                      i++) {
+                                    str_menu_list.add(snapshot.data![i]);
+                                  }
+                                  print('1 : ' + str_menu_list.toString());
+                                  //firestore 저장
+                                  firestore
+                                      .collection('QuickMenu')
+                                      .doc(nick)
+                                      .set({
+                                    'name': nick,
+                                    'menu': str_menu_list,
+                                  });
+                                });
+                              });
+                        } else {
+                          return ReorderableListView.builder(
+                              itemBuilder: (context, index) {
+                                return buildList(index, _list_ad[index]);
+                              },
+                              itemCount: _list_ad.length,
+                              onReorder: (oldIndex, newIndex) {
+                                setState(() {
+                                  str_menu_list.clear();
+                                  final index = newIndex > oldIndex
+                                      ? newIndex - 1
+                                      : newIndex;
+                                  final user_quick_menu =
+                                      _list_ad.removeAt(oldIndex);
+                                  _list_ad.insert(index, user_quick_menu);
+                                  for (int i = 0; i < _list_ad.length; i++) {
+                                    str_menu_list.add(_list_ad[i]);
+                                  }
+                                  print('2 : ' + str_menu_list.toString());
+                                  //firestore 저장
+                                  firestore
+                                      .collection('QuickMenu')
+                                      .doc(nick)
+                                      .set({
+                                    'name': nick,
+                                    'menu': str_menu_list,
+                                  });
+                                });
+                              });
+                        }
                       },
-                      itemCount: _list_ad.length,
-                      onReorder: (oldIndex, newIndex) {
-                        setState(() {
-                          final index =
-                              newIndex > oldIndex ? newIndex - 1 : newIndex;
-                          final user_quick_menu = _list_ad.removeAt(oldIndex);
-                          _list_ad.insert(index, user_quick_menu);
-                        });
-                      }),
-                );
+                    ));
               })),
             ),
           ),
@@ -163,7 +196,7 @@ class _QuickMenuPageState extends State<QuickMenuPage> {
     );
   }
 
-  Widget buildList(int index, AD_Home user_quick_menu) {
+  Widget buildList(int index, String user_quick_menu) {
     return ListTile(
       key: ValueKey(user_quick_menu),
       leading: NeumorphicIcon(
@@ -175,7 +208,7 @@ class _QuickMenuPageState extends State<QuickMenuPage> {
             color: Colors.deepPurple.shade200,
             lightSource: LightSource.topLeft),
       ),
-      title: Text(user_quick_menu.title,
+      title: Text(user_quick_menu,
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
     );

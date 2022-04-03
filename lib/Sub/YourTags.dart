@@ -7,7 +7,7 @@ import 'package:clickbyme/Tool/Chips.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
-import '../DB/AD_Home.dart';
+import '../DB/PageList.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/Shimmer_DayLog.dart';
 
@@ -84,17 +84,15 @@ Widget makeBody(BuildContext context, TabController tabController_tags,
     Home_Rec_title(sub: '사용자의 태그 보관함'),
     Home_Rec_title(sub: '분석'),
   ];
-  final List<AD_Home> _list_ad = [
-    AD_Home(
+  final List<PageList> _list_ad = [
+    PageList(
       id: '0',
       title: '데이로그 관리 탭이 신설되었습니다.',
-      person_num: 3,
       date: DateTime.now(),
     ),
-    AD_Home(
+    PageList(
       id: '1',
       title: '챌린지 관리 탭이 신설되었습니다.',
-      person_num: 4,
       date: DateTime.now(),
     ),
   ];

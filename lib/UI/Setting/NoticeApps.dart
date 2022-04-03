@@ -1,38 +1,32 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-
-import '../../DB/AD_Home.dart';
+import '../../DB/PageList.dart';
 import '../../Sub/NoticePage.dart';
 NoticeApps(BuildContext context, PageController pcontroll) {
-  final List<AD_Home> _list_ad = [
-    AD_Home(
+  final List<PageList> _list_ad = [
+    PageList(
       id: '0',
       title: '새로운 공지사항이 등록되었습니다.',
-      person_num: 3,
       date: DateTime.now(),
     ),
-    AD_Home(
+    PageList(
       id: '1',
       title: '데이로그 관리 탭이 신설되었습니다.',
-      person_num: 3,
       date: DateTime.now(),
     ),
-    AD_Home(
+    PageList(
       id: '2',
       title: '챌린지 관리 탭이 신설되었습니다.',
-      person_num: 4,
       date: DateTime.now(),
     ),
-    AD_Home(
+    PageList(
       id: '3',
       title: '페이지마크 관리 탭이 신설되었습니다.',
-      person_num: 5,
       date: DateTime.now(),
     ),
-    AD_Home(
+    PageList(
       id: '4',
-      title: '개인키 관리 탭이 신설되었습니다.',
-      person_num: 5,
+      title: '탐색기록 관리 탭이 신설되었습니다.',
       date: DateTime.now(),
     )
   ];
@@ -88,7 +82,7 @@ NoticeApps(BuildContext context, PageController pcontroll) {
   );
 }
 
-NoticeClip(context, List<AD_Home> list_ad, PageController pcontroll) {
+NoticeClip(context, List<PageList> list_ad, PageController pcontroll) {
   return Padding(
     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
     child: SizedBox(

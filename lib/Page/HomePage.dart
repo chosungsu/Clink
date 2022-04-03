@@ -1,12 +1,15 @@
 import 'package:clickbyme/DB/TODO.dart';
+import 'package:clickbyme/Futures/quickmenuasync.dart';
 import 'package:clickbyme/Tool/Shimmer_home.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import '../Futures/homeasync.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/UserChoice.dart';
 import '../UI/Home/UserPicks.dart';
+import '../route.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,12 +36,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-        body: Stack(
-      children: [
-        DrawerScreen(),
-        HomeUi(),
-      ],
-    ));
+      body: Stack(
+        children: [
+          DrawerScreen(),
+          RefreshIndicator(
+              child: HomeUi(),
+              onRefresh: () async {
+                Navigator.of(context).pushReplacement(
+                  PageTransition(
+                    type: PageTransitionType.bottomToTop,
+                    child: const MyHomePage(
+                      title: 'HabitMind',
+                      index: 0,
+                    ),
+                  ),
+                );
+              })
+        ],
+      ),
+    );
   }
 
   HomeUi() {
@@ -54,7 +70,8 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             child: Container(
               padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.01,),
+                top: MediaQuery.of(context).size.height * 0.01,
+              ),
               alignment: Alignment.topLeft,
               color: Colors.deepPurple.shade200,
               child: Row(
@@ -92,13 +109,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(
                       child: const Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text('StormDot',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      )),
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text('StormDot',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                  )),
                 ],
               ),
             ),
@@ -113,7 +130,8 @@ class _HomePageState extends State<HomePage> {
                     top: BorderSide(
                         width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
                     left: BorderSide(
-                        width: 1.0, color: const Color.fromARGB(255, 255, 214, 214)),
+                        width: 1.0,
+                        color: const Color.fromARGB(255, 255, 214, 214)),
                     right: const BorderSide(
                         width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
                     bottom: const BorderSide(

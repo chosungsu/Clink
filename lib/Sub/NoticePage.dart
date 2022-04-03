@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
-
-import '../DB/AD_Home.dart';
+import '../DB/PageList.dart';
 import '../Tool/NoBehavior.dart';
 
 class NoticePage extends StatefulWidget {
@@ -11,29 +9,25 @@ class NoticePage extends StatefulWidget {
 }
 
 class _NoticePageState extends State<NoticePage> {
-  final List<AD_Home> _list_ad = [
-    AD_Home(
+  final List<PageList> _list_ad = [
+    PageList(
       id: '0',
       title: '데이로그 관리 탭이 신설되었습니다.',
-      person_num: 3,
       date: DateTime.now(),
     ),
-    AD_Home(
+    PageList(
       id: '1',
       title: '챌린지 관리 탭이 신설되었습니다.',
-      person_num: 4,
       date: DateTime.now(),
     ),
-    AD_Home(
+    PageList(
       id: '2',
       title: '페이지마크 관리 탭이 신설되었습니다.',
-      person_num: 5,
       date: DateTime.now(),
     ),
-    AD_Home(
+    PageList(
       id: '3',
       title: '개인키 관리 탭이 신설되었습니다.',
-      person_num: 5,
       date: DateTime.now(),
     )
   ];
@@ -65,7 +59,7 @@ class _NoticePageState extends State<NoticePage> {
 }
 
 // 바디 만들기
-Widget makeBody(BuildContext context, List<AD_Home> list_ad) {
+Widget makeBody(BuildContext context, List<PageList> list_ad) {
   return Neumorphic(
       style: const NeumorphicStyle(
         shape: NeumorphicShape.concave,
