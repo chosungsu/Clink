@@ -1,23 +1,28 @@
 import 'package:clickbyme/Enums/Drawer_item.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../route.dart';
+
 class DrawerScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _DrawerScreenState();
 }
 
 class _DrawerScreenState extends State<DrawerScreen> {
+  int page_index = Hive.box('user_setting').get('page_index');
+  late bool selected;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 70, top: 70, left: 30),
+      width: 50,
       color: Colors.deepPurple.shade100,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: drawerItems.map((element) {
+          selected = drawerItems.indexOf(element) == page_index;
           return Padding(
-              padding: EdgeInsets.only(bottom: 50),
+              padding: const EdgeInsets.only(bottom: 50),
               child: InkWell(
                 onTap: () {
                   if (element.containsValue(Icons.home)) {
@@ -30,6 +35,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         ),
                       ),
                     );
+                    Hive.box('user_setting').put('page_index', 0);
                   } else if (element.containsValue(Icons.explore)) {
                     Navigator.of(context).pushReplacement(
                       PageTransition(
@@ -40,6 +46,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         ),
                       ),
                     );
+                    Hive.box('user_setting').put('page_index', 1);
                   } else {
                     Navigator.of(context).pushReplacement(
                       PageTransition(
@@ -50,15 +57,28 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         ),
                       ),
                     );
+                    Hive.box('user_setting').put('page_index', 2);
                   }
                 },
-                child: Row(
+                child: Column(
                   children: [
-                    Icon(element['icon'], color: Colors.white),
+                    selected
+                        ? Icon(element['icon'], color: Colors.white)
+                        : Icon(element['icon'], color: Colors.blueGrey),
                     const SizedBox(
-                      width: 20,
+                      height: 20,
                     ),
-                    element['title'],
+                    selected
+                        ? Text(element['title'],
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20))
+                        : Text(element['title'],
+                            style: const TextStyle(
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20)),
                   ],
                 ),
               ));

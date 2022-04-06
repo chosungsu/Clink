@@ -38,24 +38,31 @@ ListViewChipRecommend(
                             ],
                           )),
                       InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: FeedPage(),
-                                  type:
-                                      PageTransitionType.leftToRightWithFade));
-                        },
-                        child: NeumorphicIcon(
-                          Icons.arrow_forward_ios,
-                          size: 20,
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              color: Colors.deepPurpleAccent.shade100,
-                              lightSource: LightSource.topLeft),
-                        ),
-                      ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: FeedPage(),
+                                    type: PageTransitionType
+                                        .leftToRightWithFade));
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 25,
+                            height: 25,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade200),
+                            child: NeumorphicIcon(
+                              Icons.arrow_forward_ios,
+                              size: 20,
+                              style: NeumorphicStyle(
+                                  shape: NeumorphicShape.convex,
+                                  depth: 2,
+                                  color: Colors.deepPurpleAccent.shade100,
+                                  lightSource: LightSource.topLeft),
+                            ),
+                          )),
                     ],
                   )),
               SizedBox(

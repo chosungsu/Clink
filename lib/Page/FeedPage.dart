@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../DB/Contents.dart';
 import '../DB/Home_Rec_title.dart';
 import '../DB/TODO.dart';
@@ -164,8 +165,9 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Container(
-              color: Colors.deepPurple.shade200,
+              color: Colors.deepPurple.shade100,
               padding: EdgeInsets.only(
+                left: 10,
                 top: MediaQuery.of(context).size.height * 0.01,),
               alignment: Alignment.topLeft,
               child: Row(
@@ -173,32 +175,56 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                   SizedBox(
                     width: 50,
                     child: isdraweropen
-                        ? IconButton(
-                            onPressed: () {
-                              setState(() {
-                                xoffset = 0;
-                                yoffset = 0;
-                                scalefactor = 1;
-                                isdraweropen = false;
-                              });
-                            },
-                            icon: Icon(Icons.keyboard_arrow_left),
-                            color: Colors.white,
-                            iconSize: 30,
-                          )
-                        : IconButton(
-                            onPressed: () {
-                              setState(() {
-                                xoffset = 180;
-                                yoffset = 100;
-                                scalefactor = 0.8;
-                                isdraweropen = true;
-                              });
-                            },
-                            icon: Icon(Icons.menu),
-                            color: Colors.white,
-                            iconSize: 30,
-                          ),
+                        ? InkWell(
+                              onTap: () {
+                                setState(() {
+                                  xoffset = 0;
+                                  yoffset = 0;
+                                  scalefactor = 1;
+                                  isdraweropen = false;
+                                });
+                              },
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.deepPurple.shade200),
+                                child: NeumorphicIcon(
+                                  Icons.keyboard_arrow_left,
+                                  size: 30,
+                                  style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.concave,
+                                      surfaceIntensity: 0.5,
+                                      color: Colors.white,
+                                      lightSource: LightSource.topLeft),
+                                ),
+                              ))
+                          : InkWell(
+                              onTap: () {
+                                setState(() {
+                                  xoffset = 50;
+                                  yoffset = 0;
+                                  scalefactor = 1;
+                                  isdraweropen = true;
+                                });
+                              },
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.deepPurple.shade200),
+                                child: NeumorphicIcon(
+                                  Icons.menu,
+                                  size: 30,
+                                  style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.concave,
+                                      surfaceIntensity: 0.5,
+                                      color: Colors.white,
+                                      lightSource: LightSource.topLeft),
+                                ),
+                              ))
                   ),
                   SizedBox(
                       child: const Padding(
@@ -235,7 +261,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                      UserPicks(context),
+                      //UserPicks(context),
                     ])),
               ),
             ),

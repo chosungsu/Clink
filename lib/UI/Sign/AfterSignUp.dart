@@ -27,12 +27,11 @@ showAfterSignUp(
       ),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(
-            width: 1,
-            color: Colors.orange,
-          ),
-          borderRadius: BorderRadius.circular(16.0)
-        ),
+            border: Border.all(
+              width: 1,
+              color: Colors.orange,
+            ),
+            borderRadius: BorderRadius.circular(16.0)),
         //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.
         height: 80,
         child: Center(
@@ -74,15 +73,22 @@ showAfterSignUp(
                             ),
                           ],
                         )),
-                    NeumorphicIcon(
-                      Icons.arrow_forward_ios,
-                      size: 20,
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          depth: 2,
-                          color: Colors.deepPurpleAccent.shade100,
-                          lightSource: LightSource.topLeft),
-                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.grey.shade200),
+                      child: NeumorphicIcon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.convex,
+                            depth: 2,
+                            color: Colors.deepPurpleAccent.shade100,
+                            lightSource: LightSource.topLeft),
+                      ),
+                    )
                   ],
                 ),
               )),

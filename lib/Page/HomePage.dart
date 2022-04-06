@@ -2,6 +2,7 @@ import 'package:clickbyme/DB/TODO.dart';
 import 'package:clickbyme/Futures/quickmenuasync.dart';
 import 'package:clickbyme/Tool/Shimmer_home.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
@@ -25,11 +26,18 @@ class _HomePageState extends State<HomePage> {
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
-
+  PageController _pController = PageController();
   @override
   initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _pController.dispose();
   }
 
   @override
@@ -40,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           DrawerScreen(),
           RefreshIndicator(
-              child: HomeUi(),
+              child: HomeUi(_pController),
               onRefresh: () async {
                 Navigator.of(context).pushReplacement(
                   PageTransition(
@@ -51,13 +59,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 );
+                Hive.box('user_setting').put('page_index', 0);
               })
         ],
       ),
     );
   }
 
-  HomeUi() {
+  HomeUi(PageController pController) {
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
@@ -70,45 +79,71 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             child: Container(
               padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.01,
+                top: MediaQuery.of(context).size.height * 0.02,
+                left: 10,
               ),
               alignment: Alignment.topLeft,
-              color: Colors.deepPurple.shade200,
+              color: Colors.deepPurple.shade100,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 50,
-                    child: isdraweropen
-                        ? IconButton(
-                            onPressed: () {
-                              setState(() {
-                                xoffset = 0;
-                                yoffset = 0;
-                                scalefactor = 1;
-                                isdraweropen = false;
-                              });
-                            },
-                            icon: const Icon(Icons.keyboard_arrow_left),
-                            color: Colors.white,
-                            iconSize: 30,
-                          )
-                        : IconButton(
-                            onPressed: () {
-                              setState(() {
-                                xoffset = 180;
-                                yoffset = 100;
-                                scalefactor = 0.8;
-                                isdraweropen = true;
-                              });
-                            },
-                            icon: const Icon(Icons.menu),
-                            color: Colors.white,
-                            iconSize: 30,
-                          ),
-                  ),
-                  SizedBox(
-                      child: const Padding(
+                      width: 50,
+                      child: isdraweropen
+                          ? InkWell(
+                              onTap: () {
+                                setState(() {
+                                  xoffset = 0;
+                                  yoffset = 0;
+                                  scalefactor = 1;
+                                  isdraweropen = false;
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.deepPurple.shade200),
+                                child: NeumorphicIcon(
+                                  Icons.keyboard_arrow_left,
+                                  size: 30,
+                                  style: NeumorphicStyle(
+                                      shape: NeumorphicShape.concave,
+                                      surfaceIntensity: 0.5,
+                                      color: Colors.white,
+                                      lightSource: LightSource.topLeft),
+                                ),
+                              ))
+                          : InkWell(
+                              onTap: () {
+                                setState(() {
+                                  xoffset = 50;
+                                  yoffset = 0;
+                                  scalefactor = 1;
+                                  isdraweropen = true;
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.deepPurple.shade200),
+                                child: NeumorphicIcon(
+                                  Icons.menu,
+                                  size: 30,
+                                  style: NeumorphicStyle(
+                                      shape: NeumorphicShape.concave,
+                                      surfaceIntensity: 0.5,
+                                      color: Colors.white,
+                                      lightSource: LightSource.topLeft),
+                                ),
+                              ))),
+                  const SizedBox(
+                      child: Padding(
                     padding: EdgeInsets.only(left: 20),
                     child: Text('StormDot',
                         style: TextStyle(
@@ -126,19 +161,18 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(top: 20),
               decoration: const BoxDecoration(
                   color: Colors.white,
-                  border: const Border(
+                  border: Border(
                     top: BorderSide(
                         width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
                     left: BorderSide(
-                        width: 1.0,
-                        color: const Color.fromARGB(255, 255, 214, 214)),
-                    right: const BorderSide(
                         width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
-                    bottom: const BorderSide(
+                    right: BorderSide(
+                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
+                    bottom: BorderSide(
                         width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
                   ),
                   borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(20),
+                    topLeft: Radius.circular(20),
                   )),
               child: ScrollConfiguration(
                 behavior: NoBehavior(),
@@ -146,8 +180,6 @@ class _HomePageState extends State<HomePage> {
                     child: StatefulBuilder(builder: (_, StateSetter setState) {
                   return Column(
                     children: [
-                      UserPicks(context),
-                      //AD(context)
                       FutureBuilder<List<TODO>>(
                         future: homeasync(
                             selectedDay), // a previously-obtained Future<String> or null
@@ -156,7 +188,8 @@ class _HomePageState extends State<HomePage> {
                           if (snapshot.hasData &&
                               snapshot.connectionState ==
                                   ConnectionState.done) {
-                            return UserChoice(context, snapshot.data!);
+                            return UserChoice(
+                                context, snapshot.data!, pController);
                           } else {
                             return Column(
                               children: [

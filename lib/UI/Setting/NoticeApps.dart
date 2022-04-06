@@ -2,6 +2,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../DB/PageList.dart';
 import '../../Sub/NoticePage.dart';
+
 NoticeApps(BuildContext context, PageController pcontroll) {
   final List<PageList> _list_ad = [
     PageList(
@@ -56,23 +57,30 @@ NoticeApps(BuildContext context, PageController pcontroll) {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: NoticePage(),
-                              type: PageTransitionType.leftToRightWithFade));
-                    },
-                    child: NeumorphicIcon(
-                      Icons.arrow_forward_ios,
-                      size: 20,
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          depth: 2,
-                          color: Colors.deepPurpleAccent.shade100,
-                          lightSource: LightSource.topLeft),
-                    ),
-                  ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: NoticePage(),
+                                type: PageTransitionType.leftToRightWithFade));
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 25,
+                        height: 25,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey.shade200),
+                        child: NeumorphicIcon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
+                          style: NeumorphicStyle(
+                              shape: NeumorphicShape.convex,
+                              depth: 2,
+                              color: Colors.deepPurpleAccent.shade100,
+                              lightSource: LightSource.topLeft),
+                        ),
+                      )),
                 ],
               )),
           NoticeClip(context, _list_ad, pcontroll),
