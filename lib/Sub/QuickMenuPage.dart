@@ -50,9 +50,9 @@ class _QuickMenuPageState extends State<QuickMenuPage> {
           width: MediaQuery.of(context).size.width,
           child: Container(
             padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.01, right: 10),
+                top: MediaQuery.of(context).size.height * 0.02, right: 10),
             alignment: Alignment.topLeft,
-            color: Colors.deepPurple.shade200,
+            color: Colors.deepPurple.shade100,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

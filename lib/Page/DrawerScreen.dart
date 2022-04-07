@@ -16,7 +16,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Widget build(BuildContext context) {
     return Container(
       width: 50,
-      color: Colors.deepPurple.shade100,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: drawerItems.map((element) {
@@ -63,20 +65,20 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 child: Column(
                   children: [
                     selected
-                        ? Icon(element['icon'], color: Colors.white)
-                        : Icon(element['icon'], color: Colors.blueGrey),
+                        ? Icon(element['icon'], color: Colors.deepPurple.shade300)
+                        : Icon(element['icon'], color: Colors.blueGrey.shade100),
                     const SizedBox(
                       height: 20,
                     ),
                     selected
                         ? Text(element['title'],
-                            style: const TextStyle(
-                                color: Colors.white,
+                            style: TextStyle(
+                                color: Colors.deepPurple.shade300,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20))
                         : Text(element['title'],
-                            style: const TextStyle(
-                                color: Colors.blueGrey,
+                            style: TextStyle(
+                                color: Colors.blueGrey.shade100,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20)),
                   ],

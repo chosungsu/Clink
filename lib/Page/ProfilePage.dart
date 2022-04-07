@@ -51,13 +51,13 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         body: Stack(
-      children: [
-        DrawerScreen(),
-        ProfileBody(context, _pcontroll),
-      ],
-    ));
+          children: [
+            DrawerScreen(),
+            ProfileBody(context, _pcontroll),
+          ],
+        ));
   }
 
   Widget ProfileBody(BuildContext context, PageController pcontroll) {
@@ -65,127 +65,99 @@ class _ProfilePageState extends State<ProfilePage> {
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
       duration: Duration(milliseconds: 250),
-      child: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                    top: BorderSide(
-                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
-                    left: BorderSide(
-                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
-                    right: BorderSide(
-                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
-                    bottom: BorderSide(
-                        width: 1.0, color: Color.fromARGB(255, 255, 214, 214)),
-                  ),
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(20),
-                  )),
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1,),
-              child: ScrollConfiguration(
-                behavior: NoBehavior(),
-                child: SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      UserDetails(context),
-                      NoticeApps(context, pcontroll),
-                      UserSettings(context),
-                    ])),
-              ),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-            width: MediaQuery.of(context).size.width,
-            child: Container(
-              padding: EdgeInsets.only(
-                left: 10,
-                top: MediaQuery.of(context).size.height * 0.02, 
-                bottom: MediaQuery.of(context).size.height * 0.02),
-              alignment: Alignment.topLeft,
-              decoration: BoxDecoration(
-                  color: Colors.deepPurple.shade100,
-                  borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(20),
-                  )),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 50,
-                    child: isdraweropen
-                        ? InkWell(
-                              onTap: () {
-                                setState(() {
-                                  xoffset = 0;
-                                  yoffset = 0;
-                                  scalefactor = 1;
-                                  isdraweropen = false;
-                                });
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.deepPurple.shade200),
-                                child: NeumorphicIcon(
-                                  Icons.keyboard_arrow_left,
-                                  size: 30,
-                                  style: const NeumorphicStyle(
-                                      shape: NeumorphicShape.concave,
-                                      surfaceIntensity: 0.5,
-                                      color: Colors.white,
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              ))
-                          : InkWell(
-                              onTap: () {
-                                setState(() {
-                                  xoffset = 50;
-                                  yoffset = 0;
-                                  scalefactor = 1;
-                                  isdraweropen = true;
-                                });
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.deepPurple.shade200),
-                                child: NeumorphicIcon(
-                                  Icons.menu,
-                                  size: 30,
-                                  style: const NeumorphicStyle(
-                                      shape: NeumorphicShape.concave,
-                                      surfaceIntensity: 0.5,
-                                      color: Colors.white,
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              ))
-                  ),
-                  SizedBox(
-                      child: const Padding(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(padding: EdgeInsets.only(left: 10)),
+                      SizedBox(
+                          width: 50,
+                          child: isdraweropen
+                              ? InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      xoffset = 0;
+                                      yoffset = 0;
+                                      scalefactor = 1;
+                                      isdraweropen = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 30,
+                                    height: 30,
+                                    child: NeumorphicIcon(
+                                      Icons.keyboard_arrow_left,
+                                      size: 30,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          surfaceIntensity: 0.5,
+                                          color: Colors.grey.shade300,
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  ))
+                              : InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      xoffset = 50;
+                                      yoffset = 0;
+                                      scalefactor = 1;
+                                      isdraweropen = true;
+                                    });
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 30,
+                                    height: 30,
+                                    child: NeumorphicIcon(
+                                      Icons.menu,
+                                      size: 30,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          surfaceIntensity: 0.5,
+                                          depth: 2,
+                                          color: Colors.grey.shade300,
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  ))),
+                      const SizedBox(
+                          child: Padding(
                         padding: EdgeInsets.only(left: 20),
-                        child: Text('전체 설정',
+                        child: Text('전체설정',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black45,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold)),
                       )),
-                ],
-              ),
-            ),
-          ),
-        ],
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.85,
+                  child: ScrollConfiguration(
+                    behavior: NoBehavior(),
+                    child: SingleChildScrollView(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                          UserDetails(context),
+                          NoticeApps(context, pcontroll),
+                          UserSettings(context),
+                        ])),
+                  ),
+                ),
+              ],
+            )),
       ),
     );
   }

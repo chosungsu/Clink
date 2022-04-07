@@ -1,3 +1,4 @@
+import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -42,12 +43,13 @@ DeleteUserVerify(BuildContext context, String name) {
             ElevatedButton(
               onPressed: () async {
                 //탈퇴 로직 구현
-                Navigator.of(context).pushReplacement(
+                /*Navigator.of(context).pushReplacement(
                   PageTransition(
                     type: PageTransitionType.bottomToTop,
                     child: const MyHomePage(title: 'HabitMind', index: 0,),
                   ),
-                );
+                );*/
+                GoToLogin(context);
                 Provider.of<GoogleSignInController>(context, listen: false)
                     .logout(context, name);
                 Provider.of<KakaoSignInController>(context, listen: false)
