@@ -1,9 +1,14 @@
 import 'package:clickbyme/DB/TODO.dart';
 import 'package:clickbyme/Tool/Shimmer_home.dart';
+import 'package:clickbyme/UI/Home/UserMain.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Futures/homeasync.dart';
+import '../Sub/DayLog.dart';
+import '../Sub/WritePost.dart';
+import '../Sub/YourTags.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/UserChoice.dart';
 import '../route.dart';
@@ -23,8 +28,9 @@ class _HomePageState extends State<HomePage> {
   double scalefactor = 1;
   bool isdraweropen = false;
   final PageController _pController = PageController();
+
   @override
-  initState() {
+  void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
   }
@@ -37,7 +43,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    
+    return SafeArea(
+        child: Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
@@ -49,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                   PageTransition(
                     type: PageTransitionType.bottomToTop,
                     child: const MyHomePage(
-                      title: 'HabitMind',
+                      title: 'StormDot',
                       index: 0,
                     ),
                   ),
@@ -58,16 +66,70 @@ class _HomePageState extends State<HomePage> {
               })
         ],
       ),
-    );
+      floatingActionButton: SpeedDial(
+        //animatedIcon: AnimatedIcons.menu_close,
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        backgroundColor: Colors.grey.shade300,
+        spacing: 12,
+        spaceBetweenChildren: 12,
+        children: [
+          SpeedDialChild(
+              child: Image.asset(
+                'assets/images/date.png',
+                width: 20,
+                height: 20,
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: DayLog(),
+                        type: PageTransitionType.leftToRightWithFade));
+              },
+              label: '일정 작성'),
+          SpeedDialChild(
+              child: Image.asset(
+                'assets/images/challenge.png',
+                width: 20,
+                height: 20,
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: WritePost(),
+                        type: PageTransitionType.leftToRightWithFade));
+              },
+              label: '챌린지 작성'),
+          SpeedDialChild(
+              child: Image.asset(
+                'assets/images/playlist.png',
+                width: 20,
+                height: 20,
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: YourTags(),
+                        type: PageTransitionType.leftToRightWithFade));
+              },
+              label: '뷰 작성'),
+        ],
+      ),
+    ));
   }
 
   HomeUi(PageController pController) {
+    double height =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
       duration: const Duration(milliseconds: 250),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height: height,
         child: Container(
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -75,7 +137,8 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.15,
+                  height: height *
+                      0.15,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -131,11 +194,11 @@ class _HomePageState extends State<HomePage> {
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))),
-                      const SizedBox(
+                      SizedBox(
                           child: Padding(
                         padding: EdgeInsets.only(left: 20),
-                        child: Text('StormDot',
-                            style: TextStyle(
+                        child: Text(widget.title.toString(),
+                            style: const TextStyle(
                                 color: Colors.black45,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold)),
@@ -144,13 +207,18 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.85,
+                  height: height *
+                      0.85,
                   child: ScrollConfiguration(
                     behavior: NoBehavior(),
                     child: SingleChildScrollView(child:
                         StatefulBuilder(builder: (_, StateSetter setState) {
                       return Column(
                         children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 20, right: 10),
+                            child: UserMain(context),
+                          ),
                           FutureBuilder<List<TODO>>(
                             future: homeasync(
                                 selectedDay), // a previously-obtained Future<String> or null

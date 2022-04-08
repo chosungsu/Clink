@@ -12,7 +12,7 @@ GoToMain(BuildContext context) {
       PageTransition(
         type: PageTransitionType.bottomToTop,
         child: const MyHomePage(
-          title: 'HabitMind',
+          title: 'StormDot',
           index: 0,
         ),
       ),

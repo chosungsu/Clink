@@ -66,15 +66,16 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
         });
       }
     });*/
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            DrawerScreen(),
-            FeedBody(context),
-          ],
-        )
-        /*appBar: AppBar(
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          DrawerScreen(),
+          FeedBody(context),
+        ],
+      ),
+      /*appBar: AppBar(
           toolbarHeight: 130,
           backgroundColor: Colors.white,
           title: Container(
@@ -104,7 +105,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
           elevation: 0,
           automaticallyImplyLeading: false,
         ),*/
-        /*body: 
+      /*body: 
         CustomScrollView(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
@@ -151,16 +152,18 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
               child: ContentSub(
                       context, _tabController!, _list_recommend, contents))
           ],)*/
-        );
+    ));
   }
 
   Widget FeedBody(BuildContext context) {
+    double height =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
       duration: Duration(milliseconds: 250),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height: height,
         child: Container(
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -168,7 +171,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
             child: Column(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.15,
+                  height: height * 0.15,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -237,7 +240,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.85,
+                  height: height * 0.85,
                   child: ScrollConfiguration(
                     behavior: NoBehavior(),
                     child: SingleChildScrollView(

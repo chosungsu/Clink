@@ -91,7 +91,7 @@ LoginPlus(BuildContext context, bool ischecked) {
       const Text(
         '바쁜 일상 속 여유로운 티타임처럼\n'
         '모든 것들을 한 곳에서\n'
-        '조각조각 즐길 수 있는 HabitMind입니다.',
+        '조각조각 즐길 수 있는 StormDot입니다.',
         style: TextStyle(
           color: Colors.lightGreenAccent,
           fontSize: 20,
@@ -108,7 +108,7 @@ LoginPlus(BuildContext context, bool ischecked) {
             await Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(title: 'HabitMind', index: 0,),
+                child: const MyHomePage(title: 'StormDot', index: 0,),
               ),
             );
           },
@@ -126,7 +126,7 @@ LoginPlus(BuildContext context, bool ischecked) {
             await Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(title: 'HabitMind', index: 0,),
+                child: const MyHomePage(title: 'StormDot', index: 0,),
               ),
             );
           },

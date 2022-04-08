@@ -96,8 +96,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       );
     });
     checkForInitialMessage();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.bottom]);
+    /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.bottom]);*/
     scaleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),

@@ -12,7 +12,7 @@ UserChoice(BuildContext context,
 List<TODO> str_todo_list, PageController pController) {
   final List<Home_Rec_title> _list_recommend = [
     Home_Rec_title(sub: '오늘의 일정'),
-    Home_Rec_title(sub: '퀵메뉴'),
+    //Home_Rec_title(sub: '퀵메뉴'),
     Home_Rec_title(sub: '챌린지 진행도'),
     Home_Rec_title(sub: '이런 활동은 어떠신가요?'),
   ];
@@ -42,9 +42,9 @@ ContentSub(BuildContext context, List<Home_Rec_title> list_recommend,
   return Column(children: [
     ListViewDayTimeLine(
         context, list_recommend[0].sub.toString(), str_todo_list),
-    UserPicks(context, list_recommend[1].sub.toString(), pController),
-    ListViewHome(context, list_recommend[2].sub.toString(), _list_challenges),
-    ListViewChipRecommend(context, list_recommend[3].sub.toString(), _list_content),
+    //UserPicks(context, list_recommend[1].sub.toString(), pController),
+    ListViewHome(context, list_recommend[1].sub.toString(), _list_challenges),
+    ListViewChipRecommend(context, list_recommend[2].sub.toString(), _list_content),
   ]);
 }
 

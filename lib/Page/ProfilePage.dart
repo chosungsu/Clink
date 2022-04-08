@@ -50,23 +50,26 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            DrawerScreen(),
-            ProfileBody(context, _pcontroll),
-          ],
-        ));
+    return SafeArea(
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
+              children: [
+                DrawerScreen(),
+                ProfileBody(context, _pcontroll),
+              ],
+            )));
   }
 
   Widget ProfileBody(BuildContext context, PageController pcontroll) {
+    double height =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
       duration: Duration(milliseconds: 250),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height: height,
         child: Container(
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -74,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.15,
+                  height: height * 0.15,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -143,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.85,
+                  height: height * 0.85,
                   child: ScrollConfiguration(
                     behavior: NoBehavior(),
                     child: SingleChildScrollView(

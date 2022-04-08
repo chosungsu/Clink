@@ -1,9 +1,6 @@
 import 'dart:async';
-
 import 'package:clickbyme/Sub/DayLog.dart';
-import 'package:clickbyme/Sub/QuickMenuPage.dart';
 import 'package:clickbyme/Sub/WritePost.dart';
-import 'package:clickbyme/Sub/storepw.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../DB/PageList.dart';
@@ -43,13 +40,13 @@ UserPicks(BuildContext context, String s, PageController pController) {
                         ],
                       )),
                   InkWell(
-                      onTap: () {
+                      /*onTap: () {
                         Navigator.push(
                             context,
                             PageTransition(
                                 child: QuickMenuPage(),
                                 type: PageTransitionType.leftToRightWithFade));
-                      },
+                      },*/
                       child: Container(
                         alignment: Alignment.center,
                         width: 25,
@@ -220,12 +217,12 @@ Main_Pick(context, int i) {
                                               type: PageTransitionType
                                                   .leftToRightWithFade));
                                     } else {
-                                      Navigator.push(
+                                      /*Navigator.push(
                                           context,
                                           PageTransition(
                                               child: storepw(),
                                               type: PageTransitionType
-                                                  .leftToRightWithFade));
+                                                  .leftToRightWithFade));*/
                                     }
                                   },
                                   child: Padding(
@@ -312,12 +309,12 @@ Main_Pick(context, int i) {
                                               type: PageTransitionType
                                                   .leftToRightWithFade));
                                     } else {
-                                      Navigator.push(
+                                      /*Navigator.push(
                                           context,
                                           PageTransition(
                                               child: storepw(),
                                               type: PageTransitionType
-                                                  .leftToRightWithFade));
+                                                  .leftToRightWithFade));*/
                                     }
                                   },
                                   child: Padding(
@@ -413,12 +410,12 @@ Main_Pick(context, int i) {
                                               type: PageTransitionType
                                                   .leftToRightWithFade));
                                     } else {
-                                      Navigator.push(
+                                      /*Navigator.push(
                                           context,
                                           PageTransition(
                                               child: storepw(),
                                               type: PageTransitionType
-                                                  .leftToRightWithFade));
+                                                  .leftToRightWithFade));*/
                                     }
                                   },
                                   child: Padding(
@@ -514,12 +511,12 @@ Main_Pick(context, int i) {
                                               type: PageTransitionType
                                                   .leftToRightWithFade));
                                     } else {
-                                      Navigator.push(
+                                      /*Navigator.push(
                                           context,
                                           PageTransition(
                                               child: storepw(),
                                               type: PageTransitionType
-                                                  .leftToRightWithFade));
+                                                  .leftToRightWithFade));*/
                                     }
                                   },
                                   child: Padding(

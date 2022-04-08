@@ -11,7 +11,7 @@ Shimmer_home(BuildContext context) {
         child: Container(
           height: MediaQuery.of(context).size.height / 3.5 * 3,
           child: ListView.builder(
-              itemCount: 4,
+              itemCount: 3,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15),
