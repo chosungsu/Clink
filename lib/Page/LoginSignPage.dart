@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
+import '../Dialogs/destroyBackKey.dart';
 import '../route.dart';
 
 class LoginSignPage extends StatefulWidget {
@@ -18,40 +21,42 @@ class _LoginSignPageState extends State<LoginSignPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          makeBody(context, _ischecked),
-          const Divider(
-            height: 30,
-            color: Colors.grey,
-            thickness: 0.5,
-            indent: 30.0,
-            endIndent: 30.0,
-          ),
-          const Text(
-            '동의항목',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.bold, // bold
+      body: WillPopScope(
+        onWillPop: _onPop,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            makeBody(context, _ischecked),
+            const Divider(
+              height: 30,
+              color: Colors.grey,
+              thickness: 0.5,
+              indent: 30.0,
+              endIndent: 30.0,
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                      value: _ischecked,
-                      onChanged: (value) {
-                        setState(() {
-                          _ischecked = value!;
-                        });
-                      }),
-                  Flexible(
+            const Text(
+              '동의항목',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.bold, // bold
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                        value: _ischecked,
+                        onChanged: (value) {
+                          setState(() {
+                            _ischecked = value!;
+                          });
+                        }),
+                    Flexible(
                         fit: FlexFit.tight,
                         child: Row(
                           children: const [
@@ -65,7 +70,7 @@ class _LoginSignPageState extends State<LoginSignPage> {
                             ),
                           ],
                         ))
-                  /*_ischecked != false
+                    /*_ischecked != false
                       ? Flexible(
                         fit: FlexFit.tight,
                         child: Row(
@@ -94,13 +99,18 @@ class _LoginSignPageState extends State<LoginSignPage> {
                             ),
                           ],
                         ))*/
-                ],
-              )
-            ],
-          )
-        ],
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  Future<bool> _onPop() async {
+    return (await destroyBackKey(context)) ?? false;
   }
 }
 

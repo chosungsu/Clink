@@ -1,5 +1,7 @@
 import 'package:clickbyme/Page/LoginSignPage.dart';
+import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 
 showBeforeSignUp(BuildContext context) {
@@ -56,12 +58,7 @@ showBeforeSignUp(BuildContext context) {
                           primary: Colors.white,
                         ),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: LoginSignPage(),
-                                  type:
-                                      PageTransitionType.leftToRightWithFade));
+                          GoToLogin(context);
                         },
                         child: Center(
                           child: Row(

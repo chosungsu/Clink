@@ -100,19 +100,16 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     checkForInitialMessage();
     /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);*/
-    /*scaleController = AnimationController(
+    scaleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     )..addStatusListener(
         (status) {
           if (status == AnimationStatus.completed) {
-            if (Hive.box('user_info').get('id') != null ||
-                Hive.box('user_info').get('autologin') == true) {
-              GoToMain(context);
-            } else {
-              GoToLogin(context);
-            }
-
+            Hive.box('user_info').get('id') == null ||
+                            Hive.box('user_info').get('autologin') == false
+                            ? null
+                            : GoToMain(context);
             Timer(
               const Duration(milliseconds: 1000),
               () {
@@ -130,25 +127,19 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       setState(() {
         scaleController.forward();
       });
-    });*/
+    });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    //scaleController.dispose();
+    scaleController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Hive.box('user_info').get('id') == null ||
-                Hive.box('user_info').get('autologin') == false
-            ? body()
-            : GoToMain(context)
-      );
+    return Scaffold(backgroundColor: Colors.white, body: body());
   }
 
   checkForInitialMessage() async {
@@ -185,36 +176,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     ),
                   ),
                 )
-                /*Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    NeumorphicText(
-                    'StormDot',
-                    style: const NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: Colors.blueGrey,
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                    DefaultTextStyle(
-                      style: const TextStyle(fontSize: 20.0),
-                      child: AnimatedTextKit(
-                        animatedTexts: [
-                          TyperAnimatedText('나의 개인화 마인드트랙',
-                              speed: Duration(milliseconds: 150)),
-                        ],
-                        isRepeatingAnimation: true,
-                        repeatForever: true,
-                        //displayFullTextOnTap: false,
-                      ),
-                    ),
-                  ],
-                )*/
                 ),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
@@ -257,46 +218,25 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                                   )),
                             ],
                           )
-                        : const Text(
-                            '어서오세요',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 2 // bold
-                                ),
+                        : DefaultTextStyle(
+                            style: const TextStyle(fontSize: 15.0),
+                            child: AnimatedTextKit(
+                              animatedTexts: [
+                                TyperAnimatedText('로그인중입니다...',
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black
+                                    ),
+                                    speed: const Duration(milliseconds: 150)),
+                              ],
+                              isRepeatingAnimation: true,
+                              repeatForever: true,
+                              //displayFullTextOnTap: false,
+                            ),
                           ),
                   ],
                 )
-                /*Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SpinKitFadingCircle(
-                      color: Colors.white,
-                    ),
-                    Hive.box('user_info').get('id') == null ||
-                            Hive.box('user_info').get('autologin') == false
-                        ? const Text(
-                            '로그인 페이지 이동 중...',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 2 // bold
-                                ),
-                          )
-                        : const Text(
-                            '어서오세요',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 2 // bold
-                                ),
-                          )
-                  ],
-                )*/
                 ),
           ],
         ));
