@@ -49,7 +49,7 @@ DeleteUserVerify(BuildContext context, String name) {
                     child: const MyHomePage(title: 'HabitMind', index: 0,),
                   ),
                 );*/
-                GoToLogin(context);
+                GoToLogin2(context);
                 Provider.of<GoogleSignInController>(context, listen: false)
                     .logout(context, name);
                 Provider.of<KakaoSignInController>(context, listen: false)

@@ -142,32 +142,50 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double height =
-        MediaQuery.of(context).size.height - 
-        MediaQuery.of(context).padding.top;
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SizedBox(
-            height: height,
-            child: Column(
-              children: [
-                SizedBox(
-                    height: height * 0.55,
-                    child: Center(
-                      child: NeumorphicText(
-                        'StormDot',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.blueGrey,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        ),
-                      ),
-                    )
-                    /*Column(
+        body: Hive.box('user_info').get('id') == null ||
+                Hive.box('user_info').get('autologin') == false
+            ? body()
+            : GoToMain(context)
+      );
+  }
+
+  checkForInitialMessage() async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      PushNotification notifications = PushNotification(
+        title: initialMessage.notification?.title,
+        body: initialMessage.notification?.body,
+      );
+    }
+  }
+
+  body() {
+    double height =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    return SizedBox(
+        height: height,
+        child: Column(
+          children: [
+            SizedBox(
+                height: height * 0.55,
+                child: Center(
+                  child: NeumorphicText(
+                    'StormDot',
+                    style: const NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: Colors.blueGrey,
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  ),
+                )
+                /*Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -197,64 +215,60 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     ),
                   ],
                 )*/
-                    ),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: height * 0.45,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Hive.box('user_info').get('id') == null ||
-                                Hive.box('user_info').get('autologin') == false
-                            ? Column(
-                                children: [
-                                  ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.grey.shade400,
-                                      ),
-                                      onPressed: () {
-                                        GoToLogin(context);
-                                      },
-                                      child: Center(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Center(
-                                              child: NeumorphicText(
-                                                '로그인',
-                                                style: const NeumorphicStyle(
-                                                  shape: NeumorphicShape.flat,
-                                                  depth: 3,
-                                                  color: Colors.white,
-                                                ),
-                                                textStyle: NeumorphicTextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )),
-                                ],
-                              )
-                            : const Text(
-                                '어서오세요',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 2 // bold
+                ),
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: height * 0.45,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Hive.box('user_info').get('id') == null ||
+                            Hive.box('user_info').get('autologin') == false
+                        ? Column(
+                            children: [
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.grey.shade400,
+                                  ),
+                                  onPressed: () {
+                                    GoToLogin(context);
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            '로그인',
+                                            style: const NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Colors.white,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                              ),
-                        Hive.box('user_info').get('id') == null ||
-                                Hive.box('user_info').get('autologin') == false 
-                                ? const SizedBox.shrink()
-                                : GoToMain(context),
-                      ],
-                    )
-                    /*Column(
+                                  )),
+                            ],
+                          )
+                        : const Text(
+                            '어서오세요',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 2 // bold
+                                ),
+                          ),
+                  ],
+                )
+                /*Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -283,19 +297,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                           )
                   ],
                 )*/
-                    ),
-              ],
-            )));
-  }
-
-  checkForInitialMessage() async {
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      PushNotification notifications = PushNotification(
-        title: initialMessage.notification?.title,
-        body: initialMessage.notification?.body,
-      );
-    }
+                ),
+          ],
+        ));
   }
 }
