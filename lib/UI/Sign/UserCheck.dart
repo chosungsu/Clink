@@ -7,7 +7,7 @@ import '../../Page/LoginSignPage.dart';
 import '../../route.dart';
 
 GoToMain(BuildContext context) {
-  Timer? _time = Timer(const Duration(seconds: 0), () {
+  Timer? _time = Timer(const Duration(seconds: 3), () {
     Navigator.of(context).pushReplacement(
       PageTransition(
         type: PageTransitionType.bottomToTop,
@@ -24,12 +24,13 @@ GoToMain(BuildContext context) {
 
 GoToLogin(BuildContext context) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
-    Navigator.of(context).pushReplacement(
+    Navigator.push(
+      context, 
       PageTransition(
         type: PageTransitionType.bottomToTop,
         child: const LoginSignPage(),
       ),
-    );
+    )
   });
   return _time;
 }

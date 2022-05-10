@@ -32,7 +32,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       PageTransition(
                         type: PageTransitionType.rightToLeft,
                         child: const MyHomePage(
-                          title: 'HabitMind',
+                          title: 'StormDot',
                           index: 0,
                         ),
                       ),
@@ -43,7 +43,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       PageTransition(
                         type: PageTransitionType.rightToLeft,
                         child: const MyHomePage(
-                          title: 'HabitMind',
+                          title: 'StormDot',
                           index: 1,
                         ),
                       ),
@@ -54,7 +54,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       PageTransition(
                         type: PageTransitionType.rightToLeft,
                         child: const MyHomePage(
-                          title: 'HabitMind',
+                          title: 'StormDot',
                           index: 2,
                         ),
                       ),

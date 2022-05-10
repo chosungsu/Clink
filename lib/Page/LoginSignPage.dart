@@ -20,43 +20,82 @@ class _LoginSignPageState extends State<LoginSignPage> {
       backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           makeBody(context, _ischecked),
+          const Divider(
+            height: 30,
+            color: Colors.grey,
+            thickness: 0.5,
+            indent: 30.0,
+            endIndent: 30.0,
+          ),
           const Text(
-            '자동 로그인',
+            '동의항목',
             style: TextStyle(
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.bold, // bold
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Checkbox(
-                  value: _ischecked,
-                  onChanged: (value) {
-                    setState(() {
-                      _ischecked = value!;
-                    });
-                  }),
-              _ischecked != false
-                  ? const Text(
-                      '자동 로그인 on',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal, // bold
-                      ),
-                    )
-                  : const Text(
-                      '자동 로그인 off',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal, // bold
-                      ),
-                    ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                      value: _ischecked,
+                      onChanged: (value) {
+                        setState(() {
+                          _ischecked = value!;
+                        });
+                      }),
+                  Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: const [
+                            Text(
+                              '(선택)자동 로그인 사용',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  letterSpacing: 2),
+                            ),
+                          ],
+                        ))
+                  /*_ischecked != false
+                      ? Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: const [
+                            Text(
+                              '(선택)자동 로그인 사용',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  letterSpacing: 2),
+                            ),
+                          ],
+                        ))
+                      : Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: const [
+                            Text(
+                              '(선택)자동 로그인 사용',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  letterSpacing: 2),
+                            ),
+                          ],
+                        ))*/
+                ],
+              )
             ],
           )
         ],
@@ -67,39 +106,35 @@ class _LoginSignPageState extends State<LoginSignPage> {
 
 // 바디 만들기
 Widget makeBody(BuildContext context, bool ischecked) {
+  double height =
+      MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
   return SingleChildScrollView(
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Center(child: LoginPlus(context, ischecked)),
-        const Divider(
-            height: 30,
-            color: Colors.grey,
-            thickness: 0.5,
-            indent: 30.0,
-            endIndent: 30.0,
-          ),
+        SizedBox(
+          height: height * 0.75,
+          child: LoginPlus(context, ischecked, height),
+        ),
       ],
     ),
   );
 }
 
-LoginPlus(BuildContext context, bool ischecked) {
+LoginPlus(BuildContext context, bool ischecked, double height) {
   return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       const Text(
-        '바쁜 일상 속 여유로운 티타임처럼\n'
-        '모든 것들을 한 곳에서\n'
-        '조각조각 즐길 수 있는 StormDot입니다.',
+        '간단 소셜 로그인',
         style: TextStyle(
-          color: Colors.lightGreenAccent,
+          color: Colors.blueGrey,
           fontSize: 20,
           fontWeight: FontWeight.w600, // bold
         ),
       ),
-      const SizedBox(
-        height: 100,
+      SizedBox(
+        height: height * 0.25,
       ),
       InkWell(
           onTap: () async {
@@ -108,16 +143,23 @@ LoginPlus(BuildContext context, bool ischecked) {
             await Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(title: 'StormDot', index: 0,),
+                child: const MyHomePage(
+                  title: 'StormDot',
+                  index: 0,
+                ),
               ),
             );
           },
           child: SizedBox(
-            width: 250 * (MediaQuery.of(context).size.width / 392),
-            child: Image.asset('assets/images/google_signin.png'),
+            width: 200 * (MediaQuery.of(context).size.width / 392),
+            height: 50,
+            child: Image.asset(
+              'assets/images/google_signin.png',
+              fit: BoxFit.fitWidth,
+            ),
           )),
       const SizedBox(
-        height: 5,
+        height: 10,
       ),
       InkWell(
           onTap: () async {
@@ -126,13 +168,20 @@ LoginPlus(BuildContext context, bool ischecked) {
             await Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(title: 'StormDot', index: 0,),
+                child: const MyHomePage(
+                  title: 'StormDot',
+                  index: 0,
+                ),
               ),
             );
           },
           child: SizedBox(
-            width: 250 * (MediaQuery.of(context).size.width / 392),
-            child: Image.asset('assets/images/kakao_login_medium_wide.png'),
+            width: 200 * (MediaQuery.of(context).size.width / 392),
+            height: 50,
+            child: Image.asset(
+              'assets/images/kakao_login_medium_wide.png',
+              fit: BoxFit.fitWidth,
+            ),
           )),
     ],
   );
