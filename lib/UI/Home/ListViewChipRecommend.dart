@@ -1,9 +1,11 @@
 import 'package:clickbyme/Page/FeedPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../DB/Contents.dart';
+import '../../route.dart';
 
 ListViewChipRecommend(
     BuildContext context, String string, List<Contents> list_content) {
@@ -39,12 +41,16 @@ ListViewChipRecommend(
                           )),
                       InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: FeedPage(),
-                                    type: PageTransitionType
-                                        .leftToRightWithFade));
+                            Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const MyHomePage(
+                                  title: 'StormDot',
+                                  index: 1,
+                                ),
+                              ),
+                            );
+                            Hive.box('user_setting').put('page_index', 1);
                           },
                           child: Container(
                             alignment: Alignment.center,

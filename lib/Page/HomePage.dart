@@ -1,6 +1,5 @@
 import 'package:clickbyme/DB/TODO.dart';
 import 'package:clickbyme/Tool/Shimmer_home.dart';
-import 'package:clickbyme/UI/Home/UserMain.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -43,79 +42,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           DrawerScreen(),
-          RefreshIndicator(
-              child: HomeUi(_pController),
-              onRefresh: () async {
-                Navigator.of(context).pushReplacement(
-                  PageTransition(
-                    type: PageTransitionType.bottomToTop,
-                    child: const MyHomePage(
-                      title: 'StormDot',
-                      index: 0,
-                    ),
-                  ),
-                );
-                Hive.box('user_setting').put('page_index', 0);
-              })
-        ],
-      ),
-      floatingActionButton: SpeedDial(
-        //animatedIcon: AnimatedIcons.menu_close,
-        icon: Icons.add,
-        activeIcon: Icons.close,
-        backgroundColor: Colors.grey.shade300,
-        spacing: 12,
-        spaceBetweenChildren: 12,
-        children: [
-          SpeedDialChild(
-              child: Image.asset(
-                'assets/images/date.png',
-                width: 20,
-                height: 20,
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: DayLog(),
-                        type: PageTransitionType.leftToRightWithFade));
-              },
-              label: '일정 작성'),
-          SpeedDialChild(
-              child: Image.asset(
-                'assets/images/challenge.png',
-                width: 20,
-                height: 20,
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: WritePost(),
-                        type: PageTransitionType.leftToRightWithFade));
-              },
-              label: '챌린지 작성'),
-          SpeedDialChild(
-              child: Image.asset(
-                'assets/images/playlist.png',
-                width: 20,
-                height: 20,
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: YourTags(),
-                        type: PageTransitionType.leftToRightWithFade));
-              },
-              label: '뷰 작성'),
+          HomeUi(_pController),
         ],
       ),
     ));
@@ -137,8 +70,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: height *
-                      0.15,
+                  height: height * 0.15,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -195,30 +127,52 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ))),
                       SizedBox(
+                        width: MediaQuery.of(context).size.width - 60,
                           child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(widget.title.toString(),
-                            style: const TextStyle(
-                                color: Colors.black45,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      )),
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      widget.title.toString(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.black45),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 25,
+                                    height: 25,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white),
+                                    child: NeumorphicIcon(
+                                      Icons.add_circle,
+                                      size: 25,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          color:
+                                              Colors.black45,
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  )
+                                ],
+                              ))),
                     ],
                   ),
                 ),
                 SizedBox(
-                  height: height *
-                      0.85,
+                  height: height * 0.85,
                   child: ScrollConfiguration(
                     behavior: NoBehavior(),
                     child: SingleChildScrollView(child:
                         StatefulBuilder(builder: (_, StateSetter setState) {
                       return Column(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 20, right: 10),
-                            child: UserMain(context),
-                          ),
                           FutureBuilder<List<TODO>>(
                             future: homeasync(
                                 selectedDay), // a previously-obtained Future<String> or null
