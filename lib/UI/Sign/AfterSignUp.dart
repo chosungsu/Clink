@@ -78,14 +78,14 @@ showAfterSignUp(
                       width: 25,
                       height: 25,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.grey.shade200),
+                          shape: BoxShape.rectangle, color: Colors.grey.shade200),
                       child: NeumorphicIcon(
-                        Icons.arrow_forward_ios,
+                        Icons.navigate_next,
                         size: 20,
                         style: NeumorphicStyle(
                             shape: NeumorphicShape.convex,
                             depth: 2,
-                            color: Colors.deepPurpleAccent.shade100,
+                            color: Colors.black,
                             lightSource: LightSource.topLeft),
                       ),
                     )

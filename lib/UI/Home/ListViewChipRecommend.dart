@@ -45,7 +45,7 @@ ListViewChipRecommend(
                               PageTransition(
                                 type: PageTransitionType.rightToLeft,
                                 child: const MyHomePage(
-                                  title: 'StormDot',
+                                  title: 'BOnd',
                                   index: 1,
                                 ),
                               ),
@@ -60,12 +60,12 @@ ListViewChipRecommend(
                                 shape: BoxShape.circle,
                                 color: Colors.grey.shade200),
                             child: NeumorphicIcon(
-                              Icons.arrow_forward_ios,
+                              Icons.navigate_next,
                               size: 20,
                               style: NeumorphicStyle(
                                   shape: NeumorphicShape.convex,
                                   depth: 2,
-                                  color: Colors.deepPurpleAccent.shade100,
+                                  color: Colors.black,
                                   lightSource: LightSource.topLeft),
                             ),
                           )),

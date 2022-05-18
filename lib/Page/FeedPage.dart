@@ -1,3 +1,4 @@
+import 'package:clickbyme/UI/Explore/WidgetChoose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../DB/Contents.dart';
@@ -15,147 +16,37 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
-  /*TabController? _tabController;
-  int tabindex = 0;
-  String query = '';
-  late List<Contents> contents;
-  final List<Home_Rec_title> _list_recommend = [
-    Home_Rec_title(sub: 'My 피드'),
-    Home_Rec_title(sub: 'dot 추천'),
-  ];*/
   double xoffset = 0;
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
+  final PageController _pController = PageController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    /*_tabController = TabController(length: 2, vsync: this);
-    contents = [
-      Contents(content: 'aaaa', date: DateTime.now(), id: '1', title: 'a'),
-      Contents(content: 'bbbb', date: DateTime.now(), id: '2', title: 'b'),
-      Contents(content: 'cccc', date: DateTime.now(), id: '3', title: 'c'),
-      Contents(content: 'dddd', date: DateTime.now(), id: '4', title: 'd'),
-      Contents(content: 'eeee', date: DateTime.now(), id: '5', title: 'e'),
-    ];*/
   }
-
-  /*void searchFeed(String query) {
-    final list_feed = contents.where((text) {
-      final title = text.title.toLowerCase();
-      final content = text.content.toLowerCase();
-      final searchQ = query.toLowerCase();
-      return title.contains(searchQ) || content.contains(searchQ);
-    }).toList();
-
-    setState(() {
-      this.query = query;
-      contents = list_feed;
-    });
-  }*/
+  @override
+  void dispose() {
+    super.dispose();
+    _pController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    /*setState(() {
-      if (_tabController != null) {
-        _tabController!.addListener(() {
-          setState(() {
-            tabindex = _tabController!.index;
-          });
-        });
-      }
-    });*/
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           DrawerScreen(),
-          FeedBody(context),
+          FeedBody(context, _pController),
         ],
       ),
-      /*appBar: AppBar(
-          toolbarHeight: 130,
-          backgroundColor: Colors.white,
-          title: Container(
-            child: Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text('피드',
-                            style: TextStyle(
-                              color: Colors.deepPurpleAccent.shade100,
-                            )),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.check_circle,
-                          color: Colors.deepPurpleAccent.shade100,
-                        )
-                      ],
-                    ),
-                    buildSearch(context),
-                  ],
-                )),
-          ),
-          elevation: 0,
-          automaticallyImplyLeading: false,
-        ),*/
-      /*body: 
-        CustomScrollView(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          physics: BouncingScrollPhysics(),
-          scrollBehavior: NoBehavior(),
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              //centerTitle: true,
-              backgroundColor: Colors.white,
-              automaticallyImplyLeading: false,
-              flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey, width: 0.5),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          )),
-                      height: MediaQuery.of(context).size.height / 10,
-                      child: TabBar(
-                        unselectedLabelColor: Colors.black,
-                        labelColor: Colors.deepPurpleAccent,
-                        controller: _tabController,
-                        isScrollable: true,
-                        labelPadding: EdgeInsets.only(left: 25, right: 25),
-                        indicator:
-                            CircleIndicator(color: Colors.black, radius: 4),
-                        tabs: [
-                          Tab(
-                            text: _list_recommend[0].sub.toString(),
-                          ),
-                          Tab(
-                            text: _list_recommend[1].sub.toString(),
-                          ),
-                        ],
-                      ))),
-            ),
-            SliverFillRemaining(
-              hasScrollBody: true,
-              child: ContentSub(
-                      context, _tabController!, _list_recommend, contents))
-          ],)*/
     ));
   }
 
-  Widget FeedBody(BuildContext context) {
+  Widget FeedBody(BuildContext context, PageController pController) {
     double height =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return AnimatedContainer(
@@ -243,12 +134,14 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                   height: height * 0.85,
                   child: ScrollConfiguration(
                     behavior: NoBehavior(),
-                    child: SingleChildScrollView(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                          //UserPicks(context),
-                        ])),
+                    child: SingleChildScrollView(child:
+                        StatefulBuilder(builder: (_, StateSetter setState) {
+                      return Column(
+                        children: [
+                          WidgetChoose(context, pController)
+                        ],
+                      );
+                    })),
                   ),
                 )
               ],

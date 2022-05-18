@@ -13,7 +13,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:kakao_flutter_sdk/all.dart';
+import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:provider/provider.dart';
 import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
@@ -22,7 +22,7 @@ import 'Page/ProfilePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  KakaoContext.clientId = 'b5e60a90f0204c0bb09625df79a11772';
+  KakaoSdk.init(nativeAppKey: 'b5e60a90f0204c0bb09625df79a11772');
   await Firebase.initializeApp();
   await Hive.initFlutter();
   await Hive.openBox('user_info');
@@ -164,7 +164,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 height: height * 0.55,
                 child: Center(
                   child: NeumorphicText(
-                    'StormDot',
+                    'BOnD',
                     style: const NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,

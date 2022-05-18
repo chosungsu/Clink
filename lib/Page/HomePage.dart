@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                                     height: 25,
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Colors.white),
+                                        color: Colors.grey.shade200),
                                     child: NeumorphicIcon(
                                       Icons.add_circle,
                                       size: 25,
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
                                           color:
-                                              Colors.black45,
+                                              Colors.white,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   )

@@ -72,12 +72,12 @@ NoticeApps(BuildContext context, PageController pcontroll) {
                             shape: BoxShape.circle,
                             color: Colors.grey.shade200),
                         child: NeumorphicIcon(
-                          Icons.arrow_forward_ios,
+                          Icons.navigate_next,
                           size: 20,
                           style: NeumorphicStyle(
                               shape: NeumorphicShape.convex,
                               depth: 2,
-                              color: Colors.deepPurpleAccent.shade100,
+                              color: Colors.black,
                               lightSource: LightSource.topLeft),
                         ),
                       )),
@@ -94,7 +94,7 @@ NoticeClip(context, List<PageList> list_ad, PageController pcontroll) {
   return Padding(
     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
     child: SizedBox(
-      height: MediaQuery.of(context).size.height / 10,
+      height: 80,
       child: Card(
           color: Colors.white,
           shape: RoundedRectangleBorder(

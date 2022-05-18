@@ -194,12 +194,12 @@ Main_Pick(context, int i) {
                                               type: PageTransitionType
                                                   .leftToRightWithFade));
                                     } else if (snapshot.data![index] == '챌린지') {
-                                      Navigator.push(
+                                      /*Navigator.push(
                                           context,
                                           PageTransition(
                                               child: WritePost(),
                                               type: PageTransitionType
-                                                  .leftToRightWithFade));
+                                                  .leftToRightWithFade));*/
                                     } else if (snapshot.data![index] ==
                                         '페이지마크') {
                                       Navigator.push(
@@ -295,12 +295,12 @@ Main_Pick(context, int i) {
                                               type: PageTransitionType
                                                   .leftToRightWithFade));
                                     } else if (index == 1) {
-                                      Navigator.push(
+                                      /*Navigator.push(
                                           context,
                                           PageTransition(
                                               child: WritePost(),
                                               type: PageTransitionType
-                                                  .leftToRightWithFade));
+                                                  .leftToRightWithFade));*/
                                     } else if (index == 2) {
                                       Navigator.push(
                                           context,
@@ -387,12 +387,12 @@ Main_Pick(context, int i) {
                                                   .leftToRightWithFade));
                                     } else if (snapshot.data![index + 3] ==
                                         '챌린지') {
-                                      Navigator.push(
+                                      /*Navigator.push(
                                           context,
                                           PageTransition(
                                               child: WritePost(),
                                               type: PageTransitionType
-                                                  .leftToRightWithFade));
+                                                  .leftToRightWithFade));*/
                                     } else if (snapshot.data![index + 3] ==
                                         '페이지마크') {
                                       Navigator.push(
@@ -497,12 +497,12 @@ Main_Pick(context, int i) {
                                               type: PageTransitionType
                                                   .leftToRightWithFade));
                                     } else if (index == 1) {
-                                      Navigator.push(
+                                      /*Navigator.push(
                                           context,
                                           PageTransition(
                                               child: WritePost(),
                                               type: PageTransitionType
-                                                  .leftToRightWithFade));
+                                                  .leftToRightWithFade));*/
                                     } else if (index == 2) {
                                       Navigator.push(
                                           context,

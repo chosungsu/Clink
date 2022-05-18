@@ -9,7 +9,7 @@ import '../Dialogs/checkaddwhat.dart';
 import '../Tool/NoBehavior.dart';
 import '../Dialogs/checkhowtag.dart';
 
-class WritePost extends StatefulWidget {
+/*class WritePost extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _WritePostState();
 }
@@ -566,4 +566,4 @@ class _WritePostState extends State<WritePost> {
       ),
     );
   }
-}
+}*/
