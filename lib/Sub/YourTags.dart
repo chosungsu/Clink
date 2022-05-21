@@ -1,6 +1,5 @@
 import 'package:clickbyme/DB/ChipList.dart';
 import 'package:clickbyme/DB/Home_Rec_title.dart';
-import 'package:clickbyme/Tool/Shimmer_Chip.dart';
 import 'package:clickbyme/sheets/addChips.dart';
 import 'package:clickbyme/Futures/chipasync.dart';
 import 'package:clickbyme/Tool/Chips.dart';
@@ -9,7 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../DB/PageList.dart';
 import '../Tool/NoBehavior.dart';
-import '../Tool/Shimmer_DayLog.dart';
+import '../Tool/ShimmerDesign/Shimmer_Chip.dart';
 
 class YourTags extends StatefulWidget {
   @override

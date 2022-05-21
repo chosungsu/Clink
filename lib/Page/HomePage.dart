@@ -1,16 +1,9 @@
-import 'package:clickbyme/DB/TODO.dart';
-import 'package:clickbyme/Tool/Shimmer_home.dart';
+import 'package:clickbyme/UI/Home/SecondCard.dart';
+import 'package:clickbyme/UI/Home/ThirdCard.dart';
+import 'package:clickbyme/UI/Home/TopCard.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:page_transition/page_transition.dart';
-import '../Futures/homeasync.dart';
-import '../Sub/DayLog.dart';
-import '../Sub/WritePost.dart';
-import '../Sub/YourTags.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/Home/UserChoice.dart';
-import '../route.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -68,6 +61,7 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: height * 0.15,
@@ -127,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ))),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width - 60,
+                          width: MediaQuery.of(context).size.width - 60,
                           child: Padding(
                               padding: EdgeInsets.only(left: 20, right: 20),
                               child: Row(
@@ -142,24 +136,23 @@ class _HomePageState extends State<HomePage> {
                                           color: Colors.black45),
                                     ),
                                   ),
-                                  Container(
+                                  /*Container(
                                     alignment: Alignment.center,
                                     width: 25,
                                     height: 25,
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Colors.grey.shade200),
+                                        color: Colors.grey),
                                     child: NeumorphicIcon(
-                                      Icons.add_circle,
+                                      Icons.help_outline,
                                       size: 25,
                                       style: NeumorphicStyle(
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
-                                          color:
-                                              Colors.white,
+                                          color: Colors.white,
                                           lightSource: LightSource.topLeft),
                                     ),
-                                  )
+                                  )*/
                                 ],
                               ))),
                     ],
@@ -171,9 +164,11 @@ class _HomePageState extends State<HomePage> {
                     behavior: NoBehavior(),
                     child: SingleChildScrollView(child:
                         StatefulBuilder(builder: (_, StateSetter setState) {
-                      return Column(
-                        children: [
-                          FutureBuilder<List<TODO>>(
+                      return Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: Column(
+                          children: [
+                            /*FutureBuilder<List<TODO>>(
                             future: homeasync(
                                 selectedDay), // a previously-obtained Future<String> or null
                             builder: (BuildContext context,
@@ -204,8 +199,24 @@ class _HomePageState extends State<HomePage> {
                                 );
                               }
                             },
-                          ),
-                        ],
+                          ),*/
+                            SizedBox(
+                              height: 20,
+                            ),
+                            H_Container1(height),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            H_Container2(height),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            H_Container3(height),
+                            SizedBox(
+                              height: height * 0.2,
+                            ),
+                          ],
+                        ),
                       );
                     })),
                   ),
@@ -215,4 +226,79 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+H_Container1(double height) {
+  return SizedBox(
+    height: height * 0.15,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TopCard(height: height),
+      ],
+    ),
+  );
+}
+
+H_Container2(double height) {
+  return SizedBox(
+    height: height * 0.45,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: const [
+            Text('라이프 스타일러',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Life Styler',
+                style: TextStyle(
+                    color: Colors.orange,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 13)),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SecondCard()
+      ],
+    ),
+  );
+}
+H_Container3(double height) {
+  return SizedBox(
+    height: height * 0.4,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: const [
+            Text('대시보드 라이브',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Dashboard live',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 13)),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ThirdCard()
+      ],
+    ),
+  );
 }
