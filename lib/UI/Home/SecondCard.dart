@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class SecondCard extends StatelessWidget {
-  //const SecondCard({Key? key}) : super(key: key);
+  const SecondCard({Key? key, required this.height}) : super(key: key);
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -24,31 +25,41 @@ class SecondCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('일정 관리',
+                      SizedBox(
+                        height: height * 0.05,
+                        child: const Center(
+                          child: Text('일정 관리',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
                               fontSize: 18)),
-                      SizedBox(
-                        height: 10,
+                        ),
                       ),
-                      Text('약속이 생기면 바로바로',
+                      SizedBox(
+                        height: height * 0.01,
+                      ),
+                      SizedBox(
+                        height: height * 0.03,
+                        child: const Center(
+                          child: Text('약속이 생기면 바로바로',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
                               fontSize: 13)),
+                        ),
+                      ),
                       SizedBox(
-                        height: 20,
+                        height: height * 0.02,
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: 25,
-                        height: 25,
+                        width: height * 0.03,
+                        height: height * 0.03,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: Colors.grey),
                         child: NeumorphicIcon(
                           Icons.navigate_next,
-                          size: 25,
+                          size: height * 0.03,
                           style: NeumorphicStyle(
                               shape: NeumorphicShape.convex,
                               depth: 2,
@@ -72,23 +83,28 @@ class SecondCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('대중교통 이용',
+                      SizedBox(
+                        height: height * 0.05,
+                        child: const Center(
+                          child: Text('대중교통 이용',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
                               fontSize: 18)),
+                        ),
+                      ),
                       SizedBox(
-                        height: 5,
+                        height: height * 0.01,
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: 25,
-                        height: 25,
+                        width: height * 0.03,
+                        height: height * 0.03,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: Colors.grey),
                         child: NeumorphicIcon(
                           Icons.navigate_next,
-                          size: 25,
+                          size: height * 0.03,
                           style: NeumorphicStyle(
                               shape: NeumorphicShape.convex,
                               depth: 2,
@@ -118,23 +134,28 @@ class SecondCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('건강 관리',
+                      SizedBox(
+                        height: height * 0.05,
+                        child: const Center(
+                          child: Text('건강 관리',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
                               fontSize: 18)),
+                        ),
+                      ),
                       SizedBox(
-                        height: 5,
+                        height: height * 0.01,
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: 25,
-                        height: 25,
+                        width: height * 0.03,
+                        height: height * 0.03,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: Colors.grey),
                         child: NeumorphicIcon(
                           Icons.navigate_next,
-                          size: 25,
+                          size: height * 0.03,
                           style: NeumorphicStyle(
                               shape: NeumorphicShape.convex,
                               depth: 2,
@@ -158,31 +179,41 @@ class SecondCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('메모리 북',
+                      SizedBox(
+                        height: height * 0.05,
+                        child: const Center(
+                          child: Text('메모리 북',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
                               fontSize: 18)),
-                      SizedBox(
-                        height: 10,
+                        ),
                       ),
-                      Text('하루를 정리해보세요',
+                      SizedBox(
+                        height: height * 0.01,
+                      ),
+                      SizedBox(
+                        height: height * 0.05,
+                        child: const Center(
+                          child: Text('하루를 정리해보세요',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
                               fontSize: 13)),
+                        ),
+                      ),
                       SizedBox(
-                        height: 20,
+                        height: height * 0.01,
                       ),
                       Container(
                         alignment: Alignment.center,
-                        width: 25,
-                        height: 25,
+                        width: height * 0.03,
+                        height: height * 0.03,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: Colors.grey),
                         child: NeumorphicIcon(
                           Icons.navigate_next,
-                          size: 25,
+                          size: height * 0.03,
                           style: NeumorphicStyle(
                               shape: NeumorphicShape.convex,
                               depth: 2,

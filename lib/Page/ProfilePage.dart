@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:page_transition/page_transition.dart';
+import '../Sub/NoticePage.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Setting/NoticeApps.dart';
 import '../UI/Setting/UserDetails.dart';
@@ -105,7 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
                                           surfaceIntensity: 0.5,
-                                          color: Colors.grey.shade300,
+                                          color: Colors.black45,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))
@@ -129,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           shape: NeumorphicShape.convex,
                                           surfaceIntensity: 0.5,
                                           depth: 2,
-                                          color: Colors.grey.shade300,
+                                          color: Colors.black45,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))),
@@ -149,14 +151,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: height * 0.85,
                   child: ScrollConfiguration(
                     behavior: NoBehavior(),
-                    child: SingleChildScrollView(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                          UserDetails(context),
-                          NoticeApps(context, pcontroll),
-                          UserSettings(context),
-                        ])),
+                    child: SingleChildScrollView(child:
+                        StatefulBuilder(builder: (_, StateSetter setState) {
+                      return Column(
+                        children: [
+                          S_Container1(height),
+                          S_Container2(height, pcontroll, context),
+                          S_Container3(height),
+                          SizedBox(
+                            height: height * 0.15,
+                          ),
+                        ],
+                      );
+                    })),
                   ),
                 ),
               ],
@@ -164,4 +171,122 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
+S_Container1(double height) {
+  return SizedBox(
+    height: height * 0.2,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: const [
+                      Text('사용자 정보',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: height * 0.15,
+          child: UserDetails(height : height),
+        )
+      ],
+    ),
+  );
+}
+S_Container2(double height, PageController pageController, BuildContext context) {
+  return SizedBox(
+    height: height * 0.2,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: const [
+                      Text('앱 공지사항',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: NoticePage(),
+                            type: PageTransitionType.leftToRightWithFade));
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 25,
+                    height: 25,
+                    child: NeumorphicIcon(
+                      Icons.navigate_next,
+                      size: 20,
+                      style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          color: Colors.black45,
+                          lightSource: LightSource.topLeft),
+                    ),
+                  )),
+              ],
+            )),
+        SizedBox(
+          height: height * 0.15,
+          child: NoticeApps(height: height, pageController: pageController,),
+        )
+      ],
+    ),
+  );
+}
+S_Container3(double height) {
+  return SizedBox(
+    height: height * 0.5,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: const [
+                      Text('부가기능',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: height * 0.45,
+          child: UserSettings(height: height),
+        )
+      ],
+    ),
+  );
 }

@@ -6,11 +6,15 @@ List<Map> drawerItems = const [
     'title': '홈'
   },
   {
-    'icon': Icons.explore,
+    'icon': Icons.explore_outlined,
     'title': '탐색',
   },
   {
-    'icon': Icons.account_circle,
+    'icon': Icons.bar_chart,
+    'title': '분석',
+  },
+  {
+    'icon': Icons.account_circle_outlined,
     'title': '설정',
   }
 ];

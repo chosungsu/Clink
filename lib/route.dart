@@ -1,3 +1,4 @@
+import 'package:clickbyme/Page/AnalyticPage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -35,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List pages = [
       HomePage(title: widget.title),
       FeedPage(),
+      AnalyticPage(),
       ProfilePage(),
     ];
     return Scaffold(

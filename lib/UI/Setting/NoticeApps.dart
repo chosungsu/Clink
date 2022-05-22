@@ -2,8 +2,13 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../DB/PageList.dart';
 import '../../Sub/NoticePage.dart';
+import '../../Tool/ContainerDesign.dart';
 
-NoticeApps(BuildContext context, PageController pcontroll) {
+class NoticeApps extends StatelessWidget {
+  NoticeApps({Key? key, required this.height, required this.pageController})
+      : super(key: key);
+  final double height;
+  final PageController pageController;
   final List<PageList> _list_ad = [
     PageList(
       id: '0',
@@ -31,111 +36,46 @@ NoticeApps(BuildContext context, PageController pcontroll) {
       date: DateTime.now(),
     )
   ];
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      SizedBox(
-        height: 10,
-      ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              padding: const EdgeInsets.only(
-                  top: 10, bottom: 10, left: 20, right: 20),
-              child: Row(
-                children: [
-                  const Flexible(
-                    fit: FlexFit.tight,
-                    child: Text(
-                      '공지사항',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.black54,
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
+        child: ContainerDesign(
+            child: SizedBox(
+          height: height * 0.15,
+          child: PageView.builder(
+              scrollDirection: Axis.vertical,
+              pageSnapping: false,
+              itemCount: _list_ad.length,
+              controller: pageController,
+              itemBuilder: (context, index) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Text(
+                        _list_ad[index].title.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
                       ),
                     ),
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: NoticePage(),
-                                type: PageTransitionType.leftToRightWithFade));
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 25,
-                        height: 25,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey.shade200),
-                        child: NeumorphicIcon(
-                          Icons.navigate_next,
-                          size: 20,
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              color: Colors.black,
-                              lightSource: LightSource.topLeft),
+                    const Center(
+                      child: Text(
+                        'today',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color.fromARGB(115, 175, 175, 175),
                         ),
-                      )),
-                ],
-              )),
-          NoticeClip(context, _list_ad, pcontroll),
-        ],
-      )
-    ],
-  );
-}
-
-NoticeClip(context, List<PageList> list_ad, PageController pcontroll) {
-  return Padding(
-    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-    child: SizedBox(
-      height: 80,
-      child: Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              side: BorderSide(color: Colors.orange, width: 1)),
-          elevation: 4.0,
-          child: Padding(
-              padding: EdgeInsets.all(5.0),
-              child: PageView.builder(
-                  scrollDirection: Axis.vertical,
-                  pageSnapping: false,
-                  itemCount: list_ad.length,
-                  controller: pcontroll,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: Text(
-                            list_ad[index].title.toString(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.black45,
-                            ),
-                          ),
-                        ),
-                        const Center(
-                          child: Text(
-                            'today',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Color.fromARGB(115, 175, 175, 175),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }))),
-    ),
-  );
+                      ),
+                    ),
+                  ],
+                );
+              }),
+        )));
+  }
 }

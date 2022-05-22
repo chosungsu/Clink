@@ -4,100 +4,78 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 
-showBeforeSignUp(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-    child: Neumorphic(
-      style: NeumorphicStyle(
-          shape: NeumorphicShape.flat,
-          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(16.0)),
-          depth: 4,
-          intensity: 0.5,
-          color: Colors.white.withOpacity(0.1),
-          lightSource: LightSource.topLeft),
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: Colors.orange,
+import '../../Tool/ContainerDesign.dart';
+
+showBeforeSignUp(BuildContext context, double height) {
+  return ContainerDesign(
+      child: SizedBox(
+    height: height,
+    child: Center(
+      //crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Flexible(
+            fit: FlexFit.tight,
+            child: Text(
+              '로그인이 필요합니다.',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black54,
+                  letterSpacing: 2),
             ),
-            borderRadius: BorderRadius.circular(16.0)),
-        //너비는 최대너비로 생성, 높이는 자식개체만큼으로 후에 변경할것임.
-        width: MediaQuery.of(context).size.width * 0.95,
-        height: 80,
-        child: Center(
-            //crossAxisAlignment: CrossAxisAlignment.start,
-            child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Flexible(
-                fit: FlexFit.tight,
-                child: Text(
-                  '로그인이 필요합니다.',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black54,
-                      letterSpacing: 2),
-                ),
-              ),
-              SizedBox(
-                  height: 40,
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10.0)),
-                      depth: 4,
-                      intensity: 0.5,
-                    ),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                        ),
-                        onPressed: () {
-                          GoToLogin(context);
-                        },
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text(
-                                '3초 로그인',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.amberAccent,
-                                    letterSpacing: 2),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                width: 25,
-                                height: 25,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    color: Colors.grey.shade200),
-                                child: NeumorphicIcon(
-                                  Icons.navigate_next,
-                                  size: 20,
-                                  style: NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      color: Colors.black,
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              )
-                            ],
-                          ),
-                        )),
-                  ))
-            ],
           ),
-        )),
+          SizedBox(
+              height: 40,
+              child: Neumorphic(
+                style: NeumorphicStyle(
+                  shape: NeumorphicShape.flat,
+                  boxShape:
+                      NeumorphicBoxShape.roundRect(BorderRadius.circular(10.0)),
+                  depth: 4,
+                  intensity: 0.5,
+                ),
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
+                    onPressed: () {
+                      GoToLogin(context);
+                    },
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            '3초 로그인',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.amberAccent,
+                                letterSpacing: 2),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            width: 25,
+                            height: 25,
+                            child: NeumorphicIcon(
+                              Icons.navigate_next,
+                              size: 20,
+                              style: NeumorphicStyle(
+                                  shape: NeumorphicShape.convex,
+                                  depth: 2,
+                                  color: Colors.black45,
+                                  lightSource: LightSource.topLeft),
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+              ))
+        ],
       ),
     ),
-  );
+  ));
 }

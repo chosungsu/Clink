@@ -1,30 +1,23 @@
-import 'package:clickbyme/UI/Home/SecondCard.dart';
-import 'package:clickbyme/UI/Home/ThirdCard.dart';
-import 'package:clickbyme/UI/Home/TopCard.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive_flutter/adapters.dart';
 import '../Tool/NoBehavior.dart';
 import 'DrawerScreen.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+class AnalyticPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _HomePageState();
+  State<StatefulWidget> createState() => _AnalyticPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  DateTime selectedDay = DateTime.now();
+class _AnalyticPageState extends State<AnalyticPage>
+    with TickerProviderStateMixin {
   double xoffset = 0;
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
   final PageController _pController = PageController();
-
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    Hive.box('user_setting').put('page_index', 0);
   }
 
   @override
@@ -41,19 +34,19 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           DrawerScreen(),
-          HomeUi(_pController),
+          AnalyticBody(context, _pController),
         ],
       ),
     ));
   }
 
-  HomeUi(PageController pController) {
+  Widget AnalyticBody(BuildContext context, PageController pController) {
     double height =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
-      duration: const Duration(milliseconds: 250),
+      duration: Duration(milliseconds: 250),
       child: SizedBox(
         height: height,
         child: Container(
@@ -61,7 +54,6 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: height * 0.15,
@@ -92,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
                                           surfaceIntensity: 0.5,
-                                          color: Colors.black45,
+                                          color: Colors.grey.shade300,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))
@@ -116,28 +108,19 @@ class _HomePageState extends State<HomePage> {
                                           shape: NeumorphicShape.convex,
                                           surfaceIntensity: 0.5,
                                           depth: 2,
-                                          color: Colors.black45,
+                                          color: Colors.grey.shade300,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width - 60,
+                      const SizedBox(
                           child: Padding(
-                              padding: EdgeInsets.only(left: 20, right: 20),
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      widget.title.toString(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.black45),
-                                    ),
-                                  ),
-                                ],
-                              ))),
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text('MY 연구실',
+                            style: TextStyle(
+                                color: Colors.black45,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      )),
                     ],
                   ),
                 ),
@@ -151,50 +134,14 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                         child: Column(
                           children: [
-                            /*FutureBuilder<List<TODO>>(
-                            future: homeasync(
-                                selectedDay), // a previously-obtained Future<String> or null
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<TODO>> snapshot) {
-                              if (snapshot.hasData &&
-                                  snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                return UserChoice(
-                                    context, snapshot.data!, pController);
-                              } else {
-                                return Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Neumorphic(
-                                        style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          border: const NeumorphicBorder.none(),
-                                          boxShape:
-                                              NeumorphicBoxShape.roundRect(
-                                                  BorderRadius.circular(5)),
-                                          depth: 5,
-                                          color: Colors.white,
-                                        ),
-                                        child: Shimmer_home(context))
-                                  ],
-                                );
-                              }
-                            },
-                          ),*/
                             SizedBox(
                               height: 20,
                             ),
-                            H_Container1(height),
+                            A_Container1(height),
                             SizedBox(
                               height: 30,
                             ),
-                            H_Container2(height),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            H_Container3(height),
+                            A_Container2(height),
                             SizedBox(
                               height: height * 0.2,
                             ),
@@ -210,20 +157,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-H_Container1(double height) {
+A_Container1(double height) {
   return SizedBox(
     height: height * 0.15,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TopCard(height: height),
+        //TopCard(height: height),
       ],
     ),
   );
 }
 
-H_Container2(double height) {
+A_Container2(double height) {
   return SizedBox(
     height: height * 0.45,
     child: Column(
@@ -231,7 +177,7 @@ H_Container2(double height) {
       children: [
         Row(
           children: const [
-            Text('라이프 스타일러',
+            Text('라이프 분석',
                 style: TextStyle(
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
@@ -239,7 +185,7 @@ H_Container2(double height) {
             SizedBox(
               width: 10,
             ),
-            Text('Life Styler',
+            Text('Life Analytics',
                 style: TextStyle(
                     color: Colors.orange,
                     fontStyle: FontStyle.italic,
@@ -249,38 +195,7 @@ H_Container2(double height) {
         const SizedBox(
           height: 20,
         ),
-        SecondCard(height : height)
-      ],
-    ),
-  );
-}
-H_Container3(double height) {
-  return SizedBox(
-    height: height * 0.4,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Text('대시보드 라이브',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Dashboard live',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 13)),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        ThirdCard()
+        //SecondCard()
       ],
     ),
   );

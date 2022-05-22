@@ -1,10 +1,11 @@
-import 'package:clickbyme/UI/Explore/WidgetChoose.dart';
+import 'package:clickbyme/UI/Explore/FeedCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../DB/Contents.dart';
 import '../DB/Home_Rec_title.dart';
 import '../DB/TODO.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/Explore/UserView.dart';
 import '../UI/Home/UserPicks.dart';
 import '../UI/SearchWidget.dart';
 import '../UI/UserSubscription.dart';
@@ -26,6 +27,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -90,7 +92,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
                                           surfaceIntensity: 0.5,
-                                          color: Colors.grey.shade300,
+                                          color: Colors.black45,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))
@@ -114,19 +116,42 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                           shape: NeumorphicShape.convex,
                                           surfaceIntensity: 0.5,
                                           depth: 2,
-                                          color: Colors.grey.shade300,
+                                          color: Colors.black45,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))),
-                      const SizedBox(
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width - 60,
                           child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text('탐색',
-                            style: TextStyle(
-                                color: Colors.black45,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      )),
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      'C-Station',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.black45),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 25,
+                                    height: 25,
+                                    child: NeumorphicIcon(
+                                      Icons.subscriptions_outlined,
+                                      size: 25,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          color: Colors.black45,
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  )
+                                ],
+                              ))),
                     ],
                   ),
                 ),
@@ -138,7 +163,11 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                         StatefulBuilder(builder: (_, StateSetter setState) {
                       return Column(
                         children: [
-                          WidgetChoose(context, pController)
+                          F_Container1_1(height),
+                          F_Container1_2(height),
+                          SizedBox(
+                            height: height * 0.15,
+                          ),
                         ],
                       );
                     })),
@@ -149,23 +178,114 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
       ),
     );
   }
+}
 
-  // 검색창 만들기
-  /*Widget buildSearch(BuildContext context) {
-    return SearchWidget(
-      text: query,
-      hintText: '검색하실 제목이나 내용 입력바랍니다.',
-      onChanged: (String value) {
-        searchFeed(query);
-      },
-    );
-  }*/
+F_Container1_1(double height) {
+  return SizedBox(
+    height: height * 0.25,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: const [
+                      Text('챌린지 콤비네이트',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Challenge-Combinate',
+                          style: TextStyle(
+                              color: Colors.orange,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 13)),
+                    ],
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 25,
+                  height: 25,
+                  child: NeumorphicIcon(
+                    Icons.navigate_next,
+                    size: 25,
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        color: Colors.black45,
+                        lightSource: LightSource.topLeft),
+                  ),
+                )
+              ],
+            )),
+        SizedBox(
+          height: height * 0.2,
+          child: UserView(height: height),
+        )
+      ],
+    ),
+  );
+}
 
-// 바디 만들기
-  /*Widget makeBody(BuildContext context, TabController? tabController,
-      int tabindex, List<Contents> contents) {
-    return Column(children: [
-      UserSubscription(context, tabController!, tabindex, contents)
-    ]);
-  }*/
+F_Container1_2(double height) {
+  return SizedBox(
+    height: height * 1.4,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: const [
+                      Text('현재 진행중인 챌린지',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Challenges',
+                          style: TextStyle(
+                              color: Colors.orange,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 13)),
+                    ],
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 25,
+                  height: 25,
+                  child: NeumorphicIcon(
+                    Icons.navigate_next,
+                    size: 25,
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        color: Colors.black45,
+                        lightSource: LightSource.topLeft),
+                  ),
+                )
+              ],
+            )),
+        SizedBox(
+          height: height * 1.2,
+          child: FeedCard(height: height),
+        )
+      ],
+    ),
+  );
 }
