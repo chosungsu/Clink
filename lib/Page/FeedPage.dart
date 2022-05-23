@@ -1,10 +1,11 @@
-import 'package:clickbyme/UI/Explore/FeedCard.dart';
+import 'package:clickbyme/UI/Explore/ChallengeView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../DB/Contents.dart';
 import '../DB/Home_Rec_title.dart';
 import '../DB/TODO.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/Explore/FeedView.dart';
 import '../UI/Explore/UserView.dart';
 import '../UI/Home/UserPicks.dart';
 import '../UI/SearchWidget.dart';
@@ -129,7 +130,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                   Flexible(
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      'C-Station',
+                                      'Explore',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
@@ -141,7 +142,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                     width: 25,
                                     height: 25,
                                     child: NeumorphicIcon(
-                                      Icons.subscriptions_outlined,
+                                      Icons.history,
                                       size: 25,
                                       style: NeumorphicStyle(
                                           shape: NeumorphicShape.convex,
@@ -165,6 +166,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                         children: [
                           F_Container1_1(height),
                           F_Container1_2(height),
+                          F_Container2(height),
                           SizedBox(
                             height: height * 0.15,
                           ),
@@ -194,7 +196,7 @@ F_Container1_1(double height) {
                   fit: FlexFit.tight,
                   child: Row(
                     children: const [
-                      Text('챌린지 콤비네이트',
+                      Text('즐겨찾기',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
@@ -202,7 +204,7 @@ F_Container1_1(double height) {
                       SizedBox(
                         width: 10,
                       ),
-                      Text('Challenge-Combinate',
+                      Text('Favorites',
                           style: TextStyle(
                               color: Colors.orange,
                               fontStyle: FontStyle.italic,
@@ -237,7 +239,61 @@ F_Container1_1(double height) {
 
 F_Container1_2(double height) {
   return SizedBox(
-    height: height * 1.4,
+    height: height * 1.1,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: const [
+                      Text('피드',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Feed',
+                          style: TextStyle(
+                              color: Colors.orange,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 13)),
+                    ],
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 25,
+                  height: 25,
+                  child: NeumorphicIcon(
+                    Icons.navigate_next,
+                    size: 25,
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        color: Colors.black45,
+                        lightSource: LightSource.topLeft),
+                  ),
+                )
+              ],
+            )),
+        SizedBox(
+          height: height * 0.9,
+          child: FeedView(height: height),
+        )
+      ],
+    ),
+  );
+}
+F_Container2(double height) {
+  return SizedBox(
+    height: height * 1.1,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -282,8 +338,8 @@ F_Container1_2(double height) {
               ],
             )),
         SizedBox(
-          height: height * 1.2,
-          child: FeedCard(height: height),
+          height: height * 0.9,
+          child: ChallengeView(height: height),
         )
       ],
     ),

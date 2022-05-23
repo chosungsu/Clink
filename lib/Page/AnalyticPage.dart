@@ -1,3 +1,5 @@
+import 'package:clickbyme/UI/Analytics/ShareView.dart';
+import 'package:clickbyme/UI/Analytics/ReportView.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../Tool/NoBehavior.dart';
 import 'DrawerScreen.dart';
@@ -84,7 +86,7 @@ class _AnalyticPageState extends State<AnalyticPage>
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
                                           surfaceIntensity: 0.5,
-                                          color: Colors.grey.shade300,
+                                          color: Colors.black45,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))
@@ -108,7 +110,7 @@ class _AnalyticPageState extends State<AnalyticPage>
                                           shape: NeumorphicShape.convex,
                                           surfaceIntensity: 0.5,
                                           depth: 2,
-                                          color: Colors.grey.shade300,
+                                          color: Colors.black45,
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))),
@@ -130,23 +132,14 @@ class _AnalyticPageState extends State<AnalyticPage>
                     behavior: NoBehavior(),
                     child: SingleChildScrollView(child:
                         StatefulBuilder(builder: (_, StateSetter setState) {
-                      return Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            A_Container1(height),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            A_Container2(height),
-                            SizedBox(
-                              height: height * 0.2,
-                            ),
-                          ],
-                        ),
+                      return Column(
+                        children: [
+                          A_Container1(height),
+                          A_Container2(height),
+                          SizedBox(
+                            height: height * 0.2,
+                          ),
+                        ],
                       );
                     })),
                   ),
@@ -157,13 +150,57 @@ class _AnalyticPageState extends State<AnalyticPage>
     );
   }
 }
+
 A_Container1(double height) {
   return SizedBox(
-    height: height * 0.15,
+    height: height * 0.4,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        //TopCard(height: height),
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: const [
+                      Text('하루 분석',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Day Analysis',
+                          style: TextStyle(
+                              color: Colors.orange,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 13)),
+                    ],
+                  ),
+                ),
+                /*Container(
+                  alignment: Alignment.center,
+                  width: 25,
+                  height: 25,
+                  child: NeumorphicIcon(
+                    Icons.download,
+                    size: 25,
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        color: Colors.black45,
+                        lightSource: LightSource.topLeft),
+                  ),
+                )*/
+              ],
+            )),
+        SizedBox(
+          height: height * 0.3,
+          child: ReportView(height: height),
+        )
       ],
     ),
   );
@@ -171,31 +208,40 @@ A_Container1(double height) {
 
 A_Container2(double height) {
   return SizedBox(
-    height: height * 0.45,
+    height: height * 0.4,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: const [
-            Text('라이프 분석',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Life Analytics',
-                style: TextStyle(
-                    color: Colors.orange,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 13)),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        //SecondCard()
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: const [
+                      Text('공유 활동 현황',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18)),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Share Points',
+                          style: TextStyle(
+                              color: Colors.orange,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 13)),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: height * 0.3,
+          child: ShareView(height: height),
+        )
       ],
     ),
   );
