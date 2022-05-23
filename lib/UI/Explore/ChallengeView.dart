@@ -21,66 +21,69 @@ class ChallengeView extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemCount: titlelist.length,
-        itemBuilder: ((context, index) {
-          return Column(
-            children: [
-              SizedBox(
-                height: height * 0.03,
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: ContainerDesign(
-                    child: SizedBox(
-                  height: height * 0.1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: height * 0.05,
-                        child: Row(
-                          children: [
-                            NeumorphicIcon(
-                              Icons.task_alt_outlined,
-                              size: 25,
-                              style: NeumorphicStyle(
-                                  shape: NeumorphicShape.convex,
-                                  depth: 2,
-                                  color: Colors.black45,
-                                  lightSource: LightSource.topLeft),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text(titlelist[index],
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18))
-                          ],
+    return SizedBox(
+      height: height * 0.9,
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          itemCount: titlelist.length,
+          itemBuilder: ((context, index) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: height * 0.03,
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: ContainerDesign(
+                      child: SizedBox(
+                    height: height * 0.1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          height: height * 0.05,
+                          child: Row(
+                            children: [
+                              NeumorphicIcon(
+                                Icons.task_alt_outlined,
+                                size: 25,
+                                style: NeumorphicStyle(
+                                    shape: NeumorphicShape.convex,
+                                    depth: 2,
+                                    color: Colors.black45,
+                                    lightSource: LightSource.topLeft),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(titlelist[index],
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18))
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: height * 0.02,
-                      ),
-                      SizedBox(
-                        height: height * 0.03,
-                        child: Text(contextlist[index],
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13)),
-                      ),
-                    ],
-                  ),
-                )),
-              ),
-            ],
-          );
-        }));
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        SizedBox(
+                          height: height * 0.03,
+                          child: Text(contextlist[index],
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13)),
+                        ),
+                      ],
+                    ),
+                  )),
+                ),
+              ],
+            );
+          })),
+    );
   }
 }

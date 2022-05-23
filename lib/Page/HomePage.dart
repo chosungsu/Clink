@@ -225,7 +225,7 @@ H_Container1(double height) {
 
 H_Container2(double height) {
   return SizedBox(
-    height: height * 0.45,
+    height: height * 0.5,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

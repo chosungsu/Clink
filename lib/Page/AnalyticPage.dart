@@ -197,10 +197,7 @@ A_Container1(double height) {
                 )*/
               ],
             )),
-        SizedBox(
-          height: height * 0.3,
-          child: ReportView(height: height),
-        )
+        ReportView(height: height),
       ],
     ),
   );
@@ -238,10 +235,7 @@ A_Container2(double height) {
                 ),
               ],
             )),
-        SizedBox(
-          height: height * 0.3,
-          child: ShareView(height: height),
-        )
+        ShareView(height: height),
       ],
     ),
   );

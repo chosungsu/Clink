@@ -239,7 +239,7 @@ F_Container1_1(double height) {
 
 F_Container1_2(double height) {
   return SizedBox(
-    height: height * 1.1,
+    height: height * 0.8,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -283,10 +283,7 @@ F_Container1_2(double height) {
                 )
               ],
             )),
-        SizedBox(
-          height: height * 0.9,
-          child: FeedView(height: height),
-        )
+        FeedView(height: height),
       ],
     ),
   );
@@ -337,10 +334,7 @@ F_Container2(double height) {
                 )
               ],
             )),
-        SizedBox(
-          height: height * 0.9,
-          child: ChallengeView(height: height),
-        )
+        ChallengeView(height: height),
       ],
     ),
   );
