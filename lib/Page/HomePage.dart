@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DateTime selectedDay = DateTime.now();
   double xoffset = 0;
   double yoffset = 0;
   double scalefactor = 1;
@@ -183,14 +182,11 @@ class _HomePageState extends State<HomePage> {
                               }
                             },
                           ),*/
-                            SizedBox(
-                              height: 20,
-                            ),
-                            H_Container1(height),
+                            H_Container2(height),
                             SizedBox(
                               height: 30,
                             ),
-                            H_Container2(height),
+                            H_Container1(height),
                             SizedBox(
                               height: 30,
                             ),
@@ -213,10 +209,30 @@ class _HomePageState extends State<HomePage> {
 
 H_Container1(double height) {
   return SizedBox(
-    height: height * 0.15,
+    height: height * 0.4,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          children: const [
+            Text('이벤트',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Event',
+                style: TextStyle(
+                    color: Colors.orange,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 13)),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
         TopCard(height: height),
       ],
     ),
@@ -241,7 +257,7 @@ H_Container2(double height) {
             ),
             Text('Life Styler',
                 style: TextStyle(
-                    color: Colors.orange,
+                    color: Colors.blueAccent,
                     fontStyle: FontStyle.italic,
                     fontSize: 13)),
           ],

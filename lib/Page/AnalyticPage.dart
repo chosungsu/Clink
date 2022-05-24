@@ -117,7 +117,7 @@ class _AnalyticPageState extends State<AnalyticPage>
                       const SizedBox(
                           child: Padding(
                         padding: EdgeInsets.only(left: 20),
-                        child: Text('MY 연구실',
+                        child: Text('데이 연구실',
                             style: TextStyle(
                                 color: Colors.black45,
                                 fontSize: 20,

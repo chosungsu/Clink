@@ -130,7 +130,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                                   Flexible(
                                     fit: FlexFit.tight,
                                     child: Text(
-                                      'Explore',
+                                      '데이 뷰',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,

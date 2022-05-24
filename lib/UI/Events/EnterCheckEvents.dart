@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 
-class TopCard extends StatelessWidget {
-  const TopCard({Key? key, required this.height}) : super(key: key);
+class EnterCheckEvents extends StatelessWidget {
+  const EnterCheckEvents({Key? key, required this.height}) : super(key: key);
   final double height;
   final double translateX = 0.0;
   final double translateY = 0.0;
@@ -17,7 +17,7 @@ class TopCard extends StatelessWidget {
         fit: FlexFit.tight,
         child: ContainerDesign(
             child: SizedBox(
-          height: height * 0.35,
+          height: height * 0.5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -50,53 +50,34 @@ class TopCard extends StatelessWidget {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width - 80,
-                height: height * 0.1,
+                height: height * 0.3,
                 child: Text(
-                    '아래 스크롤바를 우측으로 밀어서 출석체크를 하시면 '+
-                    '메모리북 작성권과 하루분석결과 열람권을 드립니다.',
+                    '아래 스크롤바를 우측으로 밀어서 출석체크를 하시면 ' +
+                        '메모리북 작성권과 하루분석결과 열람권을 드립니다.',
                     style: TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
               ),
               SizedBox(
-                height: height * 0.05,
+                height: height * 0.02,
               ),
               SizedBox(
-                height: height * 0.05,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.grey.shade400,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.bottomToTop,
-                            child: EnterCheckPage()),
-                      );
-                    },
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: NeumorphicText(
-                              '바로가기',
-                              style: const NeumorphicStyle(
-                                shape: NeumorphicShape.flat,
-                                depth: 3,
-                                color: Colors.white,
-                              ),
-                              textStyle: NeumorphicTextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    )),
+                width: MediaQuery.of(context).size.width - 80,
+                height: height * 0.10,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Center(
+                      child: Text(
+                    '이벤트 기간 : 2022/06/01 ~ 2022/06/30',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+                    )
+                  ],
+                )
               ),
             ],
           ),

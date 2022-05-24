@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(
                           child: Padding(
                         padding: EdgeInsets.only(left: 20),
-                        child: Text('전체설정',
+                        child: Text('',
                             style: TextStyle(
                                 color: Colors.black45,
                                 fontSize: 20,
