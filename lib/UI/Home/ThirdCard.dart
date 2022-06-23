@@ -65,7 +65,7 @@ class ThirdCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
-                  Text('대중 교통',
+                  Text('식단 밸런스',
                       style: TextStyle(
                           color: Colors.black54,
                           fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class ThirdCard extends StatelessWidget {
                   ),
                   Flexible(
                     fit: FlexFit.tight,
-                    child: Text('현재 위치',
+                    child: Text('아주 좋습니다',
                         style: TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.bold,

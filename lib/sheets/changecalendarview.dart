@@ -1,8 +1,10 @@
+import 'package:clickbyme/UI/Home/DayContentHome.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:page_transition/page_transition.dart';
 
 changecalendarview(BuildContext context, String calendarview) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -92,7 +94,13 @@ changecalendarview(BuildContext context, String calendarview) {
                             Hive.box('user_setting')
                                 .put('radio_cal', calendarview);
                             Navigator.pop(context);
-                            GoToDayLog(context);
+                            //일정관리로 넘어가기
+                            Navigator.pushReplacement(
+                              context,
+                              PageTransition(
+                                  type: PageTransitionType.bottomToTop,
+                                  child: DayContentHome()),
+                            );
                           },
                           style: NeumorphicStyle(
                               shape: NeumorphicShape.concave,

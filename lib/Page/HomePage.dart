@@ -1,6 +1,6 @@
 import 'package:clickbyme/UI/Home/SecondCard.dart';
 import 'package:clickbyme/UI/Home/ThirdCard.dart';
-import 'package:clickbyme/UI/Home/TopCard.dart';
+import 'package:clickbyme/UI/Home/EventShowCard.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../Tool/NoBehavior.dart';
@@ -209,7 +209,7 @@ class _HomePageState extends State<HomePage> {
 
 H_Container1(double height) {
   return SizedBox(
-    height: height * 0.4,
+    height: 300,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -233,7 +233,7 @@ H_Container1(double height) {
         const SizedBox(
           height: 20,
         ),
-        TopCard(height: height),
+        EventShowCard(height: height),
       ],
     ),
   );
@@ -241,7 +241,7 @@ H_Container1(double height) {
 
 H_Container2(double height) {
   return SizedBox(
-    height: height * 0.5,
+    height: 150,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -272,13 +272,13 @@ H_Container2(double height) {
 }
 H_Container3(double height) {
   return SizedBox(
-    height: height * 0.4,
+    height: 350,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: const [
-            Text('대시보드 라이브',
+            Text('하루 조각',
                 style: TextStyle(
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
@@ -286,7 +286,7 @@ H_Container3(double height) {
             SizedBox(
               width: 10,
             ),
-            Text('Dashboard live',
+            Text('Beta',
                 style: TextStyle(
                     color: Colors.red,
                     fontStyle: FontStyle.italic,

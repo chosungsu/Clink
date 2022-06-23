@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import '../Tool/NoBehavior.dart';
-import '../UI/Home/TopCard.dart';
 
 class EnterCheckPage extends StatefulWidget {
   @override
