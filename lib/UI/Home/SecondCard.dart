@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/UI/Home/TodayChoiceFeed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
@@ -16,6 +17,7 @@ class SecondCard extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
             child: GridView.count(
+          physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 4,
           children: List.generate(4, (index) {
             return Row(
@@ -65,7 +67,7 @@ class SecondCard extends StatelessWidget {
                                 context,
                                 PageTransition(
                                     type: PageTransitionType.bottomToTop,
-                                    child: DayContentHome()),
+                                    child: TodayChoiceFeed()),
                               );
                             },
                             child: Column(
@@ -101,7 +103,7 @@ class SecondCard extends StatelessWidget {
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.bottomToTop,
-                                        child: DayContentHome()),
+                                        child: TodayChoiceFeed()),
                                   );
                                 },
                                 child: Column(
@@ -121,7 +123,7 @@ class SecondCard extends StatelessWidget {
                                     SizedBox(
                                       height: 50,
                                       child: const Center(
-                                        child: Text('한입명언',
+                                        child: Text('오늘의발견',
                                             style: TextStyle(
                                                 color: Colors.black54,
                                                 fontWeight: FontWeight.bold,

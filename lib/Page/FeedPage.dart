@@ -51,7 +51,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
 
   Widget FeedBody(BuildContext context, PageController pController) {
     double height =
-        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+        MediaQuery.of(context).size.height;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
@@ -65,7 +65,7 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
             child: Column(
               children: [
                 SizedBox(
-                  height: height * 0.15,
+                  height: 80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -156,25 +156,26 @@ class _FeedPageState extends State<FeedPage> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.85,
-                  child: ScrollConfiguration(
-                    behavior: NoBehavior(),
-                    child: SingleChildScrollView(child:
-                        StatefulBuilder(builder: (_, StateSetter setState) {
-                      return Column(
-                        children: [
-                          F_Container1_1(height),
-                          F_Container1_2(height),
-                          F_Container2(height),
-                          SizedBox(
-                            height: height * 0.15,
-                          ),
-                        ],
-                      );
-                    })),
-                  ),
-                )
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: SizedBox(
+                      child: ScrollConfiguration(
+                        behavior: NoBehavior(),
+                        child: SingleChildScrollView(child:
+                            StatefulBuilder(builder: (_, StateSetter setState) {
+                          return Column(
+                            children: [
+                              F_Container1_1(height),
+                              F_Container1_2(height),
+                              F_Container2(height),
+                              SizedBox(
+                                height: height * 0.15,
+                              ),
+                            ],
+                          );
+                        })),
+                      ),
+                    )),
               ],
             )),
       ),
@@ -288,6 +289,7 @@ F_Container1_2(double height) {
     ),
   );
 }
+
 F_Container2(double height) {
   return SizedBox(
     height: height * 1.1,

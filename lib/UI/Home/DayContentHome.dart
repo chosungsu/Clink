@@ -46,7 +46,7 @@ class _DayContentHomeState extends State<DayContentHome> {
       calendarview = Hive.box('user_setting').get('radio_cal') ?? 'day';
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -57,8 +57,7 @@ class _DayContentHomeState extends State<DayContentHome> {
   }
 
   EnterCheckUi(String s) {
-    double height =
-        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
       child: Container(
@@ -69,7 +68,7 @@ class _DayContentHomeState extends State<DayContentHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: height * 0.15,
+                height: 80,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -116,83 +115,85 @@ class _DayContentHomeState extends State<DayContentHome> {
                               ],
                             ))),
                     SizedBox(
-                    width: 160,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Row(
-                      children: [
-                        IconButton(
-                          visualDensity:
-                              const VisualDensity(horizontal: -4, vertical: -4),
-                          color: Colors.white,
-                          tooltip: '사용방법',
-                          onPressed: () => {checkhowdaylog(context)},
-                          icon: const Icon(
-                            Icons.question_mark,
-                            color: Colors.black45,
+                        width: 160,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                visualDensity: const VisualDensity(
+                                    horizontal: -4, vertical: -4),
+                                color: Colors.white,
+                                tooltip: '사용방법',
+                                onPressed: () => {checkhowdaylog(context)},
+                                icon: const Icon(
+                                  Icons.question_mark,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                              IconButton(
+                                visualDensity: const VisualDensity(
+                                    horizontal: -4, vertical: -4),
+                                color: Colors.black45,
+                                tooltip: '뷰 변경',
+                                onPressed: () => {
+                                  calendarview = Hive.box('user_setting')
+                                          .get('radio_cal') ??
+                                      'day',
+                                  calendarview == 'month'
+                                      ? changecalendarview(context, 'month')
+                                      : (calendarview == 'week'
+                                          ? changecalendarview(context, 'week')
+                                          : changecalendarview(context, 'day'))
+                                },
+                                icon: const Icon(Icons.change_circle),
+                              ),
+                              IconButton(
+                                visualDensity: const VisualDensity(
+                                    horizontal: -4, vertical: -4),
+                                color: Colors.black45,
+                                tooltip: '추가하기',
+                                onPressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          child: DayEventAdd(),
+                                          type: PageTransitionType
+                                              .leftToRightWithFade))
+                                  //addTodos(context, textEditingController, selectedDay)
+                                },
+                                icon: const Icon(Icons.add_circle),
+                              ),
+                            ],
                           ),
-                        ),
-                        IconButton(
-                          visualDensity:
-                              const VisualDensity(horizontal: -4, vertical: -4),
-                          color: Colors.black45,
-                          tooltip: '뷰 변경',
-                          onPressed: () => {
-                            calendarview =
-                                Hive.box('user_setting').get('radio_cal') ??
-                                    'day',
-                            calendarview == 'month'
-                                ? changecalendarview(context, 'month')
-                                : (calendarview == 'week'
-                                    ? changecalendarview(context, 'week')
-                                    : changecalendarview(context, 'day'))
-                          },
-                          icon: const Icon(Icons.change_circle),
-                        ),
-                        IconButton(
-                          visualDensity:
-                              const VisualDensity(horizontal: -4, vertical: -4),
-                          color: Colors.black45,
-                          tooltip: '추가하기',
-                          onPressed: () => {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: DayEventAdd(),
-                                    type:
-                                        PageTransitionType.leftToRightWithFade))
-                            //addTodos(context, textEditingController, selectedDay)
-                          },
-                          icon: const Icon(Icons.add_circle),
-                        ),
-                      ],
-                    ),
-                    )),
+                        )),
                   ],
                 ),
               ),
-              SizedBox(
-                height: height * 0.85,
-                child: ScrollConfiguration(
-                  behavior: NoBehavior(),
-                  child: SingleChildScrollView(child:
-                      StatefulBuilder(builder: (_, StateSetter setState) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          calendarView(height, context, s),
-                        ],
-                      ),
-                    );
-                  })),
-                ),
-              )
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: SizedBox(
+                    child: ScrollConfiguration(
+                      behavior: NoBehavior(),
+                      child: SingleChildScrollView(child:
+                          StatefulBuilder(builder: (_, StateSetter setState) {
+                        return Padding(
+                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              calendarView(height, context, s),
+                            ],
+                          ),
+                        );
+                      })),
+                    ),
+                  )),
             ],
           )),
     );
   }
+
   calendarView(double height, BuildContext context, String calendarview) {
     final _getDataSource = Provider.of<EventProvider>(context).events;
     return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -206,131 +207,134 @@ class _DayContentHomeState extends State<DayContentHome> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Neumorphic(
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          border: NeumorphicBorder.none(),
-                          boxShape: NeumorphicBoxShape.roundRect(
-                              BorderRadius.circular(20)),
-                          depth: -2,
-                          color: Colors.grey.shade200
-                          //color: Colors.grey.shade200,
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.convex,
+                            border: NeumorphicBorder.none(),
+                            boxShape: NeumorphicBoxShape.roundRect(
+                                BorderRadius.circular(20)),
+                            depth: -2,
+                            color: Colors.grey.shade200
+                            //color: Colors.grey.shade200,
+                            ),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: SfCalendar(
+                            view: CalendarView.day,
+                            initialSelectedDate: DateTime.now(),
+                            dataSource: MeetingDataSource(_getDataSource),
+                            onTap: (details) {
+                              final provider = Provider.of<EventProvider>(
+                                  context,
+                                  listen: false);
+                              provider.setDate(details.date!);
+                              setState(() {
+                                selectedDay = details.date!;
+                              });
+                            },
+                            monthViewSettings: const MonthViewSettings(
+                                appointmentDisplayMode:
+                                    MonthAppointmentDisplayMode.indicator),
+                            timeSlotViewSettings: const TimeSlotViewSettings(
+                                startHour: 0,
+                                endHour: 24,
+                                nonWorkingDays: <int>[
+                                  DateTime.saturday,
+                                  DateTime.sunday
+                                ]),
                           ),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: SfCalendar(
-                          view: CalendarView.day,
-                          initialSelectedDate: DateTime.now(),
-                          dataSource: MeetingDataSource(_getDataSource),
-                          onTap: (details) {
-                            final provider = Provider.of<EventProvider>(context,
-                                listen: false);
-                            provider.setDate(details.date!);
-                            setState(() {
-                              selectedDay = details.date!;
-                            });
-                          },
-                          monthViewSettings: const MonthViewSettings(
-                              appointmentDisplayMode:
-                                  MonthAppointmentDisplayMode.indicator),
-                          timeSlotViewSettings: const TimeSlotViewSettings(
-                              startHour: 0,
-                              endHour: 24,
-                              nonWorkingDays: <int>[
-                                DateTime.saturday,
-                                DateTime.sunday
-                              ]),
-                        ),
-                      )),
-                  )
-                )
+                        )),
+                  ))
               : (calendarview == 'week'
                   ? SizedBox(
                       height: height * 0.6,
                       child: Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
                         child: Neumorphic(
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              border: NeumorphicBorder.none(),
-                              boxShape: NeumorphicBoxShape.roundRect(
-                                  BorderRadius.circular(20)),
-                              depth: -2,
-                              color: Colors.grey.shade200
-                              //color: Colors.grey.shade200,
+                            style: NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                border: NeumorphicBorder.none(),
+                                boxShape: NeumorphicBoxShape.roundRect(
+                                    BorderRadius.circular(20)),
+                                depth: -2,
+                                color: Colors.grey.shade200
+                                //color: Colors.grey.shade200,
+                                ),
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              child: SfCalendar(
+                                view: CalendarView.week,
+                                initialSelectedDate: DateTime.now(),
+                                dataSource: MeetingDataSource(_getDataSource),
+                                onTap: (details) {
+                                  final provider = Provider.of<EventProvider>(
+                                      context,
+                                      listen: false);
+                                  provider.setDate(details.date!);
+                                  setState(() {
+                                    selectedDay = details.date!;
+                                  });
+                                },
+                                monthViewSettings: const MonthViewSettings(
+                                    appointmentDisplayMode:
+                                        MonthAppointmentDisplayMode.indicator),
+                                timeSlotViewSettings:
+                                    const TimeSlotViewSettings(
+                                        startHour: 0,
+                                        endHour: 24,
+                                        nonWorkingDays: <int>[
+                                      DateTime.saturday,
+                                      DateTime.sunday
+                                    ]),
                               ),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: SfCalendar(
-                              view: CalendarView.week,
-                              initialSelectedDate: DateTime.now(),
-                              dataSource: MeetingDataSource(_getDataSource),
-                              onTap: (details) {
-                                final provider = Provider.of<EventProvider>(
-                                    context,
-                                    listen: false);
-                                provider.setDate(details.date!);
-                                setState(() {
-                                  selectedDay = details.date!;
-                                });
-                              },
-                              monthViewSettings: const MonthViewSettings(
-                                  appointmentDisplayMode:
-                                      MonthAppointmentDisplayMode.indicator),
-                              timeSlotViewSettings: const TimeSlotViewSettings(
-                                  startHour: 0,
-                                  endHour: 24,
-                                  nonWorkingDays: <int>[
-                                    DateTime.saturday,
-                                    DateTime.sunday
-                                  ]),
-                            ),
-                          )),
+                            )),
                       ))
                   : SizedBox(
                       height: height * 0.6,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20),
-                        child: Neumorphic(
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              border: NeumorphicBorder.none(),
-                              boxShape: NeumorphicBoxShape.roundRect(
-                                  BorderRadius.circular(20)),
-                              depth: -2,
-                              color: Colors.grey.shade200
-                              //color: Colors.grey.shade200,
-                              ),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: SfCalendar(
-                              view: CalendarView.month,
-                              initialSelectedDate: DateTime.now(),
-                              dataSource: MeetingDataSource(_getDataSource),
-                              onTap: (details) {
-                                final provider = Provider.of<EventProvider>(
-                                    context,
-                                    listen: false);
-                                provider.setDate(details.date!);
-                                setState(() {
-                                  selectedDay = details.date!;
-                                });
-                              },
-                              monthViewSettings: const MonthViewSettings(
-                                  appointmentDisplayMode:
-                                      MonthAppointmentDisplayMode.indicator),
-                              timeSlotViewSettings: const TimeSlotViewSettings(
-                                  startHour: 0,
-                                  endHour: 24,
-                                  nonWorkingDays: <int>[
-                                    DateTime.saturday,
-                                    DateTime.sunday
-                                  ]),
-                            ),
-                          ))),
-                      )),
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: Neumorphic(
+                              style: NeumorphicStyle(
+                                  shape: NeumorphicShape.convex,
+                                  border: NeumorphicBorder.none(),
+                                  boxShape: NeumorphicBoxShape.roundRect(
+                                      BorderRadius.circular(20)),
+                                  depth: -2,
+                                  color: Colors.grey.shade200
+                                  //color: Colors.grey.shade200,
+                                  ),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                child: SfCalendar(
+                                  view: CalendarView.month,
+                                  initialSelectedDate: DateTime.now(),
+                                  dataSource: MeetingDataSource(_getDataSource),
+                                  onTap: (details) {
+                                    final provider = Provider.of<EventProvider>(
+                                        context,
+                                        listen: false);
+                                    provider.setDate(details.date!);
+                                    setState(() {
+                                      selectedDay = details.date!;
+                                    });
+                                  },
+                                  monthViewSettings: const MonthViewSettings(
+                                      appointmentDisplayMode:
+                                          MonthAppointmentDisplayMode
+                                              .indicator),
+                                  timeSlotViewSettings:
+                                      const TimeSlotViewSettings(
+                                          startHour: 0,
+                                          endHour: 24,
+                                          nonWorkingDays: <int>[
+                                        DateTime.saturday,
+                                        DateTime.sunday
+                                      ]),
+                                ),
+                              ))),
+                    )),
         ],
       );
     });

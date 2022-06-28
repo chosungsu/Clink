@@ -47,8 +47,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   HomeUi(PageController pController) {
-    double height =
-        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
@@ -63,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: height * 0.15,
+                  height: 80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -140,17 +139,18 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.85,
-                  child: ScrollConfiguration(
-                    behavior: NoBehavior(),
-                    child: SingleChildScrollView(child:
-                        StatefulBuilder(builder: (_, StateSetter setState) {
-                      return Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        child: Column(
-                          children: [
-                            /*FutureBuilder<List<TODO>>(
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: SizedBox(
+                      child: ScrollConfiguration(
+                        behavior: NoBehavior(),
+                        child: SingleChildScrollView(child:
+                            StatefulBuilder(builder: (_, StateSetter setState) {
+                          return Padding(
+                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            child: Column(
+                              children: [
+                                /*FutureBuilder<List<TODO>>(
                             future: homeasync(
                                 selectedDay), // a previously-obtained Future<String> or null
                             builder: (BuildContext context,
@@ -182,24 +182,24 @@ class _HomePageState extends State<HomePage> {
                               }
                             },
                           ),*/
-                            H_Container2(height),
-                            SizedBox(
-                              height: 30,
+                                H_Container2(height),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                H_Container1(height),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                H_Container3(height),
+                                SizedBox(
+                                  height: 100,
+                                ),
+                              ],
                             ),
-                            H_Container1(height),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            H_Container3(height),
-                            SizedBox(
-                              height: height * 0.2,
-                            ),
-                          ],
-                        ),
-                      );
-                    })),
-                  ),
-                )
+                          );
+                        })),
+                      ),
+                    )),
               ],
             )),
       ),
@@ -220,14 +220,6 @@ H_Container1(double height) {
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
                     fontSize: 18)),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Event',
-                style: TextStyle(
-                    color: Colors.orange,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 13)),
           ],
         ),
         const SizedBox(
@@ -252,27 +244,21 @@ H_Container2(double height) {
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
                     fontSize: 18)),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Life Styler',
-                style: TextStyle(
-                    color: Colors.blueAccent,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 13)),
+            
           ],
         ),
         const SizedBox(
           height: 20,
         ),
-        SecondCard(height : height)
+        SecondCard(height: height)
       ],
     ),
   );
 }
+
 H_Container3(double height) {
   return SizedBox(
-    height: 350,
+    height: 280,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

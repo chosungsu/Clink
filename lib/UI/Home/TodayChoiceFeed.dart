@@ -2,14 +2,14 @@ import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
-import '../Tool/NoBehavior.dart';
+import '../../Tool/NoBehavior.dart';
 
-class EnterCheckPage extends StatefulWidget {
+class TodayChoiceFeed extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _EnterCheckPageState();
+  State<StatefulWidget> createState() => _TodayChoiceFeedState();
 }
 
-class _EnterCheckPageState extends State<EnterCheckPage> {
+class _TodayChoiceFeedState extends State<TodayChoiceFeed> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -18,11 +18,11 @@ class _EnterCheckPageState extends State<EnterCheckPage> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: EnterCheckUi(),
+      body: ChoiceFeedAi(),
     ));
   }
 
-  EnterCheckUi() {
+  ChoiceFeedAi() {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,

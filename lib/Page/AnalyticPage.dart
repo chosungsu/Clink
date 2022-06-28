@@ -43,8 +43,7 @@ class _AnalyticPageState extends State<AnalyticPage>
   }
 
   Widget AnalyticBody(BuildContext context, PageController pController) {
-    double height =
-        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    double height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
@@ -58,7 +57,7 @@ class _AnalyticPageState extends State<AnalyticPage>
             child: Column(
               children: [
                 SizedBox(
-                  height: height * 0.15,
+                  height: 80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -126,24 +125,25 @@ class _AnalyticPageState extends State<AnalyticPage>
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.85,
-                  child: ScrollConfiguration(
-                    behavior: NoBehavior(),
-                    child: SingleChildScrollView(child:
-                        StatefulBuilder(builder: (_, StateSetter setState) {
-                      return Column(
-                        children: [
-                          A_Container1(height),
-                          A_Container2(height),
-                          SizedBox(
-                            height: height * 0.2,
-                          ),
-                        ],
-                      );
-                    })),
-                  ),
-                )
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: SizedBox(
+                      child: ScrollConfiguration(
+                        behavior: NoBehavior(),
+                        child: SingleChildScrollView(child:
+                            StatefulBuilder(builder: (_, StateSetter setState) {
+                          return Column(
+                            children: [
+                              A_Container1(height),
+                              A_Container2(height),
+                              SizedBox(
+                                height: height * 0.2,
+                              ),
+                            ],
+                          );
+                        })),
+                      ),
+                    )),
               ],
             )),
       ),

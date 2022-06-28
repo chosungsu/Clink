@@ -7,10 +7,13 @@ class ThirdCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
         fit: FlexFit.tight,
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ContainerDesign(
-              child: Row(
+                child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
                   Text('오늘 일정',
@@ -19,11 +22,11 @@ class ThirdCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 18)),
                   SizedBox(
-                    width: 10,
+                    height: 30,
                   ),
                   Flexible(
                     fit: FlexFit.tight,
-                    child: Text('가장 가까운 일정현황',
+                    child: Text('00:00 \n가장 가까운 일정현황',
                         style: TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.bold,
@@ -31,12 +34,11 @@ class ThirdCard extends StatelessWidget {
                   )
                 ],
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
+            )),
             ContainerDesign(
-              child: Row(
+                child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
                   Text('운동 기록',
@@ -45,7 +47,7 @@ class ThirdCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 18)),
                   SizedBox(
-                    width: 10,
+                    height: 30,
                   ),
                   Flexible(
                     fit: FlexFit.tight,
@@ -57,33 +59,7 @@ class ThirdCard extends StatelessWidget {
                   )
                 ],
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ContainerDesign(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Text('식단 밸런스',
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18)),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Text('아주 좋습니다',
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                  )
-                ],
-              ),
-            ),
+            )),
           ],
         ));
   }

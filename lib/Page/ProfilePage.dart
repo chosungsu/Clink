@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget ProfileBody(BuildContext context, PageController pcontroll) {
     double height =
-        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+        MediaQuery.of(context).size.height;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
@@ -79,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: height * 0.15,
+                  height: 80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -147,23 +147,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.85,
-                  child: ScrollConfiguration(
-                    behavior: NoBehavior(),
-                    child: SingleChildScrollView(child:
-                        StatefulBuilder(builder: (_, StateSetter setState) {
-                      return Column(
-                        children: [
-                          S_Container1(height),
-                          S_Container2(height, pcontroll, context),
-                          S_Container3(height),
-                          SizedBox(
-                            height: height * 0.15,
-                          ),
-                        ],
-                      );
-                    })),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: SizedBox(
+                    child: ScrollConfiguration(
+                      behavior: NoBehavior(),
+                      child: SingleChildScrollView(child:
+                          StatefulBuilder(builder: (_, StateSetter setState) {
+                        return Column(
+                          children: [
+                            S_Container1(height),
+                            S_Container2(height, pcontroll, context),
+                            S_Container3(height),
+                            SizedBox(
+                              height: height * 0.15,
+                            ),
+                          ],
+                        );
+                      })),
+                    ),
                   ),
                 ),
               ],
@@ -172,6 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
 S_Container1(double height) {
   return SizedBox(
     height: height * 0.2,
@@ -198,13 +201,15 @@ S_Container1(double height) {
             )),
         SizedBox(
           height: height * 0.15,
-          child: UserDetails(height : height),
+          child: UserDetails(height: height),
         )
       ],
     ),
   );
 }
-S_Container2(double height, PageController pageController, BuildContext context) {
+
+S_Container2(
+    double height, PageController pageController, BuildContext context) {
   return SizedBox(
     height: height * 0.2,
     child: Column(
@@ -227,37 +232,41 @@ S_Container2(double height, PageController pageController, BuildContext context)
                   ),
                 ),
                 InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: NoticePage(),
-                            type: PageTransitionType.leftToRightWithFade));
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 25,
-                    height: 25,
-                    child: NeumorphicIcon(
-                      Icons.navigate_next,
-                      size: 20,
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          depth: 2,
-                          color: Colors.black45,
-                          lightSource: LightSource.topLeft),
-                    ),
-                  )),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child: NoticePage(),
+                              type: PageTransitionType.leftToRightWithFade));
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 25,
+                      height: 25,
+                      child: NeumorphicIcon(
+                        Icons.navigate_next,
+                        size: 20,
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.convex,
+                            depth: 2,
+                            color: Colors.black45,
+                            lightSource: LightSource.topLeft),
+                      ),
+                    )),
               ],
             )),
         SizedBox(
           height: height * 0.15,
-          child: NoticeApps(height: height, pageController: pageController,),
+          child: NoticeApps(
+            height: height,
+            pageController: pageController,
+          ),
         )
       ],
     ),
   );
 }
+
 S_Container3(double height) {
   return SizedBox(
     height: height * 0.5,
