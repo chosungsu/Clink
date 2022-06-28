@@ -71,7 +71,7 @@ class _TodayChoiceFeedState extends State<TodayChoiceFeed> {
                                 Flexible(
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    '출석체크 이벤트',
+                                    '오늘의 추천',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
