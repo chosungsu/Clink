@@ -1,9 +1,14 @@
 import 'package:clickbyme/UI/Home/SecondCard.dart';
 import 'package:clickbyme/UI/Home/ThirdCard.dart';
 import 'package:clickbyme/UI/Home/EventShowCard.dart';
+import 'package:clickbyme/UI/Home/YourDayfulAd.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../Sub/NoticePage.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/Home/DayContentHome.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,12 +23,15 @@ class _HomePageState extends State<HomePage> {
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
-  final PageController _pController = PageController();
+  int currentPage = 0;
+  late final PageController _pController;
 
   @override
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
+    _pController =
+        PageController(initialPage: currentPage, viewportFraction: 0.8);
   }
 
   @override
@@ -182,17 +190,17 @@ class _HomePageState extends State<HomePage> {
                               }
                             },
                           ),*/
-                                H_Container2(height),
+                                H_Container_1(height),
                                 SizedBox(
                                   height: 30,
                                 ),
-                                H_Container1(height),
+                                H_Container_2(height, context),
                                 SizedBox(
                                   height: 30,
                                 ),
-                                H_Container3(height),
+                                H_Container_3(height, _pController),
                                 SizedBox(
-                                  height: 100,
+                                  height: 150,
                                 ),
                               ],
                             ),
@@ -207,7 +215,74 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-H_Container1(double height) {
+H_Container_1(double height) {
+  return SizedBox(
+    height: 150,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: const [
+            Text('라이프 스타일러',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SecondCard(height: height)
+      ],
+    ),
+  );
+}
+
+H_Container_2(double height, BuildContext context) {
+  return SizedBox(
+    height: 250,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Flexible(
+              fit: FlexFit.tight,
+              child: Text('조각 스페이스',
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            ),
+            GestureDetector(
+              onTap: () {
+                //타일변경으로 넘어가기
+                Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.bottomToTop,
+                      child: NoticePage()),
+                );
+              },
+              child: Text('변경',
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15)),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        YourDayfulAd(height: height)
+      ],
+    ),
+  );
+}
+
+H_Container_3(double height, PageController pController) {
   return SizedBox(
     height: 300,
     child: Column(
@@ -225,64 +300,7 @@ H_Container1(double height) {
         const SizedBox(
           height: 20,
         ),
-        EventShowCard(height: height),
-      ],
-    ),
-  );
-}
-
-H_Container2(double height) {
-  return SizedBox(
-    height: 150,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Text('라이프 스타일러',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)),
-            
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        SecondCard(height: height)
-      ],
-    ),
-  );
-}
-
-H_Container3(double height) {
-  return SizedBox(
-    height: 280,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Text('하루 조각',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Beta',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 13)),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        ThirdCard()
+        EventShowCard(height: height, pageController: pController),
       ],
     ),
   );
