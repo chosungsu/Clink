@@ -39,9 +39,23 @@ class YourDayfulAd extends StatelessWidget {
                                 onTap: () {
                                   //일정관리로 넘어가기
                                 },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Stack(
+                                  //crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Container(
+                                        height: 100,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text('맑음/25도/서울',
+                                                style: TextStyle(
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18)),
+                                          ],
+                                        )),
                                     Positioned(
                                       top: 0,
                                       left: 0,
@@ -59,14 +73,6 @@ class YourDayfulAd extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Text('맑음/25도/서울',
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18)),
-                                    ),
                                   ],
                                 ),
                               ))),
@@ -81,9 +87,23 @@ class YourDayfulAd extends StatelessWidget {
                                 onTap: () {
                                   //대중교통 홈으로 넘어가기
                                 },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Stack(
+                                  //crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Container(
+                                        height: 100,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text('2500걸음',
+                                                style: TextStyle(
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18)),
+                                          ],
+                                        )),
                                     Positioned(
                                       top: 0,
                                       left: 0,
@@ -100,14 +120,6 @@ class YourDayfulAd extends StatelessWidget {
                                               lightSource: LightSource.topLeft),
                                         ),
                                       ),
-                                    ),
-                                    Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Text('2500걸음',
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18)),
                                     ),
                                   ],
                                 ),
@@ -129,9 +141,26 @@ class YourDayfulAd extends StatelessWidget {
                                 onTap: () {
                                   //일정관리로 넘어가기
                                 },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Stack(
+                                  //crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Container(
+                                        height: 100,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                              '이렇게 해보시는 건 어떠세요?',
+                                              style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        )),
                                     Positioned(
                                       top: 0,
                                       left: 0,
@@ -149,16 +178,6 @@ class YourDayfulAd extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Text('이렇게 해보시는 건 어떠세요?',
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                    ),
                                   ],
                                 ),
                               ))),
@@ -173,9 +192,26 @@ class YourDayfulAd extends StatelessWidget {
                                 onTap: () {
                                   //대중교통 홈으로 넘어가기
                                 },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Stack(
+                                  //crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Container(
+                                        height: 100,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                              '친구 만나기',
+                                              style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        )),
                                     Positioned(
                                       top: 0,
                                       left: 0,
@@ -191,16 +227,6 @@ class YourDayfulAd extends StatelessWidget {
                                               color: Colors.black45,
                                               lightSource: LightSource.topLeft),
                                         ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Text('친구 만나기',
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                          overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
