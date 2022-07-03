@@ -179,17 +179,6 @@ Widget makeBody(BuildContext context, List<PageList> list_ad) {
                         ),
                         ],
                       );
-                      /*Container(
-                          padding: const EdgeInsets.all(10),
-                          child: InkWell(
-                            child: Text('${list_ad[index].title}'),
-                            onTap: () {
-                              if (index == 0) {
-                              } else if (index == 1) {
-                              } else if (index == 2) {
-                              } else {}
-                            },
-                          ));*/
                     },
                     separatorBuilder: (BuildContext context, int index) =>
                         const Divider(),

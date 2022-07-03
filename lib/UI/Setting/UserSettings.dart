@@ -12,7 +12,6 @@ class UserSettings extends StatelessWidget {
     '이용안내',
     '문의하기',
     'Pro 버전 구매',
-    '기본값 설정',
   ];
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class UserSettings extends StatelessWidget {
         padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
         child: ContainerDesign(
             child: SizedBox(
-                height: height * 0.45,
+                height: 250,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -32,7 +31,7 @@ class UserSettings extends StatelessWidget {
                       itemCount: list_title.length,
                       itemBuilder: (BuildContext context, int index) {
                         return SizedBox(
-                            height: (height * 0.85) * 0.45 / 5.5,
+                            height: 250 / 5.5,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -49,15 +48,15 @@ class UserSettings extends StatelessWidget {
                                               transitionEffect: TransitionEffect
                                                   .RIGHT_TO_LEFT));
                                     } else if (index == 1) {
-                                    } else if (index == 2) {
                                     } else {
+                                      //구독관리페이지 호출
                                       Navigator.push(
                                           context,
                                           Transition(
                                               child: SettingPage(),
                                               transitionEffect: TransitionEffect
-                                                  .RIGHT_TO_LEFT));
-                                    }
+                                                  .BOTTOM_TO_TOP));
+                                    } 
                                   },
                                 ),
                               ],

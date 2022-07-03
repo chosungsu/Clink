@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
       HomePage(title: widget.title),
-      FeedPage(),
+      //FeedPage(),
       AnalyticPage(),
       ProfilePage(),
     ];

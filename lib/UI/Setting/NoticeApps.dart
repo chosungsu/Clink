@@ -42,7 +42,7 @@ class NoticeApps extends StatelessWidget {
         padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
         child: ContainerDesign(
             child: SizedBox(
-          height: height * 0.15,
+          height: 100,
           child: PageView.builder(
               scrollDirection: Axis.vertical,
               pageSnapping: false,

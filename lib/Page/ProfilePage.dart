@@ -160,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             S_Container2(height, pcontroll, context),
                             S_Container3(height),
                             SizedBox(
-                              height: height * 0.15,
+                              height: 150,
                             ),
                           ],
                         );
@@ -177,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 S_Container1(double height) {
   return SizedBox(
-    height: height * 0.2,
+    height: 150,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -200,7 +200,7 @@ S_Container1(double height) {
               ],
             )),
         SizedBox(
-          height: height * 0.15,
+          height: 100,
           child: UserDetails(height: height),
         )
       ],
@@ -211,7 +211,7 @@ S_Container1(double height) {
 S_Container2(
     double height, PageController pageController, BuildContext context) {
   return SizedBox(
-    height: height * 0.2,
+    height: 150,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -256,7 +256,7 @@ S_Container2(
               ],
             )),
         SizedBox(
-          height: height * 0.15,
+          height: 100,
           child: NoticeApps(
             height: height,
             pageController: pageController,
@@ -269,7 +269,7 @@ S_Container2(
 
 S_Container3(double height) {
   return SizedBox(
-    height: height * 0.5,
+    height: 300,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -292,7 +292,7 @@ S_Container3(double height) {
               ],
             )),
         SizedBox(
-          height: height * 0.45,
+          height: 250,
           child: UserSettings(height: height),
         )
       ],

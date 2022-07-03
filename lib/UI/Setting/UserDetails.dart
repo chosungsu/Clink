@@ -16,7 +16,7 @@ class UserDetails extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
       child: SizedBox(
-          height: height * 0.05,
+          height: 100,
           child: Hive.box('user_info').get('id') != null
               ? showAfterSignUp(
                   Hive.box('user_info').get('id'),

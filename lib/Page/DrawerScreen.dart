@@ -38,7 +38,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       ),
                     );
                     Hive.box('user_setting').put('page_index', 0);
-                  } else if (element.containsValue(Icons.explore_outlined)) {
+                  }  else if (element.containsValue(Icons.bar_chart)) {
                     Navigator.of(context).pushReplacement(
                       PageTransition(
                         type: PageTransitionType.rightToLeft,
@@ -49,7 +49,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       ),
                     );
                     Hive.box('user_setting').put('page_index', 1);
-                  } else if (element.containsValue(Icons.bar_chart)) {
+                  } else {
                     Navigator.of(context).pushReplacement(
                       PageTransition(
                         type: PageTransitionType.rightToLeft,
@@ -60,17 +60,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       ),
                     );
                     Hive.box('user_setting').put('page_index', 2);
-                  } else {
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const MyHomePage(
-                          title: 'BOnd',
-                          index: 3,
-                        ),
-                      ),
-                    );
-                    Hive.box('user_setting').put('page_index', 3);
                   }
                 },
                 child: Column(

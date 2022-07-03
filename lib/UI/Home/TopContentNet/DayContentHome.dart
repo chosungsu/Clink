@@ -7,14 +7,13 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../DB/TODO.dart';
-import '../../Dialogs/checkhowdaylog.dart';
-import '../../Futures/homeasync.dart';
-import '../../Provider/EventProvider.dart';
-import '../../Sub/DayEventAdd.dart';
-import '../../Tool/CalendarSource.dart';
-import '../../Tool/NoBehavior.dart';
-import '../../sheets/changecalendarview.dart';
+import '../../../Dialogs/checkhowdaylog.dart';
+import '../../../Provider/EventProvider.dart';
+import '../../../Sub/DayEventAdd.dart';
+import '../../../Tool/CalendarSource.dart';
+import '../../../Tool/NoBehavior.dart';
+import '../../../sheets/changecalendarview.dart';
+
 
 class DayContentHome extends StatefulWidget {
   @override

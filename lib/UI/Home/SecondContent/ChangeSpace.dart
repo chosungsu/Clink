@@ -1,4 +1,6 @@
+import 'package:clickbyme/DB/SpaceList.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
+import 'package:clickbyme/UI/Home/SecondContent/SpaceAD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -7,36 +9,48 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../../DB/PageList.dart';
 import '../../../Dialogs/checkhowdaylog.dart';
 import '../../../Provider/EventProvider.dart';
 import '../../../Sub/DayEventAdd.dart';
 import '../../../Tool/CalendarSource.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../sheets/changecalendarview.dart';
-import '../Tool/ContainerDesign.dart';
 
-class SettingPage extends StatefulWidget {
+class ChangeSpace extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _SettingPageState();
+  State<StatefulWidget> createState() => _ChangeSpaceState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _ChangeSpaceState extends State<ChangeSpace> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  bool isclicked = false;
-  int iswalkusing = 0;
   TextEditingController textEditingController = TextEditingController();
   DateTime selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final List<SpaceList> _list_ad = [
+    SpaceList(
+      title: '날씨조각',
+      image : 'assets/images/date.png',
+    ),
+    SpaceList(
+      title: '운동조각',
+      image : 'assets/images/run.png',
+    ),
+    SpaceList(
+      title: '북마크조각',
+      image : 'assets/images/phrase.png',
+    ),
+    SpaceList(
+      title: '일정조각',
+      image : 'assets/images/date.png',
+    )
+  ];
 
   @override
   void initState() {
     super.initState();
-    Hive.box('user_info').get('iswalking') != null
-        ? iswalkusing = Hive.box('user_info').get('iswalking')
-        : iswalkusing = 0;
-    iswalkusing == 1 ? isclicked = true : isclicked = false;
   }
 
   @override
@@ -50,11 +64,11 @@ class _SettingPageState extends State<SettingPage> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: VersionBuy(),
+      body: EnterMySpace(),
     ));
   }
 
-  VersionBuy() {
+  EnterMySpace() {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
@@ -103,7 +117,7 @@ class _SettingPageState extends State<SettingPage> {
                                 Flexible(
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    '구매',
+                                    '',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -127,7 +141,11 @@ class _SettingPageState extends State<SettingPage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              BuyItem1(height, context),
+                              MySpace(height, context),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              ChoiceSpace(height, context),
                               SizedBox(
                                 height: 150,
                               ),
@@ -142,7 +160,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  BuyItem1(double height, BuildContext context) {
+  MySpace(double height, BuildContext context) {
     return SizedBox(
       height: 400,
       child: Column(
@@ -150,7 +168,7 @@ class _SettingPageState extends State<SettingPage> {
         children: [
           Row(
             children: const [
-              Text('구독하기',
+              Text('나의 현재 스페이스',
                   style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.bold,
@@ -160,103 +178,73 @@ class _SettingPageState extends State<SettingPage> {
           const SizedBox(
             height: 20,
           ),
-          Item1View()
+          myspace()
         ],
       ),
     );
   }
 
-  Item1View() {
+  myspace() {
     return SizedBox(
-        height: 300,
-        width: MediaQuery.of(context).size.width - 40,
-        child: ContainerDesign(
-            child: Column(
-          children: [
-            Flexible(
-              flex: 1,
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.looks_one_outlined,
-                          size: 30,
-                        )
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text('베이직 버전 구매',
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                  ],
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.looks_two_outlined,
-                          size: 30,
-                        )
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text('프로 버전 구매',
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                  ],
-                ),
-              ),
-            ),
-            Flexible(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Row(
-                    children: [
-                      Container(
-                        alignment: Alignment.topCenter,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Icon(
-                          Icons.looks_3_outlined,
-                          size: 30,
-                        )
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text('얼티메이트 버전 구매',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15)),
-                    ],
-                  ),
-                )),
-          ],
-        )));
+        height: 350,
+        child: ReorderableListView(
+            children: getItems(),
+            onReorder: (oldIndex, newIndex) {
+              onreorder(oldIndex, newIndex);
+            }));
+  }
+
+  List<ListTile> getItems() => _list_ad
+      .asMap()
+      .map((index, item) => MapEntry(index, buildListTile(item.title, index)))
+      .values
+      .toList();
+  ListTile buildListTile(String item, int index) => ListTile(
+        key: ValueKey(item),
+        title: Text(item),
+        trailing: Icon(
+          Icons.menu,
+          color: Colors.black45,
+          size: 20,
+        )
+      );
+  onreorder(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    setState(() {
+      String titling = _list_ad[oldIndex].title;
+      String imaging = _list_ad[oldIndex].image;
+      _list_ad.removeAt(oldIndex);
+      _list_ad.insert(newIndex, SpaceList(title: titling, image: imaging));
+    });
+  }
+
+  ChoiceSpace(double height, BuildContext context) {
+    return SizedBox(
+      height: 150,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Text('더 많은 스페이스를 원하신다면?',
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SpaceEventAD()
+        ],
+      ),
+    );
+  }
+
+  SpaceEventAD() {
+    return SpaceAD();
   }
 }

@@ -1,14 +1,13 @@
-import 'package:clickbyme/UI/Home/SecondCard.dart';
-import 'package:clickbyme/UI/Home/ThirdCard.dart';
+import 'package:clickbyme/UI/Home/SecondContent/ChangeSpace.dart';
+import 'package:clickbyme/UI/Home/TopContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/EventShowCard.dart';
-import 'package:clickbyme/UI/Home/YourDayfulAd.dart';
+import 'package:clickbyme/UI/Home/SecondContent/YourDayfulAd.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Sub/NoticePage.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/Home/DayContentHome.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
     _pController =
-        PageController(initialPage: currentPage, viewportFraction: 0.8);
+        PageController(initialPage: currentPage, viewportFraction: 1);
   }
 
   @override
@@ -223,7 +222,7 @@ H_Container_1(double height) {
       children: [
         Row(
           children: const [
-            Text('라이프 스타일러',
+            Text('조각',
                 style: TextStyle(
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
@@ -233,7 +232,7 @@ H_Container_1(double height) {
         const SizedBox(
           height: 20,
         ),
-        SecondCard(height: height)
+        TopCard(height: height)
       ],
     ),
   );
@@ -249,7 +248,7 @@ H_Container_2(double height, BuildContext context) {
           children: [
             Flexible(
               fit: FlexFit.tight,
-              child: Text('조각 스페이스',
+              child: Text('하루공간',
                   style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.bold,
@@ -262,7 +261,7 @@ H_Container_2(double height, BuildContext context) {
                   context,
                   PageTransition(
                       type: PageTransitionType.bottomToTop,
-                      child: NoticePage()),
+                      child: ChangeSpace()),
                 );
               },
               child: Text('변경',

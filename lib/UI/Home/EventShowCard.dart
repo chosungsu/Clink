@@ -18,10 +18,12 @@ class EventShowCard extends StatelessWidget {
   final List eventtitle = [
     '출석체크 이벤트',
     '룰렛 이벤트',
+    '모어 스페이스 이벤트',
   ];
   final List eventcontent = [
     '메모리북 작성권과 하루분석결과 열람권을 드립니다. 지금 즉시 바로가기를 눌러 확인해보세요!',
-    '룰렛을 돌려 AI건강지킴 사용포인트를 꽝 없이 획득해보세요!'
+    '룰렛을 돌려 AI건강지킴 사용포인트를 꽝 없이 획득해보세요!',
+    '광고제거 시 스페이스를 4개 더 드립니다. 지금 즉시 확인해보세요!',
   ];
 
   @override
@@ -35,7 +37,7 @@ class EventShowCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(
-                      height: 200,
+                      height: 210,
                       child: PageView.builder(
                         itemCount: eventtitle.length,
                         controller: pageController,
@@ -52,7 +54,7 @@ class EventShowCard extends StatelessWidget {
                                       height: 30,
                                       child: Row(
                                         children: [
-                                          NeumorphicIcon(
+                                          index == 0 ? NeumorphicIcon(
                                             Icons.confirmation_number,
                                             size: 25,
                                             style: NeumorphicStyle(
@@ -61,7 +63,18 @@ class EventShowCard extends StatelessWidget {
                                                 color: Colors.black45,
                                                 lightSource:
                                                     LightSource.topLeft),
+                                          )
+                                          : NeumorphicIcon(
+                                            Icons.sports_esports,
+                                            size: 25,
+                                            style: NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                depth: 2,
+                                                color: Colors.black45,
+                                                lightSource:
+                                                    LightSource.topLeft),
                                           ),
+                                          
                                           SizedBox(
                                             width: 20,
                                           ),
@@ -167,97 +180,3 @@ class EventShowCard extends StatelessWidget {
                 ))));
   }
 }
-/*
-Flexible(
-                        fit: FlexFit.tight,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 80,
-                              height: 30,
-                              child: Row(
-                                children: [
-                                  NeumorphicIcon(
-                                    Icons.confirmation_number,
-                                    size: 25,
-                                    style: NeumorphicStyle(
-                                        shape: NeumorphicShape.convex,
-                                        depth: 2,
-                                        color: Colors.black45,
-                                        lightSource: LightSource.topLeft),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text('출석체크 이벤트',
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18)),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 80,
-                              height: 80,
-                              child: Text(
-                                  '메모리북 작성권과 하루분석결과 열람권을 드립니다. ' +
-                                      '지금 즉시 바로가기를 눌러 확인해보세요!',
-                                  style: TextStyle(
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15)),
-                            ),
-                          ],
-                        )),
-                    Column(
-                      children: [
-                        SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.grey.shade400,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.bottomToTop,
-                                          child: EnterCheckPage()),
-                                    );
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '바로가기',
-                                            style: const NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Colors.white,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ))
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )*/

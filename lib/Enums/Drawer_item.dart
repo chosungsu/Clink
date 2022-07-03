@@ -6,10 +6,6 @@ List<Map> drawerItems = const [
     'title': '홈'
   },
   {
-    'icon': Icons.explore_outlined,
-    'title': '탐색',
-  },
-  {
     'icon': Icons.bar_chart,
     'title': '분석',
   },
