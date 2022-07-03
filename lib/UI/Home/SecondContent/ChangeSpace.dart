@@ -39,13 +39,17 @@ class _ChangeSpaceState extends State<ChangeSpace> {
       image : 'assets/images/run.png',
     ),
     SpaceList(
-      title: '북마크조각',
-      image : 'assets/images/phrase.png',
-    ),
-    SpaceList(
       title: '일정조각',
       image : 'assets/images/date.png',
-    )
+    ),
+    SpaceList(
+      title: '메모조각',
+      image : 'assets/images/book.png',
+    ),
+    SpaceList(
+      title: '오늘의 클립조각',
+      image : 'assets/images/phrase.png',
+    ),
   ];
 
   @override
@@ -196,10 +200,13 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   List<ListTile> getItems() => _list_ad
       .asMap()
-      .map((index, item) => MapEntry(index, buildListTile(item.title, index)))
+      .map((index, item) => 
+      index < 3 ?
+      MapEntry(index, buildListTile_not_buy(item.title, index)) :
+      MapEntry(index, buildListTile_after_buy(item.title, index)))
       .values
       .toList();
-  ListTile buildListTile(String item, int index) => ListTile(
+  ListTile buildListTile_not_buy(String item, int index) => ListTile(
         key: ValueKey(item),
         title: Text(item),
         trailing: Icon(
@@ -208,15 +215,33 @@ class _ChangeSpaceState extends State<ChangeSpace> {
           size: 20,
         )
       );
+  ListTile buildListTile_after_buy(String item, int index) => ListTile(
+        key: ValueKey(item),
+        title: Text(item),
+        trailing: Icon(
+          Icons.lock,
+          color: Colors.black45,
+          size: 20,
+        )
+      );
   onreorder(int oldIndex, int newIndex) {
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
+    oldIndex < 3 ?
     setState(() {
       String titling = _list_ad[oldIndex].title;
       String imaging = _list_ad[oldIndex].image;
       _list_ad.removeAt(oldIndex);
       _list_ad.insert(newIndex, SpaceList(title: titling, image: imaging));
+    }) :
+    setState(() {
+      String titling = _list_ad[oldIndex].title;
+      String imaging = _list_ad[oldIndex].image;
+      _list_ad.removeAt(oldIndex);
+      _list_ad.insert(newIndex, SpaceList(title: titling, image: imaging));
+      _list_ad.removeAt(newIndex);
+      _list_ad.insert(oldIndex, SpaceList(title: titling, image: imaging));
     });
   }
 

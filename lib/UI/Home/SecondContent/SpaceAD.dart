@@ -15,7 +15,7 @@ class SpaceAD extends StatelessWidget {
   final List eventcontent = [
     '메모리북 작성권과 하루분석결과 열람권을 드립니다. 지금 즉시 바로가기를 눌러 확인해보세요!',
     '룰렛을 돌려 AI건강지킴 사용포인트를 꽝 없이 획득해보세요!',
-    '광고제거 시 스페이스를 4개 더 드립니다. 지금 즉시 확인해보세요!',
+    '베이직 버전 이상 구매 시 스페이스잠금을 풀어드립니다. 지금 즉시 확인해보세요!',
   ];
   @override
   Widget build(BuildContext context) {
