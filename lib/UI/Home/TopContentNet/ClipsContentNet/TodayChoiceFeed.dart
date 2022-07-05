@@ -1,9 +1,10 @@
+import 'package:clickbyme/Tool/NoBehavior.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
+import 'package:clickbyme/UI/Home/TopContentNet/ClipsContentNet/ClipsCard.dart';
+import 'package:clickbyme/UI/Home/TopContentNet/ClipsContentNet/HabitCard.dart';
+import 'package:clickbyme/UI/Home/TopContentNet/ClipsContentNet/TodayRoadView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-
-import '../../../Tool/NoBehavior.dart';
-
 
 class TodayChoiceFeed extends StatefulWidget {
   @override
@@ -14,6 +15,21 @@ class _TodayChoiceFeedState extends State<TodayChoiceFeed> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
+  int currentPage = 0;
+  late final PageController _pController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pController =
+        PageController(initialPage: currentPage, viewportFraction: 1);
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _pController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -72,7 +88,7 @@ class _TodayChoiceFeedState extends State<TodayChoiceFeed> {
                                 Flexible(
                                   fit: FlexFit.tight,
                                   child: Text(
-                                    '오늘의 추천',
+                                    '',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -96,8 +112,18 @@ class _TodayChoiceFeedState extends State<TodayChoiceFeed> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              PosterView(height),
-                              CheckSystem(height),
+                              TCF_1(),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              TCF_2(),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              TCF_3(),
+                              SizedBox(
+                                height: 150,
+                              ),
                             ],
                           ),
                         );
@@ -109,108 +135,75 @@ class _TodayChoiceFeedState extends State<TodayChoiceFeed> {
     );
   }
 
-  CheckSystem(double height) {
+  TCF_1() {
     return SizedBox(
-      height: height * 0.2,
+      height: 150,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            children: const [
+              Text('#클립모음',
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            ],
+          ),
           const SizedBox(
             height: 20,
           ),
-          GestureDetector(
-            onHorizontalDragUpdate: (event) async {
-              if (event.primaryDelta! > 10) {
-                _incTansXVal();
-              }
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                paymentSuccessful(),
-                myWidth == 0.0
-                    ? Expanded(
-                        child: Center(
-                          child: Text(
-                            "화살표를 우측으로 끌고 오세요",
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 20.00),
-                          ),
-                        ),
-                      )
-                    : SizedBox(),
-              ],
-            ),
-          )
+          ClipsCard()
         ],
       ),
     );
   }
 
-  Widget paymentSuccessful() => Transform.translate(
-        offset: Offset(translateX, translateY),
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.linear,
-          width: 30 + myWidth,
-          height: 30,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50.00),
-            color: Colors.blue,
+  TCF_2() {
+    return SizedBox(
+      height: 300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Text('#하루 길라잡이',
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            ],
           ),
-          child: myWidth > 0.0
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                    Flexible(
-                      child: Text(
-                        " 출석체크 완료 ",
-                        style: TextStyle(color: Colors.white, fontSize: 20.00),
-                      ),
-                    ),
-                  ],
-                )
-              : Icon(
-                  Icons.navigate_next,
-                  color: Colors.white,
-                  size: 30.00,
-                ),
-        ),
-      );
-
-  _incTansXVal() async {
-    int canLoop = -1;
-    for (var i = 0; canLoop == -1; i++)
-      await Future.delayed(Duration(milliseconds: 1), () {
-        setState(() {
-          if (translateX + 1 <
-              MediaQuery.of(context).size.width - (200 + myWidth)) {
-            translateX += 1;
-            myWidth = MediaQuery.of(context).size.width - (200 + myWidth);
-          } else {
-            canLoop = 1;
-          }
-        });
-      });
+          const SizedBox(
+            height: 20,
+          ),
+          TodayRoadView(pageController: _pController),
+        ],
+      ),
+    );
   }
-}
 
-PosterView(double height) {
-  return SizedBox(
-    height: height * 0.6,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        EnterCheckEvents(height: height),
-      ],
-    ),
-  );
+  TCF_3() {
+    return SizedBox(
+      height: 150,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Text('#동기부여',
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          HabitCard()
+        ],
+      ),
+    );
+  }
 }

@@ -1,13 +1,13 @@
-import 'package:clickbyme/UI/Home/SecondContent/ChangeSpace.dart';
 import 'package:clickbyme/UI/Home/TopContentNet/TopCard.dart';
-import 'package:clickbyme/UI/Home/EventShowCard.dart';
-import 'package:clickbyme/UI/Home/SecondContent/YourDayfulAd.dart';
+import 'package:clickbyme/UI/Home/ThirdContentNet/EventShowCard.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Sub/NoticePage.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/Home/SecondContentNet/ChangeSpace.dart';
+import '../UI/Home/SecondContentNet/YourDayfulAd.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {

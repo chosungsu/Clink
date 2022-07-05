@@ -1,6 +1,6 @@
 import 'package:clickbyme/DB/SpaceList.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
-import 'package:clickbyme/UI/Home/SecondContent/SpaceAD.dart';
+import 'package:clickbyme/UI/Home/SecondContentNet/SpaceAD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -32,23 +32,23 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   final List<SpaceList> _list_ad = [
     SpaceList(
       title: '날씨조각',
-      image : 'assets/images/date.png',
+      image: 'assets/images/date.png',
     ),
     SpaceList(
       title: '운동조각',
-      image : 'assets/images/run.png',
+      image: 'assets/images/run.png',
     ),
     SpaceList(
       title: '일정조각',
-      image : 'assets/images/date.png',
+      image: 'assets/images/date.png',
     ),
     SpaceList(
       title: '메모조각',
-      image : 'assets/images/book.png',
+      image: 'assets/images/book.png',
     ),
     SpaceList(
       title: '오늘의 클립조각',
-      image : 'assets/images/phrase.png',
+      image: 'assets/images/phrase.png',
     ),
   ];
 
@@ -200,54 +200,42 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   List<ListTile> getItems() => _list_ad
       .asMap()
-      .map((index, item) => 
-      index < 3 ?
-      MapEntry(index, buildListTile_not_buy(item.title, index)) :
-      MapEntry(index, buildListTile_after_buy(item.title, index)))
+      .map((index, item) => index < 3
+          ? MapEntry(index, buildListTile_not_buy(item.title, index))
+          : MapEntry(index, buildListTile_after_buy(item.title, index)))
       .values
       .toList();
   ListTile buildListTile_not_buy(String item, int index) => ListTile(
-        key: ValueKey(item),
-        title: Text(item),
-        trailing: Icon(
-          Icons.menu,
-          color: Colors.black45,
-          size: 20,
-        )
-      );
+      key: ValueKey(item),
+      title: Text(item),
+      trailing: Icon(
+        Icons.menu,
+        color: Colors.black45,
+        size: 20,
+      ));
   ListTile buildListTile_after_buy(String item, int index) => ListTile(
-        key: ValueKey(item),
-        title: Text(item),
-        trailing: Icon(
-          Icons.lock,
-          color: Colors.black45,
-          size: 20,
-        )
-      );
+      key: ValueKey(item),
+      title: Text(item),
+      trailing: Icon(
+        Icons.lock,
+        color: Colors.black45,
+        size: 20,
+      ));
   onreorder(int oldIndex, int newIndex) {
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
-    oldIndex < 3 ?
     setState(() {
       String titling = _list_ad[oldIndex].title;
       String imaging = _list_ad[oldIndex].image;
       _list_ad.removeAt(oldIndex);
       _list_ad.insert(newIndex, SpaceList(title: titling, image: imaging));
-    }) :
-    setState(() {
-      String titling = _list_ad[oldIndex].title;
-      String imaging = _list_ad[oldIndex].image;
-      _list_ad.removeAt(oldIndex);
-      _list_ad.insert(newIndex, SpaceList(title: titling, image: imaging));
-      _list_ad.removeAt(newIndex);
-      _list_ad.insert(oldIndex, SpaceList(title: titling, image: imaging));
     });
   }
 
   ChoiceSpace(double height, BuildContext context) {
     return SizedBox(
-      height: 150,
+      height: 300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

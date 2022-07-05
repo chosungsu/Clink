@@ -24,8 +24,7 @@ class _SettingPageState extends State<SettingPage> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  bool isclicked = false;
-  int iswalkusing = 0;
+  bool isChecked = false;
   TextEditingController textEditingController = TextEditingController();
   DateTime selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -33,10 +32,6 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
-    Hive.box('user_info').get('iswalking') != null
-        ? iswalkusing = Hive.box('user_info').get('iswalking')
-        : iswalkusing = 0;
-    iswalkusing == 1 ? isclicked = true : isclicked = false;
   }
 
   @override
@@ -144,9 +139,9 @@ class _SettingPageState extends State<SettingPage> {
 
   BuyItem1(double height, BuildContext context) {
     return SizedBox(
-      height: 400,
+      height: 450,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             children: const [
@@ -160,7 +155,15 @@ class _SettingPageState extends State<SettingPage> {
           const SizedBox(
             height: 20,
           ),
-          Item1View()
+          Item1View(),
+          const SizedBox(
+            height: 20,
+          ),
+          isChecked == true
+              ? ConsoleBuy()
+              : SizedBox(
+                  height: 0,
+                )
         ],
       ),
     );
@@ -179,84 +182,172 @@ class _SettingPageState extends State<SettingPage> {
                 onTap: () {},
                 child: Row(
                   children: [
-                    Container(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.looks_one_outlined,
-                          size: 30,
-                        )
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text('베이직 버전 구매',
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: [
+                            Container(
+                              alignment: Alignment.topCenter,
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.looks_one_outlined,
+                                    size: 30,
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text('프로 버전 구매',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
+                          ],
+                        )),
+                    Checkbox(
+                        value: isChecked,
+                        onChanged: (value) {
+                          setState(() {
+                            isChecked = value!;
+                          });
+                        })
                   ],
                 ),
               ),
+            ),
+            SizedBox(
+              height: 10,
             ),
             Flexible(
               flex: 1,
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.looks_two_outlined,
-                          size: 30,
-                        )
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text('프로 버전 구매',
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('프로 버전을 구매 시 주어지는 혜택',
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)),
+                ],
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
             Flexible(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Row(
+              flex: 2,
+              child: ListView.separated(
+                //physics : 스크롤 막기 기능
+                //shrinkWrap : 리스트뷰 오버플로우 방지
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 3,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        alignment: Alignment.topCenter,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Icon(
-                          Icons.looks_3_outlined,
-                          size: 30,
-                        )
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text('얼티메이트 버전 구매',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15)),
+                      index == 0
+                          ? Row(
+                              children: [
+                                Text((index + 1).toString(),
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text('광고 제거',
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
+                              ],
+                            )
+                          : (index == 1
+                              ? Row(
+                                  children: [
+                                    Text((index + 1).toString(),
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15)),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text('하루 일상 스페이스 개수 잠금 해제',
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15)),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Text((index + 1).toString(),
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15)),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text('하루 분석표 일부 기능 잠금 해제',
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15)),
+                                  ],
+                                ))
                     ],
-                  ),
-                )),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+              ),
+            ),
           ],
         )));
+  }
+
+  ConsoleBuy() {
+    return SizedBox(
+      height: 50,
+      width: (MediaQuery.of(context).size.width - 40) * 0.8,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.grey.shade400,
+              ),
+              onPressed: () {},
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: NeumorphicText(
+                        '구매화면 이동',
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: Colors.white,
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+        ],
+      ),
+    );
   }
 }

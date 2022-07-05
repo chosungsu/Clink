@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clickbyme/Page/EnterCheckPage.dart';
+import 'package:clickbyme/Sub/SettingPage.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:transition/transition.dart';
 
 class EventShowCard extends StatelessWidget {
   EventShowCard({Key? key, required this.height, required this.pageController})
@@ -18,12 +20,12 @@ class EventShowCard extends StatelessWidget {
   final List eventtitle = [
     '출석체크 이벤트',
     '룰렛 이벤트',
-    '모어 스페이스 이벤트',
+    '버전 업그레이드 혜택',
   ];
   final List eventcontent = [
     '메모리북 작성권과 하루분석결과 열람권을 드립니다. 지금 즉시 바로가기를 눌러 확인해보세요!',
-    '룰렛을 돌려 AI건강지킴 사용포인트를 꽝 없이 획득해보세요!',
-    '광고제거 시 스페이스를 4개 더 드립니다. 지금 즉시 확인해보세요!',
+    '룰렛을 돌려 루틴업그레이드 포인트를 꽝 없이 획득해보세요!',
+    '버전 업그레이드 시 잠금된 기능을 해제해드립니다. 지금 즉시 확인해보세요!',
   ];
 
   @override
@@ -54,27 +56,29 @@ class EventShowCard extends StatelessWidget {
                                       height: 30,
                                       child: Row(
                                         children: [
-                                          index == 0 ? NeumorphicIcon(
-                                            Icons.confirmation_number,
-                                            size: 25,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                color: Colors.black45,
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          )
-                                          : NeumorphicIcon(
-                                            Icons.sports_esports,
-                                            size: 25,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                color: Colors.black45,
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                          
+                                          index == 0
+                                              ? NeumorphicIcon(
+                                                  Icons.confirmation_number,
+                                                  size: 25,
+                                                  style: NeumorphicStyle(
+                                                      shape: NeumorphicShape
+                                                          .convex,
+                                                      depth: 2,
+                                                      color: Colors.black45,
+                                                      lightSource:
+                                                          LightSource.topLeft),
+                                                )
+                                              : NeumorphicIcon(
+                                                  Icons.sports_esports,
+                                                  size: 25,
+                                                  style: NeumorphicStyle(
+                                                      shape: NeumorphicShape
+                                                          .convex,
+                                                      depth: 2,
+                                                      color: Colors.black45,
+                                                      lightSource:
+                                                          LightSource.topLeft),
+                                                ),
                                           SizedBox(
                                             width: 20,
                                           ),
@@ -105,8 +109,9 @@ class EventShowCard extends StatelessWidget {
                             Column(
                               children: [
                                 SizedBox(
-                                  width: (MediaQuery.of(context).size.width -
-                                          80) * 0.8,
+                                  width:
+                                      (MediaQuery.of(context).size.width - 80) *
+                                          0.8,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -116,13 +121,14 @@ class EventShowCard extends StatelessWidget {
                                             primary: Colors.grey.shade400,
                                           ),
                                           onPressed: () {
+                                            //구독관리페이지 호출
                                             Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                  type: PageTransitionType
-                                                      .bottomToTop,
-                                                  child: EnterCheckPage()),
-                                            );
+                                                context,
+                                                Transition(
+                                                    child: SettingPage(),
+                                                    transitionEffect:
+                                                        TransitionEffect
+                                                            .BOTTOM_TO_TOP));
                                           },
                                           child: Center(
                                             child: Column(

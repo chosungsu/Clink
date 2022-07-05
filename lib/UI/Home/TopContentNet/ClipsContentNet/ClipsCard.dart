@@ -1,15 +1,11 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/UI/Home/TopContentNet/ClipsContentNet/TodayChoiceFeed.dart';
+import 'package:clickbyme/UI/Home/TopContentNet/DayContentHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 
-import 'DayContentHome.dart';
-
-class TopCard extends StatelessWidget {
-  const TopCard({Key? key, required this.height}) : super(key: key);
-  final double height;
-
+class ClipsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -43,11 +39,14 @@ class TopCard extends StatelessWidget {
                                 height: 30,
                                 child: Container(
                                   alignment: Alignment.center,
-                                  child: Image.asset(
-                                    'assets/images/date.png',
-                                    color: Colors.black45,
-                                    width: 30,
-                                    height: 30,
+                                  child: NeumorphicIcon(
+                                    Icons.description,
+                                    size: 25,
+                                    style: NeumorphicStyle(
+                                        shape: NeumorphicShape.convex,
+                                        depth: 2,
+                                        color: Colors.black45,
+                                        lightSource: LightSource.topLeft),
                                   ),
                                 ),
                               ),
@@ -58,7 +57,7 @@ class TopCard extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: SizedBox(
                                   child: const Center(
-                                    child: Text('캘린더',
+                                    child: Text('일상메모장',
                                         style: TextStyle(
                                             color: Colors.black54,
                                             fontWeight: FontWeight.bold,
@@ -88,11 +87,14 @@ class TopCard extends StatelessWidget {
                                     alignment: Alignment.center,
                                     width: 30,
                                     height: 30,
-                                    child: Image.asset(
-                                      'assets/images/phrase.png',
-                                      color: Colors.black45,
-                                      width: 30,
-                                      height: 30,
+                                    child: NeumorphicIcon(
+                                      Icons.link,
+                                      size: 25,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          color: Colors.black45,
+                                          lightSource: LightSource.topLeft),
                                     ),
                                   ),
                                 ),
@@ -102,7 +104,7 @@ class TopCard extends StatelessWidget {
                                     alignment: Alignment.center,
                                     child: SizedBox(
                                       child: const Center(
-                                        child: Text('오늘의클립',
+                                        child: Text('퀵URLs',
                                             style: TextStyle(
                                                 color: Colors.black54,
                                                 fontWeight: FontWeight.bold,
@@ -130,11 +132,14 @@ class TopCard extends StatelessWidget {
                                     alignment: Alignment.center,
                                     width: 30,
                                     height: 30,
-                                    child: Image.asset(
-                                      'assets/images/book.png',
-                                      color: Colors.black45,
-                                      width: 30,
-                                      height: 30,
+                                    child: NeumorphicIcon(
+                                      Icons.add_task,
+                                      size: 25,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          color: Colors.black45,
+                                          lightSource: LightSource.topLeft),
                                     ),
                                   ),
                                 ),
@@ -144,7 +149,7 @@ class TopCard extends StatelessWidget {
                                     alignment: Alignment.center,
                                     child: SizedBox(
                                       child: const Center(
-                                        child: Text('메모리 북',
+                                        child: Text('갓생루틴',
                                             style: TextStyle(
                                                 color: Colors.black54,
                                                 fontWeight: FontWeight.bold,
