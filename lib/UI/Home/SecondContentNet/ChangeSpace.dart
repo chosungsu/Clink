@@ -166,7 +166,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   MySpace(double height, BuildContext context) {
     return SizedBox(
-      height: 400,
+      height: 350,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -190,7 +190,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   myspace() {
     return SizedBox(
-        height: 350,
+        height: 300,
         child: ReorderableListView(
             children: getItems(),
             onReorder: (oldIndex, newIndex) {
