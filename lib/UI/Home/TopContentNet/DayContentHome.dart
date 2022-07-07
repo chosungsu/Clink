@@ -1,4 +1,6 @@
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
+import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
+import 'package:clickbyme/sheets/addCalendarTodo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -27,8 +29,10 @@ class _DayContentHomeState extends State<DayContentHome> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  TextEditingController textEditingController1 = TextEditingController();
-  TextEditingController textEditingController2 = TextEditingController();
+  bool isupschedule = false;
+  late TextEditingController textEditingController1;
+  late TextEditingController textEditingController2;
+  late TextEditingController textEditingController3;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.week;
@@ -50,6 +54,9 @@ class _DayContentHomeState extends State<DayContentHome> {
   @override
   void initState() {
     super.initState();
+    textEditingController1 = TextEditingController();
+    textEditingController2 = TextEditingController();
+    textEditingController3 = TextEditingController();
     fromDate = DateTime.now();
     toDate = DateTime.now().add(const Duration(hours: 2));
     _events = {};
@@ -61,6 +68,7 @@ class _DayContentHomeState extends State<DayContentHome> {
     super.dispose();
     textEditingController1.dispose();
     textEditingController2.dispose();
+    textEditingController3.dispose();
   }
 
   @override
@@ -88,74 +96,291 @@ class _DayContentHomeState extends State<DayContentHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Padding(padding: const EdgeInsets.only(left: 10)),
-                    SizedBox(
-                        width: 50,
-                        child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 30,
-                              height: 30,
-                              child: NeumorphicIcon(
-                                Icons.keyboard_arrow_left,
-                                size: 30,
-                                style: const NeumorphicStyle(
-                                    shape: NeumorphicShape.convex,
-                                    depth: 2,
-                                    surfaceIntensity: 0.5,
-                                    color: Colors.black45,
-                                    lightSource: LightSource.topLeft),
-                              ),
-                            ))),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width - 60 - 160,
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: Row(
-                              children: [
-                                const Flexible(
-                                  fit: FlexFit.tight,
-                                  child: Text(
-                                    '',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.black45),
-                                  ),
-                                ),
-                              ],
-                            ))),
-                  ],
-                ),
+                height: 170,
+                child: calendarView(height, context),
               ),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
                     child: ScrollConfiguration(
                       behavior: NoBehavior(),
-                      child: SingleChildScrollView(child:
-                          StatefulBuilder(builder: (_, StateSetter setState) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              calendarView(height, context),
-                              AddBtn(),
-                            ],
-                          ),
-                        );
-                      })),
+                      child: SingleChildScrollView(
+                          physics: ScrollPhysics(),
+                          child: StatefulBuilder(
+                              builder: (_, StateSetter setState) {
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  isupschedule == true
+                                      ? SizedBox(
+                                          height: 40,
+                                          child: Container(
+                                            color: Colors.grey.shade400,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Flexible(
+                                                  fit: FlexFit.tight,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      NeumorphicText(
+                                                        '남은 일정',
+                                                        style:
+                                                            const NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: Colors.white,
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    //클릭시 지나간 일정을 위로 이동시킴
+                                                    setState(() {
+                                                      isupschedule = false;
+                                                    });
+                                                  },
+                                                  icon: NeumorphicIcon(
+                                                    Icons.swap_vert,
+                                                    size: 30,
+                                                    style:
+                                                        const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: Colors.white,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 40,
+                                          child: Container(
+                                            color: Colors.grey.shade400,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Flexible(
+                                                  fit: FlexFit.tight,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      NeumorphicText(
+                                                        '지나간 일정',
+                                                        style:
+                                                            const NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: Colors.white,
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    //클릭시 남은 일정을 위로 이동시킴
+                                                    setState(() {
+                                                      isupschedule = true;
+                                                    });
+                                                  },
+                                                  icon: NeumorphicIcon(
+                                                    Icons.swap_vert,
+                                                    size: 30,
+                                                    style:
+                                                        const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: Colors.white,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  TimeLineView(),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  isupschedule == true
+                                      ? SizedBox(
+                                          height: 40,
+                                          child: Container(
+                                            color: Colors.grey.shade400,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Flexible(
+                                                  fit: FlexFit.tight,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      NeumorphicText(
+                                                        '지나간 일정',
+                                                        style:
+                                                            const NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: Colors.white,
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    //클릭시 남은 일정을 위로 이동시킴
+                                                    setState(() {
+                                                      isupschedule = false;
+                                                    });
+                                                  },
+                                                  icon: NeumorphicIcon(
+                                                    Icons.swap_vert,
+                                                    size: 30,
+                                                    style:
+                                                        const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: Colors.white,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 40,
+                                          child: Container(
+                                            color: Colors.grey.shade400,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Flexible(
+                                                  fit: FlexFit.tight,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      NeumorphicText(
+                                                        '남은 일정',
+                                                        style:
+                                                            const NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: Colors.white,
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    //클릭시 지나간 일정을 위로 이동시킴
+                                                    setState(() {
+                                                      isupschedule = true;
+                                                    });
+                                                  },
+                                                  icon: NeumorphicIcon(
+                                                    Icons.swap_vert,
+                                                    size: 30,
+                                                    style:
+                                                        const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: Colors.white,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  TimeLineView(),
+                                  SizedBox(
+                                    height: 150,
+                                  )
+                                ],
+                              ),
+                            );
+                          })),
                     ),
                   )),
             ],
@@ -169,6 +394,8 @@ class _DayContentHomeState extends State<DayContentHome> {
       child: TableCalendar(
         locale: 'ko_KR',
         focusedDay: _focusedDay,
+        pageJumpingEnabled: false,
+        shouldFillViewport: false,
         firstDay: DateTime.utc(2000, 1, 1),
         lastDay: DateTime.utc(2100, 12, 31),
         calendarFormat: _calendarFormat,
@@ -192,10 +419,53 @@ class _DayContentHomeState extends State<DayContentHome> {
         },
         startingDayOfWeek: StartingDayOfWeek.sunday,
         daysOfWeekVisible: true,
-        headerStyle: const HeaderStyle(
+        headerStyle: HeaderStyle(
             formatButtonVisible: false,
-            leftChevronVisible: false,
-            rightChevronVisible: false,
+            leftChevronVisible: true,
+            leftChevronIcon: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Container(
+                  alignment: Alignment.center,
+                  width: 30,
+                  height: 30,
+                  child: NeumorphicIcon(
+                    Icons.keyboard_arrow_left,
+                    size: 30,
+                    style: const NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        surfaceIntensity: 0.5,
+                        color: Colors.black45,
+                        lightSource: LightSource.topLeft),
+                  ),
+                )),
+            rightChevronVisible: true,
+            rightChevronIcon: IconButton(
+                onPressed: () {
+                  //이벤트 작성시트 호출
+                  textEditingController1.clear();
+                  textEditingController2.clear();
+                  textEditingController3.clear();
+                  addCalendarTodo(context, _selectedDay, textEditingController1,
+                      textEditingController2, textEditingController3, _formkey);
+                },
+                icon: Container(
+                  alignment: Alignment.center,
+                  width: 30,
+                  height: 30,
+                  child: NeumorphicIcon(
+                    Icons.add_circle_outlined,
+                    size: 30,
+                    style: const NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        surfaceIntensity: 0.5,
+                        color: Colors.black45,
+                        lightSource: LightSource.topLeft),
+                  ),
+                )),
             titleTextStyle: TextStyle(
               color: Colors.black45,
               fontSize: 20,
@@ -213,238 +483,125 @@ class _DayContentHomeState extends State<DayContentHome> {
     );
   }
 
-  AddBtn() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 30,
-          width: (MediaQuery.of(context).size.width - 40) * 0.5,
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.grey.shade400,
-              ),
-              onPressed: () {
-                //이벤트 작성시트 호출
-                showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return SingleChildScrollView(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              )),
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
-                          ),
-                          child: SheetPage(),
-                        ),
-                      );
-                    });
-              },
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: NeumorphicText(
-                        '추가하기',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.white,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )),
-        )
-      ],
-    );
-  }
-
-  SheetPage() {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-          child: Form(
-              key: _formkey,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 50,
-                      child: buildSheetTitle(_selectedDay),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: buildTitle(textEditingController1),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 80,
-                      child: buildDateTimePicker(_selectedDay, textEditingController2),
-                    ),
-                    
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: 30,
-                          width: (MediaQuery.of(context).size.width - 40) * 0.5,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.grey.shade400,
-                              ),
-                              onPressed: () {
-                                //이벤트 저장
-                                saveForm();
-                              },
-                              child: Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                      child: NeumorphicText(
-                                        '저장하기',
-                                        style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.flat,
-                                          depth: 3,
-                                          color: Colors.white,
-                                        ),
-                                        textStyle: NeumorphicTextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    )
-                                  ],
+  TimeLineView() {
+    return SizedBox(
+      height: 180 * 3,
+      child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: 150,
+                  child: Row(
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              NeumorphicText(
+                                '10:00',
+                                style: NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: Colors.grey.shade400,
                                 ),
-                              )),
-                        ),
-                      ],
-                    ),
-                  ])),
-        )
-      ],
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Divider(
+                                thickness: 2,
+                                height: 15,
+                                endIndent: 20,
+                                color: Colors.black45,
+                              ),
+                            ],
+                          )),
+                      Expanded(
+                          flex: 3,
+                          child: InkWell(
+                            onTap: () {
+                              //수정 및 삭제 시트 띄우기
+                              DelOrEditCalendar(context);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  top: 10, bottom: 10, left: 10, right: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                      color: Colors.black45, width: 1)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      '아침 산책하기',
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      '10:00 ~ 11:10',
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: 5,
+                                        itemBuilder: (context, index) {
+                                          return Row(
+                                            children: [
+                                              Container(
+                                                height: 25,
+                                                width: 25,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                    border: Border.all(
+                                                        color: Colors.black45,
+                                                        width: 1)),
+                                              ),
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                )
+              ],
+            );
+          }),
     );
-  }
-
-  buildSheetTitle(DateTime fromDate) {
-    return Text(
-      fromDate.day.toString() + '일의 일정을 기록해보세요!',
-      style: const TextStyle(
-          fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-    );
-  }
-
-  buildTitle(TextEditingController titlecontroller) {
-    return TextFormField(
-      style: const TextStyle(fontSize: 20),
-      decoration: const InputDecoration(
-          border: UnderlineInputBorder(), hintText: '일정 제목 추가'),
-      onFieldSubmitted: (_) {
-        saveForm();
-      },
-      validator: (title) =>
-          title != null && title.isEmpty ? '제목은 필수 입력란입니다.' : null,
-      controller: titlecontroller,
-    );
-  }
-
-  buildDateTimePicker(DateTime fromDate, TextEditingController timecontroller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Text(
-          '시간설정',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Flexible(
-              fit: FlexFit.tight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 30,
-                    width: 100,
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      style:
-                          const TextStyle(fontSize: 20, color: Colors.black45),
-                      decoration: const InputDecoration(hintText: '시간 : 분'),
-                      readOnly: true,
-                      controller: timecontroller,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                pickDates(timecontroller);
-              },
-              child: Icon(Icons.arrow_drop_down),
-            )
-          ],
-        )
-      ],
-    );
-  }
-
-  pickDates(TextEditingController timecontroller) async {
-    Future<TimeOfDay?> pick = showTimePicker(
-        context: context, initialTime: TimeOfDay.fromDateTime(fromDate));
-    pick.then((timeOfDay) {
-      setState(() {
-        hour = timeOfDay!.hour.toString();
-        minute = timeOfDay.minute.toString();
-        timecontroller.text = '$hour:$minute';
-      });
-    });
-  }
-
-  Future saveForm() async {
-    final isValid = _formkey.currentState!.validate();
-    if (isValid) {
-      final event = Event(
-        title: textEditingController1.text,
-        description: 'Description',
-        from: fromDate,
-        to: toDate,
-        isAllDay: false,
-      );
-      final provider = Provider.of<EventProvider>(context, listen: false);
-      provider.addEvent(event);
-      Navigator.of(context).pop();
-    }
   }
 }
