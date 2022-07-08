@@ -1,9 +1,8 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/UI/Home/2ContentNet/DayContentHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-
-import '../TopContentNet/DayContentHome.dart';
 
 class YourDayfulAd extends StatelessWidget {
   const YourDayfulAd({Key? key, required this.height}) : super(key: key);

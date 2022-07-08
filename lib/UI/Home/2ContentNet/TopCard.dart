@@ -1,5 +1,5 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/UI/Home/TopContentNet/DayNoteHome.dart';
+import 'package:clickbyme/UI/Home/2ContentNet/DayNoteHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
@@ -13,19 +13,11 @@ class TopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 300,
+        height: 120,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
             child: Column(
           children: [
-            const SizedBox(
-              height: 170,
-            ),
-            const Divider(
-              thickness: 2,
-              height: 5,
-              color: Colors.black45,
-            ),
             SizedBox(
                 height: 120,
                 child: GridView.count(
@@ -177,7 +169,7 @@ class TopCard extends StatelessWidget {
                                                 const SizedBox(
                                                   height: 20,
                                                   child: Center(
-                                                        child: Text('퀵URLs',
+                                                        child: Text('링크플러스',
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .black54,

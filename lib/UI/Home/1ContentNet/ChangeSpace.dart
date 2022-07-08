@@ -1,6 +1,6 @@
 import 'package:clickbyme/DB/SpaceList.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
-import 'package:clickbyme/UI/Home/SecondContentNet/SpaceAD.dart';
+import 'package:clickbyme/UI/Home/1ContentNet/SpaceAD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';

@@ -1,14 +1,16 @@
-import 'package:clickbyme/UI/Home/TopContentNet/NewsRoomCard.dart';
-import 'package:clickbyme/UI/Home/TopContentNet/TopCard.dart';
-import 'package:clickbyme/UI/Home/ThirdContentNet/EventShowCard.dart';
+import 'package:clickbyme/UI/Home/1ContentNet/ChangeSpace.dart';
+import 'package:clickbyme/UI/Home/2ContentNet/TopCard.dart';
+import 'package:clickbyme/UI/Home/4ContentNet/EventShowCard.dart';
+import 'package:clickbyme/UI/Home/3ContentNet/QuoteRoomCard.dart';
+import 'package:clickbyme/UI/Setting/NoticeApps.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Sub/NoticePage.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/Home/SecondContentNet/ChangeSpace.dart';
-import '../UI/Home/SecondContentNet/YourDayfulAd.dart';
+import '../UI/Home/1ContentNet/YourDayfulAd.dart';
+import '../route.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -194,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_1(height, _pController),
+                                H_Container_1(height),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -203,6 +205,10 @@ class _HomePageState extends State<HomePage> {
                                   height: 20,
                                 ),
                                 H_Container_3(),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                H_Container_4(height, _pController),
                                 const SizedBox(
                                   height: 150,
                                 ),
@@ -218,30 +224,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_1(double height, PageController pController) {
-    return SizedBox(
-        height: 350,
-        width: MediaQuery.of(context).size.width - 40,
-        child: Stack(
-          children: [
-            Positioned(
-                top: 0,
-                child: SizedBox(
-                  height: 330,
-                  child: TopCard(height: height),
-                )),
-            Positioned(
-                top: 0,
-                child: SizedBox(
-                  height: 230,
-                  child: EventShowCard(
-                      height: height, pageController: pController),
-                ))
-          ],
-        ));
-  }
-
-  H_Container_2(double height) {
+  H_Container_1(double height) {
     return SizedBox(
       height: 250,
       child: Column(
@@ -284,15 +267,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_3() {
+  H_Container_2(double height) {
     return SizedBox(
       height: 150,
+      width: MediaQuery.of(context).size.width - 40,
+      child: TopCard(height: height),
+    );
+  }
+  H_Container_3() {
+    return SizedBox(
+      height: 200,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: const [
-              Text('스낵 뉴스룸',
+              Text('오늘의 문구',
                   style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.bold,
@@ -302,7 +292,32 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 20,
           ),
-          NewsRoomCard()
+          QuoteRoomCard()
+        ],
+      ),
+    );
+  }
+
+  H_Container_4(double height, PageController pController) {
+    return SizedBox(
+      height: 270,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Text('이벤트',
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          EventShowCard(
+                      height: height, pageController: pController),
         ],
       ),
     );
