@@ -30,159 +30,149 @@ class EventShowCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-        fit: FlexFit.tight,
-        child: ContainerDesign(
-            child: SizedBox(
-                height: 260,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+    return SizedBox(
+        height: 220,
+        width: MediaQuery.of(context).size.width - 40,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 140,
+              child: PageView.builder(
+                itemCount: eventtitle.length,
+                controller: pageController,
+                itemBuilder: (_, index) => Container(
+                    child: Column(
                   children: [
-                    SizedBox(
-                      height: 210,
-                      child: PageView.builder(
-                        itemCount: eventtitle.length,
-                        controller: pageController,
-                        itemBuilder: (_, index) => Container(
-                            child: Column(
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: Column(
                           children: [
-                            Flexible(
-                                fit: FlexFit.tight,
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          80,
-                                      height: 30,
-                                      child: Row(
-                                        children: [
-                                          index == 0
-                                              ? NeumorphicIcon(
-                                                  Icons.confirmation_number,
-                                                  size: 25,
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .convex,
-                                                      depth: 2,
-                                                      color: Colors.black45,
-                                                      lightSource:
-                                                          LightSource.topLeft),
-                                                )
-                                              : NeumorphicIcon(
-                                                  Icons.sports_esports,
-                                                  size: 25,
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .convex,
-                                                      depth: 2,
-                                                      color: Colors.black45,
-                                                      lightSource:
-                                                          LightSource.topLeft),
-                                                ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Text(eventtitle[index].toString(),
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18)),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          80,
-                                      height: 80,
-                                      child: Text(
-                                          eventcontent[index].toString(),
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15)),
-                                    ),
-                                  ],
-                                )),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width:
-                                      (MediaQuery.of(context).size.width - 80) *
-                                          0.8,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.grey.shade400,
-                                          ),
-                                          onPressed: () {
-                                            //구독관리페이지 호출
-                                            Navigator.push(
-                                                context,
-                                                Transition(
-                                                    child: SettingPage(),
-                                                    transitionEffect:
-                                                        TransitionEffect
-                                                            .BOTTOM_TO_TOP));
-                                          },
-                                          child: Center(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Center(
-                                                  child: NeumorphicText(
-                                                    '바로가기',
-                                                    style:
-                                                        const NeumorphicStyle(
-                                                      shape:
-                                                          NeumorphicShape.flat,
-                                                      depth: 3,
-                                                      color: Colors.white,
-                                                    ),
-                                                    textStyle:
-                                                        NeumorphicTextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ))
-                                    ],
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 80,
+                              height: 30,
+                              child: Row(
+                                children: [
+                                  index == 0
+                                      ? NeumorphicIcon(
+                                          Icons.confirmation_number,
+                                          size: 25,
+                                          style: NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              depth: 2,
+                                              color: Colors.black45,
+                                              lightSource: LightSource.topLeft),
+                                        )
+                                      : NeumorphicIcon(
+                                          Icons.sports_esports,
+                                          size: 25,
+                                          style: NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              depth: 2,
+                                              color: Colors.black45,
+                                              lightSource: LightSource.topLeft),
+                                        ),
+                                  SizedBox(
+                                    width: 20,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              ],
+                                  Text(eventtitle[index].toString(),
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 80,
+                              height: 40,
+                              child: Text(eventcontent[index].toString(),
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15)),
                             ),
                           ],
                         )),
-                      ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        SmoothPageIndicator(
-                          controller: pageController,
-                          count: eventtitle.length,
-                          effect: ExpandingDotsEffect(
-                              dotHeight: 10,
-                              dotWidth: 10,
-                              dotColor: Colors.grey,
-                              activeDotColor: Colors.black),
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width - 80) * 0.8,
+                          height: 50,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.grey.shade400,
+                                  ),
+                                  onPressed: () {
+                                    //구독관리페이지 호출
+                                    Navigator.push(
+                                        context,
+                                        Transition(
+                                            child: SettingPage(),
+                                            transitionEffect: TransitionEffect
+                                                .BOTTOM_TO_TOP));
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            '바로가기',
+                                            style: const NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Colors.white,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ))
+                            ],
+                          ),
                         ),
                       ],
-                    )
+                    ),
                   ],
-                ))));
+                )),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: SmoothPageIndicator(
+                    controller: pageController,
+                    count: eventtitle.length,
+                    effect: ExpandingDotsEffect(
+                        dotHeight: 10,
+                        dotWidth: 10,
+                        dotColor: Colors.grey,
+                        activeDotColor: Colors.black),
+                  ),
+                )
+              ],
+            )
+          ],
+        ));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:clickbyme/UI/Home/TopContentNet/NewsRoomCard.dart';
 import 'package:clickbyme/UI/Home/TopContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/ThirdContentNet/EventShowCard.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(padding: EdgeInsets.only(left: 10)),
+                      const Padding(padding: EdgeInsets.only(left: 10)),
                       SizedBox(
                           width: 50,
                           child: isdraweropen
@@ -93,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                                     child: NeumorphicIcon(
                                       Icons.keyboard_arrow_left,
                                       size: 30,
-                                      style: NeumorphicStyle(
+                                      style: const NeumorphicStyle(
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
                                           surfaceIntensity: 0.5,
@@ -117,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                                     child: NeumorphicIcon(
                                       Icons.menu,
                                       size: 30,
-                                      style: NeumorphicStyle(
+                                      style: const NeumorphicStyle(
                                           shape: NeumorphicShape.convex,
                                           surfaceIntensity: 0.5,
                                           depth: 2,
@@ -128,7 +129,8 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                           width: MediaQuery.of(context).size.width - 60,
                           child: Padding(
-                              padding: EdgeInsets.only(left: 20, right: 20),
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
                               child: Row(
                                 children: [
                                   Flexible(
@@ -154,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                         child: SingleChildScrollView(child:
                             StatefulBuilder(builder: (_, StateSetter setState) {
                           return Padding(
-                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                             child: Column(
                               children: [
                                 /*FutureBuilder<List<TODO>>(
@@ -189,16 +191,19 @@ class _HomePageState extends State<HomePage> {
                               }
                             },
                           ),*/
-                                H_Container_1(height),
-                                SizedBox(
-                                  height: 30,
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                                H_Container_2(height, context),
-                                SizedBox(
-                                  height: 30,
+                                H_Container_1(height, _pController),
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                                H_Container_3(height, _pController),
-                                SizedBox(
+                                H_Container_2(height),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                H_Container_3(),
+                                const SizedBox(
                                   height: 150,
                                 ),
                               ],
@@ -212,95 +217,94 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
 
-H_Container_1(double height) {
-  return SizedBox(
-    height: 150,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Text('조각',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        TopCard(height: height)
-      ],
-    ),
-  );
-}
-
-H_Container_2(double height, BuildContext context) {
-  return SizedBox(
-    height: 250,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+  H_Container_1(double height, PageController pController) {
+    return SizedBox(
+        height: 350,
+        width: MediaQuery.of(context).size.width - 40,
+        child: Stack(
           children: [
-            Flexible(
-              fit: FlexFit.tight,
-              child: Text('하루공간',
+            Positioned(
+                top: 0,
+                child: SizedBox(
+                  height: 330,
+                  child: TopCard(height: height),
+                )),
+            Positioned(
+                top: 0,
+                child: SizedBox(
+                  height: 230,
+                  child: EventShowCard(
+                      height: height, pageController: pController),
+                ))
+          ],
+        ));
+  }
+
+  H_Container_2(double height) {
+    return SizedBox(
+      height: 250,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Flexible(
+                fit: FlexFit.tight,
+                child: Text('하루공간',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  //타일변경으로 넘어가기
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: ChangeSpace()),
+                  );
+                },
+                child: const Text('변경',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          YourDayfulAd(height: height)
+        ],
+      ),
+    );
+  }
+
+  H_Container_3() {
+    return SizedBox(
+      height: 150,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Text('스낵 뉴스룸',
                   style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.bold,
                       fontSize: 18)),
-            ),
-            GestureDetector(
-              onTap: () {
-                //타일변경으로 넘어가기
-                Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.bottomToTop,
-                      child: ChangeSpace()),
-                );
-              },
-              child: Text('변경',
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15)),
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        YourDayfulAd(height: height)
-      ],
-    ),
-  );
-}
-
-H_Container_3(double height, PageController pController) {
-  return SizedBox(
-    height: 300,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Text('이벤트',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        EventShowCard(height: height, pageController: pController),
-      ],
-    ),
-  );
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          NewsRoomCard()
+        ],
+      ),
+    );
+  }
 }

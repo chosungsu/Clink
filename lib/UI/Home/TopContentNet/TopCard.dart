@@ -1,5 +1,5 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/UI/Home/TopContentNet/ClipsContentNet/TodayChoiceFeed.dart';
+import 'package:clickbyme/UI/Home/TopContentNet/DayNoteHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
@@ -13,151 +13,293 @@ class TopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 100,
+        height: 300,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
-            child: GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 3,
-          children: List.generate(3, (index) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                index == 0
-                    ? GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.bottomToTop,
-                                child: DayContentHome()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            Flexible(
-                              flex: 2,
-                              child: Container(
-                                alignment: Alignment.topCenter,
-                                width: 30,
-                                height: 30,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: Image.asset(
-                                    'assets/images/date.png',
-                                    color: Colors.black45,
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.center,
+            child: Column(
+          children: [
+            const SizedBox(
+              height: 170,
+            ),
+            const Divider(
+              thickness: 2,
+              height: 5,
+              color: Colors.black45,
+            ),
+            SizedBox(
+                height: 120,
+                child: GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 10,
+                  shrinkWrap: true,
+                  childAspectRatio: 2/1,
+                  children: List.generate(5, (index) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        index == 0
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.bottomToTop,
+                                        child: DayContentHome()),
+                                  );
+                                },
                                 child: SizedBox(
-                                  child: const Center(
-                                    child: Text('캘린더',
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15)),
+                                  height: 50,
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 25,
+                                        child: Container(
+                                          alignment: Alignment.topCenter,
+                                          width: 25,
+                                          height: 25,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: NeumorphicIcon(
+                                              Icons.calendar_month,
+                                              size: 25,
+                                              style: const NeumorphicStyle(
+                                                  shape: NeumorphicShape.convex,
+                                                  depth: 2,
+                                                  color: Colors.black45,
+                                                  lightSource:
+                                                      LightSource.topLeft),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                        child: Center(
+                                          child: Text('캘린더',
+                                              style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15)),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : (index == 1
-                        ? GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.bottomToTop,
-                                    child: TodayChoiceFeed()),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Flexible(
-                                  flex: 2,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: Image.asset(
-                                      'assets/images/phrase.png',
-                                      color: Colors.black45,
-                                      width: 30,
-                                      height: 30,
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: Container(
-                                    alignment: Alignment.center,
+                              )
+                            : (index == 1
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.bottomToTop,
+                                            child: DayNoteHome()),
+                                      );
+                                    },
                                     child: SizedBox(
-                                      child: const Center(
-                                        child: Text('오늘의클립',
-                                            style: TextStyle(
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
+                                      height: 50,
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                              alignment: Alignment.topCenter,
+                                              width: 25,
+                                              height: 25,
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                child: NeumorphicIcon(
+                                                  Icons.description,
+                                                  size: 25,
+                                                  style: const NeumorphicStyle(
+                                                      shape: NeumorphicShape
+                                                          .convex,
+                                                      depth: 2,
+                                                      color: Colors.black45,
+                                                      lightSource:
+                                                          LightSource.topLeft),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                            child: Center(
+                                                  child: Text('일상메모',
+                                                      style: TextStyle(
+                                                          color: Colors.black54,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 15)),
+                                                ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ))
-                        : GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.bottomToTop,
-                                    child: DayContentHome()),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Flexible(
-                                  flex: 2,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: Image.asset(
-                                      'assets/images/book.png',
-                                      color: Colors.black45,
-                                      width: 30,
-                                      height: 30,
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: SizedBox(
-                                      child: const Center(
-                                        child: Text('메모리 북',
-                                            style: TextStyle(
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )))
-              ],
-            );
-          }),
+                                  )
+                                : (index == 2
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                type: PageTransitionType
+                                                    .bottomToTop,
+                                                child: DayContentHome()),
+                                          );
+                                        },
+                                        child: SizedBox(
+                                            height: 50,
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 25,
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    width: 25,
+                                                    height: 25,
+                                                    child: NeumorphicIcon(
+                                                      Icons.link,
+                                                      size: 25,
+                                                      style: const NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          color: Colors.black45,
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                  child: Center(
+                                                        child: Text('퀵URLs',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 15)),
+                                                      ),
+                                                ),
+                                              ],
+                                            )))
+                                    : (index == 3
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: DayContentHome()),
+                                              );
+                                            },
+                                            child: SizedBox(
+                                                height: 50,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 25,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: 25,
+                                                        height: 25,
+                                                        child: NeumorphicIcon(
+                                                          Icons.add_task,
+                                                          size: 25,
+                                                          style: const NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color: Colors
+                                                                  .black45,
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                      child: Center(
+                                                            child: Text('갓생루틴',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black54,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        15)),
+                                                          ),
+                                                    ),
+                                                  ],
+                                                )))
+                                        : GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: DayContentHome()),
+                                              );
+                                            },
+                                            child: SizedBox(
+                                                height: 50,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 25,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: 25,
+                                                        height: 25,
+                                                        child: NeumorphicIcon(
+                                                          Icons.loyalty,
+                                                          size: 25,
+                                                          style: const NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color: Colors
+                                                                  .black45,
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                      child: Center(
+                                                        child: Text('건강습관',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 15)),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ))))))
+                      ],
+                    );
+                  }),
+                ))
+          ],
         )));
   }
 }
