@@ -1,5 +1,6 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/UI/Home/2ContentNet/DayNoteHome.dart';
+import 'package:clickbyme/UI/Home/2ContentNet/RoutineHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
@@ -13,7 +14,7 @@ class TopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 120,
+        height: 150,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
             child: Column(
@@ -41,7 +42,7 @@ class TopCard extends StatelessWidget {
                                   );
                                 },
                                 child: SizedBox(
-                                  height: 50,
+                                  height: 45,
                                   child: Column(
                                     children: [
                                       SizedBox(
@@ -91,7 +92,7 @@ class TopCard extends StatelessWidget {
                                       );
                                     },
                                     child: SizedBox(
-                                      height: 50,
+                                      height: 45,
                                       child: Column(
                                         children: [
                                           SizedBox(
@@ -143,7 +144,7 @@ class TopCard extends StatelessWidget {
                                           );
                                         },
                                         child: SizedBox(
-                                            height: 50,
+                                            height: 45,
                                             child: Column(
                                               children: [
                                                 SizedBox(
@@ -189,11 +190,11 @@ class TopCard extends StatelessWidget {
                                                 PageTransition(
                                                     type: PageTransitionType
                                                         .bottomToTop,
-                                                    child: DayContentHome()),
+                                                    child: RoutineHome()),
                                               );
                                             },
                                             child: SizedBox(
-                                                height: 50,
+                                                height: 45,
                                                 child: Column(
                                                   children: [
                                                     SizedBox(
@@ -246,7 +247,7 @@ class TopCard extends StatelessWidget {
                                               );
                                             },
                                             child: SizedBox(
-                                                height: 50,
+                                                height: 45,
                                                 child: Column(
                                                   children: [
                                                     SizedBox(

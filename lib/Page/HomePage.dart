@@ -204,11 +204,7 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_3(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                H_Container_4(height, _pController),
+                                H_Container_3(height, _pController),
                                 const SizedBox(
                                   height: 150,
                                 ),
@@ -223,7 +219,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
   H_Container_1(double height) {
     return SizedBox(
       height: 250,
@@ -266,15 +261,31 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
   H_Container_2(double height) {
     return SizedBox(
-      height: 150,
+      height: 200,
       width: MediaQuery.of(context).size.width - 40,
-      child: TopCard(height: height),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Flexible(
+            fit: FlexFit.tight,
+            child: Text('카테고리',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TopCard(height: height),
+        ],
+      ),
     );
   }
-  H_Container_3() {
+
+  /*H_Container_3() {
     return SizedBox(
       height: 200,
       child: Column(
@@ -296,9 +307,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
+  }*/
 
-  H_Container_4(double height, PageController pController) {
+  H_Container_3(double height, PageController pController) {
     return SizedBox(
       height: 270,
       child: Column(
@@ -316,8 +327,7 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 20,
           ),
-          EventShowCard(
-                      height: height, pageController: pController),
+          EventShowCard(height: height, pageController: pController),
         ],
       ),
     );
