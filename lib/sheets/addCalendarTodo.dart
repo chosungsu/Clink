@@ -39,20 +39,45 @@ SheetPage(
     TextEditingController textEditingController3,
     GlobalKey<FormState> formkey) {
   return SizedBox(
-    height: 380,
+    height: 350,
     child: Column(
       children: [
         Padding(
-          padding:
-              const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
           child: Form(
               key: formkey,
               child: SizedBox(
-                height: 380,
+                height: 350,
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    //mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(
+                          height: 5,
+                          width: MediaQuery.of(context).size.width - 40,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width:
+                                    (MediaQuery.of(context).size.width - 40) *
+                                        0.4,
+                              ),
+                              Container(
+                                  width:
+                                      (MediaQuery.of(context).size.width - 40) *
+                                          0.2,
+                                  alignment: Alignment.topCenter,
+                                  color: Colors.black45),
+                              SizedBox(
+                                width:
+                                    (MediaQuery.of(context).size.width - 40) *
+                                        0.4,
+                              ),
+                            ],
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
                       buildSheetTitle(selectedDay),
                       const SizedBox(
                         height: 20,
@@ -65,18 +90,18 @@ SheetPage(
                         height: 120,
                         child: Row(
                           children: [
-                            buildDateTimePicker(
-                                context, selectedDay, textEditingController2, 'prev'),
+                            buildDateTimePicker(context, selectedDay,
+                                textEditingController2, 'prev'),
                             const SizedBox(
                               width: 50,
                             ),
-                            buildDateTimePicker(
-                                context, selectedDay, textEditingController3, 'after'),
+                            buildDateTimePicker(context, selectedDay,
+                                textEditingController3, 'after'),
                           ],
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       SizedBox(
                         height: 30,
@@ -176,11 +201,11 @@ SheetPage(
 
 buildSheetTitle(DateTime fromDate) {
   return SizedBox(
-    height: 30,
+    height: 50,
     child: Text(
       fromDate.day.toString() + '일의 일정을 기록해보세요!',
       style: const TextStyle(
-          fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+          fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black),
     ),
   );
 }
@@ -189,7 +214,7 @@ buildTitle(TextEditingController titlecontroller) {
   return SizedBox(
     height: 30,
     child: TextFormField(
-      style: const TextStyle(fontSize: 20),
+      style: const TextStyle(fontSize: 23),
       decoration: const InputDecoration(
         border: UnderlineInputBorder(),
         hintText: '일정 제목 추가',
@@ -209,24 +234,25 @@ buildDateTimePicker(BuildContext context, DateTime fromDate,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          s == 'prev' ? 
-          const SizedBox(
-            height: 30,
-            child: Text(
-            '시작시각',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-          )
-          )
-          :
-          const SizedBox(
-            height: 30,
-            child: Text(
-            '종료시각',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-          )
-          ),
+          s == 'prev'
+              ? const SizedBox(
+                  height: 30,
+                  child: Text(
+                    '시작시각',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black),
+                  ))
+              : const SizedBox(
+                  height: 30,
+                  child: Text(
+                    '종료시각',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black),
+                  )),
           const SizedBox(
             height: 10,
           ),
@@ -234,37 +260,36 @@ buildDateTimePicker(BuildContext context, DateTime fromDate,
             height: 50,
             width: 150,
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: 100,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                                fontSize: 20, color: Colors.black45),
-                            decoration:
-                                const InputDecoration(hintText: '시간 : 분'),
-                            readOnly: true,
-                            controller: timecontroller,
-                          ),
-                        )
-                      ],
-                    ),
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 100,
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.black45),
+                          decoration: const InputDecoration(hintText: '시간 : 분'),
+                          readOnly: true,
+                          controller: timecontroller,
+                        ),
+                      )
+                    ],
                   ),
-                  InkWell(
-                    onTap: () {
-                      pickDates(context, timecontroller, fromDate);
-                    },
-                    child: const Icon(Icons.arrow_drop_down),
-                  )
-                ],
-              ),
+                ),
+                InkWell(
+                  onTap: () {
+                    pickDates(context, timecontroller, fromDate);
+                  },
+                  child: const Icon(Icons.arrow_drop_down),
+                )
+              ],
+            ),
           )
         ],
       ));

@@ -2,6 +2,7 @@ import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
 import 'package:clickbyme/sheets/addCalendarTodo.dart';
+import 'package:clickbyme/sheets/addRoutiner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -36,21 +37,18 @@ class _RoutineHomeState extends State<RoutineHome> {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final List routineday = ['일', '월', '화', '수', '목', '금', '토'];
-  final List routinesucceed = [
-    '3/3',
-    '3/3',
-    '3/3',
-    '3/3',
-    '3/3',
-    '3/3',
-    '3/3',
-  ];
+  final List routinesucceed = [20, 20, 80, 60, 60, 80, 100];
   final List routineplaylistdone = ['doing', 'doing', 'done', 'not yet'];
   final List routineplaylist = [
     '하루 한번 채식식단 실천하기',
     '대중교통 이용하여 출근하기',
     '토익공부 하루에 유닛4과씩 진도 나가기',
     '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기',
+  ];
+  final List personwith = [
+    '김영헌',
+    '이제민',
+    '최우성',
   ];
 
   @override
@@ -97,7 +95,7 @@ class _RoutineHomeState extends State<RoutineHome> {
               SizedBox(
                   height: 80,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -120,7 +118,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                           child: NeumorphicIcon(
                                             Icons.keyboard_arrow_left,
                                             size: 30,
-                                            style: NeumorphicStyle(
+                                            style: const NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
@@ -134,15 +132,15 @@ class _RoutineHomeState extends State<RoutineHome> {
                                         60 -
                                         160,
                                     child: Padding(
-                                        padding: EdgeInsets.only(
+                                        padding: const EdgeInsets.only(
                                             left: 20, right: 20),
                                         child: Row(
                                           children: [
                                             Flexible(
                                               fit: FlexFit.tight,
-                                              child: Text(
+                                              child: const Text(
                                                 '',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                     color: Colors.black45),
@@ -155,7 +153,9 @@ class _RoutineHomeState extends State<RoutineHome> {
                         SizedBox(
                             width: 50,
                             child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  addRoutiner(context);
+                                },
                                 child: Container(
                                   alignment: Alignment.center,
                                   width: 30,
@@ -163,7 +163,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                   child: NeumorphicIcon(
                                     Icons.settings,
                                     size: 30,
-                                    style: NeumorphicStyle(
+                                    style: const NeumorphicStyle(
                                         shape: NeumorphicShape.convex,
                                         depth: 2,
                                         surfaceIntensity: 0.5,
@@ -196,7 +196,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                 height: 20,
                               ),
                               RoutineRecommend(),
-                              SizedBox(
+                              const SizedBox(
                                 height: 150,
                               )
                             ],
@@ -217,12 +217,33 @@ class _RoutineHomeState extends State<RoutineHome> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
-              Text('루틴 대시보드',
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)),
+            children: [
+              const Flexible(
+                fit: FlexFit.tight,
+                child: Text('루틴 대시보드',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    Box();
+                  });
+                  
+                },
+                child: NeumorphicIcon(
+                  Icons.refresh,
+                  size: 30,
+                  style: const NeumorphicStyle(
+                      shape: NeumorphicShape.convex,
+                      depth: 2,
+                      surfaceIntensity: 0.5,
+                      color: Colors.black45,
+                      lightSource: LightSource.topLeft),
+                ),
+              )
             ],
           ),
           const SizedBox(
@@ -235,40 +256,132 @@ class _RoutineHomeState extends State<RoutineHome> {
   }
 
   Box() {
-    return SizedBox(
-      height: 100,
-      width: MediaQuery.of(context).size.width - 40,
-      child: ContainerDesign(
-        child: ListView.builder(
-            // the number of items in the list
-            itemCount: routineday.length,
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            // display each item of the product list
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: (MediaQuery.of(context).size.width - 40) / 7,
-                child: Column(
-                  children: [
-                    Text(routineday[index],
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(routinesucceed[index],
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                  ],
-                ),
-              );
-            }),
-      ),
-    );
+    return StatefulBuilder(builder: (_, StateSetter setState) {
+      return SizedBox(
+        height: 100,
+        width: MediaQuery.of(context).size.width - 40,
+        child: ContainerDesign(
+            child: Hive.box('user_setting').get('numorimogi_routine') == null
+                ? ListView.builder(
+                    // the number of items in the list
+                    itemCount: routineday.length,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    // display each item of the product list
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: (MediaQuery.of(context).size.width - 40) / 7,
+                        child: Column(
+                          children: [
+                            Text(routineday[index],
+                                style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(routinesucceed[index].toString() + '%',
+                                style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15))
+                          ],
+                        ),
+                      );
+                    })
+                : (Hive.box('user_setting').get('numorimogi_routine') == 0
+                    ? ListView.builder(
+                        // the number of items in the list
+                        itemCount: routineday.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        // display each item of the product list
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            width: (MediaQuery.of(context).size.width - 40) / 7,
+                            child: Column(
+                              children: [
+                                Text(routineday[index],
+                                    style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Text(routinesucceed[index].toString() + '%',
+                                    style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15))
+                              ],
+                            ),
+                          );
+                        })
+                    : ListView.builder(
+                        // the number of items in the list
+                        itemCount: routineday.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        // display each item of the product list
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            width: (MediaQuery.of(context).size.width - 40) / 7,
+                            child: Column(
+                              children: [
+                                Text(routineday[index],
+                                    style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                    alignment: Alignment.center,
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color: Colors.grey.shade400,
+                                            width: 1,
+                                            style: BorderStyle.solid)),
+                                    child: routinesucceed[index] < 35
+                                        ? Text(
+                                            personwith[0]
+                                                .toString()
+                                                .substring(0, 1),
+                                            style: const TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15))
+                                        : (routinesucceed[index] < 70
+                                            ? Text(
+                                                personwith[1]
+                                                    .toString()
+                                                    .substring(0, 1),
+                                                style: const TextStyle(
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15))
+                                            : Text(
+                                                personwith[2]
+                                                    .toString()
+                                                    .substring(0, 1),
+                                                style: const TextStyle(
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15))))
+                              ],
+                            ),
+                          );
+                        }))),
+      );
+    });
   }
 
   RoutinePlay() {
@@ -290,9 +403,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                         fontSize: 18)),
               ),
               GestureDetector(
-                onTap: () {
-                  
-                },
+                onTap: () {},
                 child: const Text('추가',
                     style: TextStyle(
                         color: Colors.black54,
@@ -365,7 +476,7 @@ class _RoutineHomeState extends State<RoutineHome> {
             // the number of items in the list
             itemCount: routineplaylist.length,
             scrollDirection: Axis.vertical,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             // display each item of the product list
             itemBuilder: (context, index) {
@@ -380,18 +491,18 @@ class _RoutineHomeState extends State<RoutineHome> {
                             fit: FlexFit.tight,
                             child: Text(
                               routineplaylist[index],
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black54,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(routineplaylistdone[index],
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black54,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15)),
@@ -413,7 +524,7 @@ class _RoutineHomeState extends State<RoutineHome> {
           Row(
             children: const [
               Text(
-                '다른 루티너분들 루틴형성표를 구경하실래요?',
+                '루틴 공유',
                 style: TextStyle(
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
@@ -436,35 +547,58 @@ class _RoutineHomeState extends State<RoutineHome> {
       height: 100,
       width: MediaQuery.of(context).size.width - 40,
       child: ContainerDesign(
-        child: ListView.builder(
-            // the number of items in the list
-            itemCount: routineday.length,
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            // display each item of the product list
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: (MediaQuery.of(context).size.width - 40) / 7,
-                child: Column(
+          child: personwith.isNotEmpty
+              ? ListView.builder(
+                  // the number of items in the list
+                  itemCount: personwith.length,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  // display each item of the product list
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: (MediaQuery.of(context).size.width - 40) / 5,
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                color: Colors.white,
+                                border: Border.all(
+                                    color: Colors.grey.shade400,
+                                    width: 1,
+                                    style: BorderStyle.solid)),
+                            child: Text(
+                                personwith[index].toString().substring(0, 1),
+                                style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(personwith[index],
+                              style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15)),
+                        ],
+                      ),
+                    );
+                  })
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(routineday[index],
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(routinesucceed[index],
-                        style: TextStyle(
+                    Text('아직 추가하신 루티너가 없습니다. 친구추가 버튼으로 추가하세요.',
+                        style: const TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.bold,
                             fontSize: 15)),
                   ],
-                ),
-              );
-            }),
-      ),
+                )),
     );
   }
 }

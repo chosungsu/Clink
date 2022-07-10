@@ -7,7 +7,7 @@ class ContainerDesign extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(10),
         child: child,
         decoration: BoxDecoration(
             shape: BoxShape.rectangle,
