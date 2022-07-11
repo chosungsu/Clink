@@ -96,7 +96,7 @@ class _DayContentHomeState extends State<DayContentHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 170,
+                height: 140,
                 child: calendarView(height, context),
               ),
               Flexible(
@@ -105,7 +105,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                     child: ScrollConfiguration(
                       behavior: NoBehavior(),
                       child: SingleChildScrollView(
-                          physics: ScrollPhysics(),
+                          physics: const ScrollPhysics(),
                           child: StatefulBuilder(
                               builder: (_, StateSetter setState) {
                             return Padding(
@@ -114,7 +114,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   isupschedule == true
@@ -240,11 +240,11 @@ class _DayContentHomeState extends State<DayContentHome> {
                                             ),
                                           ),
                                         ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   TimeLineView(),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   isupschedule == true
@@ -370,11 +370,11 @@ class _DayContentHomeState extends State<DayContentHome> {
                                             ),
                                           ),
                                         ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   TimeLineView(),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 150,
                                   )
                                 ],
@@ -390,7 +390,7 @@ class _DayContentHomeState extends State<DayContentHome> {
 
   calendarView(double height, BuildContext context) {
     return SizedBox(
-      height: 150,
+      height: 130,
       child: TableCalendar(
         locale: 'ko_KR',
         focusedDay: _focusedDay,
@@ -422,6 +422,8 @@ class _DayContentHomeState extends State<DayContentHome> {
         headerStyle: HeaderStyle(
             formatButtonVisible: false,
             leftChevronVisible: true,
+            leftChevronPadding: const EdgeInsets.only(left: 10),
+            leftChevronMargin: EdgeInsets.zero,
             leftChevronIcon: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -442,6 +444,8 @@ class _DayContentHomeState extends State<DayContentHome> {
                   ),
                 )),
             rightChevronVisible: true,
+            rightChevronPadding: const EdgeInsets.only(right: 10),
+            rightChevronMargin: EdgeInsets.zero,
             rightChevronIcon: IconButton(
                 onPressed: () {
                   //이벤트 작성시트 호출
@@ -466,7 +470,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                         lightSource: LightSource.topLeft),
                   ),
                 )),
-            titleTextStyle: TextStyle(
+            titleTextStyle: const TextStyle(
               color: Colors.black45,
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -487,7 +491,7 @@ class _DayContentHomeState extends State<DayContentHome> {
     return SizedBox(
       height: 180 * 3,
       child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           itemCount: 3,
           itemBuilder: (context, index) {
@@ -514,7 +518,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                                   fontSize: 20,
                                 ),
                               ),
-                              Divider(
+                              const Divider(
                                 thickness: 2,
                                 height: 15,
                                 endIndent: 20,
@@ -530,7 +534,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                               DelOrEditCalendar(context);
                             },
                             child: Container(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   top: 10, bottom: 10, left: 10, right: 10),
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -540,7 +544,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     flex: 2,
                                     child: Text(
                                       '아침 산책하기',
@@ -551,9 +555,9 @@ class _DayContentHomeState extends State<DayContentHome> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  Expanded(
+                                  const Expanded(
                                     flex: 1,
-                                    child: Text(
+                                    child: const Text(
                                       '10:00 ~ 11:10',
                                       style: TextStyle(
                                           color: Colors.black54,
@@ -582,7 +586,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                                                         color: Colors.black45,
                                                         width: 1)),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 20,
                                               ),
                                             ],
@@ -596,7 +600,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 )
               ],

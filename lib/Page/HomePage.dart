@@ -2,7 +2,8 @@ import 'package:clickbyme/UI/Home/1ContentNet/ChangeSpace.dart';
 import 'package:clickbyme/UI/Home/2ContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/4ContentNet/EventShowCard.dart';
 import 'package:clickbyme/UI/Home/3ContentNet/QuoteRoomCard.dart';
-import 'package:clickbyme/UI/Setting/NoticeApps.dart';
+import 'package:clickbyme/UI/Home/NotiAlarm.dart';
+import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
@@ -145,6 +146,53 @@ class _HomePageState extends State<HomePage> {
                                           color: Colors.black45),
                                     ),
                                   ),
+                                  InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              type: PageTransitionType
+                                                  .bottomToTop,
+                                              child: NotiAlarm()),
+                                        );
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: 30,
+                                        height: 30,
+                                        child: NeumorphicIcon(
+                                          Icons.notifications_none,
+                                          size: 30,
+                                          style: const NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              surfaceIntensity: 0.5,
+                                              depth: 2,
+                                              color: Colors.black45,
+                                              lightSource: LightSource.topLeft),
+                                        ),
+                                      )),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  InkWell(
+                                      onTap: () {
+                                        addgroupmember(context);
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: 30,
+                                        height: 30,
+                                        child: NeumorphicIcon(
+                                          Icons.group_add,
+                                          size: 30,
+                                          style: const NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              surfaceIntensity: 0.5,
+                                              depth: 2,
+                                              color: Colors.black45,
+                                              lightSource: LightSource.topLeft),
+                                        ),
+                                      ))
                                 ],
                               ))),
                     ],
@@ -219,6 +267,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   H_Container_1(double height) {
     return SizedBox(
       height: 250,
@@ -261,9 +310,10 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   H_Container_2(double height) {
     return SizedBox(
-      height: 200,
+      height: 140,
       width: MediaQuery.of(context).size.width - 40,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

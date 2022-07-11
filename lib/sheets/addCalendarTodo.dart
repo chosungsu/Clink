@@ -11,22 +11,28 @@ addCalendarTodo(
     TextEditingController textEditingController3,
     GlobalKey<FormState> formkey) {
   showModalBottomSheet(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      )),
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          height: 380,
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              )),
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            height: 380,
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                )),
+            child: SheetPage(context, selectedDay, textEditingController1,
+                textEditingController2, textEditingController3, formkey),
           ),
-          child: SheetPage(context, selectedDay, textEditingController1,
-              textEditingController2, textEditingController3, formkey),
         );
       });
 }
@@ -43,7 +49,7 @@ SheetPage(
     child: Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Form(
               key: formkey,
               child: SizedBox(
@@ -214,7 +220,7 @@ buildTitle(TextEditingController titlecontroller) {
   return SizedBox(
     height: 30,
     child: TextFormField(
-      style: const TextStyle(fontSize: 23),
+      style: const TextStyle(fontSize: 18),
       decoration: const InputDecoration(
         border: UnderlineInputBorder(),
         hintText: '일정 제목 추가',

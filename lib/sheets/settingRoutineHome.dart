@@ -3,26 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive/hive.dart';
 
-addRoutiner(
+settingRoutineHome(
   BuildContext context,
 ) {
   showModalBottomSheet(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      )),
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          height: 380,
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              )),
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: SheetPage(context),
-        );
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              height: 230,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  )),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: SheetPage(context),
+            ));
       });
 }
 
@@ -30,7 +38,7 @@ SheetPage(
   BuildContext context,
 ) {
   return SizedBox(
-      height: 380,
+      height: 210,
       child: Padding(
           padding:
               const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
@@ -88,7 +96,7 @@ content(
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-        height: 200,
+        height: 100,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,7 +106,7 @@ content(
                   style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 23)),
+                      fontSize: 20)),
             ),
             SizedBox(
               height: 10,
@@ -225,17 +233,6 @@ content(
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height: 30,
-              child: Text('친구 추가',
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 23)),
             ),
           ],
         ));

@@ -14,20 +14,22 @@ class TopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 150,
+        height: 80,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
             child: Column(
           children: [
+            //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
+            //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
             SizedBox(
-                height: 120,
+                height: 60,
                 child: GridView.count(
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 3,
                   mainAxisSpacing: 10,
                   shrinkWrap: true,
-                  childAspectRatio: 2/1,
-                  children: List.generate(5, (index) {
+                  childAspectRatio: 2 / 1,
+                  children: List.generate(3, (index) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -120,174 +122,64 @@ class TopCard extends StatelessWidget {
                                           const SizedBox(
                                             height: 20,
                                             child: Center(
-                                                  child: Text('일상메모',
-                                                      style: TextStyle(
-                                                          color: Colors.black54,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 15)),
-                                                ),
+                                              child: Text('일상메모',
+                                                  style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15)),
+                                            ),
                                           ),
                                         ],
                                       ),
                                     ),
                                   )
-                                : (index == 2
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            PageTransition(
-                                                type: PageTransitionType
-                                                    .bottomToTop,
-                                                child: DayContentHome()),
-                                          );
-                                        },
-                                        child: SizedBox(
-                                            height: 45,
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 25,
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: NeumorphicIcon(
-                                                      Icons.link,
-                                                      size: 25,
-                                                      style: const NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .convex,
-                                                          depth: 2,
-                                                          color: Colors.black45,
-                                                          lightSource:
-                                                              LightSource
-                                                                  .topLeft),
-                                                    ),
-                                                  ),
+                                : GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.bottomToTop,
+                                            child: RoutineHome()),
+                                      );
+                                    },
+                                    child: SizedBox(
+                                        height: 45,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 25,
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 25,
+                                                height: 25,
+                                                child: NeumorphicIcon(
+                                                  Icons.add_task,
+                                                  size: 25,
+                                                  style: const NeumorphicStyle(
+                                                      shape: NeumorphicShape
+                                                          .convex,
+                                                      depth: 2,
+                                                      color: Colors.black45,
+                                                      lightSource:
+                                                          LightSource.topLeft),
                                                 ),
-                                                const SizedBox(
-                                                  height: 20,
-                                                  child: Center(
-                                                        child: Text('링크플러스',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 15)),
-                                                      ),
-                                                ),
-                                              ],
-                                            )))
-                                    : (index == 3
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    type: PageTransitionType
-                                                        .bottomToTop,
-                                                    child: RoutineHome()),
-                                              );
-                                            },
-                                            child: SizedBox(
-                                                height: 45,
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 25,
-                                                      child: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: NeumorphicIcon(
-                                                          Icons.add_task,
-                                                          size: 25,
-                                                          style: const NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              color: Colors
-                                                                  .black45,
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 20,
-                                                      child: Center(
-                                                            child: Text('갓생루틴',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black54,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        15)),
-                                                          ),
-                                                    ),
-                                                  ],
-                                                )))
-                                        : GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    type: PageTransitionType
-                                                        .bottomToTop,
-                                                    child: DayContentHome()),
-                                              );
-                                            },
-                                            child: SizedBox(
-                                                height: 45,
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 25,
-                                                      child: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: NeumorphicIcon(
-                                                          Icons.loyalty,
-                                                          size: 25,
-                                                          style: const NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              color: Colors
-                                                                  .black45,
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 20,
-                                                      child: Center(
-                                                        child: Text('건강습관',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 15)),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ))))))
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 20,
+                                              child: Center(
+                                                child: Text('갓생루틴',
+                                                    style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 15)),
+                                              ),
+                                            ),
+                                          ],
+                                        ))))
                       ],
                     );
                   }),

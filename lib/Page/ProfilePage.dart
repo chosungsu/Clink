@@ -4,7 +4,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Sub/NoticePage.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/Setting/NoticeApps.dart';
 import '../UI/Setting/UserDetails.dart';
 import '../UI/Setting/UserSettings.dart';
 import 'DrawerScreen.dart';
@@ -157,7 +156,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         return Column(
                           children: [
                             S_Container1(height),
-                            S_Container2(height, pcontroll, context),
                             S_Container3(height),
                             SizedBox(
                               height: 150,
@@ -208,64 +206,6 @@ S_Container1(double height) {
   );
 }
 
-S_Container2(
-    double height, PageController pageController, BuildContext context) {
-  return SizedBox(
-    height: 150,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: const [
-                      Text('앱 공지사항',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18)),
-                    ],
-                  ),
-                ),
-                InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: NoticePage(),
-                              type: PageTransitionType.leftToRightWithFade));
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 25,
-                      height: 25,
-                      child: NeumorphicIcon(
-                        Icons.navigate_next,
-                        size: 20,
-                        style: NeumorphicStyle(
-                            shape: NeumorphicShape.convex,
-                            depth: 2,
-                            color: Colors.black45,
-                            lightSource: LightSource.topLeft),
-                      ),
-                    )),
-              ],
-            )),
-        SizedBox(
-          height: 100,
-          child: NoticeApps(
-            height: height,
-            pageController: pageController,
-          ),
-        )
-      ],
-    ),
-  );
-}
 
 S_Container3(double height) {
   return SizedBox(

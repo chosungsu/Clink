@@ -1,8 +1,9 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
+import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
 import 'package:clickbyme/sheets/addCalendarTodo.dart';
-import 'package:clickbyme/sheets/addRoutiner.dart';
+import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -154,7 +155,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                             width: 50,
                             child: InkWell(
                                 onTap: () {
-                                  addRoutiner(context);
+                                  settingRoutineHome(context);
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
@@ -522,14 +523,14 @@ class _RoutineHomeState extends State<RoutineHome> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
-              Text(
-                '루틴 공유',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-                overflow: TextOverflow.ellipsis,
+            children: [
+              const Flexible(
+                fit: FlexFit.tight,
+                child: Text('루티너',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18)),
               ),
             ],
           ),
