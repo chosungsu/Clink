@@ -1,6 +1,5 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/UI/Home/2ContentNet/DayContentHome.dart';
-import 'package:flutter/material.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 

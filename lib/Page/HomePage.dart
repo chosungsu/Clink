@@ -1,17 +1,13 @@
-import 'package:clickbyme/UI/Home/1ContentNet/ChangeSpace.dart';
-import 'package:clickbyme/UI/Home/2ContentNet/TopCard.dart';
-import 'package:clickbyme/UI/Home/4ContentNet/EventShowCard.dart';
-import 'package:clickbyme/UI/Home/3ContentNet/QuoteRoomCard.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
+import 'package:clickbyme/UI/Home/secondContentNet/ChangeSpace.dart';
+import 'package:clickbyme/UI/Home/thirdContentNet/EventShowCard.dart';
 import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../Sub/NoticePage.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/Home/1ContentNet/YourDayfulAd.dart';
-import '../route.dart';
+import '../UI/Home/secondContentNet/YourDayfulAd.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -74,127 +70,142 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizedBox(
                   height: 80,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Padding(padding: EdgeInsets.only(left: 10)),
                       SizedBox(
-                          width: 50,
-                          child: isdraweropen
-                              ? InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      xoffset = 0;
-                                      yoffset = 0;
-                                      scalefactor = 1;
-                                      isdraweropen = false;
-                                    });
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.keyboard_arrow_left,
-                                      size: 30,
-                                      style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          surfaceIntensity: 0.5,
-                                          color: Colors.black45,
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  ))
-                              : InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      xoffset = 50;
-                                      yoffset = 0;
-                                      scalefactor = 1;
-                                      isdraweropen = true;
-                                    });
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.menu,
-                                      size: 30,
-                                      style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          surfaceIntensity: 0.5,
-                                          depth: 2,
-                                          color: Colors.black45,
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  ))),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width - 60,
-                          child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      widget.title.toString(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.black45),
-                                    ),
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              type: PageTransitionType
-                                                  .bottomToTop,
-                                              child: NotiAlarm()),
-                                        );
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: 30,
-                                        height: 30,
-                                        child: NeumorphicIcon(
-                                          Icons.notifications_none,
-                                          size: 30,
-                                          style: const NeumorphicStyle(
-                                              shape: NeumorphicShape.convex,
-                                              surfaceIntensity: 0.5,
-                                              depth: 2,
-                                              color: Colors.black45,
-                                              lightSource: LightSource.topLeft),
+                        height: 80,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Padding(padding: EdgeInsets.only(left: 10)),
+                            SizedBox(
+                                width: 50,
+                                child: isdraweropen
+                                    ? InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            xoffset = 0;
+                                            yoffset = 0;
+                                            scalefactor = 1;
+                                            isdraweropen = false;
+                                          });
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 30,
+                                          height: 30,
+                                          child: NeumorphicIcon(
+                                            Icons.keyboard_arrow_left,
+                                            size: 30,
+                                            style: const NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                depth: 2,
+                                                surfaceIntensity: 0.5,
+                                                color: Colors.black45,
+                                                lightSource:
+                                                    LightSource.topLeft),
+                                          ),
+                                        ))
+                                    : InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            xoffset = 50;
+                                            yoffset = 0;
+                                            scalefactor = 1;
+                                            isdraweropen = true;
+                                          });
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 30,
+                                          height: 30,
+                                          child: NeumorphicIcon(
+                                            Icons.menu,
+                                            size: 30,
+                                            style: const NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                surfaceIntensity: 0.5,
+                                                depth: 2,
+                                                color: Colors.black45,
+                                                lightSource:
+                                                    LightSource.topLeft),
+                                          ),
+                                        ))),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width - 60,
+                                child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 20),
+                                    child: Row(
+                                      children: [
+                                        const Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text(
+                                            'Habit Tracker',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Colors.black45),
+                                          ),
                                         ),
-                                      )),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        addgroupmember(context);
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: 30,
-                                        height: 30,
-                                        child: NeumorphicIcon(
-                                          Icons.group_add,
-                                          size: 30,
-                                          style: const NeumorphicStyle(
-                                              shape: NeumorphicShape.convex,
-                                              surfaceIntensity: 0.5,
-                                              depth: 2,
-                                              color: Colors.black45,
-                                              lightSource: LightSource.topLeft),
+                                        InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: NotiAlarm()),
+                                              );
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                              height: 30,
+                                              child: NeumorphicIcon(
+                                                Icons.notifications_none,
+                                                size: 30,
+                                                style: const NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    surfaceIntensity: 0.5,
+                                                    depth: 2,
+                                                    color: Colors.black45,
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            )),
+                                        const SizedBox(
+                                          width: 10,
                                         ),
-                                      ))
-                                ],
-                              ))),
+                                        InkWell(
+                                            onTap: () {
+                                              addgroupmember(context);
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                              height: 30,
+                                              child: NeumorphicIcon(
+                                                Icons.group_add,
+                                                size: 30,
+                                                style: const NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    surfaceIntensity: 0.5,
+                                                    depth: 2,
+                                                    color: Colors.black45,
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            ))
+                                      ],
+                                    ))),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -270,6 +281,30 @@ class _HomePageState extends State<HomePage> {
 
   H_Container_1(double height) {
     return SizedBox(
+      height: 130,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Flexible(
+            fit: FlexFit.tight,
+            child: Text('카테고리',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TopCard(height: height),
+        ],
+      ),
+    );
+  }
+
+  H_Container_2(double height) {
+    return SizedBox(
       height: 250,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,9 +313,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               const Flexible(
                 fit: FlexFit.tight,
-                child: Text('하루공간',
+                child: Text('스페이스',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 18)),
               ),
@@ -296,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: const Text('변경',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
               )
@@ -311,54 +346,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_2(double height) {
-    return SizedBox(
-      height: 140,
-      width: MediaQuery.of(context).size.width - 40,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Flexible(
-            fit: FlexFit.tight,
-            child: Text('카테고리',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TopCard(height: height),
-        ],
-      ),
-    );
-  }
-
-  /*H_Container_3() {
-    return SizedBox(
-      height: 200,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Text('오늘의 문구',
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          QuoteRoomCard()
-        ],
-      ),
-    );
-  }*/
-
   H_Container_3(double height, PageController pController) {
     return SizedBox(
       height: 270,
@@ -369,7 +356,7 @@ class _HomePageState extends State<HomePage> {
             children: const [
               Text('이벤트',
                   style: TextStyle(
-                      color: Colors.black54,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18)),
             ],

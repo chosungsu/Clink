@@ -1,21 +1,9 @@
 import 'package:clickbyme/DB/SpaceList.dart';
-import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
-import 'package:clickbyme/UI/Home/1ContentNet/SpaceAD.dart';
+import 'package:clickbyme/UI/Home/secondContentNet/SpaceAD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../../DB/PageList.dart';
-import '../../../Dialogs/checkhowdaylog.dart';
-import '../../../Provider/EventProvider.dart';
-import '../../../Sub/DayEventAdd.dart';
-import '../../../Tool/CalendarSource.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/changecalendarview.dart';
 
 class ChangeSpace extends StatefulWidget {
   @override

@@ -156,10 +156,10 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                         padding: const EdgeInsets.only(
                                             left: 20, right: 20),
                                         child: Row(
-                                          children: [
+                                          children: const [
                                             Flexible(
                                               fit: FlexFit.tight,
-                                              child: const Text(
+                                              child: Text(
                                                 '알림',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -193,7 +193,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                   pageController: pcontroll,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               SizedBox(
@@ -223,8 +223,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: [
-              const Flexible(
+            children: const [
+              Flexible(
                 fit: FlexFit.tight,
                 child: Text('공지글',
                     style: TextStyle(
@@ -291,8 +291,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: [
-              const Flexible(
+            children: const [
+              Flexible(
                 fit: FlexFit.tight,
                 child: Text('최근',
                     style: TextStyle(
