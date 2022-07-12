@@ -1,6 +1,11 @@
+import 'package:clickbyme/Page/EnterCheckPage.dart';
+import 'package:clickbyme/UI/Analytics/EntercheckView.dart';
 import 'package:clickbyme/UI/Analytics/ShareView.dart';
 import 'package:clickbyme/UI/Analytics/ReportView.dart';
+import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:page_transition/page_transition.dart';
 import '../Tool/NoBehavior.dart';
 import 'DrawerScreen.dart';
 
@@ -47,7 +52,7 @@ class _AnalyticPageState extends State<AnalyticPage>
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
       child: SizedBox(
         height: height,
         child: Container(
@@ -55,73 +60,95 @@ class _AnalyticPageState extends State<AnalyticPage>
               color: Colors.white,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: 80,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(padding: EdgeInsets.only(left: 10)),
+                      const Padding(padding: EdgeInsets.only(left: 10)),
                       SizedBox(
-                          width: 50,
-                          child: isdraweropen
-                              ? InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      xoffset = 0;
-                                      yoffset = 0;
-                                      scalefactor = 1;
-                                      isdraweropen = false;
-                                    });
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.keyboard_arrow_left,
-                                      size: 30,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          surfaceIntensity: 0.5,
-                                          color: Colors.black45,
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  ))
-                              : InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      xoffset = 50;
-                                      yoffset = 0;
-                                      scalefactor = 1;
-                                      isdraweropen = true;
-                                    });
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.menu,
-                                      size: 30,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          surfaceIntensity: 0.5,
-                                          depth: 2,
-                                          color: Colors.black45,
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  ))),
-                      const SizedBox(
-                          child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text('데이 연구실',
-                            style: TextStyle(
-                                color: Colors.black45,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      )),
+                        height: 80,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Padding(padding: EdgeInsets.only(left: 10)),
+                            SizedBox(
+                                width: 50,
+                                child: isdraweropen
+                                    ? InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            xoffset = 0;
+                                            yoffset = 0;
+                                            scalefactor = 1;
+                                            isdraweropen = false;
+                                          });
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 30,
+                                          height: 30,
+                                          child: NeumorphicIcon(
+                                            Icons.keyboard_arrow_left,
+                                            size: 30,
+                                            style: const NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                depth: 2,
+                                                surfaceIntensity: 0.5,
+                                                color: Colors.black45,
+                                                lightSource:
+                                                    LightSource.topLeft),
+                                          ),
+                                        ))
+                                    : InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            xoffset = 50;
+                                            yoffset = 0;
+                                            scalefactor = 1;
+                                            isdraweropen = true;
+                                          });
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 30,
+                                          height: 30,
+                                          child: NeumorphicIcon(
+                                            Icons.menu,
+                                            size: 30,
+                                            style: const NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                surfaceIntensity: 0.5,
+                                                depth: 2,
+                                                color: Colors.black45,
+                                                lightSource:
+                                                    LightSource.topLeft),
+                                          ),
+                                        ))),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width - 60,
+                                child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 20),
+                                    child: Row(
+                                      children: const [
+                                        Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text(
+                                            '연구실',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Colors.black45),
+                                          ),
+                                        ),
+                                      ],
+                                    ))),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -132,15 +159,27 @@ class _AnalyticPageState extends State<AnalyticPage>
                         behavior: NoBehavior(),
                         child: SingleChildScrollView(child:
                             StatefulBuilder(builder: (_, StateSetter setState) {
-                          return Column(
-                            children: [
-                              A_Container1(height),
-                              A_Container2(height),
-                              SizedBox(
-                                height: height * 0.2,
-                              ),
-                            ],
-                          );
+                          return Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  A_Container1(height, context),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  A_Container2(height, context),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  A_Container3(height, context),
+                                  const SizedBox(
+                                    height: 150,
+                                  ),
+                                ],
+                              ));
                         })),
                       ),
                     )),
@@ -151,91 +190,93 @@ class _AnalyticPageState extends State<AnalyticPage>
   }
 }
 
-A_Container1(double height) {
+A_Container1(double height, BuildContext context) {
   return SizedBox(
-    height: height * 0.4,
+    height: 250,
+    width: MediaQuery.of(context).size.width - 40,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: const [
-                      Text('하루 분석',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18)),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text('Day Analysis',
-                          style: TextStyle(
-                              color: Colors.orange,
-                              fontStyle: FontStyle.italic,
-                              fontSize: 13)),
-                    ],
-                  ),
-                ),
-                /*Container(
-                  alignment: Alignment.center,
-                  width: 25,
-                  height: 25,
-                  child: NeumorphicIcon(
-                    Icons.download,
-                    size: 25,
-                    style: NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        color: Colors.black45,
-                        lightSource: LightSource.topLeft),
-                  ),
-                )*/
-              ],
-            )),
-        ReportView(height: height),
+        const Flexible(
+          fit: FlexFit.tight,
+          child: Text('액티비티',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18)),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ReportView(),
       ],
     ),
   );
 }
 
-A_Container2(double height) {
+A_Container2(double height, BuildContext context) {
   return SizedBox(
-    height: height * 0.4,
+    height: 170,
+    width: MediaQuery.of(context).size.width - 40,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: const [
-                      Text('공유 활동 현황',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18)),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text('Share Points',
-                          style: TextStyle(
-                              color: Colors.orange,
-                              fontStyle: FontStyle.italic,
-                              fontSize: 13)),
-                    ],
-                  ),
-                ),
-              ],
-            )),
-        ShareView(height: height),
+        Row(
+          children: [
+            const Flexible(
+              fit: FlexFit.tight,
+              child: Text('출석현황',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            ),
+            GestureDetector(
+              onTap: () {
+                //타일변경으로 넘어가기
+                Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.bottomToTop,
+                      child: EnterCheckPage()),
+                );
+              },
+              child: const Text('Go',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15)),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        EntercheckView(),
+      ],
+    ),
+  );
+}
+
+A_Container3(double height, BuildContext context) {
+  return SizedBox(
+    height: 250,
+    width: MediaQuery.of(context).size.width - 40,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Flexible(
+          fit: FlexFit.tight,
+          child: Text('루틴활동',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18)),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ReportView(),
       ],
     ),
   );

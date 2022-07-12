@@ -25,15 +25,6 @@ class SpaceAD extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
             child: GestureDetector(
-          onTap: () {
-            //타일변경으로 넘어가기
-            Navigator.push(
-              context,
-              PageTransition(
-                  type: PageTransitionType.bottomToTop,
-                  child: EnterCheckPage()),
-            );
-          },
           child: InkWell(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,9 +47,10 @@ class SpaceAD extends StatelessWidget {
             onTap: () {
               Navigator.push(
                   context,
-                  Transition(
-                      child: SettingPage(),
-                      transitionEffect: TransitionEffect.BOTTOM_TO_TOP));
+                  PageTransition(
+                      type: PageTransitionType.bottomToTop,
+                      child: EnterCheckPage()),
+                );
             },
           ),
         )));

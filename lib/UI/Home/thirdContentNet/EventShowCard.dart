@@ -115,12 +115,29 @@ class EventShowCard extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     //구독관리페이지 호출
-                                    Navigator.push(
-                                        context,
-                                        Transition(
-                                            child: SettingPage(),
-                                            transitionEffect: TransitionEffect
-                                                .BOTTOM_TO_TOP));
+                                    index == 0
+                                        ? Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                type: PageTransitionType
+                                                    .bottomToTop,
+                                                child: EnterCheckPage()),
+                                          )
+                                        : (index == 1
+                                            ? Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: EnterCheckPage()),
+                                              )
+                                            : Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: SettingPage()),
+                                              ));
                                   },
                                   child: Center(
                                     child: Column(

@@ -1,27 +1,10 @@
-import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
-import 'package:clickbyme/UI/Home/NotiAlarm.dart';
-import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
 import 'package:clickbyme/sheets/addCalendarTodo.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:transition/transition.dart';
-import 'package:clickbyme/Tool/dateutils.dart';
-import '../../../DB/Event.dart';
-import '../../../Dialogs/checkhowdaylog.dart';
-import '../../../Provider/EventProvider.dart';
-import '../../../Sub/DayEventAdd.dart';
-import '../../../Tool/CalendarSource.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/changecalendarview.dart';
 
 class DayScript extends StatefulWidget {
   const DayScript(

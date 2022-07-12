@@ -63,8 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget ProfileBody(BuildContext context, PageController pcontroll) {
-    double height =
-        MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
@@ -189,7 +188,7 @@ S_Container1(double height) {
                     children: const [
                       Text('사용자 정보',
                           style: TextStyle(
-                              color: Colors.black54,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 18)),
                     ],
@@ -198,6 +197,9 @@ S_Container1(double height) {
               ],
             )),
         SizedBox(
+          height: 20,
+        ),
+        SizedBox(
           height: 100,
           child: UserDetails(height: height),
         )
@@ -205,7 +207,6 @@ S_Container1(double height) {
     ),
   );
 }
-
 
 S_Container3(double height) {
   return SizedBox(
@@ -223,7 +224,7 @@ S_Container3(double height) {
                     children: const [
                       Text('부가기능',
                           style: TextStyle(
-                              color: Colors.black54,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 18)),
                     ],
@@ -231,6 +232,9 @@ S_Container3(double height) {
                 ),
               ],
             )),
+        SizedBox(
+          height: 20,
+        ),
         SizedBox(
           height: 250,
           child: UserSettings(height: height),

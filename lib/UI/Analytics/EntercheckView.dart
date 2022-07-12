@@ -2,18 +2,18 @@ import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
-class ReportView extends StatelessWidget {
+class EntercheckView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 120,
       width: MediaQuery.of(context).size.width - 40,
       child: ContainerDesign(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: 30,
+                height: 50,
                 child: Row(
                   children: [
                     NeumorphicIcon(
@@ -28,21 +28,21 @@ class ReportView extends StatelessWidget {
                     const SizedBox(
                       width: 20,
                     ),
-                    const Text('오늘의 걸음 수',
-                        style: const TextStyle(
+                    const Text('오늘 출석체크 이벤트 참석완료!',
+                        style: TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.bold,
                             fontSize: 18))
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                height: 50,
-                child: const Text('8800보 걸으셨습니다.',
-                    style: const TextStyle(
+              const SizedBox(
+                height: 30,
+                child: Text('하루하루 잊지말고 참여하세요~',
+                    style: TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
