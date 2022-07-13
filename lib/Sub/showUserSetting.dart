@@ -1,6 +1,6 @@
 import 'package:clickbyme/DB/User_Info.dart';
 import 'package:flutter/material.dart';
-import '../Tool/DeleteUser.dart';
+import '../UI/Setting/DeleteUser.dart';
 import '../Tool/NoBehavior.dart';
 
 

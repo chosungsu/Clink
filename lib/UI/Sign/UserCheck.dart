@@ -24,29 +24,10 @@ GoToMain(BuildContext context) {
 
 GoToLogin(BuildContext context) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
-    Navigator.push(
-      context,
-      PageTransition(
-        type: PageTransitionType.bottomToTop,
-        child: const LoginSignPage(),
-      ),
-    );
-    Hive.box('user_setting').put('login_delete', 0);
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const LoginSignPage()));
   });
 
-  return _time;
-}
-
-GoToLogin2(BuildContext context) {
-  Timer? _time = Timer(const Duration(seconds: 0), () {
-    Navigator.of(context).pushReplacement(
-      PageTransition(
-        type: PageTransitionType.bottomToTop,
-        child: const LoginSignPage(),
-      ),
-    );
-    Hive.box('user_setting').put('login_delete', 1);
-  });
   return _time;
 }
 

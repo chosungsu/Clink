@@ -16,11 +16,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool login_state = false;
   String name = "null", email = "null", cnt = "null";
-  int current_noticepage = 0;
-  late Timer _timer_noti;
-  final PageController _pcontroll = PageController(
-    initialPage: 0,
-  );
   double xoffset = 0;
   double yoffset = 0;
   double scalefactor = 1;
@@ -29,24 +24,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _timer_noti = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (current_noticepage < 4) {
-        current_noticepage++;
-      } else {
-        current_noticepage = 0;
-      }
-      if (_pcontroll.hasClients) {
-        _pcontroll.animateToPage(current_noticepage,
-            duration: const Duration(milliseconds: 2000), curve: Curves.easeIn);
-      }
-    });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _timer_noti.cancel();
   }
 
   @override
@@ -57,17 +40,17 @@ class _ProfilePageState extends State<ProfilePage> {
             body: Stack(
               children: [
                 DrawerScreen(),
-                ProfileBody(context, _pcontroll),
+                ProfileBody(context),
               ],
             )));
   }
 
-  Widget ProfileBody(BuildContext context, PageController pcontroll) {
+  Widget ProfileBody(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
         ..scale(scalefactor),
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
       child: SizedBox(
         height: height,
         child: Container(
@@ -81,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(padding: EdgeInsets.only(left: 10)),
+                      const Padding(padding: EdgeInsets.only(left: 10)),
                       SizedBox(
                           width: 50,
                           child: isdraweropen
@@ -101,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     child: NeumorphicIcon(
                                       Icons.keyboard_arrow_left,
                                       size: 30,
-                                      style: NeumorphicStyle(
+                                      style: const NeumorphicStyle(
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
                                           surfaceIntensity: 0.5,
@@ -125,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     child: NeumorphicIcon(
                                       Icons.menu,
                                       size: 30,
-                                      style: NeumorphicStyle(
+                                      style: const NeumorphicStyle(
                                           shape: NeumorphicShape.convex,
                                           surfaceIntensity: 0.5,
                                           depth: 2,
@@ -152,15 +135,20 @@ class _ProfilePageState extends State<ProfilePage> {
                       behavior: NoBehavior(),
                       child: SingleChildScrollView(child:
                           StatefulBuilder(builder: (_, StateSetter setState) {
-                        return Column(
-                          children: [
-                            S_Container1(height),
-                            S_Container3(height),
-                            SizedBox(
-                              height: 150,
-                            ),
-                          ],
-                        );
+                        return Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            child: Column(
+                              children: [
+                                S_Container1(height),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                S_Container2(height),
+                                const SizedBox(
+                                  height: 150,
+                                ),
+                              ],
+                            ));
                       })),
                     ),
                   ),
@@ -174,33 +162,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
 S_Container1(double height) {
   return SizedBox(
-    height: 150,
+    height: 155,
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: const [
-                      Text('사용자 정보',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18)),
-                    ],
-                  ),
-                ),
-              ],
-            )),
         SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          height: 100,
+          height: 150,
           child: UserDetails(height: height),
         )
       ],
@@ -208,37 +175,13 @@ S_Container1(double height) {
   );
 }
 
-S_Container3(double height) {
+S_Container2(double height) {
   return SizedBox(
-    height: 300,
+    height: 500,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: const [
-                      Text('부가기능',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18)),
-                    ],
-                  ),
-                ),
-              ],
-            )),
-        SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          height: 250,
-          child: UserSettings(height: height),
-        )
+        UserSettings(height: height),
       ],
     ),
   );

@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clickbyme/Page/EnterCheckPage.dart';
-import 'package:clickbyme/Sub/SettingPage.dart';
+import 'package:clickbyme/UI/Setting/SettingPage.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';

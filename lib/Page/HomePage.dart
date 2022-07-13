@@ -198,30 +198,6 @@ class _HomePageState extends State<HomePage> {
                                                         LightSource.topLeft),
                                               ),
                                             )),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              addgroupmember(context);
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                              height: 30,
-                                              child: NeumorphicIcon(
-                                                Icons.group_add,
-                                                size: 30,
-                                                style: const NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    surfaceIntensity: 0.5,
-                                                    depth: 2,
-                                                    color: Colors.black45,
-                                                    lightSource:
-                                                        LightSource.topLeft),
-                                              ),
-                                            ))
                                       ],
                                     ))),
                           ],

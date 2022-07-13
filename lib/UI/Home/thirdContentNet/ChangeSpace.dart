@@ -23,11 +23,15 @@ class _ChangeSpaceState extends State<ChangeSpace> {
       image: 'assets/images/date.png',
     ),
     SpaceList(
-      title: '운동조각',
+      title: '일정조각',
+      image: 'assets/images/date.png',
+    ),
+    SpaceList(
+      title: '루틴조각',
       image: 'assets/images/run.png',
     ),
     SpaceList(
-      title: '일정조각',
+      title: '운동조각',
       image: 'assets/images/date.png',
     ),
     SpaceList(

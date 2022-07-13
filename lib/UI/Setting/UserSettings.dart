@@ -1,73 +1,115 @@
+import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
+import 'package:clickbyme/UI/Setting/DeleteUser.dart';
+import 'package:clickbyme/UI/Sign/UserCheck.dart';
+import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:transition/transition.dart';
 
 import '../../Sub/HowToUsePage.dart';
-import '../../Sub/SettingPage.dart';
+import 'SettingPage.dart';
 import '../../Tool/ContainerDesign.dart';
 
 class UserSettings extends StatelessWidget {
   UserSettings({Key? key, required this.height}) : super(key: key);
   final double height;
   final List<String> list_title = <String>[
-    '이용안내',
-    '문의하기',
-    'Pro 버전 구매',
+    '도움 & 문의',
+    '설정값 변경',
+    '구매하기',
+    '친구 초대하기',
+    '로그인',
   ];
+  var name = Hive.box('user_info').get('id');
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
-        child: ContainerDesign(
-            child: SizedBox(
-                height: 250,
+    return SizedBox(
+      height:
+          list_title.isNotEmpty ? 100 * list_title.length.toDouble() : (200),
+      width: MediaQuery.of(context).size.width - 40,
+      child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          itemCount: list_title.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+                onTap: () {
+                  index == 0
+                      ? Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.bottomToTop,
+                              child: DayContentHome()),
+                        )
+                      : (index == 1
+                          ? Navigator.push(
+                              context,
+                              PageTransition(
+                                  type: PageTransitionType.bottomToTop,
+                                  child: DayContentHome()),
+                            )
+                          : (index == 2
+                              ? Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: SettingPage()),
+                                )
+                              : (index == 3
+                                  ? addgroupmember(context)
+                                  : (index == 4 && name == null
+                                      ? GoToLogin(context)
+                                      : DeleteUserVerify(context, name)))));
+                },
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ListView.separated(
-                      //physics : 스크롤 막기 기능
-                      //shrinkWrap : 리스트뷰 오버플로우 방지
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: list_title.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                            height: 250 / 5.5,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  child: Text('${list_title[index]}'),
-                                  onTap: () {
-                                    if (index == 0) {
-                                      //이용안내페이지 호출
-                                      Navigator.push(
-                                          context,
-                                          Transition(
-                                              child: HowToUsePage(),
-                                              transitionEffect: TransitionEffect
-                                                  .RIGHT_TO_LEFT));
-                                    } else if (index == 1) {
-                                    } else {
-                                      //구독관리페이지 호출
-                                      Navigator.push(
-                                        context,
-                                        PageTransition(
-                                            type:
-                                                PageTransitionType.bottomToTop,
-                                            child: SettingPage()),
-                                      );
-                                    }
-                                  },
-                                ),
-                              ],
-                            ));
-                      },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
+                    SizedBox(
+                      height: 10,
                     ),
+                    ContainerDesign(
+                        child: SizedBox(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width - 80,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Text(
+                                Hive.box('user_info').get('id') != null &&
+                                        index == 4
+                                    ? '로그아웃'
+                                    : list_title[index],
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18)),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            width: 25,
+                            height: 25,
+                            child: NeumorphicIcon(
+                              Icons.navigate_next,
+                              size: 20,
+                              style: NeumorphicStyle(
+                                  shape: NeumorphicShape.convex,
+                                  depth: 2,
+                                  color: Colors.black45,
+                                  lightSource: LightSource.topLeft),
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+                    SizedBox(
+                      height: 10,
+                    )
                   ],
-                ))));
+                ));
+          }),
+    );
   }
 }

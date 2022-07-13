@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../Auth/GoogleSignInController.dart';
-import '../Auth/KakaoSignInController.dart';
-import '../route.dart';
+import '../../Auth/GoogleSignInController.dart';
+import '../../Auth/KakaoSignInController.dart';
+import '../../route.dart';
 
 DeleteUserVerify(BuildContext context, String name) {
   showModalBottomSheet(
@@ -53,7 +53,7 @@ DeleteUserVerify(BuildContext context, String name) {
                     .logout(context, name);
                 Provider.of<KakaoSignInController>(context, listen: false)
                     .logout(context, name);
-                GoToLogin2(context);
+                GoToLogin(context);
               },
               style: ElevatedButton.styleFrom(
                   primary: Colors.amberAccent,

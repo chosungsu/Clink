@@ -21,65 +21,68 @@ class _LoginSignPageState extends State<LoginSignPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          makeBody(context, _ischecked),
-          const Divider(
-            height: 30,
-            color: Colors.grey,
-            thickness: 0.5,
-            indent: 30.0,
-            endIndent: 30.0,
-          ),
-          const Text(
-            '동의항목',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.bold, // bold
+      body: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            makeBody(context, _ischecked),
+            const Divider(
+              height: 30,
+              color: Colors.grey,
+              thickness: 0.5,
+              indent: 30.0,
+              endIndent: 30.0,
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                      value: _ischecked,
-                      onChanged: (value) {
-                        setState(() {
-                          _ischecked = value!;
-                        });
-                      }),
-                  Flexible(
-                      fit: FlexFit.tight,
-                      child: Row(
-                        children: const [
-                          Text(
-                            '(선택)자동 로그인 사용',
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16,
-                                color: Colors.black,
-                                letterSpacing: 2),
-                          ),
-                        ],
-                      ))
-                ],
-              )
-            ],
-          )
-        ],
+            const Text(
+              '동의항목',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.bold, // bold
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                        value: _ischecked,
+                        onChanged: (value) {
+                          setState(() {
+                            _ischecked = value!;
+                          });
+                        }),
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: const [
+                            Text(
+                              '(선택)자동 로그인 사용',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  letterSpacing: 2),
+                            ),
+                          ],
+                        ))
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  /*Future<bool> _onPop() async {
+  Future<bool> _onWillPop() async {
     return (await destroyBackKey(context)) ?? false;
-  }*/
+  }
 }
 
 // 바디 만들기
