@@ -1,4 +1,5 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:transition/transition.dart';
 
 import '../../Sub/HowToUsePage.dart';
@@ -51,12 +52,13 @@ class UserSettings extends StatelessWidget {
                                     } else {
                                       //구독관리페이지 호출
                                       Navigator.push(
-                                          context,
-                                          Transition(
-                                              child: SettingPage(),
-                                              transitionEffect: TransitionEffect
-                                                  .BOTTOM_TO_TOP));
-                                    } 
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.bottomToTop,
+                                            child: SettingPage()),
+                                      );
+                                    }
                                   },
                                 ),
                               ],

@@ -30,10 +30,9 @@ DelOrEditCalendar(BuildContext context) {
 
 HandlePage(BuildContext context) {
   return SizedBox(
-      height: 150,
+      height: 120,
       child: Padding(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
         child: Column(
           children: [
             buildTitle(context),
@@ -48,55 +47,87 @@ buildTitle(BuildContext context) {
       height: 100,
       child: Column(
         children: [
-          InkWell(
-            onTap: () {
-              //수정 및 삭제 시트 띄우기
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                PageTransition(
-                    type: PageTransitionType.bottomToTop,
-                    child: DayScript(
-                      index: 1,
-                      date: DateTime.now(),
-                      fkey: _formkey,
-                    )),
-              );
-            },
-            child: const Expanded(
-                flex: 1,
-                child: const Text(
-                  '수정하기',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black),
+          SizedBox(
+              height: 5,
+              width: MediaQuery.of(context).size.width - 40,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: (MediaQuery.of(context).size.width - 40) * 0.4,
+                  ),
+                  Container(
+                      width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                      alignment: Alignment.topCenter,
+                      color: Colors.black45),
+                  SizedBox(
+                    width: (MediaQuery.of(context).size.width - 40) * 0.4,
+                  ),
+                ],
+              )),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 30,
+            child: InkWell(
+                onTap: () {
+                  //수정 및 삭제 시트 띄우기
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: DayScript(
+                          index: 1,
+                          date: DateTime.now(),
+                          fkey: _formkey,
+                        )),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      '수정하기',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black),
+                    ),
+                  ],
                 )),
           ),
-          const Expanded(flex: 1, child: const SizedBox()),
-          InkWell(
-            onTap: () {
-              //수정 및 삭제 시트 띄우기
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                PageTransition(
-                    type: PageTransitionType.bottomToTop,
-                    child: DayScript(
-                      index: 2,
-                      date: DateTime.now(),
-                      fkey: _formkey,
-                    )),
-              );
-            },
-            child: const Expanded(
-                flex: 1,
-                child: const Text(
-                  '삭제하기',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            height: 30,
+            child: InkWell(
+                onTap: () {
+                  //수정 및 삭제 시트 띄우기
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: DayScript(
+                          index: 2,
+                          date: DateTime.now(),
+                          fkey: _formkey,
+                        )),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      '삭제하기',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black),
+                    ),
+                  ],
                 )),
           ),
         ],

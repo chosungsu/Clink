@@ -4,6 +4,7 @@ import 'package:clickbyme/UI/Analytics/ShareView.dart';
 import 'package:clickbyme/UI/Analytics/ReportView.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
+import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/NoBehavior.dart';
@@ -166,7 +167,7 @@ class _AnalyticPageState extends State<AnalyticPage>
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  A_Container1(height, context),
+                                  A_Container1(height, _pController),
                                   const SizedBox(
                                     height: 20,
                                   ),
@@ -175,6 +176,10 @@ class _AnalyticPageState extends State<AnalyticPage>
                                     height: 20,
                                   ),
                                   A_Container3(height, context),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  A_Container4(height, context),
                                   const SizedBox(
                                     height: 150,
                                   ),
@@ -190,9 +195,21 @@ class _AnalyticPageState extends State<AnalyticPage>
   }
 }
 
-A_Container1(double height, BuildContext context) {
+A_Container1(double height, PageController pController) {
   return SizedBox(
-    height: 250,
+    height: 140,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        EventShowCard(height: height, pageController: pController, pageindex: 1,),
+      ],
+    ),
+  );
+}
+
+A_Container2(double height, BuildContext context) {
+  return SizedBox(
+    height: 150,
     width: MediaQuery.of(context).size.width - 40,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,7 +231,7 @@ A_Container1(double height, BuildContext context) {
   );
 }
 
-A_Container2(double height, BuildContext context) {
+A_Container3(double height, BuildContext context) {
   return SizedBox(
     height: 170,
     width: MediaQuery.of(context).size.width - 40,
@@ -258,9 +275,9 @@ A_Container2(double height, BuildContext context) {
   );
 }
 
-A_Container3(double height, BuildContext context) {
+A_Container4(double height, BuildContext context) {
   return SizedBox(
-    height: 250,
+    height: 150,
     width: MediaQuery.of(context).size.width - 40,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

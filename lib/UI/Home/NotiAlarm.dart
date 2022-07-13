@@ -34,11 +34,11 @@ class _NotiAlarmState extends State<NotiAlarm> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  int current_noticepage = 0;
-  late Timer _timer_noti;
-  final PageController _pcontroll = PageController(
-    initialPage: 0,
-  );
+  final List notinamelist = [
+    '전체',
+    '공지글',
+    '푸쉬알림',
+  ];
   final List<PageList> _list_ad = [
     PageList(
       id: '0',
@@ -67,30 +67,18 @@ class _NotiAlarmState extends State<NotiAlarm> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    initializeDateFormatting(Localizations.localeOf(context).languageCode);
   }
 
   @override
   void initState() {
     super.initState();
-    _timer_noti = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (current_noticepage < 3) {
-        current_noticepage++;
-      } else {
-        current_noticepage = 0;
-      }
-      if (_pcontroll.hasClients) {
-        _pcontroll.animateToPage(current_noticepage,
-            duration: const Duration(milliseconds: 2000), curve: Curves.easeIn);
-      }
-    });
+    Hive.box('user_setting').put('noti_home_click', 0);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _timer_noti.cancel();
   }
 
   @override
@@ -98,11 +86,11 @@ class _NotiAlarmState extends State<NotiAlarm> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: UI(_pcontroll),
+      body: UI(),
     ));
   }
 
-  UI(PageController pcontroll) {
+  UI() {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
@@ -114,66 +102,79 @@ class _NotiAlarmState extends State<NotiAlarm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                  height: 80,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                            fit: FlexFit.tight,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                    width: 50,
-                                    child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.keyboard_arrow_left,
-                                            size: 30,
-                                            style: const NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: Colors.black45,
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                        ))),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width -
-                                        60 -
-                                        160,
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20, right: 20),
-                                        child: Row(
-                                          children: const [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text(
-                                                '알림',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                    color: Colors.black45),
-                                              ),
-                                            ),
-                                          ],
-                                        ))),
-                              ],
-                            )),
-                      ],
-                    ),
-                  )),
+                height: 160,
+                child: Column(
+                  children: [
+                    SizedBox(
+                        height: 80,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                          width: 50,
+                                          child: InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  Navigator.pop(context);
+                                                });
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 30,
+                                                height: 30,
+                                                child: NeumorphicIcon(
+                                                  Icons.keyboard_arrow_left,
+                                                  size: 30,
+                                                  style: const NeumorphicStyle(
+                                                      shape: NeumorphicShape
+                                                          .convex,
+                                                      depth: 2,
+                                                      surfaceIntensity: 0.5,
+                                                      color: Colors.black45,
+                                                      lightSource:
+                                                          LightSource.topLeft),
+                                                ),
+                                              ))),
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              60 -
+                                              160,
+                                          child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              child: Row(
+                                                children: const [
+                                                  Flexible(
+                                                    fit: FlexFit.tight,
+                                                    child: Text(
+                                                      '알림',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 20,
+                                                          color:
+                                                              Colors.black45),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ))),
+                                    ],
+                                  )),
+                            ],
+                          ),
+                        )),
+                    NoticeApps(),
+                  ],
+                ),
+              ),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -187,21 +188,10 @@ class _NotiAlarmState extends State<NotiAlarm> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                height: 100,
-                                child: NoticeApps(
-                                  pageController: pcontroll,
-                                ),
-                              ),
                               const SizedBox(
                                 height: 20,
                               ),
-                              SizedBox(
-                                height: 100,
-                                child: RecentAlarms(
-                                  pageController: pcontroll,
-                                ),
-                              ),
+                              NoticeLists(),
                               const SizedBox(
                                 height: 150,
                               )
@@ -216,98 +206,219 @@ class _NotiAlarmState extends State<NotiAlarm> {
     );
   }
 
-  NoticeApps({required PageController pageController}) {
+  NoticeApps() {
     return SizedBox(
       height: 80,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text('공지글',
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18)),
-              ),
-            ],
-          ),
           const SizedBox(
-            height: 20,
+            height: 5,
           ),
-          NotiBox(pageController)
+          NotiBox()
         ],
       ),
     );
   }
 
-  NotiBox(PageController pageController) {
-    return ContainerDesign(
-            child: SizedBox(
-          height: 30,
-          child: PageView.builder(
-              scrollDirection: Axis.vertical,
-              pageSnapping: false,
-              itemCount: _list_ad.length,
-              controller: pageController,
-              itemBuilder: (context, index) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Text(
-                        _list_ad[index].title.toString(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black45,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const Center(
-                      child: Text(
-                        'today',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Color.fromARGB(115, 175, 175, 175),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-        ));
-  }
-  RecentAlarms({required PageController pageController}) {
+  NotiBox() {
     return SizedBox(
-      height: 80,
+        height: 30,
+        width: MediaQuery.of(context).size.width - 40,
+        child: ListView.builder(
+            // the number of items in the list
+            itemCount: notinamelist.length,
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            // display each item of the product list
+            itemBuilder: (context, index) {
+              return index == 2
+                  ? Row(
+                      children: [
+                        SizedBox(
+                            width: (MediaQuery.of(context).size.width - 40) / 2,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    primary: Hive.box('user_setting')
+                                                .get('noti_home_click') ==
+                                            null
+                                        ? Colors.white
+                                        : (Hive.box('user_setting')
+                                                    .get('noti_home_click') ==
+                                                index
+                                            ? Colors.grey.shade400
+                                            : Colors.white),
+                                    side: const BorderSide(
+                                      width: 1,
+                                      color: Colors.black45,
+                                    )),
+                                onPressed: () {
+                                  setState(() {
+                                    Hive.box('user_setting')
+                                        .put('noti_home_click', index);
+                                  });
+                                },
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          notinamelist[index],
+                                          style: NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Hive.box('user_setting').get(
+                                                        'noti_home_click') ==
+                                                    null
+                                                ? Colors.black45
+                                                : (Hive.box('user_setting').get(
+                                                            'noti_home_click') ==
+                                                        index
+                                                    ? Colors.white
+                                                    : Colors.black45),
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ))),
+                        const SizedBox(
+                          width: 20,
+                        )
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        SizedBox(
+                            width: (MediaQuery.of(context).size.width - 40) / 4,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    primary: Hive.box('user_setting')
+                                                .get('noti_home_click') ==
+                                            null
+                                        ? Colors.white
+                                        : (Hive.box('user_setting')
+                                                    .get('noti_home_click') ==
+                                                index
+                                            ? Colors.grey.shade400
+                                            : Colors.white),
+                                    side: const BorderSide(
+                                      width: 1,
+                                      color: Colors.black45,
+                                    )),
+                                onPressed: () {
+                                  setState(() {
+                                    Hive.box('user_setting')
+                                        .put('noti_home_click', index);
+                                  });
+                                },
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          notinamelist[index],
+                                          style: NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Hive.box('user_setting').get(
+                                                        'noti_home_click') ==
+                                                    null
+                                                ? Colors.black45
+                                                : (Hive.box('user_setting').get(
+                                                            'noti_home_click') ==
+                                                        index
+                                                    ? Colors.white
+                                                    : Colors.black45),
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ))),
+                        const SizedBox(
+                          width: 20,
+                        )
+                      ],
+                    );
+            }));
+  }
+
+  NoticeLists() {
+    return SizedBox(
+      height: 120 * _list_ad.length.toDouble(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text('최근',
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18)),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          NotiBox(pageController)
-        ],
+        children: [ListBox()],
       ),
+    );
+  }
+
+  ListBox() {
+    return SizedBox(
+      height: _list_ad.isNotEmpty ? 110 * _list_ad.length.toDouble() : (200),
+      width: MediaQuery.of(context).size.width - 40,
+      child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          itemCount: _list_ad.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+                onTap: () {},
+                child: Column(
+                  children: [
+                    ContainerDesign(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                              height: 60,
+                              width: MediaQuery.of(context).size.width - 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    _list_ad[index].title,
+                                    style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ));
+          }),
     );
   }
 }

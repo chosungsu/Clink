@@ -1,13 +1,14 @@
+import 'package:clickbyme/DB/SpaceList.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
-import 'package:clickbyme/UI/Home/secondContentNet/ChangeSpace.dart';
-import 'package:clickbyme/UI/Home/thirdContentNet/EventShowCard.dart';
+import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
+import 'package:clickbyme/UI/Home/thirdContentNet/ChangeSpace.dart';
+import 'package:clickbyme/UI/Home/thirdContentNet/YourDayfulAd.dart';
 import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/Home/secondContentNet/YourDayfulAd.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,6 +25,26 @@ class _HomePageState extends State<HomePage> {
   bool isdraweropen = false;
   int currentPage = 0;
   late final PageController _pController;
+  //프로 버전 구매시 사용하게될 코드
+  bool isbought = false;
+  final List<SpaceList> _list_ad = [
+    SpaceList(
+      title: '날씨조각',
+      image: 'assets/images/date.png',
+    ),
+    SpaceList(
+      title: '운동조각',
+      image: 'assets/images/run.png',
+    ),
+    SpaceList(
+      title: '일정조각',
+      image: 'assets/images/date.png',
+    ),
+    SpaceList(
+      title: '메모조각',
+      image: 'assets/images/book.png',
+    ),
+  ];
 
   @override
   void initState() {
@@ -259,11 +280,11 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_2(height),
+                                H_Container_2(height, _pController),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_3(height, _pController),
+                                H_Container_3(height),
                                 const SizedBox(
                                   height: 150,
                                 ),
@@ -303,9 +324,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_2(double height) {
+  H_Container_2(double height, PageController pController) {
     return SizedBox(
-      height: 250,
+      height: 140,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          EventShowCard(height: height, pageController: pController, pageindex: 0,),
+        ],
+      ),
+    );
+  }
+
+  H_Container_3(double height) {
+    //프로버전 구매시 사용할 코드
+    //isbought == false일 경우와 isbought == true일 경우 사이즈박스 크기를 제한 풀기...
+    return SizedBox(
+      height:
+          isbought == false ? 130 * 3 : 130 * _list_ad.length.toDouble(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -341,30 +377,6 @@ class _HomePageState extends State<HomePage> {
             height: 20,
           ),
           YourDayfulAd(height: height)
-        ],
-      ),
-    );
-  }
-
-  H_Container_3(double height, PageController pController) {
-    return SizedBox(
-      height: 270,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Text('이벤트',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          EventShowCard(height: height, pageController: pController),
         ],
       ),
     );

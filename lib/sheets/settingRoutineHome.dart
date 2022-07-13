@@ -121,6 +121,8 @@ content(
                         height: 30,
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100)),
                                 primary: Hive.box('user_setting')
                                             .get('numorimogi_routine') ==
                                         null
@@ -128,11 +130,11 @@ content(
                                     : (Hive.box('user_setting')
                                                 .get('numorimogi_routine') ==
                                             0
-                                        ? Colors.white
-                                        : Colors.grey.shade400),
+                                        ? Colors.grey.shade400
+                                        : Colors.white),
                                 side: const BorderSide(
-                                  width: 0.5,
-                                  color: Colors.red,
+                                  width: 1,
+                                  color: Colors.black45,
                                 )),
                             onPressed: () {
                               setState(() {
@@ -158,8 +160,8 @@ content(
                                             : (Hive.box('user_setting').get(
                                                         'numorimogi_routine') ==
                                                     0
-                                                ? Colors.black45
-                                                : Colors.white),
+                                                ? Colors.white
+                                                : Colors.black45),
                                       ),
                                       textStyle: NeumorphicTextStyle(
                                         fontWeight: FontWeight.bold,
@@ -180,18 +182,20 @@ content(
                       height: 30,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100)),
                               primary: Hive.box('user_setting')
                                           .get('numorimogi_routine') ==
                                       null
-                                  ? Colors.grey.shade400
+                                  ? Colors.white
                                   : (Hive.box('user_setting')
                                               .get('numorimogi_routine') ==
-                                          0
+                                          1
                                       ? Colors.grey.shade400
                                       : Colors.white),
                               side: const BorderSide(
-                                width: 0.5,
-                                color: Colors.red,
+                                width: 1,
+                                color: Colors.black45,
                               )),
                           onPressed: () {
                             setState(() {
@@ -213,10 +217,10 @@ content(
                                       color: Hive.box('user_setting')
                                                   .get('numorimogi_routine') ==
                                               null
-                                          ? Colors.white
+                                          ? Colors.black45
                                           : (Hive.box('user_setting').get(
                                                       'numorimogi_routine') ==
-                                                  0
+                                                  1
                                               ? Colors.white
                                               : Colors.black45),
                                     ),

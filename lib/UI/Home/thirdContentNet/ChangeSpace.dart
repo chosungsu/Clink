@@ -1,5 +1,5 @@
 import 'package:clickbyme/DB/SpaceList.dart';
-import 'package:clickbyme/UI/Home/secondContentNet/SpaceAD.dart';
+import 'package:clickbyme/UI/Home/thirdContentNet/SpaceAD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
@@ -33,10 +33,6 @@ class _ChangeSpaceState extends State<ChangeSpace> {
     SpaceList(
       title: '메모조각',
       image: 'assets/images/book.png',
-    ),
-    SpaceList(
-      title: '오늘의 클립조각',
-      image: 'assets/images/phrase.png',
     ),
   ];
 
@@ -76,7 +72,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(padding: EdgeInsets.only(left: 10)),
+                    const Padding(padding: EdgeInsets.only(left: 10)),
                     SizedBox(
                         width: 50,
                         child: InkWell(
@@ -92,7 +88,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                               child: NeumorphicIcon(
                                 Icons.keyboard_arrow_left,
                                 size: 30,
-                                style: NeumorphicStyle(
+                                style: const NeumorphicStyle(
                                     shape: NeumorphicShape.convex,
                                     depth: 2,
                                     surfaceIntensity: 0.5,
@@ -103,14 +99,14 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                     SizedBox(
                         width: MediaQuery.of(context).size.width - 60 - 160,
                         child: Padding(
-                            padding: EdgeInsets.only(left: 20, right: 20),
+                            padding: const EdgeInsets.only(left: 20, right: 20),
                             child: Row(
                               children: [
                                 Flexible(
                                   fit: FlexFit.tight,
-                                  child: Text(
+                                  child: const Text(
                                     '',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
                                         color: Colors.black45),
@@ -129,16 +125,16 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                       child: SingleChildScrollView(child:
                           StatefulBuilder(builder: (_, StateSetter setState) {
                         return Padding(
-                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               MySpace(height, context),
-                              SizedBox(
+                              const SizedBox(
                                 height: 30,
                               ),
                               ChoiceSpace(height, context),
-                              SizedBox(
+                              const SizedBox(
                                 height: 150,
                               ),
                             ],
@@ -154,7 +150,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   MySpace(double height, BuildContext context) {
     return SizedBox(
-      height: 350,
+      height: 70 * _list_ad.length.toDouble() + 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -178,7 +174,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   myspace() {
     return SizedBox(
-        height: 300,
+        height: 70 * _list_ad.length.toDouble(),
         child: ReorderableListView(
             children: getItems(),
             onReorder: (oldIndex, newIndex) {
@@ -196,7 +192,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   ListTile buildListTile_not_buy(String item, int index) => ListTile(
       key: ValueKey(item),
       title: Text(item),
-      trailing: Icon(
+      trailing: const Icon(
         Icons.menu,
         color: Colors.black45,
         size: 20,
@@ -204,7 +200,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   ListTile buildListTile_after_buy(String item, int index) => ListTile(
       key: ValueKey(item),
       title: Text(item),
-      trailing: Icon(
+      trailing: const Icon(
         Icons.lock,
         color: Colors.black45,
         size: 20,
@@ -223,7 +219,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   ChoiceSpace(double height, BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 120,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -246,6 +242,10 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   }
 
   SpaceEventAD() {
-    return SpaceAD();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [SpaceAD()],
+    );
   }
 }
