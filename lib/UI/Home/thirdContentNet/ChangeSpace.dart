@@ -1,4 +1,5 @@
 import 'package:clickbyme/DB/SpaceList.dart';
+import 'package:clickbyme/Dialogs/howchangespace.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/SpaceAD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -17,28 +18,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   TextEditingController textEditingController = TextEditingController();
   DateTime selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final List<SpaceList> _list_ad = [
-    SpaceList(
-      title: '날씨조각',
-      image: 'assets/images/date.png',
-    ),
-    SpaceList(
-      title: '일정조각',
-      image: 'assets/images/date.png',
-    ),
-    SpaceList(
-      title: '루틴조각',
-      image: 'assets/images/run.png',
-    ),
-    SpaceList(
-      title: '운동조각',
-      image: 'assets/images/date.png',
-    ),
-    SpaceList(
-      title: '메모조각',
-      image: 'assets/images/book.png',
-    ),
-  ];
+  final List<SpaceList> _list_ad = [];
 
   @override
   void initState() {
@@ -101,14 +81,14 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                               ),
                             ))),
                     SizedBox(
-                        width: MediaQuery.of(context).size.width - 60 - 160,
+                        width: MediaQuery.of(context).size.width - 60,
                         child: Padding(
                             padding: const EdgeInsets.only(left: 20, right: 20),
                             child: Row(
                               children: [
-                                Flexible(
+                                const Flexible(
                                   fit: FlexFit.tight,
-                                  child: const Text(
+                                  child: Text(
                                     '',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -116,6 +96,25 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                                         color: Colors.black45),
                                   ),
                                 ),
+                                InkWell(
+                                    onTap: () {
+                                      howchangespace(context);
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 30,
+                                      height: 30,
+                                      child: NeumorphicIcon(
+                                        Icons.help_outline,
+                                        size: 30,
+                                        style: const NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            surfaceIntensity: 0.5,
+                                            depth: 2,
+                                            color: Colors.black45,
+                                            lightSource: LightSource.topLeft),
+                                      ),
+                                    )),
                               ],
                             ))),
                   ],
@@ -154,7 +153,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   MySpace(double height, BuildContext context) {
     return SizedBox(
-      height: 70 * _list_ad.length.toDouble() + 50,
+      height: 70 * 5 + 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -170,20 +169,50 @@ class _ChangeSpaceState extends State<ChangeSpace> {
           const SizedBox(
             height: 20,
           ),
-          myspace()
+          SizedBox(
+            height: 70 * 5,
+            child: myspace(),
+          ),
         ],
       ),
     );
   }
 
   myspace() {
-    return SizedBox(
-        height: 70 * _list_ad.length.toDouble(),
-        child: ReorderableListView(
-            children: getItems(),
-            onReorder: (oldIndex, newIndex) {
-              onreorder(oldIndex, newIndex);
-            }));
+    return _list_ad.isEmpty
+        ? FutureBuilder(
+            future: firestore
+                .collection("SpaceDataBase")
+                .doc('spacename')
+                .get()
+                .then((value) => {
+                      _list_ad.clear(),
+                      _list_ad.add(SpaceList(title: value['1'])),
+                      _list_ad.add(SpaceList(title: value['2'])),
+                      _list_ad.add(SpaceList(title: value['3'])),
+                      _list_ad.add(SpaceList(title: value['4'])),
+                      _list_ad.add(SpaceList(title: value['5'])),
+                    }),
+            builder: (context, future) => future.hasData
+                ? SizedBox(
+                    height: 70 * _list_ad.length.toDouble(),
+                    child: ReorderableListView(
+                        children: getItems(),
+                        onReorder: (oldIndex, newIndex) {
+                          onreorder(oldIndex, newIndex);
+                        }))
+                : const SizedBox(
+                    height: 70 * 5,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    )))
+        : SizedBox(
+            height: 70 * _list_ad.length.toDouble(),
+            child: ReorderableListView(
+                children: getItems(),
+                onReorder: (oldIndex, newIndex) {
+                  onreorder(oldIndex, newIndex);
+                }));
   }
 
   List<ListTile> getItems() => _list_ad
@@ -215,9 +244,8 @@ class _ChangeSpaceState extends State<ChangeSpace> {
     }
     setState(() {
       String titling = _list_ad[oldIndex].title;
-      String imaging = _list_ad[oldIndex].image;
       _list_ad.removeAt(oldIndex);
-      _list_ad.insert(newIndex, SpaceList(title: titling, image: imaging));
+      _list_ad.insert(newIndex, SpaceList(title: titling));
     });
   }
 

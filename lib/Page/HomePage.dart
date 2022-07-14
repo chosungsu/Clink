@@ -30,19 +30,15 @@ class _HomePageState extends State<HomePage> {
   final List<SpaceList> _list_ad = [
     SpaceList(
       title: '날씨조각',
-      image: 'assets/images/date.png',
     ),
     SpaceList(
       title: '운동조각',
-      image: 'assets/images/run.png',
     ),
     SpaceList(
       title: '일정조각',
-      image: 'assets/images/date.png',
     ),
     SpaceList(
       title: '메모조각',
-      image: 'assets/images/book.png',
     ),
   ];
 
