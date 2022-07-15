@@ -201,13 +201,36 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                               onreorder(oldIndex, newIndex);
                             }));
                   }
-                  return SizedBox(
-                        height: 70 * _user_ad.length.toDouble(),
-                        child: ReorderableListView(
-                            children: getItems(),
-                            onReorder: (oldIndex, newIndex) {
-                              onreorder(oldIndex, newIndex);
-                            }));
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: firestore.collection('SpaceDataBase').snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        _list_ad.clear();
+                        _user_ad.clear();
+                        final valuespace = snapshot.data!.docs;
+                        for (var sp in valuespace) {
+                          final messageText = sp.get('name');
+                          _list_ad.add(SpaceList(title: messageText));
+                        }
+                        print('streamelse1');
+
+                        return SizedBox(
+                            height: 70 * _list_ad.length.toDouble(),
+                            child: ReorderableListView(
+                                children: getItems(),
+                                onReorder: (oldIndex, newIndex) {
+                                  onreorder(oldIndex, newIndex);
+                                }));
+                      }
+                      return SizedBox(
+                          height: 70 * _list_ad.length.toDouble(),
+                          child: ReorderableListView(
+                              children: getItems(),
+                              onReorder: (oldIndex, newIndex) {
+                                onreorder(oldIndex, newIndex);
+                              }));
+                    },
+                  );
                 })
             : StreamBuilder<QuerySnapshot>(
                 stream: firestore.collection('SpaceDataBase').snapshots(),
@@ -231,12 +254,12 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                             }));
                   }
                   return SizedBox(
-                        height: 70 * _list_ad.length.toDouble(),
-                        child: ReorderableListView(
-                            children: getItems(),
-                            onReorder: (oldIndex, newIndex) {
-                              onreorder(oldIndex, newIndex);
-                            }));
+                      height: 70 * _list_ad.length.toDouble(),
+                      child: ReorderableListView(
+                          children: getItems(),
+                          onReorder: (oldIndex, newIndex) {
+                            onreorder(oldIndex, newIndex);
+                          }));
                 },
               ));
   }

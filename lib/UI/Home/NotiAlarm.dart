@@ -35,6 +35,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
   double translateY = 0.0;
   double myWidth = 0.0;
   int whatwantnotice = 0;
+  String name = Hive.box('user_info').get('id');
   final List notinamelist = [
     '공지글',
     '푸쉬알림',
@@ -485,7 +486,10 @@ class _NotiAlarmState extends State<NotiAlarm> {
             },
           )
         : StreamBuilder<QuerySnapshot>(
-            stream: firestore.collection('AppNoticeByUsers').snapshots(),
+            stream: firestore
+                .collection('AppNoticeByUsers')
+                .where('username', isEqualTo: name)
+                .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 _list_ad.clear();
