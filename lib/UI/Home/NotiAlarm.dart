@@ -36,7 +36,6 @@ class _NotiAlarmState extends State<NotiAlarm> {
   double myWidth = 0.0;
   int whatwantnotice = 0;
   final List notinamelist = [
-    '전체',
     '공지글',
     '푸쉬알림',
   ];
@@ -206,7 +205,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
             physics: const BouncingScrollPhysics(),
             // display each item of the product list
             itemBuilder: (context, index) {
-              return index == 2
+              return index == 1
                   ? Row(
                       children: [
                         SizedBox(
@@ -445,8 +444,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
           )
         : StreamBuilder<QuerySnapshot>(
             stream: firestore
-                .collection('AppNoticeByCompany')
-                .where('whatwantnotice', isEqualTo: whatwantnotice)
+                .collection('AppNoticeByUsers')
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
