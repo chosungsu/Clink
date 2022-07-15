@@ -7,7 +7,6 @@ import '../DB/TODO.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Explore/FeedView.dart';
 import '../UI/Explore/UserView.dart';
-import '../UI/Home/UserPicks.dart';
 import '../UI/SearchWidget.dart';
 import '../UI/UserSubscription.dart';
 import 'DrawerScreen.dart';

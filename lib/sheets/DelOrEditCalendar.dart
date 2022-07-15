@@ -42,7 +42,6 @@ HandlePage(BuildContext context) {
 }
 
 buildTitle(BuildContext context) {
-  final _formkey = GlobalKey<FormState>();
   return SizedBox(
       height: 100,
       child: Column(
@@ -80,7 +79,6 @@ buildTitle(BuildContext context) {
                         child: DayScript(
                           index: 1,
                           date: DateTime.now(),
-                          fkey: _formkey,
                         )),
                   );
                 },
@@ -113,7 +111,6 @@ buildTitle(BuildContext context) {
                         child: DayScript(
                           index: 2,
                           date: DateTime.now(),
-                          fkey: _formkey,
                         )),
                   );
                 },

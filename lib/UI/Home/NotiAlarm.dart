@@ -34,45 +34,21 @@ class _NotiAlarmState extends State<NotiAlarm> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
+  int whatwantnotice = 0;
   final List notinamelist = [
     '전체',
     '공지글',
     '푸쉬알림',
   ];
-  final List<PageList> _list_ad = [
-    PageList(
-      id: '0',
-      title: '새로운 공지사항이 등록되었습니다.',
-      date: DateTime.now(),
-    ),
-    PageList(
-      id: '1',
-      title: '캘린더 카테고리(이)가 신설되었습니다.',
-      date: DateTime.now(),
-    ),
-    PageList(
-      id: '2',
-      title: '일상메모 카테고리(이)가 신설되었습니다.',
-      date: DateTime.now(),
-    ),
-    PageList(
-      id: '3',
-      title: '갓생루틴 카테고리(이)가 신설되었습니다.',
-      date: DateTime.now(),
-    ),
-  ];
+  final List<PageList> _list_ad = [];
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
 
   @override
   void initState() {
     super.initState();
     Hive.box('user_setting').put('noti_home_click', 0);
+    whatwantnotice = 0;
   }
 
   @override
@@ -188,10 +164,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              NoticeLists(),
+                              NoticeLists(whatwantnotice),
                               const SizedBox(
                                 height: 150,
                               )
@@ -223,7 +196,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
 
   NotiBox() {
     return SizedBox(
-        height: 30,
+        height: 40,
         width: MediaQuery.of(context).size.width - 40,
         child: ListView.builder(
             // the number of items in the list
@@ -237,6 +210,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                   ? Row(
                       children: [
                         SizedBox(
+                            height: 30,
                             width: (MediaQuery.of(context).size.width - 40) / 2,
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -260,6 +234,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                   setState(() {
                                     Hive.box('user_setting')
                                         .put('noti_home_click', index);
+                                    whatwantnotice = index;
                                   });
                                 },
                                 child: Center(
@@ -301,6 +276,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                   : Row(
                       children: [
                         SizedBox(
+                            height: 30,
                             width: (MediaQuery.of(context).size.width - 40) / 4,
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -324,6 +300,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                   setState(() {
                                     Hive.box('user_setting')
                                         .put('noti_home_click', index);
+                                    whatwantnotice = index;
                                   });
                                 },
                                 child: Center(
@@ -365,60 +342,200 @@ class _NotiAlarmState extends State<NotiAlarm> {
             }));
   }
 
-  NoticeLists() {
+  NoticeLists(int whatwantnotice) {
     return SizedBox(
-      height: 120 * _list_ad.length.toDouble(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [ListBox()],
-      ),
+      height: MediaQuery.of(context).size.height - 160,
+      width: MediaQuery.of(context).size.width - 40,
+      child: SnapNotice(whatwantnotice),
     );
   }
 
-  ListBox() {
-    return SizedBox(
-      height: _list_ad.isNotEmpty ? 110 * _list_ad.length.toDouble() : (200),
-      width: MediaQuery.of(context).size.width - 40,
-      child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          itemCount: _list_ad.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-                onTap: () {},
-                child: Column(
-                  children: [
-                    ContainerDesign(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                              height: 60,
-                              width: MediaQuery.of(context).size.width - 40,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    _list_ad[index].title,
-                                    style: const TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    )
-                  ],
-                ));
-          }),
-    );
+  SnapNotice(int whatwantnotice) {
+    return whatwantnotice == 0
+        ? StreamBuilder<QuerySnapshot>(
+            stream: firestore.collection('AppNoticeByCompany').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                _list_ad.clear();
+                final valuespace = snapshot.data!.docs;
+                for (var sp in valuespace) {
+                  final messageText = sp.get('title');
+                  final messageDate = sp.get('date');
+                  _list_ad.add(PageList(title: messageText, date: messageDate));
+                }
+
+                return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: _list_ad.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ContainerDesign(
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                        height: 60,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                40,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      _list_ad[index].title,
+                                                      style: const TextStyle(
+                                                          color: Colors.black54,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    )
+                                                  ],
+                                                )),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  _list_ad[index]
+                                                      .date
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      color: Colors.black54,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          ));
+                    });
+              }
+              return SizedBox(
+                  height: MediaQuery.of(context).size.height - 160,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ));
+            },
+          )
+        : StreamBuilder<QuerySnapshot>(
+            stream: firestore
+                .collection('AppNoticeByCompany')
+                .where('whatwantnotice', isEqualTo: whatwantnotice)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                _list_ad.clear();
+                final valuespace = snapshot.data!.docs;
+                for (var sp in valuespace) {
+                  final messageText = sp.get('title');
+                  final messageDate = sp.get('date');
+                  _list_ad.add(PageList(title: messageText, date: messageDate));
+                }
+
+                return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: _list_ad.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ContainerDesign(
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                        height: 60,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                40,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      _list_ad[index].title,
+                                                      style: const TextStyle(
+                                                          color: Colors.black54,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    )
+                                                  ],
+                                                )),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  _list_ad[index]
+                                                      .date
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      color: Colors.black54,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          ));
+                    });
+              }
+              return SizedBox(
+                  height: MediaQuery.of(context).size.height - 160,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ));
+            },
+          );
   }
 }

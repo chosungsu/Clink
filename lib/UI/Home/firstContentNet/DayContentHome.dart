@@ -38,7 +38,6 @@ class _DayContentHomeState extends State<DayContentHome> {
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.week;
   late Map<DateTime, List<Event>> _events;
-  final _formkey = GlobalKey<FormState>();
   late DateTime fromDate = DateTime.now();
   late DateTime toDate = DateTime.now();
   String hour = '';
@@ -221,7 +220,6 @@ class _DayContentHomeState extends State<DayContentHome> {
                               child: DayScript(
                                 index: 0,
                                 date: _selectedDay,
-                                fkey: _formkey,
                               )),
                         );
                       },

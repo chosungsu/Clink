@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-import '../Sub/NoticePage.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Setting/UserDetails.dart';
 import '../UI/Setting/UserSettings.dart';

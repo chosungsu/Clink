@@ -7,12 +7,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../Tool/NoBehavior.dart';
 
 class DayScript extends StatefulWidget {
-  const DayScript(
-      {Key? key, required this.index, required this.date, required this.fkey})
+  DayScript(
+      {Key? key, required this.index, required this.date})
       : super(key: key);
   final int index;
   final DateTime date;
-  final GlobalKey<FormState> fkey;
   @override
   State<StatefulWidget> createState() => _DayScriptState();
 }
@@ -23,6 +22,7 @@ class _DayScriptState extends State<DayScript> {
   double myWidth = 0.0;
   DateTime _selectedDay = DateTime.now();
   bool isclickedshowmore = false;
+  final _formkey = GlobalKey<FormState>();
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
@@ -226,6 +226,7 @@ class _DayScriptState extends State<DayScript> {
     return SizedBox(
       height: 30,
       child: TextFormField(
+        key: _formkey,
         readOnly: widget.index == 2 ? true : false,
         style: const TextStyle(fontSize: 18),
         decoration: const InputDecoration(
