@@ -140,9 +140,44 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                     ),
                                                   ),
                                                 ],
-                                              ))),
+                                              )))
                                     ],
                                   )),
+                              whatwantnotice == 1
+                                  ? SizedBox(
+                                      width: 50,
+                                      child: InkWell(
+                                          onTap: () {
+                                            for (int i = 1;
+                                                i <= _list_ad.length;
+                                                i++) {
+                                              firestore
+                                                  .collection(
+                                                      'AppNoticeByUsers')
+                                                  .doc('$i')
+                                                  .delete();
+                                            }
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            width: 30,
+                                            height: 30,
+                                            child: NeumorphicIcon(
+                                              Icons.delete,
+                                              size: 30,
+                                              style: const NeumorphicStyle(
+                                                  shape: NeumorphicShape.convex,
+                                                  depth: 2,
+                                                  surfaceIntensity: 0.5,
+                                                  color: Colors.black45,
+                                                  lightSource:
+                                                      LightSource.topLeft),
+                                            ),
+                                          )))
+                                  : SizedBox(
+                                      width: 0,
+                                      height: 0,
+                                    ),
                             ],
                           ),
                         )),
@@ -437,15 +472,20 @@ class _NotiAlarmState extends State<NotiAlarm> {
               }
               return SizedBox(
                   height: MediaQuery.of(context).size.height - 160,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
+                  child: Center(
+                    child: Text(
+                      '공지사항이 없습니다;;;',
+                      style: const TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ));
             },
           )
         : StreamBuilder<QuerySnapshot>(
-            stream: firestore
-                .collection('AppNoticeByUsers')
-                .snapshots(),
+            stream: firestore.collection('AppNoticeByUsers').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 _list_ad.clear();
@@ -531,7 +571,14 @@ class _NotiAlarmState extends State<NotiAlarm> {
               return SizedBox(
                   height: MediaQuery.of(context).size.height - 160,
                   child: const Center(
-                    child: CircularProgressIndicator(),
+                    child: Text(
+                      '공지사항이 없습니다;;;',
+                      style: const TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ));
             },
           );

@@ -18,12 +18,16 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   double myWidth = 0.0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
+  String ischanged = 'no';
   final List<SpaceList> _list_ad = [];
   final List<SpaceList> _user_ad = [];
 
   @override
   void initState() {
     super.initState();
+    Hive.box('user_setting').get('change_space_click') == null
+        ? ischanged = 'no'
+        : ischanged = Hive.box('user_setting').get('change_space_click');
   }
 
   @override
@@ -174,77 +178,83 @@ class _ChangeSpaceState extends State<ChangeSpace> {
     //유저의 메뉴변경에 따라 자동으로 파이어베이스에 저장되어 불러오는 로직
     return SizedBox(
         height: 70 * 5,
-        child: FutureBuilder(
-            future: firestore
-                .collection("UserSpaceDataBase")
-                .doc(name)
-                .get()
-                .then((value) {
-              _list_ad.clear();
-              _user_ad.clear();
-              for (int i = 0; i < 5; i++) {
-                _user_ad.insert(i, SpaceList(title: value['$i']));
-              }
-            }),
-            builder: (context, future) {
-              if (future.hasData) {
-                return SizedBox(
-                    height: 70 * _user_ad.length.toDouble(),
-                    child: ReorderableListView(
-                        children: getItems(),
-                        onReorder: (oldIndex, newIndex) {
-                          onreorder(oldIndex, newIndex);
-                        }));
-              } else if (!future.hasData) {
-                return StreamBuilder<QuerySnapshot>(
-                  stream: firestore.collection('SpaceDataBase').snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final valuespace = snapshot.data!.docs;
-
-                      for (var sp in valuespace) {
-                        final messageText = sp.get('name');
-                        _list_ad.add(SpaceList(title: messageText));
-                      }
-
-                      return SizedBox(
-                          height: 70 * _list_ad.length.toDouble(),
-                          child: ReorderableListView(
-                              children: getItems(),
-                              onReorder: (oldIndex, newIndex) {
-                                onreorder(oldIndex, newIndex);
-                              }));
+        child: ischanged == 'yes'
+            ? FutureBuilder(
+                future: firestore
+                    .collection("UserSpaceDataBase")
+                    .doc(name)
+                    .get()
+                    .then((value) {
+                  _list_ad.clear();
+                  _user_ad.clear();
+                  for (int i = 0; i < 5; i++) {
+                    _user_ad.insert(i, SpaceList(title: value['$i']));
+                  }
+                }),
+                builder: (context, future) {
+                  if (future.hasData) {
+                    return SizedBox(
+                        height: 70 * _user_ad.length.toDouble(),
+                        child: ReorderableListView(
+                            children: getItems(),
+                            onReorder: (oldIndex, newIndex) {
+                              onreorder(oldIndex, newIndex);
+                            }));
+                  }
+                  return SizedBox(
+                        height: 70 * _user_ad.length.toDouble(),
+                        child: ReorderableListView(
+                            children: getItems(),
+                            onReorder: (oldIndex, newIndex) {
+                              onreorder(oldIndex, newIndex);
+                            }));
+                })
+            : StreamBuilder<QuerySnapshot>(
+                stream: firestore.collection('SpaceDataBase').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    _list_ad.clear();
+                    _user_ad.clear();
+                    final valuespace = snapshot.data!.docs;
+                    for (var sp in valuespace) {
+                      final messageText = sp.get('name');
+                      _list_ad.add(SpaceList(title: messageText));
                     }
-                    return const SizedBox(
-                        height: 70 * 5,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ));
-                  },
-                );
-              }
-              return const SizedBox(
-                  height: 70 * 5,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ));
-            }));
+                    print('streamelse1');
+
+                    return SizedBox(
+                        height: 70 * _list_ad.length.toDouble(),
+                        child: ReorderableListView(
+                            children: getItems(),
+                            onReorder: (oldIndex, newIndex) {
+                              onreorder(oldIndex, newIndex);
+                            }));
+                  }
+                  return SizedBox(
+                        height: 70 * _list_ad.length.toDouble(),
+                        child: ReorderableListView(
+                            children: getItems(),
+                            onReorder: (oldIndex, newIndex) {
+                              onreorder(oldIndex, newIndex);
+                            }));
+                },
+              ));
   }
 
   List<ListTile> getItems() => _list_ad.isEmpty
-      ? _list_ad
+      ? _user_ad
           .asMap()
           .map((index, item) =>
-              MapEntry(index, buildListTile_not_buy(item.title, index)))
+              MapEntry(index, buildListTile(item.title, index)))
           .values
           .toList()
-      : _user_ad
+      : _list_ad
           .asMap()
           .map((index, item) =>
-              MapEntry(index, buildListTile_not_buy(item.title, index)))
+              MapEntry(index, buildListTile(item.title, index)))
           .values
           .toList();
-  ListTile buildListTile_not_buy(String item, int index) => ListTile(
+  ListTile buildListTile(String item, int index) => ListTile(
       key: ValueKey(item + '-' + index.toString()),
       title: Text(item),
       trailing: index < 3
@@ -267,7 +277,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
         _list_ad
             .asMap()
             .map((index, item) =>
-                MapEntry(index, buildListTile_not_buy(item.title, index)))
+                MapEntry(index, buildListTile(item.title, index)))
             .values
             .toList();
         String titling = _list_ad[oldIndex].title;
@@ -275,11 +285,14 @@ class _ChangeSpaceState extends State<ChangeSpace> {
         _list_ad.insert(newIndex, SpaceList(title: titling));
         //data를 즉각적으로 수정하여 firestore에 저장하는 로직
         createData(name, _user_ad, _list_ad);
+        Hive.box('user_setting').put('change_space_click', 'yes');
+        ischanged = 'yes';
+        print('onreorder1');
       } else {
         _user_ad
             .asMap()
             .map((index, item) =>
-                MapEntry(index, buildListTile_not_buy(item.title, index)))
+                MapEntry(index, buildListTile(item.title, index)))
             .values
             .toList();
         String titling = _user_ad[oldIndex].title;
@@ -287,6 +300,8 @@ class _ChangeSpaceState extends State<ChangeSpace> {
         _user_ad.insert(newIndex, SpaceList(title: titling));
         //data를 즉각적으로 수정하여 firestore에 저장하는 로직
         createData(name, _user_ad, _list_ad);
+        Hive.box('user_setting').put('change_space_click', 'yes');
+        ischanged = 'yes';
       }
     });
   }
@@ -325,6 +340,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   createData(String name, List<SpaceList> list, List<SpaceList> list_ad) {
     if (list.isEmpty) {
+      print('createData1');
       for (int i = 0; i < 5; i++) {
         list.insert(i, SpaceList(title: list_ad[i].title));
         firestore
