@@ -250,13 +250,13 @@ class _DayNoteHomeState extends State<DayNoteHome> {
 
   RoutineBox() {
     return SizedBox(
-      height: 150,
+      height: 95*5 + 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: [
-              const Flexible(
+            children: const [
+              Flexible(
                 fit: FlexFit.tight,
                 child: Text('메모',
                     style: TextStyle(
@@ -264,23 +264,6 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                         fontWeight: FontWeight.bold,
                         fontSize: 18)),
               ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    Box();
-                  });
-                },
-                child: NeumorphicIcon(
-                  Icons.refresh,
-                  size: 30,
-                  style: const NeumorphicStyle(
-                      shape: NeumorphicShape.convex,
-                      depth: 2,
-                      surfaceIntensity: 0.5,
-                      color: Colors.black45,
-                      lightSource: LightSource.topLeft),
-                ),
-              )
             ],
           ),
           const SizedBox(
@@ -295,101 +278,68 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   Box() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return SizedBox(
-        height: 100,
-        width: MediaQuery.of(context).size.width - 40,
-        child: ContainerDesign(
-            color: Colors.white,
-            child: Hive.box('user_setting').get('numorimogi_routine') == null ||
-                    Hive.box('user_setting').get('numorimogi_routine') == 0
-                ? ListView.builder(
-                    // the number of items in the list
-                    itemCount: routineday.length,
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    // display each item of the product list
-                    itemBuilder: (context, index) {
-                      return SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) / 7,
-                        child: Column(
-                          children: [
-                            Text(routineday[index],
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15)),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text(routinesucceed[index].toString() + '%',
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15))
-                          ],
-                        ),
-                      );
-                    })
-                : ListView.builder(
-                    // the number of items in the list
-                    itemCount: routineday.length,
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    // display each item of the product list
-                    itemBuilder: (context, index) {
-                      return SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) / 7,
-                        child: Column(
-                          children: [
-                            Text(routineday[index],
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15)),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                                alignment: Alignment.center,
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.grey.shade400,
-                                        width: 1,
-                                        style: BorderStyle.solid)),
-                                child: routinesucceed[index] < 35
-                                    ? Text(
-                                        personwith[0]
-                                            .toString()
-                                            .substring(0, 1),
-                                        style: const TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15))
-                                    : (routinesucceed[index] < 70
-                                        ? Text(
-                                            personwith[1]
-                                                .toString()
-                                                .substring(0, 1),
-                                            style: const TextStyle(
+          height: 95 * 5,
+          width: MediaQuery.of(context).size.width - 40,
+          child: GridView.count(
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            shrinkWrap: true,
+            childAspectRatio: 2 / 1,
+            children: List.generate(9, (index) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                          onTap: () {
+                          },
+                          child: SizedBox(
+                            height: 65,
+                            child: ContainerDesign(
+                              child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 25,
+                                      child: Container(
+                                        alignment: Alignment.topCenter,
+                                        width: 25,
+                                        height: 25,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: NeumorphicIcon(
+                                            Icons.description,
+                                            size: 25,
+                                            style: const NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                depth: 2,
+                                                color: Colors.black45,
+                                                lightSource:
+                                                    LightSource.topLeft),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                      child: Center(
+                                        child: Text('일상메모',
+                                            style: TextStyle(
                                                 color: Colors.black54,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15))
-                                        : Text(
-                                            personwith[2]
-                                                .toString()
-                                                .substring(0, 1),
-                                            style: const TextStyle(
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15))))
-                          ],
-                        ),
-                      );
-                    })),
-      );
+                                                fontSize: 15)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              color: Colors.white,
+                            )
+                          ),
+                        )
+                ],
+              );
+            }),
+          ));
     });
   }
 }
