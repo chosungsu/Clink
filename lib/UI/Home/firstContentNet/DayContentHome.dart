@@ -149,210 +149,185 @@ class _DayContentHomeState extends State<DayContentHome> {
     return SizedBox(
         //height: isupschedule == 0 ? 170 : (isupschedule == 1 ? 220 : 430),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TableCalendar(
-              locale: 'ko_KR',
-              focusedDay: _focusedDay,
-              pageJumpingEnabled: false,
-              shouldFillViewport: false,
-              firstDay: DateTime.utc(2000, 1, 1),
-              lastDay: DateTime.utc(2100, 12, 31),
-              calendarFormat: isupschedule == 0
-                  ? CalendarFormat.week
-                  : (isupschedule == 1
-                      ? CalendarFormat.twoWeeks
-                      : CalendarFormat.month),
-              eventLoader: getEventList,
-              selectedDayPredicate: (day) {
-                return isSameDay(_selectedDay, day);
-              },
-              onDaySelected: (selectedDay, focusedDay) {
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        TableCalendar(
+          locale: 'ko_KR',
+          focusedDay: _focusedDay,
+          pageJumpingEnabled: false,
+          shouldFillViewport: false,
+          firstDay: DateTime.utc(2000, 1, 1),
+          lastDay: DateTime.utc(2100, 12, 31),
+          calendarFormat: isupschedule == 0
+              ? CalendarFormat.week
+              : (isupschedule == 1
+                  ? CalendarFormat.twoWeeks
+                  : CalendarFormat.month),
+          eventLoader: getEventList,
+          selectedDayPredicate: (day) {
+            return isSameDay(_selectedDay, day);
+          },
+          onDaySelected: (selectedDay, focusedDay) {
+            setState(() {
+              _selectedDay = selectedDay;
+              _focusedDay = focusedDay;
+            });
+          },
+          onPageChanged: (focusedDay) {
+            _focusedDay = focusedDay;
+          },
+          startingDayOfWeek: StartingDayOfWeek.sunday,
+          daysOfWeekVisible: true,
+          headerStyle: HeaderStyle(
+              formatButtonVisible: false,
+              leftChevronVisible: true,
+              leftChevronPadding: const EdgeInsets.only(left: 10),
+              leftChevronMargin: EdgeInsets.zero,
+              leftChevronIcon: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Container(
+                    alignment: Alignment.center,
+                    width: 30,
+                    height: 30,
+                    child: NeumorphicIcon(
+                      Icons.keyboard_arrow_left,
+                      size: 30,
+                      style: const NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
+                          color: Colors.black45,
+                          lightSource: LightSource.topLeft),
+                    ),
+                  )),
+              rightChevronVisible: true,
+              rightChevronPadding: const EdgeInsets.only(right: 10),
+              rightChevronMargin: EdgeInsets.zero,
+              rightChevronIcon: IconButton(
+                  onPressed: () {
+                    //이벤트 작성시트 호출
+                    textEditingController1.clear();
+                    textEditingController2.clear();
+                    textEditingController3.clear();
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.bottomToTop,
+                          child: DayScript(
+                            index: 0,
+                            date: _selectedDay,
+                          )),
+                    );
+                  },
+                  icon: Container(
+                    alignment: Alignment.center,
+                    width: 30,
+                    height: 30,
+                    child: NeumorphicIcon(
+                      Icons.add_circle_outlined,
+                      size: 30,
+                      style: const NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
+                          color: Colors.black45,
+                          lightSource: LightSource.topLeft),
+                    ),
+                  )),
+              titleTextStyle: const TextStyle(
+                color: Colors.black45,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              titleCentered: false,
+              formatButtonShowsNext: false),
+          calendarStyle: const CalendarStyle(
+              isTodayHighlighted: true,
+              selectedDecoration:
+                  BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+              selectedTextStyle: TextStyle(color: Colors.white),
+              weekendTextStyle: TextStyle(color: Colors.blue)),
+        ),
+        Container(
+            alignment: Alignment.center,
+            width: 30,
+            height: 30,
+            child: InkWell(
+              onTap: () {
                 setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
+                  isupschedule == 0
+                      ? isupschedule = 1
+                      : (isupschedule == 1
+                          ? isupschedule = 2
+                          : isupschedule = 0);
                 });
               },
-              onPageChanged: (focusedDay) {
-                _focusedDay = focusedDay;
-              },
-              startingDayOfWeek: StartingDayOfWeek.sunday,
-              daysOfWeekVisible: true,
-              headerStyle: HeaderStyle(
-                  formatButtonVisible: false,
-                  leftChevronVisible: true,
-                  leftChevronPadding: const EdgeInsets.only(left: 10),
-                  leftChevronMargin: EdgeInsets.zero,
-                  leftChevronIcon: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Container(
-                        alignment: Alignment.center,
-                        width: 30,
-                        height: 30,
-                        child: NeumorphicIcon(
-                          Icons.keyboard_arrow_left,
-                          size: 30,
-                          style: const NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              surfaceIntensity: 0.5,
-                              color: Colors.black45,
-                              lightSource: LightSource.topLeft),
-                        ),
-                      )),
-                  rightChevronVisible: true,
-                  rightChevronPadding: const EdgeInsets.only(right: 10),
-                  rightChevronMargin: EdgeInsets.zero,
-                  rightChevronIcon: IconButton(
-                      onPressed: () {
-                        //이벤트 작성시트 호출
-                        textEditingController1.clear();
-                        textEditingController2.clear();
-                        textEditingController3.clear();
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              child: DayScript(
-                                index: 0,
-                                date: _selectedDay,
-                              )),
-                        );
-                      },
-                      icon: Container(
-                        alignment: Alignment.center,
-                        width: 30,
-                        height: 30,
-                        child: NeumorphicIcon(
-                          Icons.add_circle_outlined,
-                          size: 30,
-                          style: const NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              surfaceIntensity: 0.5,
-                              color: Colors.black45,
-                              lightSource: LightSource.topLeft),
-                        ),
-                      )),
-                  titleTextStyle: const TextStyle(
-                    color: Colors.black45,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  titleCentered: false,
-                  formatButtonShowsNext: false),
-              calendarStyle: const CalendarStyle(
-                  isTodayHighlighted: true,
-                  selectedDecoration: BoxDecoration(
-                      color: Colors.orange, shape: BoxShape.circle),
-                  selectedTextStyle: TextStyle(color: Colors.white),
-                  weekendTextStyle: TextStyle(color: Colors.blue)),
-            ),
-            Container(
-                alignment: Alignment.center,
-                width: 30,
-                height: 30,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isupschedule == 0
-                          ? isupschedule = 1
-                          : (isupschedule == 1
-                              ? isupschedule = 2
-                              : isupschedule = 0);
-                    });
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: Colors.blue.shade500,
-                    child: Text(
-                      isupschedule == 0
-                          ? '2W'
-                          : (isupschedule == 1 ? '1M' : '1W'),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                      overflow: TextOverflow.fade,
-                    ),
-                  ),
-                ))
-          ],
-        ));
+              child: CircleAvatar(
+                backgroundColor: Colors.blue.shade500,
+                child: Text(
+                  isupschedule == 0 ? '2W' : (isupschedule == 1 ? '1M' : '1W'),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                  overflow: TextOverflow.fade,
+                ),
+              ),
+            ))
+      ],
+    ));
   }
 
   TimeLineView() {
     return SizedBox(
       height: calendardoinglist.isNotEmpty
           ? 180 * calendardoinglist.length.toDouble()
-          : (MediaQuery.of(context).size.height - 140),
-      child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          itemCount: calendardoinglist.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                SizedBox(
-                  height: 150,
-                  child: Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: index < calendarwhattimelist.length - 1 &&
-                                      calendarwhattimelist[index]
-                                              .toString()
-                                              .split(':')[0] ==
-                                          calendarwhattimelist[index + 1]
-                                              .toString()
-                                              .split(':')[0] ||
-                                  index == 0
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    NeumorphicText(
-                                      calendarwhattimelist[index]
-                                              .toString()
-                                              .split(':')[0] +
-                                          ':00',
-                                      style: NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: Colors.grey.shade400,
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    const Divider(
-                                      thickness: 2,
-                                      height: 15,
-                                      endIndent: 20,
-                                      color: Colors.black45,
-                                    ),
-                                  ],
-                                )
-                              : (index < calendarwhattimelist.length - 1 &&
-                                      calendarwhattimelist[index]
-                                              .toString()
-                                              .split(':')[0] !=
-                                          calendarwhattimelist[index + 1]
-                                              .toString()
-                                              .split(':')[0] &&
-                                      calendarwhattimelist[index]
-                                              .toString()
-                                              .split(':')[0] ==
-                                          calendarwhattimelist[index - 1]
-                                              .toString()
-                                              .split(':')[0]
+          : MediaQuery.of(context).size.height * 0.5,
+      child: calendardoinglist.isEmpty
+          ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: NeumorphicText(
+                    '기록된 일정이 없네요;;;',
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: Colors.black45,
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+              )
+            ],
+          )
+          : ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: calendardoinglist.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 150,
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 1,
+                              child: index < calendarwhattimelist.length - 1 &&
+                                          calendarwhattimelist[index]
+                                                  .toString()
+                                                  .split(':')[0] ==
+                                              calendarwhattimelist[index + 1]
+                                                  .toString()
+                                                  .split(':')[0] ||
+                                      index == 0
                                   ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: const [],
-                                    )
-                                  : Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -378,87 +353,135 @@ class _DayContentHomeState extends State<DayContentHome> {
                                           color: Colors.black45,
                                         ),
                                       ],
-                                    ))),
-                      Expanded(
-                          flex: 3,
-                          child: InkWell(
-                            onTap: () {
-                              //수정 및 삭제 시트 띄우기
-                              DelOrEditCalendar(context);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 10, left: 10, right: 10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                      color: Colors.black45, width: 1)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      calendardoinglist[index].toString(),
-                                      style: const TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                      calendarwhattimelist[index].toString(),
-                                      style: const TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: 5,
-                                        itemBuilder: (context, index) {
-                                          return Row(
-                                            children: [
-                                              Container(
-                                                height: 25,
-                                                width: 25,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                    border: Border.all(
-                                                        color: Colors.black45,
-                                                        width: 1)),
+                                    )
+                                  : (index < calendarwhattimelist.length - 1 &&
+                                          calendarwhattimelist[index]
+                                                  .toString()
+                                                  .split(':')[0] !=
+                                              calendarwhattimelist[index + 1]
+                                                  .toString()
+                                                  .split(':')[0] &&
+                                          calendarwhattimelist[index]
+                                                  .toString()
+                                                  .split(':')[0] ==
+                                              calendarwhattimelist[index - 1]
+                                                  .toString()
+                                                  .split(':')[0]
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: const [],
+                                        )
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            NeumorphicText(
+                                              calendarwhattimelist[index]
+                                                      .toString()
+                                                      .split(':')[0] +
+                                                  ':00',
+                                              style: NeumorphicStyle(
+                                                shape: NeumorphicShape.flat,
+                                                depth: 3,
+                                                color: Colors.grey.shade400,
                                               ),
-                                              const SizedBox(
-                                                width: 20,
+                                              textStyle: NeumorphicTextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
                                               ),
-                                            ],
-                                          );
-                                        }),
+                                            ),
+                                            const Divider(
+                                              thickness: 2,
+                                              height: 15,
+                                              endIndent: 20,
+                                              color: Colors.black45,
+                                            ),
+                                          ],
+                                        ))),
+                          Expanded(
+                              flex: 3,
+                              child: InkWell(
+                                onTap: () {
+                                  //수정 및 삭제 시트 띄우기
+                                  DelOrEditCalendar(context);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10, left: 10, right: 10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                          color: Colors.black45, width: 1)),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          calendardoinglist[index].toString(),
+                                          style: const TextStyle(
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Text(
+                                          calendarwhattimelist[index]
+                                              .toString(),
+                                          style: const TextStyle(
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: 5,
+                                            itemBuilder: (context, index) {
+                                              return Row(
+                                                children: [
+                                                  Container(
+                                                    height: 25,
+                                                    width: 25,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100),
+                                                        border: Border.all(
+                                                            color:
+                                                                Colors.black45,
+                                                            width: 1)),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                ],
+                                              );
+                                            }),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          )),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                )
-              ],
-            );
-          }),
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
+                );
+              }),
     );
   }
 }

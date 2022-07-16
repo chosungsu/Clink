@@ -1,6 +1,9 @@
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
+import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
 import 'package:clickbyme/sheets/addCalendarTodo.dart';
+import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -29,21 +32,21 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  bool isupschedule = false;
-  late TextEditingController textEditingController1;
-  late TextEditingController textEditingController2;
-  late TextEditingController textEditingController3;
-  DateTime _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
-  CalendarFormat _calendarFormat = CalendarFormat.week;
-  late Map<DateTime, List<Event>> _events;
-  final _formkey = GlobalKey<FormState>();
-  late DateTime fromDate = DateTime.now();
-  late DateTime toDate = DateTime.now();
-  String hour = '';
-  String minute = '';
-
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final List routineday = ['일', '월', '화', '수', '목', '금', '토'];
+  final List routinesucceed = [20, 20, 80, 60, 60, 80, 100];
+  final List routineplaylistdone = ['doing', 'doing', 'done', 'not yet'];
+  final List routineplaylist = [
+    '하루 한번 채식식단 실천하기',
+    '대중교통 이용하여 출근하기',
+    '토익공부 하루에 유닛4과씩 진도 나가기',
+    '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기',
+  ];
+  final List personwith = [
+    '김영헌',
+    '이제민',
+    '최우성',
+  ];
 
   @override
   void didChangeDependencies() {
@@ -54,21 +57,12 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   @override
   void initState() {
     super.initState();
-    textEditingController1 = TextEditingController();
-    textEditingController2 = TextEditingController();
-    textEditingController3 = TextEditingController();
-    fromDate = DateTime.now();
-    toDate = DateTime.now().add(const Duration(hours: 2));
-    _events = {};
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    textEditingController1.dispose();
-    textEditingController2.dispose();
-    textEditingController3.dispose();
   }
 
   @override
@@ -76,15 +70,11 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: EnterCheckUi(),
+      body: UI(),
     ));
   }
 
-  List<Event> getEventList(DateTime date) {
-    return _events[date] ?? [];
-  }
-
-  EnterCheckUi() {
+  UI() {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
@@ -96,291 +86,118 @@ class _DayNoteHomeState extends State<DayNoteHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 170,
-                child: calendarView(height, context),
-              ),
+                  height: 80,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                    width: 50,
+                                    child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 30,
+                                          height: 30,
+                                          child: NeumorphicIcon(
+                                            Icons.keyboard_arrow_left,
+                                            size: 30,
+                                            style: const NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                depth: 2,
+                                                surfaceIntensity: 0.5,
+                                                color: Colors.black45,
+                                                lightSource:
+                                                    LightSource.topLeft),
+                                          ),
+                                        ))),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width -
+                                        60 -
+                                        160,
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20, right: 20),
+                                        child: Row(
+                                          children: const [
+                                            Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                '',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                    color: Colors.black45),
+                                              ),
+                                            ),
+                                          ],
+                                        ))),
+                              ],
+                            )),
+                        SizedBox(
+                            width: 50,
+                            child: InkWell(
+                                onTap: () {
+                                  settingRoutineHome(context);
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 30,
+                                  height: 30,
+                                  child: NeumorphicIcon(
+                                    Icons.settings,
+                                    size: 30,
+                                    style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.convex,
+                                        depth: 2,
+                                        surfaceIntensity: 0.5,
+                                        color: Colors.black45,
+                                        lightSource: LightSource.topLeft),
+                                  ),
+                                ))),
+                      ],
+                    ),
+                  )),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
                     child: ScrollConfiguration(
                       behavior: NoBehavior(),
-                      child: SingleChildScrollView(
-                          physics: ScrollPhysics(),
-                          child: StatefulBuilder(
-                              builder: (_, StateSetter setState) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  isupschedule == true
-                                      ? SizedBox(
-                                          height: 40,
-                                          child: Container(
-                                            color: Colors.grey.shade400,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      NeumorphicText(
-                                                        '남은 일정',
-                                                        style:
-                                                            const NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
-                                                          color: Colors.white,
-                                                        ),
-                                                        textStyle:
-                                                            NeumorphicTextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    //클릭시 지나간 일정을 위로 이동시킴
-                                                    setState(() {
-                                                      isupschedule = false;
-                                                    });
-                                                  },
-                                                  icon: NeumorphicIcon(
-                                                    Icons.swap_vert,
-                                                    size: 30,
-                                                    style:
-                                                        const NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: Colors.white,
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          height: 40,
-                                          child: Container(
-                                            color: Colors.grey.shade400,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      NeumorphicText(
-                                                        '지나간 일정',
-                                                        style:
-                                                            const NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
-                                                          color: Colors.white,
-                                                        ),
-                                                        textStyle:
-                                                            NeumorphicTextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    //클릭시 남은 일정을 위로 이동시킴
-                                                    setState(() {
-                                                      isupschedule = true;
-                                                    });
-                                                  },
-                                                  icon: NeumorphicIcon(
-                                                    Icons.swap_vert,
-                                                    size: 30,
-                                                    style:
-                                                        const NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: Colors.white,
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  TimeLineView(),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  isupschedule == true
-                                      ? SizedBox(
-                                          height: 40,
-                                          child: Container(
-                                            color: Colors.grey.shade400,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      NeumorphicText(
-                                                        '지나간 일정',
-                                                        style:
-                                                            const NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
-                                                          color: Colors.white,
-                                                        ),
-                                                        textStyle:
-                                                            NeumorphicTextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    //클릭시 남은 일정을 위로 이동시킴
-                                                    setState(() {
-                                                      isupschedule = false;
-                                                    });
-                                                  },
-                                                  icon: NeumorphicIcon(
-                                                    Icons.swap_vert,
-                                                    size: 30,
-                                                    style:
-                                                        const NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: Colors.white,
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          height: 40,
-                                          child: Container(
-                                            color: Colors.grey.shade400,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      NeumorphicText(
-                                                        '남은 일정',
-                                                        style:
-                                                            const NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
-                                                          color: Colors.white,
-                                                        ),
-                                                        textStyle:
-                                                            NeumorphicTextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    //클릭시 지나간 일정을 위로 이동시킴
-                                                    setState(() {
-                                                      isupschedule = true;
-                                                    });
-                                                  },
-                                                  icon: NeumorphicIcon(
-                                                    Icons.swap_vert,
-                                                    size: 30,
-                                                    style:
-                                                        const NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: Colors.white,
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  TimeLineView(),
-                                  SizedBox(
-                                    height: 150,
-                                  )
-                                ],
+                      child: SingleChildScrollView(child:
+                          StatefulBuilder(builder: (_, StateSetter setState) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 20,
                               ),
-                            );
-                          })),
+                              SearchBox(),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              RoutineBox(),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const SizedBox(
+                                height: 150,
+                              )
+                            ],
+                          ),
+                        );
+                      })),
                     ),
                   )),
             ],
@@ -388,220 +205,191 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     );
   }
 
-  calendarView(double height, BuildContext context) {
+  SearchBox() {
     return SizedBox(
-      height: 150,
-      child: TableCalendar(
-        locale: 'ko_KR',
-        focusedDay: _focusedDay,
-        pageJumpingEnabled: false,
-        shouldFillViewport: false,
-        firstDay: DateTime.utc(2000, 1, 1),
-        lastDay: DateTime.utc(2100, 12, 31),
-        calendarFormat: _calendarFormat,
-        eventLoader: getEventList,
-        selectedDayPredicate: (day) {
-          return isSameDay(_selectedDay, day);
-        },
-        onDaySelected: (selectedDay, focusedDay) {
-          setState(() {
-            _selectedDay = selectedDay;
-            _focusedDay = focusedDay;
-          });
-        },
-        onPageChanged: (focusedDay) {
-          _focusedDay = focusedDay;
-        },
-        onFormatChanged: (format) {
-          setState(() {
-            _calendarFormat = format;
-          });
-        },
-        startingDayOfWeek: StartingDayOfWeek.sunday,
-        daysOfWeekVisible: true,
-        headerStyle: HeaderStyle(
-            formatButtonVisible: false,
-            leftChevronVisible: true,
-            leftChevronIcon: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Container(
-                  alignment: Alignment.center,
-                  width: 30,
-                  height: 30,
-                  child: NeumorphicIcon(
-                    Icons.keyboard_arrow_left,
-                    size: 30,
-                    style: const NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        surfaceIntensity: 0.5,
-                        color: Colors.black45,
-                        lightSource: LightSource.topLeft),
-                  ),
-                )),
-            rightChevronVisible: true,
-            rightChevronIcon: IconButton(
-                onPressed: () {
-                  //이벤트 작성시트 호출
-                  textEditingController1.clear();
-                  textEditingController2.clear();
-                  textEditingController3.clear();
-                  addCalendarTodo(context, _selectedDay, textEditingController1,
-                      textEditingController2, textEditingController3, _formkey);
-                },
-                icon: Container(
-                  alignment: Alignment.center,
-                  width: 30,
-                  height: 30,
-                  child: NeumorphicIcon(
-                    Icons.add_circle_outlined,
-                    size: 30,
-                    style: const NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        surfaceIntensity: 0.5,
-                        color: Colors.black45,
-                        lightSource: LightSource.topLeft),
-                  ),
-                )),
-            titleTextStyle: TextStyle(
-              color: Colors.black45,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-            titleCentered: false,
-            formatButtonShowsNext: false),
-        calendarStyle: const CalendarStyle(
-            isTodayHighlighted: true,
-            selectedDecoration:
-                BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-            selectedTextStyle: TextStyle(color: Colors.white),
-            weekendTextStyle: TextStyle(color: Colors.blue)),
+      height: 50,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Search()],
       ),
     );
   }
 
-  TimeLineView() {
-    return SizedBox(
-      height: 180 * 3,
-      child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                SizedBox(
-                  height: 150,
-                  child: Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              NeumorphicText(
-                                '10:00',
-                                style: NeumorphicStyle(
-                                  shape: NeumorphicShape.flat,
-                                  depth: 3,
-                                  color: Colors.grey.shade400,
-                                ),
-                                textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              Divider(
-                                thickness: 2,
-                                height: 15,
-                                endIndent: 20,
-                                color: Colors.black45,
-                              ),
-                            ],
-                          )),
-                      Expanded(
-                          flex: 3,
-                          child: InkWell(
-                            onTap: () {
-                              //수정 및 삭제 시트 띄우기
-                              DelOrEditCalendar(context);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  top: 10, bottom: 10, left: 10, right: 10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                      color: Colors.black45, width: 1)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      '아침 산책하기',
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                      '10:00 ~ 11:10',
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: 5,
-                                        itemBuilder: (context, index) {
-                                          return Row(
-                                            children: [
-                                              Container(
-                                                height: 25,
-                                                width: 25,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                    border: Border.all(
-                                                        color: Colors.black45,
-                                                        width: 1)),
-                                              ),
-                                              SizedBox(
-                                                width: 20,
-                                              ),
-                                            ],
-                                          );
-                                        }),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )),
-                    ],
-                  ),
+  Search() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        SizedBox(
+            height: 50,
+            child: ContainerDesign(
+                child: TextField(
+                  textAlign: TextAlign.start,
+                  textAlignVertical: TextAlignVertical.center,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: InputBorder.none,
+                      hintMaxLines: 2,
+                      hintText: '톱니바퀴 -> 조건설정 후 검색',
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black45),
+                      prefixIcon: Icon(Icons.search),
+                      isCollapsed: true,
+                      prefixIconColor: Colors.black),
                 ),
-                SizedBox(
-                  height: 20,
-                )
-              ],
-            );
-          }),
+                color: Colors.white))
+      ],
     );
+  }
+
+  RoutineBox() {
+    return SizedBox(
+      height: 150,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Flexible(
+                fit: FlexFit.tight,
+                child: Text('메모',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    Box();
+                  });
+                },
+                child: NeumorphicIcon(
+                  Icons.refresh,
+                  size: 30,
+                  style: const NeumorphicStyle(
+                      shape: NeumorphicShape.convex,
+                      depth: 2,
+                      surfaceIntensity: 0.5,
+                      color: Colors.black45,
+                      lightSource: LightSource.topLeft),
+                ),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Box()
+        ],
+      ),
+    );
+  }
+
+  Box() {
+    return StatefulBuilder(builder: (_, StateSetter setState) {
+      return SizedBox(
+        height: 100,
+        width: MediaQuery.of(context).size.width - 40,
+        child: ContainerDesign(
+            color: Colors.white,
+            child: Hive.box('user_setting').get('numorimogi_routine') == null ||
+                    Hive.box('user_setting').get('numorimogi_routine') == 0
+                ? ListView.builder(
+                    // the number of items in the list
+                    itemCount: routineday.length,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    // display each item of the product list
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: (MediaQuery.of(context).size.width - 40) / 7,
+                        child: Column(
+                          children: [
+                            Text(routineday[index],
+                                style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(routinesucceed[index].toString() + '%',
+                                style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15))
+                          ],
+                        ),
+                      );
+                    })
+                : ListView.builder(
+                    // the number of items in the list
+                    itemCount: routineday.length,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    // display each item of the product list
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: (MediaQuery.of(context).size.width - 40) / 7,
+                        child: Column(
+                          children: [
+                            Text(routineday[index],
+                                style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                                alignment: Alignment.center,
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: Colors.grey.shade400,
+                                        width: 1,
+                                        style: BorderStyle.solid)),
+                                child: routinesucceed[index] < 35
+                                    ? Text(
+                                        personwith[0]
+                                            .toString()
+                                            .substring(0, 1),
+                                        style: const TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15))
+                                    : (routinesucceed[index] < 70
+                                        ? Text(
+                                            personwith[1]
+                                                .toString()
+                                                .substring(0, 1),
+                                            style: const TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15))
+                                        : Text(
+                                            personwith[2]
+                                                .toString()
+                                                .substring(0, 1),
+                                            style: const TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15))))
+                          ],
+                        ),
+                      );
+                    })),
+      );
+    });
   }
 }
