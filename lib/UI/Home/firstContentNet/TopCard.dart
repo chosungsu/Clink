@@ -17,6 +17,7 @@ class TopCard extends StatelessWidget {
         height: 80,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
+            color: Colors.white,
             child: Column(
           children: [
             //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고

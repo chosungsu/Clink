@@ -21,6 +21,7 @@ class FeedView extends StatelessWidget {
                 Flexible(
                     flex: 3,
                     child: ContainerDesign(
+                        color: Colors.white,
                         child: GestureDetector(
                       onTap: () {
                         //일정관리로 넘어가기
@@ -79,6 +80,7 @@ class FeedView extends StatelessWidget {
                 Flexible(
                     flex: 2,
                     child: ContainerDesign(
+                        color: Colors.white,
                         child: GestureDetector(
                       onTap: () {
                         //대중교통 홈으로 넘어가기
@@ -130,6 +132,7 @@ class FeedView extends StatelessWidget {
                 Flexible(
                     flex: 2,
                     child: ContainerDesign(
+                        color: Colors.white,
                         child: GestureDetector(
                       onTap: () {
                         //건강관리로 넘어가기
@@ -175,6 +178,7 @@ class FeedView extends StatelessWidget {
                 Flexible(
                     flex: 3,
                     child: ContainerDesign(
+                        color: Colors.white,
                         child: GestureDetector(
                       onTap: () {
                         //메모리 북으로 넘어가기

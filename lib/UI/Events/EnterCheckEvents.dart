@@ -16,6 +16,7 @@ class EnterCheckEvents extends StatelessWidget {
     return Flexible(
         fit: FlexFit.tight,
         child: ContainerDesign(
+            color: Colors.yellow.shade400,
             child: SizedBox(
           height: height * 0.5,
           child: Column(

@@ -30,6 +30,7 @@ class UserView extends StatelessWidget {
                               ? Padding(
                                   padding: EdgeInsets.only(left: 5, right: 5),
                                   child: ContainerDesign(
+                                    color: Colors.white,
                                     child: SizedBox(
                                       height: height * 0.08,
                                       width: height * 0.08,
@@ -59,6 +60,7 @@ class UserView extends StatelessWidget {
                               : Padding(
                                   padding: EdgeInsets.only(left: 10, right: 5),
                                   child: ContainerDesign(
+                                      color: Colors.white,
                                       child: SizedBox(
                                     height: height * 0.08,
                                     width: height * 0.08,

@@ -1,4 +1,5 @@
 import 'package:clickbyme/DB/SpaceList.dart';
+import 'package:clickbyme/UI/Home/FormContentNet/FormCard.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
@@ -248,6 +249,10 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
+                                H_Container_0(height),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 H_Container_1(height),
                                 const SizedBox(
                                   height: 20,
@@ -272,6 +277,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  H_Container_0(double height) {
+    return SizedBox(
+      height: 90,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FormCard(height: height),
+        ],
+      ),
+    );
+  }
   H_Container_1(double height) {
     return SizedBox(
       height: 130,

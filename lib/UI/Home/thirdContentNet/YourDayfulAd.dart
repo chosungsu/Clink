@@ -47,6 +47,7 @@ class YourDayfulAd extends StatelessWidget {
                 child: Column(
                   children: [
                     ContainerDesign(
+                      color: Colors.white,
                       child: Column(
                         children: [
                           Stack(

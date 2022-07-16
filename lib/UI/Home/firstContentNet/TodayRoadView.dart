@@ -29,6 +29,7 @@ class TodayRoadView extends StatelessWidget {
     return Flexible(
         fit: FlexFit.tight,
         child: ContainerDesign(
+            color: Colors.white,
             child: SizedBox(
                 height: 260,
                 child: Column(

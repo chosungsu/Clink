@@ -412,6 +412,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                 height: 10,
                               ),
                               ContainerDesign(
+                                color: Colors.white,
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -513,6 +514,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                 height: 10,
                               ),
                               ContainerDesign(
+                                color: Colors.white,
                                 child: Column(
                                   children: [
                                     SizedBox(

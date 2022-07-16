@@ -37,6 +37,7 @@ class ChallengeView extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: ContainerDesign(
+                      color: Colors.white,
                       child: SizedBox(
                     height: height * 0.1,
                     child: Column(

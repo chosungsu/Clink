@@ -32,6 +32,7 @@ class EventShowCard extends StatelessWidget {
         height: 130,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
+            color: Colors.orange.shade400,
             child: GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -44,18 +45,21 @@ class EventShowCard extends StatelessWidget {
                 child: FutureBuilder(
                     future: firestore
                         .collection("EventNoticeDataBase")
-                        .doc(pageindex == 0 ? '1' : '2')
+                        .where('eventpage',
+                            isEqualTo: pageindex == 0 ? 'home' : 'analytic')
                         .get()
-                        .then((value) => {
+                        .then(((QuerySnapshot querySnapshot) => {
                               eventtitle.clear(),
                               eventcontent.clear(),
-                              eventtitle.add(value['eventname']),
-                              eventcontent.add(value['eventcontent']),
-                            }),
+                              querySnapshot.docs.forEach((doc) {
+                                eventtitle.add(doc.get('eventname'));
+                                eventcontent.add(doc.get('eventcontent'));
+                              })
+                            })),
                     builder: (context, future) => future.connectionState ==
                             ConnectionState.waiting
-                        ? Center(
-                            child: CircularProgressIndicator(),
+                        ? const Center(
+                            child: const CircularProgressIndicator(),
                           )
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -63,7 +67,7 @@ class EventShowCard extends StatelessWidget {
                               SizedBox(
                                 height: 100,
                                 child: PageView.builder(
-                                  itemCount: 1,
+                                  itemCount: eventtitle.length,
                                   controller: pageController,
                                   itemBuilder: (_, index) => Container(
                                       child: Column(
@@ -80,34 +84,39 @@ class EventShowCard extends StatelessWidget {
                                                 height: 30,
                                                 child: Row(
                                                   children: [
-                                                    NeumorphicIcon(
-                                                      Icons.confirmation_number,
-                                                      size: 25,
-                                                      style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .convex,
-                                                          depth: 2,
-                                                          color: Colors.black45,
-                                                          lightSource:
-                                                              LightSource
-                                                                  .topLeft),
-                                                    ),
                                                     SizedBox(
-                                                      width: 20,
+                                                      height: 30,
+                                                      width: 30,
+                                                      child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child:
+                                                              CircleAvatar(
+                                                            backgroundColor:
+                                                                Colors.orange.shade500,
+                                                            child: const Icon(
+                                                              Icons
+                                                                  .card_giftcard,
+                                                              color: Colors
+                                                                  .white,
+                                                            ),
+                                                          )),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
                                                     ),
                                                     Text(
-                                                        eventtitle[0]
+                                                        eventtitle[index]
                                                             .toString(),
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black54,
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 18)),
                                                   ],
                                                 ),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 10,
                                               ),
                                               SizedBox(
@@ -117,16 +126,17 @@ class EventShowCard extends StatelessWidget {
                                                     80,
                                                 height: 40,
                                                 child: Text(
-                                                    eventcontent[0].toString(),
-                                                    style: TextStyle(
-                                                        color: Colors.black54,
+                                                    eventcontent[index]
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 15)),
                                               ),
                                             ],
                                           )),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                     ],
@@ -137,153 +147,21 @@ class EventShowCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(right: 20),
+                                    padding: const EdgeInsets.only(right: 20),
                                     child: SmoothPageIndicator(
                                       controller: pageController,
                                       count: 1,
-                                      effect: ExpandingDotsEffect(
+                                      effect: const ExpandingDotsEffect(
                                           dotHeight: 10,
                                           dotWidth: 10,
                                           dotColor: Colors.grey,
-                                          activeDotColor: Colors.black),
+                                          activeDotColor: Colors.white),
                                     ),
                                   )
                                 ],
                               )
                             ],
                           ))
-                //readdata(context, 0),
                 )));
-  }
-
-  readdata(BuildContext context, int code) async {
-    final eventsshowing =
-        await firestore.collection("EventNoticeDataBase").doc("$code");
-    eventsshowing.get().then((value) => {
-          eventtitle.add(value['eventname']),
-          eventcontent.add(value['eventcontent']),
-        });
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(
-          height: 100,
-          child: PageView.builder(
-            itemCount: 1,
-            controller: pageController,
-            itemBuilder: (_, index) => Container(
-                child: Column(
-              children: [
-                Flexible(
-                    fit: FlexFit.tight,
-                    child: pageindex == 0
-                        ? Column(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 80,
-                                height: 30,
-                                child: Row(
-                                  children: [
-                                    NeumorphicIcon(
-                                      Icons.confirmation_number,
-                                      size: 25,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          color: Colors.black45,
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Text(eventtitle[0].toString(),
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18)),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 80,
-                                height: 40,
-                                child: Text(eventcontent[0].toString(),
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15)),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 80,
-                                height: 30,
-                                child: Row(
-                                  children: [
-                                    NeumorphicIcon(
-                                      Icons.confirmation_number,
-                                      size: 25,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          color: Colors.black45,
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Text(eventtitle[1].toString(),
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18)),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 80,
-                                height: 40,
-                                child: Text(eventcontent[1].toString(),
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15)),
-                              ),
-                            ],
-                          )),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
-            )),
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: SmoothPageIndicator(
-                controller: pageController,
-                count: 1,
-                effect: ExpandingDotsEffect(
-                    dotHeight: 10,
-                    dotWidth: 10,
-                    dotColor: Colors.grey,
-                    activeDotColor: Colors.black),
-              ),
-            )
-          ],
-        )
-      ],
-    );
   }
 }

@@ -174,6 +174,7 @@ class _SettingPageState extends State<SettingPage> {
         height: 300,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
+            color: Colors.white,
             child: Column(
           children: [
             Flexible(

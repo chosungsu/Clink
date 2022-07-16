@@ -26,6 +26,7 @@ class ReportView extends StatelessWidget {
         height: 80,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
+            color: Colors.white,
             child: Hive.box('user_setting').get('numorimogi_routine') == null
                 ? ListView.builder(
                     // the number of items in the list

@@ -11,6 +11,7 @@ class ShareView extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
         child: ContainerDesign(
+            color: Colors.white,
             child: SizedBox(
           height: height * 0.3 - 40,
           child: Column(

@@ -30,13 +30,12 @@ class _DayContentHomeState extends State<DayContentHome> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  bool isupschedule = false;
+  int isupschedule = 0;
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
-  CalendarFormat _calendarFormat = CalendarFormat.week;
   late Map<DateTime, List<Event>> _events;
   late DateTime fromDate = DateTime.now();
   late DateTime toDate = DateTime.now();
@@ -110,9 +109,9 @@ class _DayContentHomeState extends State<DayContentHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 140,
-                child: calendarView(height, context),
-              ),
+                  /*height:
+                      isupschedule == 0 ? 170 : (isupschedule == 1 ? 220 : 430),*/
+                  child: calendarView(height, context)),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -148,7 +147,7 @@ class _DayContentHomeState extends State<DayContentHome> {
 
   calendarView(double height, BuildContext context) {
     return SizedBox(
-        height: 130,
+        //height: isupschedule == 0 ? 170 : (isupschedule == 1 ? 220 : 430),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -159,7 +158,11 @@ class _DayContentHomeState extends State<DayContentHome> {
               shouldFillViewport: false,
               firstDay: DateTime.utc(2000, 1, 1),
               lastDay: DateTime.utc(2100, 12, 31),
-              calendarFormat: _calendarFormat,
+              calendarFormat: isupschedule == 0
+                  ? CalendarFormat.week
+                  : (isupschedule == 1
+                      ? CalendarFormat.twoWeeks
+                      : CalendarFormat.month),
               eventLoader: getEventList,
               selectedDayPredicate: (day) {
                 return isSameDay(_selectedDay, day);
@@ -172,11 +175,6 @@ class _DayContentHomeState extends State<DayContentHome> {
               },
               onPageChanged: (focusedDay) {
                 _focusedDay = focusedDay;
-              },
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
               },
               startingDayOfWeek: StartingDayOfWeek.sunday,
               daysOfWeekVisible: true,
@@ -252,6 +250,34 @@ class _DayContentHomeState extends State<DayContentHome> {
                   selectedTextStyle: TextStyle(color: Colors.white),
                   weekendTextStyle: TextStyle(color: Colors.blue)),
             ),
+            Container(
+                alignment: Alignment.center,
+                width: 30,
+                height: 30,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      isupschedule == 0
+                          ? isupschedule = 1
+                          : (isupschedule == 1
+                              ? isupschedule = 2
+                              : isupschedule = 0);
+                    });
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.blue.shade500,
+                    child: Text(
+                      isupschedule == 0
+                          ? '2W'
+                          : (isupschedule == 1 ? '1M' : '1W'),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                ))
           ],
         ));
   }

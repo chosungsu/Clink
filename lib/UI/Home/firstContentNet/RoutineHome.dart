@@ -261,6 +261,7 @@ class _RoutineHomeState extends State<RoutineHome> {
         height: 100,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
+            color: Colors.white,
             child: Hive.box('user_setting').get('numorimogi_routine') == null ||
                     Hive.box('user_setting').get('numorimogi_routine') == 0
                 ? ListView.builder(
@@ -443,6 +444,7 @@ class _RoutineHomeState extends State<RoutineHome> {
       height: isclickedshowmore == false ? 3 * 60 : routineplaylist.length * 60,
       width: MediaQuery.of(context).size.width - 40,
       child: ContainerDesign(
+        color: Colors.white,
         child: ListView.builder(
             // the number of items in the list
             itemCount: routineplaylist.length,
@@ -518,6 +520,7 @@ class _RoutineHomeState extends State<RoutineHome> {
       height: 100,
       width: MediaQuery.of(context).size.width - 40,
       child: ContainerDesign(
+          color: Colors.white,
           child: personwith.isNotEmpty
               ? ListView.builder(
                   // the number of items in the list

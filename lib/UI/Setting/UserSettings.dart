@@ -29,7 +29,7 @@ class UserSettings extends StatelessWidget {
           list_title.isNotEmpty ? 100 * list_title.length.toDouble() : (200),
       width: MediaQuery.of(context).size.width - 40,
       child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           itemCount: list_title.length,
           itemBuilder: (context, index) {
@@ -64,10 +64,11 @@ class UserSettings extends StatelessWidget {
                 },
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     ContainerDesign(
+                        color: Colors.white,
                         child: SizedBox(
                       height: 40,
                       width: MediaQuery.of(context).size.width - 80,
@@ -82,7 +83,7 @@ class UserSettings extends StatelessWidget {
                                         index == 4
                                     ? '로그아웃'
                                     : list_title[index],
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black54,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18)),
@@ -94,7 +95,7 @@ class UserSettings extends StatelessWidget {
                             child: NeumorphicIcon(
                               Icons.navigate_next,
                               size: 20,
-                              style: NeumorphicStyle(
+                              style: const NeumorphicStyle(
                                   shape: NeumorphicShape.convex,
                                   depth: 2,
                                   color: Colors.black45,
@@ -104,7 +105,7 @@ class UserSettings extends StatelessWidget {
                         ],
                       ),
                     )),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     )
                   ],
