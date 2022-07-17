@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
@@ -138,11 +139,18 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                             child: Column(
                               children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 S_Container1(height),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                S_Container2(height),
+                                S_Container2(),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                S_Container3(height),
                                 const SizedBox(
                                   height: 150,
                                 ),
@@ -157,31 +165,38 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
 
-S_Container1(double height) {
-  return SizedBox(
-    height: 155,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 150,
-          child: UserDetails(height: height),
-        )
-      ],
-    ),
-  );
-}
+  S_Container1(double height) {
+    return SizedBox(
+      height: 155,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 150,
+            child: UserDetails(height: height),
+          )
+        ],
+      ),
+    );
+  }
 
-S_Container2(double height) {
-  return SizedBox(
-    height: 500,
-    child: Column(
+  S_Container2() {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        UserSettings(height: height),
-      ],
-    ),
-  );
+      children: [ADEvents(context)],
+    );
+  }
+
+  S_Container3(double height) {
+    return SizedBox(
+      height: 500,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          UserSettings(height: height),
+        ],
+      ),
+    );
+  }
 }

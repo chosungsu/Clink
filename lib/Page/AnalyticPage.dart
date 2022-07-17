@@ -1,4 +1,5 @@
 import 'package:clickbyme/Page/EnterCheckPage.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Analytics/EntercheckView.dart';
 import 'package:clickbyme/UI/Analytics/ShareView.dart';
 import 'package:clickbyme/UI/Analytics/ReportView.dart';
@@ -134,15 +135,12 @@ class _AnalyticPageState extends State<AnalyticPage>
                                     padding: const EdgeInsets.only(
                                         left: 20, right: 20),
                                     child: Row(
-                                      children: const [
+                                      children: [
                                         Flexible(
                                           fit: FlexFit.tight,
                                           child: Text(
-                                            '연구실',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                                color: Colors.black45),
+                                            'Explore',
+                                            style: MyTheme.kAppTitle,
                                           ),
                                         ),
                                       ],

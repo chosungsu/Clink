@@ -1,4 +1,7 @@
 import 'package:clickbyme/DB/SpaceList.dart';
+import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/FormContentNet/FormCard.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
@@ -158,14 +161,11 @@ class _HomePageState extends State<HomePage> {
                                         left: 20, right: 20),
                                     child: Row(
                                       children: [
-                                        const Flexible(
+                                        Flexible(
                                           fit: FlexFit.tight,
                                           child: Text(
                                             'Habit Tracker',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                                color: Colors.black45),
+                                            style: MyTheme.kAppTitle,
                                           ),
                                         ),
                                         InkWell(
@@ -257,11 +257,15 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_2(height, _pController),
+                                H_Container_2(height),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_3(height),
+                                H_Container_3(height, _pController),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                H_Container_4(height),
                                 const SizedBox(
                                   height: 150,
                                 ),
@@ -290,6 +294,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
   H_Container_1(double height) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [ADEvents(context)],
+    );
+  }
+
+  
+  H_Container_2(double height) {
     return SizedBox(
       height: 130,
       width: MediaQuery.of(context).size.width - 40,
@@ -313,7 +325,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_2(double height, PageController pController) {
+  H_Container_3(double height, PageController pController) {
     return SizedBox(
       height: 140,
       child: Column(
@@ -325,7 +337,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_3(double height) {
+  H_Container_4(double height) {
     //프로버전 구매시 사용할 코드
     //isbought == false일 경우와 isbought == true일 경우 사이즈박스 크기를 제한 풀기...
     return SizedBox(

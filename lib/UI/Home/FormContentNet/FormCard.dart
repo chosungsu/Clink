@@ -1,7 +1,5 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/RoutineHome.dart';
+import 'package:clickbyme/UI/Home/FormContentNet/ChatBotRoom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
@@ -23,12 +21,12 @@ class FormCard extends StatelessWidget {
                 height: 60,
                 child: GestureDetector(
                   onTap: () {
-                    /*Navigator.push(
+                    Navigator.push(
                       context,
                       PageTransition(
                           type: PageTransitionType.bottomToTop,
-                          child: DayContentHome()),
-                    );*/
+                          child: ChatBotRoom()),
+                    );
                   },
                   child: SizedBox(
                     height: 45,
@@ -55,7 +53,7 @@ class FormCard extends StatelessWidget {
                         const SizedBox(
                           height: 45,
                           child: Center(
-                            child: Text('원큐챗봇을 클릭하여 하루 기록하기',
+                            child: Text('원큐챗봇과 함께 하루 기록하기',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

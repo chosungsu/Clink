@@ -4,6 +4,7 @@ import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Provider/EventProvider.dart';
 import 'package:clickbyme/Sub/DayEventAdd.dart';
 import 'package:clickbyme/Sub/DayLog.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
@@ -67,8 +69,11 @@ class MyApp extends StatelessWidget {
         title: 'Flutter',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Color.fromARGB(255, 255, 255, 255),
+          primaryColor: MyTheme.kPrimaryColor,
           canvasColor: Colors.transparent,
+          textTheme: GoogleFonts.poppinsTextTheme(
+            Theme.of(context).textTheme
+          ),
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey)
               .copyWith(secondary: const Color(0xFF012980)),
         ),

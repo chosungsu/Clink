@@ -1,27 +1,11 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
-import 'package:clickbyme/UI/Home/NotiAlarm.dart';
-import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
-import 'package:clickbyme/sheets/addCalendarTodo.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:transition/transition.dart';
-import 'package:clickbyme/Tool/dateutils.dart';
-import '../../../DB/Event.dart';
-import '../../../Dialogs/checkhowdaylog.dart';
-import '../../../Provider/EventProvider.dart';
-import '../../../Sub/DayEventAdd.dart';
-import '../../../Tool/CalendarSource.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/changecalendarview.dart';
 
 class DayNoteHome extends StatefulWidget {
   @override
@@ -128,15 +112,12 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                         padding: const EdgeInsets.only(
                                             left: 20, right: 20),
                                         child: Row(
-                                          children: const [
+                                          children: [
                                             Flexible(
                                               fit: FlexFit.tight,
                                               child: Text(
-                                                '',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                    color: Colors.black45),
+                                                'Memo',
+                                                style: MyTheme.kAppTitle,
                                               ),
                                             ),
                                           ],
@@ -187,7 +168,11 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              RoutineBox(),
+                              ADBox(),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              MemoBox(),
                               const SizedBox(
                                 height: 20,
                               ),
@@ -247,98 +232,170 @@ class _DayNoteHomeState extends State<DayNoteHome> {
       ],
     );
   }
-
-  RoutineBox() {
+  ADBox() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [ADEvents(context)],
+    );
+  }
+  MemoBox() {
     return SizedBox(
-      height: 95*5 + 50,
+      height: 270 * 5 + 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text('메모',
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18)),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Box()
-        ],
+        children: [memo()],
       ),
     );
   }
 
-  Box() {
+  memo() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return SizedBox(
-          height: 95 * 5,
+          height: 260 * 5,
           width: MediaQuery.of(context).size.width - 40,
-          child: GridView.count(
+          child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
             shrinkWrap: true,
-            childAspectRatio: 2 / 1,
-            children: List.generate(9, (index) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+            itemCount: 5,
+            itemBuilder: (BuildContext context, int index) {
+              return Column(
                 children: [
-                  GestureDetector(
-                          onTap: () {
-                          },
-                          child: SizedBox(
-                            height: 65,
-                            child: ContainerDesign(
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {},
+                        child: Flexible(
+                          flex: 1,
+                          child: ContainerDesign(
+                            child: SizedBox(
+                              height: 200,
                               child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 25,
-                                      child: Container(
-                                        alignment: Alignment.topCenter,
-                                        width: 25,
-                                        height: 25,
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          child: NeumorphicIcon(
-                                            Icons.description,
-                                            size: 25,
-                                            style: const NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                color: Colors.black45,
-                                                lightSource:
-                                                    LightSource.topLeft),
+                                children: [
+                                  Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Column(
+                                        children: const [
+                                          SizedBox(
+                                            height: 30,
+                                            child: Center(
+                                              child: Text('일상메모',
+                                                  style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20)),
+                                            ),
                                           ),
-                                        ),
+                                          SizedBox(
+                                            height: 120,
+                                            child: Center(
+                                              child: Text(
+                                                '일상메모를 기록하세요',
+                                                style: TextStyle(
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height: 25,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: NeumorphicIcon(
+                                        Icons.star,
+                                        size: 25,
+                                        style: const NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            depth: 2,
+                                            color: Colors.black45,
+                                            lightSource: LightSource.topLeft),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 20,
-                                      child: Center(
-                                        child: Text('일상메모',
-                                            style: TextStyle(
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              color: Colors.white,
-                            )
+                                  ),
+                                ],
+                              ),
+                            ),
+                            color: Colors.white,
                           ),
-                        )
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Flexible(
+                          flex: 1,
+                          child: ContainerDesign(
+                            child: SizedBox(
+                              height: 200,
+                              child: Column(
+                                children: [
+                                  Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Column(
+                                        children: const [
+                                          SizedBox(
+                                            height: 30,
+                                            child: Center(
+                                              child: Text('일상메모',
+                                                  style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20)),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 120,
+                                            child: Center(
+                                              child: Text(
+                                                '일상메모를 기록하세요',
+                                                style: TextStyle(
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height: 25,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: NeumorphicIcon(
+                                        Icons.star,
+                                        size: 25,
+                                        style: const NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            depth: 2,
+                                            color: Colors.black45,
+                                            lightSource: LightSource.topLeft),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  )
                 ],
               );
-            }),
+            },
           ));
     });
   }

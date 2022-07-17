@@ -85,6 +85,7 @@ dependencies:
   hive_listener: ^1.2.1
   sticky_headers: ^0.3.0+2
   textfield_tags: ^2.0.0+1
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:

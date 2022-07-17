@@ -8,9 +8,9 @@ settingRoutineHome(
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
+      shape: const RoundedRectangleBorder(
+          borderRadius: const BorderRadius.only(
+        topLeft: const Radius.circular(20),
         topRight: Radius.circular(20),
       )),
       context: context,
@@ -62,11 +62,11 @@ SheetPage(
                       ),
                     ],
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               title(context),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               content(context)
@@ -81,9 +81,9 @@ title(
       height: 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: const [
           Text('설정',
-              style: const TextStyle(
+              style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 25))
@@ -100,15 +100,15 @@ content(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 30,
-              child: Text('대시보드 분석표 설정',
-                  style: const TextStyle(
+              child: Text('검색 조건설정',
+                  style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 20)),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -124,14 +124,10 @@ content(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
                                 primary: Hive.box('user_setting')
-                                            .get('numorimogi_routine') ==
-                                        null
-                                    ? Colors.white
-                                    : (Hive.box('user_setting')
                                                 .get('numorimogi_routine') ==
                                             0
                                         ? Colors.grey.shade400
-                                        : Colors.white),
+                                        : Colors.white,
                                 side: const BorderSide(
                                   width: 1,
                                   color: Colors.black45,
@@ -149,19 +145,15 @@ content(
                                 children: [
                                   Center(
                                     child: NeumorphicText(
-                                      '퍼센트로 표시',
+                                      '제목',
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
                                         color: Hive.box('user_setting').get(
-                                                    'numorimogi_routine') ==
-                                                null
-                                            ? Colors.black45
-                                            : (Hive.box('user_setting').get(
                                                         'numorimogi_routine') ==
                                                     0
                                                 ? Colors.white
-                                                : Colors.black45),
+                                                : Colors.black45,
                                       ),
                                       textStyle: NeumorphicTextStyle(
                                         fontWeight: FontWeight.bold,
@@ -185,14 +177,10 @@ content(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
                               primary: Hive.box('user_setting')
-                                          .get('numorimogi_routine') ==
-                                      null
-                                  ? Colors.white
-                                  : (Hive.box('user_setting')
-                                              .get('numorimogi_routine') ==
-                                          1
-                                      ? Colors.grey.shade400
-                                      : Colors.white),
+                                                .get('numorimogi_routine') ==
+                                            1
+                                        ? Colors.grey.shade400
+                                        : Colors.white,
                               side: const BorderSide(
                                 width: 1,
                                 color: Colors.black45,
@@ -210,19 +198,69 @@ content(
                               children: [
                                 Center(
                                   child: NeumorphicText(
-                                    '이모지로 표시',
+                                    '내용',
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: Hive.box('user_setting')
-                                                  .get('numorimogi_routine') ==
-                                              null
-                                          ? Colors.black45
-                                          : (Hive.box('user_setting').get(
-                                                      'numorimogi_routine') ==
-                                                  1
-                                              ? Colors.white
-                                              : Colors.black45),
+                                      color: Hive.box('user_setting').get(
+                                                        'numorimogi_routine') ==
+                                                    1
+                                                ? Colors.white
+                                                : Colors.black45,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 30,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100)),
+                              primary: Hive.box('user_setting')
+                                                .get('numorimogi_routine') ==
+                                            2
+                                        ? Colors.grey.shade400
+                                        : Colors.white,
+                              side: const BorderSide(
+                                width: 1,
+                                color: Colors.black45,
+                              )),
+                          onPressed: () {
+                            setState(() {
+                              Hive.box('user_setting')
+                                  .put('numorimogi_routine', 2);
+                            });
+                          },
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: NeumorphicText(
+                                    '중요도',
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: Hive.box('user_setting').get(
+                                                        'numorimogi_routine') ==
+                                                    2
+                                                ? Colors.white
+                                                : Colors.black45,
                                     ),
                                     textStyle: NeumorphicTextStyle(
                                       fontWeight: FontWeight.bold,

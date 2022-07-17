@@ -1,3 +1,4 @@
+import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
@@ -127,6 +128,10 @@ class _DayContentHomeState extends State<DayContentHome> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  ADView(),
                                   const SizedBox(
                                     height: 20,
                                   ),
@@ -279,7 +284,12 @@ class _DayContentHomeState extends State<DayContentHome> {
       ],
     ));
   }
-
+  ADView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [ADEvents(context)],
+    );
+  }
   TimeLineView() {
     return SizedBox(
       height: calendardoinglist.isNotEmpty
