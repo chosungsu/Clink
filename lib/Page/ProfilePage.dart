@@ -152,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 S_Container3(height),
                                 const SizedBox(
-                                  height: 150,
+                                  height: 50,
                                 ),
                               ],
                             ));

@@ -1,5 +1,6 @@
 import 'package:clickbyme/DB/SpaceList.dart';
 import 'package:clickbyme/Dialogs/howchangespace.dart';
+import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/SpaceAD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -133,14 +134,18 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
                               MySpace(height, context),
                               const SizedBox(
-                                height: 30,
+                                height: 20,
+                              ),
+                              ADSpace(height, context),
+                              const SizedBox(
+                                height: 20,
                               ),
                               ChoiceSpace(height, context),
-                              const SizedBox(
-                                height: 150,
-                              ),
                             ],
                           ),
                         );
@@ -181,21 +186,6 @@ class _ChangeSpaceState extends State<ChangeSpace> {
     return SizedBox(
         height: 70 * 5,
         child:
-            /*_user_ad.isNotEmpty
-            ? SizedBox(
-                height: 70 * _user_ad.length.toDouble(),
-                child: ReorderableListView(
-                    children: getItems(),
-                    onReorder: (oldIndex, newIndex) {
-                      onreorder(oldIndex, newIndex);
-                    }))
-            : SizedBox(
-                height: 70 * _default_ad.length.toDouble(),
-                child: ReorderableListView(
-                    children: getItems(),
-                    onReorder: (oldIndex, newIndex) {
-                      onreorder(oldIndex, newIndex);
-                    }))*/
             FutureBuilder(
                 future: firestore
                     .collection("UserSpaceDataBase")
@@ -286,6 +276,12 @@ class _ChangeSpaceState extends State<ChangeSpace> {
         createData(name, _user_ad, _user_ad.length);
       }
     });
+  }
+  ADSpace(double height, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [ADEvents(context)],
+    );
   }
 
   ChoiceSpace(double height, BuildContext context) {

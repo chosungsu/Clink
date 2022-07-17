@@ -173,12 +173,6 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                 height: 20,
                               ),
                               MemoBox(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              const SizedBox(
-                                height: 150,
-                              )
                             ],
                           ),
                         );
@@ -241,10 +235,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   MemoBox() {
     return SizedBox(
       height: 270 * 5 + 50,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [memo()],
-      ),
+      child: memo()
     );
   }
 
@@ -268,9 +259,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                     children: [
                       GestureDetector(
                         onTap: () {},
-                        child: Flexible(
-                          flex: 1,
-                          child: ContainerDesign(
+                        child: ContainerDesign(
                             child: SizedBox(
                               height: 200,
                               child: Column(
@@ -325,13 +314,10 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                             ),
                             color: Colors.white,
                           ),
-                        ),
                       ),
                       GestureDetector(
                         onTap: () {},
-                        child: Flexible(
-                          flex: 1,
-                          child: ContainerDesign(
+                        child: ContainerDesign(
                             child: SizedBox(
                               height: 200,
                               child: Column(
@@ -386,7 +372,6 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                             ),
                             color: Colors.white,
                           ),
-                        ),
                       )
                     ],
                   ),

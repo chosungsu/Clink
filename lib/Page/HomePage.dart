@@ -267,7 +267,11 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 H_Container_4(height),
                                 const SizedBox(
-                                  height: 150,
+                                  height: 20,
+                                ),
+                                H_Container_5(height),
+                                const SizedBox(
+                                  height: 50,
                                 ),
                               ],
                             ),
@@ -327,7 +331,7 @@ class _HomePageState extends State<HomePage> {
 
   H_Container_3(double height, PageController pController) {
     return SizedBox(
-      height: 140,
+      height: 160,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -342,7 +346,7 @@ class _HomePageState extends State<HomePage> {
     //isbought == false일 경우와 isbought == true일 경우 사이즈박스 크기를 제한 풀기...
     return SizedBox(
       height:
-          isbought == false ? 130 * 3 : 130 * _list_ad.length.toDouble(),
+          isbought == false ? 110 * 3 : 110 * _list_ad.length.toDouble(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -380,6 +384,12 @@ class _HomePageState extends State<HomePage> {
           YourDayfulAd(height: height)
         ],
       ),
+    );
+  }
+  H_Container_5(double height) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [ADEvents(context)],
     );
   }
 }

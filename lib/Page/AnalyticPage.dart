@@ -3,6 +3,7 @@ import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Analytics/EntercheckView.dart';
 import 'package:clickbyme/UI/Analytics/ShareView.dart';
 import 'package:clickbyme/UI/Analytics/ReportView.dart';
+import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
@@ -169,17 +170,21 @@ class _AnalyticPageState extends State<AnalyticPage>
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  A_Container2(height, context),
+                                  A_Container2(height),
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  A_Container3(height, context),
+                                  A_Container3(height),
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  A_Container4(height, context),
+                                  A_Container4(height),
                                   const SizedBox(
-                                    height: 150,
+                                    height: 20,
+                                  ),
+                                  A_Container5(height),
+                                  const SizedBox(
+                                    height: 50,
                                   ),
                                 ],
                               ));
@@ -191,108 +196,119 @@ class _AnalyticPageState extends State<AnalyticPage>
       ),
     );
   }
-}
 
-A_Container1(double height, PageController pController) {
-  return SizedBox(
-    height: 140,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        EventShowCard(height: height, pageController: pController, pageindex: 1,),
-      ],
-    ),
-  );
-}
+  A_Container1(double height, PageController pController) {
+    return SizedBox(
+      height: 160,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          EventShowCard(
+            height: height,
+            pageController: pController,
+            pageindex: 1,
+          ),
+        ],
+      ),
+    );
+  }
 
-A_Container2(double height, BuildContext context) {
-  return SizedBox(
-    height: 150,
-    width: MediaQuery.of(context).size.width - 40,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Flexible(
-          fit: FlexFit.tight,
-          child: Text('액티비티',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18)),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        ReportView(),
-      ],
-    ),
-  );
-}
+  A_Container2(double height) {
+    return SizedBox(
+      height: 150,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Flexible(
+            fit: FlexFit.tight,
+            child: Text('액티비티',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ReportView(),
+        ],
+      ),
+    );
+  }
 
-A_Container3(double height, BuildContext context) {
-  return SizedBox(
-    height: 170,
-    width: MediaQuery.of(context).size.width - 40,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const Flexible(
-              fit: FlexFit.tight,
-              child: Text('출석현황',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)),
-            ),
-            GestureDetector(
-              onTap: () {
-                //타일변경으로 넘어가기
-                Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.bottomToTop,
-                      child: EnterCheckPage()),
-                );
-              },
-              child: const Text('Go',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15)),
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        EntercheckView(),
-      ],
-    ),
-  );
-}
+  A_Container3(double height) {
+    return SizedBox(
+      height: 170,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Flexible(
+                fit: FlexFit.tight,
+                child: Text('출석현황',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  //타일변경으로 넘어가기
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: EnterCheckPage()),
+                  );
+                },
+                child: const Text('Go',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          EntercheckView(),
+        ],
+      ),
+    );
+  }
 
-A_Container4(double height, BuildContext context) {
-  return SizedBox(
-    height: 150,
-    width: MediaQuery.of(context).size.width - 40,
-    child: Column(
+  A_Container4(double height) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Flexible(
-          fit: FlexFit.tight,
-          child: Text('루틴활동',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18)),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        ReportView(),
-      ],
-    ),
-  );
+      children: [ADEvents(context)],
+    );
+  }
+
+  A_Container5(double height) {
+    return SizedBox(
+      height: 150,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Flexible(
+            fit: FlexFit.tight,
+            child: Text('루틴활동',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ReportView(),
+        ],
+      ),
+    );
+  }
 }

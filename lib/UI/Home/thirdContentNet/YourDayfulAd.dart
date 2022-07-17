@@ -14,7 +14,7 @@ class YourDayfulAd extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height:
-          spacetitle.isNotEmpty ? 110 * spacetitle.length.toDouble() : (200),
+          spacetitle.isNotEmpty ? 90 * spacetitle.length.toDouble() : (200),
       width: MediaQuery.of(context).size.width - 40,
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -115,7 +115,7 @@ class YourDayfulAd extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     )
                   ],
                 ));

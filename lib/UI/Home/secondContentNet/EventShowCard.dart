@@ -29,7 +29,7 @@ class EventShowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 130,
+        height: 150,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
             color: Colors.orange.shade400,
@@ -65,7 +65,7 @@ class EventShowCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               SizedBox(
-                                height: 100,
+                                height: 120,
                                 child: PageView.builder(
                                   itemCount: eventtitle.length,
                                   controller: pageController,
@@ -124,7 +124,7 @@ class EventShowCard extends StatelessWidget {
                                                         .size
                                                         .width -
                                                     80,
-                                                height: 40,
+                                                height: 60,
                                                 child: Text(
                                                     eventcontent[index]
                                                         .toString(),
