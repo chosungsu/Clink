@@ -82,7 +82,7 @@ class UserSettings extends StatelessWidget {
                             child: Text(
                                 Hive.box('user_info').get('id') != null &&
                                         index == 4
-                                    ? '로그아웃'
+                                    ? '회원탈퇴'
                                     : list_title[index],
                                 style: const TextStyle(
                                     color: Colors.black54,
