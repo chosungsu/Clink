@@ -1,8 +1,6 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
-import 'package:clickbyme/UI/Home/NotiAlarm.dart';
-import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
-import 'package:clickbyme/sheets/addCalendarTodo.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/RoutineScript.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,18 +8,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:transition/transition.dart';
-import 'package:clickbyme/Tool/dateutils.dart';
-import '../../../DB/Event.dart';
-import '../../../Dialogs/checkhowdaylog.dart';
-import '../../../Provider/EventProvider.dart';
-import '../../../Sub/DayEventAdd.dart';
-import '../../../Tool/CalendarSource.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/changecalendarview.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 class RoutineHome extends StatefulWidget {
   @override
@@ -129,49 +117,95 @@ class _RoutineHomeState extends State<RoutineHome> {
                                           ),
                                         ))),
                                 SizedBox(
-                                    width: MediaQuery.of(context).size.width -
-                                        60 -
-                                        160,
+                                    width:
+                                        MediaQuery.of(context).size.width - 70,
                                     child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 20),
+                                            left: 20, right: 10),
                                         child: Row(
                                           children: [
                                             Flexible(
                                               fit: FlexFit.tight,
-                                              child: const Text(
-                                                '',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                    color: Colors.black45),
+                                              child: Text(
+                                                'Routine',
+                                                style: MyTheme.kAppTitle,
                                               ),
                                             ),
+                                            SizedBox(
+                                                width: 30,
+                                                child: InkWell(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        PageTransition(
+                                                            type:
+                                                                PageTransitionType
+                                                                    .bottomToTop,
+                                                            child:
+                                                                RoutineScript(
+                                                              index: 0,
+                                                              cardindex: 'null',
+                                                            )),
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons.add,
+                                                        size: 30,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ))),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            SizedBox(
+                                                width: 30,
+                                                child: InkWell(
+                                                    onTap: () {
+                                                      settingRoutineHome(
+                                                          context);
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons.settings,
+                                                        size: 30,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ))),
                                           ],
                                         ))),
                               ],
                             )),
-                        SizedBox(
-                            width: 50,
-                            child: InkWell(
-                                onTap: () {
-                                  settingRoutineHome(context);
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 30,
-                                  height: 30,
-                                  child: NeumorphicIcon(
-                                    Icons.settings,
-                                    size: 30,
-                                    style: const NeumorphicStyle(
-                                        shape: NeumorphicShape.convex,
-                                        depth: 2,
-                                        surfaceIntensity: 0.5,
-                                        color: Colors.black45,
-                                        lightSource: LightSource.topLeft),
-                                  ),
-                                ))),
                       ],
                     ),
                   )),
@@ -194,11 +228,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                               ),
                               RoutinePlay(),
                               const SizedBox(
-                                height: 20,
-                              ),
-                              RoutineRecommend(),
-                              const SizedBox(
-                                height: 150,
+                                height: 50,
                               )
                             ],
                           ),
@@ -257,183 +287,126 @@ class _RoutineHomeState extends State<RoutineHome> {
 
   Box() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
-      return SizedBox(
-        height: 100,
-        width: MediaQuery.of(context).size.width - 40,
-        child: ContainerDesign(
-            color: Colors.white,
-            child: Hive.box('user_setting').get('numorimogi_routine') == null ||
-                    Hive.box('user_setting').get('numorimogi_routine') == 0
-                ? ListView.builder(
-                    // the number of items in the list
-                    itemCount: routineday.length,
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    // display each item of the product list
-                    itemBuilder: (context, index) {
-                      return SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) / 7,
-                        child: Column(
-                          children: [
-                            Text(routineday[index],
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15)),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text(routinesucceed[index].toString() + '%',
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15))
-                          ],
-                        ),
-                      );
-                    })
-                : ListView.builder(
-                    // the number of items in the list
-                    itemCount: routineday.length,
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    // display each item of the product list
-                    itemBuilder: (context, index) {
-                      return SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) / 7,
-                        child: Column(
-                          children: [
-                            Text(routineday[index],
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15)),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                                alignment: Alignment.center,
-                                width: 20,
+      return Hive.box('user_setting').get('numorimogi_routine') == null ||
+              Hive.box('user_setting').get('numorimogi_routine') == 0
+          ? SizedBox(
+              height: 100,
+              width: MediaQuery.of(context).size.width - 40,
+              child: ContainerDesign(
+                  color: Colors.white,
+                  child: ListView.builder(
+                      // the number of items in the list
+                      itemCount: routineday.length,
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      // display each item of the product list
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          width: (MediaQuery.of(context).size.width - 40) / 7,
+                          child: Column(
+                            children: [
+                              Text(routineday[index],
+                                  style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15)),
+                              const SizedBox(
                                 height: 20,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.grey.shade400,
-                                        width: 1,
-                                        style: BorderStyle.solid)),
-                                child: routinesucceed[index] < 35
-                                    ? Text(
-                                        personwith[0]
-                                            .toString()
-                                            .substring(0, 1),
-                                        style: const TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15))
-                                    : (routinesucceed[index] < 70
-                                        ? Text(
-                                            personwith[1]
-                                                .toString()
-                                                .substring(0, 1),
-                                            style: const TextStyle(
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15))
-                                        : Text(
-                                            personwith[2]
-                                                .toString()
-                                                .substring(0, 1),
-                                            style: const TextStyle(
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15))))
-                          ],
-                        ),
-                      );
-                    })),
-      );
+                              ),
+                              Text(routinesucceed[index].toString() + '%',
+                                  style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15))
+                            ],
+                          ),
+                        );
+                      })),
+            )
+          : SizedBox(
+              height: 100,
+              width: MediaQuery.of(context).size.width - 40,
+              child: ContainerDesign(
+                  color: Colors.white,
+                  child: ListView.builder(
+                      // the number of items in the list
+                      itemCount: routineday.length,
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      // display each item of the product list
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          width: (MediaQuery.of(context).size.width - 40) / 7,
+                          child: Column(
+                            children: [
+                              Text(routineday[index],
+                                  style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15)),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                  alignment: Alignment.center,
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          color: Colors.grey.shade400,
+                                          width: 1,
+                                          style: BorderStyle.solid)),
+                                  child: routinesucceed[index] < 35
+                                      ? Text(
+                                          personwith[0]
+                                              .toString()
+                                              .substring(0, 1),
+                                          style: const TextStyle(
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15))
+                                      : (routinesucceed[index] < 70
+                                          ? Text(
+                                              personwith[1]
+                                                  .toString()
+                                                  .substring(0, 1),
+                                              style: const TextStyle(
+                                                  color: Colors.black54,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15))
+                                          : Text(
+                                              personwith[2]
+                                                  .toString()
+                                                  .substring(0, 1),
+                                              style: const TextStyle(
+                                                  color: Colors.black54,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15))))
+                            ],
+                          ),
+                        );
+                      })),
+            );
     });
   }
 
   RoutinePlay() {
     return SizedBox(
-      height: isclickedshowmore == false
-          ? 3 * 60 + 120
-          : routineplaylist.length * 60 + 120,
+      height: routineplaylist.length * 90 + 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Flexible(
-                fit: FlexFit.tight,
-                child: Text('Play',
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18)),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: const Text('추가',
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15)),
-              )
-            ],
-          ),
+          const Text('Play',
+              style: const TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18)),
           const SizedBox(
             height: 20,
           ),
           Play(),
-          const SizedBox(
-            height: 20,
-          ),
-          isclickedshowmore == true
-              ? const SizedBox(
-                  height: 0,
-                )
-              : SizedBox(
-                  height: 50,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey.shade400,
-                          ),
-                          onPressed: () {
-                            //구독관리페이지 호출
-                            setState(() {
-                              isclickedshowmore = true;
-                            });
-                          },
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    '더보기',
-                                    style: const NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: Colors.white,
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ))
-                    ],
-                  ),
-                ),
         ],
       ),
     );
@@ -441,10 +414,8 @@ class _RoutineHomeState extends State<RoutineHome> {
 
   Play() {
     return SizedBox(
-      height: isclickedshowmore == false ? 3 * 60 : routineplaylist.length * 60,
-      width: MediaQuery.of(context).size.width - 40,
-      child: ContainerDesign(
-        color: Colors.white,
+        height: routineplaylist.length * 80,
+        width: MediaQuery.of(context).size.width - 40,
         child: ListView.builder(
             // the number of items in the list
             itemCount: routineplaylist.length,
@@ -453,39 +424,77 @@ class _RoutineHomeState extends State<RoutineHome> {
             shrinkWrap: true,
             // display each item of the product list
             itemBuilder: (context, index) {
-              return SizedBox(
-                  height: 60,
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ContainerDesign(
+                    child: SizedBox(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width - 40,
+                      child: Column(
                         children: [
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: Text(
-                              routineplaylist[index],
-                              style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          Row(
+                            children: [
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: SizedBox(
+                                    height: 30,
+                                    child: Center(
+                                        child: TextScroll(
+                                      routineplaylist[index],
+                                      mode: TextScrollMode.bouncing,
+                                      velocity: const Velocity(
+                                          pixelsPerSecond: Offset(50, 0)),
+                                      delayBefore: const Duration(milliseconds: 500),
+                                      style: const TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                      textAlign: TextAlign.right,
+                                      selectable: true,
+                                    ))),
+                              ),
+                              SizedBox(
+                                  height: 30,
+                                  child: InkWell(
+                                      onTap: () {
+                                        settingRoutineHome(context);
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: 30,
+                                        height: 30,
+                                        child: NeumorphicIcon(
+                                          routineplaylistdone[index] ==
+                                                  'not yet'
+                                              ? Icons.play_circle_outline
+                                              : Icons.check_circle_outline,
+                                          size: 30,
+                                          style: const NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              depth: 2,
+                                              surfaceIntensity: 0.5,
+                                              color: Colors.black45,
+                                              lightSource: LightSource.topLeft),
+                                        ),
+                                      ))),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Text(routineplaylistdone[index],
-                              style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15)),
                         ],
                       ),
-                    ],
-                  ));
-            }),
-      ),
-    );
+                    ),
+                    color: Colors.white,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              );
+            }));
   }
 
   RoutineRecommend() {
@@ -495,8 +504,8 @@ class _RoutineHomeState extends State<RoutineHome> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: [
-              const Flexible(
+            children: const [
+              Flexible(
                 fit: FlexFit.tight,
                 child: Text('루티너',
                     style: TextStyle(
@@ -551,7 +560,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(personwith[index],
@@ -565,9 +574,9 @@ class _RoutineHomeState extends State<RoutineHome> {
                   })
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     Text('아직 추가하신 루티너가 없습니다. 친구추가 버튼으로 추가하세요.',
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.bold,
                             fontSize: 15)),

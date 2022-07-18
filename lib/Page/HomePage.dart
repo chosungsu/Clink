@@ -298,6 +298,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
   H_Container_1(double height) {
+    //프로버전 구매시 보이지 않게 함
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [ADEvents(context)],
@@ -330,6 +331,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   H_Container_3(double height, PageController pController) {
+    //프로버전 구매시 보이지 않게 함
     return SizedBox(
       height: 160,
       child: Column(

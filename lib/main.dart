@@ -3,7 +3,6 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Provider/EventProvider.dart';
 import 'package:clickbyme/Sub/DayEventAdd.dart';
-import 'package:clickbyme/Sub/DayLog.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -55,14 +54,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => KakaoSignInController(),
           child: ProfilePage(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => EventProvider(),
-          child: DayEventAdd(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => EventProvider(),
-          child: DayLog(),
         ),
       ],
       child: MaterialApp(

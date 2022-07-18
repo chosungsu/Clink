@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clickbyme/Page/EnterCheckPage.dart';
-import 'package:clickbyme/UI/Setting/SettingPage.dart';
+import 'package:clickbyme/UI/Setting/BuyingPage.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class EventShowCard extends StatelessWidget {
                     context,
                     PageTransition(
                         type: PageTransitionType.bottomToTop,
-                        child: SettingPage()),
+                        child: BuyingPage()),
                   );
                 },
                 child: FutureBuilder(

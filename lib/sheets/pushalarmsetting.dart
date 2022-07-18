@@ -1,11 +1,12 @@
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive/hive.dart';
 
-addgroupmember(
+pushalarmsetting(
   BuildContext context,
+  int i,
+  bool isChecked, DateTime selectedDay,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.white,
@@ -20,23 +21,25 @@ addgroupmember(
         return Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: Container(
-              height: 320,
+              height: 220,
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
                   )),
-              child: SheetPage(context),
+              child: SheetPage(context, i, isChecked, selectedDay),
             ));
       });
 }
 
 SheetPage(
   BuildContext context,
+  int i,
+  bool isChecked, DateTime selectedDay,
 ) {
   return SizedBox(
-      height: 300,
+      height: 200,
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Column(
@@ -62,96 +65,63 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              title(context),
+              title(context, i, isChecked, selectedDay),
               const SizedBox(
                 height: 20,
               ),
-              content(context)
+              content(context, i, isChecked, selectedDay)
             ],
           )));
 }
 
 title(
   BuildContext context,
+  int i,
+  bool isChecked, DateTime selectedDay,
 ) {
   return SizedBox(
       height: 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('피플',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25))
+        children: [
+          i == 0
+              ? const Text('앱 푸쉬알림에 동의하셨습니다.',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20))
+              : const Text('광고성 정보수신에 동의하셨습니다.',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20))
         ],
       ));
 }
 
 content(
   BuildContext context,
+  int i,
+  bool isChecked, DateTime selectedDay,
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-        height: 150,
+        height: 100,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 30,
-              child: Text('친구 추가하기',
-                  style: TextStyle(
-                      color: Colors.black,
+            i == 0
+              ? Text(selectedDay.toString() + '\n해당 일자로 수신에 동의하셨습니다.\n동의는 언제든 해제할 수 있습니다.',
+                  style: const TextStyle(
+                      color: Colors.red,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20)),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SearchBox()
+                      fontSize: 15))
+              : Text(selectedDay.toString() + '\n해당 일자로 수신에 동의하셨습니다.\n동의는 언제든 해제할 수 있습니다.',
+                  style: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15))
           ],
         ));
   });
 }
-SearchBox() {
-    return SizedBox(
-      height: 50,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Search()],
-      ),
-    );
-  }
-
-  Search() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        SizedBox(
-            height: 50,
-            child: ContainerDesign(
-                child: TextField(
-                  textAlign: TextAlign.start,
-                  textAlignVertical: TextAlignVertical.center,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: InputBorder.none,
-                      hintMaxLines: 2,
-                      hintText: '검색방법 : \'#친구의 이메일\'',
-                      hintStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black45),
-                      prefixIcon: Icon(Icons.search),
-                      isCollapsed: true,
-                      prefixIconColor: Colors.black),
-                ),
-                color: Colors.white))
-      ],
-    );
-  }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:clickbyme/Sub/DayLog.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
@@ -28,17 +27,5 @@ GoToLogin(BuildContext context) {
         MaterialPageRoute(builder: (context) => const LoginSignPage()));
   });
 
-  return _time;
-}
-
-GoToDayLog(BuildContext context) {
-  Timer? _time = Timer(const Duration(seconds: 0), () {
-    Navigator.of(context).pushReplacement(
-      PageTransition(
-        type: PageTransitionType.bottomToTop,
-        child: DayLog(),
-      ),
-    );
-  });
   return _time;
 }

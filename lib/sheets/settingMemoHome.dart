@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive/hive.dart';
 
-settingRoutineHome(
+settingMemoHome(
   BuildContext context,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
         topLeft: const Radius.circular(20),
         topRight: Radius.circular(20),
       )),
@@ -100,7 +102,7 @@ content(
           children: [
             const SizedBox(
               height: 30,
-              child: Text('대시보드 설정',
+              child: Text('검색 조건설정',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -122,10 +124,14 @@ content(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
                                 primary: Hive.box('user_setting')
-                                            .get('numorimogi_routine') ==
+                                            .get('which_search_memo') ==
                                         0
                                     ? Colors.grey.shade400
-                                    : Colors.white,
+                                    : (Hive.box('user_setting')
+                                                .get('which_search_memo') ==
+                                            null
+                                        ? Colors.grey.shade400
+                                        : Colors.white),
                                 side: const BorderSide(
                                   width: 1,
                                   color: Colors.black45,
@@ -133,7 +139,7 @@ content(
                             onPressed: () {
                               setState(() {
                                 Hive.box('user_setting')
-                                    .put('numorimogi_routine', 0);
+                                    .put('which_search_memo', 0);
                               });
                             },
                             child: Center(
@@ -143,15 +149,19 @@ content(
                                 children: [
                                   Center(
                                     child: NeumorphicText(
-                                      '퍼센트로 표시',
+                                      '제목',
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: Hive.box('user_setting').get(
-                                                    'numorimogi_routine') ==
+                                        color: Hive.box('user_setting')
+                                                    .get('which_search_memo') ==
                                                 0
                                             ? Colors.white
-                                            : Colors.black45,
+                                            : (Hive.box('user_setting').get(
+                                                        'which_search_memo') ==
+                                                    null
+                                                ? Colors.white
+                                                : Colors.black45),
                                       ),
                                       textStyle: NeumorphicTextStyle(
                                         fontWeight: FontWeight.bold,
@@ -175,7 +185,7 @@ content(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
                               primary: Hive.box('user_setting')
-                                          .get('numorimogi_routine') ==
+                                          .get('which_search_memo') ==
                                       1
                                   ? Colors.grey.shade400
                                   : Colors.white,
@@ -186,7 +196,7 @@ content(
                           onPressed: () {
                             setState(() {
                               Hive.box('user_setting')
-                                  .put('numorimogi_routine', 1);
+                                  .put('which_search_memo', 1);
                             });
                           },
                           child: Center(
@@ -196,13 +206,67 @@ content(
                               children: [
                                 Center(
                                   child: NeumorphicText(
-                                    '이모지로 표시',
+                                    '내용',
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
                                       color: Hive.box('user_setting')
-                                                  .get('numorimogi_routine') ==
+                                                  .get('which_search_memo') ==
                                               1
+                                          ? Colors.white
+                                          : Colors.black45,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 30,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100)),
+                              primary: Hive.box('user_setting')
+                                          .get('which_search_memo') ==
+                                      2
+                                  ? Colors.grey.shade400
+                                  : Colors.white,
+                              side: const BorderSide(
+                                width: 1,
+                                color: Colors.black45,
+                              )),
+                          onPressed: () {
+                            setState(() {
+                              Hive.box('user_setting')
+                                  .put('which_search_memo', 2);
+                            });
+                          },
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: NeumorphicText(
+                                    '중요도',
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: Hive.box('user_setting')
+                                                  .get('which_search_memo') ==
+                                              2
                                           ? Colors.white
                                           : Colors.black45,
                                     ),

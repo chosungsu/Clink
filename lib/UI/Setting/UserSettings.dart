@@ -1,5 +1,6 @@
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
 import 'package:clickbyme/UI/Setting/DeleteUser.dart';
+import 'package:clickbyme/UI/Setting/OptionChangePage.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -8,7 +9,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:transition/transition.dart';
 
 import '../../Sub/HowToUsePage.dart';
-import 'SettingPage.dart';
+import 'BuyingPage.dart';
 import '../../Tool/ContainerDesign.dart';
 
 class UserSettings extends StatelessWidget {
@@ -47,14 +48,14 @@ class UserSettings extends StatelessWidget {
                               context,
                               PageTransition(
                                   type: PageTransitionType.bottomToTop,
-                                  child: DayContentHome()),
+                                  child: OptionChangePage()),
                             )
                           : (index == 2
                               ? Navigator.push(
                                   context,
                                   PageTransition(
                                       type: PageTransitionType.bottomToTop,
-                                      child: SettingPage()),
+                                      child: BuyingPage()),
                                 )
                               : (index == 3
                                   ? addgroupmember(context)

@@ -1,26 +1,16 @@
-import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../../../Dialogs/checkhowdaylog.dart';
-import '../../../../Provider/EventProvider.dart';
-import '../../../../Sub/DayEventAdd.dart';
-import '../../../../Tool/CalendarSource.dart';
 import '../../../../Tool/NoBehavior.dart';
-import '../../../../sheets/changecalendarview.dart';
 import '../../Tool/ContainerDesign.dart';
 
-class SettingPage extends StatefulWidget {
+class BuyingPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _SettingPageState();
+  State<StatefulWidget> createState() => _BuyingPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _BuyingPageState extends State<BuyingPage> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -122,6 +112,9 @@ class _SettingPageState extends State<SettingPage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
                               BuyItem1(height, context),
                               SizedBox(
                                 height: 150,
@@ -176,99 +169,81 @@ class _SettingPageState extends State<SettingPage> {
         child: ContainerDesign(
             color: Colors.white,
             child: Column(
-          children: [
-            Flexible(
-              flex: 1,
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    Flexible(
-                        fit: FlexFit.tight,
-                        child: Row(
-                          children: [
-                            Container(
-                              alignment: Alignment.topCenter,
-                              child: Container(
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.looks_one_outlined,
-                                    size: 30,
-                                  )),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text('프로 버전 구매',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15)),
-                          ],
-                        )),
-                    Checkbox(
-                        value: isChecked,
-                        onChanged: (value) {
-                          setState(() {
-                            isChecked = value!;
-                          });
-                        })
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Flexible(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('프로 버전을 구매 시 주어지는 혜택',
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15)),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Flexible(
-              flex: 2,
-              child: ListView.separated(
-                //physics : 스크롤 막기 기능
-                //shrinkWrap : 리스트뷰 오버플로우 방지
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      index == 0
-                          ? Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: Row(
                               children: [
-                                Text((index + 1).toString(),
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15)),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.looks_one_outlined,
+                                        size: 30,
+                                      )),
+                                ),
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Text('광고 제거',
+                                Text('프로 버전 구매',
                                     style: TextStyle(
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15)),
                               ],
-                            )
-                          : (index == 1
+                            )),
+                        Checkbox(
+                            value: isChecked,
+                            onChanged: (value) {
+                              setState(() {
+                                isChecked = value!;
+                              });
+                            })
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('프로 버전을 구매 시 주어지는 혜택',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15)),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Flexible(
+                  flex: 2,
+                  child: ListView.separated(
+                    //physics : 스크롤 막기 기능
+                    //shrinkWrap : 리스트뷰 오버플로우 방지
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 3,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          index == 0
                               ? Row(
                                   children: [
                                     Text((index + 1).toString(),
@@ -279,39 +254,57 @@ class _SettingPageState extends State<SettingPage> {
                                     SizedBox(
                                       width: 20,
                                     ),
-                                    Text('하루 일상 스페이스 개수 잠금 해제',
+                                    Text('광고 제거',
                                         style: TextStyle(
                                             color: Colors.black54,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 15)),
                                   ],
                                 )
-                              : Row(
-                                  children: [
-                                    Text((index + 1).toString(),
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15)),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Text('하루 분석표 일부 기능 잠금 해제',
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15)),
-                                  ],
-                                ))
-                    ],
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-              ),
-            ),
-          ],
-        )));
+                              : (index == 1
+                                  ? Row(
+                                      children: [
+                                        Text((index + 1).toString(),
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15)),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text('하루 일상 스페이스 개수 잠금 해제',
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15)),
+                                      ],
+                                    )
+                                  : Row(
+                                      children: [
+                                        Text((index + 1).toString(),
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15)),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text('하루 분석표 일부 기능 잠금 해제',
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15)),
+                                      ],
+                                    ))
+                        ],
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
+                  ),
+                ),
+              ],
+            )));
   }
 
   ConsoleBuy() {

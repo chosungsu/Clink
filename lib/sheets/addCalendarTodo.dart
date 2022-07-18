@@ -12,7 +12,7 @@ addCalendarTodo(
     GlobalKey<FormState> formkey) {
   showModalBottomSheet(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),
         topRight: Radius.circular(20),
@@ -81,7 +81,7 @@ SheetPage(
                               ),
                             ],
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       buildSheetTitle(selectedDay),

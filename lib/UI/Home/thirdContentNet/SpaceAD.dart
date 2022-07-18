@@ -1,6 +1,6 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-import '../../Setting/SettingPage.dart';
+import '../../Setting/BuyingPage.dart';
 
 class SpaceAD extends StatelessWidget {
   final List eventtitle = [
@@ -27,7 +27,7 @@ class SpaceAD extends StatelessWidget {
                   context,
                   PageTransition(
                       type: PageTransitionType.bottomToTop,
-                      child: SettingPage()),
+                      child: BuyingPage()),
                 );
               },
               child: Center(

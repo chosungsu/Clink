@@ -1,26 +1,14 @@
 import 'package:clickbyme/UI/Events/ADEvents.dart';
-import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
-import 'package:clickbyme/sheets/addCalendarTodo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:transition/transition.dart';
-import 'package:clickbyme/Tool/dateutils.dart';
 import '../../../DB/Event.dart';
-import '../../../Dialogs/checkhowdaylog.dart';
-import '../../../Provider/EventProvider.dart';
-import '../../../Sub/DayEventAdd.dart';
-import '../../../Tool/CalendarSource.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/changecalendarview.dart';
 
 class DayContentHome extends StatefulWidget {
   @override
@@ -303,7 +291,7 @@ class _DayContentHomeState extends State<DayContentHome> {
               Center(
                 child: NeumorphicText(
                     '기록된 일정이 없네요;;;',
-                    style: NeumorphicStyle(
+                    style: const NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,
                       color: Colors.black45,

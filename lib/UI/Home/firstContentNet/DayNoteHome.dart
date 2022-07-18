@@ -1,10 +1,14 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/MemoScript.dart';
+import 'package:clickbyme/sheets/DelOrEditMemo.dart';
+import 'package:clickbyme/sheets/settingMemoHome.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../../Tool/NoBehavior.dart';
 
 class DayNoteHome extends StatefulWidget {
@@ -17,19 +21,14 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   double translateY = 0.0;
   double myWidth = 0.0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final List routineday = ['일', '월', '화', '수', '목', '금', '토'];
-  final List routinesucceed = [20, 20, 80, 60, 60, 80, 100];
-  final List routineplaylistdone = ['doing', 'doing', 'done', 'not yet'];
-  final List routineplaylist = [
+  final List memostar = [1, 2, 1, 1, 3];
+  final List memotitle = ['memo1', 'memo2', 'memo3', 'memo4', 'memo5'];
+  final List memocontent = [
     '하루 한번 채식식단 실천하기',
     '대중교통 이용하여 출근하기',
     '토익공부 하루에 유닛4과씩 진도 나가기',
     '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기',
-  ];
-  final List personwith = [
-    '김영헌',
-    '이제민',
-    '최우성',
+    '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기 fighting!!!',
   ];
 
   @override
@@ -105,12 +104,11 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                           ),
                                         ))),
                                 SizedBox(
-                                    width: MediaQuery.of(context).size.width -
-                                        60 -
-                                        160,
+                                    width:
+                                        MediaQuery.of(context).size.width - 70,
                                     child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 20),
+                                            left: 20, right: 10),
                                         child: Row(
                                           children: [
                                             Flexible(
@@ -120,31 +118,76 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                 style: MyTheme.kAppTitle,
                                               ),
                                             ),
+                                            SizedBox(
+                                                width: 30,
+                                                child: InkWell(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        PageTransition(
+                                                            type:
+                                                                PageTransitionType
+                                                                    .bottomToTop,
+                                                            child: MemoScript(index: 0, cardindex: 'null',)),
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons.add,
+                                                        size: 30,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ))),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            SizedBox(
+                                                width: 30,
+                                                child: InkWell(
+                                                    onTap: () {
+                                                      settingMemoHome(context);
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons.settings,
+                                                        size: 30,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ))),
                                           ],
                                         ))),
                               ],
                             )),
-                        SizedBox(
-                            width: 50,
-                            child: InkWell(
-                                onTap: () {
-                                  settingRoutineHome(context);
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 30,
-                                  height: 30,
-                                  child: NeumorphicIcon(
-                                    Icons.settings,
-                                    size: 30,
-                                    style: const NeumorphicStyle(
-                                        shape: NeumorphicShape.convex,
-                                        depth: 2,
-                                        surfaceIntensity: 0.5,
-                                        color: Colors.black45,
-                                        lightSource: LightSource.topLeft),
-                                  ),
-                                ))),
                       ],
                     ),
                   )),
@@ -226,162 +269,230 @@ class _DayNoteHomeState extends State<DayNoteHome> {
       ],
     );
   }
+
   ADBox() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [ADEvents(context)],
     );
   }
+
   MemoBox() {
-    return SizedBox(
-      height: 270 * 5 + 50,
-      child: memo()
-    );
+    return SizedBox(height: memocontent.isEmpty
+              ? MediaQuery.of(context).size.height * 0.5
+              : 160 * (memocontent.length.toDouble()) + 50, child: memo());
   }
 
   memo() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return SizedBox(
-          height: 260 * 5,
+          height: memocontent.isEmpty
+              ? MediaQuery.of(context).size.height * 0.5
+              : 150 * (memocontent.length.toDouble()),
           width: MediaQuery.of(context).size.width - 40,
-          child: ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: 5,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: ContainerDesign(
-                            child: SizedBox(
-                              height: 200,
-                              child: Column(
-                                children: [
-                                  Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Column(
-                                        children: const [
-                                          SizedBox(
-                                            height: 30,
-                                            child: Center(
-                                              child: Text('일상메모',
-                                                  style: TextStyle(
-                                                      color: Colors.black54,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20)),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 120,
-                                            child: Center(
-                                              child: Text(
-                                                '일상메모를 기록하세요',
-                                                style: TextStyle(
-                                                    color: Colors.black54,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )),
-                                  SizedBox(
-                                    height: 25,
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: NeumorphicIcon(
-                                        Icons.star,
-                                        size: 25,
-                                        style: const NeumorphicStyle(
-                                            shape: NeumorphicShape.convex,
-                                            depth: 2,
-                                            color: Colors.black45,
-                                            lightSource: LightSource.topLeft),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            color: Colors.white,
-                          ),
+          child: memocontent.isEmpty
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: NeumorphicText(
+                        '기록된 메모가 없네요;;;',
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: Colors.black45,
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: ContainerDesign(
+                    )
+                  ],
+                )
+              : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: memocontent.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            DelOrEditMemo(context, index);
+                          },
+                          child: ContainerDesign(
                             child: SizedBox(
-                              height: 200,
+                              height: 100,
                               child: Column(
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Column(
-                                        children: const [
+                                  Column(
+                                        children: [
                                           SizedBox(
                                             height: 30,
                                             child: Center(
-                                              child: Text('일상메모',
-                                                  style: TextStyle(
+                                                child: Text(memotitle[index],
+                                                  softWrap: true,
+                                                  maxLines: 2,
+                                                  style: const TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 20)),
-                                            ),
+                                              )
                                           ),
                                           SizedBox(
-                                            height: 120,
-                                            child: Center(
-                                              child: Text(
-                                                '일상메모를 기록하세요',
-                                                style: TextStyle(
+                                            height: 50,
+                                            child: Text(
+                                                memocontent[index],
+                                                maxLines: 2,
+                                                softWrap: true,
+                                                style: const TextStyle(
                                                     color: Colors.black54,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 15),
-                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                            ),
                                           ),
                                         ],
-                                      )),
-                                  SizedBox(
-                                    height: 25,
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: NeumorphicIcon(
-                                        Icons.star,
-                                        size: 25,
-                                        style: const NeumorphicStyle(
-                                            shape: NeumorphicShape.convex,
-                                            depth: 2,
-                                            color: Colors.black45,
-                                            lightSource: LightSource.topLeft),
                                       ),
-                                    ),
-                                  ),
+                                  SizedBox(
+                                      height: 20,
+                                      child: memostar[index] == 1
+                                          ? Container(
+                                              alignment: Alignment.center,
+                                              child: NeumorphicIcon(
+                                                Icons.star,
+                                                size: 20,
+                                                style: const NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    depth: 2,
+                                                    color: Colors.black45,
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            )
+                                          : (memostar[index] == 2
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: NeumorphicIcon(
+                                                        Icons.star,
+                                                        size: 20,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: NeumorphicIcon(
+                                                        Icons.star,
+                                                        size: 20,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: NeumorphicIcon(
+                                                        Icons.star,
+                                                        size: 20,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: NeumorphicIcon(
+                                                        Icons.star,
+                                                        size: 20,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: NeumorphicIcon(
+                                                        Icons.star,
+                                                        size: 20,
+                                                        style: const NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            color:
+                                                                Colors.black45,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ))),
                                 ],
                               ),
                             ),
                             color: Colors.white,
                           ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  )
-                ],
-              );
-            },
-          ));
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    );
+                  },
+                ));
     });
   }
 }

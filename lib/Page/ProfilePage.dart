@@ -182,6 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   S_Container2() {
+    //프로버전 구매시 보이지 않게 함
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [ADEvents(context)],

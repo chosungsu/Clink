@@ -17,6 +17,12 @@ class MyTheme {
     fontWeight: FontWeight.bold,
   );
 
+  static final TextStyle kAppSecondTitle = GoogleFonts.jua(
+    fontSize: 20,
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+  );
+
   static const TextStyle heading2 = TextStyle(
     color: Color(0xff686795),
     fontSize: 18,
