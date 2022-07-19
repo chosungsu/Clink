@@ -1,5 +1,6 @@
 
 import 'package:clickbyme/DB/PageList.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +45,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: BGColor(),
       body: UI(),
     ));
   }
@@ -54,8 +55,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: BGColor(),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,12 +91,12 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                 child: NeumorphicIcon(
                                                   Icons.keyboard_arrow_left,
                                                   size: 30,
-                                                  style: const NeumorphicStyle(
+                                                  style: NeumorphicStyle(
                                                       shape: NeumorphicShape
                                                           .convex,
                                                       depth: 2,
                                                       surfaceIntensity: 0.5,
-                                                      color: Colors.black45,
+                                                      color: TextColor(),
                                                       lightSource:
                                                           LightSource.topLeft),
                                                 ),
@@ -119,8 +120,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize: secondTitleTextsize(),
-                                                          color:
-                                                              Colors.black45),
+                                                          color:TextColor(),),
                                                     ),
                                                   ),
                                                 ],
@@ -149,11 +149,11 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                             child: NeumorphicIcon(
                                               Icons.delete,
                                               size: 30,
-                                              style: const NeumorphicStyle(
+                                              style: NeumorphicStyle(
                                                   shape: NeumorphicShape.convex,
                                                   depth: 2,
                                                   surfaceIntensity: 0.5,
-                                                  color: Colors.black45,
+                                                  color: TextColor(),
                                                   lightSource:
                                                       LightSource.topLeft),
                                             ),
@@ -244,9 +244,9 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                 index
                                             ? Colors.grey.shade400
                                             : Colors.white),
-                                    side: const BorderSide(
+                                    side: BorderSide(
                                       width: 1,
-                                      color: Colors.black45,
+                                      color: TextColor(),
                                     )),
                                 onPressed: () {
                                   setState(() {
@@ -395,7 +395,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                 height: 10,
                               ),
                               ContainerDesign(
-                                color: Colors.white,
+                                color: BGColor(),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -416,7 +416,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                     Text(
                                                       _list_ad[index].title,
                                                       style: TextStyle(
-                                                          color: Colors.black54,
+                                                          color: TextColor(),
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize: contentTextsize()),
@@ -434,7 +434,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                       .date
                                                       .toString(),
                                                   style: TextStyle(
-                                                      color: Colors.black54,
+                                                      color: TextColor(),
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: contentTextsize()),
@@ -461,7 +461,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                     child: Text(
                       '공지사항이 없습니다;;;',
                       style: TextStyle(
-                          color: Colors.black54,
+                          color: TextColor(),
                           fontWeight: FontWeight.bold,
                           fontSize: secondTitleTextsize()),
                       overflow: TextOverflow.ellipsis,
@@ -497,7 +497,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                 height: 10,
                               ),
                               ContainerDesign(
-                                color: Colors.white,
+                                color: BGColor(),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -518,7 +518,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                     Text(
                                                       _list_ad[index].title,
                                                       style: TextStyle(
-                                                          color: Colors.black54,
+                                                          color: TextColor(),
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize: contentTextsize()),
@@ -536,7 +536,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                       .date
                                                       .toString(),
                                                   style: TextStyle(
-                                                      color: Colors.black54,
+                                                      color: TextColor(),
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: contentTextsize()),
@@ -563,7 +563,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                     child: Text(
                       '공지사항이 없습니다;;;',
                       style: TextStyle(
-                          color: Colors.black54,
+                          color: TextColor(),
                           fontWeight: FontWeight.bold,
                           fontSize: secondTitleTextsize()),
                       overflow: TextOverflow.ellipsis,
