@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
@@ -7,6 +8,7 @@ import 'package:clickbyme/sheets/settingMemoHome.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -52,7 +54,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: BGColor(),
       body: UI(),
     ));
   }
@@ -62,8 +64,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: BGColor()
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,11 +96,11 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                           child: NeumorphicIcon(
                                             Icons.keyboard_arrow_left,
                                             size: 30,
-                                            style: const NeumorphicStyle(
+                                            style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
-                                                color: Colors.black45,
+                                                color: TextColor(),
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -115,7 +117,11 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                               fit: FlexFit.tight,
                                               child: Text(
                                                 'Memo',
-                                                style: MyTheme.kAppTitle,
+                                                style: GoogleFonts.lobster(
+                                                fontSize: 25,
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                              )
                                               ),
                                             ),
                                             SizedBox(
@@ -139,7 +145,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.add,
                                                         size: 30,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
@@ -147,7 +153,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                             surfaceIntensity:
                                                                 0.5,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -170,7 +176,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.settings,
                                                         size: 30,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
@@ -178,7 +184,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                             surfaceIntensity:
                                                                 0.5,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -240,7 +246,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   Search() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         SizedBox(
             height: 50,
             child: ContainerDesign(
@@ -248,22 +254,22 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                   textAlign: TextAlign.start,
                   textAlignVertical: TextAlignVertical.center,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: TextColor(),
                       fontWeight: FontWeight.bold,
                       fontSize: 18),
                   decoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: TextColor(),
                       border: InputBorder.none,
                       hintMaxLines: 2,
                       hintText: '톱니바퀴 -> 조건설정 후 검색',
                       hintStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
-                          color: Colors.black45),
+                          color: BGColor()),
                       prefixIcon: Icon(Icons.search),
                       isCollapsed: true,
-                      prefixIconColor: Colors.black),
+                      prefixIconColor: TextColor(),),
                 ),
                 color: Colors.white))
       ],
@@ -298,10 +304,10 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                     Center(
                       child: NeumorphicText(
                         '기록된 메모가 없네요;;;',
-                        style: const NeumorphicStyle(
+                        style: NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
-                          color: Colors.black45,
+                          color: TextColor(),
                         ),
                         textStyle: NeumorphicTextStyle(
                           fontWeight: FontWeight.bold,
@@ -339,8 +345,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                 child: Text(memotitle[index],
                                                   softWrap: true,
                                                   maxLines: 2,
-                                                  style: const TextStyle(
-                                                      color: Colors.black54,
+                                                  style: TextStyle(
+                                                      color: TextColor(),
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 20)),
@@ -352,8 +358,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                 memocontent[index],
                                                 maxLines: 2,
                                                 softWrap: true,
-                                                style: const TextStyle(
-                                                    color: Colors.black54,
+                                                style: TextStyle(
+                                                    color: TextColor(),
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 15),
                                               ),
@@ -368,11 +374,11 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                               child: NeumorphicIcon(
                                                 Icons.star,
                                                 size: 20,
-                                                style: const NeumorphicStyle(
+                                                style: NeumorphicStyle(
                                                     shape:
                                                         NeumorphicShape.convex,
                                                     depth: 2,
-                                                    color: Colors.black45,
+                                                    color: TextColor(),
                                                     lightSource:
                                                         LightSource.topLeft),
                                               ),
@@ -388,13 +394,13 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.star,
                                                         size: 20,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
                                                             depth: 2,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -406,13 +412,13 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.star,
                                                         size: 20,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
                                                             depth: 2,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -430,13 +436,13 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.star,
                                                         size: 20,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
                                                             depth: 2,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -448,13 +454,13 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.star,
                                                         size: 20,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
                                                             depth: 2,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -466,13 +472,13 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.star,
                                                         size: 20,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
                                                             depth: 2,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -483,7 +489,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                 ],
                               ),
                             ),
-                            color: Colors.white,
+                            color: BGColor()
                           ),
                         ),
                         const SizedBox(

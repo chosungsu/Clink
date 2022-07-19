@@ -1,10 +1,13 @@
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/RoutineScript.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:page_transition/page_transition.dart';
@@ -65,7 +68,7 @@ class _RoutineHomeState extends State<RoutineHome> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: BGColor(),
       body: UI(),
     ));
   }
@@ -75,8 +78,8 @@ class _RoutineHomeState extends State<RoutineHome> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: BGColor()
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,11 +110,11 @@ class _RoutineHomeState extends State<RoutineHome> {
                                           child: NeumorphicIcon(
                                             Icons.keyboard_arrow_left,
                                             size: 30,
-                                            style: const NeumorphicStyle(
+                                            style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
-                                                color: Colors.black45,
+                                                color: TextColor(),
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -128,7 +131,11 @@ class _RoutineHomeState extends State<RoutineHome> {
                                               fit: FlexFit.tight,
                                               child: Text(
                                                 'Routine',
-                                                style: MyTheme.kAppTitle,
+                                                style: GoogleFonts.lobster(
+                                                fontSize: 25,
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                              )
                                               ),
                                             ),
                                             SizedBox(
@@ -156,7 +163,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.add,
                                                         size: 30,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
@@ -164,7 +171,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                                             surfaceIntensity:
                                                                 0.5,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -188,7 +195,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                                       child: NeumorphicIcon(
                                                         Icons.settings,
                                                         size: 30,
-                                                        style: const NeumorphicStyle(
+                                                        style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
@@ -196,7 +203,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                                             surfaceIntensity:
                                                                 0.5,
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -243,19 +250,19 @@ class _RoutineHomeState extends State<RoutineHome> {
 
   RoutineBox() {
     return SizedBox(
-      height: 150,
+      height: 170,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Flexible(
+              Flexible(
                 fit: FlexFit.tight,
                 child: Text('루틴 대시보드',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: TextColor(),
                         fontWeight: FontWeight.bold,
-                        fontSize: 18)),
+                        fontSize: contentTitleTextsize())),
               ),
               GestureDetector(
                 onTap: () {
@@ -266,11 +273,11 @@ class _RoutineHomeState extends State<RoutineHome> {
                 child: NeumorphicIcon(
                   Icons.refresh,
                   size: 30,
-                  style: const NeumorphicStyle(
+                  style: NeumorphicStyle(
                       shape: NeumorphicShape.convex,
                       depth: 2,
                       surfaceIntensity: 0.5,
-                      color: Colors.black45,
+                      color: TextColor(),
                       lightSource: LightSource.topLeft),
                 ),
               )
@@ -293,7 +300,7 @@ class _RoutineHomeState extends State<RoutineHome> {
               height: 100,
               width: MediaQuery.of(context).size.width - 40,
               child: ContainerDesign(
-                  color: Colors.white,
+                  color: BGColor(),
                   child: ListView.builder(
                       // the number of items in the list
                       itemCount: routineday.length,
@@ -306,16 +313,16 @@ class _RoutineHomeState extends State<RoutineHome> {
                           child: Column(
                             children: [
                               Text(routineday[index],
-                                  style: const TextStyle(
-                                      color: Colors.black54,
+                                  style: TextStyle(
+                                      color: TextColor(),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15)),
                               const SizedBox(
                                 height: 20,
                               ),
                               Text(routinesucceed[index].toString() + '%',
-                                  style: const TextStyle(
-                                      color: Colors.black54,
+                                  style: TextStyle(
+                                      color: TextColor(),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15))
                             ],
@@ -327,7 +334,7 @@ class _RoutineHomeState extends State<RoutineHome> {
               height: 100,
               width: MediaQuery.of(context).size.width - 40,
               child: ContainerDesign(
-                  color: Colors.white,
+                  color: BGColor(),
                   child: ListView.builder(
                       // the number of items in the list
                       itemCount: routineday.length,
@@ -340,8 +347,8 @@ class _RoutineHomeState extends State<RoutineHome> {
                           child: Column(
                             children: [
                               Text(routineday[index],
-                                  style: const TextStyle(
-                                      color: Colors.black54,
+                                  style: TextStyle(
+                                      color: TextColor(),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15)),
                               const SizedBox(
@@ -353,7 +360,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                   height: 20,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
-                                      color: Colors.white,
+                                      color: BGColor(),
                                       border: Border.all(
                                           color: Colors.grey.shade400,
                                           width: 1,
@@ -363,8 +370,8 @@ class _RoutineHomeState extends State<RoutineHome> {
                                           personwith[0]
                                               .toString()
                                               .substring(0, 1),
-                                          style: const TextStyle(
-                                              color: Colors.black54,
+                                          style: TextStyle(
+                                              color: TextColor(),
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15))
                                       : (routinesucceed[index] < 70
@@ -372,16 +379,16 @@ class _RoutineHomeState extends State<RoutineHome> {
                                               personwith[1]
                                                   .toString()
                                                   .substring(0, 1),
-                                              style: const TextStyle(
-                                                  color: Colors.black54,
+                                              style: TextStyle(
+                                                  color: TextColor(),
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 15))
                                           : Text(
                                               personwith[2]
                                                   .toString()
                                                   .substring(0, 1),
-                                              style: const TextStyle(
-                                                  color: Colors.black54,
+                                              style: TextStyle(
+                                                  color: TextColor(),
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 15))))
                             ],
@@ -398,11 +405,11 @@ class _RoutineHomeState extends State<RoutineHome> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Play',
-              style: const TextStyle(
-                  color: Colors.black54,
+          Text('Play',
+              style: TextStyle(
+                  color: TextColor(),
                   fontWeight: FontWeight.bold,
-                  fontSize: 18)),
+                  fontSize: contentTitleTextsize())),
           const SizedBox(
             height: 20,
           ),
@@ -450,8 +457,8 @@ class _RoutineHomeState extends State<RoutineHome> {
                                       velocity: const Velocity(
                                           pixelsPerSecond: Offset(50, 0)),
                                       delayBefore: const Duration(milliseconds: 500),
-                                      style: const TextStyle(
-                                          color: Colors.black54,
+                                      style: TextStyle(
+                                          color: TextColor(),
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18),
                                       textAlign: TextAlign.right,
@@ -474,11 +481,11 @@ class _RoutineHomeState extends State<RoutineHome> {
                                               ? Icons.play_circle_outline
                                               : Icons.check_circle_outline,
                                           size: 30,
-                                          style: const NeumorphicStyle(
+                                          style: NeumorphicStyle(
                                               shape: NeumorphicShape.convex,
                                               depth: 2,
                                               surfaceIntensity: 0.5,
-                                              color: Colors.black45,
+                                              color: TextColor(),
                                               lightSource: LightSource.topLeft),
                                         ),
                                       ))),
@@ -487,7 +494,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                         ],
                       ),
                     ),
-                    color: Colors.white,
+                    color: BGColor()
                   ),
                   const SizedBox(
                     height: 10,

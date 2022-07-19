@@ -1,5 +1,7 @@
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class MyTheme {
   MyTheme._();
@@ -10,18 +12,14 @@ class MyTheme {
   static Color kUnreadChatBG = const Color(0xffEE1D1D);
   static Color chatbotColor = Colors.lightGreen;
   static Color userchatColor = Colors.white;
-
-  static final TextStyle kAppTitle = GoogleFonts.lobster(
-    fontSize: 23,
-    color: Colors.black45,
-    fontWeight: FontWeight.bold,
-  );
-
-  static final TextStyle kAppSecondTitle = GoogleFonts.jua(
-    fontSize: 20,
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-  );
+  static Color colorWhite = Colors.white;
+  static Color colorblack = Colors.black;
+  static Color colorWhite_drawer = Colors.white;
+  static Color colorblack_drawer = Colors.black;
+  static Color colorselected_drawer = Colors.deepPurple;
+  static Color colornotselected_drawer = Colors.black45;
+  static Color colorselected_black_drawer = Colors.deepPurple;
+  static Color colornotselected_black_drawer = Colors.white;
 
   static const TextStyle heading2 = TextStyle(
     color: Color(0xff686795),

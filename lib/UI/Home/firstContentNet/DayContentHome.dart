@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
@@ -77,7 +78,7 @@ class _DayContentHomeState extends State<DayContentHome> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: BGColor(),
       body: EnterCheckUi(),
     ));
   }
@@ -91,8 +92,8 @@ class _DayContentHomeState extends State<DayContentHome> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: BGColor()
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,11 +188,11 @@ class _DayContentHomeState extends State<DayContentHome> {
                     child: NeumorphicIcon(
                       Icons.keyboard_arrow_left,
                       size: 30,
-                      style: const NeumorphicStyle(
+                      style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,
                           depth: 2,
                           surfaceIntensity: 0.5,
-                          color: Colors.black45,
+                          color: TextColor(),
                           lightSource: LightSource.topLeft),
                     ),
                   )),
@@ -221,26 +222,27 @@ class _DayContentHomeState extends State<DayContentHome> {
                     child: NeumorphicIcon(
                       Icons.add_circle_outlined,
                       size: 30,
-                      style: const NeumorphicStyle(
+                      style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,
                           depth: 2,
                           surfaceIntensity: 0.5,
-                          color: Colors.black45,
+                          color: TextColor(),
                           lightSource: LightSource.topLeft),
                     ),
                   )),
-              titleTextStyle: const TextStyle(
-                color: Colors.black45,
+              titleTextStyle: TextStyle(
+                color: TextColor(),
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
               titleCentered: false,
               formatButtonShowsNext: false),
-          calendarStyle: const CalendarStyle(
+          calendarStyle: CalendarStyle(
               isTodayHighlighted: true,
               selectedDecoration:
                   BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-              selectedTextStyle: TextStyle(color: Colors.white),
+              selectedTextStyle: TextStyle(color: TextColor()),
+              defaultTextStyle: TextStyle(color: TextColor()),
               weekendTextStyle: TextStyle(color: Colors.blue)),
         ),
         Container(
@@ -337,18 +339,18 @@ class _DayContentHomeState extends State<DayContentHome> {
                                           style: NeumorphicStyle(
                                             shape: NeumorphicShape.flat,
                                             depth: 3,
-                                            color: Colors.grey.shade400,
+                                            color: TextColor(),
                                           ),
                                           textStyle: NeumorphicTextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20,
                                           ),
                                         ),
-                                        const Divider(
+                                        Divider(
                                           thickness: 2,
                                           height: 15,
                                           endIndent: 20,
-                                          color: Colors.black45,
+                                          color: TextColor(),
                                         ),
                                       ],
                                     )
@@ -382,18 +384,18 @@ class _DayContentHomeState extends State<DayContentHome> {
                                               style: NeumorphicStyle(
                                                 shape: NeumorphicShape.flat,
                                                 depth: 3,
-                                                color: Colors.grey.shade400,
+                                                color: TextColor(),
                                               ),
                                               textStyle: NeumorphicTextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20,
                                               ),
                                             ),
-                                            const Divider(
+                                            Divider(
                                               thickness: 2,
                                               height: 15,
                                               endIndent: 20,
-                                              color: Colors.black45,
+                                              color: TextColor(),
                                             ),
                                           ],
                                         ))),
@@ -408,10 +410,10 @@ class _DayContentHomeState extends State<DayContentHome> {
                                   padding: const EdgeInsets.only(
                                       top: 10, bottom: 10, left: 10, right: 10),
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: BGColor(),
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
-                                          color: Colors.black45, width: 1)),
+                                          color: TextColor(), width: 1)),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -420,8 +422,8 @@ class _DayContentHomeState extends State<DayContentHome> {
                                         flex: 2,
                                         child: Text(
                                           calendardoinglist[index].toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black54,
+                                          style: TextStyle(
+                                              color: TextColor(),
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20),
                                           overflow: TextOverflow.ellipsis,
@@ -432,8 +434,8 @@ class _DayContentHomeState extends State<DayContentHome> {
                                         child: Text(
                                           calendarwhattimelist[index]
                                               .toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black54,
+                                          style: TextStyle(
+                                              color: TextColor(),
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20),
                                           overflow: TextOverflow.ellipsis,
@@ -451,13 +453,13 @@ class _DayContentHomeState extends State<DayContentHome> {
                                                     height: 25,
                                                     width: 25,
                                                     decoration: BoxDecoration(
-                                                        color: Colors.white,
+                                                        color: BGColor(),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(100),
                                                         border: Border.all(
                                                             color:
-                                                                Colors.black45,
+                                                                TextColor(),
                                                             width: 1)),
                                                   ),
                                                   const SizedBox(

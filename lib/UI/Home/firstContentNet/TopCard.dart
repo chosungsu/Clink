@@ -1,4 +1,6 @@
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/RoutineHome.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ class TopCard extends StatelessWidget {
         height: 80,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
-            color: Colors.white,
+            color: BGColor(),
             child: Column(
           children: [
             //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
@@ -45,7 +47,7 @@ class TopCard extends StatelessWidget {
                                   );
                                 },
                                 child: SizedBox(
-                                  height: 45,
+                                  height: 55,
                                   child: Column(
                                     children: [
                                       SizedBox(
@@ -59,24 +61,24 @@ class TopCard extends StatelessWidget {
                                             child: NeumorphicIcon(
                                               Icons.calendar_month,
                                               size: 25,
-                                              style: const NeumorphicStyle(
+                                              style: NeumorphicStyle(
                                                   shape: NeumorphicShape.convex,
                                                   depth: 2,
-                                                  color: Colors.black45,
+                                                  color: TextColor(),
                                                   lightSource:
                                                       LightSource.topLeft),
                                             ),
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 20,
+                                      SizedBox(
+                                        height: 30,
                                         child: Center(
                                           child: Text('캘린더',
                                               style: TextStyle(
-                                                  color: Colors.black54,
+                                                  color: TextColor(),
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 15)),
+                                                  fontSize: contentTextsize())),
                                         ),
                                       ),
                                     ],
@@ -95,7 +97,7 @@ class TopCard extends StatelessWidget {
                                       );
                                     },
                                     child: SizedBox(
-                                      height: 45,
+                                      height: 55,
                                       child: Column(
                                         children: [
                                           SizedBox(
@@ -109,26 +111,26 @@ class TopCard extends StatelessWidget {
                                                 child: NeumorphicIcon(
                                                   Icons.description,
                                                   size: 25,
-                                                  style: const NeumorphicStyle(
+                                                  style: NeumorphicStyle(
                                                       shape: NeumorphicShape
                                                           .convex,
                                                       depth: 2,
-                                                      color: Colors.black45,
+                                                      color: TextColor(),
                                                       lightSource:
                                                           LightSource.topLeft),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 20,
+                                          SizedBox(
+                                            height: 30,
                                             child: Center(
                                               child: Text('일상메모',
                                                   style: TextStyle(
-                                                      color: Colors.black54,
+                                                      color: TextColor(),
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 15)),
+                                                      fontSize: contentTextsize())),
                                             ),
                                           ),
                                         ],
@@ -146,7 +148,7 @@ class TopCard extends StatelessWidget {
                                       );
                                     },
                                     child: SizedBox(
-                                        height: 45,
+                                        height: 55,
                                         child: Column(
                                           children: [
                                             SizedBox(
@@ -158,25 +160,25 @@ class TopCard extends StatelessWidget {
                                                 child: NeumorphicIcon(
                                                   Icons.add_task,
                                                   size: 25,
-                                                  style: const NeumorphicStyle(
+                                                  style: NeumorphicStyle(
                                                       shape: NeumorphicShape
                                                           .convex,
                                                       depth: 2,
-                                                      color: Colors.black45,
+                                                      color: TextColor(),
                                                       lightSource:
                                                           LightSource.topLeft),
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 20,
+                                            SizedBox(
+                                              height: 30,
                                               child: Center(
                                                 child: Text('갓생루틴',
                                                     style: TextStyle(
-                                                        color: Colors.black54,
+                                                        color: TextColor(),
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: 15)),
+                                                        fontSize: contentTextsize())),
                                               ),
                                             ),
                                           ],

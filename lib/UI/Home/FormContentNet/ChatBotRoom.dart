@@ -3,6 +3,7 @@ import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class ChatBotRoom extends StatefulWidget {
@@ -129,7 +130,11 @@ class _ChatBotRoomState extends State<ChatBotRoom> {
                                               fit: FlexFit.tight,
                                               child: Text(
                                                 'Chatty',
-                                                style: MyTheme.kAppTitle,
+                                                style: GoogleFonts.lobster(
+                                                fontSize: 23,
+                                                //color: widget.coloritems,
+                                                fontWeight: FontWeight.bold,
+                                              )
                                               ),
                                             ),
                                           ],

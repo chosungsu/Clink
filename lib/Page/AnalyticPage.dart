@@ -1,5 +1,7 @@
 import 'package:clickbyme/Page/EnterCheckPage.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Analytics/EntercheckView.dart';
 import 'package:clickbyme/UI/Analytics/ShareView.dart';
 import 'package:clickbyme/UI/Analytics/ReportView.dart';
@@ -7,12 +9,21 @@ import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
+import 'package:clickbyme/route.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/NoBehavior.dart';
 import 'DrawerScreen.dart';
 
 class AnalyticPage extends StatefulWidget {
+  const AnalyticPage(
+      {Key? key,required this.colorbackground,
+      required this.coloritems})
+      : super(key: key);
+  final Color colorbackground;
+  final Color coloritems;
   @override
   State<StatefulWidget> createState() => _AnalyticPageState();
 }
@@ -23,7 +34,10 @@ class _AnalyticPageState extends State<AnalyticPage>
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
+  Color color1 = Colors.white;
+  Color color2 = Colors.white;
   final PageController _pController = PageController();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -40,14 +54,22 @@ class _AnalyticPageState extends State<AnalyticPage>
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          DrawerScreen(),
-          AnalyticBody(context, _pController),
-        ],
-      ),
-    ));
+            backgroundColor: BGColor(),
+            body: isdraweropen == true
+                ? Stack(
+                    children: [
+                      Container(
+                        width: 50,
+                        child: DrawerScreen(),
+                      ),
+                      AnalyticBody(context, _pController),
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      AnalyticBody(context, _pController),
+                    ],
+                  )));
   }
 
   Widget AnalyticBody(BuildContext context, PageController pController) {
@@ -59,9 +81,7 @@ class _AnalyticPageState extends State<AnalyticPage>
       child: SizedBox(
         height: height,
         child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
+          color: BGColor(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -96,11 +116,11 @@ class _AnalyticPageState extends State<AnalyticPage>
                                           child: NeumorphicIcon(
                                             Icons.keyboard_arrow_left,
                                             size: 30,
-                                            style: const NeumorphicStyle(
+                                            style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
-                                                color: Colors.black45,
+                                                color: TextColor(),
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -121,11 +141,11 @@ class _AnalyticPageState extends State<AnalyticPage>
                                           child: NeumorphicIcon(
                                             Icons.menu,
                                             size: 30,
-                                            style: const NeumorphicStyle(
+                                            style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 surfaceIntensity: 0.5,
                                                 depth: 2,
-                                                color: Colors.black45,
+                                                color: TextColor(),
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -141,7 +161,11 @@ class _AnalyticPageState extends State<AnalyticPage>
                                           fit: FlexFit.tight,
                                           child: Text(
                                             'Explore',
-                                            style: MyTheme.kAppTitle,
+                                            style: GoogleFonts.lobster(
+                                                fontSize: 25,
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                              )
                                           ),
                                         ),
                                       ],
@@ -220,13 +244,13 @@ class _AnalyticPageState extends State<AnalyticPage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Flexible(
+          Flexible(
             fit: FlexFit.tight,
             child: Text('액티비티',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: TextColor(),
                     fontWeight: FontWeight.bold,
-                    fontSize: 18)),
+                    fontSize: contentTextsize())),
           ),
           const SizedBox(
             height: 20,
@@ -246,13 +270,13 @@ class _AnalyticPageState extends State<AnalyticPage>
         children: [
           Row(
             children: [
-              const Flexible(
+              Flexible(
                 fit: FlexFit.tight,
                 child: Text('출석현황',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: TextColor(),
                         fontWeight: FontWeight.bold,
-                        fontSize: 18)),
+                        fontSize: contentTextsize())),
               ),
               GestureDetector(
                 onTap: () {
@@ -264,11 +288,11 @@ class _AnalyticPageState extends State<AnalyticPage>
                         child: EnterCheckPage()),
                   );
                 },
-                child: const Text('Go',
+                child: Text('Go',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: TextColor(),
                         fontWeight: FontWeight.bold,
-                        fontSize: 15)),
+                        fontSize: contentTextsize())),
               )
             ],
           ),
@@ -295,13 +319,13 @@ class _AnalyticPageState extends State<AnalyticPage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Flexible(
+          Flexible(
             fit: FlexFit.tight,
             child: Text('루틴활동',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: TextColor(),
                     fontWeight: FontWeight.bold,
-                    fontSize: 18)),
+                    fontSize: contentTextsize())),
           ),
           const SizedBox(
             height: 20,

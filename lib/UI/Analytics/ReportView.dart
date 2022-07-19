@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -26,7 +27,7 @@ class ReportView extends StatelessWidget {
         height: 80,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
-            color: Colors.white,
+            color: BGColor(),
             child: Hive.box('user_setting').get('numorimogi_routine') == null
                 ? ListView.builder(
                     // the number of items in the list
@@ -40,16 +41,16 @@ class ReportView extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(routineday[index],
-                                style: const TextStyle(
-                                    color: Colors.black54,
+                                style: TextStyle(
+                                    color: TextColor(),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15)),
                             const SizedBox(
                               height: 20,
                             ),
                             Text(routinesucceed[index].toString() + '%',
-                                style: const TextStyle(
-                                    color: Colors.black54,
+                                style: TextStyle(
+                                    color: TextColor(),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15))
                           ],
@@ -69,16 +70,16 @@ class ReportView extends StatelessWidget {
                             child: Column(
                               children: [
                                 Text(routineday[index],
-                                    style: const TextStyle(
-                                        color: Colors.black54,
+                                    style: TextStyle(
+                                        color: TextColor(),
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15)),
                                 const SizedBox(
                                   height: 20,
                                 ),
                                 Text(routinesucceed[index].toString() + '%',
-                                    style: const TextStyle(
-                                        color: Colors.black54,
+                                    style: TextStyle(
+                                        color: TextColor(),
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15))
                               ],
@@ -97,8 +98,8 @@ class ReportView extends StatelessWidget {
                             child: Column(
                               children: [
                                 Text(routineday[index],
-                                    style: const TextStyle(
-                                        color: Colors.black54,
+                                    style: TextStyle(
+                                        color: TextColor(),
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15)),
                                 const SizedBox(
@@ -111,7 +112,7 @@ class ReportView extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(100),
-                                        color: Colors.white,
+                                        color: BGColor(),
                                         border: Border.all(
                                             color: Colors.grey.shade400,
                                             width: 1,
@@ -121,8 +122,8 @@ class ReportView extends StatelessWidget {
                                             personwith[0]
                                                 .toString()
                                                 .substring(0, 1),
-                                            style: const TextStyle(
-                                                color: Colors.black54,
+                                            style: TextStyle(
+                                                color: TextColor(),
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 15))
                                         : (routinesucceed[index] < 70
@@ -130,16 +131,16 @@ class ReportView extends StatelessWidget {
                                                 personwith[1]
                                                     .toString()
                                                     .substring(0, 1),
-                                                style: const TextStyle(
-                                                    color: Colors.black54,
+                                                style: TextStyle(
+                                                    color: TextColor(),
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 15))
                                             : Text(
                                                 personwith[2]
                                                     .toString()
                                                     .substring(0, 1),
-                                                style: const TextStyle(
-                                                    color: Colors.black54,
+                                                style: TextStyle(
+                                                    color: TextColor(),
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 15))))
                               ],

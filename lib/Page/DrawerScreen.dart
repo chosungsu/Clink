@@ -1,4 +1,6 @@
 import 'package:clickbyme/Enums/Drawer_item.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
@@ -12,19 +14,29 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   int page_index = Hive.box('user_setting').get('page_index');
   late bool selected;
+  Color colorselection = Colors.white;
+  @override
+  void initState() {
+    super.initState();
+    Hive.box('user_setting').get('which_color_background') == null
+        ? colorselection = MyTheme.colorWhite_drawer
+        : (Hive.box('user_setting').get('which_color_background') == 0
+            ? colorselection = MyTheme.colorWhite_drawer
+            : colorselection = MyTheme.colorblack_drawer);
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 50,
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: BGColor()
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: drawerItems.map((element) {
           selected = drawerItems.indexOf(element) == page_index;
           return Padding(
-              padding: const EdgeInsets.only(bottom: 50),
+              padding: const EdgeInsets.only(top: 30, bottom: 30),
               child: InkWell(
                 onTap: () {
                   if (element.containsValue(Icons.home)) {
@@ -32,18 +44,16 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       PageTransition(
                         type: PageTransitionType.rightToLeft,
                         child: const MyHomePage(
-                          title: 'BOnd',
                           index: 0,
                         ),
                       ),
                     );
                     Hive.box('user_setting').put('page_index', 0);
-                  }  else if (element.containsValue(Icons.bar_chart)) {
+                  } else if (element.containsValue(Icons.bar_chart)) {
                     Navigator.of(context).pushReplacement(
                       PageTransition(
                         type: PageTransitionType.rightToLeft,
                         child: const MyHomePage(
-                          title: 'BOnd',
                           index: 1,
                         ),
                       ),
@@ -54,7 +64,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       PageTransition(
                         type: PageTransitionType.rightToLeft,
                         child: const MyHomePage(
-                          title: 'BOnd',
                           index: 2,
                         ),
                       ),
@@ -65,20 +74,24 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 child: Column(
                   children: [
                     selected
-                        ? Icon(element['icon'], color: Colors.deepPurple.shade300)
-                        : Icon(element['icon'], color: Colors.blueGrey.shade100),
+                        ? Icon(
+                            element['icon'],
+                            color: NaviColor(selected),
+                          )
+                        : Icon(element['icon'],
+                            color: NaviColor(selected),),
                     const SizedBox(
                       height: 20,
                     ),
                     selected
                         ? Text(element['title'],
                             style: TextStyle(
-                                color: Colors.deepPurple.shade300,
+                                color: NaviColor(selected),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20))
                         : Text(element['title'],
                             style: TextStyle(
-                                color: Colors.blueGrey.shade100,
+                                color: NaviColor(selected),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20)),
                   ],

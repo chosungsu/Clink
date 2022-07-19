@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/RoutineHome.dart';
@@ -47,7 +48,7 @@ class YourDayfulAd extends StatelessWidget {
                 child: Column(
                   children: [
                     ContainerDesign(
-                      color: Colors.white,
+                      color: BGColor(),
                       child: Column(
                         children: [
                           Stack(
@@ -63,7 +64,7 @@ class YourDayfulAd extends StatelessWidget {
                                       ),
                                       Text(spacecontent[index],
                                           style: TextStyle(
-                                              color: Colors.black54,
+                                              color: TextColor(),
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18)),
                                     ],
@@ -81,7 +82,7 @@ class YourDayfulAd extends StatelessWidget {
                                             style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 depth: 2,
-                                                color: Colors.black45,
+                                                color: TextColor(),
                                                 lightSource:
                                                     LightSource.topLeft),
                                           )
@@ -93,7 +94,7 @@ class YourDayfulAd extends StatelessWidget {
                                                     shape:
                                                         NeumorphicShape.convex,
                                                     depth: 2,
-                                                    color: Colors.black45,
+                                                    color: TextColor(),
                                                     lightSource:
                                                         LightSource.topLeft),
                                               )
@@ -104,7 +105,7 @@ class YourDayfulAd extends StatelessWidget {
                                                     shape:
                                                         NeumorphicShape.convex,
                                                     depth: 2,
-                                                    color: Colors.black45,
+                                                    color: TextColor(),
                                                     lightSource:
                                                         LightSource.topLeft),
                                               ))),

@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
@@ -38,7 +39,7 @@ class UserDetails extends StatelessWidget {
                         width: 10,
                       ),
                       Hive.box('user_info').get('id') == null
-                          ? const SizedBox(
+                          ? SizedBox(
                               height: 45,
                               child: Center(
                                 child: Text(
@@ -46,7 +47,7 @@ class UserDetails extends StatelessWidget {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18),
+                                      fontSize: contentTextsize()),
                                   overflow: TextOverflow.fade,
                                 ),
                               ),
@@ -57,10 +58,10 @@ class UserDetails extends StatelessWidget {
                                 child: Text(
                                   Hive.box('user_info').get('id').toString() +
                                       '님 Profile Card',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18),
+                                      fontSize: contentTextsize()),
                                   overflow: TextOverflow.fade,
                                 ),
                               ),
@@ -96,10 +97,10 @@ class UserDetails extends StatelessWidget {
                                 ),
                                 label: Text(
                                   '포토북',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: contentTextsize()),
                                 ),
                               ),),
                       ),
@@ -122,10 +123,10 @@ class UserDetails extends StatelessWidget {
                                 ),
                                 label: Text(
                                   '포인트',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: contentTextsize()),
                                 ),
                               )),
                       ),
@@ -148,10 +149,10 @@ class UserDetails extends StatelessWidget {
                                 ),
                                 label: Text(
                                   '뱃지',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: contentTextsize()),
                                 ),
                               )),
                       ),

@@ -1,14 +1,24 @@
 import 'dart:async';
+import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
+import 'package:clickbyme/route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Setting/UserDetails.dart';
 import '../UI/Setting/UserSettings.dart';
 import 'DrawerScreen.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage(
+      {Key? key, required this.colorbackground, required this.coloritems})
+      : super(key: key);
+  final Color colorbackground;
+  final Color coloritems;
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
 }
@@ -20,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -30,19 +41,29 @@ class _ProfilePageState extends State<ProfilePage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    print('dispose');
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: Colors.white,
-            body: Stack(
-              children: [
-                DrawerScreen(),
-                ProfileBody(context),
-              ],
-            )));
+            backgroundColor: BGColor(),
+            body: isdraweropen == true
+                ? Stack(
+                    children: [
+                      Container(
+                        width: 50,
+                        child: DrawerScreen(),
+                      ),
+                      ProfileBody(context),
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      ProfileBody(context),
+                    ],
+                  )));
   }
 
   Widget ProfileBody(BuildContext context) {
@@ -54,9 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: SizedBox(
         height: height,
         child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
+            color: BGColor(),
             child: Column(
               children: [
                 SizedBox(
@@ -84,11 +103,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                     child: NeumorphicIcon(
                                       Icons.keyboard_arrow_left,
                                       size: 30,
-                                      style: const NeumorphicStyle(
+                                      style: NeumorphicStyle(
                                           shape: NeumorphicShape.convex,
                                           depth: 2,
                                           surfaceIntensity: 0.5,
-                                          color: Colors.black45,
+                                          color: TextColor(),
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))
@@ -108,20 +127,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                     child: NeumorphicIcon(
                                       Icons.menu,
                                       size: 30,
-                                      style: const NeumorphicStyle(
+                                      style: NeumorphicStyle(
                                           shape: NeumorphicShape.convex,
                                           surfaceIntensity: 0.5,
                                           depth: 2,
-                                          color: Colors.black45,
+                                          color: TextColor(),
                                           lightSource: LightSource.topLeft),
                                     ),
                                   ))),
-                      const SizedBox(
+                      SizedBox(
                           child: Padding(
                         padding: EdgeInsets.only(left: 20),
                         child: Text('',
                             style: TextStyle(
-                                color: Colors.black45,
+                                color: widget.coloritems,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold)),
                       )),

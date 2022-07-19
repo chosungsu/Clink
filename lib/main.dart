@@ -4,7 +4,9 @@ import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Provider/EventProvider.dart';
 import 'package:clickbyme/Sub/DayEventAdd.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/UI/Setting/OptionChangePage.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
+import 'package:clickbyme/route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -47,14 +49,14 @@ class MyApp extends StatelessWidget {
           create: (context) => KakaoSignInController(),
           child: LoginSignPage(),
         ),
-        ChangeNotifierProvider(
+        /*ChangeNotifierProvider(
           create: (context) => GoogleSignInController(),
-          child: ProfilePage(),
+          child: const ProfilePage(colorbackground: null, coloritems: null,),
         ),
         ChangeNotifierProvider(
           create: (context) => KakaoSignInController(),
-          child: ProfilePage(),
-        ),
+          child: const ProfilePage(colorbackground: null, coloritems: null,),
+        ),*/
       ],
       child: MaterialApp(
         title: 'Flutter',
@@ -160,7 +162,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 height: height * 0.55,
                 child: Center(
                   child: NeumorphicText(
-                    'BOnD',
+                    'Habit Tracker',
                     style: const NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,

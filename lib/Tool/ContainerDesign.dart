@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:flutter/material.dart';
 
 class ContainerDesign extends StatelessWidget {
@@ -16,12 +17,12 @@ class ContainerDesign extends StatelessWidget {
             color: color,
             boxShadow: [
               BoxShadow(
-                  color: Colors.black54.withOpacity(0.5),
+                  color: TextColor().withOpacity(0.5),
                   blurRadius: 5,
                   spreadRadius: 0,
                   offset: Offset(1, 1)),
               BoxShadow(
-                  color: Colors.white.withOpacity(0.5),
+                  color: BGColor().withOpacity(0.5),
                   blurRadius: 5,
                   spreadRadius: 0,
                   offset: Offset(-1, -1)),

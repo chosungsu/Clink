@@ -1,6 +1,8 @@
 import 'package:clickbyme/DB/SpaceList.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/FormContentNet/FormCard.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
@@ -8,16 +10,21 @@ import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/ChangeSpace.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/YourDayfulAd.dart';
+import 'package:clickbyme/route.dart';
 import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/NoBehavior.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const HomePage(
+      {Key? key, required this.colorbackground, required this.coloritems})
+      : super(key: key);
+  final Color colorbackground;
+  final Color coloritems;
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -28,6 +35,9 @@ class _HomePageState extends State<HomePage> {
   double scalefactor = 1;
   bool isdraweropen = false;
   int currentPage = 0;
+  Color color1 = Colors.white;
+  Color color2 = Colors.white;
+
   late final PageController _pController;
   //프로 버전 구매시 사용하게될 코드
   bool isbought = false;
@@ -50,6 +60,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
+    /*color1 = widget.colorbackground;
+    color2 = widget.coloritems;
+    watchcolor();*/
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
   }
@@ -60,18 +73,35 @@ class _HomePageState extends State<HomePage> {
     _pController.dispose();
   }
 
+  /*void watchcolor() {
+    Stream.fromFuture(getBackColor()).listen((event1) {
+      color1 = event1;
+    });
+    Stream.fromFuture(getitemColor()).listen((event2) {
+      color2 = event2;
+    });
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          DrawerScreen(),
-          HomeUi(_pController),
-        ],
-      ),
-    ));
+            backgroundColor: BGColor(),
+            body: isdraweropen == true
+                ? Stack(
+                    children: [
+                      Container(
+                        width: 50,
+                        child: DrawerScreen(),
+                      ),
+                      HomeUi(_pController),
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      HomeUi(_pController),
+                    ],
+                  )));
   }
 
   HomeUi(PageController pController) {
@@ -83,9 +113,8 @@ class _HomePageState extends State<HomePage> {
       child: SizedBox(
         height: height,
         child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
+            color: BGColor(),
+            //decoration: BoxDecoration(color: colorselection),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -120,11 +149,11 @@ class _HomePageState extends State<HomePage> {
                                           child: NeumorphicIcon(
                                             Icons.keyboard_arrow_left,
                                             size: 30,
-                                            style: const NeumorphicStyle(
+                                            style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
-                                                color: Colors.black45,
+                                                color: TextColor(),
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -145,11 +174,11 @@ class _HomePageState extends State<HomePage> {
                                           child: NeumorphicIcon(
                                             Icons.menu,
                                             size: 30,
-                                            style: const NeumorphicStyle(
+                                            style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 surfaceIntensity: 0.5,
                                                 depth: 2,
-                                                color: Colors.black45,
+                                                color: TextColor(),
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -163,10 +192,12 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Flexible(
                                           fit: FlexFit.tight,
-                                          child: Text(
-                                            'Habit Tracker',
-                                            style: MyTheme.kAppTitle,
-                                          ),
+                                          child: Text('Habit Tracker',
+                                              style: GoogleFonts.lobster(
+                                                fontSize: 25,
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
                                         ),
                                         InkWell(
                                             onTap: () {
@@ -185,12 +216,12 @@ class _HomePageState extends State<HomePage> {
                                               child: NeumorphicIcon(
                                                 Icons.notifications_none,
                                                 size: 30,
-                                                style: const NeumorphicStyle(
+                                                style: NeumorphicStyle(
                                                     shape:
                                                         NeumorphicShape.convex,
                                                     surfaceIntensity: 0.5,
                                                     depth: 2,
-                                                    color: Colors.black45,
+                                                    color: TextColor(),
                                                     lightSource:
                                                         LightSource.topLeft),
                                               ),
@@ -297,6 +328,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   H_Container_1(double height) {
     //프로버전 구매시 보이지 않게 함
     return Column(
@@ -305,7 +337,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  
   H_Container_2(double height) {
     return SizedBox(
       height: 130,
@@ -313,13 +344,13 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Flexible(
+          Flexible(
             fit: FlexFit.tight,
             child: Text('카테고리',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: TextColor(),
                     fontWeight: FontWeight.bold,
-                    fontSize: 18)),
+                    fontSize: contentTitleTextsize())),
           ),
           const SizedBox(
             height: 20,
@@ -337,7 +368,11 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          EventShowCard(height: height, pageController: pController, pageindex: 0,),
+          EventShowCard(
+            height: height,
+            pageController: pController,
+            pageindex: 0,
+          ),
         ],
       ),
     );
@@ -347,20 +382,19 @@ class _HomePageState extends State<HomePage> {
     //프로버전 구매시 사용할 코드
     //isbought == false일 경우와 isbought == true일 경우 사이즈박스 크기를 제한 풀기...
     return SizedBox(
-      height:
-          isbought == false ? 110 * 3 : 110 * _list_ad.length.toDouble(),
+      height: isbought == false ? 110 * 3 : 110 * _list_ad.length.toDouble(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Flexible(
+              Flexible(
                 fit: FlexFit.tight,
                 child: Text('스페이스',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: TextColor(),
                         fontWeight: FontWeight.bold,
-                        fontSize: 18)),
+                        fontSize: contentTitleTextsize())),
               ),
               GestureDetector(
                 onTap: () {
@@ -372,11 +406,11 @@ class _HomePageState extends State<HomePage> {
                         child: ChangeSpace()),
                   );
                 },
-                child: const Text('변경',
+                child: Text('변경',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: TextColor(),
                         fontWeight: FontWeight.bold,
-                        fontSize: 15)),
+                        fontSize: contentTextsize())),
               )
             ],
           ),
@@ -388,6 +422,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   H_Container_5(double height) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

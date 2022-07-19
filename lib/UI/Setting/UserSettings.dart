@@ -1,3 +1,5 @@
+import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
 import 'package:clickbyme/UI/Setting/DeleteUser.dart';
 import 'package:clickbyme/UI/Setting/OptionChangePage.dart';
@@ -69,7 +71,7 @@ class UserSettings extends StatelessWidget {
                       height: 10,
                     ),
                     ContainerDesign(
-                        color: Colors.white,
+                        color: BGColor(),
                         child: SizedBox(
                       height: 40,
                       width: MediaQuery.of(context).size.width - 80,
@@ -84,10 +86,10 @@ class UserSettings extends StatelessWidget {
                                         index == 4
                                     ? '회원탈퇴'
                                     : list_title[index],
-                                style: const TextStyle(
-                                    color: Colors.black54,
+                                style: TextStyle(
+                                    color: TextColor(),
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18)),
+                                    fontSize: contentTextsize())),
                           ),
                           Container(
                             alignment: Alignment.center,
@@ -96,10 +98,10 @@ class UserSettings extends StatelessWidget {
                             child: NeumorphicIcon(
                               Icons.navigate_next,
                               size: 20,
-                              style: const NeumorphicStyle(
+                              style: NeumorphicStyle(
                                   shape: NeumorphicShape.convex,
                                   depth: 2,
-                                  color: Colors.black45,
+                                  color: TextColor(),
                                   lightSource: LightSource.topLeft),
                             ),
                           )

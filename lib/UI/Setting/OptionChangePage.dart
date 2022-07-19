@@ -1,9 +1,15 @@
+import 'package:clickbyme/Page/ProfilePage.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/route.dart';
 import 'package:clickbyme/sheets/pushalarmsetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../Tool/NoBehavior.dart';
 
@@ -18,11 +24,14 @@ class _OptionChangePageState extends State<OptionChangePage> {
   double myWidth = 0.0;
   bool isChecked_pushalarm = false;
   bool isChecked_adok = false;
+  Color colorselection = Colors.white;
+  Color coloritems = Colors.white;
   DateTime selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final List<String> list_app_setting = <String>[
     '배경색',
     '글자크기',
+    '메뉴바 위치',
   ];
   final List<String> list_noti_setting = <String>[
     '앱 푸쉬알림 설정',
@@ -51,7 +60,7 @@ class _OptionChangePageState extends State<OptionChangePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: BGColor(),
       body: Options(),
     ));
   }
@@ -61,8 +70,8 @@ class _OptionChangePageState extends State<OptionChangePage> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: BGColor(),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,11 +97,11 @@ class _OptionChangePageState extends State<OptionChangePage> {
                               child: NeumorphicIcon(
                                 Icons.keyboard_arrow_left,
                                 size: 30,
-                                style: const NeumorphicStyle(
+                                style: NeumorphicStyle(
                                     shape: NeumorphicShape.convex,
                                     depth: 2,
                                     surfaceIntensity: 0.5,
-                                    color: Colors.black45,
+                                    color: TextColor(),
                                     lightSource: LightSource.topLeft),
                               ),
                             ))),
@@ -153,16 +162,18 @@ class _OptionChangePageState extends State<OptionChangePage> {
           40 +
           60 * list_noti_setting.length.toDouble() +
           40 +
-          140,
+          170,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             children: [
-              Text(
-                '옵션을 원하는대로\n 변경하는 공간입니다.',
-                style: MyTheme.kAppSecondTitle,
-              ),
+              Text('옵션을 원하는대로\n 변경하는 공간입니다.',
+                  style: GoogleFonts.jua(
+                    fontSize: secondTitleTextsize(),
+                    color: TextColor(),
+                    fontWeight: FontWeight.bold,
+                  )),
             ],
           ),
           const SizedBox(
@@ -185,10 +196,10 @@ class _OptionChangePageState extends State<OptionChangePage> {
         child: Column(
           children: [
             Row(
-              children: const [
+              children: [
                 Icon(
                   Icons.tune,
-                  color: Colors.black45,
+                  color: TextColor(),
                 ),
                 SizedBox(
                   width: 10,
@@ -197,8 +208,8 @@ class _OptionChangePageState extends State<OptionChangePage> {
                   '앱 UI 설정',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black45),
+                      fontSize: contentTextsize(),
+                      color: TextColor()),
                 ),
               ],
             ),
@@ -218,7 +229,7 @@ class _OptionChangePageState extends State<OptionChangePage> {
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
-          itemCount: list_noti_setting.length,
+          itemCount: list_app_setting.length,
           itemBuilder: (context, index) {
             return Column(
               children: [
@@ -229,10 +240,10 @@ class _OptionChangePageState extends State<OptionChangePage> {
                     children: [
                       Text(
                         list_app_setting[index],
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.black45),
+                            fontSize: contentTextsize(),
+                            color: TextColor()),
                       ),
                       index == 0
                           ? SizedBox(
@@ -377,148 +388,311 @@ class _OptionChangePageState extends State<OptionChangePage> {
                                 ],
                               ),
                             )
-                          : SizedBox(
-                              height: 30,
-                              width: 183,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Flexible(
-                                      flex: 1,
-                                      child: SizedBox(
-                                        width: 90,
-                                        child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100)),
-                                                primary: Hive.box(
-                                                                'user_setting')
-                                                            .get(
-                                                                'which_text_size') ==
-                                                        0
-                                                    ? Colors.grey.shade400
-                                                    : (Hive.box('user_setting').get(
-                                                                'which_text_size') ==
-                                                            null
+                          : (index == 1
+                              ? SizedBox(
+                                  height: 30,
+                                  width: 183,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Flexible(
+                                          flex: 1,
+                                          child: SizedBox(
+                                            width: 90,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100)),
+                                                    primary: Hive.box(
+                                                                    'user_setting')
+                                                                .get(
+                                                                    'which_text_size') ==
+                                                            0
                                                         ? Colors.grey.shade400
-                                                        : Colors.white),
-                                                side: const BorderSide(
-                                                  width: 1,
-                                                  color: Colors.black45,
-                                                )),
-                                            onPressed: () {
-                                              setState(() {
-                                                Hive.box('user_setting')
-                                                    .put('which_text_size', 0);
-                                              });
-                                            },
-                                            child: Center(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Center(
-                                                    child: NeumorphicText(
-                                                      'mid',
-                                                      style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .flat,
-                                                        depth: 3,
-                                                        color: Hive.box('user_setting')
+                                                        : (Hive.box('user_setting')
                                                                     .get(
                                                                         'which_text_size') ==
-                                                                0
-                                                            ? Colors.white
-                                                            : (Hive.box('user_setting')
+                                                                null
+                                                            ? Colors
+                                                                .grey.shade400
+                                                            : Colors.white),
+                                                    side: const BorderSide(
+                                                      width: 1,
+                                                      color: Colors.black45,
+                                                    )),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    Hive.box('user_setting')
+                                                        .put('which_text_size',
+                                                            0);
+                                                  });
+                                                },
+                                                child: Center(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Center(
+                                                        child: NeumorphicText(
+                                                          '중간',
+                                                          style:
+                                                              NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .flat,
+                                                            depth: 3,
+                                                            color: Hive.box('user_setting')
                                                                         .get(
                                                                             'which_text_size') ==
-                                                                    null
+                                                                    0
                                                                 ? Colors.white
-                                                                : Colors
-                                                                    .black45),
-                                                      ),
-                                                      textStyle:
-                                                          NeumorphicTextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
-                                      )),
-                                  const SizedBox(
-                                    width: 3,
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: SizedBox(
-                                      width: 70,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100)),
-                                              primary: Hive.box('user_setting')
-                                                          .get(
-                                                              'which_text_size') ==
-                                                      1
-                                                  ? Colors.grey.shade400
-                                                  : Colors.white,
-                                              side: const BorderSide(
-                                                width: 1,
-                                                color: Colors.black45,
-                                              )),
-                                          onPressed: () {
-                                            setState(() {
-                                              Hive.box('user_setting')
-                                                  .put('which_text_size', 1);
-                                            });
-                                          },
-                                          child: Center(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Center(
-                                                  child: NeumorphicText(
-                                                    'big',
-                                                    style: NeumorphicStyle(
-                                                      shape:
-                                                          NeumorphicShape.flat,
-                                                      depth: 3,
-                                                      color: Hive.box('user_setting')
-                                                                  .get(
-                                                                      'which_text_size') ==
-                                                              1
-                                                          ? Colors.white
-                                                          : Colors.black45,
-                                                    ),
-                                                    textStyle:
-                                                        NeumorphicTextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18,
-                                                    ),
+                                                                : (Hive.box('user_setting').get(
+                                                                            'which_text_size') ==
+                                                                        null
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black45),
+                                                          ),
+                                                          textStyle:
+                                                              NeumorphicTextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                )
-                                              ],
-                                            ),
+                                                )),
                                           )),
-                                    ),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          width: 70,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100)),
+                                                  primary: Hive.box(
+                                                                  'user_setting')
+                                                              .get(
+                                                                  'which_text_size') ==
+                                                          1
+                                                      ? Colors.grey.shade400
+                                                      : Colors.white,
+                                                  side: const BorderSide(
+                                                    width: 1,
+                                                    color: Colors.black45,
+                                                  )),
+                                              onPressed: () {
+                                                setState(() {
+                                                  Hive.box('user_setting').put(
+                                                      'which_text_size', 1);
+                                                });
+                                              },
+                                              child: Center(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                      child: NeumorphicText(
+                                                        '큼',
+                                                        style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: Hive.box('user_setting')
+                                                                      .get(
+                                                                          'which_text_size') ==
+                                                                  1
+                                                              ? Colors.white
+                                                              : Colors.black45,
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            )
+                                )
+                              : SizedBox(
+                                  height: 30,
+                                  width: 183,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Flexible(
+                                          flex: 1,
+                                          child: SizedBox(
+                                            width: 90,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100)),
+                                                    primary: Hive.box(
+                                                                    'user_setting')
+                                                                .get(
+                                                                    'which_menu_pick') ==
+                                                            0
+                                                        ? Colors.grey.shade400
+                                                        : (Hive.box('user_setting')
+                                                                    .get(
+                                                                        'which_menu_pick') ==
+                                                                null
+                                                            ? Colors
+                                                                .grey.shade400
+                                                            : Colors.white),
+                                                    side: const BorderSide(
+                                                      width: 1,
+                                                      color: Colors.black45,
+                                                    )),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    Hive.box('user_setting')
+                                                        .put('which_menu_pick',
+                                                            0);
+                                                  });
+                                                },
+                                                child: Center(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Center(
+                                                        child: NeumorphicText(
+                                                          '사이드',
+                                                          style:
+                                                              NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .flat,
+                                                            depth: 3,
+                                                            color: Hive.box('user_setting')
+                                                                        .get(
+                                                                            'which_menu_pick') ==
+                                                                    0
+                                                                ? Colors.white
+                                                                : (Hive.box('user_setting').get(
+                                                                            'which_menu_pick') ==
+                                                                        null
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black45),
+                                                          ),
+                                                          textStyle:
+                                                              NeumorphicTextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                          )),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          width: 90,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100)),
+                                                  primary: Hive.box(
+                                                                  'user_setting')
+                                                              .get(
+                                                                  'which_menu_pick') ==
+                                                          1
+                                                      ? Colors.grey.shade400
+                                                      : Colors.white,
+                                                  side: const BorderSide(
+                                                    width: 1,
+                                                    color: Colors.black45,
+                                                  )),
+                                              onPressed: () {
+                                                setState(() {
+                                                  Hive.box('user_setting').put(
+                                                      'which_menu_pick', 1);
+                                                });
+                                              },
+                                              child: Center(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                      child: NeumorphicText(
+                                                        '아래',
+                                                        style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: Hive.box('user_setting')
+                                                                      .get(
+                                                                          'which_menu_pick') ==
+                                                                  1
+                                                              ? Colors.white
+                                                              : Colors.black45,
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
                     ],
                   ),
                 )
@@ -535,10 +709,10 @@ class _OptionChangePageState extends State<OptionChangePage> {
         child: Column(
           children: [
             Row(
-              children: const [
+              children: [
                 Icon(
                   Icons.notifications,
-                  color: Colors.black45,
+                  color: TextColor(),
                 ),
                 SizedBox(
                   width: 10,
@@ -547,8 +721,8 @@ class _OptionChangePageState extends State<OptionChangePage> {
                   '알림 설정',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black45),
+                      fontSize: contentTextsize(),
+                      color: TextColor()),
                 ),
               ],
             ),
@@ -579,10 +753,10 @@ class _OptionChangePageState extends State<OptionChangePage> {
                     children: [
                       Text(
                         list_noti_setting[index],
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.black45),
+                            fontSize: contentTextsize(),
+                            color: TextColor()),
                       ),
                       index == 0
                           ? Transform.scale(
@@ -591,12 +765,14 @@ class _OptionChangePageState extends State<OptionChangePage> {
                                   value: isChecked_pushalarm,
                                   onChanged: (bool val) {
                                     setState(() {
+                                      selectedDay = DateTime.now();
                                       isChecked_pushalarm = val;
                                       Hive.box('user_setting').put(
                                           'isChecked_pushalarm',
                                           isChecked_pushalarm);
                                       if (isChecked_pushalarm == true) {
-                                        pushalarmsetting(context, 0, isChecked_pushalarm, selectedDay);
+                                        pushalarmsetting(context, 0,
+                                            isChecked_pushalarm, selectedDay);
                                       }
                                     });
                                   }),
@@ -607,11 +783,13 @@ class _OptionChangePageState extends State<OptionChangePage> {
                                   value: isChecked_adok,
                                   onChanged: (bool val) {
                                     setState(() {
+                                      selectedDay = DateTime.now();
                                       isChecked_adok = val;
                                       Hive.box('user_setting').put(
                                           'isChecked_adok', isChecked_adok);
                                       if (isChecked_adok == true) {
-                                        pushalarmsetting(context, 1, isChecked_pushalarm, selectedDay);
+                                        pushalarmsetting(context, 1,
+                                            isChecked_pushalarm, selectedDay);
                                       }
                                     });
                                   }),

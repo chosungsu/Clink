@@ -11,7 +11,6 @@ GoToMain(BuildContext context) {
       PageTransition(
         type: PageTransitionType.bottomToTop,
         child: const MyHomePage(
-          title: 'BOnd',
           index: 0,
         ),
       ),

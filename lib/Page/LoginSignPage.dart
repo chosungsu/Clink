@@ -125,7 +125,6 @@ LoginPlus(BuildContext context, bool ischecked, double height) {
               PageTransition(
                 type: PageTransitionType.bottomToTop,
                 child: const MyHomePage(
-                  title: 'BOnd',
                   index: 0,
                 ),
               ),
@@ -150,7 +149,6 @@ LoginPlus(BuildContext context, bool ischecked, double height) {
               PageTransition(
                 type: PageTransitionType.bottomToTop,
                 child: const MyHomePage(
-                  title: 'BOnd',
                   index: 0,
                 ),
               ),

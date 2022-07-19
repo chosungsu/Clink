@@ -1,18 +1,20 @@
 import 'package:clickbyme/Page/AnalyticPage.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:provider/provider.dart';
 import 'Dialogs/destroyBackKey.dart';
 import 'Page/FeedPage.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title, required this.index})
-      : super(key: key);
-  final String title;
+  const MyHomePage({Key? key, required this.index}) : super(key: key);
   final int index;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -33,14 +35,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
     List pages = [
-      HomePage(title: widget.title),
+      HomePage(colorbackground: BGColor(), coloritems: TextColor()),
       //FeedPage(),
-      AnalyticPage(),
-      ProfilePage(),
+      AnalyticPage(colorbackground: BGColor(), coloritems: TextColor()),
+      ProfilePage(colorbackground: BGColor(), coloritems: TextColor()),
     ];
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: BGColor(),
       body: WillPopScope(
         onWillPop: _onWillPop,
         child: pages[widget.index],

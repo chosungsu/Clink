@@ -1,6 +1,7 @@
 
 import 'package:clickbyme/DB/PageList.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -109,7 +110,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                               padding: const EdgeInsets.only(
                                                   left: 20, right: 20),
                                               child: Row(
-                                                children: const [
+                                                children: [
                                                   Flexible(
                                                     fit: FlexFit.tight,
                                                     child: Text(
@@ -117,7 +118,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: 20,
+                                                          fontSize: secondTitleTextsize(),
                                                           color:
                                                               Colors.black45),
                                                     ),
@@ -278,7 +279,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                           ),
                                           textStyle: NeumorphicTextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                            fontSize: contentTextsize(),
                                           ),
                                         ),
                                       )
@@ -344,7 +345,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                           ),
                                           textStyle: NeumorphicTextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                            fontSize: contentTextsize(),
                                           ),
                                         ),
                                       )
@@ -398,7 +399,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                        height: 60,
+                                        height: 70,
                                         width:
                                             MediaQuery.of(context).size.width -
                                                 40,
@@ -414,11 +415,11 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                   children: [
                                                     Text(
                                                       _list_ad[index].title,
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                           color: Colors.black54,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: 18),
+                                                          fontSize: contentTextsize()),
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     )
@@ -432,11 +433,11 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                   _list_ad[index]
                                                       .date
                                                       .toString(),
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 18),
+                                                      fontSize: contentTextsize()),
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
@@ -459,10 +460,10 @@ class _NotiAlarmState extends State<NotiAlarm> {
                   child: Center(
                     child: Text(
                       '공지사항이 없습니다;;;',
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: Colors.black54,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18),
+                          fontSize: secondTitleTextsize()),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ));
@@ -500,7 +501,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                        height: 60,
+                                        height: 70,
                                         width:
                                             MediaQuery.of(context).size.width -
                                                 40,
@@ -516,11 +517,11 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                   children: [
                                                     Text(
                                                       _list_ad[index].title,
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                           color: Colors.black54,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: 18),
+                                                          fontSize: contentTextsize()),
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     )
@@ -534,11 +535,11 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                   _list_ad[index]
                                                       .date
                                                       .toString(),
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                       color: Colors.black54,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 18),
+                                                      fontSize: contentTextsize()),
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
@@ -558,13 +559,13 @@ class _NotiAlarmState extends State<NotiAlarm> {
               }
               return SizedBox(
                   height: MediaQuery.of(context).size.height - 160,
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       '공지사항이 없습니다;;;',
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: Colors.black54,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18),
+                          fontSize: secondTitleTextsize()),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ));
