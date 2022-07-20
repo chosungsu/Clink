@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../Tool/NoBehavior.dart';
@@ -60,9 +61,23 @@ class _OptionChangePageState extends State<OptionChangePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: BGColor(),
-      body: Options(),
-    ));
+            backgroundColor: BGColor(),
+            body: WillPopScope(
+              onWillPop: () async {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.leftToRight,
+                    child: const MyHomePage(
+                      index: 2,
+                    ),
+                  ),
+                );
+                Hive.box('user_setting').put('page_index', 2);
+                return false;
+              },
+              child: Options(),
+            )));
   }
 
   Options() {

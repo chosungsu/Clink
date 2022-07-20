@@ -2,6 +2,7 @@ import 'package:clickbyme/DB/SpaceList.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/FormContentNet/FormCard.dart';
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
+  int navi = 0;
   int currentPage = 0;
   Color color1 = Colors.white;
   Color color2 = Colors.white;
@@ -60,11 +62,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
-    /*color1 = widget.colorbackground;
-    color2 = widget.coloritems;
-    watchcolor();*/
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
+    navi = NaviWhere();
   }
 
   @override
@@ -73,30 +73,27 @@ class _HomePageState extends State<HomePage> {
     _pController.dispose();
   }
 
-  /*void watchcolor() {
-    Stream.fromFuture(getBackColor()).listen((event1) {
-      color1 = event1;
-    });
-    Stream.fromFuture(getitemColor()).listen((event2) {
-      color2 = event2;
-    });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
-            body: isdraweropen == true
-                ? Stack(
-                    children: [
-                      Container(
-                        width: 50,
-                        child: DrawerScreen(),
-                      ),
-                      HomeUi(_pController),
-                    ],
-                  )
+            body: navi == 0
+                ? (isdraweropen == true
+                    ? Stack(
+                        children: [
+                          Container(
+                            width: 50,
+                            child: DrawerScreen(),
+                          ),
+                          HomeUi(_pController),
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          HomeUi(_pController),
+                        ],
+                      ))
                 : Stack(
                     children: [
                       HomeUi(_pController),
@@ -130,61 +127,67 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const Padding(padding: EdgeInsets.only(left: 10)),
+                            navi == 0
+                                ? SizedBox(
+                                    width: 50,
+                                    child: isdraweropen
+                                        ? InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                xoffset = 0;
+                                                yoffset = 0;
+                                                scalefactor = 1;
+                                                isdraweropen = false;
+                                              });
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                              height: 30,
+                                              child: NeumorphicIcon(
+                                                Icons.keyboard_arrow_left,
+                                                size: 30,
+                                                style: NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    depth: 2,
+                                                    surfaceIntensity: 0.5,
+                                                    color: TextColor(),
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            ))
+                                        : InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                xoffset = 50;
+                                                yoffset = 0;
+                                                scalefactor = 1;
+                                                isdraweropen = true;
+                                              });
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                              height: 30,
+                                              child: NeumorphicIcon(
+                                                Icons.menu,
+                                                size: 30,
+                                                style: NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    surfaceIntensity: 0.5,
+                                                    depth: 2,
+                                                    color: TextColor(),
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            )))
+                                : const SizedBox(),
                             SizedBox(
-                                width: 50,
-                                child: isdraweropen
-                                    ? InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            xoffset = 0;
-                                            yoffset = 0;
-                                            scalefactor = 1;
-                                            isdraweropen = false;
-                                          });
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.keyboard_arrow_left,
-                                            size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: TextColor(),
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                        ))
-                                    : InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            xoffset = 50;
-                                            yoffset = 0;
-                                            scalefactor = 1;
-                                            isdraweropen = true;
-                                          });
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.menu,
-                                            size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                surfaceIntensity: 0.5,
-                                                depth: 2,
-                                                color: TextColor(),
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                        ))),
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width - 60,
+                                width: navi == 0
+                                    ? MediaQuery.of(context).size.width - 60
+                                    : MediaQuery.of(context).size.width - 10,
                                 child: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 20, right: 20),

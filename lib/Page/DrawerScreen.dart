@@ -1,6 +1,7 @@
 import 'package:clickbyme/Enums/Drawer_item.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
@@ -88,12 +89,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             style: TextStyle(
                                 color: NaviColor(selected),
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20))
+                                fontSize: contentTitleTextsize()))
                         : Text(element['title'],
                             style: TextStyle(
                                 color: NaviColor(selected),
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20)),
+                                fontSize: contentTitleTextsize())),
                   ],
                 ),
               ));

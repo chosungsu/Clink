@@ -23,6 +23,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   double translateY = 0.0;
   double myWidth = 0.0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final searchNode = FocusNode();
   final List memostar = [1, 2, 1, 1, 3];
   final List memotitle = ['memo1', 'memo2', 'memo3', 'memo4', 'memo5'];
   final List memocontent = [
@@ -55,7 +56,12 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: BGColor(),
-      body: UI(),
+      body: GestureDetector(
+        onTap: () {
+          searchNode.unfocus();
+        },
+        child: UI(),
+      ),
     ));
   }
 
@@ -64,9 +70,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: BoxDecoration(
-            color: BGColor()
-          ),
+          decoration: BoxDecoration(color: BGColor()),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -115,14 +119,12 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                           children: [
                                             Flexible(
                                               fit: FlexFit.tight,
-                                              child: Text(
-                                                'Memo',
-                                                style: GoogleFonts.lobster(
-                                                fontSize: 25,
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                              )
-                                              ),
+                                              child: Text('Memo',
+                                                  style: GoogleFonts.lobster(
+                                                    fontSize: 25,
+                                                    color: TextColor(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
                                             ),
                                             SizedBox(
                                                 width: 30,
@@ -134,7 +136,10 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                             type:
                                                                 PageTransitionType
                                                                     .bottomToTop,
-                                                            child: MemoScript(index: 0, cardindex: 'null',)),
+                                                            child: MemoScript(
+                                                              index: 0,
+                                                              cardindex: 'null',
+                                                            )),
                                                       );
                                                     },
                                                     child: Container(
@@ -152,8 +157,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                             depth: 2,
                                                             surfaceIntensity:
                                                                 0.5,
-                                                            color:
-                                                                TextColor(),
+                                                            color: TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -183,8 +187,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                             depth: 2,
                                                             surfaceIntensity:
                                                                 0.5,
-                                                            color:
-                                                                TextColor(),
+                                                            color: TextColor(),
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -250,28 +253,31 @@ class _DayNoteHomeState extends State<DayNoteHome> {
         SizedBox(
             height: 50,
             child: ContainerDesign(
-                child: TextField(
-                  textAlign: TextAlign.start,
-                  textAlignVertical: TextAlignVertical.center,
-                  style: TextStyle(
-                      color: TextColor(),
+              child: TextField(
+                focusNode: searchNode,
+                textAlign: TextAlign.start,
+                textAlignVertical: TextAlignVertical.center,
+                style: TextStyle(
+                    color: Colors.black45,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: InputBorder.none,
+                  hintMaxLines: 2,
+                  hintText: '톱니바퀴 -> 조건설정 후 검색',
+                  hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: TextColor(),
-                      border: InputBorder.none,
-                      hintMaxLines: 2,
-                      hintText: '톱니바퀴 -> 조건설정 후 검색',
-                      hintStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: BGColor()),
-                      prefixIcon: Icon(Icons.search),
-                      isCollapsed: true,
-                      prefixIconColor: TextColor(),),
+                      fontSize: 18,
+                      color: Colors.black45),
+                  prefixIcon: Icon(Icons.search),
+                  isCollapsed: true,
+                  prefixIconColor: Colors.black45,
                 ),
-                color: Colors.white))
+              ),
+              color: Colors.white,
+            ))
       ],
     );
   }
@@ -284,9 +290,11 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   }
 
   MemoBox() {
-    return SizedBox(height: memocontent.isEmpty
-              ? MediaQuery.of(context).size.height * 0.5
-              : 160 * (memocontent.length.toDouble()) + 50, child: memo());
+    return SizedBox(
+        height: memocontent.isEmpty
+            ? MediaQuery.of(context).size.height * 0.5
+            : 160 * (memocontent.length.toDouble()) + 50,
+        child: memo());
   }
 
   memo() {
@@ -332,17 +340,17 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                             DelOrEditMemo(context, index);
                           },
                           child: ContainerDesign(
-                            child: SizedBox(
-                              height: 100,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Column(
-                                        children: [
-                                          SizedBox(
+                              child: SizedBox(
+                                height: 100,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        SizedBox(
                                             height: 30,
                                             child: Center(
-                                                child: Text(memotitle[index],
+                                              child: Text(memotitle[index],
                                                   softWrap: true,
                                                   maxLines: 2,
                                                   style: TextStyle(
@@ -350,147 +358,147 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 20)),
+                                            )),
+                                        SizedBox(
+                                          height: 50,
+                                          child: Text(
+                                            memocontent[index],
+                                            maxLines: 2,
+                                            softWrap: true,
+                                            style: TextStyle(
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                        height: 20,
+                                        child: memostar[index] == 1
+                                            ? Container(
+                                                alignment: Alignment.center,
+                                                child: NeumorphicIcon(
+                                                  Icons.star,
+                                                  size: 20,
+                                                  style: NeumorphicStyle(
+                                                      shape: NeumorphicShape
+                                                          .convex,
+                                                      depth: 2,
+                                                      color: TextColor(),
+                                                      lightSource:
+                                                          LightSource.topLeft),
+                                                ),
                                               )
-                                          ),
-                                          SizedBox(
-                                            height: 50,
-                                            child: Text(
-                                                memocontent[index],
-                                                maxLines: 2,
-                                                softWrap: true,
-                                                style: TextStyle(
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                              ),
-                                          ),
-                                        ],
-                                      ),
-                                  SizedBox(
-                                      height: 20,
-                                      child: memostar[index] == 1
-                                          ? Container(
-                                              alignment: Alignment.center,
-                                              child: NeumorphicIcon(
-                                                Icons.star,
-                                                size: 20,
-                                                style: NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    depth: 2,
-                                                    color: TextColor(),
-                                                    lightSource:
-                                                        LightSource.topLeft),
-                                              ),
-                                            )
-                                          : (memostar[index] == 2
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: NeumorphicIcon(
-                                                        Icons.star,
-                                                        size: 20,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            color:
-                                                                TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
+                                            : (memostar[index] == 2
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.star,
+                                                          size: 20,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: NeumorphicIcon(
-                                                        Icons.star,
-                                                        size: 20,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            color:
-                                                                TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.star,
+                                                          size: 20,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: NeumorphicIcon(
-                                                        Icons.star,
-                                                        size: 20,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            color:
-                                                                TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
+                                                    ],
+                                                  )
+                                                : Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.star,
+                                                          size: 20,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: NeumorphicIcon(
-                                                        Icons.star,
-                                                        size: 20,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            color:
-                                                                TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.star,
+                                                          size: 20,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: NeumorphicIcon(
-                                                        Icons.star,
-                                                        size: 20,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            color:
-                                                                TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.star,
+                                                          size: 20,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ))),
-                                ],
+                                                    ],
+                                                  ))),
+                                  ],
+                                ),
                               ),
-                            ),
-                            color: BGColor()
-                          ),
+                              color: BGColor()),
                         ),
                         const SizedBox(
                           height: 10,

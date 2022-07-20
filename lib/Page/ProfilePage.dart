@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/route.dart';
 import 'package:flutter/material.dart';
@@ -30,18 +31,19 @@ class _ProfilePageState extends State<ProfilePage> {
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
+  int navi = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    navi = NaviWhere();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    print('dispose');
   }
 
   @override
@@ -49,7 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
-            body: isdraweropen == true
+            body: navi == 0 ? 
+            (isdraweropen == true
                 ? Stack(
                     children: [
                       Container(
@@ -60,6 +63,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   )
                 : Stack(
+                    children: [
+                      ProfileBody(context),
+                    ],
+                  )) : Stack(
                     children: [
                       ProfileBody(context),
                     ],
@@ -84,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Padding(padding: EdgeInsets.only(left: 10)),
-                      SizedBox(
+                      navi == 0 ? SizedBox(
                           width: 50,
                           child: isdraweropen
                               ? InkWell(
@@ -134,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           color: TextColor(),
                                           lightSource: LightSource.topLeft),
                                     ),
-                                  ))),
+                                  ))) : const SizedBox(),
                       SizedBox(
                           child: Padding(
                         padding: EdgeInsets.only(left: 20),

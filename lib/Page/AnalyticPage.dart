@@ -1,6 +1,7 @@
 import 'package:clickbyme/Page/EnterCheckPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Analytics/EntercheckView.dart';
 import 'package:clickbyme/UI/Analytics/ShareView.dart';
@@ -34,6 +35,7 @@ class _AnalyticPageState extends State<AnalyticPage>
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
+  int navi = 0;
   Color color1 = Colors.white;
   Color color2 = Colors.white;
   final PageController _pController = PageController();
@@ -42,6 +44,7 @@ class _AnalyticPageState extends State<AnalyticPage>
   void initState() {
     // TODO: implement initState
     super.initState();
+    navi = NaviWhere();
   }
 
   @override
@@ -55,7 +58,8 @@ class _AnalyticPageState extends State<AnalyticPage>
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
-            body: isdraweropen == true
+            body: navi == 0 ? 
+            (isdraweropen == true
                 ? Stack(
                     children: [
                       Container(
@@ -64,8 +68,11 @@ class _AnalyticPageState extends State<AnalyticPage>
                       ),
                       AnalyticBody(context, _pController),
                     ],
-                  )
-                : Stack(
+                  ) : Stack(
+                    children: [
+                      AnalyticBody(context, _pController),
+                    ],
+                  )) : Stack(
                     children: [
                       AnalyticBody(context, _pController),
                     ],
@@ -97,7 +104,7 @@ class _AnalyticPageState extends State<AnalyticPage>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const Padding(padding: EdgeInsets.only(left: 10)),
-                            SizedBox(
+                            navi == 0 ? SizedBox(
                                 width: 50,
                                 child: isdraweropen
                                     ? InkWell(
@@ -149,7 +156,7 @@ class _AnalyticPageState extends State<AnalyticPage>
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
-                                        ))),
+                                        ))) : const SizedBox(),
                             SizedBox(
                                 width: MediaQuery.of(context).size.width - 60,
                                 child: Padding(

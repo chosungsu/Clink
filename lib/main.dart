@@ -1,27 +1,19 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
-import 'package:clickbyme/Provider/EventProvider.dart';
-import 'package:clickbyme/Sub/DayEventAdd.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/UI/Setting/OptionChangePage.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
-import 'package:clickbyme/route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:provider/provider.dart';
 import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
 import 'Page/LoginSignPage.dart';
-import 'Page/ProfilePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

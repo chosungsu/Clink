@@ -46,11 +46,17 @@ class UserSettings extends StatelessWidget {
                               child: DayContentHome()),
                         )
                       : (index == 1
-                          ? Navigator.push(
+                          ? /*Navigator.push(
                               context,
                               PageTransition(
                                   type: PageTransitionType.bottomToTop,
                                   child: OptionChangePage()),
+                            )*/
+                          Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.bottomToTop,
+                                child: OptionChangePage(),
+                              ),
                             )
                           : (index == 2
                               ? Navigator.push(
@@ -73,41 +79,41 @@ class UserSettings extends StatelessWidget {
                     ContainerDesign(
                         color: BGColor(),
                         child: SizedBox(
-                      height: 40,
-                      width: MediaQuery.of(context).size.width - 80,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: Text(
-                                Hive.box('user_info').get('id') != null &&
-                                        index == 4
-                                    ? '회원탈퇴'
-                                    : list_title[index],
-                                style: TextStyle(
-                                    color: TextColor(),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize())),
+                          height: 40,
+                          width: MediaQuery.of(context).size.width - 80,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: Text(
+                                    Hive.box('user_info').get('id') != null &&
+                                            index == 4
+                                        ? '회원탈퇴'
+                                        : list_title[index],
+                                    style: TextStyle(
+                                        color: TextColor(),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize())),
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                width: 25,
+                                height: 25,
+                                child: NeumorphicIcon(
+                                  Icons.navigate_next,
+                                  size: 20,
+                                  style: NeumorphicStyle(
+                                      shape: NeumorphicShape.convex,
+                                      depth: 2,
+                                      color: TextColor(),
+                                      lightSource: LightSource.topLeft),
+                                ),
+                              )
+                            ],
                           ),
-                          Container(
-                            alignment: Alignment.center,
-                            width: 25,
-                            height: 25,
-                            child: NeumorphicIcon(
-                              Icons.navigate_next,
-                              size: 20,
-                              style: NeumorphicStyle(
-                                  shape: NeumorphicShape.convex,
-                                  depth: 2,
-                                  color: TextColor(),
-                                  lightSource: LightSource.topLeft),
-                            ),
-                          )
-                        ],
-                      ),
-                    )),
+                        )),
                     const SizedBox(
                       height: 10,
                     )
