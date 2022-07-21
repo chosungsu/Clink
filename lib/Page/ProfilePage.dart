@@ -32,18 +32,21 @@ class _ProfilePageState extends State<ProfilePage> {
   double scalefactor = 1;
   bool isdraweropen = false;
   int navi = 0;
+  var _controller = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     navi = NaviWhere();
+    _controller = TextEditingController();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -51,22 +54,23 @@ class _ProfilePageState extends State<ProfilePage> {
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
-            body: navi == 0 ? 
-            (isdraweropen == true
-                ? Stack(
-                    children: [
-                      Container(
-                        width: 50,
-                        child: DrawerScreen(),
-                      ),
-                      ProfileBody(context),
-                    ],
-                  )
+            body: navi == 0
+                ? (isdraweropen == true
+                    ? Stack(
+                        children: [
+                          Container(
+                            width: 50,
+                            child: DrawerScreen(),
+                          ),
+                          ProfileBody(context),
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          ProfileBody(context),
+                        ],
+                      ))
                 : Stack(
-                    children: [
-                      ProfileBody(context),
-                    ],
-                  )) : Stack(
                     children: [
                       ProfileBody(context),
                     ],
@@ -91,57 +95,59 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Padding(padding: EdgeInsets.only(left: 10)),
-                      navi == 0 ? SizedBox(
-                          width: 50,
-                          child: isdraweropen
-                              ? InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      xoffset = 0;
-                                      yoffset = 0;
-                                      scalefactor = 1;
-                                      isdraweropen = false;
-                                    });
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.keyboard_arrow_left,
-                                      size: 30,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          surfaceIntensity: 0.5,
-                                          color: TextColor(),
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  ))
-                              : InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      xoffset = 50;
-                                      yoffset = 0;
-                                      scalefactor = 1;
-                                      isdraweropen = true;
-                                    });
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.menu,
-                                      size: 30,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          surfaceIntensity: 0.5,
-                                          depth: 2,
-                                          color: TextColor(),
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  ))) : const SizedBox(),
+                      navi == 0
+                          ? SizedBox(
+                              width: 50,
+                              child: isdraweropen
+                                  ? InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          xoffset = 0;
+                                          yoffset = 0;
+                                          scalefactor = 1;
+                                          isdraweropen = false;
+                                        });
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: 30,
+                                        height: 30,
+                                        child: NeumorphicIcon(
+                                          Icons.keyboard_arrow_left,
+                                          size: 30,
+                                          style: NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              depth: 2,
+                                              surfaceIntensity: 0.5,
+                                              color: TextColor(),
+                                              lightSource: LightSource.topLeft),
+                                        ),
+                                      ))
+                                  : InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          xoffset = 50;
+                                          yoffset = 0;
+                                          scalefactor = 1;
+                                          isdraweropen = true;
+                                        });
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: 30,
+                                        height: 30,
+                                        child: NeumorphicIcon(
+                                          Icons.menu,
+                                          size: 30,
+                                          style: NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              surfaceIntensity: 0.5,
+                                              depth: 2,
+                                              color: TextColor(),
+                                              lightSource: LightSource.topLeft),
+                                        ),
+                                      )))
+                          : const SizedBox(),
                       SizedBox(
                           child: Padding(
                         padding: EdgeInsets.only(left: 20),
@@ -221,7 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserSettings(height: height),
+          UserSettings(height: height, controller: _controller),
         ],
       ),
     );

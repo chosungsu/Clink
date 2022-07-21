@@ -15,6 +15,21 @@ class GoogleSignInController with ChangeNotifier {
     googleSignInAccount = await _googleSignIn.signIn();
     String nick = googleSignInAccount!.displayName.toString();
     String email = googleSignInAccount!.email.toString();
+    String codes = Hive.box('user_info').get('id').toString().length > 5
+      ? Hive.box('user_info').get('id').toString().substring(0, 4) + 
+      Hive.box('user_info').get('email').toString().substring(0, 3) +
+      Hive.box('user_info')
+      .get('email')
+      .toString()
+      .split('@')[1]
+      .substring(0, 2)
+      : Hive.box('user_info').get('id').toString().substring(0, 2)+ 
+      Hive.box('user_info').get('email').toString().substring(0, 3) +
+      Hive.box('user_info')
+      .get('email')
+      .toString()
+      .split('@')[1]
+      .substring(0, 2);
     //내부 저장으로 로그인 정보 저장
     Hive.box('user_info').put('id', nick);
     Hive.box('user_info').put('email', email);
@@ -26,7 +41,8 @@ class GoogleSignInController with ChangeNotifier {
       'email': email,
       'login_where': 'google_user',
       'time': DateTime.now(), 
-      'autologin' : ischecked
+      'autologin' : ischecked,
+      'code' : codes
     });
 
     notifyListeners();

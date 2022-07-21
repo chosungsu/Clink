@@ -87,6 +87,7 @@ dependencies:
   textfield_tags: ^2.0.0+1
   google_fonts: ^3.0.1
   text_scroll: ^0.1.0
+  avoid_keyboard: ^0.3.0
 
 dev_dependencies:
   flutter_test:

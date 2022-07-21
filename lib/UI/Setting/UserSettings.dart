@@ -15,8 +15,9 @@ import 'BuyingPage.dart';
 import '../../Tool/ContainerDesign.dart';
 
 class UserSettings extends StatelessWidget {
-  UserSettings({Key? key, required this.height}) : super(key: key);
+  UserSettings({Key? key, required this.height, required this.controller}) : super(key: key);
   final double height;
+  final searchNode = FocusNode();
   final List<String> list_title = <String>[
     '도움 & 문의',
     '설정값 변경',
@@ -25,6 +26,7 @@ class UserSettings extends StatelessWidget {
     '로그인',
   ];
   var name = Hive.box('user_info').get('id');
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -54,8 +56,8 @@ class UserSettings extends StatelessWidget {
                             )*/
                           Navigator.of(context).pushReplacement(
                               PageTransition(
-                                type: PageTransitionType.bottomToTop,
                                 child: OptionChangePage(),
+                                type: PageTransitionType.bottomToTop,
                               ),
                             )
                           : (index == 2
@@ -66,7 +68,7 @@ class UserSettings extends StatelessWidget {
                                       child: BuyingPage()),
                                 )
                               : (index == 3
-                                  ? addgroupmember(context)
+                                  ? addgroupmember(context, searchNode, controller)
                                   : (index == 4 && name == null
                                       ? GoToLogin(context)
                                       : DeleteUserVerify(context, name)))));

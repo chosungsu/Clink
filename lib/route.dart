@@ -81,11 +81,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     label: '홈',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.widgets, size: 25),
+                    icon: Icon(Icons.bar_chart, size: 25),
                     label: '분석',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle, size: 25),
+                    icon: Icon(Icons.account_circle_outlined, size: 25),
                     label: '설정',
                   ),
                 ],

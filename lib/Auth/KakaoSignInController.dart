@@ -5,7 +5,6 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 class KakaoSignInController with ChangeNotifier {
-
   late int count;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -13,9 +12,25 @@ class KakaoSignInController with ChangeNotifier {
     count = 2;
     //설치 여부 묻기
     final installed = await isKakaoTalkInstalled();
-    installed ? await UserApi.instance.loginWithKakaoTalk() :
-    await UserApi.instance.loginWithKakaoAccount();
+    installed
+        ? await UserApi.instance.loginWithKakaoTalk()
+        : await UserApi.instance.loginWithKakaoAccount();
     User user = await UserApi.instance.me();
+    String codes = Hive.box('user_info').get('id').toString().length > 5
+      ? Hive.box('user_info').get('id').toString().substring(0, 4) + 
+      Hive.box('user_info').get('email').toString().substring(0, 3) +
+      Hive.box('user_info')
+      .get('email')
+      .toString()
+      .split('@')[1]
+      .substring(0, 2)
+      : Hive.box('user_info').get('id').toString().substring(0, 2)+ 
+      Hive.box('user_info').get('email').toString().substring(0, 3) +
+      Hive.box('user_info')
+      .get('email')
+      .toString()
+      .split('@')[1]
+      .substring(0, 2);
     //내부 저장으로 로그인 정보 저장
     if (user.kakaoAccount != null) {
       if (user.kakaoAccount!.profile!.nickname != null) {
@@ -26,22 +41,26 @@ class KakaoSignInController with ChangeNotifier {
         Hive.box('user_info').put('count', count);
         Hive.box('user_info').put('autologin', ischecked);
         //firestore 저장
-        await firestore.collection('User').doc(nick)
-            .set({
-          'name' : nick, 'email' : email, 'login_where' : 'kakao_user', 'time' : DateTime.now(), 'autologin' : ischecked
+        await firestore.collection('User').doc(nick).set({
+          'name': nick,
+          'email': email,
+          'login_where': 'kakao_user',
+          'time': DateTime.now(),
+          'autologin': ischecked,
+          'code' : codes
         });
       }
     }
 
     notifyListeners();
   }
+
   logout(BuildContext context, String name) async {
     count = -2;
     Hive.box('user_info').delete('id');
     await UserApi.instance.logout();
     //firestore 삭제
-    await firestore.collection('User').doc(name)
-        .delete();
+    await firestore.collection('User').doc(name).delete();
     notifyListeners();
   }
 }
