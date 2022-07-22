@@ -102,7 +102,15 @@ class _OptionChangePageState extends State<OptionChangePage> {
                         child: InkWell(
                             onTap: () {
                               setState(() {
-                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    type: PageTransitionType.leftToRight,
+                                    child: const MyHomePage(
+                                      index: 2,
+                                    ),
+                                  ),
+                                );
                               });
                             },
                             child: Container(

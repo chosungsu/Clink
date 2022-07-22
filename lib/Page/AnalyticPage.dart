@@ -11,6 +11,7 @@ import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
 import 'package:clickbyme/route.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -55,6 +56,8 @@ class _AnalyticPageState extends State<AnalyticPage>
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),

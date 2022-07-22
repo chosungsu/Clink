@@ -88,6 +88,8 @@ dependencies:
   google_fonts: ^3.0.1
   text_scroll: ^0.1.0
   avoid_keyboard: ^0.3.0
+  get: ^4.6.5
+  another_flushbar: ^1.10.29
 
 dev_dependencies:
   flutter_test:

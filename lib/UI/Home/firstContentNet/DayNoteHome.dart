@@ -8,6 +8,7 @@ import 'package:clickbyme/sheets/settingMemoHome.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:page_transition/page_transition.dart';
@@ -90,7 +91,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                     child: InkWell(
                                         onTap: () {
                                           setState(() {
-                                            Navigator.pop(context);
+                                            //Navigator.pop(context);
+                                            Get.back();
                                           });
                                         },
                                         child: Container(

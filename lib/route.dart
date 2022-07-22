@@ -1,18 +1,11 @@
 import 'package:clickbyme/Page/AnalyticPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:provider/provider.dart';
 import 'Dialogs/destroyBackKey.dart';
-import 'Page/FeedPage.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
 
@@ -40,6 +33,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
       HomePage(colorbackground: BGColor(), coloritems: TextColor()),
@@ -56,59 +51,41 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         bottomNavigationBar: navi == 1
             ? Container(
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: TextColor(), width: 2))
-              ),
-              child: BottomNavigationBar(
-                onTap: (_index) {
-                  //Handle button tap
-                  setState(() {
-                    _selectedIndex = _index;
-                  });
-                },
-                backgroundColor: BGColor(),
-                selectedFontSize: contentTitleTextsize(),
-                unselectedFontSize: contentTitleTextsize(),
-                selectedItemColor: NaviColor(true),
-                unselectedItemColor: NaviColor(false),
-                showSelectedLabels: true,
-                showUnselectedLabels: true,
-                currentIndex: _selectedIndex,
-                key: _bottomNavigationKey,
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home, size: 25),
-                    label: '홈',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.bar_chart, size: 25),
-                    label: '분석',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle_outlined, size: 25),
-                    label: '설정',
-                  ),
-                ],
-              ),
-            )
-            /*CurvedNavigationBar(
-                height: 50,
-                index: widget.index,
-                backgroundColor: Colors.deepPurpleAccent.shade100,
-                color: Colors.white,
-                key: _bottomNavigationKey,
-                items: const <Widget>[
-                  Icon(Icons.home, size: 25),
-                  Icon(Icons.widgets, size: 25),
-                  Icon(Icons.account_circle, size: 25),
-                ],
-                onTap: (_index) {
-                  //Handle button tap
-                  setState(() {
-                    _selectedIndex = _index;
-                  });
-                },
-              )*/
+                decoration: BoxDecoration(
+                    border:
+                        Border(top: BorderSide(color: TextColor(), width: 2))),
+                child: BottomNavigationBar(
+                  onTap: (_index) {
+                    //Handle button tap
+                    setState(() {
+                      _selectedIndex = _index;
+                    });
+                  },
+                  backgroundColor: BGColor(),
+                  selectedFontSize: contentTitleTextsize(),
+                  unselectedFontSize: contentTitleTextsize(),
+                  selectedItemColor: NaviColor(true),
+                  unselectedItemColor: NaviColor(false),
+                  showSelectedLabels: true,
+                  showUnselectedLabels: true,
+                  currentIndex: _selectedIndex,
+                  key: _bottomNavigationKey,
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home, size: 25),
+                      label: '홈',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.bar_chart, size: 25),
+                      label: '분석',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.account_circle_outlined, size: 25),
+                      label: '설정',
+                    ),
+                  ],
+                ),
+              )
             : const SizedBox(
                 height: 0,
               ));

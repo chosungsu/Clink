@@ -1,9 +1,12 @@
 import 'package:clickbyme/DB/SpaceList.dart';
 import 'package:clickbyme/Dialogs/howchangespace.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/SpaceAD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../Tool/NoBehavior.dart';
@@ -37,7 +40,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: BGColor(),
       body: EnterMySpace(),
     ));
   }
@@ -47,8 +50,8 @@ class _ChangeSpaceState extends State<ChangeSpace> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: BGColor(),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +67,8 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                         child: InkWell(
                             onTap: () {
                               setState(() {
-                                Navigator.pop(context);
+                                //Navigator.pop(context);
+                                Get.back();
                               });
                             },
                             child: Container(
@@ -74,11 +78,11 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                               child: NeumorphicIcon(
                                 Icons.keyboard_arrow_left,
                                 size: 30,
-                                style: const NeumorphicStyle(
+                                style: NeumorphicStyle(
                                     shape: NeumorphicShape.convex,
                                     depth: 2,
                                     surfaceIntensity: 0.5,
-                                    color: Colors.black45,
+                                    color: TextColor(),
                                     lightSource: LightSource.topLeft),
                               ),
                             ))),
@@ -109,11 +113,11 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                                       child: NeumorphicIcon(
                                         Icons.help_outline,
                                         size: 30,
-                                        style: const NeumorphicStyle(
+                                        style: NeumorphicStyle(
                                             shape: NeumorphicShape.convex,
                                             surfaceIntensity: 0.5,
                                             depth: 2,
-                                            color: Colors.black45,
+                                            color: TextColor(),
                                             lightSource: LightSource.topLeft),
                                       ),
                                     )),
@@ -146,6 +150,9 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                                 height: 20,
                               ),
                               ChoiceSpace(height, context),
+                              const SizedBox(
+                                height: 50,
+                              ),
                             ],
                           ),
                         );
@@ -159,17 +166,17 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   MySpace(double height, BuildContext context) {
     return SizedBox(
-      height: 70 * 5 + 50,
+      height: 70 * 5 + 55,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
+            children: [
               Text('나의 현재 스페이스',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: TextColor(),
                       fontWeight: FontWeight.bold,
-                      fontSize: 18)),
+                      fontSize: contentTitleTextsize())),
             ],
           ),
           const SizedBox(
@@ -185,37 +192,36 @@ class _ChangeSpaceState extends State<ChangeSpace> {
     //유저의 메뉴변경에 따라 자동으로 파이어베이스에 저장되어 불러오는 로직
     return SizedBox(
         height: 70 * 5,
-        child:
-            FutureBuilder(
-                future: firestore
-                    .collection("UserSpaceDataBase")
-                    .doc(name)
-                    .get()
-                    .then((value) {
-                  _user_ad.clear();
-                  value.data()!.forEach((key, value) {
-                    _user_ad.addAll([SpaceList(title: value)]);
-                  });
-                }),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return SizedBox(
-                        height: 70 * _user_ad.length.toDouble(),
-                        child: ReorderableListView(
-                            children: getItems(),
-                            onReorder: (oldIndex, newIndex) {
-                              onreorder(oldIndex, newIndex);
-                            }));
-                  } else {
-                    return SizedBox(
-                        height: 70 * _default_ad.length.toDouble(),
-                        child: ReorderableListView(
-                            children: getItems(),
-                            onReorder: (oldIndex, newIndex) {
-                              onreorder(oldIndex, newIndex);
-                            }));
-                  }
-                }));
+        child: FutureBuilder(
+            future: firestore
+                .collection("UserSpaceDataBase")
+                .doc(name)
+                .get()
+                .then((value) {
+              _user_ad.clear();
+              value.data()!.forEach((key, value) {
+                _user_ad.addAll([SpaceList(title: value)]);
+              });
+            }),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return SizedBox(
+                    height: 70 * _user_ad.length.toDouble(),
+                    child: ReorderableListView(
+                        children: getItems(),
+                        onReorder: (oldIndex, newIndex) {
+                          onreorder(oldIndex, newIndex);
+                        }));
+              } else {
+                return SizedBox(
+                    height: 70 * _default_ad.length.toDouble(),
+                    child: ReorderableListView(
+                        children: getItems(),
+                        onReorder: (oldIndex, newIndex) {
+                          onreorder(oldIndex, newIndex);
+                        }));
+              }
+            }));
   }
 
   List<ListTile> getItems() => _user_ad.isEmpty
@@ -233,17 +239,21 @@ class _ChangeSpaceState extends State<ChangeSpace> {
           .toList();
   ListTile buildListTile(String item, int index) => ListTile(
       key: ValueKey(item + '-' + index.toString()),
-      title: Text(item),
+      title: Text('item',
+                  style: TextStyle(
+                      color: TextColor(),
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
       trailing: index < 3
-          ? const Icon(
+          ? Icon(
               Icons.menu,
-              color: Colors.black45,
-              size: 20,
+              color: TextColor(),
+              size: contentTitleTextsize(),
             )
-          : const Icon(
+          : Icon(
               Icons.lock,
-              color: Colors.black45,
-              size: 20,
+              color: TextColor(),
+              size: contentTitleTextsize(),
             ));
   onreorder(int oldIndex, int newIndex) {
     if (newIndex > oldIndex) {
@@ -277,6 +287,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
       }
     });
   }
+
   ADSpace(double height, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,12 +302,12 @@ class _ChangeSpaceState extends State<ChangeSpace> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
+            children: [
               Text('더 많은 스페이스를 원하신다면?',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: TextColor(),
                       fontWeight: FontWeight.bold,
-                      fontSize: 18)),
+                      fontSize: contentTitleTextsize())),
             ],
           ),
           const SizedBox(

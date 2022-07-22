@@ -14,6 +14,8 @@ class MyTheme {
   static Color userchatColor = Colors.white;
   static Color colorWhite = Colors.white;
   static Color colorblack = Colors.black;
+  static Color colorWhitestatus = Colors.white60;
+  static Color colorblackstatus = Colors.black45;
   static Color colorWhite_drawer = Colors.white;
   static Color colorblack_drawer = Colors.black;
   static Color colorselected_drawer = Colors.deepPurple;

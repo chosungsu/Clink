@@ -1,4 +1,7 @@
+import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../Setting/BuyingPage.dart';
 
@@ -20,15 +23,15 @@ class SpaceAD extends StatelessWidget {
         children: [
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.grey.shade400,
-              ),
+                  primary: BGColor(), side: BorderSide(color: TextColor())),
               onPressed: () {
-                Navigator.push(
+                /*Navigator.push(
                   context,
                   PageTransition(
                       type: PageTransitionType.bottomToTop,
                       child: BuyingPage()),
-                );
+                );*/
+                Get.to(() => BuyingPage(), transition: Transition.fadeIn);
               },
               child: Center(
                 child: Column(
@@ -37,14 +40,14 @@ class SpaceAD extends StatelessWidget {
                     Center(
                       child: NeumorphicText(
                         '구매화면 이동',
-                        style: const NeumorphicStyle(
+                        style: NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
-                          color: Colors.white,
+                          color: TextColor(),
                         ),
                         textStyle: NeumorphicTextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: contentTitleTextsize(),
                         ),
                       ),
                     )

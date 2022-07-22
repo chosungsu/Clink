@@ -5,9 +5,9 @@ import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:transition/transition.dart';
 
 class EventShowCard extends StatelessWidget {
   EventShowCard(
@@ -35,11 +35,15 @@ class EventShowCard extends StatelessWidget {
             color: Colors.orange.shade400,
             child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
+                  /*Navigator.push(
                     context,
                     PageTransition(
                         type: PageTransitionType.bottomToTop,
                         child: BuyingPage()),
+                  );*/
+                  Get.to(
+                    () => BuyingPage(),
+                    transition: Transition.fadeIn
                   );
                 },
                 child: FutureBuilder(
@@ -90,15 +94,15 @@ class EventShowCard extends StatelessWidget {
                                                       child: Container(
                                                           alignment:
                                                               Alignment.center,
-                                                          child:
-                                                              CircleAvatar(
+                                                          child: CircleAvatar(
                                                             backgroundColor:
-                                                                Colors.orange.shade500,
+                                                                Colors.orange
+                                                                    .shade500,
                                                             child: const Icon(
                                                               Icons
                                                                   .card_giftcard,
-                                                              color: Colors
-                                                                  .white,
+                                                              color:
+                                                                  Colors.white,
                                                             ),
                                                           )),
                                                     ),
@@ -161,7 +165,6 @@ class EventShowCard extends StatelessWidget {
                                 ],
                               )
                             ],
-                          ))
-                )));
+                          )))));
   }
 }

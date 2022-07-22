@@ -5,6 +5,7 @@ import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -78,7 +79,7 @@ class _DayContentHomeState extends State<DayContentHome> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: BGColor(),
+      //backgroundColor: BGColor(),
       body: EnterCheckUi(),
     ));
   }
@@ -92,9 +93,7 @@ class _DayContentHomeState extends State<DayContentHome> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: BoxDecoration(
-            color: BGColor()
-          ),
+          decoration: BoxDecoration(color: BGColor()),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -179,7 +178,8 @@ class _DayContentHomeState extends State<DayContentHome> {
               leftChevronMargin: EdgeInsets.zero,
               leftChevronIcon: IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    //Navigator.pop(context);
+                    Get.back();
                   },
                   icon: Container(
                     alignment: Alignment.center,
@@ -274,12 +274,14 @@ class _DayContentHomeState extends State<DayContentHome> {
       ],
     ));
   }
+
   ADView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [ADEvents(context)],
     );
   }
+
   TimeLineView() {
     return SizedBox(
       height: calendardoinglist.isNotEmpty
@@ -287,11 +289,11 @@ class _DayContentHomeState extends State<DayContentHome> {
           : MediaQuery.of(context).size.height * 0.5,
       child: calendardoinglist.isEmpty
           ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: NeumorphicText(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: NeumorphicText(
                     '기록된 일정이 없네요;;;',
                     style: const NeumorphicStyle(
                       shape: NeumorphicShape.flat,
@@ -303,9 +305,9 @@ class _DayContentHomeState extends State<DayContentHome> {
                       fontSize: 20,
                     ),
                   ),
-              )
-            ],
-          )
+                )
+              ],
+            )
           : ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
@@ -458,8 +460,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                                                             BorderRadius
                                                                 .circular(100),
                                                         border: Border.all(
-                                                            color:
-                                                                TextColor(),
+                                                            color: TextColor(),
                                                             width: 1)),
                                                   ),
                                                   const SizedBox(

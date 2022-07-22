@@ -1,6 +1,9 @@
+import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 
 import '../../../../Tool/NoBehavior.dart';
 import '../../Tool/ContainerDesign.dart';
@@ -44,8 +47,8 @@ class _BuyingPageState extends State<BuyingPage> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: BGColor(),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +64,8 @@ class _BuyingPageState extends State<BuyingPage> {
                         child: InkWell(
                             onTap: () {
                               setState(() {
-                                Navigator.pop(context);
+                                //Navigator.pop(context);
+                                Get.back();
                               });
                             },
                             child: Container(
@@ -75,7 +79,7 @@ class _BuyingPageState extends State<BuyingPage> {
                                     shape: NeumorphicShape.convex,
                                     depth: 2,
                                     surfaceIntensity: 0.5,
-                                    color: Colors.black45,
+                                    color: TextColor(),
                                     lightSource: LightSource.topLeft),
                               ),
                             ))),
@@ -89,10 +93,10 @@ class _BuyingPageState extends State<BuyingPage> {
                                   fit: FlexFit.tight,
                                   child: Text(
                                     '구매',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.black45),
+                                        fontSize: contentTitleTextsize(),
+                                        color: TextColor()),
                                   ),
                                 ),
                               ],
@@ -137,12 +141,12 @@ class _BuyingPageState extends State<BuyingPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
-            children: const [
+            children: [
               Text('구독하기',
                   style: TextStyle(
-                      color: Colors.black54,
+                      color: TextColor(),
                       fontWeight: FontWeight.bold,
-                      fontSize: 18)),
+                      fontSize: contentTextsize())),
             ],
           ),
           const SizedBox(
@@ -167,7 +171,7 @@ class _BuyingPageState extends State<BuyingPage> {
         height: 300,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
-            color: Colors.white,
+            color: BGColor(),
             child: Column(
               children: [
                 Flexible(
@@ -186,6 +190,7 @@ class _BuyingPageState extends State<BuyingPage> {
                                       alignment: Alignment.center,
                                       child: Icon(
                                         Icons.looks_one_outlined,
+                                        color: TextColor(),
                                         size: 30,
                                       )),
                                 ),
@@ -194,18 +199,24 @@ class _BuyingPageState extends State<BuyingPage> {
                                 ),
                                 Text('프로 버전 구매',
                                     style: TextStyle(
-                                        color: Colors.black54,
+                                        color: TextColor(),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 15)),
+                                        fontSize: contentTextsize())),
                               ],
                             )),
-                        Checkbox(
-                            value: isChecked,
-                            onChanged: (value) {
-                              setState(() {
-                                isChecked = value!;
-                              });
-                            })
+                        Theme(
+                            data: Theme.of(context).copyWith(
+                              unselectedWidgetColor: Colors.white,
+                            ),
+                            child: Checkbox(
+                                activeColor: TextColor(),
+                                checkColor: Colors.blue,
+                                value: isChecked,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isChecked = value!;
+                                  });
+                                }))
                       ],
                     ),
                   ),
@@ -221,9 +232,9 @@ class _BuyingPageState extends State<BuyingPage> {
                     children: [
                       Text('프로 버전을 구매 시 주어지는 혜택',
                           style: TextStyle(
-                              color: Colors.black54,
+                              color: TextColor(),
                               fontWeight: FontWeight.bold,
-                              fontSize: 15)),
+                              fontSize: contentTextsize())),
                     ],
                   ),
                 ),
@@ -248,17 +259,17 @@ class _BuyingPageState extends State<BuyingPage> {
                                   children: [
                                     Text((index + 1).toString(),
                                         style: TextStyle(
-                                            color: Colors.black54,
+                                            color: TextColor(),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 15)),
+                                            fontSize: contentTextsize())),
                                     SizedBox(
                                       width: 20,
                                     ),
                                     Text('광고 제거',
                                         style: TextStyle(
-                                            color: Colors.black54,
+                                            color: TextColor(),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 15)),
+                                            fontSize: contentTextsize())),
                                   ],
                                 )
                               : (index == 1
@@ -266,41 +277,43 @@ class _BuyingPageState extends State<BuyingPage> {
                                       children: [
                                         Text((index + 1).toString(),
                                             style: TextStyle(
-                                                color: Colors.black54,
+                                                color: TextColor(),
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
+                                                fontSize: contentTextsize())),
                                         SizedBox(
                                           width: 20,
                                         ),
                                         Text('하루 일상 스페이스 개수 잠금 해제',
                                             style: TextStyle(
-                                                color: Colors.black54,
+                                                color: TextColor(),
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
+                                                fontSize: contentTextsize())),
                                       ],
                                     )
                                   : Row(
                                       children: [
                                         Text((index + 1).toString(),
                                             style: TextStyle(
-                                                color: Colors.black54,
+                                                color: TextColor(),
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
+                                                fontSize: contentTextsize())),
                                         SizedBox(
                                           width: 20,
                                         ),
                                         Text('하루 분석표 일부 기능 잠금 해제',
                                             style: TextStyle(
-                                                color: Colors.black54,
+                                                color: TextColor(),
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
+                                                fontSize: contentTextsize())),
                                       ],
                                     ))
                         ],
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
+                        Divider(
+                      color: TextColor(),
+                    ),
                   ),
                 ),
               ],
@@ -316,7 +329,10 @@ class _BuyingPageState extends State<BuyingPage> {
         children: [
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.grey.shade400,
+                primary: BGColor(),
+                side: BorderSide(
+                  color: TextColor()
+                )
               ),
               onPressed: () {},
               child: Center(
@@ -326,14 +342,14 @@ class _BuyingPageState extends State<BuyingPage> {
                     Center(
                       child: NeumorphicText(
                         '구매화면 이동',
-                        style: const NeumorphicStyle(
+                        style: NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
-                          color: Colors.white,
+                          color: TextColor(),
                         ),
                         textStyle: NeumorphicTextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: contentTitleTextsize(),
                         ),
                       ),
                     )

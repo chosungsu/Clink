@@ -13,7 +13,9 @@ import 'package:clickbyme/UI/Home/thirdContentNet/ChangeSpace.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/YourDayfulAd.dart';
 import 'package:clickbyme/route.dart';
 import 'package:clickbyme/sheets/addgroupmember.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
@@ -75,6 +77,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
@@ -204,13 +208,14 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         InkWell(
                                             onTap: () {
-                                              Navigator.push(
+                                              /*Navigator.push(
                                                 context,
                                                 PageTransition(
                                                     type: PageTransitionType
                                                         .bottomToTop,
                                                     child: NotiAlarm()),
-                                              );
+                                              );*/
+                                              Get.to(NotiAlarm());
                                             },
                                             child: Container(
                                               alignment: Alignment.center,
@@ -402,11 +407,15 @@ class _HomePageState extends State<HomePage> {
               GestureDetector(
                 onTap: () {
                   //타일변경으로 넘어가기
-                  Navigator.push(
+                  /*Navigator.push(
                     context,
                     PageTransition(
                         type: PageTransitionType.bottomToTop,
                         child: ChangeSpace()),
+                  );*/
+                  Get.to(
+                    () => ChangeSpace(),
+                    transition: Transition.fadeIn
                   );
                 },
                 child: Text('변경',

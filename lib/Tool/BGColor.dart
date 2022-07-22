@@ -11,6 +11,15 @@ Color BGColor() {
           : color_bg = MyTheme.colorblack);
   return color_bg;
 }
+Color StatusColor() {
+  Color color_status = Colors.white60;
+  Hive.box('user_setting').get('which_color_background') == null
+      ? color_status = MyTheme.colorWhitestatus
+      : (Hive.box('user_setting').get('which_color_background') == 0
+          ? color_status = MyTheme.colorWhitestatus
+          : color_status = MyTheme.colorblackstatus);
+  return color_status;
+}
 
 Color TextColor() {
   Color color_text = Colors.white;

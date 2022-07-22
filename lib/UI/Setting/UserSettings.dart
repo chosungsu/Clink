@@ -6,16 +6,15 @@ import 'package:clickbyme/UI/Setting/OptionChangePage.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:transition/transition.dart';
-
-import '../../Sub/HowToUsePage.dart';
 import 'BuyingPage.dart';
 import '../../Tool/ContainerDesign.dart';
 
 class UserSettings extends StatelessWidget {
-  UserSettings({Key? key, required this.height, required this.controller}) : super(key: key);
+  UserSettings({Key? key, required this.height, required this.controller})
+      : super(key: key);
   final double height;
   final searchNode = FocusNode();
   final List<String> list_title = <String>[
@@ -27,6 +26,7 @@ class UserSettings extends StatelessWidget {
   ];
   var name = Hive.box('user_info').get('id');
   final TextEditingController controller;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -41,12 +41,14 @@ class UserSettings extends StatelessWidget {
             return GestureDetector(
                 onTap: () {
                   index == 0
-                      ? Navigator.push(
+                      ? /*Navigator.push(
                           context,
                           PageTransition(
                               type: PageTransitionType.bottomToTop,
                               child: DayContentHome()),
-                        )
+                        )*/
+                      Get.to(() => DayContentHome(),
+                          transition: Transition.rightToLeft)
                       : (index == 1
                           ? /*Navigator.push(
                               context,
@@ -54,21 +56,20 @@ class UserSettings extends StatelessWidget {
                                   type: PageTransitionType.bottomToTop,
                                   child: OptionChangePage()),
                             )*/
-                          Navigator.of(context).pushReplacement(
-                              PageTransition(
-                                child: OptionChangePage(),
-                                type: PageTransitionType.bottomToTop,
-                              ),
-                            )
+                          Get.to(() => OptionChangePage(),
+                              transition: Transition.rightToLeft)
                           : (index == 2
-                              ? Navigator.push(
+                              ? /*Navigator.push(
                                   context,
                                   PageTransition(
                                       type: PageTransitionType.bottomToTop,
                                       child: BuyingPage()),
-                                )
+                                )*/
+                              Get.to(() => BuyingPage(),
+                                  transition: Transition.fadeIn)
                               : (index == 3
-                                  ? addgroupmember(context, searchNode, controller)
+                                  ? addgroupmember(
+                                      context, searchNode, controller)
                                   : (index == 4 && name == null
                                       ? GoToLogin(context)
                                       : DeleteUserVerify(context, name)))));
