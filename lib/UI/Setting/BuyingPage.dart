@@ -206,10 +206,10 @@ class _BuyingPageState extends State<BuyingPage> {
                             )),
                         Theme(
                             data: Theme.of(context).copyWith(
-                              unselectedWidgetColor: Colors.white,
+                              unselectedWidgetColor: TextColor(),
                             ),
                             child: Checkbox(
-                                activeColor: TextColor(),
+                                activeColor: BGColor(),
                                 checkColor: Colors.blue,
                                 value: isChecked,
                                 onChanged: (value) {
