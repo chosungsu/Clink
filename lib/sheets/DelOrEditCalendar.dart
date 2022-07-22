@@ -78,7 +78,8 @@ buildTitle(BuildContext context) {
                         type: PageTransitionType.bottomToTop,
                         child: DayScript(
                           index: 1,
-                          date: DateTime.now(),
+                          date: DateTime.now(), 
+                          position: 'cal',
                         )),
                   );
                 },
@@ -111,6 +112,7 @@ buildTitle(BuildContext context) {
                         child: DayScript(
                           index: 2,
                           date: DateTime.now(),
+                          position: 'cal',
                         )),
                   );
                 },

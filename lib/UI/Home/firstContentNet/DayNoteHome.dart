@@ -2,6 +2,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/MemoScript.dart';
 import 'package:clickbyme/sheets/DelOrEditMemo.dart';
 import 'package:clickbyme/sheets/settingMemoHome.dart';
@@ -132,17 +133,28 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                 width: 30,
                                                 child: InkWell(
                                                     onTap: () {
-                                                      Navigator.push(
+                                                      /*Navigator.push(
                                                         context,
                                                         PageTransition(
                                                             type:
                                                                 PageTransitionType
                                                                     .bottomToTop,
-                                                            child: MemoScript(
+                                                            child: DayScript(
                                                               index: 0,
-                                                              cardindex: 'null',
+                                                              date: DateTime.now(),
+                                                              position: 'note',
                                                             )),
-                                                      );
+                                                      );*/
+                                                      Get.to(
+                                                          () => DayScript(
+                                                                index: 0,
+                                                                date: DateTime
+                                                                    .now(),
+                                                                position:
+                                                                    'note',
+                                                              ),
+                                                          transition: Transition
+                                                              .downToUp);
                                                     },
                                                     child: Container(
                                                       alignment:

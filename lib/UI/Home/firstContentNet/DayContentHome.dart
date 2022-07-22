@@ -205,7 +205,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                     textEditingController1.clear();
                     textEditingController2.clear();
                     textEditingController3.clear();
-                    Navigator.push(
+                    /*Navigator.push(
                       context,
                       PageTransition(
                           type: PageTransitionType.bottomToTop,
@@ -213,14 +213,20 @@ class _DayContentHomeState extends State<DayContentHome> {
                             index: 0,
                             date: _selectedDay,
                           )),
-                    );
+                    );*/
+                    Get.to(() => DayScript(
+                          index: 0,
+                          date: _selectedDay,
+                          position: 'cal'
+                        ),
+                        transition: Transition.downToUp);
                   },
                   icon: Container(
                     alignment: Alignment.center,
                     width: 30,
                     height: 30,
                     child: NeumorphicIcon(
-                      Icons.add_circle_outlined,
+                      Icons.add,
                       size: 30,
                       style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,

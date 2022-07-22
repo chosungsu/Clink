@@ -267,7 +267,7 @@ Search(
                         fillColor: Colors.white,
                         border: InputBorder.none,
                         hintMaxLines: 2,
-                        hintText: '검색방법 : #친구의 고유 Code',
+                        hintText: '검색방법 : 친구의 고유 Code',
                         hintStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,

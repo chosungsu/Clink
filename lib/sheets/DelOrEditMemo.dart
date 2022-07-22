@@ -75,9 +75,10 @@ buildTitle(BuildContext context, int index) {
                     context,
                     PageTransition(
                         type: PageTransitionType.bottomToTop,
-                        child: MemoScript(
+                        child: DayScript(
                           index: 1,
-                          cardindex: index.toString(),
+                          date: DateTime.now(), 
+                          position: 'note',
                         )),
                   );
                 },
@@ -107,9 +108,10 @@ buildTitle(BuildContext context, int index) {
                     context,
                     PageTransition(
                         type: PageTransitionType.bottomToTop,
-                        child: MemoScript(
+                        child: DayScript(
                           index: 2,
-                          cardindex: index.toString(),
+                          date: DateTime.now(), 
+                          position: 'note',
                         )),
                   );
                 },

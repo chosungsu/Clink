@@ -239,7 +239,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
           .toList();
   ListTile buildListTile(String item, int index) => ListTile(
       key: ValueKey(item + '-' + index.toString()),
-      title: Text('item',
+      title: Text(item,
                   style: TextStyle(
                       color: TextColor(),
                       fontWeight: FontWeight.bold,

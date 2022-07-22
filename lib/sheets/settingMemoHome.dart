@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -81,12 +82,12 @@ title(
       height: 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text('설정',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 25))
+                  fontSize: secondTitleTextsize()))
         ],
       ));
 }
@@ -100,13 +101,13 @@ content(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
+            SizedBox(
               height: 30,
               child: Text('검색 조건설정',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20)),
+                      fontSize: contentTitleTextsize())),
             ),
             const SizedBox(
               height: 10,
@@ -165,7 +166,7 @@ content(
                                       ),
                                       textStyle: NeumorphicTextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 18,
+                                        fontSize: contentTextsize(),
                                       ),
                                     ),
                                   )
@@ -218,7 +219,7 @@ content(
                                     ),
                                     textStyle: NeumorphicTextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                      fontSize: contentTextsize(),
                                     ),
                                   ),
                                 )
@@ -272,7 +273,7 @@ content(
                                     ),
                                     textStyle: NeumorphicTextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                      fontSize: contentTextsize(),
                                     ),
                                   ),
                                 )
