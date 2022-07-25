@@ -1,65 +1,42 @@
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
-settingMemoHome(
-  BuildContext context,
-) {
-  showModalBottomSheet(
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-          borderRadius: const BorderRadius.only(
-        topLeft: const Radius.circular(20),
-        topRight: Radius.circular(20),
-      )),
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Container(
-              height: 230,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  )),
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: SheetPage(context),
-            ));
-      });
-}
+import '../Tool/SheetGetx/calendarthemesetting.dart';
+
 
 SheetPage(
-  BuildContext context,
+  BuildContext context, int setcal_fromsheet,
+    calendarshowsetting controll_cals, calendarthemesetting controll_cals2, int themecal_fromsheet
 ) {
+
   return SizedBox(
-      height: 210,
+      height: 300,
       child: Padding(
           padding:
               const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                   height: 5,
-                  width: MediaQuery.of(context).size.width - 40,
+                  width: MediaQuery.of(context).size.width - 70,
                   child: Row(
                     children: [
                       SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
+                        width: (MediaQuery.of(context).size.width - 70) * 0.4,
                       ),
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: (MediaQuery.of(context).size.width - 70) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                       SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
+                        width: (MediaQuery.of(context).size.width - 70) * 0.4,
                       ),
                     ],
                   )),
@@ -70,7 +47,7 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              content(context)
+              content(context, setcal_fromsheet, controll_cals, controll_cals2, themecal_fromsheet)
             ],
           )));
 }
@@ -93,17 +70,19 @@ title(
 }
 
 content(
-  BuildContext context,
+  BuildContext context, int setcal_fromsheet,
+    calendarshowsetting controll_cals, calendarthemesetting controll_cals2, int themecal_fromsheet
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-        height: 100,
+        height: 180,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 30,
-              child: Text('검색 조건설정',
+              child: Text('달력 설정',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -124,23 +103,18 @@ content(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
-                                primary: Hive.box('user_setting')
-                                            .get('which_search_memo') ==
-                                        0
+                                primary: setcal_fromsheet ==
+                                    0
                                     ? Colors.grey.shade400
-                                    : (Hive.box('user_setting')
-                                                .get('which_search_memo') ==
-                                            null
-                                        ? Colors.grey.shade400
-                                        : Colors.white),
+                                    : Colors.white,
                                 side: const BorderSide(
                                   width: 1,
                                   color: Colors.black45,
                                 )),
                             onPressed: () {
                               setState(() {
-                                Hive.box('user_setting')
-                                    .put('which_search_memo', 0);
+                                controll_cals.setcals1w();
+                                setcal_fromsheet = controll_cals.showcalendar;
                               });
                             },
                             child: Center(
@@ -150,19 +124,14 @@ content(
                                 children: [
                                   Center(
                                     child: NeumorphicText(
-                                      '제목',
+                                      '1week',
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: Hive.box('user_setting')
-                                                    .get('which_search_memo') ==
-                                                0
+                                        color: setcal_fromsheet ==
+                                            0
                                             ? Colors.white
-                                            : (Hive.box('user_setting').get(
-                                                        'which_search_memo') ==
-                                                    null
-                                                ? Colors.white
-                                                : Colors.black45),
+                                            : Colors.black45,
                                       ),
                                       textStyle: NeumorphicTextStyle(
                                         fontWeight: FontWeight.bold,
@@ -185,9 +154,8 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: Hive.box('user_setting')
-                                          .get('which_search_memo') ==
-                                      1
+                              primary: setcal_fromsheet ==
+                                  1
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               side: const BorderSide(
@@ -196,8 +164,8 @@ content(
                               )),
                           onPressed: () {
                             setState(() {
-                              Hive.box('user_setting')
-                                  .put('which_search_memo', 1);
+                              controll_cals.setcals2w();
+                              setcal_fromsheet = controll_cals.showcalendar;
                             });
                           },
                           child: Center(
@@ -207,13 +175,12 @@ content(
                               children: [
                                 Center(
                                   child: NeumorphicText(
-                                    '내용',
+                                    '2weeks',
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: Hive.box('user_setting')
-                                                  .get('which_search_memo') ==
-                                              1
+                                      color: setcal_fromsheet ==
+                                          1
                                           ? Colors.white
                                           : Colors.black45,
                                     ),
@@ -239,9 +206,8 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: Hive.box('user_setting')
-                                          .get('which_search_memo') ==
-                                      2
+                              primary: setcal_fromsheet ==
+                                  2
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               side: const BorderSide(
@@ -250,8 +216,8 @@ content(
                               )),
                           onPressed: () {
                             setState(() {
-                              Hive.box('user_setting')
-                                  .put('which_search_memo', 2);
+                              controll_cals.setcals1m();
+                              setcal_fromsheet = controll_cals.showcalendar;
                             });
                           },
                           child: Center(
@@ -261,13 +227,133 @@ content(
                               children: [
                                 Center(
                                   child: NeumorphicText(
-                                    '중요도',
+                                    '1month',
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: Hive.box('user_setting')
-                                                  .get('which_search_memo') ==
-                                              2
+                                      color: setcal_fromsheet ==
+                                          2
+                                          ? Colors.white
+                                          : Colors.black45,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 30,
+              child: Text('일정테마 변경',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize())),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 30,
+              child: Row(
+                children: [
+                  Flexible(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 30,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100)),
+                                primary: themecal_fromsheet ==
+                                        0
+                                    ? Colors.grey.shade400
+                                    : Colors.white,
+                                side: const BorderSide(
+                                  width: 1,
+                                  color: Colors.black45,
+                                )),
+                            onPressed: () {
+                              setState(() {
+                                controll_cals2.themecals1();
+                                themecal_fromsheet = controll_cals2.themecalendar;
+                              });
+                            },
+                            child: Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: NeumorphicText(
+                                      '달력테마',
+                                      style: NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: themecal_fromsheet ==
+                                                0
+                                            ? Colors.white
+                                            : Colors.black45,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )),
+                      )),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 30,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100)),
+                              primary: themecal_fromsheet ==
+                                      1
+                                  ? Colors.grey.shade400
+                                  : Colors.white,
+                              side: const BorderSide(
+                                width: 1,
+                                color: Colors.black45,
+                              )),
+                          onPressed: () {
+                            setState(() {
+                              controll_cals2.themecals2();
+                              themecal_fromsheet = controll_cals2.themecalendar;
+                            });
+                          },
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: NeumorphicText(
+                                    '시간표테마',
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: themecal_fromsheet ==
+                                              1
                                           ? Colors.white
                                           : Colors.black45,
                                     ),

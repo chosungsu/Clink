@@ -10,9 +10,9 @@ import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/ChangeSpace.dart';
-import 'package:clickbyme/UI/Home/thirdContentNet/YourDayfulAd.dart';
 import 'package:clickbyme/route.dart';
 import 'package:clickbyme/sheets/addgroupmember.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -20,6 +20,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/Home/firstContentNet/DayContentHome.dart';
+import '../UI/Home/firstContentNet/RoutineHome.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -41,24 +43,20 @@ class _HomePageState extends State<HomePage> {
   int currentPage = 0;
   Color color1 = Colors.white;
   Color color2 = Colors.white;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String name = Hive.box('user_info').get('id');
+  List<SpaceList> _user_ad = [];
+  final List<SpaceList> _default_ad = [
+    SpaceList(title: '날씨공간'),
+    SpaceList(title: '일정공간'),
+    SpaceList(title: '루틴공간'),
+    SpaceList(title: '메모공간'),
+    SpaceList(title: '운동공간'),
+  ];
 
   late final PageController _pController;
   //프로 버전 구매시 사용하게될 코드
   bool isbought = false;
-  final List<SpaceList> _list_ad = [
-    SpaceList(
-      title: '날씨조각',
-    ),
-    SpaceList(
-      title: '운동조각',
-    ),
-    SpaceList(
-      title: '일정조각',
-    ),
-    SpaceList(
-      title: '메모조각',
-    ),
-  ];
 
   @override
   void initState() {
@@ -390,46 +388,349 @@ class _HomePageState extends State<HomePage> {
     //프로버전 구매시 사용할 코드
     //isbought == false일 경우와 isbought == true일 경우 사이즈박스 크기를 제한 풀기...
     return SizedBox(
-      height: isbought == false ? 110 * 3 : 110 * _list_ad.length.toDouble(),
+      height: isbought == false ? 80 * 3 + 50 : 130 * 5,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text('스페이스',
-                    style: TextStyle(
-                        color: TextColor(),
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize())),
-              ),
-              GestureDetector(
-                onTap: () {
-                  //타일변경으로 넘어가기
-                  /*Navigator.push(
+          SizedBox(
+            height: 30,
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text('스페이스',
+                      style: TextStyle(
+                          color: TextColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize())),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    //타일변경으로 넘어가기
+                    /*Navigator.push(
                     context,
                     PageTransition(
                         type: PageTransitionType.bottomToTop,
                         child: ChangeSpace()),
                   );*/
-                  Get.to(
-                    () => ChangeSpace(),
-                    transition: Transition.fadeIn
-                  );
-                },
-                child: Text('변경',
-                    style: TextStyle(
-                        color: TextColor(),
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize())),
-              )
-            ],
+                    Get.to(
+                            () => ChangeSpace(),
+                        transition: Transition.fadeIn
+                    );
+                  },
+                  child: Text('변경',
+                      style: TextStyle(
+                          color: TextColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize())),
+                )
+              ],
+            ),
           ),
           const SizedBox(
             height: 20,
           ),
-          YourDayfulAd(height: height)
+          SizedBox(
+            height: isbought == true ? 80 * 5 : 80 * 3,
+            child: FutureBuilder(
+                future: firestore
+                    .collection("UserSpaceDataBase")
+                    .doc(name)
+                    .get()
+                    .then((value) {
+                  _user_ad.clear();
+                  value.data()!.forEach((key, value) {
+                    _user_ad.addAll([SpaceList(title: value)]);
+                  });
+                }),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData || _user_ad.isNotEmpty) {
+                    return ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: isbought == true ? _user_ad.length : 3,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () {
+                                _user_ad[index].title == '날씨공간'
+                                    ? Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: DayContentHome()),
+                                )
+                                    : (_user_ad[index].title == '운동공간'
+                                    ? Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: DayContentHome()),
+                                )
+                                    : (_user_ad[index].title == '메모공간' ?
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ) : (_user_ad[index].title == '루틴공간' ?
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ) : Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ))));
+                              },
+                              child: SizedBox(
+                                height: 80,
+                                child: Column(
+                                  children: [
+                                    ContainerDesign(
+                                      color: BGColor(),
+                                      child: Column(
+                                        children: [
+                                          Stack(
+                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                  height: 50,
+                                                  width: MediaQuery.of(context).size.width - 40,
+                                                  child: Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(_user_ad[index].title,
+                                                          style: TextStyle(
+                                                              color: TextColor(),
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 18)),
+                                                    ],
+                                                  )),
+                                              Positioned(
+                                                top: 0,
+                                                left: 0,
+                                                child: Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    child: _user_ad[index].title == '날씨공간'
+                                                        ? NeumorphicIcon(
+                                                      Icons.sunny,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    )
+                                                        : (_user_ad[index].title == '운동공간'
+                                                        ? NeumorphicIcon(
+                                                      Icons.directions_run,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    )
+                                                        : (_user_ad[index].title == '메모공간' ?
+                                                    NeumorphicIcon(
+                                                      Icons.note,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ) : (_user_ad[index].title == '루틴공간' ?
+                                                    NeumorphicIcon(
+                                                      Icons.add_task,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ) : NeumorphicIcon(
+                                                      Icons.today,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ))))),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                ),
+                              ));
+                        });
+                  } else {
+                    return ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: isbought == true ? _default_ad.length : 3,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () {
+                                _default_ad[index].title == '날씨공간'
+                                    ? Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: DayContentHome()),
+                                )
+                                    : (_default_ad[index].title == '운동공간'
+                                    ? Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: DayContentHome()),
+                                )
+                                    : (_default_ad[index].title == '메모공간' ?
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ) : (_default_ad[index].title == '루틴공간' ?
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ) : Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ))));
+                              },
+                              child: SizedBox(
+                                height: 80,
+                                child: Column(
+                                  children: [
+                                    ContainerDesign(
+                                      color: BGColor(),
+                                      child: Column(
+                                        children: [
+                                          Stack(
+                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                  height: 50,
+                                                  width: MediaQuery.of(context).size.width - 40,
+                                                  child: Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(_default_ad[index].title,
+                                                          style: TextStyle(
+                                                              color: TextColor(),
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 18)),
+                                                    ],
+                                                  )),
+                                              Positioned(
+                                                top: 0,
+                                                left: 0,
+                                                child: Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    child: _default_ad[index].title == '날씨공간'
+                                                        ? NeumorphicIcon(
+                                                      Icons.sunny,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    )
+                                                        : (_default_ad[index].title == '운동공간'
+                                                        ? NeumorphicIcon(
+                                                      Icons.directions_run,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    )
+                                                        : (_default_ad[index].title == '메모공간' ?
+                                                    NeumorphicIcon(
+                                                      Icons.note,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ) : (_default_ad[index].title == '루틴공간' ?
+                                                    NeumorphicIcon(
+                                                      Icons.add_task,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ) : NeumorphicIcon(
+                                                      Icons.today,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ))))),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                ),
+                              ));
+                        });
+                  }
+                }),
+          )
         ],
       ),
     );

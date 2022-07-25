@@ -209,7 +209,7 @@ class _BuyingPageState extends State<BuyingPage> {
                               unselectedWidgetColor: TextColor(),
                             ),
                             child: Checkbox(
-                                activeColor: BGColor(),
+                                activeColor: TextColor(),
                                 checkColor: Colors.blue,
                                 value: isChecked,
                                 onChanged: (value) {
@@ -257,54 +257,62 @@ class _BuyingPageState extends State<BuyingPage> {
                           index == 0
                               ? Row(
                                   children: [
-                                    Text((index + 1).toString(),
-                                        style: TextStyle(
-                                            color: TextColor(),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize())),
                                     SizedBox(
-                                      width: 20,
+                                      width: 50,
+                                      child: Text((index + 1).toString() + '.',
+                                          style: TextStyle(
+                                              color: TextColor(),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize())),
                                     ),
-                                    Text('광고 제거',
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Text('광고 제거',
                                         style: TextStyle(
                                             color: TextColor(),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize())),
+                                            fontSize: contentTextsize())),)
                                   ],
                                 )
                               : (index == 1
                                   ? Row(
                                       children: [
-                                        Text((index + 1).toString(),
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize())),
                                         SizedBox(
-                                          width: 20,
+                                          width: 50,
+                                          child: Text((index + 1).toString() + '.',
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
                                         ),
-                                        Text('하루 일상 스페이스 개수 잠금 해제',
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize())),
+                                        Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text('하루 일상 스페이스 개수 잠금 해제',
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),)
+
                                       ],
                                     )
                                   : Row(
                                       children: [
-                                        Text((index + 1).toString(),
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize())),
                                         SizedBox(
-                                          width: 20,
+                                          width: 50,
+                                          child: Text((index + 1).toString() + '.',
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
                                         ),
-                                        Text('하루 분석표 일부 기능 잠금 해제',
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize())),
+                                        Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text('하루 분석표 일부 기능 잠금 해제',
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),)
+
                                       ],
                                     ))
                         ],
@@ -313,6 +321,8 @@ class _BuyingPageState extends State<BuyingPage> {
                     separatorBuilder: (BuildContext context, int index) =>
                         Divider(
                       color: TextColor(),
+                          height: 10,
+                          thickness: 3,
                     ),
                   ),
                 ),

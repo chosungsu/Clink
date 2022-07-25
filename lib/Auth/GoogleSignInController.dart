@@ -15,26 +15,27 @@ class GoogleSignInController with ChangeNotifier {
     googleSignInAccount = await _googleSignIn.signIn();
     String nick = googleSignInAccount!.displayName.toString();
     String email = googleSignInAccount!.email.toString();
-    String codes = Hive.box('user_info').get('id').toString().length > 5
-      ? Hive.box('user_info').get('id').toString().substring(0, 4) + 
-      Hive.box('user_info').get('email').toString().substring(0, 3) +
-      Hive.box('user_info')
-      .get('email')
-      .toString()
-      .split('@')[1]
-      .substring(0, 2)
-      : Hive.box('user_info').get('id').toString().substring(0, 2)+ 
-      Hive.box('user_info').get('email').toString().substring(0, 3) +
-      Hive.box('user_info')
-      .get('email')
-      .toString()
-      .split('@')[1]
-      .substring(0, 2);
+
     //내부 저장으로 로그인 정보 저장
     Hive.box('user_info').put('id', nick);
     Hive.box('user_info').put('email', email);
     Hive.box('user_info').put('count', count);
     Hive.box('user_info').put('autologin', ischecked);
+    String codes = Hive.box('user_info').get('id').toString().length > 5
+        ? Hive.box('user_info').get('email').toString().substring(0, 3) +
+        Hive.box('user_info')
+            .get('email')
+            .toString()
+            .split('@')[1]
+            .substring(0, 2) +
+            Hive.box('user_info').get('id').toString().substring(0, 4)
+        : Hive.box('user_info').get('email').toString().substring(0, 3) +
+        Hive.box('user_info')
+            .get('email')
+            .toString()
+            .split('@')[1]
+            .substring(0, 2) + 
+            Hive.box('user_info').get('id').toString().substring(0, 2);
     //firestore 저장
     await firestore.collection('User').doc(nick).set({
       'name': nick,

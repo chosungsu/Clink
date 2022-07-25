@@ -16,21 +16,7 @@ class KakaoSignInController with ChangeNotifier {
         ? await UserApi.instance.loginWithKakaoTalk()
         : await UserApi.instance.loginWithKakaoAccount();
     User user = await UserApi.instance.me();
-    String codes = Hive.box('user_info').get('id').toString().length > 5
-      ? Hive.box('user_info').get('id').toString().substring(0, 4) + 
-      Hive.box('user_info').get('email').toString().substring(0, 3) +
-      Hive.box('user_info')
-      .get('email')
-      .toString()
-      .split('@')[1]
-      .substring(0, 2)
-      : Hive.box('user_info').get('id').toString().substring(0, 2)+ 
-      Hive.box('user_info').get('email').toString().substring(0, 3) +
-      Hive.box('user_info')
-      .get('email')
-      .toString()
-      .split('@')[1]
-      .substring(0, 2);
+
     //내부 저장으로 로그인 정보 저장
     if (user.kakaoAccount != null) {
       if (user.kakaoAccount!.profile!.nickname != null) {
@@ -40,6 +26,21 @@ class KakaoSignInController with ChangeNotifier {
         Hive.box('user_info').put('email', email);
         Hive.box('user_info').put('count', count);
         Hive.box('user_info').put('autologin', ischecked);
+        String codes = Hive.box('user_info').get('id').toString().length > 5
+            ? Hive.box('user_info').get('email').toString().substring(0, 3) +
+                Hive.box('user_info')
+                    .get('email')
+                    .toString()
+                    .split('@')[1]
+                    .substring(0, 2) +
+                Hive.box('user_info').get('id').toString().substring(0, 4)
+            : Hive.box('user_info').get('email').toString().substring(0, 3) +
+                Hive.box('user_info')
+                    .get('email')
+                    .toString()
+                    .split('@')[1]
+                    .substring(0, 2) +
+                Hive.box('user_info').get('id').toString().substring(0, 2);
         //firestore 저장
         await firestore.collection('User').doc(nick).set({
           'name': nick,
@@ -47,7 +48,7 @@ class KakaoSignInController with ChangeNotifier {
           'login_where': 'kakao_user',
           'time': DateTime.now(),
           'autologin': ischecked,
-          'code' : codes
+          'code': codes
         });
       }
     }

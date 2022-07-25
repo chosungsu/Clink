@@ -1,45 +1,17 @@
+import 'package:clickbyme/Tool/SheetGetx/memosearchsetting.dart';
+import 'package:clickbyme/Tool/SheetGetx/memosortsetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive/hive.dart';
 
-settingMemoHome(
-  BuildContext context,
-) {
-  showModalBottomSheet(
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-          borderRadius: const BorderRadius.only(
-        topLeft: const Radius.circular(20),
-        topRight: Radius.circular(20),
-      )),
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Container(
-              height: 230,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  )),
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: SheetPage(context),
-            ));
-      });
-}
-
-SheetPage(
-  BuildContext context,
+SheetPage_memo(
+  BuildContext context, int sortmemo_fromsheet,
+    memosearchsetting controll_memo, memosortsetting controll_memo2, int searchmemo_fromsheet,
 ) {
   return SizedBox(
-      height: 210,
+      height: 300,
       child: Padding(
           padding:
               const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
@@ -48,18 +20,18 @@ SheetPage(
             children: [
               SizedBox(
                   height: 5,
-                  width: MediaQuery.of(context).size.width - 40,
+                  width: MediaQuery.of(context).size.width - 60,
                   child: Row(
                     children: [
                       SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
+                        width: (MediaQuery.of(context).size.width - 60) * 0.4,
                       ),
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: (MediaQuery.of(context).size.width - 60) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                       SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
+                        width: (MediaQuery.of(context).size.width - 60) * 0.4,
                       ),
                     ],
                   )),
@@ -70,7 +42,7 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              content(context)
+              content(context, sortmemo_fromsheet, controll_memo, controll_memo2, searchmemo_fromsheet)
             ],
           )));
 }
@@ -93,11 +65,12 @@ title(
 }
 
 content(
-  BuildContext context,
+  BuildContext context, int sortmemo_fromsheet,
+    memosearchsetting controll_memo, memosortsetting controll_memo2, int searchmemo_fromsheet,
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-        height: 100,
+        height: 180,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -124,23 +97,18 @@ content(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
-                                primary: Hive.box('user_setting')
-                                            .get('which_search_memo') ==
+                                primary: searchmemo_fromsheet ==
                                         0
                                     ? Colors.grey.shade400
-                                    : (Hive.box('user_setting')
-                                                .get('which_search_memo') ==
-                                            null
-                                        ? Colors.grey.shade400
-                                        : Colors.white),
+                                    : Colors.white,
                                 side: const BorderSide(
                                   width: 1,
                                   color: Colors.black45,
                                 )),
                             onPressed: () {
                               setState(() {
-                                Hive.box('user_setting')
-                                    .put('which_search_memo', 0);
+                                controll_memo.setmemo1();
+                                searchmemo_fromsheet = controll_memo.memosearch;
                               });
                             },
                             child: Center(
@@ -154,15 +122,10 @@ content(
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: Hive.box('user_setting')
-                                                    .get('which_search_memo') ==
+                                        color: searchmemo_fromsheet ==
                                                 0
                                             ? Colors.white
-                                            : (Hive.box('user_setting').get(
-                                                        'which_search_memo') ==
-                                                    null
-                                                ? Colors.white
-                                                : Colors.black45),
+                                            : Colors.black45,
                                       ),
                                       textStyle: NeumorphicTextStyle(
                                         fontWeight: FontWeight.bold,
@@ -185,8 +148,7 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: Hive.box('user_setting')
-                                          .get('which_search_memo') ==
+                              primary: searchmemo_fromsheet ==
                                       1
                                   ? Colors.grey.shade400
                                   : Colors.white,
@@ -196,8 +158,8 @@ content(
                               )),
                           onPressed: () {
                             setState(() {
-                              Hive.box('user_setting')
-                                  .put('which_search_memo', 1);
+                              controll_memo.setmemo2();
+                              searchmemo_fromsheet = controll_memo.memosearch;
                             });
                           },
                           child: Center(
@@ -211,8 +173,7 @@ content(
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: Hive.box('user_setting')
-                                                  .get('which_search_memo') ==
+                                      color: searchmemo_fromsheet ==
                                               1
                                           ? Colors.white
                                           : Colors.black45,
@@ -239,8 +200,7 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: Hive.box('user_setting')
-                                          .get('which_search_memo') ==
+                              primary: searchmemo_fromsheet ==
                                       2
                                   ? Colors.grey.shade400
                                   : Colors.white,
@@ -250,8 +210,8 @@ content(
                               )),
                           onPressed: () {
                             setState(() {
-                              Hive.box('user_setting')
-                                  .put('which_search_memo', 2);
+                              controll_memo.setmemo3();
+                              searchmemo_fromsheet = controll_memo.memosearch;
                             });
                           },
                           child: Center(
@@ -265,9 +225,129 @@ content(
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: Hive.box('user_setting')
-                                                  .get('which_search_memo') ==
+                                      color: searchmemo_fromsheet ==
                                               2
+                                          ? Colors.white
+                                          : Colors.black45,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 30,
+              child: Text('정렬기준',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize())),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 30,
+              child: Row(
+                children: [
+                  Flexible(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 30,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100)),
+                                primary: sortmemo_fromsheet ==
+                                    0
+                                    ? Colors.grey.shade400
+                                    : Colors.white,
+                                side: const BorderSide(
+                                  width: 1,
+                                  color: Colors.black45,
+                                )),
+                            onPressed: () {
+                              setState(() {
+                                controll_memo2.sort1();
+                                sortmemo_fromsheet = controll_memo2.memosort;
+                              });
+                            },
+                            child: Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: NeumorphicText(
+                                      '컬렉션순',
+                                      style: NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: sortmemo_fromsheet ==
+                                            0
+                                            ? Colors.white
+                                            : Colors.black45,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )),
+                      )),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 30,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100)),
+                              primary: sortmemo_fromsheet ==
+                                  1
+                                  ? Colors.grey.shade400
+                                  : Colors.white,
+                              side: const BorderSide(
+                                width: 1,
+                                color: Colors.black45,
+                              )),
+                          onPressed: () {
+                            setState(() {
+                              controll_memo2.sort2();
+                              sortmemo_fromsheet = controll_memo2.memosort;
+                            });
+                          },
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: NeumorphicText(
+                                    '중요도순',
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: sortmemo_fromsheet ==
+                                          1
                                           ? Colors.white
                                           : Colors.black45,
                                     ),

@@ -33,9 +33,11 @@ addgroupmember(
         ),
       ),
       backgroundColor: Colors.white,
-      isDismissible: false,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)));
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))).whenComplete(() {
+    controller.clear();
+    Hive.box('user_setting').put('user_people', null);
+  });
 }
 
 SheetPage(
@@ -102,22 +104,6 @@ title(
                     fontWeight: FontWeight.bold,
                     fontSize: 25)),
           ),
-          TextButton(
-              onPressed: () {
-                controller.clear();
-                Hive.box('user_setting').put('user_people', null);
-                Navigator.pop(context);
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Text('창 닫기',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20)),
-                ],
-              ))
         ],
       ));
 }

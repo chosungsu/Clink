@@ -1,6 +1,8 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/SheetGetx/memosearchsetting.dart';
+import 'package:clickbyme/Tool/SheetGetx/memosortsetting.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/MemoScript.dart';
@@ -24,6 +26,10 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
+  int sortmemo_fromsheet = 0;
+  int searchmemo_fromsheet = 0;
+  final controll_memo = Get.put(memosearchsetting());
+  final controll_memo2 = Get.put(memosortsetting());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final searchNode = FocusNode();
   final List memostar = [1, 2, 1, 1, 3];
@@ -45,6 +51,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   @override
   void initState() {
     super.initState();
+    searchmemo_fromsheet = controll_memo.memosearch;
+    sortmemo_fromsheet = controll_memo2.memosort;
   }
 
   @override
@@ -184,7 +192,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                 width: 30,
                                                 child: InkWell(
                                                     onTap: () {
-                                                      settingMemoHome(context);
+                                                      settingMemoHome(context, controll_memo,
+                                                          controll_memo2);
                                                     },
                                                     child: Container(
                                                       alignment:
@@ -295,7 +304,46 @@ class _DayNoteHomeState extends State<DayNoteHome> {
       ],
     );
   }
-
+  settingMemoHome(
+      BuildContext context, memosearchsetting controll_memo, memosortsetting controll_memo2,
+      ) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),
+              bottomLeft: Radius.circular(20), topRight: Radius.circular(20),
+              bottomRight: Radius.circular(20),)),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.all(10),
+            child: Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Container(
+                  height: 320,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: SheetPage_memo(context, sortmemo_fromsheet,
+                      controll_memo, controll_memo2, searchmemo_fromsheet),
+                ))
+          );
+        }).whenComplete(() {
+      setState(() {
+        sortmemo_fromsheet = controll_memo2.memosort;
+        searchmemo_fromsheet = controll_memo.memosearch;
+      });
+    });
+  }
   ADBox() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,16 +1,20 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
+import 'package:clickbyme/sheets/settingCalendarHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../DB/Event.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../Tool/SheetGetx/calendarthemesetting.dart';
 
 class DayContentHome extends StatefulWidget {
   @override
@@ -21,7 +25,10 @@ class _DayContentHomeState extends State<DayContentHome> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  int isupschedule = 0;
+  int setcal_fromsheet = 0;
+  int themecal_fromsheet = 0;
+  final controll_cals = Get.put(calendarshowsetting());
+  final controll_cals2 = Get.put(calendarthemesetting());
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
@@ -58,6 +65,8 @@ class _DayContentHomeState extends State<DayContentHome> {
   @override
   void initState() {
     super.initState();
+    setcal_fromsheet = controll_cals.showcalendar;
+    themecal_fromsheet = controll_cals2.themecalendar;
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
@@ -77,10 +86,11 @@ class _DayContentHomeState extends State<DayContentHome> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
         child: Scaffold(
       //backgroundColor: BGColor(),
-      body: EnterCheckUi(),
+      body: EnterCheckUi(controll_cals, controll_cals2),
     ));
   }
 
@@ -88,7 +98,7 @@ class _DayContentHomeState extends State<DayContentHome> {
     return _events[date] ?? [];
   }
 
-  EnterCheckUi() {
+  EnterCheckUi(calendarshowsetting controll_cals, calendarthemesetting controll_cals2) {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
@@ -100,7 +110,7 @@ class _DayContentHomeState extends State<DayContentHome> {
               SizedBox(
                   /*height:
                       isupschedule == 0 ? 170 : (isupschedule == 1 ? 220 : 430),*/
-                  child: calendarView(height, context)),
+                  child: calendarView(height, context, controll_cals, controll_cals2)),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -138,7 +148,8 @@ class _DayContentHomeState extends State<DayContentHome> {
     );
   }
 
-  calendarView(double height, BuildContext context) {
+  calendarView(double height, BuildContext context,
+      calendarshowsetting controll_cals, calendarthemesetting controll_cals2) {
     return SizedBox(
         //height: isupschedule == 0 ? 170 : (isupschedule == 1 ? 220 : 430),
         child: Column(
@@ -151,9 +162,9 @@ class _DayContentHomeState extends State<DayContentHome> {
           shouldFillViewport: false,
           firstDay: DateTime.utc(2000, 1, 1),
           lastDay: DateTime.utc(2100, 12, 31),
-          calendarFormat: isupschedule == 0
+          calendarFormat: setcal_fromsheet == 0
               ? CalendarFormat.week
-              : (isupschedule == 1
+              : (setcal_fromsheet == 1
                   ? CalendarFormat.twoWeeks
                   : CalendarFormat.month),
           eventLoader: getEventList,
@@ -199,13 +210,19 @@ class _DayContentHomeState extends State<DayContentHome> {
               rightChevronVisible: true,
               rightChevronPadding: const EdgeInsets.only(right: 10),
               rightChevronMargin: EdgeInsets.zero,
-              rightChevronIcon: IconButton(
-                  onPressed: () {
-                    //이벤트 작성시트 호출
-                    textEditingController1.clear();
-                    textEditingController2.clear();
-                    textEditingController3.clear();
-                    /*Navigator.push(
+              rightChevronIcon: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                        onPressed: () {
+                          //이벤트 작성시트 호출
+                          textEditingController1.clear();
+                          textEditingController2.clear();
+                          textEditingController3.clear();
+                          /*Navigator.push(
                       context,
                       PageTransition(
                           type: PageTransitionType.bottomToTop,
@@ -214,28 +231,47 @@ class _DayContentHomeState extends State<DayContentHome> {
                             date: _selectedDay,
                           )),
                     );*/
-                    Get.to(() => DayScript(
-                          index: 0,
-                          date: _selectedDay,
-                          position: 'cal'
-                        ),
-                        transition: Transition.downToUp);
-                  },
-                  icon: Container(
-                    alignment: Alignment.center,
-                    width: 30,
-                    height: 30,
-                    child: NeumorphicIcon(
-                      Icons.add,
-                      size: 30,
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          depth: 2,
-                          surfaceIntensity: 0.5,
-                          color: TextColor(),
-                          lightSource: LightSource.topLeft),
-                    ),
-                  )),
+                          Get.to(() => DayScript(
+                              index: 0,
+                              date: _selectedDay,
+                              position: 'cal'
+                          ),
+                              transition: Transition.downToUp);
+                        },
+                        icon: NeumorphicIcon(
+                          Icons.add,
+                          size: 30,
+                          style: NeumorphicStyle(
+                              shape: NeumorphicShape.convex,
+                              depth: 2,
+                              surfaceIntensity: 0.5,
+                              color: TextColor(),
+                              lightSource: LightSource.topLeft),
+                        ),),
+                    const SizedBox(width: 10,),
+                    IconButton(
+                        padding: const EdgeInsets.only(right: 10),
+                      constraints: const BoxConstraints(),
+                        onPressed: () {
+                          settingCalendarHome(
+                              context,
+                            controll_cals,
+                              controll_cals2
+                          );
+                        },
+                        icon: NeumorphicIcon(
+                          Icons.settings,
+                          size: 30,
+                          style: NeumorphicStyle(
+                              shape: NeumorphicShape.convex,
+                              depth: 2,
+                              surfaceIntensity: 0.5,
+                              color: TextColor(),
+                              lightSource: LightSource.topLeft),
+                        ),),
+                  ],
+                ),
+              ),
               titleTextStyle: TextStyle(
                 color: TextColor(),
                 fontSize: 20,
@@ -246,29 +282,29 @@ class _DayContentHomeState extends State<DayContentHome> {
           calendarStyle: CalendarStyle(
               isTodayHighlighted: true,
               selectedDecoration:
-                  BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                  const BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
               selectedTextStyle: TextStyle(color: TextColor()),
               defaultTextStyle: TextStyle(color: TextColor()),
-              weekendTextStyle: TextStyle(color: Colors.blue)),
+              weekendTextStyle: const TextStyle(color: Colors.blue)),
         ),
-        Container(
+        /*Container(
             alignment: Alignment.center,
             width: 30,
             height: 30,
             child: InkWell(
               onTap: () {
                 setState(() {
-                  isupschedule == 0
-                      ? isupschedule = 1
-                      : (isupschedule == 1
-                          ? isupschedule = 2
-                          : isupschedule = 0);
+                  schedule == 0
+                      ? schedule = 1
+                      : (schedule == 1
+                          ? schedule = 2
+                          : schedule = 0);
                 });
               },
               child: CircleAvatar(
                 backgroundColor: Colors.blue.shade500,
                 child: Text(
-                  isupschedule == 0 ? '2W' : (isupschedule == 1 ? '1M' : '1W'),
+                  schedule == 0 ? '2W' : (schedule == 1 ? '1M' : '1W'),
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -276,11 +312,50 @@ class _DayContentHomeState extends State<DayContentHome> {
                   overflow: TextOverflow.fade,
                 ),
               ),
-            ))
+            ))*/
       ],
     ));
   }
-
+  settingCalendarHome(
+      BuildContext context, calendarshowsetting controll_cals, calendarthemesetting controll_cals2,
+      ) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),
+              bottomLeft: Radius.circular(20), topRight: Radius.circular(20),
+              bottomRight: Radius.circular(20),)),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.all(10),
+            child: Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Container(
+                  height: 320,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: SheetPage(context, setcal_fromsheet,
+                      controll_cals, controll_cals2, themecal_fromsheet),
+                )),
+          );
+        }).whenComplete(() {
+      setState(() {
+        setcal_fromsheet = controll_cals.showcalendar;
+        themecal_fromsheet = controll_cals2.themecalendar;
+      });
+    });
+  }
   ADView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
