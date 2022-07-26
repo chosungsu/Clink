@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
@@ -8,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:page_transition/page_transition.dart';
@@ -25,10 +27,11 @@ class _DayContentHomeState extends State<DayContentHome> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  int setcal_fromsheet = 0;
-  int themecal_fromsheet = 0;
   final controll_cals = Get.put(calendarshowsetting());
-  final controll_cals2 = Get.put(calendarthemesetting());
+  static final controll_cals2 = Get.put(calendarthemesetting());
+  int setcal_fromsheet = 0;
+  int themecal_fromsheet = controll_cals2.themecalendar;
+  
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
@@ -65,6 +68,7 @@ class _DayContentHomeState extends State<DayContentHome> {
   @override
   void initState() {
     super.initState();
+    print('in');
     setcal_fromsheet = controll_cals.showcalendar;
     themecal_fromsheet = controll_cals2.themecalendar;
     textEditingController1 = TextEditingController();
@@ -86,7 +90,6 @@ class _DayContentHomeState extends State<DayContentHome> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
         child: Scaffold(
       //backgroundColor: BGColor(),
@@ -98,7 +101,8 @@ class _DayContentHomeState extends State<DayContentHome> {
     return _events[date] ?? [];
   }
 
-  EnterCheckUi(calendarshowsetting controll_cals, calendarthemesetting controll_cals2) {
+  EnterCheckUi(
+      calendarshowsetting controll_cals, calendarthemesetting controll_cals2) {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
@@ -108,9 +112,8 @@ class _DayContentHomeState extends State<DayContentHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                  /*height:
-                      isupschedule == 0 ? 170 : (isupschedule == 1 ? 220 : 430),*/
-                  child: calendarView(height, context, controll_cals, controll_cals2)),
+                  child: calendarView(
+                      height, context, controll_cals, controll_cals2)),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -210,67 +213,64 @@ class _DayContentHomeState extends State<DayContentHome> {
               rightChevronVisible: true,
               rightChevronPadding: const EdgeInsets.only(right: 10),
               rightChevronMargin: EdgeInsets.zero,
-              rightChevronIcon: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                        onPressed: () {
-                          //이벤트 작성시트 호출
-                          textEditingController1.clear();
-                          textEditingController2.clear();
-                          textEditingController3.clear();
-                          /*Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.bottomToTop,
-                          child: DayScript(
-                            index: 0,
-                            date: _selectedDay,
-                          )),
-                    );*/
-                          Get.to(() => DayScript(
-                              index: 0,
-                              date: _selectedDay,
-                              position: 'cal'
-                          ),
-                              transition: Transition.downToUp);
-                        },
-                        icon: NeumorphicIcon(
-                          Icons.add,
-                          size: 30,
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              surfaceIntensity: 0.5,
-                              color: TextColor(),
-                              lightSource: LightSource.topLeft),
-                        ),),
-                    const SizedBox(width: 10,),
-                    IconButton(
-                        padding: const EdgeInsets.only(right: 10),
-                      constraints: const BoxConstraints(),
-                        onPressed: () {
-                          settingCalendarHome(
-                              context,
-                            controll_cals,
-                              controll_cals2
-                          );
-                        },
-                        icon: NeumorphicIcon(
-                          Icons.settings,
-                          size: 30,
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              surfaceIntensity: 0.5,
-                              color: TextColor(),
-                              lightSource: LightSource.topLeft),
-                        ),),
-                  ],
-                ),
+              rightChevronIcon: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      //이벤트 작성시트 호출
+                      textEditingController1.clear();
+                      textEditingController2.clear();
+                      textEditingController3.clear();
+                      /*Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: DayScript(
+                          index: 0,
+                          date: _selectedDay,
+                        )),
+                  );*/
+                      Get.to(
+                          () => DayScript(
+                              index: 0, date: _selectedDay, position: 'cal'),
+                          transition: Transition.downToUp);
+                    },
+                    icon: NeumorphicIcon(
+                      Icons.add,
+                      size: 30,
+                      style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
+                          color: TextColor(),
+                          lightSource: LightSource.topLeft),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                    padding: const EdgeInsets.only(right: 10),
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      settingCalendarHome(
+                          context, controll_cals, controll_cals2);
+                    },
+                    icon: NeumorphicIcon(
+                      Icons.settings,
+                      size: 30,
+                      style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
+                          color: TextColor(),
+                          lightSource: LightSource.topLeft),
+                    ),
+                  ),
+                ],
               ),
               titleTextStyle: TextStyle(
                 color: TextColor(),
@@ -281,8 +281,8 @@ class _DayContentHomeState extends State<DayContentHome> {
               formatButtonShowsNext: false),
           calendarStyle: CalendarStyle(
               isTodayHighlighted: true,
-              selectedDecoration:
-                  const BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+              selectedDecoration: const BoxDecoration(
+                  color: Colors.orange, shape: BoxShape.circle),
               selectedTextStyle: TextStyle(color: TextColor()),
               defaultTextStyle: TextStyle(color: TextColor()),
               weekendTextStyle: const TextStyle(color: Colors.blue)),
@@ -316,15 +316,21 @@ class _DayContentHomeState extends State<DayContentHome> {
       ],
     ));
   }
+
   settingCalendarHome(
-      BuildContext context, calendarshowsetting controll_cals, calendarthemesetting controll_cals2,
-      ) {
+    BuildContext context,
+    calendarshowsetting controll_cals,
+    calendarthemesetting controll_cals2,
+  ) {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),
-              bottomLeft: Radius.circular(20), topRight: Radius.circular(20),
-              bottomRight: Radius.circular(20),)),
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        )),
         context: context,
         isScrollControlled: true,
         builder: (context) {
@@ -345,8 +351,8 @@ class _DayContentHomeState extends State<DayContentHome> {
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  child: SheetPage(context, setcal_fromsheet,
-                      controll_cals, controll_cals2, themecal_fromsheet),
+                  child: SheetPage(context, setcal_fromsheet, controll_cals,
+                      controll_cals2, themecal_fromsheet),
                 )),
           );
         }).whenComplete(() {
@@ -356,6 +362,7 @@ class _DayContentHomeState extends State<DayContentHome> {
       });
     });
   }
+
   ADView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -493,7 +500,23 @@ class _DayContentHomeState extends State<DayContentHome> {
                                   padding: const EdgeInsets.only(
                                       top: 10, bottom: 10, left: 10, right: 10),
                                   decoration: BoxDecoration(
-                                      color: BGColor(),
+                                      color: themecal_fromsheet == 0
+                                          ? (index % 4 == 0
+                                              ? MyTheme.colororigred
+                                              : (index % 4 == 1
+                                                  ? MyTheme.colororigorange
+                                                  : (index % 4 == 2
+                                                      ? MyTheme.colororigblue
+                                                      : MyTheme
+                                                          .colororiggreen)))
+                                          : (index % 4 == 0
+                                              ? MyTheme.colorpastelred
+                                              : (index % 4 == 1
+                                                  ? MyTheme.colorpastelorange
+                                                  : (index % 4 == 2
+                                                      ? MyTheme.colorpastelblue
+                                                      : MyTheme
+                                                          .colorpastelgreen))),
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
                                           color: TextColor(), width: 1)),

@@ -255,7 +255,7 @@ content(
             ),
             SizedBox(
               height: 30,
-              child: Text('일정테마 변경',
+              child: Text('일정카드테마',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -297,7 +297,7 @@ content(
                                 children: [
                                   Center(
                                     child: NeumorphicText(
-                                      '달력테마',
+                                      '기본원색',
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
@@ -348,7 +348,7 @@ content(
                               children: [
                                 Center(
                                   child: NeumorphicText(
-                                    '시간표테마',
+                                    '파스텔',
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,

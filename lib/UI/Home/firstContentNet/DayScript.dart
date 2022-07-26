@@ -231,7 +231,7 @@ class _DayScriptState extends State<DayScript> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Pictures(),
+                              AddSharing(),
                               const SizedBox(
                                 height: 50,
                               )
@@ -247,19 +247,38 @@ class _DayScriptState extends State<DayScript> {
   }
 
   buildSheetTitle(DateTime fromDate) {
-    return widget.position == 'cal' ? 
-    SizedBox(
-      height: 30,
-      child: Text(
-        '세부내용',
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: contentTitleTextsize(),
-            color: TextColor()),
-      ),
-    ) : SizedBox(
-      height: 0,
-    );
+    return widget.position == 'cal'
+        ? SizedBox(
+            height: 30,
+            child: Text(
+              '일정제목',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize(),
+                  color: TextColor()),
+            ),
+          )
+        : (widget.position == 'note'
+            ? SizedBox(
+                height: 30,
+                child: Text(
+                  '메모제목',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: TextColor()),
+                ),
+              )
+            : SizedBox(
+                height: 30,
+                child: Text(
+                  '루틴제목',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: TextColor()),
+                ),
+              ));
   }
 
   Title() {
@@ -288,23 +307,10 @@ class _DayScriptState extends State<DayScript> {
           )
         : (widget.position == 'note'
             ? SizedBox(
-                height: 260,
+                height: 210,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 30,
-                      child: Text(
-                        '메모제목',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: TextColor()),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
                     SizedBox(
                       height: 30,
                       child: TextFormField(
@@ -370,23 +376,10 @@ class _DayScriptState extends State<DayScript> {
                   ],
                 ))
             : SizedBox(
-                height: 260,
+                height: 210,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 30,
-                      child: Text(
-                        '메모제목',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: TextColor()),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
                     SizedBox(
                       height: 30,
                       child: TextFormField(
@@ -901,16 +894,186 @@ class _DayScriptState extends State<DayScript> {
               ));
   }
 
-  Pictures() {
+  AddSharing() {
     return SizedBox(
-      height: 30,
-      child: Text(
-        '첨부사진 및 영상',
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: contentTitleTextsize(),
-            color: TextColor()),
-      ),
+      height: 90,
+      child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      child: Text(
+                        '중요도 선택',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                            color: TextColor()),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: 30,
+                      width: MediaQuery.of(context).size.width - 80,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            height: 30,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    primary: Hive.box('user_setting')
+                                                .get('ememo_stars') ==
+                                            1
+                                        ? Colors.grey.shade400
+                                        : Colors.white,
+                                    side: const BorderSide(
+                                      width: 1,
+                                      color: Colors.black45,
+                                    )),
+                                onPressed: () {
+                                  setState(() {
+                                    Hive.box('user_setting')
+                                        .put('ememo_stars', 1);
+                                  });
+                                },
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          '+1',
+                                          style: NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Hive.box('user_setting')
+                                                        .get('ememo_stars') ==
+                                                    1
+                                                ? Colors.white
+                                                : Colors.black45,
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 30,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    primary: Hive.box('user_setting')
+                                                .get('ememo_stars') ==
+                                            2
+                                        ? Colors.grey.shade400
+                                        : Colors.white,
+                                    side: const BorderSide(
+                                      width: 1,
+                                      color: Colors.black45,
+                                    )),
+                                onPressed: () {
+                                  setState(() {
+                                    Hive.box('user_setting')
+                                        .put('ememo_stars', 2);
+                                  });
+                                },
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          '+2',
+                                          style: NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Hive.box('user_setting')
+                                                        .get('ememo_stars') ==
+                                                    2
+                                                ? Colors.white
+                                                : Colors.black45,
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 30,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    primary: Hive.box('user_setting')
+                                                .get('ememo_stars') ==
+                                            3
+                                        ? Colors.grey.shade400
+                                        : Colors.white,
+                                    side: const BorderSide(
+                                      width: 1,
+                                      color: Colors.black45,
+                                    )),
+                                onPressed: () {
+                                  setState(() {
+                                    Hive.box('user_setting')
+                                        .put('ememo_stars', 3);
+                                  });
+                                },
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          '+3',
+                                          style: NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Hive.box('user_setting')
+                                                        .get('ememo_stars') ==
+                                                    3
+                                                ? Colors.white
+                                                : Colors.black45,
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
     );
   }
 }

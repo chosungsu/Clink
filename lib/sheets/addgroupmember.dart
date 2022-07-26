@@ -14,27 +14,29 @@ addgroupmember(
   TextEditingController controller,
 ) {
   Get.bottomSheet(
-      Padding(
-        padding: MediaQuery.of(context).viewInsets,
-        child: Container(
-          height: 440,
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              )),
-          child: GestureDetector(
-            onTap: () {
-              searchNode.unfocus();
-            },
-            child: SheetPage(context, searchNode, controller),
+          Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              height: 440,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  )),
+              child: GestureDetector(
+                onTap: () {
+                  searchNode.unfocus();
+                },
+                child: SheetPage(context, searchNode, controller),
+              ),
+            ),
           ),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))).whenComplete(() {
+          backgroundColor: Colors.white,
+          isScrollControlled: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+      .whenComplete(() {
     controller.clear();
     Hive.box('user_setting').put('user_people', null);
   });
@@ -225,10 +227,12 @@ Search(
   TextEditingController controller,
   FirebaseFirestore firestore,
   BuildContext context,
+  List<String> list_sp,
 ) {
   String username = Hive.box('user_info').get(
     'id',
   );
+  int cnt = 0;
 
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -275,7 +279,8 @@ Search(
                         prefixIconColor: Colors.black),
                   ),
                   color: Colors.white)),
-          Hive.box('user_setting').get('user_people') != 'nothing'
+          Hive.box('user_setting').get('user_people') != 'nothing' &&
+                  list_user.isNotEmpty
               ? SizedBox(
                   height: 90,
                   child: Column(
@@ -303,116 +308,201 @@ Search(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width -
-                                                80,
+                                                60,
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
-                                                Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Text(
-                                                      list_user[index] +
-                                                          '(이)가 맞습니까?',
-                                                      style: TextStyle(
-                                                          color: Colors.black45,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize())),
-                                                ),
+                                                list_sp.contains(
+                                                        list_user[index])
+                                                    ? Flexible(
+                                                        fit: FlexFit.tight,
+                                                        child: Text(
+                                                          list_user[index] +
+                                                              '는 이미 추가된 이름입니다.',
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .black45,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize()),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      )
+                                                    : Flexible(
+                                                        fit: FlexFit.tight,
+                                                        child: Text(
+                                                            list_user[index] +
+                                                                '(이)가 맞습니까?',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black45,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize:
+                                                                    contentTextsize())),
+                                                      ),
                                                 Container(
                                                     alignment: Alignment.center,
                                                     width: 25,
                                                     height: 25,
                                                     child: InkWell(
-                                                      onTap: () {
-                                                        firestore
-                                                            .collection(
-                                                                'PeopleList')
-                                                            .doc(username)
-                                                            .set(
-                                                                {
-                                                              'people':
-                                                                  list_user[
-                                                                      index]
-                                                            },
-                                                                SetOptions(
-                                                                    merge:
-                                                                        true));
-                                                        /*Get.snackbar(
-                                                          "Notice",
-                                                          "정상적으로 추가되었습니다!",
-                                                          icon: Icon(
-                                                              Icons.person,
-                                                              color:
-                                                                  Colors.white),
-                                                          snackPosition:
-                                                              SnackPosition
-                                                                  .BOTTOM,
-                                                          borderColor: Colors.black45,
-                                                          backgroundColor:
-                                                              Colors.blueGrey,
-                                                          borderRadius: 20,
-                                                          margin:
-                                                              EdgeInsets.all(
-                                                                  15),
-                                                          colorText:
-                                                              Colors.white,
-                                                          duration: Duration(
-                                                              seconds: 2),
-                                                          isDismissible: true,
-                                                          dismissDirection:
-                                                              DismissDirection.horizontal,
-                                                          forwardAnimationCurve:
-                                                              Curves
-                                                                  .easeOutBack,
-                                                        );*/
-                                                        Flushbar(
-                                                          backgroundColor: Colors.black,
-                                                          titleText: Text(
-                                                      'Notice',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: contentTitleTextsize(),
-                                                          fontWeight:
-                                                              FontWeight.bold,)),
-                                                          messageText:
-                                                              Text(
-                                                      '정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: contentTextsize(),
-                                                          fontWeight:
-                                                              FontWeight.bold,)),
-                                                          icon: Icon(
-                                                            Icons.info_outline,
-                                                            size: 25.0,
-                                                            color: Colors
-                                                                .blue[300],
-                                                          ),
-                                                          duration: const Duration(
-                                                              seconds: 3),
-                                                          leftBarIndicatorColor:
-                                                              Colors.blue[300],
-                                                        ).show(context);
-                                                      },
-                                                      child: NeumorphicIcon(
-                                                        Icons.add,
-                                                        size: 20,
-                                                        style: const NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            color:
-                                                                Colors.black45,
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    ))
+                                                        onTap: () {
+                                                          if (!list_sp.contains(
+                                                              list_user[
+                                                                  index])) {
+                                                            list_sp.add(
+                                                                list_user[
+                                                                    index]);
+                                                            Flushbar(
+                                                              backgroundColor:
+                                                                  Colors.blue
+                                                                      .shade400,
+                                                              titleText: Text(
+                                                                  'Notice',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        contentTitleTextsize(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  )),
+                                                              messageText: Text(
+                                                                  '정상적으로 추가되었습니다.',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  )),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .info_outline,
+                                                                size: 25.0,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              duration:
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          3),
+                                                              leftBarIndicatorColor:
+                                                                  Colors.blue
+                                                                      .shade100,
+                                                            ).show(context);
+                                                          } else {
+                                                            list_sp.remove(
+                                                                list_user[
+                                                                    index]);
+                                                            firestore
+                                                                .collection(
+                                                                    'PeopleList')
+                                                                .doc(username)
+                                                                .delete();
+                                                            Flushbar(
+                                                              backgroundColor:
+                                                                  Colors.red
+                                                                      .shade400,
+                                                              titleText: Text(
+                                                                  'Notice',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        contentTitleTextsize(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  )),
+                                                              messageText: Text(
+                                                                  '삭제하였습니다.',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  )),
+                                                              icon: const Icon(
+                                                                Icons.warning,
+                                                                size: 25.0,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              duration:
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          3),
+                                                              leftBarIndicatorColor:
+                                                                  Colors.red
+                                                                      .shade100,
+                                                            ).show(context);
+                                                          }
+                                                          for (int i = 0;
+                                                              i <
+                                                                  list_sp
+                                                                      .length;
+                                                              i++) {
+                                                            firestore
+                                                                .collection(
+                                                                    'PeopleList')
+                                                                .doc(username)
+                                                                .set(
+                                                                    {
+                                                                  '$i':
+                                                                      list_sp[i]
+                                                                },
+                                                                    SetOptions(
+                                                                        merge:
+                                                                            true));
+                                                          }
+                                                        },
+                                                        child: list_sp.contains(
+                                                                list_user[
+                                                                    index])
+                                                            ? NeumorphicIcon(
+                                                                Icons.remove,
+                                                                size: 20,
+                                                                style: const NeumorphicStyle(
+                                                                    shape: NeumorphicShape
+                                                                        .convex,
+                                                                    depth: 2,
+                                                                    color: Colors
+                                                                        .red,
+                                                                    lightSource:
+                                                                        LightSource
+                                                                            .topLeft),
+                                                              )
+                                                            : NeumorphicIcon(
+                                                                Icons.add,
+                                                                size: 20,
+                                                                style: const NeumorphicStyle(
+                                                                    shape: NeumorphicShape
+                                                                        .convex,
+                                                                    depth: 2,
+                                                                    color: Colors
+                                                                        .red,
+                                                                    lightSource:
+                                                                        LightSource
+                                                                            .topLeft),
+                                                              )))
                                               ],
                                             ),
                                           )),
@@ -425,7 +515,7 @@ Search(
                       )
                     ],
                   ))
-              : SizedBox(
+              : const SizedBox(
                   height: 0,
                 )
         ],
@@ -442,6 +532,16 @@ usersearch(
   BuildContext context,
 ) {
   String addwhat = '';
+  String username = Hive.box('user_info').get(
+    'id',
+  );
+  List<String> list_sp = [];
+  var list_share_people =
+      firestore.collection('PeopleList').doc(username).get().then((value) {
+    value.data()!.forEach((key, value) {
+      list_sp.add(value);
+    });
+  });
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return FutureBuilder(
         future: firestore
@@ -466,20 +566,10 @@ usersearch(
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Search(
-              searchNode,
-              list_user,
-              controller,
-              firestore,
-              context,
-            );
+                searchNode, list_user, controller, firestore, context, list_sp);
           } else {
             return Search(
-              searchNode,
-              list_user,
-              controller,
-              firestore,
-              context,
-            );
+                searchNode, list_user, controller, firestore, context, list_sp);
           }
         });
   });

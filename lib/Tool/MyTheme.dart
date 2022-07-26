@@ -22,6 +22,14 @@ class MyTheme {
   static Color colornotselected_drawer = Colors.black45;
   static Color colorselected_black_drawer = Colors.deepPurple;
   static Color colornotselected_black_drawer = Colors.white;
+  static Color colororigred = Colors.red;
+  static Color colororigorange = Colors.orange;
+  static Color colororigblue = Colors.blue;
+  static Color colororiggreen = Colors.green;
+  static Color colorpastelred = Colors.red.shade200;
+  static Color colorpastelorange = Colors.orange.shade200;
+  static Color colorpastelblue = Colors.blue.shade200;
+  static Color colorpastelgreen = Colors.green.shade200;
 
   static const TextStyle heading2 = TextStyle(
     color: Color(0xff686795),
