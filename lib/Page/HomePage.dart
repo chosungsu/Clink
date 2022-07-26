@@ -286,10 +286,10 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_0(height),
+                                /*H_Container_0(height),
                                 const SizedBox(
                                   height: 20,
-                                ),
+                                ),*/
                                 H_Container_1(height),
                                 const SizedBox(
                                   height: 20,
@@ -302,11 +302,11 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_4(height),
+                                H_Container_5(height),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_5(height),
+                                H_Container_4(height),
                                 const SizedBox(
                                   height: 50,
                                 ),
@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_0(double height) {
+  /*H_Container_0(double height) {
     return SizedBox(
       height: 90,
       width: MediaQuery.of(context).size.width - 40,
@@ -333,7 +333,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
+  }*/
 
   H_Container_1(double height) {
     //프로버전 구매시 보이지 않게 함
@@ -378,6 +378,7 @@ class _HomePageState extends State<HomePage> {
             height: height,
             pageController: pController,
             pageindex: 0,
+            buy: isbought
           ),
         ],
       ),

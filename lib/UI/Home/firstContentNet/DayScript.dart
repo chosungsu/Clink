@@ -7,6 +7,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../../../DB/ChipList.dart';
+import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
 
 class DayScript extends StatefulWidget {
@@ -28,7 +30,13 @@ class _DayScriptState extends State<DayScript> {
   double translateY = 0.0;
   double myWidth = 0.0;
   DateTime _selectedDay = DateTime.now();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool isclickedshowmore = false;
+  String username = Hive.box('user_info').get(
+    'id',
+  );
+  List<ChipList> list_sp = [];
+
   final searchNode = FocusNode();
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
@@ -43,8 +51,6 @@ class _DayScriptState extends State<DayScript> {
     '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기 fighting!!!',
   ];
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -54,6 +60,7 @@ class _DayScriptState extends State<DayScript> {
   @override
   void initState() {
     super.initState();
+
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
@@ -77,12 +84,12 @@ class _DayScriptState extends State<DayScript> {
         onTap: () {
           searchNode.unfocus();
         },
-        child: UI(),
+        child: UI(list_sp),
       ),
     ));
   }
 
-  UI() {
+  UI(List<ChipList> list_sp) {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
@@ -231,7 +238,7 @@ class _DayScriptState extends State<DayScript> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              AddSharing(),
+                              AddSharing(list_sp),
                               const SizedBox(
                                 height: 50,
                               )
@@ -286,7 +293,7 @@ class _DayScriptState extends State<DayScript> {
         ? SizedBox(
             height: 30,
             child: TextFormField(
-              key: ValueKey('cal' + 'title'),
+              key: const ValueKey('cal' + 'title'),
               focusNode: searchNode,
               readOnly: widget.index == 2 ? true : false,
               style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
@@ -314,7 +321,7 @@ class _DayScriptState extends State<DayScript> {
                     SizedBox(
                       height: 30,
                       child: TextFormField(
-                        key: ValueKey('note' + 'title'),
+                        key: const ValueKey('note' + 'title'),
                         readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: contentTextsize()),
                         decoration: InputDecoration(
@@ -334,7 +341,7 @@ class _DayScriptState extends State<DayScript> {
                         controller: textEditingController1,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     SizedBox(
@@ -347,13 +354,13 @@ class _DayScriptState extends State<DayScript> {
                             color: TextColor()),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     SizedBox(
                       height: 100,
                       child: TextFormField(
-                        key: ValueKey('note' + 'content'),
+                        key: const ValueKey('note' + 'content'),
                         readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: contentTextsize()),
                         decoration: InputDecoration(
@@ -383,7 +390,7 @@ class _DayScriptState extends State<DayScript> {
                     SizedBox(
                       height: 30,
                       child: TextFormField(
-                        key: ValueKey('routine' + 'title'),
+                        key: const ValueKey('routine' + 'title'),
                         readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: contentTextsize()),
                         decoration: InputDecoration(
@@ -403,7 +410,7 @@ class _DayScriptState extends State<DayScript> {
                         controller: textEditingController1,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     SizedBox(
@@ -416,13 +423,13 @@ class _DayScriptState extends State<DayScript> {
                             color: TextColor()),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     SizedBox(
                       height: 100,
                       child: TextFormField(
-                        key: ValueKey('routine' + 'content'),
+                        key: const ValueKey('routine' + 'content'),
                         readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: contentTextsize()),
                         decoration: InputDecoration(
@@ -547,7 +554,7 @@ class _DayScriptState extends State<DayScript> {
                             color: TextColor()),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     SizedBox(
@@ -556,155 +563,176 @@ class _DayScriptState extends State<DayScript> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            1
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 1);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+1',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    1
-                                                ? Colors.white
-                                                : Colors.black45,
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 30,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Hive.box('user_setting')
+                                                      .get('stars') ==
+                                                  1 ||
+                                              Hive.box('user_setting')
+                                                      .get('stars') ==
+                                                  null
+                                          ? Colors.grey.shade400
+                                          : Colors.white,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Hive.box('user_setting').put('stars', 1);
+                                    });
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            '+1',
+                                            style: NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Hive.box('user_setting')
+                                                              .get('stars') ==
+                                                          1 ||
+                                                      Hive.box('user_setting')
+                                                              .get('stars') ==
+                                                          null
+                                                  ? Colors.white
+                                                  : Colors.black45,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
                                           ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
                           ),
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            2
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 2);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+2',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    2
-                                                ? Colors.white
-                                                : Colors.black45,
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
+                          const SizedBox(
+                            width: 20,
                           ),
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            3
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 3);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+3',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    3
-                                                ? Colors.white
-                                                : Colors.black45,
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 30,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Hive.box('user_setting')
+                                                  .get('stars') ==
+                                              2
+                                          ? Colors.grey.shade400
+                                          : Colors.white,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Hive.box('user_setting').put('stars', 2);
+                                    });
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            '+2',
+                                            style: NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Hive.box('user_setting')
+                                                          .get('stars') ==
+                                                      2
+                                                  ? Colors.white
+                                                  : Colors.black45,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
                                           ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 30,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Hive.box('user_setting')
+                                                  .get('stars') ==
+                                              3
+                                          ? Colors.grey.shade400
+                                          : Colors.white,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Hive.box('user_setting').put('stars', 3);
+                                    });
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            '+3',
+                                            style: NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Hive.box('user_setting')
+                                                          .get('stars') ==
+                                                      3
+                                                  ? Colors.white
+                                                  : Colors.black45,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
                           ),
                         ],
                       ),
@@ -727,164 +755,185 @@ class _DayScriptState extends State<DayScript> {
                             color: TextColor()),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     SizedBox(
                       height: 30,
-                      width: MediaQuery.of(context).size.width - 80,
+                      width: MediaQuery.of(context).size.width - 40,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            1
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 1);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+1',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    1
-                                                ? Colors.white
-                                                : Colors.black45,
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 30,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Hive.box('user_setting')
+                                                      .get('stars') ==
+                                                  1 ||
+                                              Hive.box('user_setting')
+                                                      .get('stars') ==
+                                                  null
+                                          ? Colors.grey.shade400
+                                          : Colors.white,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Hive.box('user_setting').put('stars', 1);
+                                    });
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            '+1',
+                                            style: NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Hive.box('user_setting')
+                                                              .get('stars') ==
+                                                          1 ||
+                                                      Hive.box('user_setting')
+                                                              .get('stars') ==
+                                                          null
+                                                  ? Colors.white
+                                                  : Colors.black45,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
                                           ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
                           ),
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            2
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 2);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+2',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    2
-                                                ? Colors.white
-                                                : Colors.black45,
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
+                          const SizedBox(
+                            width: 20,
                           ),
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            3
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 3);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+3',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    3
-                                                ? Colors.white
-                                                : Colors.black45,
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 30,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Hive.box('user_setting')
+                                                  .get('stars') ==
+                                              2
+                                          ? Colors.grey.shade400
+                                          : Colors.white,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Hive.box('user_setting').put('stars', 2);
+                                    });
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            '+2',
+                                            style: NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Hive.box('user_setting')
+                                                          .get('stars') ==
+                                                      2
+                                                  ? Colors.white
+                                                  : Colors.black45,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
                                           ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 30,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Hive.box('user_setting')
+                                                  .get('stars') ==
+                                              3
+                                          ? Colors.grey.shade400
+                                          : Colors.white,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Hive.box('user_setting').put('stars', 3);
+                                    });
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            '+3',
+                                            style: NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Hive.box('user_setting')
+                                                          .get('stars') ==
+                                                      3
+                                                  ? Colors.white
+                                                  : Colors.black45,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
                           ),
                         ],
                       ),
@@ -894,186 +943,163 @@ class _DayScriptState extends State<DayScript> {
               ));
   }
 
-  AddSharing() {
+  AddSharing(List<ChipList> list_sp) {
+    bool isselected = false;
     return SizedBox(
-      height: 90,
+      height: 120,
       child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 30,
+            child: Text(
+              '공유',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize(),
+                  color: TextColor()),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          FutureBuilder(
+              future: firestore
+                  .collection('PeopleList')
+                  .doc(username)
+                  .get()
+                  .then((value) {
+                value.data()!.forEach((key, value) {
+                  list_sp.add(ChipList(checked: isselected, title: value));
+                });
+              }),
+              builder: (context, snapshot) {
+                if (snapshot.hasData || list_sp.isNotEmpty) {
+                  return SizedBox(
+                      height: 80,
+                      width: MediaQuery.of(context).size.width - 40,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: list_sp.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              children: [
+                                SizedBox(
+                                  height: 80,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            list_sp[index].checked == true
+                                                ? list_sp.insert(
+                                                    index,
+                                                    ChipList(
+                                                        checked: false,
+                                                        title: list_sp[index]
+                                                            .title))
+                                                : list_sp.insert(
+                                                    index,
+                                                    ChipList(
+                                                        checked: true,
+                                                        title: list_sp[index]
+                                                            .title));
+                                            list_sp.removeAt(index + 1);
+                                          });
+                                        },
+                                        child: ContainerDesign(
+                                            color: BGColor(),
+                                            child: Row(
+                                              children: [
+                                                SizedBox(
+                                                  height: 30,
+                                                  width: 30,
+                                                  child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.orange
+                                                                  .shade500,
+                                                          child: list_sp[index]
+                                                                      .checked ==
+                                                                  false
+                                                              ? Text(
+                                                                  list_sp[index]
+                                                                      .title
+                                                                      .toString()
+                                                                      .substring(
+                                                                          0, 1),
+                                                                  style: const TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          18))
+                                                              : Icon(
+                                                                  Icons.check,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ))),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                SizedBox(
+                                                  width: 100,
+                                                  child: Text(
+                                                    list_sp[index]
+                                                        .title
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                    maxLines: 1,
+                                                    softWrap: false,
+                                                    overflow: TextOverflow.fade,
+                                                  ),
+                                                )
+                                              ],
+                                            )),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            );
+                          }));
+                }
+                return SizedBox(
+                    height: 80,
+                    width: MediaQuery.of(context).size.width - 40,
+                    child: Center(
                       child: Text(
-                        '중요도 선택',
+                        '친구 리스트를 불러오는 중입니다...',
                         style: TextStyle(
+                            color: TextColor(),
                             fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: TextColor()),
+                            fontSize: 18),
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.fade,
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      width: MediaQuery.of(context).size.width - 80,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            1
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 1);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+1',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    1
-                                                ? Colors.white
-                                                : Colors.black45,
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ),
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            2
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 2);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+2',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    2
-                                                ? Colors.white
-                                                : Colors.black45,
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ),
-                          SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('ememo_stars') ==
-                                            3
-                                        ? Colors.grey.shade400
-                                        : Colors.white,
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('ememo_stars', 3);
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '+3',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting')
-                                                        .get('ememo_stars') ==
-                                                    3
-                                                ? Colors.white
-                                                : Colors.black45,
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                    ));
+              }),
+        ],
+      ),
     );
   }
 }

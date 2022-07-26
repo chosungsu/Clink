@@ -1,9 +1,9 @@
 class ChipList {
-  final String first_word;
   final String title;
+  final bool checked;
 
   ChipList({
-    required this.first_word,
+    required this.checked,
     required this.title,
 });
 }

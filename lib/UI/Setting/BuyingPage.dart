@@ -168,7 +168,7 @@ class _BuyingPageState extends State<BuyingPage> {
 
   Item1View() {
     return SizedBox(
-        height: 300,
+        height: 330,
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
             color: BGColor(),

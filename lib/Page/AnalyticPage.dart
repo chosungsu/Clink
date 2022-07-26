@@ -40,6 +40,7 @@ class _AnalyticPageState extends State<AnalyticPage>
   Color color1 = Colors.white;
   Color color2 = Colors.white;
   final PageController _pController = PageController();
+  bool isbought = false;
 
   @override
   void initState() {
@@ -241,6 +242,7 @@ class _AnalyticPageState extends State<AnalyticPage>
             height: height,
             pageController: pController,
             pageindex: 1,
+            buy: isbought,
           ),
         ],
       ),
