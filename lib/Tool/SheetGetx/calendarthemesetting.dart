@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class calendarthemesetting extends GetxController {
-  int themecalendar = 0;
+  int themecalendar = Hive.box('user_setting').get('origorpastel') ?? 0;
 
   void themecals1() {
     themecalendar = 0;

@@ -68,7 +68,6 @@ class _DayContentHomeState extends State<DayContentHome> {
   @override
   void initState() {
     super.initState();
-    print('in');
     setcal_fromsheet = controll_cals.showcalendar;
     themecal_fromsheet = controll_cals2.themecalendar;
     textEditingController1 = TextEditingController();

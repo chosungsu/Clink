@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../Tool/NoBehavior.dart';
+import '../../../Tool/SheetGetx/Spacesetting.dart';
 
 class ChangeSpace extends StatefulWidget {
   @override
@@ -20,7 +21,10 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final spaceset = Get.put(Spacesetting());
+  List list_space = [];
   String name = Hive.box('user_info').get('id');
   final List<SpaceList> _default_ad = [
     SpaceList(title: '날씨공간'),
@@ -240,10 +244,10 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   ListTile buildListTile(String item, int index) => ListTile(
       key: ValueKey(item + '-' + index.toString()),
       title: Text(item,
-                  style: TextStyle(
-                      color: TextColor(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize())),
+          style: TextStyle(
+              color: TextColor(),
+              fontWeight: FontWeight.bold,
+              fontSize: contentTextsize())),
       trailing: index < 3
           ? Icon(
               Icons.menu,
@@ -328,11 +332,17 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   }
 
   createData(String name, List<SpaceList> list, int length) {
+    
     for (int i = 0; i < length; i++) {
       firestore
           .collection('UserSpaceDataBase')
           .doc(name)
           .set({'$i': list[i].title}, SetOptions(merge: true));
+      list_space.insert(i, list[i].title);
     }
+    Hive.box('user_setting').put('space_name', list_space);
+    setState(() {
+      spaceset.setspace();
+    });
   }
 }

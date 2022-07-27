@@ -11,6 +11,10 @@ Color BGColor() {
           : color_bg = MyTheme.colorblack);
   return color_bg;
 }
+Color ButtonColor() {
+  Color color_btn = Colors.blue;
+  return color_btn;
+}
 Color StatusColor() {
   Color color_status = Colors.white60;
   Hive.box('user_setting').get('which_color_background') == null

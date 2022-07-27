@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/SheetGetx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../DB/ChipList.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../sheets/addgroupmember.dart';
+import '../../../sheets/showGroupmember.dart';
 
 class DayScript extends StatefulWidget {
   DayScript(
@@ -36,8 +39,10 @@ class _DayScriptState extends State<DayScript> {
     'id',
   );
   List<ChipList> list_sp = [];
-
+  static final cal_share_person = Get.put(PeopleAdd());
+  List finallist = cal_share_person.people;
   final searchNode = FocusNode();
+  late TextEditingController controllername;
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
@@ -60,7 +65,9 @@ class _DayScriptState extends State<DayScript> {
   @override
   void initState() {
     super.initState();
-
+    cal_share_person.peoplecalendarrestart();
+    finallist = cal_share_person.people;
+    controllername = TextEditingController();
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
@@ -70,6 +77,7 @@ class _DayScriptState extends State<DayScript> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    controllername.dispose();
     textEditingController1.dispose();
     textEditingController2.dispose();
     textEditingController3.dispose();
@@ -238,7 +246,7 @@ class _DayScriptState extends State<DayScript> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              AddSharing(list_sp),
+                              AddSharing(),
                               const SizedBox(
                                 height: 50,
                               )
@@ -943,164 +951,148 @@ class _DayScriptState extends State<DayScript> {
               ));
   }
 
-  AddSharing(List<ChipList> list_sp) {
-    bool isselected = false;
+  AddSharing() {
+    
     return SizedBox(
-      height: 120,
+      height: 50 + 100,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 30,
-            child: Text(
-              '공유',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                  color: TextColor()),
+            height: 50,
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: SizedBox(
+                    height: 30,
+                    child: Text(
+                      '공유',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize(),
+                          color: TextColor()),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    showGroupmember(searchNode, controllername);
+                  },
+                  child: Text(
+                    '불러오기',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize(),
+                        color: TextColor()),
+                  ),
+                )
+              ],
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          FutureBuilder(
-              future: firestore
-                  .collection('PeopleList')
-                  .doc(username)
-                  .get()
-                  .then((value) {
-                value.data()!.forEach((key, value) {
-                  list_sp.add(ChipList(checked: isselected, title: value));
-                });
-              }),
-              builder: (context, snapshot) {
-                if (snapshot.hasData || list_sp.isNotEmpty) {
-                  return SizedBox(
-                      height: 80,
-                      width: MediaQuery.of(context).size.width - 40,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: list_sp.length,
-                          itemBuilder: (context, index) {
-                            return Row(
-                              children: [
-                                SizedBox(
-                                  height: 80,
+          SizedBox(
+              height: 100,
+              width: MediaQuery.of(context).size.width - 40,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: finallist.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        SizedBox(
+                          height: 80,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ContainerDesign(
+                                  color: BGColor(),
                                   child: Row(
-                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            list_sp[index].checked == true
-                                                ? list_sp.insert(
-                                                    index,
-                                                    ChipList(
-                                                        checked: false,
-                                                        title: list_sp[index]
-                                                            .title))
-                                                : list_sp.insert(
-                                                    index,
-                                                    ChipList(
-                                                        checked: true,
-                                                        title: list_sp[index]
-                                                            .title));
-                                            list_sp.removeAt(index + 1);
-                                          });
-                                        },
-                                        child: ContainerDesign(
-                                            color: BGColor(),
-                                            child: Row(
-                                              children: [
-                                                SizedBox(
-                                                  height: 30,
-                                                  width: 30,
-                                                  child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: CircleAvatar(
-                                                          backgroundColor:
-                                                              Colors.orange
-                                                                  .shade500,
-                                                          child: list_sp[index]
-                                                                      .checked ==
-                                                                  false
-                                                              ? Text(
-                                                                  list_sp[index]
-                                                                      .title
-                                                                      .toString()
-                                                                      .substring(
-                                                                          0, 1),
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          18))
-                                                              : Icon(
-                                                                  Icons.check,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ))),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                SizedBox(
-                                                  width: 100,
-                                                  child: Text(
-                                                    list_sp[index]
-                                                        .title
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        color: TextColor(),
+                                      SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            child: CircleAvatar(
+                                                backgroundColor:
+                                                    Colors.orange.shade500,
+                                                child: Text(
+                                                    finallist[index]
+                                                        .toString()
+                                                        .substring(0, 1),
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: 18),
-                                                    maxLines: 1,
-                                                    softWrap: false,
-                                                    overflow: TextOverflow.fade,
-                                                  ),
-                                                )
-                                              ],
-                                            )),
+                                                        fontSize: 18)))),
                                       ),
                                       const SizedBox(
                                         width: 10,
+                                      ),
+                                      SizedBox(
+                                        width: 100,
+                                        child: Text(
+                                          finallist[index].toString(),
+                                          style: TextStyle(
+                                              color: TextColor(),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                        ),
                                       )
                                     ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                )
-                              ],
-                            );
-                          }));
-                }
-                return SizedBox(
-                    height: 80,
-                    width: MediaQuery.of(context).size.width - 40,
-                    child: Center(
-                      child: Text(
-                        '친구 리스트를 불러오는 중입니다...',
-                        style: TextStyle(
-                            color: TextColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                        maxLines: 1,
-                        softWrap: false,
-                        overflow: TextOverflow.fade,
-                      ),
-                    ));
-              }),
+                                  )),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        )
+                      ],
+                    );
+                  }))
         ],
       ),
     );
+  }
+
+  showGroupmember(
+    FocusNode searchNode,
+    TextEditingController controller,
+  ) {
+    Get.bottomSheet(
+            Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                height: 440,
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    )),
+                child: GestureDetector(
+                  onTap: () {
+                    searchNode.unfocus();
+                  },
+                  child: SheetPageG(context, searchNode, controller),
+                ),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            isScrollControlled: true,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+        .whenComplete(() {
+      setState(() {
+        controller.clear();
+        cal_share_person.peoplecalendar();
+        finallist = cal_share_person.people;
+      });
+    });
   }
 }
 

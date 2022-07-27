@@ -3,6 +3,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
+import 'package:clickbyme/Tool/SheetGetx/Spacesetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/FormContentNet/FormCard.dart';
@@ -44,6 +45,8 @@ class _HomePageState extends State<HomePage> {
   Color color1 = Colors.white;
   Color color2 = Colors.white;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static final spaceset = Get.put(Spacesetting());
+  List showspacelist = [];
   String name = Hive.box('user_info').get('id');
   List<SpaceList> _user_ad = [];
   final List<SpaceList> _default_ad = [
@@ -62,6 +65,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
+    spaceset.setspace();
+    showspacelist = spaceset.space;
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
@@ -433,7 +438,148 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(
             height: isbought == true ? 80 * 5 : 80 * 3,
-            child: FutureBuilder(
+            child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: isbought == true ? showspacelist.length : 3,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () {
+                                showspacelist[index] == '날씨공간'
+                                    ? Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: DayContentHome()),
+                                )
+                                    : (showspacelist[index] == '운동공간'
+                                    ? Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: DayContentHome()),
+                                )
+                                    : (showspacelist[index] == '메모공간' ?
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ) : (showspacelist[index] == '루틴공간' ?
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ) : Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: RoutineHome()),
+                                ))));
+                              },
+                              child: SizedBox(
+                                height: 80,
+                                child: Column(
+                                  children: [
+                                    ContainerDesign(
+                                      color: BGColor(),
+                                      child: Column(
+                                        children: [
+                                          Stack(
+                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                  height: 50,
+                                                  width: MediaQuery.of(context).size.width - 40,
+                                                  child: Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(showspacelist[index],
+                                                          style: TextStyle(
+                                                              color: TextColor(),
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 18)),
+                                                    ],
+                                                  )),
+                                              Positioned(
+                                                top: 0,
+                                                left: 0,
+                                                child: Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    child: showspacelist[index] == '날씨공간'
+                                                        ? NeumorphicIcon(
+                                                      Icons.sunny,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    )
+                                                        : (showspacelist[index] == '운동공간'
+                                                        ? NeumorphicIcon(
+                                                      Icons.directions_run,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    )
+                                                        : (showspacelist[index] == '메모공간' ?
+                                                    NeumorphicIcon(
+                                                      Icons.note,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ) : (showspacelist[index] == '루틴공간' ?
+                                                    NeumorphicIcon(
+                                                      Icons.add_task,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ) : NeumorphicIcon(
+                                                      Icons.today,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape:
+                                                          NeumorphicShape.convex,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                          LightSource.topLeft),
+                                                    ))))),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                ),
+                              ));
+                        })
+            /*FutureBuilder(
                 future: firestore
                     .collection("UserSpaceDataBase")
                     .doc(name)
@@ -730,7 +876,7 @@ class _HomePageState extends State<HomePage> {
                               ));
                         });
                   }
-                }),
+                }),*/
           )
         ],
       ),
