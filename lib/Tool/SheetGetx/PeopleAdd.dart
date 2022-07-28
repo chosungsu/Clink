@@ -5,7 +5,7 @@ class PeopleAdd extends GetxController {
   List people = [];
 
   void peoplecalendar() {
-    people = Hive.box('user_setting').get('share_cal_person') ?? [];
+    people = Hive.box('user_setting').get('share_cal_person');
     update();
     notifyChildrens();
   }

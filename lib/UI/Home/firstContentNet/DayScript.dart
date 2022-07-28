@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/SheetGetx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -46,6 +47,10 @@ class _DayScriptState extends State<DayScript> {
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
+  final GlobalKey<FormState> _form1Key = GlobalKey();
+  final GlobalKey<FormState> _form2Key = GlobalKey();
+  final GlobalKey<FormState> _form3Key = GlobalKey();
+  final GlobalKey<FormState> _form4Key = GlobalKey();
   final List memostar = [1, 2, 1, 1, 3];
   final List memotitle = ['memo1', 'memo2', 'memo3', 'memo4', 'memo5'];
   final List memocontent = [
@@ -176,7 +181,149 @@ class _DayScriptState extends State<DayScript> {
                             width: 50,
                             child: InkWell(
                                 onTap: () {
-                                  settingRoutineHome(context);
+                                  if (textEditingController1.text.isNotEmpty) {
+                                    if (textEditingController2
+                                            .text.isNotEmpty ||
+                                        textEditingController3
+                                            .text.isNotEmpty) {
+                                      widget.position == 'cal'
+                                          ? firestore
+                                              .collection('CalendarDataBase')
+                                              .add({
+                                              'Daytodo':
+                                                  textEditingController1.text,
+                                              'Timestart':
+                                                  textEditingController2.text,
+                                              'Timefinish':
+                                                  textEditingController3.text,
+                                              'Shares': finallist,
+                                              'OriginalUser': username,
+                                              'Date': widget.date.toString().split('일')[0] + 
+                                              '일',
+                                            })
+                                          : (widget.position == 'note'
+                                              ? firestore
+                                                  .collection(
+                                                      'CalendarDataBase')
+                                                  .add({
+                                                  'Daytodo':
+                                                      textEditingController1
+                                                          .text,
+                                                  'Timestart':
+                                                      textEditingController2
+                                                          .text,
+                                                  'Timefinish':
+                                                      textEditingController3
+                                                          .text,
+                                                  'Shares': finallist,
+                                                  'OriginalUser': username,
+                                                })
+                                              : firestore
+                                                  .collection(
+                                                      'CalendarDataBase')
+                                                  .add({
+                                                  'Daytodo':
+                                                      textEditingController1
+                                                          .text,
+                                                  'Timestart':
+                                                      textEditingController2
+                                                          .text,
+                                                  'Timefinish':
+                                                      textEditingController3
+                                                          .text,
+                                                  'Shares': finallist,
+                                                  'OriginalUser': username,
+                                                }));
+                                    } else {
+                                      Flushbar(
+                                        backgroundColor: Colors.red.shade400,
+                                        titleText: Text('Notice',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: contentTitleTextsize(),
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                        messageText: widget.position == 'cal'
+                                            ? Text('시작시각은 필수 입력사항입니다!',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: contentTextsize(),
+                                                  fontWeight: FontWeight.bold,
+                                                ))
+                                            : Text('메모내용은 필수 입력사항입니다!',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: contentTextsize(),
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                        icon: const Icon(
+                                          Icons.info_outline,
+                                          size: 25.0,
+                                          color: Colors.white,
+                                        ),
+                                        duration: const Duration(seconds: 1),
+                                        leftBarIndicatorColor:
+                                            Colors.red.shade100,
+                                      ).show(context);
+                                    }
+                                  } else {
+                                    Flushbar(
+                                      backgroundColor: Colors.red.shade400,
+                                      titleText: Text('Notice',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: contentTitleTextsize(),
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      messageText: Text('제목은 필수 입력사항입니다!',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: contentTextsize(),
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      icon: const Icon(
+                                        Icons.info_outline,
+                                        size: 25.0,
+                                        color: Colors.white,
+                                      ),
+                                      duration: const Duration(seconds: 1),
+                                      leftBarIndicatorColor:
+                                          Colors.red.shade100,
+                                    ).show(context);
+                                  }
+                                  Future.delayed(const Duration(seconds: 2),
+                                      () {
+                                    Flushbar(
+                                      backgroundColor: Colors.blue.shade400,
+                                      titleText: Text('Notice',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: contentTitleTextsize(),
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      messageText: widget.position == 'cal'
+                                          ? Text('일정이 정상적으로 추가되었습니다.',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: contentTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              ))
+                                          : Text('메모가 정상적으로 추가되었습니다.',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: contentTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                      icon: const Icon(
+                                        Icons.info_outline,
+                                        size: 25.0,
+                                        color: Colors.white,
+                                      ),
+                                      duration: const Duration(seconds: 1),
+                                      leftBarIndicatorColor:
+                                          Colors.blue.shade100,
+                                    ).show(context);
+                                  });
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
@@ -301,7 +448,8 @@ class _DayScriptState extends State<DayScript> {
         ? SizedBox(
             height: 30,
             child: TextFormField(
-              key: const ValueKey('cal' + 'title'),
+              //key: const ValueKey('cal' + 'title'),
+              key: _form1Key,
               focusNode: searchNode,
               readOnly: widget.index == 2 ? true : false,
               style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
@@ -314,9 +462,6 @@ class _DayScriptState extends State<DayScript> {
                 hintStyle:
                     TextStyle(fontSize: contentTextsize(), color: TextColor()),
               ),
-              onFieldSubmitted: (_) {
-                //saveForm();
-              },
               controller: textEditingController1,
             ),
           )
@@ -329,7 +474,8 @@ class _DayScriptState extends State<DayScript> {
                     SizedBox(
                       height: 30,
                       child: TextFormField(
-                        key: const ValueKey('note' + 'title'),
+                        //key: const ValueKey('note' + 'title'),
+                        key: _form1Key,
                         readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: contentTextsize()),
                         decoration: InputDecoration(
@@ -343,9 +489,6 @@ class _DayScriptState extends State<DayScript> {
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
-                        onFieldSubmitted: (_) {
-                          //saveForm();
-                        },
                         controller: textEditingController1,
                       ),
                     ),
@@ -368,7 +511,8 @@ class _DayScriptState extends State<DayScript> {
                     SizedBox(
                       height: 100,
                       child: TextFormField(
-                        key: const ValueKey('note' + 'content'),
+                        //key: const ValueKey('note' + 'content'),
+                        key: _form2Key,
                         readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: contentTextsize()),
                         decoration: InputDecoration(
@@ -382,9 +526,6 @@ class _DayScriptState extends State<DayScript> {
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
-                        onFieldSubmitted: (_) {
-                          //saveForm();
-                        },
                         controller: textEditingController2,
                       ),
                     )
@@ -398,7 +539,8 @@ class _DayScriptState extends State<DayScript> {
                     SizedBox(
                       height: 30,
                       child: TextFormField(
-                        key: const ValueKey('routine' + 'title'),
+                        //key: const ValueKey('routine' + 'title'),
+                        key: _form1Key,
                         readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: contentTextsize()),
                         decoration: InputDecoration(
@@ -412,9 +554,6 @@ class _DayScriptState extends State<DayScript> {
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
-                        onFieldSubmitted: (_) {
-                          //saveForm();
-                        },
                         controller: textEditingController1,
                       ),
                     ),
@@ -437,8 +576,17 @@ class _DayScriptState extends State<DayScript> {
                     SizedBox(
                       height: 100,
                       child: TextFormField(
-                        key: const ValueKey('routine' + 'content'),
+                        //key: const ValueKey('routine' + 'content'),
+                        key: _form2Key,
                         readOnly: widget.index == 2 ? true : false,
+                        validator: (text) {
+                          if (text!.isEmpty) {
+                            return '필수 입력사항입니다.';
+                          } else {
+                            return null;
+                          }
+                        },
+                        autovalidateMode: AutovalidateMode.always,
                         style: TextStyle(fontSize: contentTextsize()),
                         decoration: InputDecoration(
                           enabledBorder: UnderlineInputBorder(
@@ -451,9 +599,6 @@ class _DayScriptState extends State<DayScript> {
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
-                        onFieldSubmitted: (_) {
-                          //saveForm();
-                        },
                         controller: textEditingController2,
                       ),
                     )
@@ -514,17 +659,33 @@ class _DayScriptState extends State<DayScript> {
                                   color: BGColor(),
                                   border:
                                       Border.all(color: TextColor(), width: 2)),
-                              child: TextFormField(
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  hintText: '시간 : 분',
-                                  hintStyle: TextStyle(
-                                      fontSize: contentTextsize(),
-                                      color: TextColor()),
-                                ),
-                                readOnly: true,
-                                controller: textEditingController,
-                              ),
+                              child: s == 'prev'
+                                  ? TextFormField(
+                                      key: _form3Key,
+                                      autovalidateMode: AutovalidateMode.always,
+                                      textAlign: TextAlign.center,
+                                      decoration: InputDecoration(
+                                        hintText: '시간 : 분',
+                                        hintStyle: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: TextColor()),
+                                      ),
+                                      readOnly: true,
+                                      controller: textEditingController,
+                                    )
+                                  : TextFormField(
+                                      key: _form4Key,
+                                      autovalidateMode: AutovalidateMode.always,
+                                      textAlign: TextAlign.center,
+                                      decoration: InputDecoration(
+                                        hintText: '시간 : 분',
+                                        hintStyle: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: TextColor()),
+                                      ),
+                                      readOnly: true,
+                                      controller: textEditingController,
+                                    ),
                             )
                           ],
                         ),
@@ -952,7 +1113,6 @@ class _DayScriptState extends State<DayScript> {
   }
 
   AddSharing() {
-    
     return SizedBox(
       height: 50 + 100,
       child: Column(
@@ -976,7 +1136,10 @@ class _DayScriptState extends State<DayScript> {
                 ),
                 InkWell(
                   onTap: () {
-                    showGroupmember(searchNode, controllername);
+                    searchNode.unfocus();
+                    Future.delayed(const Duration(seconds: 1), () {
+                      showGroupmember(searchNode, controllername);
+                    });
                   },
                   child: Text(
                     '불러오기',

@@ -31,10 +31,6 @@ class _DayContentHomeState extends State<DayContentHome> {
   static final controll_cals2 = Get.put(calendarthemesetting());
   int setcal_fromsheet = 0;
   int themecal_fromsheet = controll_cals2.themecalendar;
-  
-  late TextEditingController textEditingController1;
-  late TextEditingController textEditingController2;
-  late TextEditingController textEditingController3;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   late Map<DateTime, List<Event>> _events;
@@ -42,21 +38,9 @@ class _DayContentHomeState extends State<DayContentHome> {
   late DateTime toDate = DateTime.now();
   String hour = '';
   String minute = '';
-  final List calendardoinglist = [
-    '아침 산책하기',
-    '회사 미팅하기',
-    '회사 과업 수행하기',
-    '토익공부 하루에 유닛4과씩 진도 나가기',
-    '알고리즘 하루에 4개씩 파이썬과 자바 두언어로 만들기',
-  ];
-  final List calendarwhattimelist = [
-    '6:00 ~ 6:30',
-    '9:00 ~ 11:00',
-    '9:00 ~ 17:00',
-    '19:00 ~ 19:40',
-    '20:00 ~ 21:00',
-  ];
-
+  String username = Hive.box('user_info').get(
+    'id',
+  );
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -70,9 +54,6 @@ class _DayContentHomeState extends State<DayContentHome> {
     super.initState();
     setcal_fromsheet = controll_cals.showcalendar;
     themecal_fromsheet = controll_cals2.themecalendar;
-    textEditingController1 = TextEditingController();
-    textEditingController2 = TextEditingController();
-    textEditingController3 = TextEditingController();
     fromDate = DateTime.now();
     toDate = DateTime.now().add(const Duration(hours: 2));
     _events = {};
@@ -82,9 +63,6 @@ class _DayContentHomeState extends State<DayContentHome> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    textEditingController1.dispose();
-    textEditingController2.dispose();
-    textEditingController3.dispose();
   }
 
   @override
@@ -219,19 +197,6 @@ class _DayContentHomeState extends State<DayContentHome> {
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                     onPressed: () {
-                      //이벤트 작성시트 호출
-                      textEditingController1.clear();
-                      textEditingController2.clear();
-                      textEditingController3.clear();
-                      /*Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.bottomToTop,
-                        child: DayScript(
-                          index: 0,
-                          date: _selectedDay,
-                        )),
-                  );*/
                       Get.to(
                           () => DayScript(
                               index: 0, date: _selectedDay, position: 'cal'),
@@ -370,103 +335,69 @@ class _DayContentHomeState extends State<DayContentHome> {
   }
 
   TimeLineView() {
-    return SizedBox(
-      height: calendardoinglist.isNotEmpty
-          ? 180 * calendardoinglist.length.toDouble()
-          : MediaQuery.of(context).size.height * 0.5,
-      child: calendardoinglist.isEmpty
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: NeumorphicText(
-                    '기록된 일정이 없네요;;;',
-                    style: const NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: Colors.black45,
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+    return StreamBuilder<QuerySnapshot>(
+      stream: firestore
+          .collection('CalendarDataBase')
+          //.where('Timestart', isGreaterThanOrEqualTo: '00:00')
+          .where('OriginalUser', isEqualTo: username)
+          .where('Date', isEqualTo: _selectedDay.toString().split('일')[0] + '일')
+          //.orderBy('Timestart')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return snapshot.data!.docs.isEmpty
+              ? SizedBox(
+                  height: 300,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: NeumorphicText(
+                          '기록된 일정이 없네요;;;',
+                          style: const NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: Colors.black45,
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 )
-              ],
-            )
-          : ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: calendardoinglist.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 150,
-                      child: Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: index < calendarwhattimelist.length - 1 &&
-                                          calendarwhattimelist[index]
-                                                  .toString()
-                                                  .split(':')[0] ==
-                                              calendarwhattimelist[index + 1]
-                                                  .toString()
-                                                  .split(':')[0] ||
-                                      index == 0
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        NeumorphicText(
-                                          calendarwhattimelist[index]
-                                                  .toString()
-                                                  .split(':')[0] +
-                                              ':00',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: TextColor(),
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Divider(
-                                          thickness: 2,
-                                          height: 15,
-                                          endIndent: 20,
-                                          color: TextColor(),
-                                        ),
-                                      ],
-                                    )
-                                  : (index < calendarwhattimelist.length - 1 &&
-                                          calendarwhattimelist[index]
-                                                  .toString()
-                                                  .split(':')[0] !=
-                                              calendarwhattimelist[index + 1]
-                                                  .toString()
-                                                  .split(':')[0] &&
-                                          calendarwhattimelist[index]
-                                                  .toString()
-                                                  .split(':')[0] ==
-                                              calendarwhattimelist[index - 1]
-                                                  .toString()
-                                                  .split(':')[0]
+              : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 150,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: index < snapshot.data!.docs.length - 1 &&
+                                              snapshot.data!.docs[index]['Timestart']
+                                                      .toString()
+                                                      .split(':')[0] ==
+                                                  snapshot.data!.docs[index + 1]['Timestart']
+                                                      .toString()
+                                                      .split(':')[0] ||
+                                          index == 0
                                       ? Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: const [],
-                                        )
-                                      : Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             NeumorphicText(
-                                              calendarwhattimelist[index]
+                                              snapshot.data!
+                                                      .docs[index]['Timestart']
                                                       .toString()
                                                       .split(':')[0] +
                                                   ':00',
@@ -487,105 +418,305 @@ class _DayContentHomeState extends State<DayContentHome> {
                                               color: TextColor(),
                                             ),
                                           ],
-                                        ))),
-                          Expanded(
-                              flex: 3,
-                              child: InkWell(
-                                onTap: () {
-                                  //수정 및 삭제 시트 띄우기
-                                  DelOrEditCalendar(context);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                      color: themecal_fromsheet == 0
-                                          ? (index % 4 == 0
-                                              ? MyTheme.colororigred
-                                              : (index % 4 == 1
-                                                  ? MyTheme.colororigorange
-                                                  : (index % 4 == 2
-                                                      ? MyTheme.colororigblue
-                                                      : MyTheme
-                                                          .colororiggreen)))
-                                          : (index % 4 == 0
-                                              ? MyTheme.colorpastelred
-                                              : (index % 4 == 1
-                                                  ? MyTheme.colorpastelorange
-                                                  : (index % 4 == 2
-                                                      ? MyTheme.colorpastelblue
-                                                      : MyTheme
-                                                          .colorpastelgreen))),
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                          color: TextColor(), width: 1)),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Text(
-                                          calendardoinglist[index].toString(),
-                                          style: TextStyle(
-                                              color: TextColor(),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          calendarwhattimelist[index]
-                                              .toString(),
-                                          style: TextStyle(
-                                              color: TextColor(),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: 5,
-                                            itemBuilder: (context, index) {
-                                              return Row(
-                                                children: [
-                                                  Container(
-                                                    height: 25,
-                                                    width: 25,
-                                                    decoration: BoxDecoration(
-                                                        color: BGColor(),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(100),
-                                                        border: Border.all(
-                                                            color: TextColor(),
-                                                            width: 1)),
+                                        )
+                                      : (index < snapshot.data!.docs.length - 1 &&
+                                                  snapshot.data!.docs[index]['Timestart']
+                                                          .toString()
+                                                          .split(':')[0] ==
+                                                      snapshot.data!.docs[index - 1]['Timestart']
+                                                          .toString()
+                                                          .split(':')[0] ||
+                                              (index == snapshot.data!.docs.length - 1 &&
+                                                  snapshot.data!.docs[index]['Timestart']
+                                                          .toString()
+                                                          .split(':')[0] ==
+                                                      snapshot.data!.docs[index - 1]['Timestart'].toString().split(':')[0])
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: const [],
+                                            )
+                                          : Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                NeumorphicText(
+                                                  snapshot
+                                                          .data!
+                                                          .docs[index]
+                                                              ['Timestart']
+                                                          .toString()
+                                                          .split(':')[0] +
+                                                      ':00',
+                                                  style: NeumorphicStyle(
+                                                    shape: NeumorphicShape.flat,
+                                                    depth: 3,
+                                                    color: TextColor(),
                                                   ),
-                                                  const SizedBox(
-                                                    width: 20,
+                                                  textStyle:
+                                                      NeumorphicTextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
                                                   ),
-                                                ],
-                                              );
-                                            }),
+                                                ),
+                                                Divider(
+                                                  thickness: 2,
+                                                  height: 15,
+                                                  endIndent: 20,
+                                                  color: TextColor(),
+                                                ),
+                                              ],
+                                            ))),
+                              Expanded(
+                                  flex: 3,
+                                  child: InkWell(
+                                    onTap: () {
+                                      //수정 및 삭제 시트 띄우기
+                                      //DelOrEditCalendar(context);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          left: 10,
+                                          right: 10),
+                                      decoration: BoxDecoration(
+                                          color: themecal_fromsheet == 0
+                                              ? (index % 4 == 0
+                                                  ? MyTheme.colororigred
+                                                  : (index % 4 == 1
+                                                      ? MyTheme.colororigorange
+                                                      : (index % 4 == 2
+                                                          ? MyTheme
+                                                              .colororigblue
+                                                          : MyTheme
+                                                              .colororiggreen)))
+                                              : (index % 4 == 0
+                                                  ? MyTheme.colorpastelred
+                                                  : (index % 4 == 1
+                                                      ? MyTheme
+                                                          .colorpastelorange
+                                                      : (index % 4 == 2
+                                                          ? MyTheme
+                                                              .colorpastelblue
+                                                          : MyTheme
+                                                              .colorpastelgreen))),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              color: TextColor(), width: 1)),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: Text(
+                                              snapshot
+                                                  .data!.docs[index]['Daytodo']
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: snapshot
+                                                    .data!
+                                                    .docs[index]['Timefinish']
+                                                    .isEmpty
+                                                ? Text(
+                                                    snapshot
+                                                                .data!
+                                                                .docs[index][
+                                                                    'Timestart']
+                                                                .toString()
+                                                                .split(
+                                                                    ':')[1] ==
+                                                            '0'
+                                                        ? snapshot
+                                                                .data!
+                                                                .docs[index][
+                                                                    'Timestart']
+                                                                .toString() +
+                                                            '0' +
+                                                            '-' +
+                                                            ''
+                                                        : snapshot
+                                                                .data!
+                                                                .docs[index][
+                                                                    'Timestart']
+                                                                .toString() +
+                                                            '-' +
+                                                            '',
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  )
+                                                : Text(
+                                                    snapshot.data!.docs[index]['Timestart']
+                                                                .toString()
+                                                                .split(
+                                                                    ':')[1] ==
+                                                            '0'
+                                                        ? snapshot.data!.docs[index]['Timestart']
+                                                                .toString() +
+                                                            '0' +
+                                                            '-' +
+                                                            snapshot.data!.docs[index]['Timefinish']
+                                                                .toString()
+                                                        : (snapshot.data!.docs[index]['Timefinish'].toString().split(':')[1] == '0'
+                                                            ? snapshot.data!.docs[index]['Timestart']
+                                                                    .toString() +
+                                                                '-' +
+                                                                snapshot.data!.docs[index]['Timefinish']
+                                                                    .toString() +
+                                                                '0'
+                                                            : snapshot.data!.docs[index]['Timestart']
+                                                                    .toString() +
+                                                                '0' +
+                                                                '-' +
+                                                                snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                        ['Timefinish']
+                                                                    .toString()),
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: snapshot
+                                                    .data!
+                                                    .docs[index]['Shares']
+                                                    .length,
+                                                itemBuilder: (context, index2) {
+                                                  return Row(
+                                                    children: [
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: 25,
+                                                        width: 25,
+                                                        child: Text(
+                                                            snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                                    ['Shares']
+                                                                    [index2]
+                                                                .toString()
+                                                                .substring(
+                                                                    0, 1),
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 18)),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      100),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                    ],
+                                                  );
+                                                }),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              )),
-                        ],
-                      ),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    );
+                  });
+        } else if (snapshot.hasError) {
+          return SizedBox(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: NeumorphicText(
+                    '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
+                    style: const NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: Colors.black45,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    )
-                  ],
-                );
-              }),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [Center(child: CircularProgressIndicator())],
+            ),
+          );
+        }
+        return SizedBox(
+          height: 300,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: NeumorphicText(
+                  '기록된 일정이 없네요;;;',
+                  style: const NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    depth: 3,
+                    color: Colors.black45,
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

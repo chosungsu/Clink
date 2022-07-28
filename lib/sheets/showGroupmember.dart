@@ -19,7 +19,7 @@ SheetPageG(
   return SizedBox(
       height: 390,
       child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+          padding: EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
