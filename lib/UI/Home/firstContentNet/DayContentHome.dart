@@ -19,6 +19,11 @@ import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/calendarthemesetting.dart';
 
 class DayContentHome extends StatefulWidget {
+  const DayContentHome({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+  final String title;
   @override
   State<StatefulWidget> createState() => _DayContentHomeState();
 }
@@ -199,7 +204,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                     onPressed: () {
                       Get.to(
                           () => DayScript(
-                              index: 0, date: _selectedDay, position: 'cal'),
+                              index: 0, date: _selectedDay, position: 'cal', title : widget.title,),
                           transition: Transition.downToUp);
                     },
                     icon: NeumorphicIcon(
@@ -339,6 +344,7 @@ class _DayContentHomeState extends State<DayContentHome> {
       stream: firestore
           .collection('CalendarDataBase')
           //.where('Timestart', isGreaterThanOrEqualTo: '00:00')
+          .where('calname', isEqualTo: widget.title)
           .where('OriginalUser', isEqualTo: username)
           .where('Date', isEqualTo: _selectedDay.toString().split('일')[0] + '일')
           //.orderBy('Timestart')

@@ -20,11 +20,13 @@ class DayScript extends StatefulWidget {
       {Key? key,
       required this.index,
       required this.date,
-      required this.position})
+      required this.position,
+      required this.title})
       : super(key: key);
   final int index;
   final DateTime date;
   final String position;
+  final String title;
   @override
   State<StatefulWidget> createState() => _DayScriptState();
 }
@@ -198,8 +200,11 @@ class _DayScriptState extends State<DayScript> {
                                                   textEditingController3.text,
                                               'Shares': finallist,
                                               'OriginalUser': username,
-                                              'Date': widget.date.toString().split('일')[0] + 
-                                              '일',
+                                              'calname': widget.title,
+                                              'Date': widget.date
+                                                      .toString()
+                                                      .split('일')[0] +
+                                                  '일',
                                             })
                                           : (widget.position == 'note'
                                               ? firestore

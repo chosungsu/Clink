@@ -21,6 +21,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/firstContentNet/RoutineHome.dart';
 import 'DrawerScreen.dart';
@@ -80,8 +81,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
@@ -380,11 +381,10 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           EventShowCard(
-            height: height,
-            pageController: pController,
-            pageindex: 0,
-            buy: isbought
-          ),
+              height: height,
+              pageController: pController,
+              pageindex: 0,
+              buy: isbought),
         ],
       ),
     );
@@ -419,10 +419,7 @@ class _HomePageState extends State<HomePage> {
                         type: PageTransitionType.bottomToTop,
                         child: ChangeSpace()),
                   );*/
-                    Get.to(
-                            () => ChangeSpace(),
-                        transition: Transition.fadeIn
-                    );
+                    Get.to(() => ChangeSpace(), transition: Transition.fadeIn);
                   },
                   child: Text('변경',
                       style: TextStyle(
@@ -437,149 +434,167 @@ class _HomePageState extends State<HomePage> {
             height: 20,
           ),
           SizedBox(
-            height: isbought == true ? 80 * 5 : 80 * 3,
-            child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: isbought == true ? showspacelist.length : 3,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () {
-                                showspacelist[index] == '날씨공간'
-                                    ? Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      child: DayContentHome()),
+              height: isbought == true ? 80 * 5 : 80 * 3,
+              child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: isbought == true ? showspacelist.length : 3,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () {
+                          showspacelist[index] == '날씨공간'
+                              ? Get.to(
+                                  () => ChooseCalendar(),
+                                  transition: Transition.rightToLeft,
                                 )
-                                    : (showspacelist[index] == '운동공간'
-                                    ? Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      child: DayContentHome()),
-                                )
-                                    : (showspacelist[index] == '메모공간' ?
-                                Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      child: RoutineHome()),
-                                ) : (showspacelist[index] == '루틴공간' ?
-                                Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      child: RoutineHome()),
-                                ) : Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      child: RoutineHome()),
-                                ))));
-                              },
-                              child: SizedBox(
-                                height: 80,
+                              : (showspacelist[index] == '운동공간'
+                                  ? Get.to(
+                                      () => ChooseCalendar(),
+                                      transition: Transition.rightToLeft,
+                                    )
+                                  : (showspacelist[index] == '메모공간'
+                                      ? Get.to(
+                                          () => ChooseCalendar(),
+                                          transition: Transition.rightToLeft,
+                                        )
+                                      : (showspacelist[index] == '루틴공간'
+                                          ? Get.to(
+                                              () => ChooseCalendar(),
+                                              transition:
+                                                  Transition.rightToLeft,
+                                            )
+                                          : Get.to(
+                                              () => ChooseCalendar(),
+                                              transition:
+                                                  Transition.rightToLeft,
+                                            ))));
+                        },
+                        child: SizedBox(
+                          height: 80,
+                          child: Column(
+                            children: [
+                              ContainerDesign(
+                                color: BGColor(),
                                 child: Column(
                                   children: [
-                                    ContainerDesign(
-                                      color: BGColor(),
-                                      child: Column(
-                                        children: [
-                                          Stack(
-                                            //crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                  height: 50,
-                                                  width: MediaQuery.of(context).size.width - 40,
-                                                  child: Column(
-                                                    children: [
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(showspacelist[index],
-                                                          style: TextStyle(
-                                                              color: TextColor(),
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 18)),
-                                                    ],
-                                                  )),
-                                              Positioned(
-                                                top: 0,
-                                                left: 0,
-                                                child: Container(
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: showspacelist[index] == '날씨공간'
-                                                        ? NeumorphicIcon(
+                                    Stack(
+                                      //crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            height: 50,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                40,
+                                            child: Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(showspacelist[index],
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18)),
+                                              ],
+                                            )),
+                                        Positioned(
+                                          top: 0,
+                                          left: 0,
+                                          child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              child: showspacelist[index] ==
+                                                      '날씨공간'
+                                                  ? NeumorphicIcon(
                                                       Icons.sunny,
                                                       size: 25,
                                                       style: NeumorphicStyle(
-                                                          shape: NeumorphicShape.convex,
+                                                          shape: NeumorphicShape
+                                                              .convex,
                                                           depth: 2,
                                                           color: TextColor(),
                                                           lightSource:
-                                                          LightSource.topLeft),
+                                                              LightSource
+                                                                  .topLeft),
                                                     )
-                                                        : (showspacelist[index] == '운동공간'
-                                                        ? NeumorphicIcon(
-                                                      Icons.directions_run,
-                                                      size: 25,
-                                                      style: NeumorphicStyle(
-                                                          shape:
-                                                          NeumorphicShape.convex,
-                                                          depth: 2,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                          LightSource.topLeft),
-                                                    )
-                                                        : (showspacelist[index] == '메모공간' ?
-                                                    NeumorphicIcon(
-                                                      Icons.note,
-                                                      size: 25,
-                                                      style: NeumorphicStyle(
-                                                          shape:
-                                                          NeumorphicShape.convex,
-                                                          depth: 2,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                          LightSource.topLeft),
-                                                    ) : (showspacelist[index] == '루틴공간' ?
-                                                    NeumorphicIcon(
-                                                      Icons.add_task,
-                                                      size: 25,
-                                                      style: NeumorphicStyle(
-                                                          shape:
-                                                          NeumorphicShape.convex,
-                                                          depth: 2,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                          LightSource.topLeft),
-                                                    ) : NeumorphicIcon(
-                                                      Icons.today,
-                                                      size: 25,
-                                                      style: NeumorphicStyle(
-                                                          shape:
-                                                          NeumorphicShape.convex,
-                                                          depth: 2,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                          LightSource.topLeft),
-                                                    ))))),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                                  : (showspacelist[index] ==
+                                                          '운동공간'
+                                                      ? NeumorphicIcon(
+                                                          Icons.directions_run,
+                                                          size: 25,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        )
+                                                      : (showspacelist[index] ==
+                                                              '메모공간'
+                                                          ? NeumorphicIcon(
+                                                              Icons.note,
+                                                              size: 25,
+                                                              style: NeumorphicStyle(
+                                                                  shape:
+                                                                      NeumorphicShape
+                                                                          .convex,
+                                                                  depth: 2,
+                                                                  color:
+                                                                      TextColor(),
+                                                                  lightSource:
+                                                                      LightSource
+                                                                          .topLeft),
+                                                            )
+                                                          : (showspacelist[
+                                                                      index] ==
+                                                                  '루틴공간'
+                                                              ? NeumorphicIcon(
+                                                                  Icons
+                                                                      .add_task,
+                                                                  size: 25,
+                                                                  style: NeumorphicStyle(
+                                                                      shape: NeumorphicShape
+                                                                          .convex,
+                                                                      depth: 2,
+                                                                      color:
+                                                                          TextColor(),
+                                                                      lightSource:
+                                                                          LightSource
+                                                                              .topLeft),
+                                                                )
+                                                              : NeumorphicIcon(
+                                                                  Icons.today,
+                                                                  size: 25,
+                                                                  style: NeumorphicStyle(
+                                                                      shape: NeumorphicShape
+                                                                          .convex,
+                                                                      depth: 2,
+                                                                      color:
+                                                                          TextColor(),
+                                                                      lightSource:
+                                                                          LightSource
+                                                                              .topLeft),
+                                                                ))))),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    )
                                   ],
                                 ),
-                              ));
-                        })
-            /*FutureBuilder(
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          ),
+                        ));
+                  })
+              /*FutureBuilder(
                 future: firestore
                     .collection("UserSpaceDataBase")
                     .doc(name)
@@ -877,7 +892,7 @@ class _HomePageState extends State<HomePage> {
                         });
                   }
                 }),*/
-          )
+              )
         ],
       ),
     );

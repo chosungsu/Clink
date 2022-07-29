@@ -1,6 +1,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/ChooseCalendar.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/RoutineHome.dart';
 import 'package:flutter/material.dart';
@@ -40,14 +41,12 @@ class TopCard extends StatelessWidget {
                             index == 0
                                 ? GestureDetector(
                                     onTap: () {
-                                      /*Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.bottomToTop,
-                                        child: DayContentHome()),
-                                  );*/
-                                      Get.to(
+                                      /*Get.to(
                                         () => DayContentHome(),
+                                        transition: Transition.rightToLeft,
+                                      );*/
+                                      Get.to(
+                                        () => ChooseCalendar(),
                                         transition: Transition.rightToLeft,
                                       );
                                     },
@@ -104,7 +103,7 @@ class TopCard extends StatelessWidget {
                                             child: DayNoteHome()),
                                       );*/
                                           Get.to(
-                                            () => DayNoteHome(),
+                                            () => DayNoteHome(title: '',),
                                             transition: Transition.rightToLeft,
                                           );
                                         },

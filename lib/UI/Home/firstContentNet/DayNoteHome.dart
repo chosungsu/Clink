@@ -18,6 +18,11 @@ import 'package:page_transition/page_transition.dart';
 import '../../../Tool/NoBehavior.dart';
 
 class DayNoteHome extends StatefulWidget {
+  const DayNoteHome({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+  final String title;
   @override
   State<StatefulWidget> createState() => _DayNoteHomeState();
 }
@@ -160,6 +165,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                                     .now(),
                                                                 position:
                                                                     'note',
+                                                                title: '',
                                                               ),
                                                           transition: Transition
                                                               .downToUp);

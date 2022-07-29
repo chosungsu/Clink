@@ -47,7 +47,7 @@ class UserSettings extends StatelessWidget {
                               type: PageTransitionType.bottomToTop,
                               child: DayContentHome()),
                         )*/
-                      Get.to(() => DayContentHome(),
+                      Get.to(() => OptionChangePage(),
                           transition: Transition.rightToLeft)
                       : (index == 1
                           ? /*Navigator.push(

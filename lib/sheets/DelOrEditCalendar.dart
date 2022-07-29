@@ -80,6 +80,7 @@ buildTitle(BuildContext context) {
                           index: 1,
                           date: DateTime.now(), 
                           position: 'cal',
+                          title: '',
                         )),
                   );
                 },
@@ -113,6 +114,7 @@ buildTitle(BuildContext context) {
                           index: 2,
                           date: DateTime.now(),
                           position: 'cal',
+                          title: '',
                         )),
                   );
                 },
