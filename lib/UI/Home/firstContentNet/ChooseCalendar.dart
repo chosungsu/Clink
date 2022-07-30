@@ -313,19 +313,25 @@ class _ChooseCalendarState extends State<ChooseCalendar>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return snapshot.data!.docs.isEmpty
-                ? Center(
-                    child: NeumorphicText(
-                      '기록된 일정이 없네요;;;',
-                      style: NeumorphicStyle(
-                        shape: NeumorphicShape.flat,
-                        depth: 3,
-                        color: TextColor(),
-                      ),
-                      textStyle: NeumorphicTextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                      ),
-                    ),
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: NeumorphicText(
+                          '작성된 일정표가 아직 없습니다.',
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: TextColor(),
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                          ),
+                        ),
+                      )
+                    ],
                   )
                 : GridView.builder(
                     gridDelegate:
@@ -407,36 +413,52 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                       );
                     });
           } else if (snapshot.hasError) {
-            return Center(
-              child: NeumorphicText(
-                '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
-                style: NeumorphicStyle(
-                  shape: NeumorphicShape.flat,
-                  depth: 3,
-                  color: TextColor(),
-                ),
-                textStyle: NeumorphicTextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                ),
-              ),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: NeumorphicText(
+                    '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: TextColor(),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                    ),
+                  ),
+                )
+              ],
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [const Center(child: CircularProgressIndicator())],
+            );
           }
-          return Center(
-            child: NeumorphicText(
-              '생성된 일정표가 없습니다.\n추가 버튼으로 생성해보세요~',
-              style: NeumorphicStyle(
-                shape: NeumorphicShape.flat,
-                depth: 3,
-                color: TextColor(),
-              ),
-              textStyle: NeumorphicTextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize(),
-              ),
-            ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: NeumorphicText(
+                  '생성된 일정표가 없습니다.\n추가 버튼으로 생성해보세요~',
+                  style: NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    depth: 3,
+                    color: TextColor(),
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize(),
+                  ),
+                ),
+              )
+            ],
           );
         },
       );
