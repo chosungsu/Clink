@@ -124,7 +124,7 @@ content(
                                 children: [
                                   Center(
                                     child: NeumorphicText(
-                                      '1week',
+                                      '1주씩',
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
@@ -175,7 +175,7 @@ content(
                               children: [
                                 Center(
                                   child: NeumorphicText(
-                                    '2weeks',
+                                    '2주씩',
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
@@ -227,7 +227,7 @@ content(
                               children: [
                                 Center(
                                   child: NeumorphicText(
-                                    '1month',
+                                    '1달씩',
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,

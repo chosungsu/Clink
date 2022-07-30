@@ -1,6 +1,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
@@ -74,6 +75,7 @@ class _DayContentHomeState extends State<DayContentHome> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+      resizeToAvoidBottomInset: false,
       //backgroundColor: BGColor(),
       body: EnterCheckUi(controll_cals, controll_cals2),
     ));
@@ -361,14 +363,14 @@ class _DayContentHomeState extends State<DayContentHome> {
                       Center(
                         child: NeumorphicText(
                           '기록된 일정이 없네요;;;',
-                          style: const NeumorphicStyle(
+                          style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
-                            color: Colors.black45,
+                            color: TextColor(),
                           ),
                           textStyle: NeumorphicTextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: contentTitleTextsize(),
                           ),
                         ),
                       )
@@ -675,14 +677,14 @@ class _DayContentHomeState extends State<DayContentHome> {
                 Center(
                   child: NeumorphicText(
                     '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
-                    style: const NeumorphicStyle(
+                    style: NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,
-                      color: Colors.black45,
+                      color: TextColor(),
                     ),
                     textStyle: NeumorphicTextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: contentTitleTextsize(),
                     ),
                   ),
                 )
@@ -708,14 +710,14 @@ class _DayContentHomeState extends State<DayContentHome> {
               Center(
                 child: NeumorphicText(
                   '기록된 일정이 없네요;;;',
-                  style: const NeumorphicStyle(
+                  style: NeumorphicStyle(
                     shape: NeumorphicShape.flat,
                     depth: 3,
-                    color: Colors.black45,
+                    color: TextColor(),
                   ),
                   textStyle: NeumorphicTextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: contentTitleTextsize(),
                   ),
                 ),
               )
