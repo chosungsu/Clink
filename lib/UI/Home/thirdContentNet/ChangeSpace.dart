@@ -27,11 +27,9 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   List list_space = [];
   String name = Hive.box('user_info').get('id');
   final List<SpaceList> _default_ad = [
-    SpaceList(title: '날씨공간'),
     SpaceList(title: '일정공간'),
-    SpaceList(title: '루틴공간'),
     SpaceList(title: '메모공간'),
-    SpaceList(title: '운동공간'),
+    SpaceList(title: '루틴공간'),
   ];
   List<SpaceList> _user_ad = [];
 
@@ -170,7 +168,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   MySpace(double height, BuildContext context) {
     return SizedBox(
-      height: 70 * 5 + 55,
+      height: 70 * 3 + 55,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -194,38 +192,38 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   myspace() {
     //유저의 메뉴변경에 따라 자동으로 파이어베이스에 저장되어 불러오는 로직
-    return SizedBox(
-        height: 70 * 5,
-        child: FutureBuilder(
-            future: firestore
-                .collection("UserSpaceDataBase")
-                .doc(name)
-                .get()
-                .then((value) {
-              _user_ad.clear();
-              value.data()!.forEach((key, value) {
-                _user_ad.addAll([SpaceList(title: value)]);
-              });
-            }),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return SizedBox(
-                    height: 70 * _user_ad.length.toDouble(),
-                    child: ReorderableListView(
-                        children: getItems(),
-                        onReorder: (oldIndex, newIndex) {
-                          onreorder(oldIndex, newIndex);
-                        }));
-              } else {
-                return SizedBox(
-                    height: 70 * _default_ad.length.toDouble(),
-                    child: ReorderableListView(
-                        children: getItems(),
-                        onReorder: (oldIndex, newIndex) {
-                          onreorder(oldIndex, newIndex);
-                        }));
-              }
-            }));
+    return FutureBuilder(
+        future: firestore
+            .collection("UserSpaceDataBase")
+            .doc(name)
+            .get()
+            .then((value) {
+          _user_ad.clear();
+          value.data()!.forEach((key, value) {
+            if (value != name) {
+              _user_ad.addAll([SpaceList(title: value)]);
+            }
+          });
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return SizedBox(
+                height: 70 * _user_ad.length.toDouble(),
+                child: ReorderableListView(
+                    children: getItems(),
+                    onReorder: (oldIndex, newIndex) {
+                      onreorder(oldIndex, newIndex);
+                    }));
+          } else {
+            return SizedBox(
+                height: 70 * _default_ad.length.toDouble(),
+                child: ReorderableListView(
+                    children: getItems(),
+                    onReorder: (oldIndex, newIndex) {
+                      onreorder(oldIndex, newIndex);
+                    }));
+          }
+        });
   }
 
   List<ListTile> getItems() => _user_ad.isEmpty
@@ -292,6 +290,23 @@ class _ChangeSpaceState extends State<ChangeSpace> {
     });
   }
 
+  createData(String name, List<SpaceList> list, int length) {
+    for (int i = 0; i < length; i++) {
+      firestore
+          .collection('UserSpaceDataBase')
+          .doc(name)
+          .set({
+            '$i': list[i].title,
+            'name' : name
+          }, SetOptions(merge: true));
+      list_space.insert(i, list[i].title);
+    }
+    Hive.box('user_setting').put('space_name', list_space);
+    setState(() {
+      spaceset.setspace();
+    });
+  }
+
   ADSpace(double height, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,20 +344,5 @@ class _ChangeSpaceState extends State<ChangeSpace> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [SpaceAD()],
     );
-  }
-
-  createData(String name, List<SpaceList> list, int length) {
-    
-    for (int i = 0; i < length; i++) {
-      firestore
-          .collection('UserSpaceDataBase')
-          .doc(name)
-          .set({'$i': list[i].title}, SetOptions(merge: true));
-      list_space.insert(i, list[i].title);
-    }
-    Hive.box('user_setting').put('space_name', list_space);
-    setState(() {
-      spaceset.setspace();
-    });
   }
 }

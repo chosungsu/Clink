@@ -203,7 +203,13 @@ class _DayScriptState extends State<DayScript> {
                                               'calname': widget.title,
                                               'Date': widget.date
                                                       .toString()
-                                                      .split('일')[0] +
+                                                      .split('-')[0] + '-' +
+                                                      widget.date
+                                                      .toString()
+                                                      .split('-')[1] + '-' +
+                                                      widget.date
+                                                      .toString()
+                                                      .split('-')[2].substring(0, 2) +
                                                   '일',
                                             })
                                           : (widget.position == 'note'

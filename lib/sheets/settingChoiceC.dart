@@ -67,11 +67,10 @@ content(BuildContext context, FocusNode searchNode,
   String username = Hive.box('user_info').get(
     'id',
   );
-  Color _color = doc_color == null
-      ? Colors.blue
-      : Color(doc_color);
+  Color _color = doc_color == null ? Colors.blue : Color(doc_color);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List updateid = [];
+  List deleteid = [];
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
         height: 180,
@@ -194,6 +193,22 @@ content(BuildContext context, FocusNode searchNode,
                                 .collection('CalendarSheetHome')
                                 .doc(doc)
                                 .delete();
+                            firestore
+                                .collection('CalendarDataBase')
+                                .where('calname', isEqualTo: doc)
+                                .get()
+                                .then((value) {
+                              value.docs.forEach((element) {
+                                deleteid.add(element.id);
+                              });
+                              for (int i = 0; i < deleteid.length; i++) {
+                                firestore
+                                    .collection('CalendarDataBase')
+                                    .doc(deleteid[i])
+                                    .delete();
+                              }
+                            });
+
                             Navigator.pop(context);
                           });
                         },

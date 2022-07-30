@@ -206,7 +206,11 @@ class _DayContentHomeState extends State<DayContentHome> {
                     onPressed: () {
                       Get.to(
                           () => DayScript(
-                              index: 0, date: _selectedDay, position: 'cal', title : widget.title,),
+                                index: 0,
+                                date: _selectedDay,
+                                position: 'cal',
+                                title: widget.title,
+                              ),
                           transition: Transition.downToUp);
                     },
                     icon: NeumorphicIcon(
@@ -245,7 +249,7 @@ class _DayContentHomeState extends State<DayContentHome> {
               ),
               titleTextStyle: TextStyle(
                 color: TextColor(),
-                fontSize: 20,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
               titleCentered: false,
@@ -258,32 +262,6 @@ class _DayContentHomeState extends State<DayContentHome> {
               defaultTextStyle: TextStyle(color: TextColor()),
               weekendTextStyle: const TextStyle(color: Colors.blue)),
         ),
-        /*Container(
-            alignment: Alignment.center,
-            width: 30,
-            height: 30,
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  schedule == 0
-                      ? schedule = 1
-                      : (schedule == 1
-                          ? schedule = 2
-                          : schedule = 0);
-                });
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.blue.shade500,
-                child: Text(
-                  schedule == 0 ? '2W' : (schedule == 1 ? '1M' : '1W'),
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                  overflow: TextOverflow.fade,
-                ),
-              ),
-            ))*/
       ],
     ));
   }
@@ -348,33 +326,32 @@ class _DayContentHomeState extends State<DayContentHome> {
           //.where('Timestart', isGreaterThanOrEqualTo: '00:00')
           .where('calname', isEqualTo: widget.title)
           .where('OriginalUser', isEqualTo: username)
-          .where('Date', isEqualTo: _selectedDay.toString().split('일')[0] + '일')
+          .where('Date', isEqualTo: _selectedDay
+                                                      .toString()
+                                                      .split('-')[0] + '-' +
+                                                      _selectedDay
+                                                      .toString()
+                                                      .split('-')[1] + '-' +
+                                                      _selectedDay
+                                                      .toString()
+                                                      .split('-')[2].substring(0, 2) + '일')
           //.orderBy('Timestart')
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return snapshot.data!.docs.isEmpty
-              ? SizedBox(
-                  height: 300,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: NeumorphicText(
-                          '기록된 일정이 없네요;;;',
-                          style: NeumorphicStyle(
-                            shape: NeumorphicShape.flat,
-                            depth: 3,
-                            color: TextColor(),
-                          ),
-                          textStyle: NeumorphicTextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                          ),
-                        ),
-                      )
-                    ],
+              ? Center(
+                  child: NeumorphicText(
+                    '기록된 일정이 없네요;;;',
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: TextColor(),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                    ),
                   ),
                 )
               : ListView.builder(
@@ -668,60 +645,35 @@ class _DayContentHomeState extends State<DayContentHome> {
                     );
                   });
         } else if (snapshot.hasError) {
-          return SizedBox(
-            height: 300,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: NeumorphicText(
-                    '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
-                    style: NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: TextColor(),
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                    ),
-                  ),
-                )
-              ],
+          return Center(
+            child: NeumorphicText(
+              '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
+              style: NeumorphicStyle(
+                shape: NeumorphicShape.flat,
+                depth: 3,
+                color: TextColor(),
+              ),
+              textStyle: NeumorphicTextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: contentTitleTextsize(),
+              ),
             ),
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return SizedBox(
-            height: 300,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [Center(child: CircularProgressIndicator())],
-            ),
-          );
+          return Center(child: CircularProgressIndicator());
         }
-        return SizedBox(
-          height: 300,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: NeumorphicText(
-                  '기록된 일정이 없네요;;;',
-                  style: NeumorphicStyle(
-                    shape: NeumorphicShape.flat,
-                    depth: 3,
-                    color: TextColor(),
-                  ),
-                  textStyle: NeumorphicTextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize(),
-                  ),
-                ),
-              )
-            ],
+        return Center(
+          child: NeumorphicText(
+            '기록된 일정이 없네요;;;',
+            style: NeumorphicStyle(
+              shape: NeumorphicShape.flat,
+              depth: 3,
+              color: TextColor(),
+            ),
+            textStyle: NeumorphicTextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: contentTitleTextsize(),
+            ),
           ),
         );
       },

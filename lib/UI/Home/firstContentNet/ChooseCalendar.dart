@@ -349,9 +349,12 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                         },
                         onLongPress: () {
                           //삭제 및 이름변경 띄우기
-                          settingChoiceCal(context, controller, 
-                          snapshot.data!.docs[index].id, snapshot.data!.docs[index]['type'],
-                          snapshot.data!.docs[index]['color']);
+                          settingChoiceCal(
+                              context,
+                              controller,
+                              snapshot.data!.docs[index].id,
+                              snapshot.data!.docs[index]['type'],
+                              snapshot.data!.docs[index]['color']);
                         },
                         child: ContainerDesign(
                             child: Column(
@@ -442,9 +445,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
 
   settingChoiceCal(
     BuildContext context,
-    TextEditingController controller, 
-    doc, 
-    doc_type, 
+    TextEditingController controller,
+    doc,
+    doc_type,
     doc_color,
   ) {
     showModalBottomSheet(
@@ -477,7 +480,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                     },
                     child: SizedBox(
                       height: 300,
-                      child: SheetPageC(context, controller, searchNode, doc, doc_type, doc_color),
+                      child: SheetPageC(context, controller, searchNode, doc,
+                          doc_type, doc_color),
                     )),
               ));
         }).whenComplete(() {
