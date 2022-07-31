@@ -81,6 +81,7 @@ buildTitle(BuildContext context) {
                           date: DateTime.now(), 
                           position: 'cal',
                           title: '',
+                          share: [],
                         )),
                   );
                 },
@@ -115,6 +116,7 @@ buildTitle(BuildContext context) {
                           date: DateTime.now(),
                           position: 'cal',
                           title: '',
+                          share: [],
                         )),
                   );
                 },

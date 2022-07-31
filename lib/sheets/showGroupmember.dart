@@ -73,7 +73,7 @@ alphalist(FocusNode searchNode, TextEditingController controller,
   List<bool> isselected = List.filled(10000, false, growable: true);
   List<String> list_sp = [];
   final cal_share_person = Get.put(PeopleAdd());
-
+  cal_share_person.peoplecalendar();
   List listselected_sp = cal_share_person.people;
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -117,12 +117,12 @@ alphalist(FocusNode searchNode, TextEditingController controller,
                                             listselected_sp.add(id);
                                           } else {
                                             listselected_sp.removeWhere(
-                                                  (element) => element == id);
+                                                (element) => element == id);
                                           }
                                         } else {
                                           if (isselected[k] == false) {
                                             listselected_sp.removeWhere(
-                                                  (element) => element == id);
+                                                (element) => element == id);
                                           } else {
                                             listselected_sp.add(id);
                                           }
@@ -130,8 +130,9 @@ alphalist(FocusNode searchNode, TextEditingController controller,
                                       });
                                     },
                                     value: listselected_sp.contains(id)
-                                     ? isselected[list_sp.indexOf(id)] = true
-                                     : isselected[list_sp.indexOf(id)] = false,
+                                        ? isselected[list_sp.indexOf(id)] = true
+                                        : isselected[list_sp.indexOf(id)] =
+                                            false,
                                   )),
                             );
                           },
@@ -144,6 +145,20 @@ alphalist(FocusNode searchNode, TextEditingController controller,
                               fontSize: contentTitleTextsize(),
                               color: Colors.black),
                         ));
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return SizedBox(
+                        height: 230,
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            CircularProgressIndicator(
+                              color: Colors.black,
+                            )
+                          ],
+                        ));
                   }
                   return SizedBox(
                       height: 230,
@@ -151,10 +166,19 @@ alphalist(FocusNode searchNode, TextEditingController controller,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          CircularProgressIndicator(
-                            color: Colors.black,
-                          )
+                        children: [
+                          NeumorphicText(
+                            '친구목록이 비어있습니다.\n 추가하는 방법 : 설정->친구추가',
+                            style: const NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 3,
+                              color: Colors.black,
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                            ),
+                          ),
                         ],
                       ));
                 }),

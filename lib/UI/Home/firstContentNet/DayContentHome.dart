@@ -23,8 +23,10 @@ class DayContentHome extends StatefulWidget {
   const DayContentHome({
     Key? key,
     required this.title,
+    required this.share,
   }) : super(key: key);
   final String title;
+  final List share;
   @override
   State<StatefulWidget> createState() => _DayContentHomeState();
 }
@@ -210,6 +212,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                                 date: _selectedDay,
                                 position: 'cal',
                                 title: widget.title,
+                                share: widget.share,
                               ),
                           transition: Transition.downToUp);
                     },
@@ -326,15 +329,13 @@ class _DayContentHomeState extends State<DayContentHome> {
           //.where('Timestart', isGreaterThanOrEqualTo: '00:00')
           .where('calname', isEqualTo: widget.title)
           .where('OriginalUser', isEqualTo: username)
-          .where('Date', isEqualTo: _selectedDay
-                                                      .toString()
-                                                      .split('-')[0] + '-' +
-                                                      _selectedDay
-                                                      .toString()
-                                                      .split('-')[1] + '-' +
-                                                      _selectedDay
-                                                      .toString()
-                                                      .split('-')[2].substring(0, 2) + '일')
+          .where('Date',
+              isEqualTo: _selectedDay.toString().split('-')[0] +
+                  '-' +
+                  _selectedDay.toString().split('-')[1] +
+                  '-' +
+                  _selectedDay.toString().split('-')[2].substring(0, 2) +
+                  '일')
           //.orderBy('Timestart')
           .snapshots(),
       builder: (context, snapshot) {
@@ -500,6 +501,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                                               snapshot
                                                   .data!.docs[index]['Daytodo']
                                                   .toString(),
+                                              maxLines: 3,
                                               style: TextStyle(
                                                   color: TextColor(),
                                                   fontWeight: FontWeight.bold,
@@ -583,54 +585,85 @@ class _DayContentHomeState extends State<DayContentHome> {
                                                   ),
                                           ),
                                           Expanded(
-                                            flex: 2,
-                                            child: ListView.builder(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemCount: snapshot
-                                                    .data!
-                                                    .docs[index]['Shares']
-                                                    .length,
-                                                itemBuilder: (context, index2) {
-                                                  return Row(
-                                                    children: [
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        height: 25,
-                                                        width: 25,
-                                                        child: Text(
-                                                            snapshot
-                                                                .data!
-                                                                .docs[index]
-                                                                    ['Shares']
-                                                                    [index2]
-                                                                .toString()
-                                                                .substring(
-                                                                    0, 1),
-                                                            style: const TextStyle(
+                                              flex: 1,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    'with',
+                                                    softWrap: true,
+                                                    style: GoogleFonts.lobster(
+                                                      color: TextColor(),
+                                                      fontWeight:
+                                                          FontWeight.w200,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 30,
+                                                    child: ListView.builder(
+                                                      shrinkWrap: true,
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      itemCount: snapshot
+                                                          .data!
+                                                          .docs[index]['Shares']
+                                                          .length,
+                                                      itemBuilder:
+                                                          (context, index2) {
+                                                        return Row(
+                                                          children: [
+                                                            Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              height: 25,
+                                                              width: 25,
+                                                              child: Text(
+                                                                  snapshot
+                                                                      .data!
+                                                                      .docs[
+                                                                          index]
+                                                                          [
+                                                                          'Shares']
+                                                                          [
+                                                                          index2]
+                                                                      .toString()
+                                                                      .substring(
+                                                                          0,
+                                                                          1),
+                                                                  style: const TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          18)),
+                                                              decoration:
+                                                                  BoxDecoration(
                                                                 color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 18)),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      100),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                    ],
-                                                  );
-                                                }),
-                                          ),
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            100),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }),
+                                                  )
+                                                ],
+                                              )),
                                         ],
                                       ),
                                     ),

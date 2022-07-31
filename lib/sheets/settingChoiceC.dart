@@ -6,8 +6,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../Tool/TextSize.dart';
 
-SheetPageC(BuildContext context, TextEditingController controller,
-    FocusNode searchNode, doc, doc_type, doc_color) {
+SheetPageC(
+    BuildContext context,
+    TextEditingController controller,
+    FocusNode searchNode,
+    doc,
+    doc_type,
+    doc_color,
+    doc_name,
+    doc_made_user,
+    List finallist) {
   return SizedBox(
       height: 280,
       child: Padding(
@@ -40,7 +48,8 @@ SheetPageC(BuildContext context, TextEditingController controller,
               const SizedBox(
                 height: 20,
               ),
-              content(context, searchNode, controller, doc, doc_type, doc_color)
+              content(context, searchNode, controller, doc, doc_type, doc_color,
+                  doc_name, doc_made_user, finallist)
             ],
           )));
 }
@@ -62,14 +71,22 @@ title(
       ));
 }
 
-content(BuildContext context, FocusNode searchNode,
-    TextEditingController controller, doc, doc_type, doc_color) {
+content(
+    BuildContext context,
+    FocusNode searchNode,
+    TextEditingController controller,
+    doc,
+    doc_type,
+    doc_color,
+    doc_name,
+    doc_made_user,
+    List finallist) {
   String username = Hive.box('user_info').get(
     'id',
   );
   Color _color = doc_color == null ? Colors.blue : Color(doc_color);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List updateid = [];
+
   List deleteid = [];
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -92,6 +109,8 @@ content(BuildContext context, FocusNode searchNode,
             SizedBox(
               height: 40,
               child: TextField(
+                minLines: 1,
+                maxLines: 5,
                 controller: controller,
                 focusNode: searchNode,
                 textAlign: TextAlign.start,
@@ -99,7 +118,7 @@ content(BuildContext context, FocusNode searchNode,
                 style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                    fontSize: 20),
                 decoration: const InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -115,7 +134,7 @@ content(BuildContext context, FocusNode searchNode,
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             SizedBox(
               height: 30,
@@ -157,6 +176,9 @@ content(BuildContext context, FocusNode searchNode,
                                     ElevatedButton(
                                       child: const Text('반영하기'),
                                       onPressed: () {
+                                        setState(() {
+                                          _color = _color;
+                                        });
                                         Hive.box('user_setting').put(
                                             'typecolorcalendar',
                                             _color.value.toInt());
@@ -175,7 +197,7 @@ content(BuildContext context, FocusNode searchNode,
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             SizedBox(
                 height: 30,
@@ -189,25 +211,49 @@ content(BuildContext context, FocusNode searchNode,
                         ),
                         onPressed: () {
                           setState(() {
-                            firestore
-                                .collection('CalendarSheetHome')
-                                .doc(doc)
-                                .delete();
-                            firestore
-                                .collection('CalendarDataBase')
-                                .where('calname', isEqualTo: doc)
-                                .get()
-                                .then((value) {
-                              value.docs.forEach((element) {
-                                deleteid.add(element.id);
+                            if (Hive.box('user_setting')
+                                        .get('noti_calendar_click') ==
+                                    null ||
+                                Hive.box('user_setting')
+                                        .get('noti_calendar_click') ==
+                                    0) {
+                              firestore
+                                  .collection('CalendarSheetHome')
+                                  .doc(doc)
+                                  .delete();
+                              firestore
+                                  .collection('CalendarDataBase')
+                                  .where('calname', isEqualTo: doc)
+                                  .get()
+                                  .then((value) {
+                                value.docs.forEach((element) {
+                                  deleteid.add(element.id);
+                                });
+                                for (int i = 0; i < deleteid.length; i++) {
+                                  firestore
+                                      .collection('CalendarDataBase')
+                                      .doc(deleteid[i])
+                                      .delete();
+                                }
                               });
-                              for (int i = 0; i < deleteid.length; i++) {
-                                firestore
-                                    .collection('CalendarDataBase')
-                                    .doc(deleteid[i])
-                                    .delete();
-                              }
-                            });
+                              firestore
+                                  .collection('ShareHome')
+                                  .doc(doc +
+                                      '-' +
+                                      doc_made_user +
+                                      '-' +
+                                      username)
+                                  .delete();
+                            } else {
+                              firestore
+                                  .collection('ShareHome')
+                                  .doc(doc +
+                                      '-' +
+                                      doc_made_user +
+                                      '-' +
+                                      username)
+                                  .delete();
+                            }
 
                             Navigator.pop(context);
                           });
@@ -248,14 +294,24 @@ content(BuildContext context, FocusNode searchNode,
                           onPressed: () {
                             setState(() {
                               firestore
-                                  .collection('CalendarSheetHome')
-                                  .doc(doc)
-                                  .update({
-                                'calname': controller.text,
-                                'madeUser': username,
-                                'type': doc_type,
-                                'color': doc_color,
-                              });
+                                    .collection('CalendarSheetHome')
+                                    .doc(doc)
+                                    .update({
+                                  'calname': controller.text,
+                                  'color': _color.value.toInt(),
+                                });
+                                firestore
+                                    .collection('ShareHome')
+                                    .doc(doc +
+                                        '-' +
+                                        doc_made_user +
+                                        '-' +
+                                        username)
+                                    .update({
+                                  'calname': controller.text,
+                                  'color': _color.value.toInt(),
+                                });
+
                               Navigator.pop(context);
                             });
                           },

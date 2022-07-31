@@ -21,12 +21,14 @@ class DayScript extends StatefulWidget {
       required this.index,
       required this.date,
       required this.position,
-      required this.title})
+      required this.title,
+      required this.share})
       : super(key: key);
   final int index;
   final DateTime date;
   final String position;
   final String title;
+  final List share;
   @override
   State<StatefulWidget> createState() => _DayScriptState();
 }
@@ -49,10 +51,6 @@ class _DayScriptState extends State<DayScript> {
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
-  final GlobalKey<FormState> _form1Key = GlobalKey();
-  final GlobalKey<FormState> _form2Key = GlobalKey();
-  final GlobalKey<FormState> _form3Key = GlobalKey();
-  final GlobalKey<FormState> _form4Key = GlobalKey();
   final List memostar = [1, 2, 1, 1, 3];
   final List memotitle = ['memo1', 'memo2', 'memo3', 'memo4', 'memo5'];
   final List memocontent = [
@@ -198,18 +196,21 @@ class _DayScriptState extends State<DayScript> {
                                                   textEditingController2.text,
                                               'Timefinish':
                                                   textEditingController3.text,
-                                              'Shares': finallist,
+                                              'Shares': widget.share,
                                               'OriginalUser': username,
                                               'calname': widget.title,
                                               'Date': widget.date
                                                       .toString()
-                                                      .split('-')[0] + '-' +
-                                                      widget.date
+                                                      .split('-')[0] +
+                                                  '-' +
+                                                  widget.date
                                                       .toString()
-                                                      .split('-')[1] + '-' +
-                                                      widget.date
+                                                      .split('-')[1] +
+                                                  '-' +
+                                                  widget.date
                                                       .toString()
-                                                      .split('-')[2].substring(0, 2) +
+                                                      .split('-')[2]
+                                                      .substring(0, 2) +
                                                   '일',
                                             })
                                           : (widget.position == 'note'
@@ -402,10 +403,6 @@ class _DayScriptState extends State<DayScript> {
                                       : Content(context, textEditingController2,
                                           'prev', widget.date)),
                               const SizedBox(
-                                height: 20,
-                              ),
-                              AddSharing(),
-                              const SizedBox(
                                 height: 50,
                               )
                             ],
@@ -458,17 +455,15 @@ class _DayScriptState extends State<DayScript> {
     return widget.position == 'cal'
         ? SizedBox(
             height: 30,
-            child: TextFormField(
-              //key: const ValueKey('cal' + 'title'),
-              key: _form1Key,
+            child: TextField(
+              minLines: 1,
+              maxLines: 3,
               focusNode: searchNode,
               readOnly: widget.index == 2 ? true : false,
-              style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
+              style: TextStyle(fontSize: 20, color: TextColor()),
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: TextColor())),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: TextColor())),
+                border: InputBorder.none,
+                isCollapsed: true,
                 hintText: '일정 제목 추가',
                 hintStyle:
                     TextStyle(fontSize: contentTextsize(), color: TextColor()),
@@ -484,19 +479,18 @@ class _DayScriptState extends State<DayScript> {
                   children: [
                     SizedBox(
                       height: 30,
-                      child: TextFormField(
-                        //key: const ValueKey('note' + 'title'),
-                        key: _form1Key,
+                      child: TextField(
+                        minLines: 1,
+                        maxLines: 3,
+                        focusNode: searchNode,
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
                         readOnly: widget.index == 2 ? true : false,
-                        style: TextStyle(fontSize: contentTextsize()),
+                        style: TextStyle(fontSize: 20, color: TextColor()),
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: TextColor())),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: TextColor())),
-                          hintText: widget.index == 0
-                              ? '제목 입력'
-                              : memotitle[widget.index],
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          hintText: '제목 입력',
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
@@ -521,19 +515,18 @@ class _DayScriptState extends State<DayScript> {
                     ),
                     SizedBox(
                       height: 100,
-                      child: TextFormField(
-                        //key: const ValueKey('note' + 'content'),
-                        key: _form2Key,
+                      child: TextField(
+                        minLines: 1,
+                        maxLines: 10,
+                        focusNode: searchNode,
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
                         readOnly: widget.index == 2 ? true : false,
-                        style: TextStyle(fontSize: contentTextsize()),
+                        style: TextStyle(fontSize: 20, color: TextColor()),
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: TextColor())),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: TextColor())),
-                          hintText: widget.index == 0
-                              ? '내용 입력'
-                              : memocontent[widget.index],
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          hintText: '내용 입력',
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
@@ -549,19 +542,18 @@ class _DayScriptState extends State<DayScript> {
                   children: [
                     SizedBox(
                       height: 30,
-                      child: TextFormField(
-                        //key: const ValueKey('routine' + 'title'),
-                        key: _form1Key,
+                      child: TextField(
+                        minLines: 1,
+                        maxLines: 3,
+                        focusNode: searchNode,
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
                         readOnly: widget.index == 2 ? true : false,
-                        style: TextStyle(fontSize: contentTextsize()),
+                        style: TextStyle(fontSize: 20, color: TextColor()),
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: TextColor())),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: TextColor())),
-                          hintText: widget.index == 0
-                              ? '제목 입력'
-                              : memotitle[widget.index],
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          hintText: '제목 입력',
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
@@ -586,27 +578,18 @@ class _DayScriptState extends State<DayScript> {
                     ),
                     SizedBox(
                       height: 100,
-                      child: TextFormField(
-                        //key: const ValueKey('routine' + 'content'),
-                        key: _form2Key,
+                      child: TextField(
+                        minLines: 1,
+                        maxLines: 3,
+                        focusNode: searchNode,
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
                         readOnly: widget.index == 2 ? true : false,
-                        validator: (text) {
-                          if (text!.isEmpty) {
-                            return '필수 입력사항입니다.';
-                          } else {
-                            return null;
-                          }
-                        },
-                        autovalidateMode: AutovalidateMode.always,
-                        style: TextStyle(fontSize: contentTextsize()),
+                        style: TextStyle(fontSize: 20, color: TextColor()),
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: TextColor())),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: TextColor())),
-                          hintText: widget.index == 0
-                              ? '내용 입력'
-                              : memocontent[widget.index],
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          hintText: '내용 입력',
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
@@ -671,30 +654,40 @@ class _DayScriptState extends State<DayScript> {
                                   border:
                                       Border.all(color: TextColor(), width: 2)),
                               child: s == 'prev'
-                                  ? TextFormField(
-                                      key: _form3Key,
-                                      autovalidateMode: AutovalidateMode.always,
+                                  ? TextField(
                                       textAlign: TextAlign.center,
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      readOnly:true,
+                                      style: TextStyle(
+                                          fontSize: 20, color: TextColor()),
                                       decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: InputBorder.none,
                                         hintText: '시간 : 분',
                                         hintStyle: TextStyle(
                                             fontSize: contentTextsize(),
                                             color: TextColor()),
                                       ),
-                                      readOnly: true,
                                       controller: textEditingController,
                                     )
-                                  : TextFormField(
-                                      key: _form4Key,
-                                      autovalidateMode: AutovalidateMode.always,
+                                  : TextField(
                                       textAlign: TextAlign.center,
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      readOnly:true,
+                                      style: TextStyle(
+                                          fontSize: 20, color: TextColor()),
                                       decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: InputBorder.none,
                                         hintText: '시간 : 분',
                                         hintStyle: TextStyle(
                                             fontSize: contentTextsize(),
                                             color: TextColor()),
                                       ),
-                                      readOnly: true,
                                       controller: textEditingController,
                                     ),
                             )
@@ -1121,116 +1114,6 @@ class _DayScriptState extends State<DayScript> {
                   ],
                 ),
               ));
-  }
-
-  AddSharing() {
-    return SizedBox(
-      height: 50 + 100,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 50,
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: SizedBox(
-                    height: 30,
-                    child: Text(
-                      '공유',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTitleTextsize(),
-                          color: TextColor()),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    searchNode.unfocus();
-                    Future.delayed(const Duration(seconds: 1), () {
-                      showGroupmember(searchNode, controllername);
-                    });
-                  },
-                  child: Text(
-                    '불러오기',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize(),
-                        color: TextColor()),
-                  ),
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-              height: 100,
-              width: MediaQuery.of(context).size.width - 40,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: finallist.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        SizedBox(
-                          height: 80,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ContainerDesign(
-                                  color: BGColor(),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        height: 30,
-                                        width: 30,
-                                        child: Container(
-                                            alignment: Alignment.center,
-                                            child: CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.orange.shade500,
-                                                child: Text(
-                                                    finallist[index]
-                                                        .toString()
-                                                        .substring(0, 1),
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18)))),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      SizedBox(
-                                        width: 100,
-                                        child: Text(
-                                          finallist[index].toString(),
-                                          style: TextStyle(
-                                              color: TextColor(),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                          maxLines: 1,
-                                          softWrap: false,
-                                          overflow: TextOverflow.fade,
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        )
-                      ],
-                    );
-                  }))
-        ],
-      ),
-    );
   }
 
   showGroupmember(

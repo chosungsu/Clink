@@ -21,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
+import '../DB/SpaceContent.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayContentHome.dart';
@@ -44,8 +45,8 @@ class _HomePageState extends State<HomePage> {
   bool isdraweropen = false;
   int navi = 0;
   int currentPage = 0;
-  Color color1 = Colors.white;
-  Color color2 = Colors.white;
+  List<SpaceContent> sc = [];
+  late DateTime Date = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   static final spaceset = Get.put(Spacesetting());
   List showspacelist = [];
@@ -80,6 +81,25 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    firestore
+        .collection('CalendarDataBase')
+        .where('OriginalUser', isEqualTo: name)
+        .where('Date',
+            isEqualTo: Date.toString().split('-')[0] +
+                '-' +
+                Date.toString().split('-')[1] +
+                '-' +
+                Date.toString().split('-')[2].substring(0, 2) +
+                '일')
+        .get()
+        .then((value) {
+      sc.clear();
+      value.docs.forEach((element) {
+        sc.add(SpaceContent(
+            title: element['Daytodo'],
+            date: element['Timestart'] + '-' + element['Timefinish']));
+      });
+    });
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return SafeArea(
@@ -495,10 +515,14 @@ class _HomePageState extends State<HomePage> {
                                                             const SizedBox(
                                                               height: 10,
                                                             ),
-                                                            Text(
-                                                                _default_ad[
-                                                                        index]
-                                                                    .title,
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 50
+                                                                ),
+                                                                Text(
+                                                                sc[0]
+                                                                    .date,
                                                                 style: TextStyle(
                                                                     color:
                                                                         TextColor(),
@@ -507,6 +531,24 @@ class _HomePageState extends State<HomePage> {
                                                                             .bold,
                                                                     fontSize:
                                                                         18)),
+                                                                SizedBox(
+                                                                  width: 20
+                                                                ),
+                                                                Text(
+                                                                sc[0]
+                                                                    .title,
+                                                                    maxLines: 2,
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        18),
+                                                                        overflow: TextOverflow.ellipsis,),
+                                                              ],
+                                                            )
                                                           ],
                                                         )),
                                                     Positioned(
@@ -626,9 +668,14 @@ class _HomePageState extends State<HomePage> {
                                                             const SizedBox(
                                                               height: 10,
                                                             ),
-                                                            Text(
-                                                                _user_ad[index]
-                                                                    .title,
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 50
+                                                                ),
+                                                                Text(
+                                                                sc[0]
+                                                                    .date,
                                                                 style: TextStyle(
                                                                     color:
                                                                         TextColor(),
@@ -637,6 +684,24 @@ class _HomePageState extends State<HomePage> {
                                                                             .bold,
                                                                     fontSize:
                                                                         18)),
+                                                                SizedBox(
+                                                                  width: 20
+                                                                ),
+                                                                Text(
+                                                                sc[0]
+                                                                    .title,
+                                                                    maxLines: 2,
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        18),
+                                                                        overflow: TextOverflow.ellipsis,),
+                                                              ],
+                                                            )
                                                           ],
                                                         )),
                                                     Positioned(

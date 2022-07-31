@@ -80,6 +80,7 @@ buildTitle(BuildContext context, int index) {
                           date: DateTime.now(), 
                           position: 'note',
                           title: '',
+                          share: [],
                         )),
                   );
                 },
@@ -114,6 +115,7 @@ buildTitle(BuildContext context, int index) {
                           date: DateTime.now(), 
                           position: 'note',
                           title: '',
+                          share: [],
                         )),
                   );
                 },

@@ -166,6 +166,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                                 position:
                                                                     'note',
                                                                 title: '',
+                                                                share: [],
                                                               ),
                                                           transition: Transition
                                                               .downToUp);

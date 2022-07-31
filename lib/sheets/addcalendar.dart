@@ -15,6 +15,7 @@ addcalendar(
   FocusNode searchNode,
   TextEditingController controller,
   String username,
+  DateTime date,
 ) {
   Get.bottomSheet(
           Padding(
@@ -31,7 +32,8 @@ addcalendar(
                   onTap: () {
                     searchNode.unfocus();
                   },
-                  child: SheetPage(context, searchNode, controller, username)),
+                  child: SheetPage(
+                      context, searchNode, controller, username, date)),
             ),
           ),
           backgroundColor: Colors.white,
@@ -48,6 +50,7 @@ SheetPage(
   FocusNode searchNode,
   TextEditingController controller,
   String username,
+  DateTime date,
 ) {
   Color _color = Hive.box('user_setting').get('typecolorcalendar') == null
       ? Colors.blue
@@ -84,7 +87,7 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              content(context, searchNode, controller, username, _color)
+              content(context, searchNode, controller, username, _color, date)
             ],
           )));
 }
@@ -113,6 +116,7 @@ content(
   TextEditingController controller,
   String username,
   Color _color,
+  DateTime date,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -120,13 +124,24 @@ content(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 30,
-          child: Text('일정표 카드 제목',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize())),
-        ),
+            height: 30,
+            child: Row(
+              children: [
+                Text('일정표 카드 제목',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize())),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text('필수항목',
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+              ],
+            )),
         const SizedBox(
           height: 20,
         ),
@@ -158,7 +173,7 @@ content(
         ),
         SizedBox(
           height: 30,
-          child: Text('일정표 타입 선택',
+          child: Text('현재 지원중인 일정표 타입',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -220,58 +235,6 @@ content(
                           ),
                         )),
                   )),
-              const SizedBox(
-                width: 20,
-              ),
-              Flexible(
-                flex: 1,
-                child: SizedBox(
-                  height: 30,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100)),
-                          primary:
-                              Hive.box('user_setting').get('typecalendar') == 1
-                                  ? Colors.grey.shade400
-                                  : Colors.white,
-                          side: const BorderSide(
-                            width: 1,
-                            color: Colors.black45,
-                          )),
-                      onPressed: () {
-                        setState(() {
-                          Hive.box('user_setting').put('typecalendar', 1);
-                        });
-                      },
-                      child: Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: NeumorphicText(
-                                '주간반복형',
-                                style: NeumorphicStyle(
-                                  shape: NeumorphicShape.flat,
-                                  depth: 3,
-                                  color: Hive.box('user_setting')
-                                              .get('typecalendar') ==
-                                          1
-                                      ? Colors.white
-                                      : Colors.black45,
-                                ),
-                                textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize(),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )),
-                ),
-              ),
             ],
           ),
         ),
@@ -347,14 +310,69 @@ content(
                 primary: Colors.blue,
               ),
               onPressed: () {
-                setState(() {
-                  firestore.collection('CalendarSheetHome').add({
-                    'calname': controller.text,
-                    'madeUser': username,
-                    'type': Hive.box('user_setting').get('typecalendar'),
-                    'color': Hive.box('user_setting').get('typecolorcalendar'),
+                if (controller.text.isEmpty) {
+                  Flushbar(
+                    backgroundColor: Colors.red.shade400,
+                    titleText: Text('Notice',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTitleTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    messageText: Text('카드제목은 필수사항입니다.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    icon: const Icon(
+                      Icons.info_outline,
+                      size: 25.0,
+                      color: Colors.white,
+                    ),
+                    duration: const Duration(seconds: 1),
+                    leftBarIndicatorColor: Colors.red.shade100,
+                  ).show(context);
+                } else {
+                  setState(() {
+                    firestore.collection('CalendarSheetHome').add({
+                      'calname': controller.text,
+                      'madeUser': username,
+                      'type': Hive.box('user_setting').get('typecalendar'),
+                      'color':
+                          Hive.box('user_setting').get('typecolorcalendar'),
+                      'date': date.toString().split('-')[0] +
+                          '-' +
+                          date.toString().split('-')[1] +
+                          '-' +
+                          date.toString().split('-')[2].substring(0, 2) +
+                          '일'
+                    });
                   });
-                });
+                  Flushbar(
+                    backgroundColor: Colors.blue.shade400,
+                    titleText: Text('Notice',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTitleTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    messageText: Text('정상적으로 추가되었습니다.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    icon: const Icon(
+                      Icons.info_outline,
+                      size: 25.0,
+                      color: Colors.white,
+                    ),
+                    duration: const Duration(seconds: 1),
+                    leftBarIndicatorColor: Colors.blue.shade100,
+                  ).show(context);
+                  Get.back();
+                }
               },
               child: Center(
                 child: Column(

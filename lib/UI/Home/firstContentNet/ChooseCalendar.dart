@@ -21,7 +21,9 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../DB/Event.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../Tool/SheetGetx/PeopleAdd.dart';
 import '../../../Tool/SheetGetx/calendarthemesetting.dart';
+import '../../../sheets/showGroupmember.dart';
 
 class ChooseCalendar extends StatefulWidget {
   @override
@@ -33,20 +35,25 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  final controll_cals = Get.put(calendarshowsetting());
-  static final controll_cals2 = Get.put(calendarthemesetting());
-  int setcal_fromsheet = 0;
-  int themecal_fromsheet = controll_cals2.themecalendar;
   String username = Hive.box('user_info').get(
     'id',
   );
+  static final cal_share_person = Get.put(PeopleAdd());
+  List finallist = cal_share_person.people;
   TextEditingController controller = TextEditingController();
   final searchNode = FocusNode();
   final inputNode = FocusNode();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List list_calendar_home = [];
+  List updateid = [];
   bool _showBackToTopButton = false;
+  late DateTime Date = DateTime.now();
   ScrollController _scrollController = ScrollController();
+  final List noticalendarlist = [
+    'MY',
+    '공유된 캘린더',
+  ];
+  int code = Hive.box('user_setting').get('noti_calendar_click');
 
   @override
   void didChangeDependencies() {
@@ -57,9 +64,10 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   @override
   void initState() {
     super.initState();
-    setcal_fromsheet = controll_cals.showcalendar;
-    themecal_fromsheet = controll_cals2.themecalendar;
+    Hive.box('user_setting').put('noti_calendar_click', 0);
     controller = TextEditingController();
+    cal_share_person.peoplecalendarrestart();
+    finallist = cal_share_person.people;
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -186,7 +194,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             context,
                                                             searchNode,
                                                             controller,
-                                                            username);
+                                                            username,
+                                                            Date);
                                                       },
                                                       child: Container(
                                                         alignment:
@@ -217,6 +226,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                         ],
                       ),
                     )),
+                Selectisshare(),
                 Flexible(
                     fit: FlexFit.tight,
                     child: SizedBox(
@@ -235,14 +245,14 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      /*const SizedBox(
+                                        height: 20,
+                                      ),
+                                      SearchBox(),*/
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      SearchBox(),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      listy(),
+                                      code == 0 ? listy_My() : listy_Shared(),
                                       const SizedBox(
                                         height: 50,
                                       ),
@@ -257,7 +267,172 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     );
   }
 
-  SearchBox() {
+  Selectisshare() {
+    return SizedBox(
+      height: 40,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [ShareBox()],
+      ),
+    );
+  }
+
+  ShareBox() {
+    return SizedBox(
+        height: 40,
+        width: MediaQuery.of(context).size.width - 60,
+        child: ListView.builder(
+            // the number of items in the list
+            itemCount: noticalendarlist.length,
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            // display each item of the product list
+            itemBuilder: (context, index) {
+              return index == 1
+                  ? Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        SizedBox(
+                            height: 30,
+                            width: (MediaQuery.of(context).size.width - 40) / 2,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    primary: Hive.box('user_setting')
+                                                .get('noti_calendar_click') ==
+                                            null
+                                        ? Colors.white
+                                        : (Hive.box('user_setting').get(
+                                                    'noti_calendar_click') ==
+                                                index
+                                            ? Colors.grey.shade400
+                                            : Colors.white),
+                                    side: BorderSide(
+                                      width: 1,
+                                      color: TextColor(),
+                                    )),
+                                onPressed: () {
+                                  setState(() {
+                                    Hive.box('user_setting')
+                                        .put('noti_calendar_click', index);
+                                    code = index;
+                                  });
+                                },
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          noticalendarlist[index],
+                                          style: NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Hive.box('user_setting').get(
+                                                        'noti_calendar_click') ==
+                                                    null
+                                                ? Colors.black45
+                                                : (Hive.box('user_setting').get(
+                                                            'noti_calendar_click') ==
+                                                        index
+                                                    ? Colors.white
+                                                    : Colors.black45),
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize(),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ))),
+                        const SizedBox(
+                          width: 10,
+                        )
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        SizedBox(
+                            height: 30,
+                            width: (MediaQuery.of(context).size.width - 40) / 4,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    primary: Hive.box('user_setting')
+                                                .get('noti_calendar_click') ==
+                                            null
+                                        ? Colors.grey.shade400
+                                        : (Hive.box('user_setting').get(
+                                                    'noti_calendar_click') ==
+                                                index
+                                            ? Colors.grey.shade400
+                                            : Colors.white),
+                                    side: const BorderSide(
+                                      width: 1,
+                                      color: Colors.black45,
+                                    )),
+                                onPressed: () {
+                                  setState(() {
+                                    Hive.box('user_setting')
+                                        .put('noti_calendar_click', index);
+                                    code = index;
+                                  });
+                                },
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          noticalendarlist[index],
+                                          style: NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Hive.box('user_setting').get(
+                                                        'noti_calendar_click') ==
+                                                    null
+                                                ? Colors.white
+                                                : (Hive.box('user_setting').get(
+                                                            'noti_calendar_click') ==
+                                                        index
+                                                    ? Colors.white
+                                                    : Colors.black45),
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize(),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ))),
+                        const SizedBox(
+                          width: 10,
+                        )
+                      ],
+                    );
+            }));
+  }
+
+  /*SearchBox() {
     return SizedBox(
       height: 50,
       child: Column(
@@ -301,9 +476,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
             ))
       ],
     );
-  }
+  }*/
 
-  listy() {
+  listy_My() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return StreamBuilder<QuerySnapshot>(
         stream: firestore
@@ -319,7 +494,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                     children: [
                       Center(
                         child: NeumorphicText(
-                          '작성된 일정표가 아직 없습니다.',
+                          '생성된 일정표가 없습니다.\n추가 버튼으로 생성해보세요~',
                           style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
@@ -333,83 +508,324 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                       )
                     ],
                   )
-                : GridView.builder(
-                    gridDelegate:
+                : ListView.builder(
+                    /*gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             childAspectRatio: 1 / 2,
                             mainAxisSpacing: 10,
-                            crossAxisSpacing: 10),
+                            crossAxisSpacing: 10),*/
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(
-                            () => DayContentHome(
-                                title: snapshot.data!.docs[index].id),
-                            transition: Transition.rightToLeft,
-                          );
-                        },
-                        onLongPress: () {
-                          //삭제 및 이름변경 띄우기
-                          settingChoiceCal(
-                              context,
-                              controller,
-                              snapshot.data!.docs[index].id,
-                              snapshot.data!.docs[index]['type'],
-                              snapshot.data!.docs[index]['color']);
-                        },
-                        child: ContainerDesign(
-                            child: Column(
-                              children: [
-                                Flexible(
-                                    fit: FlexFit.tight,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                      return Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => DayContentHome(
+                                      title: snapshot.data!.docs[index].id,
+                                      share: snapshot.data!.docs[index]
+                                          ['share']),
+                                  transition: Transition.rightToLeft,
+                                );
+                              },
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: ContainerDesign(
+                                    child: Row(
                                       children: [
-                                        Text(
-                                          snapshot.data!.docs[index]['calname'],
-                                          maxLines: 5,
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            color: TextColor(),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTitleTextsize(),
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        )
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                decoration: BoxDecoration(
+                                                    border: Border(
+                                                        right: BorderSide(
+                                                            color:
+                                                                TextColor()))),
+                                                child: Column(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        //공유자 검색
+                                                        Hive.box('user_setting').put(
+                                                            'share_cal_person',
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['share']);
+
+                                                        Future.delayed(
+                                                            const Duration(
+                                                                seconds: 1),
+                                                            () {
+                                                          showGroupmember(
+                                                              searchNode,
+                                                              controller,
+                                                              snapshot
+                                                                  .data!
+                                                                  .docs[index]
+                                                                  .id,
+                                                              snapshot.data!
+                                                                      .docs[index]
+                                                                  ['date'],
+                                                              snapshot.data!
+                                                                      .docs[index]
+                                                                  ['type'],
+                                                              snapshot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['color'],
+                                                              snapshot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['calname'],
+                                                              snapshot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['share']);
+                                                        });
+                                                      },
+                                                      child: NeumorphicIcon(
+                                                        Icons.share,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        //삭제 및 이름변경 띄우기
+                                                        controller =
+                                                            TextEditingController(
+                                                                text: snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    [
+                                                                    'calname']);
+                                                        settingChoiceCal(
+                                                            context,
+                                                            controller,
+                                                            snapshot.data!
+                                                                .docs[index].id,
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['type'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['color'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['calname'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['madeUser']);
+                                                      },
+                                                      child: NeumorphicIcon(
+                                                        Icons.edit,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
+                                          ],
+                                        ),
+                                        Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20, right: 20),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 50,
+                                                      child: Text(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['calname'],
+                                                        maxLines: 5,
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTitleTextsize(),
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 30,
+                                                      child: Text(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['date'],
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                    snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                                    ['share']
+                                                                .length >
+                                                            0
+                                                        ? SizedBox(
+                                                            height: 30,
+                                                            child: Row(
+                                                              children: [
+                                                                Text(
+                                                                  'with',
+                                                                  softWrap:
+                                                                      true,
+                                                                  style: GoogleFonts
+                                                                      .lobster(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w200,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                  ),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                ListView
+                                                                    .builder(
+                                                                        shrinkWrap:
+                                                                            true,
+                                                                        scrollDirection:
+                                                                            Axis
+                                                                                .horizontal,
+                                                                        itemCount: snapshot
+                                                                            .data!
+                                                                            .docs[index][
+                                                                                'share']
+                                                                            .length,
+                                                                        itemBuilder:
+                                                                            (context,
+                                                                                index2) {
+                                                                          return Row(
+                                                                            children: [
+                                                                              Container(
+                                                                                alignment: Alignment.center,
+                                                                                height: 25,
+                                                                                width: 25,
+                                                                                child: Text(snapshot.data!.docs[index]['share'][index2].toString().substring(0, 1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.white,
+                                                                                  borderRadius: BorderRadius.circular(100),
+                                                                                ),
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                width: 5,
+                                                                              ),
+                                                                            ],
+                                                                          );
+                                                                        }),
+                                                              ],
+                                                            ))
+                                                        : const SizedBox(
+                                                            height: 0,
+                                                          ),
+                                                  ],
+                                                ))),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border(
+                                                      left: BorderSide(
+                                                          color: TextColor()))),
+                                              child: RotatedBox(
+                                                  quarterTurns: 3,
+                                                  child: NeumorphicText(
+                                                    'Made By\n' +
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['madeUser'],
+                                                    style: NeumorphicStyle(
+                                                      shape:
+                                                          NeumorphicShape.flat,
+                                                      depth: 3,
+                                                      color: TextColor(),
+                                                    ),
+                                                    textStyle:
+                                                        NeumorphicTextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                    ),
+                                                  )),
+                                            )
+                                          ],
+                                        ),
                                       ],
-                                    )),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    NeumorphicText(
-                                      'Made By ' +
-                                          snapshot.data!.docs[index]
-                                              ['madeUser'],
-                                      style: NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: TextColor(),
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            color: snapshot.data!.docs[index]['color'] != null
-                                ? Color(snapshot.data!.docs[index]['color'])
-                                : Colors.blue),
+                                    ),
+                                    color: snapshot.data!.docs[index]
+                                                ['color'] !=
+                                            null
+                                        ? Color(
+                                            snapshot.data!.docs[index]['color'])
+                                        : Colors.blue),
+                              )),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
                       );
                     });
           } else if (snapshot.hasError) {
@@ -465,12 +881,505 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     });
   }
 
+  listy_Shared() {
+    return StatefulBuilder(builder: (_, StateSetter setState) {
+      return StreamBuilder<QuerySnapshot>(
+        stream: firestore
+            .collection('ShareHome')
+            .where('showingUser', isEqualTo: username)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return snapshot.data!.docs.isEmpty
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: NeumorphicText(
+                          '공유된 일정표가 없습니다.',
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: TextColor(),
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                : ListView.builder(
+                    /*gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1 / 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10),*/
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => DayContentHome(
+                                      title: snapshot.data!.docs[index]['doc'],
+                                      share: snapshot.data!.docs[index]
+                                          ['share']),
+                                  transition: Transition.rightToLeft,
+                                );
+                              },
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: ContainerDesign(
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                decoration: BoxDecoration(
+                                                    border: Border(
+                                                        right: BorderSide(
+                                                            color:
+                                                                TextColor()))),
+                                                child: Column(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        //공유자 검색
+                                                        Hive.box('user_setting').put(
+                                                            'share_cal_person',
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['share']);
+
+                                                        Future.delayed(
+                                                            const Duration(
+                                                                seconds: 1),
+                                                            () {
+                                                          showGroupmember(
+                                                              searchNode,
+                                                              controller,
+                                                              snapshot
+                                                                  .data!
+                                                                  .docs[index]['doc'],
+                                                              snapshot.data!
+                                                                      .docs[index]
+                                                                  ['date'],
+                                                              snapshot.data!
+                                                                      .docs[index]
+                                                                  ['type'],
+                                                              snapshot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['color'],
+                                                              snapshot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['calname'],
+                                                              snapshot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['share']);
+                                                        });
+                                                      },
+                                                      child: NeumorphicIcon(
+                                                        Icons.share,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        //삭제 및 이름변경 띄우기
+                                                        controller =
+                                                            TextEditingController(
+                                                                text: snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    [
+                                                                    'calname']);
+                                                        settingChoiceCal(
+                                                            context,
+                                                            controller,
+                                                            snapshot.data!
+                                                                .docs[index]['doc'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['type'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['color'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['calname'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['madeUser']);
+                                                      },
+                                                      child: NeumorphicIcon(
+                                                        Icons.edit,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
+                                          ],
+                                        ),
+                                        Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20, right: 20),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 50,
+                                                      child: Text(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['calname'],
+                                                        maxLines: 5,
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTitleTextsize(),
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                    snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                                    ['share']
+                                                                .length >
+                                                            0
+                                                        ? SizedBox(
+                                                            height: 30,
+                                                            child: Row(
+                                                              children: [
+                                                                Text(
+                                                                  'with',
+                                                                  softWrap:
+                                                                      true,
+                                                                  style: GoogleFonts
+                                                                      .lobster(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w200,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                  ),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                ListView
+                                                                    .builder(
+                                                                        shrinkWrap:
+                                                                            true,
+                                                                        scrollDirection:
+                                                                            Axis
+                                                                                .horizontal,
+                                                                        itemCount: snapshot
+                                                                            .data!
+                                                                            .docs[index][
+                                                                                'share']
+                                                                            .length,
+                                                                        itemBuilder:
+                                                                            (context,
+                                                                                index2) {
+                                                                          return Row(
+                                                                            children: [
+                                                                              Container(
+                                                                                alignment: Alignment.center,
+                                                                                height: 25,
+                                                                                width: 25,
+                                                                                child: Text(snapshot.data!.docs[index]['share'][index2].toString().substring(0, 1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.white,
+                                                                                  borderRadius: BorderRadius.circular(100),
+                                                                                ),
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                width: 5,
+                                                                              ),
+                                                                            ],
+                                                                          );
+                                                                        }),
+                                                              ],
+                                                            ))
+                                                        : const SizedBox(
+                                                            height: 0,
+                                                          ),
+                                                  ],
+                                                ))),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border(
+                                                      left: BorderSide(
+                                                          color: TextColor()))),
+                                              child: RotatedBox(
+                                                  quarterTurns: 3,
+                                                  child: NeumorphicText(
+                                                    'Shared By\n' +
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['madeUser'],
+                                                    style: NeumorphicStyle(
+                                                      shape:
+                                                          NeumorphicShape.flat,
+                                                      depth: 3,
+                                                      color: TextColor(),
+                                                    ),
+                                                    textStyle:
+                                                        NeumorphicTextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                    ),
+                                                  )),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    color: snapshot.data!.docs[index]
+                                                ['color'] !=
+                                            null
+                                        ? Color(
+                                            snapshot.data!.docs[index]['color'])
+                                        : Colors.blue),
+                              )),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      );
+                    });
+          } else if (snapshot.hasError) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: NeumorphicText(
+                    '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: TextColor(),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                    ),
+                  ),
+                )
+              ],
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [const Center(child: CircularProgressIndicator())],
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: NeumorphicText(
+                  '공유된 일정표가 없습니다.',
+                  style: NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    depth: 3,
+                    color: TextColor(),
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize(),
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      );
+    });
+  }
+
+  showGroupmember(
+    FocusNode searchNode,
+    TextEditingController controller,
+    String doc,
+    doc_when,
+    doc_type,
+    doc_color,
+    doc_name,
+    doc_share,
+  ) {
+    Get.bottomSheet(
+            Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                height: 440,
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    )),
+                child: GestureDetector(
+                  onTap: () {
+                    searchNode.unfocus();
+                  },
+                  child: SheetPageG(context, searchNode, controller),
+                ),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            isScrollControlled: true,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+        .whenComplete(() {
+      setState(() {
+        controller.clear();
+        cal_share_person.peoplecalendar();
+        finallist = cal_share_person.people;
+        firestore.collection('CalendarSheetHome').doc(doc).update({
+          'calname': controller.text.isEmpty ? doc_name : controller.text,
+          'madeUser': username,
+          'type': doc_type,
+          'color': doc_color,
+          'share': finallist,
+        });
+        firestore
+            .collection('CalendarDataBase')
+            .where('calname', isEqualTo: doc)
+            .get()
+            .then((value) {
+          updateid.clear();
+          value.docs.forEach((element) {
+            updateid.add(element.id);
+          });
+          for (int i = 0; i < updateid.length; i++) {
+            firestore.collection('CalendarDataBase').doc(updateid[i]).update({
+              'Shares': finallist,
+            });
+          }
+        });
+        if (finallist.isNotEmpty) {
+          for (int i = 0; i < finallist.length; i++) {
+            firestore
+                .collection('ShareHome')
+                .doc(doc + '-' + username + '-' + finallist[i])
+                .get()
+                .then((value) {
+              if (value.data() == null) {
+                firestore
+                    .collection('ShareHome')
+                    .doc(doc + '-' + username + '-' + finallist[i])
+                    .set({
+                  'calname': doc_name,
+                  'madeUser': username,
+                  'showingUser': finallist[i],
+                  'type': doc_type,
+                  'color': doc_color,
+                  'share': finallist,
+                  'doc': doc,
+                  'date' : doc_when
+                });
+              } else {
+                firestore
+                    .collection('ShareHome')
+                    .doc(doc + '-' + username + '-' + finallist[i])
+                    .update({
+                  'calname': doc_name,
+                  'madeUser': username,
+                  'showingUser': finallist[i],
+                  'type': doc_type,
+                  'color': doc_color,
+                  'share': finallist,
+                  'doc': doc,
+                  'date' : doc_when
+                });
+              }
+            });
+          }
+        } else {
+          for (int i = 0; i < finallist.length; i++) {
+            firestore.collection('ShareHome').doc(doc).delete();
+          }
+        }
+      });
+    });
+  }
+
   settingChoiceCal(
     BuildContext context,
     TextEditingController controller,
     doc,
     doc_type,
     doc_color,
+    doc_name,
+    doc_made_user,
   ) {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -503,7 +1412,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                     child: SizedBox(
                       height: 300,
                       child: SheetPageC(context, controller, searchNode, doc,
-                          doc_type, doc_color),
+                          doc_type, doc_color, doc_name, doc_made_user, finallist),
                     )),
               ));
         }).whenComplete(() {
