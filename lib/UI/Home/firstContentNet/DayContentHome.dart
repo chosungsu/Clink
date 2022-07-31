@@ -24,9 +24,11 @@ class DayContentHome extends StatefulWidget {
     Key? key,
     required this.title,
     required this.share,
+    required this.origin,
   }) : super(key: key);
   final String title;
   final List share;
+  final String origin;
   @override
   State<StatefulWidget> createState() => _DayContentHomeState();
 }
@@ -328,7 +330,7 @@ class _DayContentHomeState extends State<DayContentHome> {
           .collection('CalendarDataBase')
           //.where('Timestart', isGreaterThanOrEqualTo: '00:00')
           .where('calname', isEqualTo: widget.title)
-          .where('OriginalUser', isEqualTo: username)
+          .where('OriginalUser', isEqualTo: widget.origin)
           .where('Date',
               isEqualTo: _selectedDay.toString().split('-')[0] +
                   '-' +

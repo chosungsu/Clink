@@ -3,6 +3,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
+import 'package:clickbyme/Tool/SheetGetx/SpaceShowRoom.dart';
 import 'package:clickbyme/Tool/SheetGetx/Spacesetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
@@ -71,16 +72,6 @@ class _HomePageState extends State<HomePage> {
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _pController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     firestore
         .collection('CalendarDataBase')
         .where('OriginalUser', isEqualTo: name)
@@ -94,12 +85,50 @@ class _HomePageState extends State<HomePage> {
         .get()
         .then((value) {
       sc.clear();
-      value.docs.forEach((element) {
-        sc.add(SpaceContent(
-            title: element['Daytodo'],
-            date: element['Timestart'] + '-' + element['Timefinish']));
-      });
+      value.docs.isEmpty
+          ? firestore
+              .collection('CalendarDataBase')
+              .where('Date',
+                  isEqualTo: Date.toString().split('-')[0] +
+                      '-' +
+                      Date.toString().split('-')[1] +
+                      '-' +
+                      Date.toString().split('-')[2].substring(0, 2) +
+                      '일')
+              .get()
+              .then(((value) {
+              value.docs.forEach((element) {
+                for (int i = 0; i < element['Shares'].length; i++) {
+                  if (element['Shares'][i].contains(name)) {
+                    setState(() {
+                      sc.add(SpaceContent(
+                        title: element['Daytodo'],
+                        date: element['Timestart'] +
+                            '-' +
+                            element['Timefinish']));
+                    });
+                  }
+                }
+              });
+            }))
+          : value.docs.forEach((element) {
+              setState(() {
+                sc.add(SpaceContent(
+                  title: element['Daytodo'],
+                  date: element['Timestart'] + '-' + element['Timefinish']));
+              });
+            });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return SafeArea(
@@ -518,35 +547,40 @@ class _HomePageState extends State<HomePage> {
                                                             Row(
                                                               children: [
                                                                 SizedBox(
-                                                                  width: 50
-                                                                ),
+                                                                    width: 50),
                                                                 Text(
-                                                                sc[0]
-                                                                    .date,
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18)),
+                                                                    sc.isEmpty
+                                                                        ? ''
+                                                                        : sc[0]
+                                                                            .date,
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                            TextColor(),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            18)),
                                                                 SizedBox(
-                                                                  width: 20
-                                                                ),
+                                                                    width: 20),
                                                                 Text(
-                                                                sc[0]
-                                                                    .title,
-                                                                    maxLines: 2,
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18),
-                                                                        overflow: TextOverflow.ellipsis,),
+                                                                  sc.isEmpty
+                                                                      ? '작성된 것이 없습니다.'
+                                                                      : sc[0]
+                                                                          .title,
+                                                                  maxLines: 2,
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          TextColor(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          18),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
                                                               ],
                                                             )
                                                           ],
@@ -671,35 +705,40 @@ class _HomePageState extends State<HomePage> {
                                                             Row(
                                                               children: [
                                                                 SizedBox(
-                                                                  width: 50
-                                                                ),
+                                                                    width: 50),
                                                                 Text(
-                                                                sc[0]
-                                                                    .date,
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18)),
+                                                                    sc.isEmpty
+                                                                        ? ''
+                                                                        : sc[0]
+                                                                            .date,
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                            TextColor(),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            18)),
                                                                 SizedBox(
-                                                                  width: 20
-                                                                ),
+                                                                    width: 20),
                                                                 Text(
-                                                                sc[0]
-                                                                    .title,
-                                                                    maxLines: 2,
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18),
-                                                                        overflow: TextOverflow.ellipsis,),
+                                                                  sc.isEmpty
+                                                                      ? '작성된 것이 없습니다.'
+                                                                      : sc[0]
+                                                                          .title,
+                                                                  maxLines: 2,
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          TextColor(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          18),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
                                                               ],
                                                             )
                                                           ],

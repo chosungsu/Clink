@@ -168,7 +168,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
 
   MySpace(double height, BuildContext context) {
     return SizedBox(
-      height: 70 * 3 + 55,
+      height: 70 * 3 + 60,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

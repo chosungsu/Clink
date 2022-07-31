@@ -53,7 +53,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     'MY',
     '공유된 캘린더',
   ];
-  int code = Hive.box('user_setting').get('noti_calendar_click');
+  int code = 0;
 
   @override
   void didChangeDependencies() {
@@ -65,6 +65,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   void initState() {
     super.initState();
     Hive.box('user_setting').put('noti_calendar_click', 0);
+    code = Hive.box('user_setting').get('noti_calendar_click') ?? 0;
     controller = TextEditingController();
     cal_share_person.peoplecalendarrestart();
     finallist = cal_share_person.people;
@@ -529,9 +530,11 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                               onTap: () {
                                 Get.to(
                                   () => DayContentHome(
-                                      title: snapshot.data!.docs[index].id,
-                                      share: snapshot.data!.docs[index]
-                                          ['share']),
+                                    title: snapshot.data!.docs[index].id,
+                                    share: snapshot.data!.docs[index]['share'],
+                                    origin: snapshot.data!.docs[index]
+                                        ['madeUser'],
+                                  ),
                                   transition: Transition.rightToLeft,
                                 );
                               },
@@ -709,75 +712,78 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             .ellipsis,
                                                       ),
                                                     ),
-                                                    snapshot
-                                                                .data!
-                                                                .docs[index]
-                                                                    ['share']
-                                                                .length >
-                                                            0
-                                                        ? SizedBox(
-                                                            height: 30,
-                                                            child: Row(
-                                                              children: [
-                                                                Text(
-                                                                  'with',
-                                                                  softWrap:
-                                                                      true,
-                                                                  style: GoogleFonts
-                                                                      .lobster(
-                                                                    color:
-                                                                        TextColor(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w200,
-                                                                    fontSize:
-                                                                        contentTextsize(),
-                                                                  ),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                ListView
-                                                                    .builder(
-                                                                        shrinkWrap:
-                                                                            true,
-                                                                        scrollDirection:
-                                                                            Axis
-                                                                                .horizontal,
-                                                                        itemCount: snapshot
-                                                                            .data!
-                                                                            .docs[index][
-                                                                                'share']
-                                                                            .length,
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                index2) {
-                                                                          return Row(
-                                                                            children: [
-                                                                              Container(
-                                                                                alignment: Alignment.center,
-                                                                                height: 25,
-                                                                                width: 25,
-                                                                                child: Text(snapshot.data!.docs[index]['share'][index2].toString().substring(0, 1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
-                                                                                decoration: BoxDecoration(
-                                                                                  color: Colors.white,
-                                                                                  borderRadius: BorderRadius.circular(100),
-                                                                                ),
-                                                                              ),
-                                                                              const SizedBox(
-                                                                                width: 5,
-                                                                              ),
-                                                                            ],
-                                                                          );
-                                                                        }),
-                                                              ],
-                                                            ))
-                                                        : const SizedBox(
-                                                            height: 0,
-                                                          ),
+                                                    SizedBox(
+                                                        height: 30,
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              'with',
+                                                              softWrap: true,
+                                                              style: GoogleFonts
+                                                                  .lobster(
+                                                                color:
+                                                                    TextColor(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w200,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                              ),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            ListView.builder(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                scrollDirection:
+                                                                    Axis
+                                                                        .horizontal,
+                                                                itemCount: snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                        [
+                                                                        'share']
+                                                                    .length,
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        index2) {
+                                                                  return Row(
+                                                                    children: [
+                                                                      Container(
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        height:
+                                                                            25,
+                                                                        width:
+                                                                            25,
+                                                                        child: Text(
+                                                                            snapshot.data!.docs[index]['share'][index2].toString().substring(0,
+                                                                                1),
+                                                                            style: const TextStyle(
+                                                                                color: Colors.black,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontSize: 18)),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(100),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        width:
+                                                                            5,
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                }),
+                                                          ],
+                                                        ))
                                                   ],
                                                 ))),
                                         Column(
@@ -932,9 +938,11 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                               onTap: () {
                                 Get.to(
                                   () => DayContentHome(
-                                      title: snapshot.data!.docs[index]['doc'],
-                                      share: snapshot.data!.docs[index]
-                                          ['share']),
+                                    title: snapshot.data!.docs[index]['doc'],
+                                    share: snapshot.data!.docs[index]['share'],
+                                    origin: snapshot.data!.docs[index]
+                                        ['madeUser'],
+                                  ),
                                   transition: Transition.rightToLeft,
                                 );
                               },
@@ -973,9 +981,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                           showGroupmember(
                                                               searchNode,
                                                               controller,
-                                                              snapshot
-                                                                  .data!
-                                                                  .docs[index]['doc'],
+                                                              snapshot.data!
+                                                                      .docs[
+                                                                  index]['doc'],
                                                               snapshot.data!
                                                                       .docs[index]
                                                                   ['date'],
@@ -983,16 +991,13 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                       .docs[index]
                                                                   ['type'],
                                                               snapshot.data!
-                                                                          .docs[
-                                                                      index]
+                                                                      .docs[index]
                                                                   ['color'],
                                                               snapshot.data!
-                                                                          .docs[
-                                                                      index]
+                                                                      .docs[index]
                                                                   ['calname'],
                                                               snapshot.data!
-                                                                          .docs[
-                                                                      index]
+                                                                      .docs[index]
                                                                   ['share']);
                                                         });
                                                       },
@@ -1029,7 +1034,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             context,
                                                             controller,
                                                             snapshot.data!
-                                                                .docs[index]['doc'],
+                                                                    .docs[index]
+                                                                ['doc'],
                                                             snapshot.data!
                                                                     .docs[index]
                                                                 ['type'],
@@ -1344,7 +1350,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                   'color': doc_color,
                   'share': finallist,
                   'doc': doc,
-                  'date' : doc_when
+                  'date': doc_when
                 });
               } else {
                 firestore
@@ -1358,7 +1364,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                   'color': doc_color,
                   'share': finallist,
                   'doc': doc,
-                  'date' : doc_when
+                  'date': doc_when
                 });
               }
             });
@@ -1411,8 +1417,16 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                     },
                     child: SizedBox(
                       height: 300,
-                      child: SheetPageC(context, controller, searchNode, doc,
-                          doc_type, doc_color, doc_name, doc_made_user, finallist),
+                      child: SheetPageC(
+                          context,
+                          controller,
+                          searchNode,
+                          doc,
+                          doc_type,
+                          doc_color,
+                          doc_name,
+                          doc_made_user,
+                          finallist),
                     )),
               ));
         }).whenComplete(() {

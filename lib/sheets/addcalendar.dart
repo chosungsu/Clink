@@ -339,6 +339,7 @@ content(
                       'calname': controller.text,
                       'madeUser': username,
                       'type': Hive.box('user_setting').get('typecalendar'),
+                      'share': [],
                       'color':
                           Hive.box('user_setting').get('typecolorcalendar'),
                       'date': date.toString().split('-')[0] +
@@ -348,6 +349,7 @@ content(
                           date.toString().split('-')[2].substring(0, 2) +
                           '일'
                     });
+                    Navigator.of(context).pop();
                   });
                   Flushbar(
                     backgroundColor: Colors.blue.shade400,
@@ -371,7 +373,6 @@ content(
                     duration: const Duration(seconds: 1),
                     leftBarIndicatorColor: Colors.blue.shade100,
                   ).show(context);
-                  Get.back();
                 }
               },
               child: Center(

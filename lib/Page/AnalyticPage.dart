@@ -275,7 +275,7 @@ class _AnalyticPageState extends State<AnalyticPage>
 
   A_Container3(double height) {
     return SizedBox(
-      height: 170,
+      height: 180,
       width: MediaQuery.of(context).size.width - 40,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
