@@ -1,6 +1,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/PeopleGroup.dart';
 import 'package:clickbyme/sheets/addcalendar.dart';
 import 'package:clickbyme/sheets/settingChoiceC.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -194,14 +195,16 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                       'sort_cal_card',
                                                                       0);
                                                           Hive.box('user_setting')
-                                                            .get(
-                                                                'sort_cal_card') == 0 || Hive.box('user_setting')
-                                                            .get(
-                                                                'sort_cal_card') == null ? 
-                                                                sort = 0 :
-                                                                sort = 1;
+                                                                          .get(
+                                                                              'sort_cal_card') ==
+                                                                      0 ||
+                                                                  Hive.box('user_setting')
+                                                                          .get(
+                                                                              'sort_cal_card') ==
+                                                                      null
+                                                              ? sort = 0
+                                                              : sort = 1;
                                                         });
-                                                        
                                                       },
                                                       child: Container(
                                                         alignment:
@@ -225,6 +228,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                       .topLeft),
                                                         ),
                                                       ))),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
                                               SizedBox(
                                                   width: 30,
                                                   child: InkWell(
@@ -613,32 +619,48 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             const Duration(
                                                                 seconds: 1),
                                                             () {
-                                                          showGroupmember(
-                                                              searchNode,
-                                                              controller,
-                                                              snapshot
+                                                          Get.to(
+                                                            () => PeopleGroup(
+                                                              doc: snapshot
                                                                   .data!
                                                                   .docs[index]
-                                                                  .id,
-                                                              snapshot.data!
-                                                                      .docs[index]
-                                                                  ['date'],
-                                                              snapshot.data!
-                                                                      .docs[index]
-                                                                  ['type'],
-                                                              snapshot.data!
-                                                                      .docs[index]
-                                                                  ['color'],
-                                                              snapshot.data!
-                                                                      .docs[index]
-                                                                  ['calname'],
-                                                              snapshot.data!
-                                                                      .docs[index]
-                                                                  ['share'],
-                                                              snapshot.data!
+                                                                  .id.toString(),
+                                                              when: snapshot
+                                                                          .data!
                                                                           .docs[
                                                                       index]
-                                                                  ['madeUser']);
+                                                                  ['date'],
+                                                              type: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['type'],
+                                                              color: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['color'],
+                                                              nameid: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['calname'],
+                                                              share: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['share'],
+                                                              made: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['madeUser'],
+                                                            ),
+                                                            transition:
+                                                                Transition
+                                                                    .downToUp,
+                                                          );
+
                                                         });
                                                       },
                                                       child: NeumorphicIcon(
@@ -1023,30 +1045,48 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             const Duration(
                                                                 seconds: 1),
                                                             () {
-                                                          showGroupmember(
-                                                              searchNode,
-                                                              controller,
-                                                              snapshot.data!
-                                                                      .docs[index]
+                                                          Get.to(
+                                                            () => PeopleGroup(
+                                                              doc: snapshot
+                                                                  .data!
+                                                                  .docs[index]
                                                                   ['doc'],
-                                                              snapshot.data!
-                                                                      .docs[index]
+                                                              when: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
                                                                   ['date'],
-                                                              snapshot.data!
-                                                                      .docs[index]
+                                                              type: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
                                                                   ['type'],
-                                                              snapshot.data!
-                                                                      .docs[index]
+                                                              color: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
                                                                   ['color'],
-                                                              snapshot.data!
-                                                                      .docs[index]
+                                                              nameid: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
                                                                   ['calname'],
-                                                              snapshot.data!
-                                                                      .docs[index]
+                                                              share: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
                                                                   ['share'],
-                                                              snapshot.data!
-                                                                      .docs[index]
-                                                                  ['madeUser']);
+                                                              made: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['madeUser'],
+                                                            ),
+                                                            transition:
+                                                                Transition
+                                                                    .downToUp,
+                                                          );
+
                                                         });
                                                       },
                                                       child: NeumorphicIcon(

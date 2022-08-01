@@ -2,7 +2,6 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/SheetGetx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -12,8 +11,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../DB/ChipList.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/addgroupmember.dart';
-import '../../../sheets/showGroupmember.dart';
 
 class DayScript extends StatefulWidget {
   DayScript(
@@ -1272,7 +1269,7 @@ pickDates(BuildContext context, TextEditingController timecontroller,
       context: context, initialTime: TimeOfDay.fromDateTime(fromDate));
   pick.then((timeOfDay) {
     if (timeOfDay != null) {
-      hour = timeOfDay!.hour.toString();
+      hour = timeOfDay.hour.toString();
       minute = timeOfDay.minute.toString();
       timecontroller.text = '$hour:$minute';
     }

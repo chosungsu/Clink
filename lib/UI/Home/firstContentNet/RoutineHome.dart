@@ -2,7 +2,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/RoutineScript.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/PeopleGroup.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -144,18 +144,7 @@ class _RoutineHomeState extends State<RoutineHome> {
                                                 width: 30,
                                                 child: InkWell(
                                                     onTap: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        PageTransition(
-                                                            type:
-                                                                PageTransitionType
-                                                                    .bottomToTop,
-                                                            child:
-                                                                RoutineScript(
-                                                              index: 0,
-                                                              cardindex: 'null',
-                                                            )),
-                                                      );
+                                                      
                                                     },
                                                     child: Container(
                                                       alignment:
