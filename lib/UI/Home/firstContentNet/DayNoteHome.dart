@@ -1,20 +1,15 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/SheetGetx/memosearchsetting.dart';
 import 'package:clickbyme/Tool/SheetGetx/memosortsetting.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/MemoScript.dart';
-import 'package:clickbyme/sheets/DelOrEditMemo.dart';
 import 'package:clickbyme/sheets/settingMemoHome.dart';
-import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:page_transition/page_transition.dart';
 import '../../../Tool/NoBehavior.dart';
 
 class DayNoteHome extends StatefulWidget {
@@ -160,13 +155,13 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       );*/
                                                       Get.to(
                                                           () => DayScript(
-                                                                index: 0,
                                                                 date: DateTime
                                                                     .now(),
                                                                 position:
                                                                     'note',
                                                                 title: '',
                                                                 share: [],
+                                                                orig: '',
                                                               ),
                                                           transition: Transition
                                                               .downToUp);
@@ -406,7 +401,6 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            DelOrEditMemo(context, index);
                           },
                           child: ContainerDesign(
                               child: SizedBox(

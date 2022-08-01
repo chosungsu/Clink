@@ -1,13 +1,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
-import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
 import 'package:clickbyme/sheets/addcalendar.dart';
-import 'package:clickbyme/sheets/settingCalendarHome.dart';
 import 'package:clickbyme/sheets/settingChoiceC.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +10,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:table_calendar/table_calendar.dart';
-import '../../../DB/Event.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/PeopleAdd.dart';
-import '../../../Tool/SheetGetx/calendarthemesetting.dart';
 import '../../../sheets/showGroupmember.dart';
 
 class ChooseCalendar extends StatefulWidget {
@@ -54,6 +44,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     '공유된 캘린더',
   ];
   int code = 0;
+  int sort = 0;
 
   @override
   void didChangeDependencies() {
@@ -65,7 +56,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   void initState() {
     super.initState();
     Hive.box('user_setting').put('noti_calendar_click', 0);
+    Hive.box('user_setting').put('sort_cal_card', 0);
     code = Hive.box('user_setting').get('noti_calendar_click') ?? 0;
+    sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
     controller = TextEditingController();
     cal_share_person.peoplecalendarrestart();
     finallist = cal_share_person.people;
@@ -183,6 +176,55 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                           FontWeight.bold,
                                                     )),
                                               ),
+                                              SizedBox(
+                                                  width: 30,
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        //리스트 정렬
+                                                        setState(() {
+                                                          sort == 0
+                                                              ? Hive.box(
+                                                                      'user_setting')
+                                                                  .put(
+                                                                      'sort_cal_card',
+                                                                      1)
+                                                              : Hive.box(
+                                                                      'user_setting')
+                                                                  .put(
+                                                                      'sort_cal_card',
+                                                                      0);
+                                                          Hive.box('user_setting')
+                                                            .get(
+                                                                'sort_cal_card') == 0 || Hive.box('user_setting')
+                                                            .get(
+                                                                'sort_cal_card') == null ? 
+                                                                sort = 0 :
+                                                                sort = 1;
+                                                        });
+                                                        
+                                                      },
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: 30,
+                                                        height: 30,
+                                                        child: NeumorphicIcon(
+                                                          Icons.swap_vert,
+                                                          size: 30,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              surfaceIntensity:
+                                                                  0.5,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      ))),
                                               SizedBox(
                                                   width: 30,
                                                   child: InkWell(
@@ -485,6 +527,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
         stream: firestore
             .collection('CalendarSheetHome')
             .where('madeUser', isEqualTo: username)
+            .orderBy('date', descending: sort == 0 ? true : false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -584,17 +627,18 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                       .docs[index]
                                                                   ['type'],
                                                               snapshot.data!
-                                                                          .docs[
-                                                                      index]
+                                                                      .docs[index]
                                                                   ['color'],
                                                               snapshot.data!
-                                                                          .docs[
-                                                                      index]
+                                                                      .docs[index]
                                                                   ['calname'],
+                                                              snapshot.data!
+                                                                      .docs[index]
+                                                                  ['share'],
                                                               snapshot.data!
                                                                           .docs[
                                                                       index]
-                                                                  ['share']);
+                                                                  ['madeUser']);
                                                         });
                                                       },
                                                       child: NeumorphicIcon(
@@ -676,12 +720,12 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     SizedBox(
-                                                      height: 50,
+                                                      height: 70,
                                                       child: Text(
                                                         snapshot.data!
                                                                 .docs[index]
                                                             ['calname'],
-                                                        maxLines: 5,
+                                                        maxLines: 2,
                                                         softWrap: true,
                                                         style: TextStyle(
                                                           color: TextColor(),
@@ -893,6 +937,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
         stream: firestore
             .collection('ShareHome')
             .where('showingUser', isEqualTo: username)
+            .orderBy('date', descending: sort == 0 ? true : false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -982,8 +1027,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                               searchNode,
                                                               controller,
                                                               snapshot.data!
-                                                                      .docs[
-                                                                  index]['doc'],
+                                                                      .docs[index]
+                                                                  ['doc'],
                                                               snapshot.data!
                                                                       .docs[index]
                                                                   ['date'],
@@ -998,7 +1043,10 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                   ['calname'],
                                                               snapshot.data!
                                                                       .docs[index]
-                                                                  ['share']);
+                                                                  ['share'],
+                                                              snapshot.data!
+                                                                      .docs[index]
+                                                                  ['madeUser']);
                                                         });
                                                       },
                                                       child: NeumorphicIcon(
@@ -1280,6 +1328,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     doc_color,
     doc_name,
     doc_share,
+    doc_made,
   ) {
     Get.bottomSheet(
             Padding(
@@ -1311,69 +1360,71 @@ class _ChooseCalendarState extends State<ChooseCalendar>
         finallist = cal_share_person.people;
         firestore.collection('CalendarSheetHome').doc(doc).update({
           'calname': controller.text.isEmpty ? doc_name : controller.text,
-          'madeUser': username,
+          'madeUser': doc_made,
           'type': doc_type,
           'color': doc_color,
           'share': finallist,
-        });
-        firestore
-            .collection('CalendarDataBase')
-            .where('calname', isEqualTo: doc)
-            .get()
-            .then((value) {
-          updateid.clear();
-          value.docs.forEach((element) {
-            updateid.add(element.id);
-          });
-          for (int i = 0; i < updateid.length; i++) {
-            firestore.collection('CalendarDataBase').doc(updateid[i]).update({
-              'Shares': finallist,
+        }).whenComplete(() {
+          firestore
+              .collection('CalendarDataBase')
+              .where('calname', isEqualTo: doc)
+              .get()
+              .then((value) {
+            updateid.clear();
+            value.docs.forEach((element) {
+              updateid.add(element.id);
             });
-          }
-        });
-        if (finallist.isNotEmpty) {
-          for (int i = 0; i < finallist.length; i++) {
-            firestore
-                .collection('ShareHome')
-                .doc(doc + '-' + username + '-' + finallist[i])
-                .get()
-                .then((value) {
-              if (value.data() == null) {
+            for (int i = 0; i < updateid.length; i++) {
+              firestore.collection('CalendarDataBase').doc(updateid[i]).update({
+                'Shares': finallist,
+              });
+            }
+          }).whenComplete(() {
+            if (finallist.isNotEmpty) {
+              for (int i = 0; i < finallist.length; i++) {
                 firestore
                     .collection('ShareHome')
-                    .doc(doc + '-' + username + '-' + finallist[i])
-                    .set({
-                  'calname': doc_name,
-                  'madeUser': username,
-                  'showingUser': finallist[i],
-                  'type': doc_type,
-                  'color': doc_color,
-                  'share': finallist,
-                  'doc': doc,
-                  'date': doc_when
-                });
-              } else {
-                firestore
-                    .collection('ShareHome')
-                    .doc(doc + '-' + username + '-' + finallist[i])
-                    .update({
-                  'calname': doc_name,
-                  'madeUser': username,
-                  'showingUser': finallist[i],
-                  'type': doc_type,
-                  'color': doc_color,
-                  'share': finallist,
-                  'doc': doc,
-                  'date': doc_when
+                    .doc(doc + '-' + doc_made + '-' + finallist[i])
+                    .get()
+                    .then((value) {
+                  if (value.data() == null) {
+                    firestore
+                        .collection('ShareHome')
+                        .doc(doc + '-' + doc_made + '-' + finallist[i])
+                        .set({
+                      'calname': doc_name,
+                      'madeUser': doc_made,
+                      'showingUser': finallist[i],
+                      'type': doc_type,
+                      'color': doc_color,
+                      'share': finallist,
+                      'doc': doc,
+                      'date': doc_when
+                    });
+                  } else {
+                    firestore
+                        .collection('ShareHome')
+                        .doc(doc + '-' + doc_made + '-' + finallist[i])
+                        .update({
+                      'calname': doc_name,
+                      'madeUser': doc_made,
+                      'showingUser': finallist[i],
+                      'type': doc_type,
+                      'color': doc_color,
+                      'share': finallist,
+                      'doc': doc,
+                      'date': doc_when
+                    });
+                  }
                 });
               }
-            });
-          }
-        } else {
-          for (int i = 0; i < finallist.length; i++) {
-            firestore.collection('ShareHome').doc(doc).delete();
-          }
-        }
+            } else {
+              for (int i = 0; i < finallist.length; i++) {
+                firestore.collection('ShareHome').doc(doc).delete();
+              }
+            }
+          });
+        });
       });
     });
   }

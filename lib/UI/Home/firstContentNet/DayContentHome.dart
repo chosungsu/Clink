@@ -3,17 +3,15 @@ import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachCalendar.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
-import 'package:clickbyme/sheets/DelOrEditCalendar.dart';
 import 'package:clickbyme/sheets/settingCalendarHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../DB/Event.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -210,11 +208,11 @@ class _DayContentHomeState extends State<DayContentHome> {
                     onPressed: () {
                       Get.to(
                           () => DayScript(
-                                index: 0,
                                 date: _selectedDay,
                                 position: 'cal',
                                 title: widget.title,
                                 share: widget.share,
+                                orig: widget.origin,
                               ),
                           transition: Transition.downToUp);
                     },
@@ -328,9 +326,7 @@ class _DayContentHomeState extends State<DayContentHome> {
     return StreamBuilder<QuerySnapshot>(
       stream: firestore
           .collection('CalendarDataBase')
-          //.where('Timestart', isGreaterThanOrEqualTo: '00:00')
           .where('calname', isEqualTo: widget.title)
-          .where('OriginalUser', isEqualTo: widget.origin)
           .where('Date',
               isEqualTo: _selectedDay.toString().split('-')[0] +
                   '-' +
@@ -338,7 +334,7 @@ class _DayContentHomeState extends State<DayContentHome> {
                   '-' +
                   _selectedDay.toString().split('-')[2].substring(0, 2) +
                   '일')
-          //.orderBy('Timestart')
+          .orderBy('Timestart')
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -460,7 +456,15 @@ class _DayContentHomeState extends State<DayContentHome> {
                                   child: InkWell(
                                     onTap: () {
                                       //수정 및 삭제 시트 띄우기
-                                      //DelOrEditCalendar(context);
+                                      Get.to(
+                                          () => ClickShowEachCalendar(
+                                            start : snapshot.data!.docs[index]['Timestart'],
+                                            finish : snapshot.data!.docs[index]['Timefinish'],
+                                            calinfo : snapshot.data!.docs[index]['Daytodo'],
+                                            date: _selectedDay,
+                                            doc : widget.title
+                                              ),
+                                          transition: Transition.downToUp);
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.only(
@@ -512,80 +516,138 @@ class _DayContentHomeState extends State<DayContentHome> {
                                             ),
                                           ),
                                           Expanded(
-                                            flex: 1,
-                                            child: snapshot
-                                                    .data!
-                                                    .docs[index]['Timefinish']
-                                                    .isEmpty
-                                                ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .docs[index][
-                                                                    'Timestart']
-                                                                .toString()
-                                                                .split(
-                                                                    ':')[1] ==
-                                                            '0'
-                                                        ? snapshot
-                                                                .data!
-                                                                .docs[index][
-                                                                    'Timestart']
-                                                                .toString() +
-                                                            '0' +
-                                                            '-' +
-                                                            ''
-                                                        : snapshot
-                                                                .data!
-                                                                .docs[index][
-                                                                    'Timestart']
-                                                                .toString() +
-                                                            '-' +
-                                                            '',
-                                                    style: TextStyle(
-                                                        color: TextColor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  )
-                                                : Text(
-                                                    snapshot.data!.docs[index]['Timestart']
-                                                                .toString()
-                                                                .split(
-                                                                    ':')[1] ==
-                                                            '0'
-                                                        ? snapshot.data!.docs[index]['Timestart']
-                                                                .toString() +
-                                                            '0' +
-                                                            '-' +
-                                                            snapshot.data!.docs[index]['Timefinish']
-                                                                .toString()
-                                                        : (snapshot.data!.docs[index]['Timefinish'].toString().split(':')[1] == '0'
-                                                            ? snapshot.data!.docs[index]['Timestart']
-                                                                    .toString() +
-                                                                '-' +
-                                                                snapshot.data!.docs[index]['Timefinish']
-                                                                    .toString() +
-                                                                '0'
-                                                            : snapshot.data!.docs[index]['Timestart']
-                                                                    .toString() +
-                                                                '0' +
-                                                                '-' +
-                                                                snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                        ['Timefinish']
-                                                                    .toString()),
-                                                    style: TextStyle(
-                                                        color: TextColor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                          ),
+                                              flex: 1,
+                                              child: snapshot
+                                                      .data!
+                                                      .docs[index]['Timefinish']
+                                                      .isEmpty
+                                                  ? Text(
+                                                      snapshot
+                                                                  .data!
+                                                                  .docs[index][
+                                                                      'Timestart']
+                                                                  .toString()
+                                                                  .split(
+                                                                      ':')[1] ==
+                                                              '0'
+                                                          ? snapshot
+                                                                  .data!
+                                                                  .docs[index][
+                                                                      'Timestart']
+                                                                  .toString() +
+                                                              '0' +
+                                                              '-' +
+                                                              ''
+                                                          : snapshot
+                                                                  .data!
+                                                                  .docs[index][
+                                                                      'Timestart']
+                                                                  .toString() +
+                                                              '-' +
+                                                              '',
+                                                      style: TextStyle(
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 20),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    )
+                                                  : (snapshot
+                                                              .data!
+                                                              .docs[index]
+                                                                  ['Timefinish']
+                                                              .toString()
+                                                              .split(':')[1] ==
+                                                          '0'
+                                                      ? Text(
+                                                          snapshot.data!.docs[index]['Timestart']
+                                                                          .toString()
+                                                                          .split(
+                                                                              ':')[
+                                                                      1] ==
+                                                                  '0'
+                                                              ? snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                          [
+                                                                          'Timestart']
+                                                                      .toString() +
+                                                                  '0' +
+                                                                  '-' +
+                                                                  snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                          [
+                                                                          'Timefinish']
+                                                                      .toString() +
+                                                                  '0'
+                                                              : snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                          [
+                                                                          'Timestart']
+                                                                      .toString() +
+                                                                  '-' +
+                                                                  snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                          ['Timefinish']
+                                                                      .toString() +
+                                                                  '0',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 20),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        )
+                                                      : Text(
+                                                          snapshot.data!.docs[index]['Timestart']
+                                                                          .toString()
+                                                                          .split(
+                                                                              ':')[
+                                                                      1] ==
+                                                                  '0'
+                                                              ? snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                          [
+                                                                          'Timestart']
+                                                                      .toString() +
+                                                                  '0' +
+                                                                  '-' +
+                                                                  snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                          [
+                                                                          'Timefinish']
+                                                                      .toString()
+                                                              : snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                          [
+                                                                          'Timestart']
+                                                                      .toString() +
+                                                                  '-' +
+                                                                  snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                          ['Timefinish']
+                                                                      .toString(),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 20),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ))),
                                           Expanded(
                                               flex: 1,
                                               child: Row(
@@ -609,60 +671,62 @@ class _DayContentHomeState extends State<DayContentHome> {
                                                   SizedBox(
                                                     height: 30,
                                                     child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemCount: snapshot
-                                                          .data!
-                                                          .docs[index]['Shares']
-                                                          .length,
-                                                      itemBuilder:
-                                                          (context, index2) {
-                                                        return Row(
-                                                          children: [
-                                                            Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              height: 25,
-                                                              width: 25,
-                                                              child: Text(
-                                                                  snapshot
-                                                                      .data!
-                                                                      .docs[
-                                                                          index]
-                                                                          [
-                                                                          'Shares']
-                                                                          [
-                                                                          index2]
-                                                                      .toString()
-                                                                      .substring(
-                                                                          0,
-                                                                          1),
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          18)),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            100),
+                                                        shrinkWrap: true,
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemCount: snapshot
+                                                            .data!
+                                                            .docs[index]
+                                                                ['Shares']
+                                                            .length,
+                                                        itemBuilder:
+                                                            (context, index2) {
+                                                          return Row(
+                                                            children: [
+                                                              Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                height: 25,
+                                                                width: 25,
+                                                                child: Text(
+                                                                    snapshot
+                                                                        .data!
+                                                                        .docs[
+                                                                            index]
+                                                                            [
+                                                                            'Shares']
+                                                                            [
+                                                                            index2]
+                                                                        .toString()
+                                                                        .substring(
+                                                                            0,
+                                                                            1),
+                                                                    style: const TextStyle(
+                                                                        color:
+                                                                            Colors
+                                                                                .black,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            18)),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              100),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                          ],
-                                                        );
-                                                      }),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }),
                                                   )
                                                 ],
                                               )),

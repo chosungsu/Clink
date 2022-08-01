@@ -18,16 +18,16 @@ import '../../../sheets/showGroupmember.dart';
 class DayScript extends StatefulWidget {
   DayScript(
       {Key? key,
-      required this.index,
       required this.date,
       required this.position,
       required this.title,
-      required this.share})
+      required this.share,
+      required this.orig})
       : super(key: key);
-  final int index;
   final DateTime date;
   final String position;
   final String title;
+  final String orig;
   final List share;
   @override
   State<StatefulWidget> createState() => _DayScriptState();
@@ -161,11 +161,7 @@ class _DayScriptState extends State<DayScript> {
                                             Flexible(
                                               fit: FlexFit.tight,
                                               child: Text(
-                                                widget.index == 0
-                                                    ? '작성하기'
-                                                    : (widget.index == 1
-                                                        ? '수정하기'
-                                                        : '삭제하기'),
+                                                '작성하기',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize:
@@ -193,11 +189,19 @@ class _DayScriptState extends State<DayScript> {
                                               'Daytodo':
                                                   textEditingController1.text,
                                               'Timestart':
-                                                  textEditingController2.text,
+                                                  textEditingController2.text
+                                                              .split(':')[0]
+                                                              .length ==
+                                                          1
+                                                      ? '0' +
+                                                          textEditingController2
+                                                              .text
+                                                      : textEditingController2
+                                                          .text,
                                               'Timefinish':
                                                   textEditingController3.text,
                                               'Shares': widget.share,
-                                              'OriginalUser': username,
+                                              'OriginalUser': widget.orig,
                                               'calname': widget.title,
                                               'Date': widget.date
                                                       .toString()
@@ -212,6 +216,54 @@ class _DayScriptState extends State<DayScript> {
                                                       .split('-')[2]
                                                       .substring(0, 2) +
                                                   '일',
+                                            }).whenComplete(() {
+                                              Future.delayed(
+                                                  const Duration(seconds: 2),
+                                                  () {
+                                                Flushbar(
+                                                  backgroundColor:
+                                                      Colors.blue.shade400,
+                                                  titleText: Text('Notice',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            contentTitleTextsize(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      )),
+                                                  messageText: widget
+                                                              .position ==
+                                                          'cal'
+                                                      ? Text(
+                                                          '일정이 정상적으로 추가되었습니다.',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ))
+                                                      : Text(
+                                                          '메모가 정상적으로 추가되었습니다.',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                  icon: const Icon(
+                                                    Icons.info_outline,
+                                                    size: 25.0,
+                                                    color: Colors.white,
+                                                  ),
+                                                  duration: const Duration(
+                                                      seconds: 1),
+                                                  leftBarIndicatorColor:
+                                                      Colors.blue.shade100,
+                                                ).show(context).whenComplete(
+                                                    () => Get.back());
+                                              });
                                             })
                                           : (widget.position == 'note'
                                               ? firestore
@@ -229,6 +281,60 @@ class _DayScriptState extends State<DayScript> {
                                                           .text,
                                                   'Shares': finallist,
                                                   'OriginalUser': username,
+                                                }).whenComplete(() {
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          seconds: 2), () {
+                                                    Flushbar(
+                                                      backgroundColor:
+                                                          Colors.blue.shade400,
+                                                      titleText: Text('Notice',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                contentTitleTextsize(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                      messageText: widget
+                                                                  .position ==
+                                                              'cal'
+                                                          ? Text(
+                                                              '일정이 정상적으로 추가되었습니다.',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ))
+                                                          : Text(
+                                                              '메모가 정상적으로 추가되었습니다.',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                      icon: const Icon(
+                                                        Icons.info_outline,
+                                                        size: 25.0,
+                                                        color: Colors.white,
+                                                      ),
+                                                      duration: const Duration(
+                                                          seconds: 1),
+                                                      leftBarIndicatorColor:
+                                                          Colors.blue.shade100,
+                                                    )
+                                                        .show(context)
+                                                        .whenComplete(
+                                                            () => Get.back());
+                                                  });
                                                 })
                                               : firestore
                                                   .collection(
@@ -245,6 +351,60 @@ class _DayScriptState extends State<DayScript> {
                                                           .text,
                                                   'Shares': finallist,
                                                   'OriginalUser': username,
+                                                }).whenComplete(() {
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          seconds: 2), () {
+                                                    Flushbar(
+                                                      backgroundColor:
+                                                          Colors.blue.shade400,
+                                                      titleText: Text('Notice',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                contentTitleTextsize(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                      messageText: widget
+                                                                  .position ==
+                                                              'cal'
+                                                          ? Text(
+                                                              '일정이 정상적으로 추가되었습니다.',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ))
+                                                          : Text(
+                                                              '메모가 정상적으로 추가되었습니다.',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                      icon: const Icon(
+                                                        Icons.info_outline,
+                                                        size: 25.0,
+                                                        color: Colors.white,
+                                                      ),
+                                                      duration: const Duration(
+                                                          seconds: 1),
+                                                      leftBarIndicatorColor:
+                                                          Colors.blue.shade100,
+                                                    )
+                                                        .show(context)
+                                                        .whenComplete(
+                                                            () => Get.back());
+                                                  });
                                                 }));
                                     } else {
                                       Flushbar(
@@ -303,39 +463,6 @@ class _DayScriptState extends State<DayScript> {
                                           Colors.red.shade100,
                                     ).show(context);
                                   }
-                                  Future.delayed(const Duration(seconds: 2),
-                                      () {
-                                    Flushbar(
-                                      backgroundColor: Colors.blue.shade400,
-                                      titleText: Text('Notice',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: contentTitleTextsize(),
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                      messageText: widget.position == 'cal'
-                                          ? Text('일정이 정상적으로 추가되었습니다.',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: contentTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              ))
-                                          : Text('메모가 정상적으로 추가되었습니다.',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: contentTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                      icon: const Icon(
-                                        Icons.info_outline,
-                                        size: 25.0,
-                                        color: Colors.white,
-                                      ),
-                                      duration: const Duration(seconds: 1),
-                                      leftBarIndicatorColor:
-                                          Colors.blue.shade100,
-                                    ).show(context);
-                                  });
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
@@ -368,40 +495,26 @@ class _DayScriptState extends State<DayScript> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
                               buildSheetTitle(widget.date),
                               const SizedBox(
                                 height: 20,
                               ),
                               Title(),
                               const SizedBox(
+                                height: 30,
+                              ),
+                              buildContentTitle(),
+                              const SizedBox(
                                 height: 20,
                               ),
                               widget.position == 'cal'
-                                  ? SizedBox(
-                                      height: 120,
-                                      child: Row(
-                                        children: [
-                                          Content(
-                                              context,
-                                              textEditingController2,
-                                              'prev',
-                                              widget.date),
-                                          const SizedBox(
-                                            width: 50,
-                                          ),
-                                          Content(
-                                              context,
-                                              textEditingController3,
-                                              'after',
-                                              widget.date),
-                                        ],
-                                      ),
-                                    )
-                                  : (widget.position == 'note'
-                                      ? Content(context, textEditingController2,
-                                          'prev', widget.date)
-                                      : Content(context, textEditingController2,
-                                          'prev', widget.date)),
+                                  ? Content()
+                                  : const SizedBox(
+                                      height: 0,
+                                    ),
                               const SizedBox(
                                 height: 50,
                               )
@@ -420,35 +533,68 @@ class _DayScriptState extends State<DayScript> {
     return widget.position == 'cal'
         ? SizedBox(
             height: 30,
-            child: Text(
-              '일정제목',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                  color: TextColor()),
-            ),
-          )
+            child: Row(
+              children: [
+                Text(
+                  '일정제목',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: TextColor()),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text('필수항목',
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+              ],
+            ))
         : (widget.position == 'note'
             ? SizedBox(
                 height: 30,
-                child: Text(
-                  '메모제목',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor()),
-                ),
-              )
+                child: Row(
+                  children: [
+                    Text(
+                      '메모제목',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize(),
+                          color: TextColor()),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Text('필수항목',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15)),
+                  ],
+                ))
             : SizedBox(
                 height: 30,
-                child: Text(
-                  '루틴제목',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor()),
-                ),
-              ));
+                child: Row(
+                  children: [
+                    Text(
+                      '루틴제목',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize(),
+                          color: TextColor()),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Text('필수항목',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15)),
+                  ],
+                )));
   }
 
   Title() {
@@ -459,8 +605,7 @@ class _DayScriptState extends State<DayScript> {
               minLines: 1,
               maxLines: 3,
               focusNode: searchNode,
-              readOnly: widget.index == 2 ? true : false,
-              style: TextStyle(fontSize: 20, color: TextColor()),
+              style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
               decoration: InputDecoration(
                 border: InputBorder.none,
                 isCollapsed: true,
@@ -485,8 +630,8 @@ class _DayScriptState extends State<DayScript> {
                         focusNode: searchNode,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
-                        readOnly: widget.index == 2 ? true : false,
-                        style: TextStyle(fontSize: 20, color: TextColor()),
+                        style: TextStyle(
+                            fontSize: contentTextsize(), color: TextColor()),
                         decoration: InputDecoration(
                           isCollapsed: true,
                           border: InputBorder.none,
@@ -521,8 +666,8 @@ class _DayScriptState extends State<DayScript> {
                         focusNode: searchNode,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
-                        readOnly: widget.index == 2 ? true : false,
-                        style: TextStyle(fontSize: 20, color: TextColor()),
+                        style: TextStyle(
+                            fontSize: contentTextsize(), color: TextColor()),
                         decoration: InputDecoration(
                           isCollapsed: true,
                           border: InputBorder.none,
@@ -548,7 +693,6 @@ class _DayScriptState extends State<DayScript> {
                         focusNode: searchNode,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
-                        readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: 20, color: TextColor()),
                         decoration: InputDecoration(
                           isCollapsed: true,
@@ -584,7 +728,6 @@ class _DayScriptState extends State<DayScript> {
                         focusNode: searchNode,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
-                        readOnly: widget.index == 2 ? true : false,
                         style: TextStyle(fontSize: 20, color: TextColor()),
                         decoration: InputDecoration(
                           isCollapsed: true,
@@ -601,114 +744,118 @@ class _DayScriptState extends State<DayScript> {
               ));
   }
 
-  Content(
-    BuildContext context,
-    TextEditingController textEditingController,
-    String s,
-    DateTime fromDate,
-  ) {
+  buildContentTitle() {
+    return SizedBox(
+      height: 30,
+      child: Text(
+        '일정세부사항',
+        style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: contentTitleTextsize(),
+            color: TextColor()),
+      ),
+    );
+  }
+
+  Content() {
     return widget.position == 'cal'
         ? SizedBox(
-            height: 120,
+            height: 200,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                s == 'prev'
-                    ? SizedBox(
-                        height: 30,
-                        child: Text(
-                          '시작시각',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                              color: TextColor()),
-                        ))
-                    : SizedBox(
-                        height: 30,
-                        child: Text(
-                          '종료시각',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                              color: TextColor()),
-                        )),
-                const SizedBox(
-                  height: 10,
-                ),
                 SizedBox(
-                  height: 50,
-                  width: 150,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  color: BGColor(),
-                                  border:
-                                      Border.all(color: TextColor(), width: 2)),
-                              child: s == 'prev'
-                                  ? TextField(
-                                      textAlign: TextAlign.center,
-                                      textAlignVertical:
-                                          TextAlignVertical.center,
-                                      readOnly:true,
-                                      style: TextStyle(
-                                          fontSize: 20, color: TextColor()),
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        border: InputBorder.none,
-                                        hintText: '시간 : 분',
-                                        hintStyle: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: TextColor()),
-                                      ),
-                                      controller: textEditingController,
-                                    )
-                                  : TextField(
-                                      textAlign: TextAlign.center,
-                                      textAlignVertical:
-                                          TextAlignVertical.center,
-                                      readOnly:true,
-                                      style: TextStyle(
-                                          fontSize: 20, color: TextColor()),
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        border: InputBorder.none,
-                                        hintText: '시간 : 분',
-                                        hintStyle: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: TextColor()),
-                                      ),
-                                      controller: textEditingController,
-                                    ),
-                            )
-                          ],
-                        ),
+                  height: 80,
+                  child: ContainerDesign(
+                    color: BGColor(),
+                    child: ListTile(
+                      leading: NeumorphicIcon(
+                        Icons.schedule,
+                        size: 30,
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.convex,
+                            depth: 2,
+                            surfaceIntensity: 0.5,
+                            color: TextColor(),
+                            lightSource: LightSource.topLeft),
                       ),
-                      InkWell(
+                      title: Text(
+                        '시작시간',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                            color: TextColor()),
+                      ),
+                      subtitle: TextFormField(
+                        readOnly: true,
+                        style: TextStyle(
+                            fontSize: contentTextsize(), color: TextColor()),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          isCollapsed: true,
+                        ),
+                        controller: textEditingController2,
+                      ),
+                      trailing: InkWell(
                         onTap: () {
-                          if (widget.index == 2) {
-                          } else {
-                            pickDates(context, textEditingController, fromDate);
-                          }
+                          pickDates(
+                              context, textEditingController2, widget.date);
                         },
                         child: Icon(
                           Icons.arrow_drop_down,
                           color: TextColor(),
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
-                )
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  height: 80,
+                  child: ContainerDesign(
+                    color: BGColor(),
+                    child: ListTile(
+                      leading: NeumorphicIcon(
+                        Icons.schedule,
+                        size: 30,
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.convex,
+                            depth: 2,
+                            surfaceIntensity: 0.5,
+                            color: TextColor(),
+                            lightSource: LightSource.topLeft),
+                      ),
+                      title: Text(
+                        '종료시간',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                            color: TextColor()),
+                      ),
+                      subtitle: TextFormField(
+                        readOnly: true,
+                        style: TextStyle(
+                            fontSize: contentTextsize(), color: TextColor()),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          isCollapsed: true,
+                        ),
+                        controller: textEditingController3,
+                      ),
+                      trailing: InkWell(
+                        onTap: () {
+                          pickDates(
+                              context, textEditingController3, widget.date);
+                        },
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                          color: TextColor(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ))
         : (widget.position == 'note'
@@ -1115,42 +1262,6 @@ class _DayScriptState extends State<DayScript> {
                 ),
               ));
   }
-
-  showGroupmember(
-    FocusNode searchNode,
-    TextEditingController controller,
-  ) {
-    Get.bottomSheet(
-            Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                height: 440,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    )),
-                child: GestureDetector(
-                  onTap: () {
-                    searchNode.unfocus();
-                  },
-                  child: SheetPageG(context, searchNode, controller),
-                ),
-              ),
-            ),
-            backgroundColor: Colors.white,
-            isScrollControlled: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-        .whenComplete(() {
-      setState(() {
-        controller.clear();
-        cal_share_person.peoplecalendar();
-        finallist = cal_share_person.people;
-      });
-    });
-  }
 }
 
 pickDates(BuildContext context, TextEditingController timecontroller,
@@ -1160,8 +1271,10 @@ pickDates(BuildContext context, TextEditingController timecontroller,
   Future<TimeOfDay?> pick = showTimePicker(
       context: context, initialTime: TimeOfDay.fromDateTime(fromDate));
   pick.then((timeOfDay) {
-    hour = timeOfDay!.hour.toString();
-    minute = timeOfDay.minute.toString();
-    timecontroller.text = '$hour:$minute';
+    if (timeOfDay != null) {
+      hour = timeOfDay!.hour.toString();
+      minute = timeOfDay.minute.toString();
+      timecontroller.text = '$hour:$minute';
+    }
   });
 }

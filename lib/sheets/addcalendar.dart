@@ -149,6 +149,7 @@ content(
           height: 40,
           child: TextField(
             controller: controller,
+            maxLines: 2,
             focusNode: searchNode,
             textAlign: TextAlign.start,
             textAlignVertical: TextAlignVertical.center,
@@ -348,8 +349,9 @@ content(
                           '-' +
                           date.toString().split('-')[2].substring(0, 2) +
                           '일'
+                    }).whenComplete(() {
+                      Navigator.of(context).pop();
                     });
-                    Navigator.of(context).pop();
                   });
                   Flushbar(
                     backgroundColor: Colors.blue.shade400,
