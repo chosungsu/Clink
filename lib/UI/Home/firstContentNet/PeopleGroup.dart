@@ -77,7 +77,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
       body: UI(),
     ));
   }
@@ -87,8 +86,8 @@ class _PeopleGroupState extends State<PeopleGroup> {
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: BGColor(),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,11 +118,11 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                           child: NeumorphicIcon(
                                             Icons.keyboard_arrow_left,
                                             size: 30,
-                                            style: const NeumorphicStyle(
+                                            style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
-                                                color: Colors.black45,
+                                                color: TextColor(),
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -140,10 +139,10 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                               fit: FlexFit.tight,
                                               child: Text(
                                                 '',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
-                                                    color: Colors.black45),
+                                                    color: TextColor()),
                                               ),
                                             ),
                                             SizedBox(
@@ -256,36 +255,49 @@ class _PeopleGroupState extends State<PeopleGroup> {
                         return Padding(
                           padding: const EdgeInsets.only(right: 20),
                           child: ListTile(
-                              title: Text('$id'),
-                              leading: const Icon(
-                                Icons.person,
-                                color: Colors.black,
+                              title: Text(
+                                '$id',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: TextColor()),
                               ),
-                              trailing: Checkbox(
-                                onChanged: (value) {
-                                  setState(() {
-                                    isselected[k] = value!;
-                                    if (!listselected_sp.contains(id)) {
-                                      if (isselected[k] == true) {
-                                        listselected_sp.add(id);
-                                      } else {
-                                        listselected_sp.removeWhere(
-                                            (element) => element == id);
-                                      }
-                                    } else {
-                                      if (isselected[k] == false) {
-                                        listselected_sp.removeWhere(
-                                            (element) => element == id);
-                                      } else {
-                                        listselected_sp.add(id);
-                                      }
-                                    }
-                                  });
-                                },
-                                value: listselected_sp.contains(id)
-                                    ? isselected[list_sp.indexOf(id)] = true
-                                    : isselected[list_sp.indexOf(id)] = false,
-                              )),
+                              leading: Icon(
+                                Icons.person,
+                                color: TextColor(),
+                              ),
+                              trailing: Theme(
+                                  data: Theme.of(context).copyWith(
+                                    unselectedWidgetColor: TextColor(),
+                                  ),
+                                  child: Checkbox(
+                                    activeColor: TextColor(),
+                                    checkColor: Colors.blue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isselected[k] = value!;
+                                        if (!listselected_sp.contains(id)) {
+                                          if (isselected[k] == true) {
+                                            listselected_sp.add(id);
+                                          } else {
+                                            listselected_sp.removeWhere(
+                                                (element) => element == id);
+                                          }
+                                        } else {
+                                          if (isselected[k] == false) {
+                                            listselected_sp.removeWhere(
+                                                (element) => element == id);
+                                          } else {
+                                            listselected_sp.add(id);
+                                          }
+                                        }
+                                      });
+                                    },
+                                    value: listselected_sp.contains(id)
+                                        ? isselected[list_sp.indexOf(id)] = true
+                                        : isselected[list_sp.indexOf(id)] =
+                                            false,
+                                  ))),
                         );
                       },
                       selectedTextStyle: TextStyle(
@@ -295,7 +307,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                       unselectedTextStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTitleTextsize(),
-                          color: Colors.black),
+                          color: TextColor()),
                     ),
                   );
                 } else if (snapshot.connectionState ==
