@@ -14,7 +14,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/PeopleAdd.dart';
-import '../../../sheets/showGroupmember.dart';
 
 class ChooseCalendar extends StatefulWidget {
   @override
@@ -38,7 +37,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   List list_calendar_home = [];
   List updateid = [];
   bool _showBackToTopButton = false;
-  late DateTime Date = DateTime.now();
+  DateTime Date = DateTime.now();
   ScrollController _scrollController = ScrollController();
   final List noticalendarlist = [
     'MY',
@@ -244,7 +243,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             searchNode,
                                                             controller,
                                                             username,
-                                                            Date);
+                                                            Date,
+                                                            'cal');
                                                       },
                                                       child: Container(
                                                         alignment:
@@ -1356,116 +1356,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
           );
         },
       );
-    });
-  }
-
-  showGroupmember(
-    FocusNode searchNode,
-    TextEditingController controller,
-    String doc,
-    doc_when,
-    doc_type,
-    doc_color,
-    doc_name,
-    doc_share,
-    doc_made,
-  ) {
-    Get.bottomSheet(
-            Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                height: 440,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    )),
-                child: GestureDetector(
-                  onTap: () {
-                    searchNode.unfocus();
-                  },
-                  child: SheetPageG(context, searchNode, controller),
-                ),
-              ),
-            ),
-            backgroundColor: Colors.white,
-            isScrollControlled: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-        .whenComplete(() {
-      setState(() {
-        controller.clear();
-        cal_share_person.peoplecalendar();
-        finallist = cal_share_person.people;
-        firestore.collection('CalendarSheetHome').doc(doc).update({
-          'calname': controller.text.isEmpty ? doc_name : controller.text,
-          'madeUser': doc_made,
-          'type': doc_type,
-          'color': doc_color,
-          'share': finallist,
-        }).whenComplete(() {
-          firestore
-              .collection('CalendarDataBase')
-              .where('calname', isEqualTo: doc)
-              .get()
-              .then((value) {
-            updateid.clear();
-            value.docs.forEach((element) {
-              updateid.add(element.id);
-            });
-            for (int i = 0; i < updateid.length; i++) {
-              firestore.collection('CalendarDataBase').doc(updateid[i]).update({
-                'Shares': finallist,
-              });
-            }
-          }).whenComplete(() {
-            if (finallist.isNotEmpty) {
-              for (int i = 0; i < finallist.length; i++) {
-                firestore
-                    .collection('ShareHome')
-                    .doc(doc + '-' + doc_made + '-' + finallist[i])
-                    .get()
-                    .then((value) {
-                  if (value.data() == null) {
-                    firestore
-                        .collection('ShareHome')
-                        .doc(doc + '-' + doc_made + '-' + finallist[i])
-                        .set({
-                      'calname': doc_name,
-                      'madeUser': doc_made,
-                      'showingUser': finallist[i],
-                      'type': doc_type,
-                      'color': doc_color,
-                      'share': finallist,
-                      'doc': doc,
-                      'date': doc_when
-                    });
-                  } else {
-                    firestore
-                        .collection('ShareHome')
-                        .doc(doc + '-' + doc_made + '-' + finallist[i])
-                        .update({
-                      'calname': doc_name,
-                      'madeUser': doc_made,
-                      'showingUser': finallist[i],
-                      'type': doc_type,
-                      'color': doc_color,
-                      'share': finallist,
-                      'doc': doc,
-                      'date': doc_when
-                    });
-                  }
-                });
-              }
-            } else {
-              for (int i = 0; i < finallist.length; i++) {
-                firestore.collection('ShareHome').doc(doc).delete();
-              }
-            }
-          });
-        });
-      });
     });
   }
 

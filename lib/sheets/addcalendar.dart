@@ -10,12 +10,15 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
+import '../Tool/SheetGetx/onequeform.dart';
+
 addcalendar(
   BuildContext context,
   FocusNode searchNode,
   TextEditingController controller,
   String username,
   DateTime date,
+  String s,
 ) {
   Get.bottomSheet(
           Padding(
@@ -33,7 +36,7 @@ addcalendar(
                     searchNode.unfocus();
                   },
                   child: SheetPage(
-                      context, searchNode, controller, username, date)),
+                      context, searchNode, controller, username, date, s)),
             ),
           ),
           backgroundColor: Colors.white,
@@ -51,6 +54,7 @@ SheetPage(
   TextEditingController controller,
   String username,
   DateTime date,
+  String s,
 ) {
   Color _color = Hive.box('user_setting').get('typecolorcalendar') == null
       ? Colors.blue
@@ -87,7 +91,8 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              content(context, searchNode, controller, username, _color, date)
+              content(
+                  context, searchNode, controller, username, _color, date, s)
             ],
           )));
 }
@@ -117,8 +122,19 @@ content(
   String username,
   Color _color,
   DateTime date,
+  String s,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  int changetype = 0;
+  final List types = [
+    '달력',
+    '메모',
+    '루틴',
+  ];
+  final cntget = Get.put(onequeform());
+  cntget.setcnt();
+  //cntget.setresetcnt();
+  int cnt = cntget.cnt;
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +143,7 @@ content(
             height: 30,
             child: Row(
               children: [
-                Text('일정표 카드 제목',
+                Text('카드 제목',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -135,8 +151,8 @@ content(
                 const SizedBox(
                   width: 20,
                 ),
-                Text('필수항목',
-                    style: TextStyle(
+                const Text('필수항목',
+                    style: const TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
@@ -174,7 +190,7 @@ content(
         ),
         SizedBox(
           height: 30,
-          child: Text('현재 지원중인 일정표 타입',
+          child: Text('현재 지원중인 타입',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -183,62 +199,239 @@ content(
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
-          height: 30,
-          child: Row(
-            children: [
-              Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: 30,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100)),
-                            primary:
-                                Hive.box('user_setting').get('typecalendar') ==
-                                        0
-                                    ? Colors.grey.shade400
-                                    : Colors.white,
-                            side: const BorderSide(
-                              width: 1,
-                              color: Colors.black45,
-                            )),
-                        onPressed: () {
+        s == 'home'
+            ? SizedBox(
+                height: 30,
+                width: MediaQuery.of(context).size.width - 40,
+                child: Row(
+                  children: [
+                    InkWell(
+                        onTap: () {
                           setState(() {
-                            Hive.box('user_setting').put('typecalendar', 0);
+                            changetype--;
                           });
                         },
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: NeumorphicText(
-                                  '기본달력형',
-                                  style: NeumorphicStyle(
-                                    shape: NeumorphicShape.flat,
-                                    depth: 3,
-                                    color: Hive.box('user_setting')
-                                                .get('typecalendar') ==
-                                            0
-                                        ? Colors.white
-                                        : Colors.black45,
-                                  ),
-                                  textStyle: NeumorphicTextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                  ),
-                                ),
+                        child: changetype == 0
+                            ? const SizedBox(
+                                width: 30,
+                                height: 30,
                               )
-                            ],
-                          ),
-                        )),
-                  )),
-            ],
-          ),
-        ),
+                            : Container(
+                                alignment: Alignment.center,
+                                width: 30,
+                                height: 30,
+                                child: NeumorphicIcon(
+                                  Icons.keyboard_arrow_left,
+                                  size: 30,
+                                  style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.convex,
+                                      depth: 2,
+                                      surfaceIntensity: 0.5,
+                                      color: Colors.black,
+                                      lightSource: LightSource.topLeft),
+                                ),
+                              )),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100)),
+                              primary: Colors.grey.shade400,
+                              side: const BorderSide(
+                                width: 1,
+                                color: Colors.black45,
+                              )),
+                          onPressed: () {},
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: NeumorphicText(
+                                    types[changetype],
+                                    style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: Colors.white,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
+                    InkWell(
+                        onTap: () {
+                          setState(() {
+                            changetype++;
+                          });
+                        },
+                        child: changetype == 2
+                            ? const SizedBox(
+                                width: 30,
+                                height: 30,
+                              )
+                            : Container(
+                                alignment: Alignment.center,
+                                width: 30,
+                                height: 30,
+                                child: NeumorphicIcon(
+                                  Icons.keyboard_arrow_right,
+                                  size: 30,
+                                  style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.convex,
+                                      depth: 2,
+                                      surfaceIntensity: 0.5,
+                                      color: Colors.black,
+                                      lightSource: LightSource.topLeft),
+                                ),
+                              )),
+                  ],
+                ),
+              )
+            : (s == 'cal'
+                ? SizedBox(
+                    height: 30,
+                    width: MediaQuery.of(context).size.width - 40,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100)),
+                                  primary: Colors.grey.shade400,
+                                  side: const BorderSide(
+                                    width: 1,
+                                    color: Colors.black45,
+                                  )),
+                              onPressed: () {},
+                              child: Center(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: NeumorphicText(
+                                        types[0],
+                                        style: const NeumorphicStyle(
+                                          shape: NeumorphicShape.flat,
+                                          depth: 3,
+                                          color: Colors.white,
+                                        ),
+                                        textStyle: NeumorphicTextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  )
+                : (s == 'memo'
+                    ? SizedBox(
+                        height: 30,
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Row(
+                          children: [
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Colors.grey.shade400,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {},
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            types[1],
+                                            style: const NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Colors.white,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(
+                        height: 30,
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Row(
+                          children: [
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Colors.grey.shade400,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {},
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            types[2],
+                                            style: const NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Colors.white,
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ))),
         const SizedBox(
           height: 20,
         ),
@@ -251,7 +444,7 @@ content(
                 fit: FlexFit.tight,
                 child: SizedBox(
                   height: 30,
-                  child: Text('일정표 카드 배경색',
+                  child: Text('카드 배경색',
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -336,23 +529,58 @@ content(
                   ).show(context);
                 } else {
                   setState(() {
-                    firestore.collection('CalendarSheetHome').add({
-                      'calname': controller.text,
-                      'madeUser': username,
-                      'type': Hive.box('user_setting').get('typecalendar'),
-                      'share': [],
-                      'color':
-                          Hive.box('user_setting').get('typecolorcalendar'),
-                      'date': date.toString().split('-')[0] +
-                          '-' +
-                          date.toString().split('-')[1] +
-                          '-' +
-                          date.toString().split('-')[2].substring(0, 2) +
-                          '일'
-                    }).whenComplete(() {
-                      Navigator.of(context).pop();
-                    });
+                    types[changetype].toString() == '달력'
+                        ? firestore.collection('CalendarSheetHome').add({
+                            'calname': controller.text,
+                            'madeUser': username,
+                            'type': changetype,
+                            'share': [],
+                            'color': Hive.box('user_setting')
+                                .get('typecolorcalendar'),
+                            'date': date.toString().split('-')[0] +
+                                '-' +
+                                date.toString().split('-')[1] +
+                                '-' +
+                                date.toString().split('-')[2].substring(0, 2) +
+                                '일'
+                          })
+                        : (types[changetype].toString() == '메모'
+                            ? firestore.collection('MemoSheetHome').add({
+                                'memoname': controller.text,
+                                'madeUser': username,
+                                'type': changetype,
+                                'share': [],
+                                'color': Hive.box('user_setting')
+                                    .get('typecolorcalendar'),
+                                'date': date.toString().split('-')[0] +
+                                    '-' +
+                                    date.toString().split('-')[1] +
+                                    '-' +
+                                    date
+                                        .toString()
+                                        .split('-')[2]
+                                        .substring(0, 2) +
+                                    '일'
+                              })
+                            : firestore.collection('RoutineSheetHome').add({
+                                'routinename': controller.text,
+                                'madeUser': username,
+                                'type': changetype,
+                                'share': [],
+                                'color': Hive.box('user_setting')
+                                    .get('typecolorcalendar'),
+                                'date': date.toString().split('-')[0] +
+                                    '-' +
+                                    date.toString().split('-')[1] +
+                                    '-' +
+                                    date
+                                        .toString()
+                                        .split('-')[2]
+                                        .substring(0, 2) +
+                                    '일'
+                              }));
                   });
+
                   Flushbar(
                     backgroundColor: Colors.blue.shade400,
                     titleText: Text('Notice',
@@ -374,31 +602,77 @@ content(
                     ),
                     duration: const Duration(seconds: 1),
                     leftBarIndicatorColor: Colors.blue.shade100,
-                  ).show(context);
+                  ).show(context).whenComplete(() {
+                    if (cnt <= 5) {
+                      setState(() {
+                        cntget.minuscnt();
+                        cnt = cntget.cnt;
+                      });
+                    }
+                    Get.back();
+                  });
                 }
               },
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: NeumorphicText(
-                        '생성하기',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.white,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                        ),
+              child: s != 'home'
+                  ? Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: NeumorphicText(
+                              '생성하기',
+                              style: const NeumorphicStyle(
+                                shape: NeumorphicShape.flat,
+                                depth: 3,
+                                color: Colors.white,
+                              ),
+                              textStyle: NeumorphicTextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     )
-                  ],
-                ),
-              )),
+                  : Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: NeumorphicText(
+                              '생성하기',
+                              style: const NeumorphicStyle(
+                                shape: NeumorphicShape.flat,
+                                depth: 3,
+                                color: Colors.white,
+                              ),
+                              textStyle: NeumorphicTextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          NeumorphicText(
+                            '(횟수제한 : ' + cnt.toString() + '/5)',
+                            style: const NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 3,
+                              color: Colors.white,
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
         ),
       ],
     );

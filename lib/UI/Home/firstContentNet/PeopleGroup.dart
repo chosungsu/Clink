@@ -46,6 +46,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
     'id',
   );
   List updateid = [];
+  List deleteid = [];
   List<bool> isselected = List.filled(10000, false, growable: true);
   List<String> list_sp = [];
   final cal_share_person = Get.put(PeopleAdd());
@@ -395,7 +396,121 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                 });
                               }
                             }).whenComplete(() {
-                              if (listselected_sp.isNotEmpty) {
+                              if (widget.share.isNotEmpty) {
+                                /*deleteid.clear();
+                                if (listselected_sp.length >
+                                    widget.share.length) {
+                                  for (int i = 0;
+                                      i < listselected_sp.length;
+                                      i++) {
+                                    deleteid.add(listselected_sp
+                                        .where((element) =>
+                                            element != widget.share[i])
+                                        .toSet());
+                                  }
+                                } else {
+                                  for (int i = 0;
+                                      i < widget.share.length;
+                                      i++) {
+                                    deleteid.add(widget.share
+                                        .where((element) =>
+                                            element != listselected_sp[i])
+                                        .toSet());
+                                  }
+                                }
+                                print(deleteid.length);*/
+                                firestore
+                                    .collection('ShareHome')
+                                    .where('doc', isEqualTo: widget.doc)
+                                    .get()
+                                    .then((value) {
+                                  deleteid.clear();
+                                  value.docs.forEach((element) {
+                                    deleteid.add(element.id);
+                                  });
+                                  for (int i = 0; i < updateid.length; i++) {
+                                    firestore
+                                        .collection('ShareHome')
+                                        .doc(deleteid[i])
+                                        .delete();
+                                  }
+                                }).whenComplete(() {
+                                  for (int i = 0;
+                                      i < listselected_sp.length;
+                                      i++) {
+                                    firestore
+                                        .collection('ShareHome')
+                                        .doc(widget.doc +
+                                            '-' +
+                                            widget.made +
+                                            '-' +
+                                            listselected_sp[i])
+                                        .get()
+                                        .then((value) {
+                                      if (value.data() == null) {
+                                        firestore
+                                            .collection('ShareHome')
+                                            .doc(widget.doc +
+                                                '-' +
+                                                widget.made +
+                                                '-' +
+                                                listselected_sp[i])
+                                            .set({
+                                          'calname': widget.nameid,
+                                          'madeUser': widget.made,
+                                          'showingUser': listselected_sp[i],
+                                          'type': widget.type,
+                                          'color': widget.color,
+                                          'share': listselected_sp,
+                                          'doc': widget.doc,
+                                          'date': widget.when
+                                        });
+                                      } else {
+                                        firestore
+                                            .collection('ShareHome')
+                                            .doc(widget.doc +
+                                                '-' +
+                                                widget.made +
+                                                '-' +
+                                                widget.share[i])
+                                            .update({
+                                          'calname': widget.nameid,
+                                          'madeUser': widget.made,
+                                          'type': widget.type,
+                                          'color': widget.color,
+                                          'share': listselected_sp,
+                                          'doc': widget.doc,
+                                          'date': widget.when
+                                        });
+                                      }
+                                    });
+                                  }
+                                  Flushbar(
+                                    backgroundColor: Colors.blue.shade400,
+                                    titleText: Text('Notice',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: contentTitleTextsize(),
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    messageText: Text('변경사항이 정상적으로 저장되었습니다.',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: contentTextsize(),
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    icon: const Icon(
+                                      Icons.info_outline,
+                                      size: 25.0,
+                                      color: Colors.white,
+                                    ),
+                                    duration: const Duration(seconds: 1),
+                                    leftBarIndicatorColor: Colors.blue.shade100,
+                                  )
+                                      .show(context)
+                                      .whenComplete(() => Get.back());
+                                });
+                              } else {
                                 for (int i = 0;
                                     i < listselected_sp.length;
                                     i++) {
@@ -433,14 +548,89 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                               '-' +
                                               widget.made +
                                               '-' +
-                                              listselected_sp[i])
+                                              widget.share[i])
                                           .update({
+                                        'calname': widget.nameid,
+                                        'madeUser': widget.made,
+                                        'type': widget.type,
+                                        'color': widget.color,
+                                        'share': listselected_sp,
+                                        'doc': widget.doc,
+                                        'date': widget.when
+                                      });
+                                    }
+                                  });
+                                }
+                                Flushbar(
+                                  backgroundColor: Colors.blue.shade400,
+                                  titleText: Text('Notice',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: contentTitleTextsize(),
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  messageText: Text('변경사항이 정상적으로 저장되었습니다.',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: contentTextsize(),
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  icon: const Icon(
+                                    Icons.info_outline,
+                                    size: 25.0,
+                                    color: Colors.white,
+                                  ),
+                                  duration: const Duration(seconds: 1),
+                                  leftBarIndicatorColor: Colors.blue.shade100,
+                                ).show(context).whenComplete(() => Get.back());
+                              }
+
+                              /*if (listselected_sp.isNotEmpty) {
+                                for (int i = 0;
+                                    i < widget.share.length;
+                                    i++) {
+                                  firestore
+                                      .collection('ShareHome')
+                                      .doc(widget.doc +
+                                          '-' +
+                                          widget.made +
+                                          '-' +
+                                          widget.share[i])
+                                      .get()
+                                      .then((value) {
+                                    if (value.data() == null) {
+                                      firestore
+                                          .collection('ShareHome')
+                                          .doc(widget.doc +
+                                              '-' +
+                                              widget.made +
+                                              '-' +
+                                              widget.share[i])
+                                          .set({
                                         'calname': widget.nameid,
                                         'madeUser': widget.made,
                                         'showingUser': listselected_sp[i],
                                         'type': widget.type,
                                         'color': widget.color,
                                         'share': listselected_sp,
+                                        'doc': widget.doc,
+                                        'date': widget.when
+                                      });
+                                    } else {
+                                      firestore
+                                          .collection('ShareHome')
+                                          .doc(widget.doc +
+                                              '-' +
+                                              widget.made +
+                                              '-' +
+                                              widget.share[i])
+                                          .update({
+                                        'calname': widget.nameid,
+                                        'madeUser': widget.made,
+                                        'showingUser': widget.share[i],
+                                        'type': widget.type,
+                                        'color': widget.color,
+                                        'share': widget.share,
                                         'doc': widget.doc,
                                         'date': widget.when
                                       });
@@ -479,10 +669,14 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                     i++) {
                                   firestore
                                       .collection('ShareHome')
-                                      .doc(widget.doc)
+                                      .doc(widget.doc +
+                                              '-' +
+                                              widget.made +
+                                              '-' +
+                                              widget.share[i])
                                       .delete();
                                 }
-                              }
+                              }*/
                             });
                           });
                         });

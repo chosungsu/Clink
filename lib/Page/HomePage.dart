@@ -5,6 +5,7 @@ import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/SheetGetx/SpaceShowRoom.dart';
 import 'package:clickbyme/Tool/SheetGetx/Spacesetting.dart';
+import 'package:clickbyme/Tool/SheetGetx/onequeform.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/FormContentNet/FormCard.dart';
@@ -102,10 +103,10 @@ class _HomePageState extends State<HomePage> {
                   if (element['Shares'][i].contains(name)) {
                     setState(() {
                       sc.add(SpaceContent(
-                        title: element['Daytodo'],
-                        date: element['Timestart'] +
-                            '-' +
-                            element['Timefinish']));
+                          title: element['Daytodo'],
+                          date: element['Timestart'] +
+                              '-' +
+                              element['Timefinish']));
                     });
                   }
                 }
@@ -114,8 +115,8 @@ class _HomePageState extends State<HomePage> {
           : value.docs.forEach((element) {
               setState(() {
                 sc.add(SpaceContent(
-                  title: element['Daytodo'],
-                  date: element['Timestart'] + '-' + element['Timefinish']));
+                    title: element['Daytodo'],
+                    date: element['Timestart'] + '-' + element['Timefinish']));
               });
             });
     });
@@ -340,10 +341,10 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                /*H_Container_0(height),
+                                H_Container_0(height),
                                 const SizedBox(
                                   height: 20,
-                                ),*/
+                                ),
                                 H_Container_1(height),
                                 const SizedBox(
                                   height: 20,
@@ -376,18 +377,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /*H_Container_0(double height) {
+  H_Container_0(double height) {
     return SizedBox(
       height: 90,
       width: MediaQuery.of(context).size.width - 40,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FormCard(height: height),
+          FormCard(height: height, buy: isbought),
         ],
       ),
     );
-  }*/
+  }
 
   H_Container_1(double height) {
     //프로버전 구매시 보이지 않게 함

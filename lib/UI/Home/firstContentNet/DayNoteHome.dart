@@ -2,15 +2,19 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/SheetGetx/memosearchsetting.dart';
 import 'package:clickbyme/Tool/SheetGetx/memosortsetting.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/settingMemoHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../sheets/addcalendar.dart';
 
 class DayNoteHome extends StatefulWidget {
   const DayNoteHome({
@@ -41,6 +45,12 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기',
     '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기 fighting!!!',
   ];
+  String username = Hive.box('user_info').get(
+    'id',
+  );
+  int sort = 0;
+  DateTime Date = DateTime.now();
+  TextEditingController controller = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -53,26 +63,89 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     super.initState();
     searchmemo_fromsheet = controll_memo.memosearch;
     sortmemo_fromsheet = controll_memo2.memosort;
+    controller = TextEditingController();
+    sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: BGColor(),
-      body: GestureDetector(
-        onTap: () {
-          searchNode.unfocus();
-        },
-        child: UI(),
-      ),
-    ));
+            backgroundColor: BGColor(),
+            body: GestureDetector(
+              onTap: () {
+                searchNode.unfocus();
+              },
+              child: UI(),
+            ),
+            floatingActionButton: SpeedDial(
+                activeIcon: Icons.close,
+                icon: Icons.add,
+                backgroundColor: Colors.blue,
+                overlayColor: BGColor(),
+                overlayOpacity: 0.4,
+                spacing: 10,
+                spaceBetweenChildren: 10,
+                children: [
+                  SpeedDialChild(
+                    child: NeumorphicIcon(
+                      Icons.collections_bookmark,
+                      size: 30,
+                      style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
+                          color: TextColor(),
+                          lightSource: LightSource.topLeft),
+                    ),
+                    backgroundColor: Colors.blue.shade200,
+                    onTap: () {
+                      addcalendar(context, searchNode, controller, username,
+                          Date, 'memo');
+                    },
+                    label: '컬렉션 추가',
+                    labelStyle: TextStyle(
+                        color: Colors.black45,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize()),
+                  ),
+                  SpeedDialChild(
+                    child: NeumorphicIcon(
+                      Icons.add,
+                      size: 30,
+                      style: NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
+                          color: TextColor(),
+                          lightSource: LightSource.topLeft),
+                    ),
+                    backgroundColor: Colors.orange.shade200,
+                    onTap: () {
+                      Get.to(
+                          () => DayScript(
+                                date: DateTime.now(),
+                                position: 'note',
+                                title: '',
+                                share: [],
+                                orig: '',
+                              ),
+                          transition: Transition.downToUp);
+                    },
+                    label: '메모 추가',
+                    labelStyle: TextStyle(
+                        color: Colors.black45,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize()),
+                  ),
+                ])));
   }
 
   UI() {
@@ -138,63 +211,66 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                   )),
                                             ),
                                             SizedBox(
-                                                width: 30,
-                                                child: InkWell(
-                                                    onTap: () {
-                                                      /*Navigator.push(
-                                                        context,
-                                                        PageTransition(
-                                                            type:
-                                                                PageTransitionType
-                                                                    .bottomToTop,
-                                                            child: DayScript(
-                                                              index: 0,
-                                                              date: DateTime.now(),
-                                                              position: 'note',
-                                                            )),
-                                                      );*/
-                                                      Get.to(
-                                                          () => DayScript(
-                                                                date: DateTime
-                                                                    .now(),
-                                                                position:
-                                                                    'note',
-                                                                title: '',
-                                                                share: [],
-                                                                orig: '',
-                                                              ),
-                                                          transition: Transition
-                                                              .downToUp);
-                                                    },
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: NeumorphicIcon(
-                                                        Icons.add,
-                                                        size: 30,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    ))),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
+                                                  width: 30,
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        //리스트 정렬
+                                                        setState(() {
+                                                          sort == 0
+                                                              ? Hive.box(
+                                                                      'user_setting')
+                                                                  .put(
+                                                                      'sort_cal_card',
+                                                                      1)
+                                                              : Hive.box(
+                                                                      'user_setting')
+                                                                  .put(
+                                                                      'sort_cal_card',
+                                                                      0);
+                                                          Hive.box('user_setting')
+                                                                          .get(
+                                                                              'sort_cal_card') ==
+                                                                      0 ||
+                                                                  Hive.box('user_setting')
+                                                                          .get(
+                                                                              'sort_cal_card') ==
+                                                                      null
+                                                              ? sort = 0
+                                                              : sort = 1;
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: 30,
+                                                        height: 30,
+                                                        child: NeumorphicIcon(
+                                                          Icons.swap_vert,
+                                                          size: 30,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              surfaceIntensity:
+                                                                  0.5,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      ))),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
                                             SizedBox(
                                                 width: 30,
                                                 child: InkWell(
                                                     onTap: () {
-                                                      settingMemoHome(context, controll_memo,
+                                                      settingMemoHome(
+                                                          context,
+                                                          controll_memo,
                                                           controll_memo2);
                                                     },
                                                     child: Container(
@@ -249,7 +325,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              MemoBox(),
+                              listy_My(),
                             ],
                           ),
                         );
@@ -282,21 +358,21 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                 focusNode: searchNode,
                 textAlign: TextAlign.start,
                 textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.black45,
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
                   border: InputBorder.none,
                   hintMaxLines: 2,
                   hintText: '톱니바퀴 -> 조건설정 후 검색',
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                       color: Colors.black45),
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   isCollapsed: true,
                   prefixIconColor: Colors.black45,
                 ),
@@ -306,39 +382,44 @@ class _DayNoteHomeState extends State<DayNoteHome> {
       ],
     );
   }
+
   settingMemoHome(
-      BuildContext context, memosearchsetting controll_memo, memosortsetting controll_memo2,
-      ) {
+    BuildContext context,
+    memosearchsetting controll_memo,
+    memosortsetting controll_memo2,
+  ) {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),
-              bottomLeft: Radius.circular(20), topRight: Radius.circular(20),
-              bottomRight: Radius.circular(20),)),
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        )),
         context: context,
         isScrollControlled: true,
         builder: (context) {
           return Container(
-            margin: const EdgeInsets.all(10),
-            child: Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  height: 320,
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: SheetPage_memo(context, sortmemo_fromsheet,
-                      controll_memo, controll_memo2, searchmemo_fromsheet),
-                ))
-          );
+              margin: const EdgeInsets.all(10),
+              child: Padding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: Container(
+                    height: 320,
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        )),
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: SheetPage_memo(context, sortmemo_fromsheet,
+                        controll_memo, controll_memo2, searchmemo_fromsheet),
+                  )));
         }).whenComplete(() {
       setState(() {
         sortmemo_fromsheet = controll_memo2.memosort;
@@ -346,6 +427,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
       });
     });
   }
+
   ADBox() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,223 +435,429 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     );
   }
 
-  MemoBox() {
-    return SizedBox(
-        height: memocontent.isEmpty
-            ? MediaQuery.of(context).size.height * 0.5
-            : 160 * (memocontent.length.toDouble()) + 50,
-        child: memo());
-  }
-
-  memo() {
+  listy_My() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
-      return SizedBox(
-          height: memocontent.isEmpty
-              ? MediaQuery.of(context).size.height * 0.5
-              : 150 * (memocontent.length.toDouble()),
-          width: MediaQuery.of(context).size.width - 40,
-          child: memocontent.isEmpty
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: NeumorphicText(
-                        '기록된 메모가 없네요;;;',
-                        style: NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: TextColor(),
+      return StreamBuilder<QuerySnapshot>(
+        stream: firestore
+            .collection('MemoSheetHome')
+            .where('madeUser', isEqualTo: username)
+            .orderBy('date', descending: sort == 0 ? true : false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return snapshot.data!.docs.isEmpty
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: NeumorphicText(
+                          '생성된 메모컬렉션이 없습니다.\n추가 버튼으로 생성해보세요~',
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: TextColor(),
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                          ),
                         ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    )
-                  ],
-                )
-              : ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: memocontent.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                          },
-                          child: ContainerDesign(
+                      )
+                    ],
+                  )
+                : GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1 / 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10),
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                /*Get.to(
+                                  () => DayContentHome(
+                                    title: snapshot.data!.docs[index].id,
+                                    share: snapshot.data!.docs[index]['share'],
+                                    origin: snapshot.data!.docs[index]
+                                        ['madeUser'],
+                                  ),
+                                  transition: Transition.rightToLeft,
+                                );*/
+                              },
                               child: SizedBox(
-                                height: 100,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Column(
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: ContainerDesign(
+                                    child: Row(
                                       children: [
-                                        SizedBox(
-                                            height: 30,
-                                            child: Center(
-                                              child: Text(memotitle[index],
-                                                  softWrap: true,
-                                                  maxLines: 2,
-                                                  style: TextStyle(
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                decoration: BoxDecoration(
+                                                    border: Border(
+                                                        right: BorderSide(
+                                                            color:
+                                                                TextColor()))),
+                                                child: Column(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        //공유자 검색
+                                                        /*Hive.box('user_setting').put(
+                                                            'share_cal_person',
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['share']);
+
+                                                        Future.delayed(
+                                                            const Duration(
+                                                                seconds: 1),
+                                                            () {
+                                                          Get.to(
+                                                            () => PeopleGroup(
+                                                              doc: snapshot
+                                                                  .data!
+                                                                  .docs[index]
+                                                                  .id.toString(),
+                                                              when: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['date'],
+                                                              type: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['type'],
+                                                              color: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['color'],
+                                                              nameid: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['calname'],
+                                                              share: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['share'],
+                                                              made: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['madeUser'],
+                                                            ),
+                                                            transition:
+                                                                Transition
+                                                                    .downToUp,
+                                                          );
+
+                                                        });*/
+                                                      },
+                                                      child: NeumorphicIcon(
+                                                        Icons.share,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        //삭제 및 이름변경 띄우기
+                                                        /*controller =
+                                                            TextEditingController(
+                                                                text: snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    [
+                                                                    'calname']);
+                                                        settingChoiceCal(
+                                                            context,
+                                                            controller,
+                                                            snapshot.data!
+                                                                .docs[index].id,
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['type'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['color'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['calname'],
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['madeUser']);*/
+                                                      },
+                                                      child: NeumorphicIcon(
+                                                        Icons.edit,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
+                                          ],
+                                        ),
+                                        Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20, right: 20),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 70,
+                                                      child: Text(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['calname'],
+                                                        maxLines: 2,
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTitleTextsize(),
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 30,
+                                                      child: Text(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['date'],
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        height: 30,
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              'with',
+                                                              softWrap: true,
+                                                              style: GoogleFonts
+                                                                  .lobster(
+                                                                color:
+                                                                    TextColor(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w200,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                              ),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            ListView.builder(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                scrollDirection:
+                                                                    Axis
+                                                                        .horizontal,
+                                                                itemCount: snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                        [
+                                                                        'share']
+                                                                    .length,
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        index2) {
+                                                                  return Row(
+                                                                    children: [
+                                                                      Container(
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        height:
+                                                                            25,
+                                                                        width:
+                                                                            25,
+                                                                        child: Text(
+                                                                            snapshot.data!.docs[index]['share'][index2].toString().substring(0,
+                                                                                1),
+                                                                            style: const TextStyle(
+                                                                                color: Colors.black,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontSize: 18)),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(100),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        width:
+                                                                            5,
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                }),
+                                                          ],
+                                                        ))
+                                                  ],
+                                                ))),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border(
+                                                      left: BorderSide(
+                                                          color: TextColor()))),
+                                              child: RotatedBox(
+                                                  quarterTurns: 3,
+                                                  child: NeumorphicText(
+                                                    'Made By\n' +
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['madeUser'],
+                                                    style: NeumorphicStyle(
+                                                      shape:
+                                                          NeumorphicShape.flat,
+                                                      depth: 3,
                                                       color: TextColor(),
+                                                    ),
+                                                    textStyle:
+                                                        NeumorphicTextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 20)),
-                                            )),
-                                        SizedBox(
-                                          height: 50,
-                                          child: Text(
-                                            memocontent[index],
-                                            maxLines: 2,
-                                            softWrap: true,
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
-                                          ),
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                    ),
+                                                  )),
+                                            )
+                                          ],
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                        height: 20,
-                                        child: memostar[index] == 1
-                                            ? Container(
-                                                alignment: Alignment.center,
-                                                child: NeumorphicIcon(
-                                                  Icons.star,
-                                                  size: 20,
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .convex,
-                                                      depth: 2,
-                                                      color: TextColor(),
-                                                      lightSource:
-                                                          LightSource.topLeft),
-                                                ),
-                                              )
-                                            : (memostar[index] == 2
-                                                ? Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: NeumorphicIcon(
-                                                          Icons.star,
-                                                          size: 20,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: NeumorphicIcon(
-                                                          Icons.star,
-                                                          size: 20,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                : Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: NeumorphicIcon(
-                                                          Icons.star,
-                                                          size: 20,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: NeumorphicIcon(
-                                                          Icons.star,
-                                                          size: 20,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: NeumorphicIcon(
-                                                          Icons.star,
-                                                          size: 20,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ))),
-                                  ],
-                                ),
-                              ),
-                              color: BGColor()),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    );
-                  },
-                ));
+                                    color: snapshot.data!.docs[index]
+                                                ['color'] !=
+                                            null
+                                        ? Color(
+                                            snapshot.data!.docs[index]['color'])
+                                        : Colors.blue),
+                              )),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      );
+                    });
+          } else if (snapshot.hasError) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: NeumorphicText(
+                    '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: TextColor(),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                    ),
+                  ),
+                )
+              ],
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [const Center(child: CircularProgressIndicator())],
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: NeumorphicText(
+                  '생성된 메모컬렉션이 없습니다.\n추가 버튼으로 생성해보세요~',
+                  style: NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    depth: 3,
+                    color: TextColor(),
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize(),
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      );
     });
   }
 }

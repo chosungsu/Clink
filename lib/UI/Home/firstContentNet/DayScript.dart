@@ -57,6 +57,8 @@ class _DayScriptState extends State<DayScript> {
     '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기',
     '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기 fighting!!!',
   ];
+  String selectedValue = '선택없음';
+  bool isChecked_pushalarm = false;
 
   @override
   void didChangeDependencies() {
@@ -73,6 +75,11 @@ class _DayScriptState extends State<DayScript> {
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
+    selectedValue = Hive.box('user_setting').get('alarming_time') ?? '5분 전';
+    Hive.box('user_setting').get('isChecked_alarming') == null
+        ? isChecked_pushalarm = false
+        : isChecked_pushalarm =
+            Hive.box('user_setting').get('isChecked_alarming');
   }
 
   @override
@@ -503,15 +510,23 @@ class _DayScriptState extends State<DayScript> {
                               const SizedBox(
                                 height: 30,
                               ),
-                              buildContentTitle(),
+                              SetTimeTitle(),
                               const SizedBox(
                                 height: 20,
                               ),
                               widget.position == 'cal'
-                                  ? Content()
+                                  ? Time()
                                   : const SizedBox(
                                       height: 0,
                                     ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              SetAlarmTitle(),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Alarm(),
                               const SizedBox(
                                 height: 50,
                               )
@@ -542,8 +557,8 @@ class _DayScriptState extends State<DayScript> {
                 const SizedBox(
                   width: 20,
                 ),
-                Text('필수항목',
-                    style: TextStyle(
+                const Text('필수항목',
+                    style: const TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
@@ -564,8 +579,8 @@ class _DayScriptState extends State<DayScript> {
                     const SizedBox(
                       width: 20,
                     ),
-                    Text('필수항목',
-                        style: TextStyle(
+                    const Text('필수항목',
+                        style: const TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
                             fontSize: 15)),
@@ -585,8 +600,8 @@ class _DayScriptState extends State<DayScript> {
                     const SizedBox(
                       width: 20,
                     ),
-                    Text('필수항목',
-                        style: TextStyle(
+                    const Text('필수항목',
+                        style: const TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
                             fontSize: 15)),
@@ -741,7 +756,7 @@ class _DayScriptState extends State<DayScript> {
               ));
   }
 
-  buildContentTitle() {
+  SetTimeTitle() {
     return SizedBox(
       height: 30,
       child: Text(
@@ -754,7 +769,7 @@ class _DayScriptState extends State<DayScript> {
     );
   }
 
-  Content() {
+  Time() {
     return widget.position == 'cal'
         ? SizedBox(
             height: 200,
@@ -1258,6 +1273,120 @@ class _DayScriptState extends State<DayScript> {
                   ],
                 ),
               ));
+  }
+
+  SetAlarmTitle() {
+    return widget.position == 'cal'
+        ? SizedBox(
+            height: 30,
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '알람설정',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: TextColor()),
+                  ),
+                ),
+                Transform.scale(
+                  scale: 0.7,
+                  child: Switch(
+                      activeColor: Colors.blue,
+                      inactiveThumbColor: TextColor(),
+                      inactiveTrackColor: Colors.grey.shade100,
+                      value: isChecked_pushalarm,
+                      onChanged: (bool val) {
+                        setState(() {
+                          isChecked_pushalarm = val;
+                          Hive.box('user_setting')
+                              .put('isChecked_alarming', isChecked_pushalarm);
+                        });
+                      }),
+                )
+              ],
+            ))
+        : const SizedBox();
+  }
+
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(child: Text("1분 전"), value: "1분 전"),
+      const DropdownMenuItem(child: Text("5분 전"), value: "5분 전"),
+      const DropdownMenuItem(child: Text("10분 전"), value: "10분 전"),
+      const DropdownMenuItem(child: Text("30분 전"), value: "30분 전"),
+    ];
+    return menuItems;
+  }
+
+  Alarm() {
+    return widget.position == 'cal'
+        ? SizedBox(
+            height: 200,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 80,
+                  child: ContainerDesign(
+                    color: BGColor(),
+                    child: ListTile(
+                      leading: NeumorphicIcon(
+                        Icons.alarm,
+                        size: 30,
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.convex,
+                            depth: 2,
+                            surfaceIntensity: 0.5,
+                            color: TextColor(),
+                            lightSource: LightSource.topLeft),
+                      ),
+                      title: Text(
+                        '알람',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                            color: TextColor()),
+                      ),
+                      trailing: isChecked_pushalarm == true ?
+                      DropdownButton(
+                        value: selectedValue,
+                        dropdownColor: BGColor(),
+                        items: dropdownItems,
+                        icon: NeumorphicIcon(
+                          Icons.arrow_drop_down,
+                          size: 20,
+                          style: NeumorphicStyle(
+                              shape: NeumorphicShape.convex,
+                              depth: 2,
+                              surfaceIntensity: 0.5,
+                              color: TextColor(),
+                              lightSource: LightSource.topLeft),
+                        ),
+                        style: TextStyle(
+                            color: TextColor(), fontSize: contentTextsize()),
+                        onChanged: isChecked_pushalarm == true
+                            ? (String? value) {
+                                setState(() {
+                                  selectedValue = value!;
+                                  Hive.box('user_setting')
+                                      .put('alarming_time', selectedValue);
+                                });
+                              }
+                            : null,
+                      ) : Text(
+                        '설정off상태입니다.',
+                        style: TextStyle(
+                            fontSize: contentTextsize(),
+                            color: TextColor()),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ))
+        : const SizedBox();
   }
 }
 
