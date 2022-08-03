@@ -4,12 +4,14 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/SpaceAD.dart';
+import 'package:clickbyme/route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../Tool/NoBehavior.dart';
+import '../../../Tool/SheetGetx/SpaceShowRoom.dart';
 import '../../../Tool/SheetGetx/Spacesetting.dart';
 
 class ChangeSpace extends StatefulWidget {
@@ -38,12 +40,25 @@ class _ChangeSpaceState extends State<ChangeSpace> {
     super.initState();
   }
 
+  Future<bool> _onWillPop() async {
+    Get.off(
+      () => const MyHomePage(
+        index: 0,
+      ),
+      transition: Transition.rightToLeft,
+    );
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       backgroundColor: BGColor(),
-      body: EnterMySpace(),
+      body: WillPopScope(
+        onWillPop: _onWillPop,
+        child: EnterMySpace(),
+      ),
     ));
   }
 
@@ -295,15 +310,14 @@ class _ChangeSpaceState extends State<ChangeSpace> {
       firestore
           .collection('UserSpaceDataBase')
           .doc(name)
-          .set({
-            '$i': list[i].title,
-            'name' : name
-          }, SetOptions(merge: true));
+          .set({'$i': list[i].title, 'name': name}, SetOptions(merge: true));
       list_space.insert(i, list[i].title);
     }
     Hive.box('user_setting').put('space_name', list_space);
     setState(() {
       spaceset.setspace();
+      final spaceroomset = Get.put(SpaceShowRoom());
+      spaceroomset.onInit();
     });
   }
 

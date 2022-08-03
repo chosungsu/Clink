@@ -12,43 +12,7 @@ import 'package:another_flushbar/flushbar.dart';
 
 import '../Tool/SheetGetx/onequeform.dart';
 
-addcalendar(
-  BuildContext context,
-  FocusNode searchNode,
-  TextEditingController controller,
-  String username,
-  DateTime date,
-  String s,
-) {
-  Get.bottomSheet(
-          Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Container(
-              height: 440,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  )),
-              child: GestureDetector(
-                  onTap: () {
-                    searchNode.unfocus();
-                  },
-                  child: SheetPage(
-                      context, searchNode, controller, username, date, s)),
-            ),
-          ),
-          backgroundColor: Colors.white,
-          isScrollControlled: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-      .whenComplete(() {
-    controller.clear();
-  });
-}
-
-SheetPage(
+SheetPageAC(
   BuildContext context,
   FocusNode searchNode,
   TextEditingController controller,
@@ -529,6 +493,28 @@ content(
                   ).show(context);
                 } else {
                   setState(() {
+                    Flushbar(
+                      backgroundColor: Colors.green.shade400,
+                      titleText: Text('Notice',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: contentTitleTextsize(),
+                            fontWeight: FontWeight.bold,
+                          )),
+                      messageText: Text('잠시만 기다려주세요~',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: contentTextsize(),
+                            fontWeight: FontWeight.bold,
+                          )),
+                      icon: const Icon(
+                        Icons.info_outline,
+                        size: 25.0,
+                        color: Colors.white,
+                      ),
+                      duration: const Duration(seconds: 1),
+                      leftBarIndicatorColor: Colors.green.shade100,
+                    ).show(context);
                     types[changetype].toString() == '달력'
                         ? firestore.collection('CalendarSheetHome').add({
                             'calname': controller.text,
@@ -600,10 +586,10 @@ content(
                       size: 25.0,
                       color: Colors.white,
                     ),
-                    duration: const Duration(seconds: 1),
+                    duration: const Duration(seconds: 2),
                     leftBarIndicatorColor: Colors.blue.shade100,
                   ).show(context).whenComplete(() {
-                    if (cnt <= 5) {
+                    if (s == 'home') {
                       setState(() {
                         cntget.minuscnt();
                         cnt = cntget.cnt;

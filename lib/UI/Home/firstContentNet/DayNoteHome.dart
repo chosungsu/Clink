@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../../../Page/HomePage.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../sheets/addcalendar.dart';
 
@@ -131,7 +132,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                     onTap: () {
                       Get.to(
                           () => DayScript(
-                                date: DateTime.now(),
+                                firstdate: DateTime.now(),
+                                lastdate: DateTime.now(),
                                 position: 'note',
                                 title: '',
                                 share: [],
@@ -211,59 +213,58 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                   )),
                                             ),
                                             SizedBox(
-                                                  width: 30,
-                                                  child: InkWell(
-                                                      onTap: () {
-                                                        //리스트 정렬
-                                                        setState(() {
-                                                          sort == 0
-                                                              ? Hive.box(
-                                                                      'user_setting')
-                                                                  .put(
-                                                                      'sort_cal_card',
-                                                                      1)
-                                                              : Hive.box(
-                                                                      'user_setting')
-                                                                  .put(
-                                                                      'sort_cal_card',
-                                                                      0);
-                                                          Hive.box('user_setting')
-                                                                          .get(
-                                                                              'sort_cal_card') ==
-                                                                      0 ||
-                                                                  Hive.box('user_setting')
-                                                                          .get(
-                                                                              'sort_cal_card') ==
-                                                                      null
-                                                              ? sort = 0
-                                                              : sort = 1;
-                                                        });
-                                                      },
-                                                      child: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 30,
-                                                        height: 30,
-                                                        child: NeumorphicIcon(
-                                                          Icons.swap_vert,
-                                                          size: 30,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              surfaceIntensity:
-                                                                  0.5,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      ))),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
+                                                width: 30,
+                                                child: InkWell(
+                                                    onTap: () {
+                                                      //리스트 정렬
+                                                      setState(() {
+                                                        sort == 0
+                                                            ? Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'sort_cal_card',
+                                                                    1)
+                                                            : Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'sort_cal_card',
+                                                                    0);
+                                                        Hive.box('user_setting')
+                                                                        .get(
+                                                                            'sort_cal_card') ==
+                                                                    0 ||
+                                                                Hive.box('user_setting')
+                                                                        .get(
+                                                                            'sort_cal_card') ==
+                                                                    null
+                                                            ? sort = 0
+                                                            : sort = 1;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons.swap_vert,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ))),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
                                             SizedBox(
                                                 width: 30,
                                                 child: InkWell(

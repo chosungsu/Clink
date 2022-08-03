@@ -8,6 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import '../../../DB/ChipList.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -15,13 +16,15 @@ import '../../../Tool/NoBehavior.dart';
 class DayScript extends StatefulWidget {
   DayScript(
       {Key? key,
-      required this.date,
+      required this.firstdate,
       required this.position,
       required this.title,
       required this.share,
-      required this.orig})
+      required this.orig,
+      required this.lastdate})
       : super(key: key);
-  final DateTime date;
+  final DateTime firstdate;
+  final DateTime lastdate;
   final String position;
   final String title;
   final String orig;
@@ -48,17 +51,10 @@ class _DayScriptState extends State<DayScript> {
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
-  final List memostar = [1, 2, 1, 1, 3];
-  final List memotitle = ['memo1', 'memo2', 'memo3', 'memo4', 'memo5'];
-  final List memocontent = [
-    '하루 한번 채식식단 실천하기',
-    '대중교통 이용하여 출근하기',
-    '토익공부 하루에 유닛4과씩 진도 나가기',
-    '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기',
-    '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기 fighting!!!',
-  ];
   String selectedValue = '선택없음';
   bool isChecked_pushalarm = false;
+  int differ_date = 0;
+  List differ_list = [];
 
   @override
   void didChangeDependencies() {
@@ -75,6 +71,16 @@ class _DayScriptState extends State<DayScript> {
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
+    widget.lastdate != widget.firstdate
+        ? differ_date = int.parse(widget.lastdate
+            .difference(DateTime.parse(widget.firstdate.toString()))
+            .inDays
+            .toString())
+        : differ_date = 0;
+    for (int i = 0; i <= differ_date; i++) {
+      differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month,
+          widget.firstdate.day + i));
+    }
     selectedValue = Hive.box('user_setting').get('alarming_time') ?? '5분 전';
     Hive.box('user_setting').get('isChecked_alarming') == null
         ? isChecked_pushalarm = false
@@ -186,10 +192,39 @@ class _DayScriptState extends State<DayScript> {
                                             .text.isNotEmpty ||
                                         textEditingController3
                                             .text.isNotEmpty) {
-                                      widget.position == 'cal'
-                                          ? firestore
-                                              .collection('CalendarDataBase')
-                                              .add({
+                                      if (widget.position == 'cal') {
+                                        Flushbar(
+                                          backgroundColor:
+                                              Colors.green.shade400,
+                                          titleText: Text('Uploading...',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                    contentTitleTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          messageText: Text('잠시만 기다려주세요~',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: contentTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          icon: const Icon(
+                                            Icons.info_outline,
+                                            size: 25.0,
+                                            color: Colors.white,
+                                          ),
+                                          duration: const Duration(seconds: 1),
+                                          leftBarIndicatorColor:
+                                              Colors.green.shade100,
+                                        ).show(context);
+                                        if (differ_list.isNotEmpty) {
+                                          for (int j = 0;
+                                              j < differ_list.length;
+                                              j++) {
+                                            firestore
+                                                .collection('CalendarDataBase')
+                                                .add({
                                               'Daytodo':
                                                   textEditingController1.text,
                                               'Timestart':
@@ -207,18 +242,11 @@ class _DayScriptState extends State<DayScript> {
                                               'Shares': widget.share,
                                               'OriginalUser': widget.orig,
                                               'calname': widget.title,
-                                              'Date': widget.date
+                                              'Date': DateFormat('yyyy-MM-dd')
+                                                      .parse(differ_list[j]
+                                                          .toString())
                                                       .toString()
-                                                      .split('-')[0] +
-                                                  '-' +
-                                                  widget.date
-                                                      .toString()
-                                                      .split('-')[1] +
-                                                  '-' +
-                                                  widget.date
-                                                      .toString()
-                                                      .split('-')[2]
-                                                      .substring(0, 2) +
+                                                      .split(' ')[0] +
                                                   '일',
                                             }).whenComplete(() {
                                               Future.delayed(
@@ -268,148 +296,254 @@ class _DayScriptState extends State<DayScript> {
                                                 ).show(context).whenComplete(
                                                     () => Get.back());
                                               });
-                                            })
-                                          : (widget.position == 'note'
-                                              ? firestore
-                                                  .collection(
-                                                      'CalendarDataBase')
-                                                  .add({
-                                                  'Daytodo':
-                                                      textEditingController1
+                                            });
+                                          }
+                                        } else {
+                                          for (int j = 0;
+                                              j < differ_list.length;
+                                              j++) {
+                                            firestore
+                                                .collection('CalendarDataBase')
+                                                .add({
+                                              'Daytodo':
+                                                  textEditingController1.text,
+                                              'Timestart':
+                                                  textEditingController2.text
+                                                              .split(':')[0]
+                                                              .length ==
+                                                          1
+                                                      ? '0' +
+                                                          textEditingController2
+                                                              .text
+                                                      : textEditingController2
                                                           .text,
-                                                  'Timestart':
-                                                      textEditingController2
-                                                          .text,
-                                                  'Timefinish':
-                                                      textEditingController3
-                                                          .text,
-                                                  'Shares': finallist,
-                                                  'OriginalUser': username,
-                                                }).whenComplete(() {
-                                                  Future.delayed(
-                                                      const Duration(
-                                                          seconds: 2), () {
-                                                    Flushbar(
-                                                      backgroundColor:
-                                                          Colors.blue.shade400,
-                                                      titleText: Text('Notice',
+                                              'Timefinish':
+                                                  textEditingController3.text,
+                                              'Shares': widget.share,
+                                              'OriginalUser': widget.orig,
+                                              'calname': widget.title,
+                                              'Date': DateFormat('yyyy-MM-dd')
+                                                      .parse(widget.firstdate
+                                                          .toString())
+                                                      .toString()
+                                                      .split(' ')[0] +
+                                                  '일',
+                                            }).whenComplete(() {
+                                              Future.delayed(
+                                                  const Duration(seconds: 0),
+                                                  () {
+                                                Flushbar(
+                                                  backgroundColor:
+                                                      Colors.blue.shade400,
+                                                  titleText: Text('Notice',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            contentTitleTextsize(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      )),
+                                                  messageText: widget
+                                                              .position ==
+                                                          'cal'
+                                                      ? Text(
+                                                          '일정이 정상적으로 추가되었습니다.',
                                                           style: TextStyle(
                                                             color: Colors.white,
                                                             fontSize:
-                                                                contentTitleTextsize(),
+                                                                contentTextsize(),
                                                             fontWeight:
                                                                 FontWeight.bold,
-                                                          )),
-                                                      messageText: widget
-                                                                  .position ==
-                                                              'cal'
-                                                          ? Text(
-                                                              '일정이 정상적으로 추가되었습니다.',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ))
-                                                          : Text(
-                                                              '메모가 정상적으로 추가되었습니다.',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              )),
-                                                      icon: const Icon(
-                                                        Icons.info_outline,
-                                                        size: 25.0,
-                                                        color: Colors.white,
-                                                      ),
-                                                      duration: const Duration(
-                                                          seconds: 1),
-                                                      leftBarIndicatorColor:
-                                                          Colors.blue.shade100,
-                                                    )
-                                                        .show(context)
-                                                        .whenComplete(
-                                                            () => Get.back());
-                                                  });
-                                                })
-                                              : firestore
-                                                  .collection(
-                                                      'CalendarDataBase')
-                                                  .add({
-                                                  'Daytodo':
-                                                      textEditingController1
-                                                          .text,
-                                                  'Timestart':
-                                                      textEditingController2
-                                                          .text,
-                                                  'Timefinish':
-                                                      textEditingController3
-                                                          .text,
-                                                  'Shares': finallist,
-                                                  'OriginalUser': username,
-                                                }).whenComplete(() {
-                                                  Future.delayed(
-                                                      const Duration(
-                                                          seconds: 2), () {
-                                                    Flushbar(
-                                                      backgroundColor:
-                                                          Colors.blue.shade400,
-                                                      titleText: Text('Notice',
+                                                          ))
+                                                      : Text(
+                                                          '메모가 정상적으로 추가되었습니다.',
                                                           style: TextStyle(
                                                             color: Colors.white,
                                                             fontSize:
-                                                                contentTitleTextsize(),
+                                                                contentTextsize(),
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           )),
-                                                      messageText: widget
-                                                                  .position ==
-                                                              'cal'
-                                                          ? Text(
-                                                              '일정이 정상적으로 추가되었습니다.',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ))
-                                                          : Text(
-                                                              '메모가 정상적으로 추가되었습니다.',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              )),
-                                                      icon: const Icon(
-                                                        Icons.info_outline,
-                                                        size: 25.0,
+                                                  icon: const Icon(
+                                                    Icons.info_outline,
+                                                    size: 25.0,
+                                                    color: Colors.white,
+                                                  ),
+                                                  duration: const Duration(
+                                                      seconds: 2),
+                                                  leftBarIndicatorColor:
+                                                      Colors.blue.shade100,
+                                                ).show(context).whenComplete(
+                                                    () => Get.back());
+                                              });
+                                            });
+                                          }
+                                        }
+                                      } else if (widget.position == 'note') {
+                                        Flushbar(
+                                          backgroundColor:
+                                              Colors.green.shade400,
+                                          titleText: Text('Uploading...',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                    contentTitleTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          messageText: Text('잠시만 기다려주세요~',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: contentTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          icon: const Icon(
+                                            Icons.info_outline,
+                                            size: 25.0,
+                                            color: Colors.white,
+                                          ),
+                                          duration: const Duration(seconds: 1),
+                                          leftBarIndicatorColor:
+                                              Colors.green.shade100,
+                                        ).show(context);
+                                        firestore
+                                            .collection('CalendarDataBase')
+                                            .add({
+                                          'Daytodo':
+                                              textEditingController1.text,
+                                          'Timestart':
+                                              textEditingController2.text,
+                                          'Timefinish':
+                                              textEditingController3.text,
+                                          'Shares': finallist,
+                                          'OriginalUser': username,
+                                        }).whenComplete(() {
+                                          Future.delayed(
+                                              const Duration(seconds: 0), () {
+                                            Flushbar(
+                                              backgroundColor:
+                                                  Colors.blue.shade400,
+                                              titleText: Text('Notice',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        contentTitleTextsize(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                              messageText: widget.position ==
+                                                      'cal'
+                                                  ? Text('일정이 정상적으로 추가되었습니다.',
+                                                      style: TextStyle(
                                                         color: Colors.white,
-                                                      ),
-                                                      duration: const Duration(
-                                                          seconds: 1),
-                                                      leftBarIndicatorColor:
-                                                          Colors.blue.shade100,
-                                                    )
-                                                        .show(context)
-                                                        .whenComplete(
-                                                            () => Get.back());
-                                                  });
-                                                }));
+                                                        fontSize:
+                                                            contentTextsize(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ))
+                                                  : Text('메모가 정상적으로 추가되었습니다.',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            contentTextsize(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      )),
+                                              icon: const Icon(
+                                                Icons.info_outline,
+                                                size: 25.0,
+                                                color: Colors.white,
+                                              ),
+                                              duration:
+                                                  const Duration(seconds: 2),
+                                              leftBarIndicatorColor:
+                                                  Colors.blue.shade100,
+                                            )
+                                                .show(context)
+                                                .whenComplete(() => Get.back());
+                                          });
+                                        });
+                                      } else {
+                                        Flushbar(
+                                          backgroundColor:
+                                              Colors.green.shade400,
+                                          titleText: Text('Uploading...',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                    contentTitleTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          messageText: Text('잠시만 기다려주세요~',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: contentTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          icon: const Icon(
+                                            Icons.info_outline,
+                                            size: 25.0,
+                                            color: Colors.white,
+                                          ),
+                                          duration: const Duration(seconds: 1),
+                                          leftBarIndicatorColor:
+                                              Colors.green.shade100,
+                                        ).show(context);
+                                        firestore
+                                            .collection('CalendarDataBase')
+                                            .add({
+                                          'Daytodo':
+                                              textEditingController1.text,
+                                          'Timestart':
+                                              textEditingController2.text,
+                                          'Timefinish':
+                                              textEditingController3.text,
+                                          'Shares': finallist,
+                                          'OriginalUser': username,
+                                        }).whenComplete(() {
+                                          Future.delayed(
+                                              const Duration(seconds: 0), () {
+                                            Flushbar(
+                                              backgroundColor:
+                                                  Colors.blue.shade400,
+                                              titleText: Text('Notice',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        contentTitleTextsize(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                              messageText: widget.position ==
+                                                      'cal'
+                                                  ? Text('일정이 정상적으로 추가되었습니다.',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            contentTextsize(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ))
+                                                  : Text('메모가 정상적으로 추가되었습니다.',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            contentTextsize(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      )),
+                                              icon: const Icon(
+                                                Icons.info_outline,
+                                                size: 25.0,
+                                                color: Colors.white,
+                                              ),
+                                              duration:
+                                                  const Duration(seconds: 2),
+                                              leftBarIndicatorColor:
+                                                  Colors.blue.shade100,
+                                            )
+                                                .show(context)
+                                                .whenComplete(() => Get.back());
+                                          });
+                                        });
+                                      }
                                     } else {
                                       Flushbar(
                                         backgroundColor: Colors.red.shade400,
@@ -502,7 +636,7 @@ class _DayScriptState extends State<DayScript> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              buildSheetTitle(widget.date),
+                              buildSheetTitle(widget.firstdate),
                               const SizedBox(
                                 height: 20,
                               ),
@@ -772,9 +906,66 @@ class _DayScriptState extends State<DayScript> {
   Time() {
     return widget.position == 'cal'
         ? SizedBox(
-            height: 200,
+            height: widget.lastdate != widget.firstdate ? 320 : 300,
             child: Column(
               children: [
+                widget.lastdate != widget.firstdate
+                    ? SizedBox(
+                        height: 100,
+                        child: ContainerDesign(
+                          color: BGColor(),
+                          child: ListTile(
+                            leading: NeumorphicIcon(
+                              Icons.today,
+                              size: 30,
+                              style: NeumorphicStyle(
+                                  shape: NeumorphicShape.convex,
+                                  depth: 2,
+                                  surfaceIntensity: 0.5,
+                                  color: TextColor(),
+                                  lightSource: LightSource.topLeft),
+                            ),
+                            title: Text(
+                              widget.firstdate.toString().split(' ')[0] +
+                                  '부터 ' +
+                                  widget.lastdate.toString().split(' ')[0] +
+                                  '까지',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize(),
+                                  color: TextColor()),
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        height: 80,
+                        child: ContainerDesign(
+                          color: BGColor(),
+                          child: ListTile(
+                            leading: NeumorphicIcon(
+                              Icons.today,
+                              size: 30,
+                              style: NeumorphicStyle(
+                                  shape: NeumorphicShape.convex,
+                                  depth: 2,
+                                  surfaceIntensity: 0.5,
+                                  color: TextColor(),
+                                  lightSource: LightSource.topLeft),
+                            ),
+                            title: Text(
+                              widget.firstdate.toString().split(' ')[0],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize(),
+                                  color: TextColor()),
+                            ),
+                          ),
+                        ),
+                      ),
+                const SizedBox(
+                  height: 20,
+                ),
                 SizedBox(
                   height: 80,
                   child: ContainerDesign(
@@ -809,8 +1000,8 @@ class _DayScriptState extends State<DayScript> {
                       ),
                       trailing: InkWell(
                         onTap: () {
-                          pickDates(
-                              context, textEditingController2, widget.date);
+                          pickDates(context, textEditingController2,
+                              widget.firstdate);
                         },
                         child: Icon(
                           Icons.arrow_drop_down,
@@ -857,8 +1048,8 @@ class _DayScriptState extends State<DayScript> {
                       ),
                       trailing: InkWell(
                         onTap: () {
-                          pickDates(
-                              context, textEditingController3, widget.date);
+                          pickDates(context, textEditingController3,
+                              widget.firstdate);
                         },
                         child: Icon(
                           Icons.arrow_drop_down,
@@ -1349,38 +1540,40 @@ class _DayScriptState extends State<DayScript> {
                             fontSize: contentTitleTextsize(),
                             color: TextColor()),
                       ),
-                      trailing: isChecked_pushalarm == true ?
-                      DropdownButton(
-                        value: selectedValue,
-                        dropdownColor: BGColor(),
-                        items: dropdownItems,
-                        icon: NeumorphicIcon(
-                          Icons.arrow_drop_down,
-                          size: 20,
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              surfaceIntensity: 0.5,
-                              color: TextColor(),
-                              lightSource: LightSource.topLeft),
-                        ),
-                        style: TextStyle(
-                            color: TextColor(), fontSize: contentTextsize()),
-                        onChanged: isChecked_pushalarm == true
-                            ? (String? value) {
-                                setState(() {
-                                  selectedValue = value!;
-                                  Hive.box('user_setting')
-                                      .put('alarming_time', selectedValue);
-                                });
-                              }
-                            : null,
-                      ) : Text(
-                        '설정off상태입니다.',
-                        style: TextStyle(
-                            fontSize: contentTextsize(),
-                            color: TextColor()),
-                      ),
+                      trailing: isChecked_pushalarm == true
+                          ? DropdownButton(
+                              value: selectedValue,
+                              dropdownColor: BGColor(),
+                              items: dropdownItems,
+                              icon: NeumorphicIcon(
+                                Icons.arrow_drop_down,
+                                size: 20,
+                                style: NeumorphicStyle(
+                                    shape: NeumorphicShape.convex,
+                                    depth: 2,
+                                    surfaceIntensity: 0.5,
+                                    color: TextColor(),
+                                    lightSource: LightSource.topLeft),
+                              ),
+                              style: TextStyle(
+                                  color: TextColor(),
+                                  fontSize: contentTextsize()),
+                              onChanged: isChecked_pushalarm == true
+                                  ? (String? value) {
+                                      setState(() {
+                                        selectedValue = value!;
+                                        Hive.box('user_setting').put(
+                                            'alarming_time', selectedValue);
+                                      });
+                                    }
+                                  : null,
+                            )
+                          : Text(
+                              '설정off상태입니다.',
+                              style: TextStyle(
+                                  fontSize: contentTextsize(),
+                                  color: TextColor()),
+                            ),
                     ),
                   ),
                 ),

@@ -9,8 +9,18 @@ class onequeform extends GetxController {
 
   void setcnt() {
     cnt = Hive.box('user_setting').get('count_formcard') ?? 5;
-    Hive.box('user_setting').put('count_formcard', cnt);
-    print('set ' + cnt.toString());
+    //cnt = 5;
+
+    update();
+    notifyChildrens();
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    cnt = Hive.box('user_setting').get('count_formcard') ?? 5;
+    print('init ' + cnt.toString());
     update();
     notifyChildrens();
   }

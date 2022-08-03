@@ -57,9 +57,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: MyTheme.kPrimaryColor,
           canvasColor: Colors.transparent,
-          textTheme: GoogleFonts.poppinsTextTheme(
-            Theme.of(context).textTheme
-          ),
+          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey)
               .copyWith(secondary: const Color(0xFF012980)),
         ),
@@ -98,9 +96,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         (status) {
           if (status == AnimationStatus.completed) {
             Hive.box('user_info').get('id') == null ||
-                            Hive.box('user_info').get('autologin') == false
-                            ? null
-                            : GoToMain(context);
+                    Hive.box('user_info').get('autologin') == false
+                ? null
+                : GoToMain(context);
             Timer(
               const Duration(milliseconds: 1000),
               () {
@@ -130,7 +128,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.white, body: body());
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: body());
   }
 
   checkForInitialMessage() async {
@@ -166,8 +167,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       fontSize: 25,
                     ),
                   ),
-                )
-                ),
+                )),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: height * 0.45,
@@ -215,10 +215,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                               animatedTexts: [
                                 TyperAnimatedText('로그인중입니다...',
                                     textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.black
-                                    ),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black),
                                     speed: const Duration(milliseconds: 150)),
                               ],
                               isRepeatingAnimation: true,
@@ -227,8 +226,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                             ),
                           ),
                   ],
-                )
-                ),
+                )),
           ],
         ));
   }

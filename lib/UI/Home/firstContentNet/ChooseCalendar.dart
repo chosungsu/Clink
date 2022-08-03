@@ -11,9 +11,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../../../Page/HomePage.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/PeopleAdd.dart';
+import '../../../Tool/SheetGetx/SpaceShowRoom.dart';
+import '../../../route.dart';
 
 class ChooseCalendar extends StatefulWidget {
   @override
@@ -89,13 +92,27 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     }
   }
 
+  Future<bool> _onWillPop() async {
+    Get.off(
+      () => const MyHomePage(
+        index: 0,
+      ),
+      transition: Transition.rightToLeft,
+    );
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       //backgroundColor: BGColor(),
       resizeToAvoidBottomInset: false,
-      body: ChoiceC(),
+      body: WillPopScope(
+        onWillPop: _onWillPop,
+        child: ChoiceC(),
+      ),
+
       floatingActionButton: _showBackToTopButton == false
           ? null
           : FloatingActionButton(
@@ -624,7 +641,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                               doc: snapshot
                                                                   .data!
                                                                   .docs[index]
-                                                                  .id.toString(),
+                                                                  .id
+                                                                  .toString(),
                                                               when: snapshot
                                                                           .data!
                                                                           .docs[
@@ -660,7 +678,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                 Transition
                                                                     .downToUp,
                                                           );
-
                                                         });
                                                       },
                                                       child: NeumorphicIcon(
@@ -1048,9 +1065,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                           Get.to(
                                                             () => PeopleGroup(
                                                               doc: snapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                                  ['doc'],
+                                                                      .data!
+                                                                      .docs[
+                                                                  index]['doc'],
                                                               when: snapshot
                                                                           .data!
                                                                           .docs[
@@ -1086,7 +1103,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                 Transition
                                                                     .downToUp,
                                                           );
-
                                                         });
                                                       },
                                                       child: NeumorphicIcon(

@@ -149,11 +149,32 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                           .collection(
                                                               'CalendarDataBase')
                                                           .where('calname',
-                                                              isEqualTo:
-                                                                  widget.doc)
+                                                              isEqualTo: widget
+                                                                  .doc)
                                                           .where('Daytodo',
                                                               isEqualTo: widget
                                                                   .calinfo)
+                                                          .where('Date',
+                                                              isEqualTo: widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split('-')[
+                                                                      0] +
+                                                                  '-' +
+                                                                  widget.date
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[
+                                                                      1] +
+                                                                  '-' +
+                                                                  widget.date
+                                                                      .toString()
+                                                                      .split('-')[
+                                                                          2]
+                                                                      .substring(
+                                                                          0,
+                                                                          2) +
+                                                                  '일')
                                                           .where('Timestart',
                                                               isEqualTo:
                                                                   widget.start)
@@ -221,17 +242,17 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                                           .bold,
                                                                 )),
                                                             messageText: Text(
-                                                                    '일정이 정상적으로 변경되었습니다.',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          contentTextsize(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    )),
+                                                                '일정이 정상적으로 변경되었습니다.',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      contentTextsize(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                )),
                                                             icon: const Icon(
                                                               Icons
                                                                   .info_outline,
@@ -251,7 +272,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                                   () => Get
                                                                       .back());
                                                         });
-                                                        
                                                       });
                                                     },
                                                     child: Container(
@@ -287,11 +307,32 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                           .collection(
                                                               'CalendarDataBase')
                                                           .where('calname',
-                                                              isEqualTo:
-                                                                  widget.doc)
+                                                              isEqualTo: widget
+                                                                  .doc)
                                                           .where('Daytodo',
                                                               isEqualTo: widget
                                                                   .calinfo)
+                                                          .where('Date',
+                                                              isEqualTo: widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split('-')[
+                                                                      0] +
+                                                                  '-' +
+                                                                  widget.date
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[
+                                                                      1] +
+                                                                  '-' +
+                                                                  widget.date
+                                                                      .toString()
+                                                                      .split('-')[
+                                                                          2]
+                                                                      .substring(
+                                                                          0,
+                                                                          2) +
+                                                                  '일')
                                                           .where('Timestart',
                                                               isEqualTo:
                                                                   widget.start)
@@ -334,17 +375,17 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                                           .bold,
                                                                 )),
                                                             messageText: Text(
-                                                                    '일정이 정상적으로 삭제되었습니다.',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          contentTextsize(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    )),
+                                                                '일정이 정상적으로 삭제되었습니다.',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      contentTextsize(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                )),
                                                             icon: const Icon(
                                                               Icons
                                                                   .info_outline,

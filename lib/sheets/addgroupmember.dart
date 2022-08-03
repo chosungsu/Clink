@@ -42,11 +42,8 @@ addgroupmember(
   });
 }
 
-SheetPage(
-  BuildContext context,
-  FocusNode searchNode,
-  TextEditingController controller,
-) {
+SheetPage(BuildContext context, FocusNode searchNode,
+    TextEditingController controller) {
   final List<String> list_user = <String>[];
   return SizedBox(
       height: 420,

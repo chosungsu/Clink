@@ -45,7 +45,7 @@ class TopCard extends StatelessWidget {
                                         () => DayContentHome(),
                                         transition: Transition.rightToLeft,
                                       );*/
-                                      Get.to(
+                                      Get.off(
                                         () => ChooseCalendar(),
                                         transition: Transition.rightToLeft,
                                       );
@@ -102,8 +102,10 @@ class TopCard extends StatelessWidget {
                                                 PageTransitionType.bottomToTop,
                                             child: DayNoteHome()),
                                       );*/
-                                          Get.to(
-                                            () => DayNoteHome(title: '',),
+                                          Get.off(
+                                            () => DayNoteHome(
+                                              title: '',
+                                            ),
                                             transition: Transition.rightToLeft,
                                           );
                                         },
@@ -160,7 +162,7 @@ class TopCard extends StatelessWidget {
                                                 PageTransitionType.bottomToTop,
                                             child: RoutineHome()),
                                       );*/
-                                          Get.to(
+                                          Get.off(
                                             () => RoutineHome(),
                                             transition: Transition.rightToLeft,
                                           );

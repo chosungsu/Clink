@@ -1,33 +1,29 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/DB/SpaceList.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
-import 'package:clickbyme/Tool/SheetGetx/SpaceShowRoom.dart';
 import 'package:clickbyme/Tool/SheetGetx/Spacesetting.dart';
 import 'package:clickbyme/Tool/SheetGetx/onequeform.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
-import 'package:clickbyme/UI/Home/FormContentNet/FormCard.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
 import 'package:clickbyme/UI/Home/thirdContentNet/ChangeSpace.dart';
-import 'package:clickbyme/route.dart';
-import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:page_transition/page_transition.dart';
 import '../DB/SpaceContent.dart';
 import '../Tool/NoBehavior.dart';
+import '../Tool/SheetGetx/SpaceShowRoom.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
-import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/firstContentNet/RoutineHome.dart';
+import '../sheets/addcalendar.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -51,6 +47,7 @@ class _HomePageState extends State<HomePage> {
   late DateTime Date = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   static final spaceset = Get.put(Spacesetting());
+
   List showspacelist = [];
   String name = Hive.box('user_info').get('id');
   List<SpaceList> _user_ad = [];
@@ -63,6 +60,8 @@ class _HomePageState extends State<HomePage> {
   late final PageController _pController;
   //프로 버전 구매시 사용하게될 코드
   bool isbought = false;
+  TextEditingController controller = TextEditingController();
+  var searchNode = FocusNode();
 
   @override
   void initState() {
@@ -73,53 +72,6 @@ class _HomePageState extends State<HomePage> {
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
-    firestore
-        .collection('CalendarDataBase')
-        .where('OriginalUser', isEqualTo: name)
-        .where('Date',
-            isEqualTo: Date.toString().split('-')[0] +
-                '-' +
-                Date.toString().split('-')[1] +
-                '-' +
-                Date.toString().split('-')[2].substring(0, 2) +
-                '일')
-        .get()
-        .then((value) {
-      sc.clear();
-      value.docs.isEmpty
-          ? firestore
-              .collection('CalendarDataBase')
-              .where('Date',
-                  isEqualTo: Date.toString().split('-')[0] +
-                      '-' +
-                      Date.toString().split('-')[1] +
-                      '-' +
-                      Date.toString().split('-')[2].substring(0, 2) +
-                      '일')
-              .get()
-              .then(((value) {
-              value.docs.forEach((element) {
-                for (int i = 0; i < element['Shares'].length; i++) {
-                  if (element['Shares'][i].contains(name)) {
-                    setState(() {
-                      sc.add(SpaceContent(
-                          title: element['Daytodo'],
-                          date: element['Timestart'] +
-                              '-' +
-                              element['Timefinish']));
-                    });
-                  }
-                }
-              });
-            }))
-          : value.docs.forEach((element) {
-              setState(() {
-                sc.add(SpaceContent(
-                    title: element['Daytodo'],
-                    date: element['Timestart'] + '-' + element['Timefinish']));
-              });
-            });
-    });
   }
 
   @override
@@ -130,6 +82,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final cntget = Get.put(onequeform());
+    cntget.onInit();
+    final spaceroomset = Get.put(SpaceShowRoom());
+    spaceroomset.onInit();
+    print('22');
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return SafeArea(
@@ -143,22 +100,23 @@ class _HomePageState extends State<HomePage> {
                             width: 50,
                             child: DrawerScreen(),
                           ),
-                          HomeUi(_pController),
+                          HomeUi(_pController, cntget, spaceroomset),
                         ],
                       )
                     : Stack(
                         children: [
-                          HomeUi(_pController),
+                          HomeUi(_pController, cntget, spaceroomset),
                         ],
                       ))
                 : Stack(
                     children: [
-                      HomeUi(_pController),
+                      HomeUi(_pController, cntget, spaceroomset),
                     ],
                   )));
   }
 
-  HomeUi(PageController pController) {
+  HomeUi(PageController pController, onequeform cntget,
+      SpaceShowRoom spaceroomset) {
     double height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
       transform: Matrix4.translationValues(xoffset, yoffset, 0)
@@ -341,7 +299,7 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_0(height),
+                                H_Container_0(height, cntget),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -361,7 +319,7 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_4(height),
+                                H_Container_4(height, spaceroomset),
                                 const SizedBox(
                                   height: 50,
                                 ),
@@ -377,14 +335,156 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_0(double height) {
+  H_Container_0(double height, onequeform cntget) {
     return SizedBox(
       height: 90,
       width: MediaQuery.of(context).size.width - 40,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FormCard(height: height, buy: isbought),
+          SizedBox(
+              height: 80,
+              width: MediaQuery.of(context).size.width - 40,
+              child: ContainerDesign(
+                  color: Colors.blue.shade400,
+                  child: Column(
+                    children: [
+                      GetBuilder<onequeform>(
+                          init: onequeform(),
+                          builder: (_) => SizedBox(
+                              height: 60,
+                              child: GestureDetector(
+                                onTap: () {
+                                  cntget.cnt != 0
+                                      ? addcalendar(context, searchNode,
+                                          controller, name, Date, 'home')
+                                      : Flushbar(
+                                          backgroundColor: Colors.red.shade400,
+                                          titleText: Text('Notice',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                    contentTitleTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          messageText: Text(
+                                              '오늘 할당량을 소진하셨습니다.\n버전 업그레이드 시 이용가능합니다!',
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: contentTextsize(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          icon: const Icon(
+                                            Icons.info_outline,
+                                            size: 25.0,
+                                            color: Colors.white,
+                                          ),
+                                          duration: const Duration(seconds: 3),
+                                          leftBarIndicatorColor:
+                                              Colors.red.shade100,
+                                        ).show(context);
+                                },
+                                child: SizedBox(
+                                  height: 45,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: 45,
+                                        width: 45,
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.blue.shade500,
+                                              child: const Icon(
+                                                Icons.smart_toy,
+                                                color: Colors.white,
+                                              ),
+                                            )),
+                                      ),
+                                      const Flexible(
+                                        fit: FlexFit.tight,
+                                        child: SizedBox(
+                                          height: 45,
+                                          child: Center(
+                                            child: Text(
+                                              '원큐로 기록카드 만들기',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18),
+                                              overflow: TextOverflow.fade,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      cntget.cnt != 0
+                                          ? SizedBox(
+                                              height: 45,
+                                              width: 45,
+                                              child: Container(
+                                                  alignment: Alignment.center,
+                                                  child: CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.blue.shade500,
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            cntget.cnt
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 18),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                          ),
+                                                          const Text(
+                                                            '/5',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 18),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                          ),
+                                                        ],
+                                                      ))),
+                                            )
+                                          : SizedBox(
+                                              height: 45,
+                                              width: 45,
+                                              child: Container(
+                                                  alignment: Alignment.center,
+                                                  child: CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.blue.shade500,
+                                                    child: const Icon(
+                                                      Icons.lock,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )),
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                              ))),
+                    ],
+                  )))
         ],
       ),
     );
@@ -439,7 +539,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_4(double height) {
+  H_Container_4(double height, SpaceShowRoom spaceroomset) {
     //프로버전 구매시 사용할 코드
     //isbought == false일 경우와 isbought == true일 경우 사이즈박스 크기를 제한 풀기...
     return SizedBox(
@@ -461,7 +561,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => ChangeSpace(), transition: Transition.fadeIn);
+                    Get.off(() => ChangeSpace(), transition: Transition.fadeIn);
                   },
                   child: Text('변경',
                       style: TextStyle(
@@ -494,127 +594,122 @@ class _HomePageState extends State<HomePage> {
                           _user_ad.add(SpaceList(title: messageText));
                         }
                       }
+                      final spaceroomset = Get.put(SpaceShowRoom());
+                      spaceroomset.onInit();
+
                       return snapshot.data!.docs.isEmpty
-                          ? ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              itemCount: _default_ad.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      _default_ad[index].title == '메모공간'
-                                          ? Get.to(
-                                              () => const DayNoteHome(
-                                                title: '',
-                                              ),
-                                              transition:
-                                                  Transition.rightToLeft,
-                                            )
-                                          : (_default_ad[index].title == '루틴공간'
+                          ? GetBuilder<SpaceShowRoom>(
+                              init: SpaceShowRoom(),
+                              builder: (_) => ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: _default_ad.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          _default_ad[index].title == '메모공간'
                                               ? Get.to(
-                                                  () => RoutineHome(),
+                                                  () => const DayNoteHome(
+                                                    title: '',
+                                                  ),
                                                   transition:
                                                       Transition.rightToLeft,
                                                 )
-                                              : Get.to(
-                                                  () => ChooseCalendar(),
-                                                  transition:
-                                                      Transition.rightToLeft,
-                                                ));
-                                    },
-                                    child: SizedBox(
-                                      height: 80,
-                                      child: Column(
-                                        children: [
-                                          ContainerDesign(
-                                            color: BGColor(),
-                                            child: Column(
-                                              children: [
-                                                Stack(
-                                                  //crossAxisAlignment: CrossAxisAlignment.start,
+                                              : (_default_ad[index].title ==
+                                                      '루틴공간'
+                                                  ? Get.to(
+                                                      () => RoutineHome(),
+                                                      transition: Transition
+                                                          .rightToLeft,
+                                                    )
+                                                  : Get.to(
+                                                      () => ChooseCalendar(),
+                                                      transition: Transition
+                                                          .rightToLeft,
+                                                    ));
+                                        },
+                                        child: SizedBox(
+                                          height: 80,
+                                          child: Column(
+                                            children: [
+                                              ContainerDesign(
+                                                color: BGColor(),
+                                                child: Column(
                                                   children: [
-                                                    Container(
-                                                        height: 50,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width -
-                                                            40,
-                                                        child: Column(
-                                                          children: [
-                                                            const SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Row(
+                                                    Stack(
+                                                      //crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                            height: 50,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width -
+                                                                40,
+                                                            child: Column(
                                                               children: [
-                                                                SizedBox(
-                                                                    width: 50),
-                                                                Text(
-                                                                    sc.isEmpty
-                                                                        ? ''
-                                                                        : sc[0]
-                                                                            .date,
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                            TextColor(),
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            18)),
-                                                                SizedBox(
-                                                                    width: 20),
-                                                                Text(
-                                                                  sc.isEmpty
-                                                                      ? '작성된 것이 없습니다.'
-                                                                      : sc[0]
-                                                                          .title,
-                                                                  maxLines: 2,
-                                                                  style: TextStyle(
-                                                                      color:
-                                                                          TextColor(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          18),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
+                                                                const SizedBox(
+                                                                  height: 10,
                                                                 ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        )),
-                                                    Positioned(
-                                                      top: 0,
-                                                      left: 0,
-                                                      child: Container(
-                                                          width: 30,
-                                                          height: 30,
-                                                          child: _default_ad[
-                                                                          index]
-                                                                      .title ==
-                                                                  '메모공간'
-                                                              ? NeumorphicIcon(
-                                                                  Icons.note,
-                                                                  size: 25,
-                                                                  style: NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      depth: 2,
-                                                                      color:
-                                                                          TextColor(),
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
+                                                                Row(
+                                                                  children: [
+                                                                    SizedBox(
+                                                                        width:
+                                                                            50),
+                                                                    Text(
+                                                                        spaceroomset.content.isEmpty
+                                                                            ? ''
+                                                                            : spaceroomset
+                                                                                .content[
+                                                                                    0]
+                                                                                .date,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                TextColor(),
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontSize: 18)),
+                                                                    SizedBox(
+                                                                        width:
+                                                                            20),
+                                                                    Text(
+                                                                      spaceroomset
+                                                                              .content
+                                                                              .isEmpty
+                                                                          ? '작성된 것이 없습니다.'
+                                                                          : spaceroomset
+                                                                              .content[0]
+                                                                              .title,
+                                                                      maxLines:
+                                                                          2,
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              TextColor(),
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                              18),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                  ],
                                                                 )
-                                                              : (_default_ad[index]
+                                                              ],
+                                                            )),
+                                                        Positioned(
+                                                          top: 0,
+                                                          left: 0,
+                                                          child: Container(
+                                                              width: 30,
+                                                              height: 30,
+                                                              child: _default_ad[
+                                                                              index]
                                                                           .title ==
-                                                                      '루틴공간'
+                                                                      '메모공간'
                                                                   ? NeumorphicIcon(
                                                                       Icons
-                                                                          .add_task,
+                                                                          .note,
                                                                       size: 25,
                                                                       style: NeumorphicStyle(
                                                                           shape: NeumorphicShape
@@ -626,152 +721,154 @@ class _HomePageState extends State<HomePage> {
                                                                           lightSource:
                                                                               LightSource.topLeft),
                                                                     )
-                                                                  : NeumorphicIcon(
-                                                                      Icons
-                                                                          .today,
-                                                                      size: 25,
-                                                                      style: NeumorphicStyle(
-                                                                          shape: NeumorphicShape
-                                                                              .convex,
-                                                                          depth:
-                                                                              2,
-                                                                          color:
-                                                                              TextColor(),
-                                                                          lightSource:
-                                                                              LightSource.topLeft),
-                                                                    ))),
+                                                                  : (_default_ad[index]
+                                                                              .title ==
+                                                                          '루틴공간'
+                                                                      ? NeumorphicIcon(
+                                                                          Icons
+                                                                              .add_task,
+                                                                          size:
+                                                                              25,
+                                                                          style: NeumorphicStyle(
+                                                                              shape: NeumorphicShape.convex,
+                                                                              depth: 2,
+                                                                              color: TextColor(),
+                                                                              lightSource: LightSource.topLeft),
+                                                                        )
+                                                                      : NeumorphicIcon(
+                                                                          Icons
+                                                                              .today,
+                                                                          size:
+                                                                              25,
+                                                                          style: NeumorphicStyle(
+                                                                              shape: NeumorphicShape.convex,
+                                                                              depth: 2,
+                                                                              color: TextColor(),
+                                                                              lightSource: LightSource.topLeft),
+                                                                        ))),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          )
-                                        ],
-                                      ),
-                                    ));
-                              })
-                          : ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              itemCount: _user_ad.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      _user_ad[index].title == '메모공간'
-                                          ? Get.to(
-                                              () => const DayNoteHome(
-                                                title: '',
                                               ),
-                                              transition:
-                                                  Transition.rightToLeft,
-                                            )
-                                          : (_user_ad[index].title == '루틴공간'
+                                              const SizedBox(
+                                                height: 10,
+                                              )
+                                            ],
+                                          ),
+                                        ));
+                                  }))
+                          : GetBuilder<SpaceShowRoom>(
+                              init: SpaceShowRoom(),
+                              builder: (_) => ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: _user_ad.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          _user_ad[index].title == '메모공간'
                                               ? Get.to(
-                                                  () => RoutineHome(),
+                                                  () => const DayNoteHome(
+                                                    title: '',
+                                                  ),
                                                   transition:
                                                       Transition.rightToLeft,
                                                 )
-                                              : Get.to(
-                                                  () => ChooseCalendar(),
-                                                  transition:
-                                                      Transition.rightToLeft,
-                                                ));
-                                    },
-                                    child: SizedBox(
-                                      height: 80,
-                                      child: Column(
-                                        children: [
-                                          ContainerDesign(
-                                            color: BGColor(),
-                                            child: Column(
-                                              children: [
-                                                Stack(
-                                                  //crossAxisAlignment: CrossAxisAlignment.start,
+                                              : (_user_ad[index].title == '루틴공간'
+                                                  ? Get.to(
+                                                      () => RoutineHome(),
+                                                      transition: Transition
+                                                          .rightToLeft,
+                                                    )
+                                                  : Get.to(
+                                                      () => ChooseCalendar(),
+                                                      transition: Transition
+                                                          .rightToLeft,
+                                                    ));
+                                        },
+                                        child: SizedBox(
+                                          height: 80,
+                                          child: Column(
+                                            children: [
+                                              ContainerDesign(
+                                                color: BGColor(),
+                                                child: Column(
                                                   children: [
-                                                    Container(
-                                                        height: 50,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width -
-                                                            40,
-                                                        child: Column(
-                                                          children: [
-                                                            const SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Row(
+                                                    Stack(
+                                                      //crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                            height: 50,
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width -
+                                                                40,
+                                                            child: Column(
                                                               children: [
-                                                                SizedBox(
-                                                                    width: 50),
-                                                                Text(
-                                                                    sc.isEmpty
-                                                                        ? ''
-                                                                        : sc[0]
-                                                                            .date,
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                            TextColor(),
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            18)),
-                                                                SizedBox(
-                                                                    width: 20),
-                                                                Text(
-                                                                  sc.isEmpty
-                                                                      ? '작성된 것이 없습니다.'
-                                                                      : sc[0]
-                                                                          .title,
-                                                                  maxLines: 2,
-                                                                  style: TextStyle(
-                                                                      color:
-                                                                          TextColor(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          18),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
+                                                                const SizedBox(
+                                                                  height: 10,
                                                                 ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        )),
-                                                    Positioned(
-                                                      top: 0,
-                                                      left: 0,
-                                                      child: Container(
-                                                          width: 30,
-                                                          height: 30,
-                                                          child: _user_ad[index]
-                                                                      .title ==
-                                                                  '메모공간'
-                                                              ? NeumorphicIcon(
-                                                                  Icons.note,
-                                                                  size: 25,
-                                                                  style: NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      depth: 2,
-                                                                      color:
-                                                                          TextColor(),
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
+                                                                Row(
+                                                                  children: [
+                                                                    SizedBox(
+                                                                        width:
+                                                                            50),
+                                                                    Text(
+                                                                        spaceroomset.content.isEmpty
+                                                                            ? ''
+                                                                            : spaceroomset
+                                                                                .content[
+                                                                                    0]
+                                                                                .date,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                TextColor(),
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontSize: 18)),
+                                                                    SizedBox(
+                                                                        width:
+                                                                            20),
+                                                                    Text(
+                                                                      spaceroomset
+                                                                              .content
+                                                                              .isEmpty
+                                                                          ? '작성된 것이 없습니다.'
+                                                                          : spaceroomset
+                                                                              .content[0]
+                                                                              .title,
+                                                                      maxLines:
+                                                                          2,
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              TextColor(),
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                              18),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                  ],
                                                                 )
-                                                              : (_user_ad[index]
+                                                              ],
+                                                            )),
+                                                        Positioned(
+                                                          top: 0,
+                                                          left: 0,
+                                                          child: Container(
+                                                              width: 30,
+                                                              height: 30,
+                                                              child: _user_ad[index]
                                                                           .title ==
-                                                                      '루틴공간'
+                                                                      '메모공간'
                                                                   ? NeumorphicIcon(
                                                                       Icons
-                                                                          .add_task,
+                                                                          .note,
                                                                       size: 25,
                                                                       style: NeumorphicStyle(
                                                                           shape: NeumorphicShape
@@ -783,33 +880,44 @@ class _HomePageState extends State<HomePage> {
                                                                           lightSource:
                                                                               LightSource.topLeft),
                                                                     )
-                                                                  : NeumorphicIcon(
-                                                                      Icons
-                                                                          .today,
-                                                                      size: 25,
-                                                                      style: NeumorphicStyle(
-                                                                          shape: NeumorphicShape
-                                                                              .convex,
-                                                                          depth:
-                                                                              2,
-                                                                          color:
-                                                                              TextColor(),
-                                                                          lightSource:
-                                                                              LightSource.topLeft),
-                                                                    ))),
+                                                                  : (_user_ad[index]
+                                                                              .title ==
+                                                                          '루틴공간'
+                                                                      ? NeumorphicIcon(
+                                                                          Icons
+                                                                              .add_task,
+                                                                          size:
+                                                                              25,
+                                                                          style: NeumorphicStyle(
+                                                                              shape: NeumorphicShape.convex,
+                                                                              depth: 2,
+                                                                              color: TextColor(),
+                                                                              lightSource: LightSource.topLeft),
+                                                                        )
+                                                                      : NeumorphicIcon(
+                                                                          Icons
+                                                                              .today,
+                                                                          size:
+                                                                              25,
+                                                                          style: NeumorphicStyle(
+                                                                              shape: NeumorphicShape.convex,
+                                                                              depth: 2,
+                                                                              color: TextColor(),
+                                                                              lightSource: LightSource.topLeft),
+                                                                        ))),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              )
+                                            ],
                                           ),
-                                          const SizedBox(
-                                            height: 10,
-                                          )
-                                        ],
-                                      ),
-                                    ));
-                              });
+                                        ));
+                                  }));
                     } else if (snapshot.hasError) {
                       return Center(
                         child: NeumorphicText(
@@ -857,4 +965,44 @@ class _HomePageState extends State<HomePage> {
       children: [ADEvents(context)],
     );
   }
+}
+
+addcalendar(
+  BuildContext context,
+  FocusNode searchNode,
+  TextEditingController controller,
+  String username,
+  DateTime date,
+  String s,
+) {
+  Get.bottomSheet(
+          Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              height: 440,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  )),
+              child: GestureDetector(
+                  onTap: () {
+                    searchNode.unfocus();
+                  },
+                  child: SheetPageAC(
+                      context, searchNode, controller, username, date, s)),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          isScrollControlled: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+      .whenComplete(() {
+    controller.clear();
+    final cntget = Get.put(onequeform());
+    cntget.setcnt();
+    final spaceroomset = Get.put(SpaceShowRoom());
+    spaceroomset.onInit();
+  });
 }

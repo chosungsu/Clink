@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
@@ -12,9 +14,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../DB/Event.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../Tool/SheetGetx/SpaceShowRoom.dart';
 import '../../../Tool/SheetGetx/calendarthemesetting.dart';
 
 class DayContentHome extends StatefulWidget {
@@ -50,6 +54,9 @@ class _DayContentHomeState extends State<DayContentHome> {
     'id',
   );
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+  var _rangeStart = null;
+  var _rangeEnd = null;
 
   @override
   void didChangeDependencies() {
@@ -71,6 +78,15 @@ class _DayContentHomeState extends State<DayContentHome> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+  }
+
+  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
+    setState(() {
+      _focusedDay = focusedDay;
+      _rangeStart = start;
+      _rangeEnd = end;
+      _rangeSelectionMode = RangeSelectionMode.toggledOn;
+    });
   }
 
   @override
@@ -147,8 +163,44 @@ class _DayContentHomeState extends State<DayContentHome> {
         TableCalendar(
           locale: 'ko_KR',
           focusedDay: _focusedDay,
+          calendarBuilders: CalendarBuilders(dowBuilder: (context, day) {
+            if (day.weekday == DateTime.sunday) {
+              return Container(
+                height: 50,
+                child: Center(
+                  child: Text(DateFormat.E('ko_KR').format(day),
+                      style: TextStyle(color: Colors.red)),
+                ),
+              );
+            } else if (day.weekday == DateTime.saturday) {
+              return Container(
+                height: 50,
+                child: Center(
+                  child: Text(DateFormat.E('ko_KR').format(day),
+                      style: TextStyle(color: Colors.blue)),
+                ),
+              );
+            } else {
+              return Container(
+                height: 50,
+                child: Center(
+                  child: Text(DateFormat.E('ko_KR').format(day),
+                      style: TextStyle(color: TextColor())),
+                ),
+              );
+            }
+          }),
+          rangeStartDay: _rangeStart,
+          rangeEndDay: _rangeEnd,
+          rangeSelectionMode: _rangeSelectionMode,
+          onRangeSelected: _onRangeSelected,
           pageJumpingEnabled: false,
           shouldFillViewport: false,
+          rowHeight: 40,
+          weekendDays: [DateTime.saturday],
+          holidayPredicate: (day) {
+            return day.weekday == DateTime.sunday;
+          },
           firstDay: DateTime.utc(2000, 1, 1),
           lastDay: DateTime.utc(2100, 12, 31),
           calendarFormat: setcal_fromsheet == 0
@@ -164,6 +216,9 @@ class _DayContentHomeState extends State<DayContentHome> {
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
+              _rangeStart = null;
+              _rangeEnd = null;
+              _rangeSelectionMode = RangeSelectionMode.toggledOff;
             });
           },
           onPageChanged: (focusedDay) {
@@ -171,8 +226,11 @@ class _DayContentHomeState extends State<DayContentHome> {
           },
           startingDayOfWeek: StartingDayOfWeek.sunday,
           daysOfWeekVisible: true,
+          daysOfWeekHeight: 50,
           headerStyle: HeaderStyle(
               formatButtonVisible: false,
+              titleTextFormatter: (date, locale) =>
+                  DateFormat.yMMM(locale).format(date),
               leftChevronVisible: true,
               leftChevronPadding: const EdgeInsets.only(left: 10),
               leftChevronMargin: EdgeInsets.zero,
@@ -208,7 +266,8 @@ class _DayContentHomeState extends State<DayContentHome> {
                     onPressed: () {
                       Get.to(
                           () => DayScript(
-                                date: _selectedDay,
+                                firstdate: _rangeStart ?? _selectedDay,
+                                lastdate: _rangeEnd ?? _selectedDay,
                                 position: 'cal',
                                 title: widget.title,
                                 share: widget.share,
@@ -252,7 +311,7 @@ class _DayContentHomeState extends State<DayContentHome> {
               ),
               titleTextStyle: TextStyle(
                 color: TextColor(),
-                fontSize: 25,
+                fontSize: contentTitleTextsize(),
                 fontWeight: FontWeight.bold,
               ),
               titleCentered: false,
@@ -263,6 +322,9 @@ class _DayContentHomeState extends State<DayContentHome> {
                   color: Colors.orange, shape: BoxShape.circle),
               selectedTextStyle: TextStyle(color: TextColor()),
               defaultTextStyle: TextStyle(color: TextColor()),
+              holidayTextStyle: const TextStyle(color: Colors.red),
+              holidayDecoration:
+                  const BoxDecoration(shape: BoxShape.circle, border: Border()),
               weekendTextStyle: const TextStyle(color: Colors.blue)),
         ),
       ],
@@ -458,12 +520,14 @@ class _DayContentHomeState extends State<DayContentHome> {
                                       //수정 및 삭제 시트 띄우기
                                       Get.to(
                                           () => ClickShowEachCalendar(
-                                            start : snapshot.data!.docs[index]['Timestart'],
-                                            finish : snapshot.data!.docs[index]['Timefinish'],
-                                            calinfo : snapshot.data!.docs[index]['Daytodo'],
-                                            date: _selectedDay,
-                                            doc : widget.title
-                                              ),
+                                              start: snapshot.data!.docs[index]
+                                                  ['Timestart'],
+                                              finish: snapshot.data!.docs[index]
+                                                  ['Timefinish'],
+                                              calinfo: snapshot
+                                                  .data!.docs[index]['Daytodo'],
+                                              date: _selectedDay,
+                                              doc: widget.title),
                                           transition: Transition.downToUp);
                                     },
                                     child: Container(
