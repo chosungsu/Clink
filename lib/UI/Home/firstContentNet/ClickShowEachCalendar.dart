@@ -145,6 +145,43 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                 child: InkWell(
                                                     onTap: () {
                                                       //수정
+                                                      Flushbar(
+                                                        backgroundColor: Colors
+                                                            .green.shade400,
+                                                        titleText: Text(
+                                                            'Uploading...',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize:
+                                                                  contentTitleTextsize(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            )),
+                                                        messageText: Text(
+                                                            '잠시만 기다려주세요~',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            )),
+                                                        icon: const Icon(
+                                                          Icons.info_outline,
+                                                          size: 25.0,
+                                                          color: Colors.white,
+                                                        ),
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
+                                                        leftBarIndicatorColor:
+                                                            Colors
+                                                                .green.shade100,
+                                                      ).show(context);
                                                       firestore
                                                           .collection(
                                                               'CalendarDataBase')
@@ -223,7 +260,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                       }).whenComplete(() {
                                                         Future.delayed(
                                                             const Duration(
-                                                                seconds: 0),
+                                                                seconds: 2),
                                                             () {
                                                           Flushbar(
                                                             backgroundColor:
@@ -262,7 +299,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                             ),
                                                             duration:
                                                                 const Duration(
-                                                                    seconds: 1),
+                                                                    seconds: 2),
                                                             leftBarIndicatorColor:
                                                                 Colors.blue
                                                                     .shade100,
@@ -303,6 +340,43 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                 child: InkWell(
                                                     onTap: () {
                                                       //삭제
+                                                      Flushbar(
+                                                        backgroundColor: Colors
+                                                            .green.shade400,
+                                                        titleText: Text(
+                                                            'Uploading...',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize:
+                                                                  contentTitleTextsize(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            )),
+                                                        messageText: Text(
+                                                            '잠시만 기다려주세요~',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            )),
+                                                        icon: const Icon(
+                                                          Icons.info_outline,
+                                                          size: 25.0,
+                                                          color: Colors.white,
+                                                        ),
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
+                                                        leftBarIndicatorColor:
+                                                            Colors
+                                                                .green.shade100,
+                                                      ).show(context);
                                                       firestore
                                                           .collection(
                                                               'CalendarDataBase')
@@ -356,7 +430,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                       }).whenComplete(() {
                                                         Future.delayed(
                                                             const Duration(
-                                                                seconds: 0),
+                                                                seconds: 2),
                                                             () {
                                                           Flushbar(
                                                             backgroundColor:
@@ -395,7 +469,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                             ),
                                                             duration:
                                                                 const Duration(
-                                                                    seconds: 1),
+                                                                    seconds: 2),
                                                             leftBarIndicatorColor:
                                                                 Colors.blue
                                                                     .shade100,
