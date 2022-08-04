@@ -16,11 +16,6 @@ import '../UI/Setting/UserSettings.dart';
 import 'DrawerScreen.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage(
-      {Key? key, required this.colorbackground, required this.coloritems})
-      : super(key: key);
-  final Color colorbackground;
-  final Color coloritems;
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
 }
@@ -52,8 +47,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
@@ -156,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         padding: EdgeInsets.only(left: 20),
                         child: Text('',
                             style: TextStyle(
-                                color: widget.coloritems,
+                                color: TextColor(),
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold)),
                       )),

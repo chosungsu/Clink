@@ -1,31 +1,19 @@
 import 'package:clickbyme/Page/EnterCheckPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Analytics/EntercheckView.dart';
-import 'package:clickbyme/UI/Analytics/ShareView.dart';
 import 'package:clickbyme/UI/Analytics/ReportView.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
-import 'package:clickbyme/UI/Events/EnterCheckEvents.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/TopCard.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
-import 'package:clickbyme/route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/NoBehavior.dart';
 import 'DrawerScreen.dart';
 
 class AnalyticPage extends StatefulWidget {
-  const AnalyticPage(
-      {Key? key,required this.colorbackground,
-      required this.coloritems})
-      : super(key: key);
-  final Color colorbackground;
-  final Color coloritems;
   @override
   State<StatefulWidget> createState() => _AnalyticPageState();
 }
@@ -57,26 +45,28 @@ class _AnalyticPageState extends State<AnalyticPage>
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
-            body: navi == 0 ? 
-            (isdraweropen == true
-                ? Stack(
-                    children: [
-                      Container(
-                        width: 50,
-                        child: DrawerScreen(),
-                      ),
-                      AnalyticBody(context, _pController),
-                    ],
-                  ) : Stack(
-                    children: [
-                      AnalyticBody(context, _pController),
-                    ],
-                  )) : Stack(
+            body: navi == 0
+                ? (isdraweropen == true
+                    ? Stack(
+                        children: [
+                          Container(
+                            width: 50,
+                            child: DrawerScreen(),
+                          ),
+                          AnalyticBody(context, _pController),
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          AnalyticBody(context, _pController),
+                        ],
+                      ))
+                : Stack(
                     children: [
                       AnalyticBody(context, _pController),
                     ],
@@ -92,7 +82,7 @@ class _AnalyticPageState extends State<AnalyticPage>
       child: SizedBox(
         height: height,
         child: Container(
-          color: BGColor(),
+            color: BGColor(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -108,59 +98,63 @@ class _AnalyticPageState extends State<AnalyticPage>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const Padding(padding: EdgeInsets.only(left: 10)),
-                            navi == 0 ? SizedBox(
-                                width: 50,
-                                child: isdraweropen
-                                    ? InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            xoffset = 0;
-                                            yoffset = 0;
-                                            scalefactor = 1;
-                                            isdraweropen = false;
-                                          });
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.keyboard_arrow_left,
-                                            size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: TextColor(),
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                        ))
-                                    : InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            xoffset = 50;
-                                            yoffset = 0;
-                                            scalefactor = 1;
-                                            isdraweropen = true;
-                                          });
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.menu,
-                                            size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                surfaceIntensity: 0.5,
-                                                depth: 2,
-                                                color: TextColor(),
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                        ))) : const SizedBox(),
+                            navi == 0
+                                ? SizedBox(
+                                    width: 50,
+                                    child: isdraweropen
+                                        ? InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                xoffset = 0;
+                                                yoffset = 0;
+                                                scalefactor = 1;
+                                                isdraweropen = false;
+                                              });
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                              height: 30,
+                                              child: NeumorphicIcon(
+                                                Icons.keyboard_arrow_left,
+                                                size: 30,
+                                                style: NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    depth: 2,
+                                                    surfaceIntensity: 0.5,
+                                                    color: TextColor(),
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            ))
+                                        : InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                xoffset = 50;
+                                                yoffset = 0;
+                                                scalefactor = 1;
+                                                isdraweropen = true;
+                                              });
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                              height: 30,
+                                              child: NeumorphicIcon(
+                                                Icons.menu,
+                                                size: 30,
+                                                style: NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    surfaceIntensity: 0.5,
+                                                    depth: 2,
+                                                    color: TextColor(),
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            )))
+                                : const SizedBox(),
                             SizedBox(
                                 width: MediaQuery.of(context).size.width - 60,
                                 child: Padding(
@@ -170,14 +164,12 @@ class _AnalyticPageState extends State<AnalyticPage>
                                       children: [
                                         Flexible(
                                           fit: FlexFit.tight,
-                                          child: Text(
-                                            'Explore',
-                                            style: GoogleFonts.lobster(
+                                          child: Text('Explore',
+                                              style: GoogleFonts.lobster(
                                                 fontSize: 25,
                                                 color: TextColor(),
                                                 fontWeight: FontWeight.bold,
-                                              )
-                                          ),
+                                              )),
                                         ),
                                       ],
                                     ))),

@@ -248,56 +248,51 @@ class _DayScriptState extends State<DayScript> {
                                                       .toString()
                                                       .split(' ')[0] +
                                                   '일',
-                                            }).whenComplete(() {
-                                              Future.delayed(
-                                                  const Duration(seconds: 2),
-                                                  () {
-                                                Flushbar(
-                                                  backgroundColor:
-                                                      Colors.blue.shade400,
-                                                  titleText: Text('Notice',
+                                            });
+                                          }
+                                          Future.delayed(
+                                              const Duration(seconds: 2), () {
+                                            Flushbar(
+                                              backgroundColor:
+                                                  Colors.blue.shade400,
+                                              titleText: Text('Notice',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        contentTitleTextsize(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                              messageText: widget.position ==
+                                                      'cal'
+                                                  ? Text('일정이 정상적으로 추가되었습니다.',
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize:
-                                                            contentTitleTextsize(),
+                                                            contentTextsize(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ))
+                                                  : Text('메모가 정상적으로 추가되었습니다.',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            contentTextsize(),
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       )),
-                                                  messageText: widget
-                                                              .position ==
-                                                          'cal'
-                                                      ? Text(
-                                                          '일정이 정상적으로 추가되었습니다.',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize:
-                                                                contentTextsize(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ))
-                                                      : Text(
-                                                          '메모가 정상적으로 추가되었습니다.',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize:
-                                                                contentTextsize(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          )),
-                                                  icon: const Icon(
-                                                    Icons.info_outline,
-                                                    size: 25.0,
-                                                    color: Colors.white,
-                                                  ),
-                                                  duration: const Duration(
-                                                      seconds: 1),
-                                                  leftBarIndicatorColor:
-                                                      Colors.blue.shade100,
-                                                ).show(context).whenComplete(
-                                                    () => Get.back());
-                                              });
-                                            });
-                                          }
+                                              icon: const Icon(
+                                                Icons.info_outline,
+                                                size: 25.0,
+                                                color: Colors.white,
+                                              ),
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              leftBarIndicatorColor:
+                                                  Colors.blue.shade100,
+                                            )
+                                                .show(context)
+                                                .whenComplete(() => Get.back());
+                                          });
                                         } else {
                                           for (int j = 0;
                                               j < differ_list.length;
@@ -328,56 +323,51 @@ class _DayScriptState extends State<DayScript> {
                                                       .toString()
                                                       .split(' ')[0] +
                                                   '일',
-                                            }).whenComplete(() {
-                                              Future.delayed(
-                                                  const Duration(seconds: 0),
-                                                  () {
-                                                Flushbar(
-                                                  backgroundColor:
-                                                      Colors.blue.shade400,
-                                                  titleText: Text('Notice',
+                                            });
+                                          }
+                                          Future.delayed(
+                                              const Duration(seconds: 0), () {
+                                            Flushbar(
+                                              backgroundColor:
+                                                  Colors.blue.shade400,
+                                              titleText: Text('Notice',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        contentTitleTextsize(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                              messageText: widget.position ==
+                                                      'cal'
+                                                  ? Text('일정이 정상적으로 추가되었습니다.',
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize:
-                                                            contentTitleTextsize(),
+                                                            contentTextsize(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ))
+                                                  : Text('메모가 정상적으로 추가되었습니다.',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            contentTextsize(),
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       )),
-                                                  messageText: widget
-                                                              .position ==
-                                                          'cal'
-                                                      ? Text(
-                                                          '일정이 정상적으로 추가되었습니다.',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize:
-                                                                contentTextsize(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ))
-                                                      : Text(
-                                                          '메모가 정상적으로 추가되었습니다.',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize:
-                                                                contentTextsize(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          )),
-                                                  icon: const Icon(
-                                                    Icons.info_outline,
-                                                    size: 25.0,
-                                                    color: Colors.white,
-                                                  ),
-                                                  duration: const Duration(
-                                                      seconds: 2),
-                                                  leftBarIndicatorColor:
-                                                      Colors.blue.shade100,
-                                                ).show(context).whenComplete(
-                                                    () => Get.back());
-                                              });
-                                            });
-                                          }
+                                              icon: const Icon(
+                                                Icons.info_outline,
+                                                size: 25.0,
+                                                color: Colors.white,
+                                              ),
+                                              duration:
+                                                  const Duration(seconds: 2),
+                                              leftBarIndicatorColor:
+                                                  Colors.blue.shade100,
+                                            )
+                                                .show(context)
+                                                .whenComplete(() => Get.back());
+                                          });
                                         }
                                       } else if (widget.position == 'note') {
                                         Flushbar(

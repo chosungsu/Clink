@@ -93,12 +93,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   }
 
   Future<bool> _onWillPop() async {
-    Get.off(
-      () => const MyHomePage(
-        index: 0,
-      ),
-      transition: Transition.rightToLeft,
-    );
+    Get.back(result: true);
     return true;
   }
 
@@ -155,8 +150,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                       child: InkWell(
                                           onTap: () {
                                             setState(() {
-                                              //Navigator.pop(context);
-                                              Get.back();
+                                              Get.back(result: true);
                                             });
                                           },
                                           child: Container(

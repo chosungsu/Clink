@@ -41,12 +41,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
   }
 
   Future<bool> _onWillPop() async {
-    Get.off(
-      () => const MyHomePage(
-        index: 0,
-      ),
-      transition: Transition.rightToLeft,
-    );
+    Get.back(result: true);
     return true;
   }
 
@@ -84,8 +79,7 @@ class _ChangeSpaceState extends State<ChangeSpace> {
                         child: InkWell(
                             onTap: () {
                               setState(() {
-                                //Navigator.pop(context);
-                                Get.back();
+                                Get.back(result: true);
                               });
                             },
                             child: Container(

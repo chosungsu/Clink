@@ -38,10 +38,10 @@ class _MyHomePageState extends State<MyHomePage> {
         statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
-      HomePage(colorbackground: BGColor(), coloritems: TextColor()),
+      HomePage(),
       //FeedPage(),
-      AnalyticPage(colorbackground: BGColor(), coloritems: TextColor()),
-      ProfilePage(colorbackground: BGColor(), coloritems: TextColor()),
+      AnalyticPage(),
+      ProfilePage(),
     ];
 
     return Scaffold(
