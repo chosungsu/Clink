@@ -20,6 +20,7 @@ import 'package:hive_flutter/adapters.dart';
 import '../DB/SpaceContent.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/SheetGetx/SpaceShowRoom.dart';
+import '../Tool/ShimmerDesign/Shimmer_home.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/RoutineHome.dart';
 import '../sheets/addcalendar.dart';
@@ -67,56 +68,6 @@ class _HomePageState extends State<HomePage> {
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
-    firestore
-        .collection('CalendarDataBase')
-        .where('OriginalUser', isEqualTo: name)
-        .where('Date',
-            isEqualTo: Date.toString().split('-')[0] +
-                '-' +
-                Date.toString().split('-')[1] +
-                '-' +
-                Date.toString().split('-')[2].substring(0, 2) +
-                '일')
-        .get()
-        .then((value) {
-      content.clear();
-      value.docs.isEmpty
-          ? firestore
-              .collection('CalendarDataBase')
-              .where('Date',
-                  isEqualTo: Date.toString().split('-')[0] +
-                      '-' +
-                      Date.toString().split('-')[1] +
-                      '-' +
-                      Date.toString().split('-')[2].substring(0, 2) +
-                      '일')
-              .get()
-              .then(((value) {
-              value.docs.forEach((element) {
-                for (int i = 0; i < element['Shares'].length; i++) {
-                  if (element['Shares'][i].contains(name)) {
-                    if (int.parse(
-                            element['Timestart'].toString().substring(0, 2)) >=
-                        Date.hour) {
-                      content.add(SpaceContent(
-                          title: element['Daytodo'],
-                          date: element['Timestart'] +
-                              '-' +
-                              element['Timefinish']));
-                    }
-                  }
-                }
-              });
-            }))
-          : value.docs.forEach((element) {
-              if (int.parse(element['Timestart'].toString().substring(0, 2)) >=
-                  Date.hour) {
-                content.add(SpaceContent(
-                    title: element['Daytodo'],
-                    date: element['Timestart'] + '-' + element['Timefinish']));
-              }
-            });
-    });
   }
 
   @override
@@ -306,38 +257,6 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                             child: Column(
                               children: [
-                                /*FutureBuilder<List<TODO>>(
-                            future: homeasync(
-                                selectedDay), // a previously-obtained Future<String> or null
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<TODO>> snapshot) {
-                              if (snapshot.hasData &&
-                                  snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                return UserChoice(
-                                    context, snapshot.data!, pController);
-                              } else {
-                                return Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Neumorphic(
-                                        style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          border: const NeumorphicBorder.none(),
-                                          boxShape:
-                                              NeumorphicBoxShape.roundRect(
-                                                  BorderRadius.circular(5)),
-                                          depth: 5,
-                                          color: Colors.white,
-                                        ),
-                                        child: Shimmer_home(context))
-                                  ],
-                                );
-                              }
-                            },
-                          ),*/
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -361,8 +280,82 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_4(
-                                  height,
+                                FutureBuilder<void>(
+                                  future: firestore
+                                      .collection('CalendarDataBase')
+                                      .where('OriginalUser', isEqualTo: name)
+                                      .where('Date',
+                                          isEqualTo: Date.toString()
+                                                  .split('-')[0] +
+                                              '-' +
+                                              Date.toString().split('-')[1] +
+                                              '-' +
+                                              Date.toString()
+                                                  .split('-')[2]
+                                                  .substring(0, 2) +
+                                              '일')
+                                      .get()
+                                      .then((value) {
+                                    content.clear();
+                                    value.docs.isEmpty
+                                        ? firestore
+                                            .collection('CalendarDataBase')
+                                            .where('Date',
+                                                isEqualTo: Date.toString()
+                                                        .split('-')[0] +
+                                                    '-' +
+                                                    Date.toString()
+                                                        .split('-')[1] +
+                                                    '-' +
+                                                    Date.toString()
+                                                        .split('-')[2]
+                                                        .substring(0, 2) +
+                                                    '일')
+                                            .get()
+                                            .then(((value) {
+                                            value.docs.forEach((element) {
+                                              for (int i = 0;
+                                                  i < element['Shares'].length;
+                                                  i++) {
+                                                if (element['Shares'][i]
+                                                    .contains(name)) {
+                                                  if (int.parse(
+                                                          element['Timestart']
+                                                              .toString()
+                                                              .substring(
+                                                                  0, 2)) >=
+                                                      Date.hour) {
+                                                    content.add(SpaceContent(
+                                                        title:
+                                                            element['Daytodo'],
+                                                        date: element[
+                                                                'Timestart'] +
+                                                            '-' +
+                                                            element[
+                                                                'Timefinish']));
+                                                  }
+                                                }
+                                              }
+                                            });
+                                          }))
+                                        : value.docs.forEach((element) {
+                                            if (int.parse(element['Timestart']
+                                                    .toString()
+                                                    .substring(0, 2)) >=
+                                                Date.hour) {
+                                              content.add(SpaceContent(
+                                                  title: element['Daytodo'],
+                                                  date: element['Timestart'] +
+                                                      '-' +
+                                                      element['Timefinish']));
+                                            }
+                                          });
+                                  }), // a previously-obtained Future<String> or null
+                                  builder: (context, snapshot) {
+                                    return H_Container_4(
+                                      height,
+                                    );
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 50,

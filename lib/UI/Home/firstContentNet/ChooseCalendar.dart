@@ -17,6 +17,7 @@ import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/PeopleAdd.dart';
 import '../../../Tool/SheetGetx/SpaceShowRoom.dart';
 import '../../../route.dart';
+import '../../../sheets/settingChoiceC_Cards.dart';
 
 class ChooseCalendar extends StatefulWidget {
   @override
@@ -537,6 +538,51 @@ class _ChooseCalendarState extends State<ChooseCalendar>
       ],
     );
   }*/
+  settingCalendarHome(
+    int index,
+    doc_name,
+    doc_shares,
+    doc_change,
+  ) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        )),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.all(10),
+            child: Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Container(
+                  height: 280,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: SheetPageCC(context, doc_name, doc_shares, doc_change),
+                )),
+          );
+        }).whenComplete(() {
+      setState(() {
+        //setcal_fromsheet = controll_cals.showcalendar;
+        //themecal_fromsheet = controll_cals2.themecalendar;
+      });
+    });
+  }
 
   listy_My() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -570,12 +616,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                     ],
                   )
                 : ListView.builder(
-                    /*gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 1 / 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10),*/
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -617,6 +657,40 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                 TextColor()))),
                                                 child: Column(
                                                   children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        //카드별 설정 ex.공유자 권한설정
+                                                        settingCalendarHome(
+                                                          index,
+                                                          snapshot.data!
+                                                              .docs[index].id,
+                                                          snapshot.data!
+                                                                  .docs[index][
+                                                              'allowance_share'],
+                                                          snapshot.data!
+                                                                  .docs[index][
+                                                              'allowance_change_set'],
+                                                        );
+                                                      },
+                                                      child: NeumorphicIcon(
+                                                        Icons.settings,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
                                                     InkWell(
                                                       onTap: () {
                                                         //공유자 검색
@@ -667,6 +741,16 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                           .docs[
                                                                       index]
                                                                   ['madeUser'],
+                                                              allow_share: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index][
+                                                                  'allowance_share'],
+                                                              allow_change_set: snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index][
+                                                                  'allowance_change_set'],
                                                             ),
                                                             transition:
                                                                 Transition
@@ -1043,126 +1127,160 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                 TextColor()))),
                                                 child: Column(
                                                   children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        //공유자 검색
-                                                        Hive.box('user_setting').put(
-                                                            'share_cal_person',
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                ['share']);
+                                                    snapshot.data!.docs[index]
+                                                            ['allowance_share']
+                                                        ? InkWell(
+                                                            onTap: () {
+                                                              //공유자 검색
+                                                              Hive.box('user_setting').put(
+                                                                  'share_cal_person',
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'share']);
 
-                                                        Future.delayed(
-                                                            const Duration(
-                                                                seconds: 1),
-                                                            () {
-                                                          Get.to(
-                                                            () => PeopleGroup(
-                                                              doc: snapshot
-                                                                      .data!
-                                                                      .docs[
-                                                                  index]['doc'],
-                                                              when: snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index]
-                                                                  ['date'],
-                                                              type: snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index]
-                                                                  ['type'],
-                                                              color: snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index]
-                                                                  ['color'],
-                                                              nameid: snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index]
-                                                                  ['calname'],
-                                                              share: snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index]
-                                                                  ['share'],
-                                                              made: snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index]
-                                                                  ['madeUser'],
+                                                              Future.delayed(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          1),
+                                                                  () {
+                                                                Get.to(
+                                                                  () =>
+                                                                      PeopleGroup(
+                                                                    doc: snapshot
+                                                                            .data!
+                                                                            .docs[index]
+                                                                        ['doc'],
+                                                                    when: snapshot
+                                                                            .data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'date'],
+                                                                    type: snapshot
+                                                                            .data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'type'],
+                                                                    color: snapshot
+                                                                            .data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'color'],
+                                                                    nameid: snapshot
+                                                                            .data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'calname'],
+                                                                    share: snapshot
+                                                                            .data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'share'],
+                                                                    made: snapshot
+                                                                            .data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'madeUser'],
+                                                                    allow_share:
+                                                                        snapshot
+                                                                            .data!
+                                                                            .docs[index]['allowance_share'],
+                                                                    allow_change_set:
+                                                                        snapshot
+                                                                            .data!
+                                                                            .docs[index]['allowance_change_set'],
+                                                                  ),
+                                                                  transition:
+                                                                      Transition
+                                                                          .downToUp,
+                                                                );
+                                                              });
+                                                            },
+                                                            child:
+                                                                NeumorphicIcon(
+                                                              Icons.share,
+                                                              size: 30,
+                                                              style: NeumorphicStyle(
+                                                                  shape:
+                                                                      NeumorphicShape
+                                                                          .convex,
+                                                                  depth: 2,
+                                                                  surfaceIntensity:
+                                                                      0.5,
+                                                                  color:
+                                                                      TextColor(),
+                                                                  lightSource:
+                                                                      LightSource
+                                                                          .topLeft),
                                                             ),
-                                                            transition:
-                                                                Transition
-                                                                    .downToUp,
-                                                          );
-                                                        });
-                                                      },
-                                                      child: NeumorphicIcon(
-                                                        Icons.share,
-                                                        size: 30,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        //삭제 및 이름변경 띄우기
-                                                        controller =
-                                                            TextEditingController(
-                                                                text: snapshot
-                                                                        .data!
-                                                                        .docs[index]
-                                                                    [
-                                                                    'calname']);
-                                                        settingChoiceCal(
-                                                            context,
-                                                            controller,
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                ['doc'],
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                ['type'],
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                ['color'],
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                ['calname'],
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                ['madeUser']);
-                                                      },
-                                                      child: NeumorphicIcon(
-                                                        Icons.edit,
-                                                        size: 30,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    )
+                                                          )
+                                                        : const SizedBox(
+                                                            height: 0,
+                                                          ),
+                                                    snapshot.data!.docs[index]
+                                                            ['allowance_share']
+                                                        ? const SizedBox(
+                                                            height: 10,
+                                                          )
+                                                        : const SizedBox(
+                                                            height: 0,
+                                                          ),
+                                                    snapshot.data!.docs[index][
+                                                            'allowance_change_set']
+                                                        ? InkWell(
+                                                            onTap: () {
+                                                              //삭제 및 이름변경 띄우기
+                                                              controller = TextEditingController(
+                                                                  text: snapshot
+                                                                          .data!
+                                                                          .docs[index]
+                                                                      [
+                                                                      'calname']);
+                                                              settingChoiceCal(
+                                                                  context,
+                                                                  controller,
+                                                                  snapshot.data!
+                                                                          .docs[index]
+                                                                      ['doc'],
+                                                                  snapshot.data!
+                                                                          .docs[index]
+                                                                      ['type'],
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      ['color'],
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'calname'],
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      ['madeUser']);
+                                                            },
+                                                            child:
+                                                                NeumorphicIcon(
+                                                              Icons.edit,
+                                                              size: 30,
+                                                              style: NeumorphicStyle(
+                                                                  shape:
+                                                                      NeumorphicShape
+                                                                          .convex,
+                                                                  depth: 2,
+                                                                  surfaceIntensity:
+                                                                      0.5,
+                                                                  color:
+                                                                      TextColor(),
+                                                                  lightSource:
+                                                                      LightSource
+                                                                          .topLeft),
+                                                            ),
+                                                          )
+                                                        : const SizedBox(
+                                                            height: 0,
+                                                          )
                                                   ],
                                                 ))
                                           ],

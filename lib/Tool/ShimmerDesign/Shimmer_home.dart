@@ -9,36 +9,18 @@ Shimmer_home(BuildContext context) {
         baseColor: Colors.grey.shade400,
         highlightColor: Colors.grey.shade100,
         child: Container(
-          height: MediaQuery.of(context).size.height / 3.5 * 3,
+          height: 80 * 3,
           child: ListView.builder(
               itemCount: 3,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15),
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                   child: Container(
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          height: 20,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.grey.shade400
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height / 5.5,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.grey.shade400
-                          ),
-                        )
-                      ],
-                    ),
+                    height: 70,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.grey.shade400),
                   ),
                 );
               }),

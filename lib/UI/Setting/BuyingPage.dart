@@ -206,10 +206,15 @@ class _BuyingPageState extends State<BuyingPage> {
                             )),
                         Theme(
                             data: Theme.of(context).copyWith(
-                              unselectedWidgetColor: TextColor(),
+                              unselectedWidgetColor: BGColor(),
                             ),
                             child: Checkbox(
-                                activeColor: TextColor(),
+                                side: BorderSide(
+                                  // POINT
+                                  color: TextColor(),
+                                  width: 2.0,
+                                ),
+                                activeColor: BGColor(),
                                 checkColor: Colors.blue,
                                 value: isChecked,
                                 onChanged: (value) {
@@ -268,10 +273,11 @@ class _BuyingPageState extends State<BuyingPage> {
                                     Flexible(
                                       fit: FlexFit.tight,
                                       child: Text('광고 제거',
-                                        style: TextStyle(
-                                            color: TextColor(),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize())),)
+                                          style: TextStyle(
+                                              color: TextColor(),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize())),
+                                    )
                                   ],
                                 )
                               : (index == 1
@@ -279,7 +285,8 @@ class _BuyingPageState extends State<BuyingPage> {
                                       children: [
                                         SizedBox(
                                           width: 50,
-                                          child: Text((index + 1).toString() + '.',
+                                          child: Text(
+                                              (index + 1).toString() + '.',
                                               style: TextStyle(
                                                   color: TextColor(),
                                                   fontWeight: FontWeight.bold,
@@ -291,15 +298,16 @@ class _BuyingPageState extends State<BuyingPage> {
                                               style: TextStyle(
                                                   color: TextColor(),
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),)
-
+                                                  fontSize: contentTextsize())),
+                                        )
                                       ],
                                     )
                                   : Row(
                                       children: [
                                         SizedBox(
                                           width: 50,
-                                          child: Text((index + 1).toString() + '.',
+                                          child: Text(
+                                              (index + 1).toString() + '.',
                                               style: TextStyle(
                                                   color: TextColor(),
                                                   fontWeight: FontWeight.bold,
@@ -311,8 +319,8 @@ class _BuyingPageState extends State<BuyingPage> {
                                               style: TextStyle(
                                                   color: TextColor(),
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),)
-
+                                                  fontSize: contentTextsize())),
+                                        )
                                       ],
                                     ))
                         ],
@@ -321,8 +329,8 @@ class _BuyingPageState extends State<BuyingPage> {
                     separatorBuilder: (BuildContext context, int index) =>
                         Divider(
                       color: TextColor(),
-                          height: 10,
-                          thickness: 3,
+                      height: 10,
+                      thickness: 3,
                     ),
                   ),
                 ),
@@ -339,11 +347,7 @@ class _BuyingPageState extends State<BuyingPage> {
         children: [
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: BGColor(),
-                side: BorderSide(
-                  color: TextColor()
-                )
-              ),
+                  primary: BGColor(), side: BorderSide(color: TextColor())),
               onPressed: () {},
               child: Center(
                 child: Column(
