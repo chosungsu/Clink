@@ -67,6 +67,56 @@ class _HomePageState extends State<HomePage> {
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
+    firestore
+        .collection('CalendarDataBase')
+        .where('OriginalUser', isEqualTo: name)
+        .where('Date',
+            isEqualTo: Date.toString().split('-')[0] +
+                '-' +
+                Date.toString().split('-')[1] +
+                '-' +
+                Date.toString().split('-')[2].substring(0, 2) +
+                '일')
+        .get()
+        .then((value) {
+      content.clear();
+      value.docs.isEmpty
+          ? firestore
+              .collection('CalendarDataBase')
+              .where('Date',
+                  isEqualTo: Date.toString().split('-')[0] +
+                      '-' +
+                      Date.toString().split('-')[1] +
+                      '-' +
+                      Date.toString().split('-')[2].substring(0, 2) +
+                      '일')
+              .get()
+              .then(((value) {
+              value.docs.forEach((element) {
+                for (int i = 0; i < element['Shares'].length; i++) {
+                  if (element['Shares'][i].contains(name)) {
+                    if (int.parse(
+                            element['Timestart'].toString().substring(0, 2)) >=
+                        Date.hour) {
+                      content.add(SpaceContent(
+                          title: element['Daytodo'],
+                          date: element['Timestart'] +
+                              '-' +
+                              element['Timefinish']));
+                    }
+                  }
+                }
+              });
+            }))
+          : value.docs.forEach((element) {
+              if (int.parse(element['Timestart'].toString().substring(0, 2)) >=
+                  Date.hour) {
+                content.add(SpaceContent(
+                    title: element['Daytodo'],
+                    date: element['Timestart'] + '-' + element['Timefinish']));
+              }
+            });
+    });
   }
 
   @override

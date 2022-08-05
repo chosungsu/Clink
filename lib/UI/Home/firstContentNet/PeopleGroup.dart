@@ -1,16 +1,17 @@
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/PeopleAdd.dart';
 import '../../../Tool/TextSize.dart';
+import 'package:contacts_service/contacts_service.dart';
 import '../../../sheets/addgroupmember.dart';
 
 class PeopleGroup extends StatefulWidget {
@@ -45,12 +46,15 @@ class _PeopleGroupState extends State<PeopleGroup> {
   String username = Hive.box('user_info').get(
     'id',
   );
+  bool iscontactyes = false;
   List updateid = [];
   List deleteid = [];
   List<bool> isselected = List.filled(10000, false, growable: true);
   List<String> list_sp = [];
   final cal_share_person = Get.put(PeopleAdd());
   List listselected_sp = [];
+  var contacts;
+  List usercontactlist = [];
 
   @override
   void didChangeDependencies() {
@@ -64,7 +68,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
     _controller = TextEditingController();
     cal_share_person.peoplecalendar();
     listselected_sp = cal_share_person.people;
-    ;
+    ContactsPermissionIsGranted();
   }
 
   @override
@@ -80,6 +84,59 @@ class _PeopleGroupState extends State<PeopleGroup> {
         child: Scaffold(
       body: UI(),
     ));
+  }
+
+  Future<bool> ContactsPermissionIsGranted() async {
+    var _status = await Permission.contacts.status.isGranted;
+    iscontactyes = _status;
+    contacts = ContactsService.getContacts();
+    setState(() {
+      usercontactlist = contacts;
+    });
+    return _status;
+  }
+
+  checkPermissions() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+              "알림",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.w600, // bold
+              ),
+            ),
+            content: const Text(
+              "[설정] > [권한 설정]에서 연락처 읽기 권한설정을 확인해주세요.",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 15,
+                fontWeight: FontWeight.w600, // bold
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text("바로승인"),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await [Permission.contacts].request();
+                  ContactsPermissionIsGranted();
+                },
+              ),
+              TextButton(
+                child: Text("설정변경"),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await openAppSettings();
+                  ContactsPermissionIsGranted();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   UI() {
@@ -176,6 +233,37 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                                                     .topLeft),
                                                       ),
                                                     ))),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            SizedBox(
+                                                width: 30,
+                                                child: InkWell(
+                                                    onTap: () {
+                                                      //공유자에게 어느 권한까지 줄지 결정
+                                                      checkPermissions();
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons.manage_accounts,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    ))),
                                           ],
                                         ))),
                               ],
@@ -203,7 +291,9 @@ class _PeopleGroupState extends State<PeopleGroup> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Content(),
+                              iscontactyes
+                                  ? Content_contact_user()
+                                  : Content_real_user(),
                               const SizedBox(
                                 height: 50,
                               )
@@ -222,7 +312,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
     return SizedBox(
         height: 50,
         child: Text(
-          '목록',
+          '아래 목록에서 공유자를 선택해보세요',
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: contentTitleTextsize(),
@@ -230,7 +320,389 @@ class _PeopleGroupState extends State<PeopleGroup> {
         ));
   }
 
-  Content() {
+  Content_contact_user() {
+    return StatefulBuilder(builder: (_, StateSetter setState) {
+      return Column(
+        children: [
+          ListView.builder(
+              // the number of items in the list
+              itemCount: usercontactlist.length,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              // display each item of the product list
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    radius: 25,
+                  ),
+                  title: Text(usercontactlist[index].displayName),
+                );
+              }),
+          SizedBox(
+              height: 50,
+              width: (MediaQuery.of(context).size.width - 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: ButtonColor(),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _controller.clear();
+                          Hive.box('user_setting')
+                              .put('share_cal_person', listselected_sp);
+                          cal_share_person.peoplecalendar();
+                          listselected_sp = cal_share_person.people;
+                          firestore
+                              .collection('CalendarSheetHome')
+                              .doc(widget.doc)
+                              .update({
+                            'calname': _controller.text.isEmpty
+                                ? widget.nameid
+                                : _controller.text,
+                            'madeUser': widget.made,
+                            'type': widget.type,
+                            'color': widget.color,
+                            'share': listselected_sp,
+                          }).whenComplete(() {
+                            firestore
+                                .collection('CalendarDataBase')
+                                .where('calname', isEqualTo: widget.doc)
+                                .get()
+                                .then((value) {
+                              updateid.clear();
+                              value.docs.forEach((element) {
+                                updateid.add(element.id);
+                              });
+                              for (int i = 0; i < updateid.length; i++) {
+                                firestore
+                                    .collection('CalendarDataBase')
+                                    .doc(updateid[i])
+                                    .update({
+                                  'Shares': listselected_sp,
+                                });
+                              }
+                            }).whenComplete(() {
+                              if (widget.share.isNotEmpty) {
+                                /*deleteid.clear();
+                                if (listselected_sp.length >
+                                    widget.share.length) {
+                                  for (int i = 0;
+                                      i < listselected_sp.length;
+                                      i++) {
+                                    deleteid.add(listselected_sp
+                                        .where((element) =>
+                                            element != widget.share[i])
+                                        .toSet());
+                                  }
+                                } else {
+                                  for (int i = 0;
+                                      i < widget.share.length;
+                                      i++) {
+                                    deleteid.add(widget.share
+                                        .where((element) =>
+                                            element != listselected_sp[i])
+                                        .toSet());
+                                  }
+                                }
+                                print(deleteid.length);*/
+                                firestore
+                                    .collection('ShareHome')
+                                    .where('doc', isEqualTo: widget.doc)
+                                    .get()
+                                    .then((value) {
+                                  deleteid.clear();
+                                  value.docs.forEach((element) {
+                                    deleteid.add(element.id);
+                                  });
+                                  for (int i = 0; i < updateid.length; i++) {
+                                    firestore
+                                        .collection('ShareHome')
+                                        .doc(deleteid[i])
+                                        .delete();
+                                  }
+                                }).whenComplete(() {
+                                  for (int i = 0;
+                                      i < listselected_sp.length;
+                                      i++) {
+                                    firestore
+                                        .collection('ShareHome')
+                                        .doc(widget.doc +
+                                            '-' +
+                                            widget.made +
+                                            '-' +
+                                            listselected_sp[i])
+                                        .get()
+                                        .then((value) {
+                                      if (value.data() == null) {
+                                        firestore
+                                            .collection('ShareHome')
+                                            .doc(widget.doc +
+                                                '-' +
+                                                widget.made +
+                                                '-' +
+                                                listselected_sp[i])
+                                            .set({
+                                          'calname': widget.nameid,
+                                          'madeUser': widget.made,
+                                          'showingUser': listselected_sp[i],
+                                          'type': widget.type,
+                                          'color': widget.color,
+                                          'share': listselected_sp,
+                                          'doc': widget.doc,
+                                          'date': widget.when
+                                        });
+                                      } else {
+                                        firestore
+                                            .collection('ShareHome')
+                                            .doc(widget.doc +
+                                                '-' +
+                                                widget.made +
+                                                '-' +
+                                                widget.share[i])
+                                            .update({
+                                          'calname': widget.nameid,
+                                          'madeUser': widget.made,
+                                          'type': widget.type,
+                                          'color': widget.color,
+                                          'share': listselected_sp,
+                                          'doc': widget.doc,
+                                          'date': widget.when
+                                        });
+                                      }
+                                    });
+                                  }
+                                  Flushbar(
+                                    backgroundColor: Colors.blue.shade400,
+                                    titleText: Text('Notice',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: contentTitleTextsize(),
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    messageText: Text('변경사항이 정상적으로 저장되었습니다.',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: contentTextsize(),
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    icon: const Icon(
+                                      Icons.info_outline,
+                                      size: 25.0,
+                                      color: Colors.white,
+                                    ),
+                                    duration: const Duration(seconds: 1),
+                                    leftBarIndicatorColor: Colors.blue.shade100,
+                                  )
+                                      .show(context)
+                                      .whenComplete(() => Get.back());
+                                });
+                              } else {
+                                for (int i = 0;
+                                    i < listselected_sp.length;
+                                    i++) {
+                                  firestore
+                                      .collection('ShareHome')
+                                      .doc(widget.doc +
+                                          '-' +
+                                          widget.made +
+                                          '-' +
+                                          listselected_sp[i])
+                                      .get()
+                                      .then((value) {
+                                    if (value.data() == null) {
+                                      firestore
+                                          .collection('ShareHome')
+                                          .doc(widget.doc +
+                                              '-' +
+                                              widget.made +
+                                              '-' +
+                                              listselected_sp[i])
+                                          .set({
+                                        'calname': widget.nameid,
+                                        'madeUser': widget.made,
+                                        'showingUser': listselected_sp[i],
+                                        'type': widget.type,
+                                        'color': widget.color,
+                                        'share': listselected_sp,
+                                        'doc': widget.doc,
+                                        'date': widget.when
+                                      });
+                                    } else {
+                                      firestore
+                                          .collection('ShareHome')
+                                          .doc(widget.doc +
+                                              '-' +
+                                              widget.made +
+                                              '-' +
+                                              widget.share[i])
+                                          .update({
+                                        'calname': widget.nameid,
+                                        'madeUser': widget.made,
+                                        'type': widget.type,
+                                        'color': widget.color,
+                                        'share': listselected_sp,
+                                        'doc': widget.doc,
+                                        'date': widget.when
+                                      });
+                                    }
+                                  });
+                                }
+                                Flushbar(
+                                  backgroundColor: Colors.blue.shade400,
+                                  titleText: Text('Notice',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: contentTitleTextsize(),
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  messageText: Text('변경사항이 정상적으로 저장되었습니다.',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: contentTextsize(),
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  icon: const Icon(
+                                    Icons.info_outline,
+                                    size: 25.0,
+                                    color: Colors.white,
+                                  ),
+                                  duration: const Duration(seconds: 1),
+                                  leftBarIndicatorColor: Colors.blue.shade100,
+                                ).show(context).whenComplete(() => Get.back());
+                              }
+
+                              /*if (listselected_sp.isNotEmpty) {
+                                for (int i = 0;
+                                    i < widget.share.length;
+                                    i++) {
+                                  firestore
+                                      .collection('ShareHome')
+                                      .doc(widget.doc +
+                                          '-' +
+                                          widget.made +
+                                          '-' +
+                                          widget.share[i])
+                                      .get()
+                                      .then((value) {
+                                    if (value.data() == null) {
+                                      firestore
+                                          .collection('ShareHome')
+                                          .doc(widget.doc +
+                                              '-' +
+                                              widget.made +
+                                              '-' +
+                                              widget.share[i])
+                                          .set({
+                                        'calname': widget.nameid,
+                                        'madeUser': widget.made,
+                                        'showingUser': listselected_sp[i],
+                                        'type': widget.type,
+                                        'color': widget.color,
+                                        'share': listselected_sp,
+                                        'doc': widget.doc,
+                                        'date': widget.when
+                                      });
+                                    } else {
+                                      firestore
+                                          .collection('ShareHome')
+                                          .doc(widget.doc +
+                                              '-' +
+                                              widget.made +
+                                              '-' +
+                                              widget.share[i])
+                                          .update({
+                                        'calname': widget.nameid,
+                                        'madeUser': widget.made,
+                                        'showingUser': widget.share[i],
+                                        'type': widget.type,
+                                        'color': widget.color,
+                                        'share': widget.share,
+                                        'doc': widget.doc,
+                                        'date': widget.when
+                                      });
+                                    }
+                                  }).whenComplete(() {
+                                    Flushbar(
+                                      backgroundColor: Colors.blue.shade400,
+                                      titleText: Text('Notice',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: contentTitleTextsize(),
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      messageText: Text('변경사항이 정상적으로 저장되었습니다.',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: contentTextsize(),
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      icon: const Icon(
+                                        Icons.info_outline,
+                                        size: 25.0,
+                                        color: Colors.white,
+                                      ),
+                                      duration: const Duration(seconds: 1),
+                                      leftBarIndicatorColor:
+                                          Colors.blue.shade100,
+                                    )
+                                        .show(context)
+                                        .whenComplete(() => Get.back());
+                                  });
+                                }
+                              } else {
+                                for (int i = 0;
+                                    i < listselected_sp.length;
+                                    i++) {
+                                  firestore
+                                      .collection('ShareHome')
+                                      .doc(widget.doc +
+                                              '-' +
+                                              widget.made +
+                                              '-' +
+                                              widget.share[i])
+                                      .delete();
+                                }
+                              }*/
+                            });
+                          });
+                        });
+                      },
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: NeumorphicText(
+                                '선택완료',
+                                style: const NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: Colors.white,
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize(),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ))
+                ],
+              ))
+        ],
+      );
+    });
+  }
+
+  Content_real_user() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return Column(
         children: [

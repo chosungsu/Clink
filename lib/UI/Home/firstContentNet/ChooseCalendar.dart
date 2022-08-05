@@ -68,7 +68,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
-          if (_scrollController.offset >= 20) {
+          if (_scrollController.offset >= 150) {
             _showBackToTopButton = true; // show the back-to-top button
           } else {
             _showBackToTopButton = false; // hide the back-to-top button

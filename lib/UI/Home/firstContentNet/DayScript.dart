@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import '../../../DB/ChipList.dart';
+import '../../../DB/Event.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
 
@@ -43,7 +43,7 @@ class _DayScriptState extends State<DayScript> {
   String username = Hive.box('user_info').get(
     'id',
   );
-  List<ChipList> list_sp = [];
+  late Map<DateTime, List<Event>> _events;
   static final cal_share_person = Get.put(PeopleAdd());
   List finallist = cal_share_person.people;
   final searchNode = FocusNode();
@@ -71,6 +71,7 @@ class _DayScriptState extends State<DayScript> {
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
+    _events = {};
     widget.lastdate != widget.firstdate
         ? differ_date = int.parse(widget.lastdate
             .difference(DateTime.parse(widget.firstdate.toString()))
@@ -107,12 +108,12 @@ class _DayScriptState extends State<DayScript> {
         onTap: () {
           searchNode.unfocus();
         },
-        child: UI(list_sp),
+        child: UI(),
       ),
     ));
   }
 
-  UI(List<ChipList> list_sp) {
+  UI() {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,

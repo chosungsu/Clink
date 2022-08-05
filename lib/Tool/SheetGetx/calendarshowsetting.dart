@@ -8,11 +8,13 @@ class calendarshowsetting extends GetxController {
     update();
     notifyChildrens();
   }
+
   void setcals2w() {
     showcalendar = 1;
     update();
     notifyChildrens();
   }
+
   void setcals1m() {
     showcalendar = 2;
     update();
