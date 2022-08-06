@@ -221,7 +221,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   S_Container3(double height) {
     return SizedBox(
-      height: 500,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

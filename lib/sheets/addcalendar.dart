@@ -95,10 +95,6 @@ content(
     '메모',
     '루틴',
   ];
-  final cntget = Get.put(onequeform());
-  cntget.setcnt();
-  //cntget.setresetcnt();
-  int cnt = cntget.cnt;
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -589,76 +585,33 @@ content(
                     duration: const Duration(seconds: 2),
                     leftBarIndicatorColor: Colors.blue.shade100,
                   ).show(context).whenComplete(() {
-                    if (s == 'home') {
-                      setState(() {
-                        cntget.minuscnt();
-                        cnt = cntget.cnt;
-                      });
-                    }
+                    //전면광고띄우기
                     Get.back();
                   });
                 }
               },
-              child: s != 'home'
-                  ? Center(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: NeumorphicText(
-                              '생성하기',
-                              style: const NeumorphicStyle(
-                                shape: NeumorphicShape.flat,
-                                depth: 3,
-                                color: Colors.white,
-                              ),
-                              textStyle: NeumorphicTextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize(),
-                              ),
-                            ),
-                          ),
-                        ],
+              child: Center(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: NeumorphicText(
+                        '생성하기',
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: Colors.white,
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                        ),
                       ),
-                    )
-                  : Center(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: NeumorphicText(
-                              '생성하기',
-                              style: const NeumorphicStyle(
-                                shape: NeumorphicShape.flat,
-                                depth: 3,
-                                color: Colors.white,
-                              ),
-                              textStyle: NeumorphicTextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize(),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          NeumorphicText(
-                            '(횟수제한 : ' + cnt.toString() + '/5)',
-                            style: const NeumorphicStyle(
-                              shape: NeumorphicShape.flat,
-                              depth: 3,
-                              color: Colors.white,
-                            ),
-                            textStyle: NeumorphicTextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
+                    ),
+                  ],
+                ),
+              )),
         ),
       ],
     );

@@ -20,7 +20,6 @@ class UserSettings extends StatelessWidget {
   final List<String> list_title = <String>[
     '도움 & 문의',
     '설정값 변경',
-    '구매하기',
     '친구 초대하기',
     '로그인',
   ];
@@ -30,13 +29,12 @@ class UserSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height:
-          list_title.isNotEmpty ? 100 * list_title.length.toDouble() : (200),
       width: MediaQuery.of(context).size.width - 40,
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           itemCount: list_title.length,
+          shrinkWrap: true,
           itemBuilder: (context, index) {
             return GestureDetector(
                 onTap: () {
@@ -59,20 +57,10 @@ class UserSettings extends StatelessWidget {
                           Get.to(() => OptionChangePage(),
                               transition: Transition.rightToLeft)
                           : (index == 2
-                              ? /*Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      child: BuyingPage()),
-                                )*/
-                              Get.to(() => BuyingPage(),
-                                  transition: Transition.fadeIn)
-                              : (index == 3
-                                  ? addgroupmember(
-                                      context, searchNode, controller)
-                                  : (index == 4 && name == null
-                                      ? GoToLogin(context)
-                                      : DeleteUserVerify(context, name)))));
+                              ? addgroupmember(context, searchNode, controller)
+                              : (index == 3 && name == null
+                                  ? GoToLogin(context)
+                                  : DeleteUserVerify(context, name))));
                 },
                 child: Column(
                   children: [
@@ -92,7 +80,7 @@ class UserSettings extends StatelessWidget {
                                 fit: FlexFit.tight,
                                 child: Text(
                                     Hive.box('user_info').get('id') != null &&
-                                            index == 4
+                                            index == 3
                                         ? '회원탈퇴'
                                         : list_title[index],
                                     style: TextStyle(

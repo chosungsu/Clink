@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:clickbyme/LocalNotiPlatform/localnotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/SheetGetx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -12,6 +13,7 @@ import 'package:intl/intl.dart';
 import '../../../DB/Event.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../sheets/addmemocollection.dart';
 
 class DayScript extends StatefulWidget {
   DayScript(
@@ -46,11 +48,15 @@ class _DayScriptState extends State<DayScript> {
   late Map<DateTime, List<Event>> _events;
   static final cal_share_person = Get.put(PeopleAdd());
   List finallist = cal_share_person.people;
-  final searchNode = FocusNode();
+  final searchNode_first_section = FocusNode();
+  final searchNode_second_section = FocusNode();
+  final searchNode_third_section = FocusNode();
+  final searchNode_add_section = FocusNode();
   late TextEditingController controllername;
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
+  late TextEditingController textEditingController_add_sheet;
   String selectedValue = '선택없음';
   bool isChecked_pushalarm = false;
   int differ_date = 0;
@@ -71,6 +77,7 @@ class _DayScriptState extends State<DayScript> {
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
+    textEditingController_add_sheet = TextEditingController();
     _events = {};
     widget.lastdate != widget.firstdate
         ? differ_date = int.parse(widget.lastdate
@@ -83,10 +90,6 @@ class _DayScriptState extends State<DayScript> {
           widget.firstdate.day + i));
     }
     selectedValue = Hive.box('user_setting').get('alarming_time') ?? '5분 전';
-    Hive.box('user_setting').get('isChecked_alarming') == null
-        ? isChecked_pushalarm = false
-        : isChecked_pushalarm =
-            Hive.box('user_setting').get('isChecked_alarming');
   }
 
   @override
@@ -97,6 +100,7 @@ class _DayScriptState extends State<DayScript> {
     textEditingController1.dispose();
     textEditingController2.dispose();
     textEditingController3.dispose();
+    textEditingController_add_sheet.dispose();
   }
 
   @override
@@ -106,7 +110,9 @@ class _DayScriptState extends State<DayScript> {
       backgroundColor: BGColor(),
       body: GestureDetector(
         onTap: () {
-          searchNode.unfocus();
+          searchNode_first_section.unfocus();
+          searchNode_second_section.unfocus();
+          searchNode_third_section.unfocus();
         },
         child: UI(),
       ),
@@ -187,12 +193,13 @@ class _DayScriptState extends State<DayScript> {
                         SizedBox(
                             width: 50,
                             child: InkWell(
-                                onTap: () {
+                                onTap: () async {
                                   if (textEditingController1.text.isNotEmpty) {
                                     if (textEditingController2
                                             .text.isNotEmpty ||
                                         textEditingController3
                                             .text.isNotEmpty) {
+                                      await localnotification.notishow();
                                       if (widget.position == 'cal') {
                                         Flushbar(
                                           backgroundColor:
@@ -228,6 +235,12 @@ class _DayScriptState extends State<DayScript> {
                                                 .add({
                                               'Daytodo':
                                                   textEditingController1.text,
+                                              'Alarm':
+                                                  isChecked_pushalarm == true
+                                                      ? Hive.box('user_setting')
+                                                          .put('alarming_time',
+                                                              selectedValue)
+                                                      : '설정off',
                                               'Timestart':
                                                   textEditingController2.text
                                                               .split(':')[0]
@@ -295,37 +308,36 @@ class _DayScriptState extends State<DayScript> {
                                                 .whenComplete(() => Get.back());
                                           });
                                         } else {
-                                          for (int j = 0;
-                                              j < differ_list.length;
-                                              j++) {
-                                            firestore
-                                                .collection('CalendarDataBase')
-                                                .add({
-                                              'Daytodo':
-                                                  textEditingController1.text,
-                                              'Timestart':
-                                                  textEditingController2.text
-                                                              .split(':')[0]
-                                                              .length ==
-                                                          1
-                                                      ? '0' +
-                                                          textEditingController2
-                                                              .text
-                                                      : textEditingController2
-                                                          .text,
-                                              'Timefinish':
-                                                  textEditingController3.text,
-                                              'Shares': widget.share,
-                                              'OriginalUser': widget.orig,
-                                              'calname': widget.title,
-                                              'Date': DateFormat('yyyy-MM-dd')
-                                                      .parse(widget.firstdate
-                                                          .toString())
-                                                      .toString()
-                                                      .split(' ')[0] +
-                                                  '일',
-                                            });
-                                          }
+                                          firestore
+                                              .collection('CalendarDataBase')
+                                              .add({
+                                            'Daytodo':
+                                                textEditingController1.text,
+                                            'Alarm': isChecked_pushalarm == true
+                                                ? Hive.box('user_setting').put(
+                                                    'alarming_time',
+                                                    selectedValue)
+                                                : '설정off',
+                                            'Timestart': textEditingController2
+                                                        .text
+                                                        .split(':')[0]
+                                                        .length ==
+                                                    1
+                                                ? '0' +
+                                                    textEditingController2.text
+                                                : textEditingController2.text,
+                                            'Timefinish':
+                                                textEditingController3.text,
+                                            'Shares': widget.share,
+                                            'OriginalUser': widget.orig,
+                                            'calname': widget.title,
+                                            'Date': DateFormat('yyyy-MM-dd')
+                                                    .parse(widget.firstdate
+                                                        .toString())
+                                                    .toString()
+                                                    .split(' ')[0] +
+                                                '일',
+                                          });
                                           Future.delayed(
                                               const Duration(seconds: 0), () {
                                             Flushbar(
@@ -734,6 +746,22 @@ class _DayScriptState extends State<DayScript> {
                 )));
   }
 
+  List<DropdownMenuItem<String>> get dropdownItems_memo_collections {
+    firestore
+        .collection('MemoCollections')
+        .where('name', isEqualTo: username)
+        .get()
+        .then((value) {});
+    List<DropdownMenuItem<String>> collectionItems = [
+      const DropdownMenuItem(
+          child: Text("메모가 저장될 MY컬렉션을 지정해주세요"), value: 'first_open'),
+      const DropdownMenuItem(child: Text("5분 전"), value: "5분 전"),
+      const DropdownMenuItem(child: Text("10분 전"), value: "10분 전"),
+      const DropdownMenuItem(child: Text("30분 전"), value: "30분 전"),
+    ];
+    return collectionItems;
+  }
+
   Title() {
     return widget.position == 'cal'
         ? SizedBox(
@@ -741,7 +769,7 @@ class _DayScriptState extends State<DayScript> {
             child: TextField(
               minLines: 1,
               maxLines: 3,
-              focusNode: searchNode,
+              focusNode: searchNode_first_section,
               style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -755,7 +783,7 @@ class _DayScriptState extends State<DayScript> {
           )
         : (widget.position == 'note'
             ? SizedBox(
-                height: 210,
+                height: 360,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -764,7 +792,7 @@ class _DayScriptState extends State<DayScript> {
                       child: TextField(
                         minLines: 1,
                         maxLines: 3,
-                        focusNode: searchNode,
+                        focusNode: searchNode_first_section,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(
@@ -777,6 +805,81 @@ class _DayScriptState extends State<DayScript> {
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
                         controller: textEditingController1,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                        height: 30,
+                        child: Row(
+                          children: [
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: Text(
+                                '컬렉션 선택',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize(),
+                                    color: TextColor()),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                addmemocollector(
+                                    context,
+                                    username,
+                                    textEditingController_add_sheet,
+                                    searchNode_add_section);
+                              },
+                              child: NeumorphicIcon(
+                                Icons.add,
+                                size: 30,
+                                style: NeumorphicStyle(
+                                    shape: NeumorphicShape.convex,
+                                    depth: 2,
+                                    surfaceIntensity: 0.5,
+                                    color: TextColor(),
+                                    lightSource: LightSource.topLeft),
+                              ),
+                            )
+                          ],
+                        )),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: Text(
+                        '+아이콘으로 MY컬렉션을 추가 및 지정해주세요',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.blue),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: TextField(
+                        minLines: 1,
+                        maxLines: 1,
+                        readOnly: true,
+                        focusNode: searchNode_second_section,
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                            fontSize: contentTextsize(), color: TextColor()),
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          hintText: '지정된 컬렉션이 현재 없습니다!',
+                          hintStyle: TextStyle(
+                              fontSize: contentTextsize(), color: TextColor()),
+                        ),
+                        controller: textEditingController2,
                       ),
                     ),
                     const SizedBox(
@@ -800,7 +903,7 @@ class _DayScriptState extends State<DayScript> {
                       child: TextField(
                         minLines: 1,
                         maxLines: 10,
-                        focusNode: searchNode,
+                        focusNode: searchNode_third_section,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(
@@ -827,7 +930,7 @@ class _DayScriptState extends State<DayScript> {
                       child: TextField(
                         minLines: 1,
                         maxLines: 3,
-                        focusNode: searchNode,
+                        focusNode: searchNode_first_section,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(fontSize: 20, color: TextColor()),
@@ -862,7 +965,7 @@ class _DayScriptState extends State<DayScript> {
                       child: TextField(
                         minLines: 1,
                         maxLines: 3,
-                        focusNode: searchNode,
+                        focusNode: searchNode_first_section,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(fontSize: 20, color: TextColor()),
@@ -1483,8 +1586,6 @@ class _DayScriptState extends State<DayScript> {
                       onChanged: (bool val) {
                         setState(() {
                           isChecked_pushalarm = val;
-                          Hive.box('user_setting')
-                              .put('isChecked_alarming', isChecked_pushalarm);
                         });
                       }),
                 )
@@ -1493,7 +1594,7 @@ class _DayScriptState extends State<DayScript> {
         : const SizedBox();
   }
 
-  List<DropdownMenuItem<String>> get dropdownItems {
+  List<DropdownMenuItem<String>> get dropdownItems_alarm {
     List<DropdownMenuItem<String>> menuItems = [
       const DropdownMenuItem(child: Text("1분 전"), value: "1분 전"),
       const DropdownMenuItem(child: Text("5분 전"), value: "5분 전"),
@@ -1535,7 +1636,7 @@ class _DayScriptState extends State<DayScript> {
                           ? DropdownButton(
                               value: selectedValue,
                               dropdownColor: BGColor(),
-                              items: dropdownItems,
+                              items: dropdownItems_alarm,
                               icon: NeumorphicIcon(
                                 Icons.arrow_drop_down,
                                 size: 20,
@@ -1571,6 +1672,44 @@ class _DayScriptState extends State<DayScript> {
               ],
             ))
         : const SizedBox();
+  }
+
+  addmemocollector(
+    BuildContext context,
+    String username,
+    TextEditingController textEditingController_add_sheet,
+    FocusNode searchNode_add_section,
+  ) {
+    Get.bottomSheet(
+            Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: SingleChildScrollView(
+                  child: Container(
+                      height: 550,
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          )),
+                      child: GestureDetector(
+                        onTap: () {
+                          searchNode_add_section.unfocus();
+                        },
+                        child: SheetPagememoCollection(
+                            context,
+                            username,
+                            textEditingController_add_sheet,
+                            searchNode_add_section),
+                      )),
+                )),
+            backgroundColor: Colors.white,
+            isScrollControlled: true,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+        .whenComplete(() {
+      textEditingController_add_sheet.clear();
+    });
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/DB/SpaceList.dart';
+import 'package:clickbyme/LocalNotiPlatform/localnotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
@@ -42,7 +43,6 @@ class _HomePageState extends State<HomePage> {
   late DateTime Date = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   static final spaceset = Get.put(Spacesetting());
-  final cntget = Get.put(onequeform());
   List showspacelist = [];
   List content = [];
   String name = Hive.box('user_info').get('id');
@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    localnotification.requestPermission();
     Hive.box('user_setting').put('page_index', 0);
     spaceset.setspace();
     showspacelist = spaceset.space;
@@ -91,24 +92,29 @@ class _HomePageState extends State<HomePage> {
                             width: 50,
                             child: DrawerScreen(),
                           ),
-                          HomeUi(_pController, cntget),
+                          HomeUi(
+                            _pController,
+                          ),
                         ],
                       )
                     : Stack(
                         children: [
-                          HomeUi(_pController, cntget),
+                          HomeUi(
+                            _pController,
+                          ),
                         ],
                       ))
                 : Stack(
                     children: [
-                      HomeUi(_pController, cntget),
+                      HomeUi(
+                        _pController,
+                      ),
                     ],
                   )));
   }
 
   HomeUi(
     PageController pController,
-    onequeform cntget,
   ) {
     double height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
@@ -212,13 +218,6 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         InkWell(
                                             onTap: () {
-                                              /*Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    type: PageTransitionType
-                                                        .bottomToTop,
-                                                    child: NotiAlarm()),
-                                              );*/
                                               Get.to(NotiAlarm());
                                             },
                                             child: Container(
@@ -260,7 +259,9 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                H_Container_0(height, cntget),
+                                H_Container_0(
+                                  height,
+                                ),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -372,7 +373,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_0(double height, onequeform cntget) {
+  H_Container_0(double height) {
     return SizedBox(
       height: 90,
       width: MediaQuery.of(context).size.width - 40,
@@ -386,140 +387,51 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.blue.shade400,
                   child: Column(
                     children: [
-                      GetBuilder<onequeform>(
-                          init: onequeform(),
-                          builder: (_) => SizedBox(
-                              height: 60,
-                              child: GestureDetector(
-                                onTap: () {
-                                  cntget.cnt != 0
-                                      ? addcalendar(context, searchNode,
-                                          controller, name, Date, 'home')
-                                      : Flushbar(
-                                          backgroundColor: Colors.red.shade400,
-                                          titleText: Text('Notice',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                    contentTitleTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          messageText: Text(
-                                              '오늘 할당량을 소진하셨습니다.\n버전 업그레이드 시 이용가능합니다!',
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: contentTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          icon: const Icon(
-                                            Icons.info_outline,
-                                            size: 25.0,
+                      SizedBox(
+                          height: 60,
+                          child: GestureDetector(
+                            onTap: () {
+                              addcalendar(context, searchNode, controller, name,
+                                  Date, 'home');
+                            },
+                            child: SizedBox(
+                              height: 45,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 45,
+                                    width: 45,
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.blue.shade500,
+                                          child: const Icon(
+                                            Icons.smart_toy,
                                             color: Colors.white,
                                           ),
-                                          duration: const Duration(seconds: 3),
-                                          leftBarIndicatorColor:
-                                              Colors.red.shade100,
-                                        ).show(context);
-                                },
-                                child: SizedBox(
-                                  height: 45,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        height: 45,
-                                        width: 45,
-                                        child: Container(
-                                            alignment: Alignment.center,
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.blue.shade500,
-                                              child: const Icon(
-                                                Icons.smart_toy,
-                                                color: Colors.white,
-                                              ),
-                                            )),
-                                      ),
-                                      const Flexible(
-                                        fit: FlexFit.tight,
-                                        child: SizedBox(
-                                          height: 45,
-                                          child: Center(
-                                            child: Text(
-                                              '원큐로 기록카드 만들기',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
-                                              overflow: TextOverflow.fade,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      cntget.cnt != 0
-                                          ? SizedBox(
-                                              height: 45,
-                                              width: 45,
-                                              child: Container(
-                                                  alignment: Alignment.center,
-                                                  child: CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.blue.shade500,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            cntget.cnt
-                                                                .toString(),
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 18),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .fade,
-                                                          ),
-                                                          const Text(
-                                                            '/5',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 18),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .fade,
-                                                          ),
-                                                        ],
-                                                      ))),
-                                            )
-                                          : SizedBox(
-                                              height: 45,
-                                              width: 45,
-                                              child: Container(
-                                                  alignment: Alignment.center,
-                                                  child: CircleAvatar(
-                                                    backgroundColor:
-                                                        Colors.blue.shade500,
-                                                    child: const Icon(
-                                                      Icons.lock,
-                                                      color: Colors.white,
-                                                    ),
-                                                  )),
-                                            ),
-                                    ],
+                                        )),
                                   ),
-                                ),
-                              ))),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const SizedBox(
+                                    height: 45,
+                                    child: Center(
+                                      child: Text(
+                                        '원큐로 기록카드 만들기',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ))
                     ],
                   )))
         ],
@@ -967,7 +879,7 @@ class _HomePageState extends State<HomePage> {
                                                                   ),
                                                                   Row(
                                                                     children: [
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                           width:
                                                                               50),
                                                                       Text(
@@ -979,7 +891,7 @@ class _HomePageState extends State<HomePage> {
                                                                               color: TextColor(),
                                                                               fontWeight: FontWeight.bold,
                                                                               fontSize: 18)),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                           width:
                                                                               20),
                                                                       Text(
@@ -1116,7 +1028,7 @@ class _HomePageState extends State<HomePage> {
                                                                   ),
                                                                   Row(
                                                                     children: [
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                           width:
                                                                               50),
                                                                       Text(
@@ -1128,7 +1040,7 @@ class _HomePageState extends State<HomePage> {
                                                                               color: TextColor(),
                                                                               fontWeight: FontWeight.bold,
                                                                               fontSize: 18)),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                           width:
                                                                               20),
                                                                       Text(

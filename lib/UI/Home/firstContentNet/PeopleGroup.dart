@@ -330,7 +330,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                               ),
                               trailing: Theme(
                                   data: Theme.of(context).copyWith(
-                                    unselectedWidgetColor: BGColor(),
+                                    unselectedWidgetColor: TextColor(),
                                   ),
                                   child: Checkbox(
                                     activeColor: BGColor(),

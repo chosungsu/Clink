@@ -92,15 +92,15 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                       )),
                   Theme(
                       data: Theme.of(context).copyWith(
-                        unselectedWidgetColor: BGColor(),
+                        unselectedWidgetColor: Colors.black,
                       ),
                       child: Checkbox(
                         side: BorderSide(
                           // POINT
-                          color: TextColor(),
+                          color: Colors.black,
                           width: 2.0,
                         ),
-                        activeColor: BGColor(),
+                        activeColor: Colors.white,
                         checkColor: Colors.blue,
                         onChanged: (value) {
                           setState(() {
@@ -138,15 +138,15 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                       )),
                   Theme(
                       data: Theme.of(context).copyWith(
-                        unselectedWidgetColor: BGColor(),
+                        unselectedWidgetColor: Colors.black,
                       ),
                       child: Checkbox(
                         side: BorderSide(
                           // POINT
-                          color: TextColor(),
+                          color: Colors.black,
                           width: 2.0,
                         ),
-                        activeColor: BGColor(),
+                        activeColor: Colors.white,
                         checkColor: Colors.blue,
                         onChanged: (value) {
                           setState(() {
@@ -190,15 +190,15 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                       )),
                   Theme(
                       data: Theme.of(context).copyWith(
-                        unselectedWidgetColor: BGColor(),
+                        unselectedWidgetColor: Colors.black,
                       ),
                       child: Checkbox(
                         side: BorderSide(
                           // POINT
-                          color: TextColor(),
+                          color: Colors.black,
                           width: 2.0,
                         ),
-                        activeColor: BGColor(),
+                        activeColor: Colors.white,
                         checkColor: Colors.blue,
                         onChanged: (value) {
                           setState(() {

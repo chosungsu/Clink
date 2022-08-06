@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
+import 'package:clickbyme/LocalNotiPlatform/localnotification.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
 import 'Page/LoginSignPage.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,7 +74,8 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
   bool islogined = false;
@@ -80,6 +83,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notifications = PushNotification(
         title: message.notification?.title,
@@ -87,6 +91,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       );
     });
     checkForInitialMessage();
+    checkForInitialMessagefromlocal();
     /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);*/
     scaleController = AnimationController(
@@ -124,6 +129,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     // TODO: implement dispose
     super.dispose();
     scaleController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      FlutterAppBadger.removeBadge();
+    }
   }
 
   @override
@@ -143,6 +156,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         body: initialMessage.notification?.body,
       );
     }
+  }
+
+  checkForInitialMessagefromlocal() async {
+    localnotification.initLocalNotificationPlugin();
   }
 
   body() {

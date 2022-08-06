@@ -803,7 +803,9 @@ class _DayContentHomeState extends State<DayContentHome> {
                                               calinfo: snapshot
                                                   .data!.docs[index]['Daytodo'],
                                               date: _selectedDay,
-                                              doc: widget.title),
+                                              doc: widget.title,
+                                              alarm: snapshot
+                                                  .data!.docs[index]['Alarm'],),
                                           transition: Transition.downToUp);
                                     },
                                     child: Container(
@@ -1083,21 +1085,6 @@ class _DayContentHomeState extends State<DayContentHome> {
                       ],
                     );
                   });
-        } else if (snapshot.hasError) {
-          return Center(
-            child: NeumorphicText(
-              '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
-              style: NeumorphicStyle(
-                shape: NeumorphicShape.flat,
-                depth: 3,
-                color: TextColor(),
-              ),
-              textStyle: NeumorphicTextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize(),
-              ),
-            ),
-          );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }

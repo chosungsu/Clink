@@ -19,13 +19,15 @@ class ClickShowEachCalendar extends StatefulWidget {
       required this.finish,
       required this.calinfo,
       required this.date,
-      required this.doc})
+      required this.doc,
+      required this.alarm})
       : super(key: key);
   final String start;
   final String finish;
   final String calinfo;
   final DateTime date;
   final String doc;
+  final String alarm;
   @override
   State<StatefulWidget> createState() => _ClickShowEachCalendarState();
 }
@@ -40,6 +42,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
   final searchNode = FocusNode();
   List updateid = [];
   List deleteid = [];
+  bool isChecked_pushalarm = false;
+  String changevalue = Hive.box('user_setting').get('alarming_time') ?? "10분 전";
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -239,6 +243,17 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                                         .calinfo
                                                                     : textEditingController1
                                                                         .text,
+                                                            'Alarm': widget
+                                                                        .alarm ==
+                                                                    '설정off'
+                                                                ? (isChecked_pushalarm ==
+                                                                        true
+                                                                    ? changevalue
+                                                                    : '설정off')
+                                                                : (!isChecked_pushalarm ==
+                                                                        true
+                                                                    ? changevalue
+                                                                    : '설정off'),
                                                             'Timestart':
                                                                 textEditingController2
                                                                         .text
@@ -543,6 +558,14 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                 ),
                                 Content(),
                                 const SizedBox(
+                                  height: 20,
+                                ),
+                                buildAlarmTitle(),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Alarm(),
+                                const SizedBox(
                                   height: 50,
                                 )
                               ],
@@ -694,6 +717,168 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                       color: TextColor(),
                     ),
                   ),
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  buildAlarmTitle() {
+    print(widget.alarm);
+    return SizedBox(
+        height: 30,
+        child: Row(
+          children: [
+            Flexible(
+              fit: FlexFit.tight,
+              child: Text(
+                '알람설정',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize(),
+                    color: TextColor()),
+              ),
+            ),
+            widget.alarm == '설정off'
+                ? Transform.scale(
+                    scale: 0.7,
+                    child: Switch(
+                        activeColor: Colors.blue,
+                        inactiveThumbColor: TextColor(),
+                        inactiveTrackColor: Colors.grey.shade100,
+                        value: isChecked_pushalarm,
+                        onChanged: (bool val) {
+                          setState(() {
+                            isChecked_pushalarm = val;
+                            print(isChecked_pushalarm);
+                          });
+                        }),
+                  )
+                : Transform.scale(
+                    scale: 0.7,
+                    child: Switch(
+                        activeColor: Colors.blue,
+                        inactiveThumbColor: TextColor(),
+                        inactiveTrackColor: Colors.grey.shade100,
+                        value: !isChecked_pushalarm,
+                        onChanged: (bool val) {
+                          setState(() {
+                            isChecked_pushalarm = !val;
+                            print(isChecked_pushalarm);
+                          });
+                        }),
+                  )
+          ],
+        ));
+  }
+
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(child: Text("1분 전"), value: "1분 전"),
+      const DropdownMenuItem(child: Text("5분 전"), value: "5분 전"),
+      const DropdownMenuItem(child: Text("10분 전"), value: "10분 전"),
+      const DropdownMenuItem(child: Text("30분 전"), value: "30분 전"),
+    ];
+    return menuItems;
+  }
+
+  Alarm() {
+    return SizedBox(
+        height: 200,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 80,
+              child: ContainerDesign(
+                color: BGColor(),
+                child: ListTile(
+                  leading: NeumorphicIcon(
+                    Icons.alarm,
+                    size: 30,
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        surfaceIntensity: 0.5,
+                        color: TextColor(),
+                        lightSource: LightSource.topLeft),
+                  ),
+                  title: Text(
+                    '알람',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: TextColor()),
+                  ),
+                  trailing: widget.alarm == '설정off'
+                      ? (isChecked_pushalarm == true
+                          ? DropdownButton(
+                              value: changevalue,
+                              dropdownColor: BGColor(),
+                              items: dropdownItems,
+                              icon: NeumorphicIcon(
+                                Icons.arrow_drop_down,
+                                size: 20,
+                                style: NeumorphicStyle(
+                                    shape: NeumorphicShape.convex,
+                                    depth: 2,
+                                    surfaceIntensity: 0.5,
+                                    color: TextColor(),
+                                    lightSource: LightSource.topLeft),
+                              ),
+                              style: TextStyle(
+                                  color: TextColor(),
+                                  fontSize: contentTextsize()),
+                              onChanged: isChecked_pushalarm == true
+                                  ? (String? value) {
+                                      setState(() {
+                                        changevalue = value!;
+                                        Hive.box('user_setting')
+                                            .put('alarming_time', changevalue);
+                                      });
+                                    }
+                                  : null,
+                            )
+                          : Text(
+                              '설정off상태입니다.',
+                              style: TextStyle(
+                                  fontSize: contentTextsize(),
+                                  color: TextColor()),
+                            ))
+                      : (!isChecked_pushalarm == true
+                          ? DropdownButton(
+                              value: changevalue,
+                              dropdownColor: BGColor(),
+                              items: dropdownItems,
+                              icon: NeumorphicIcon(
+                                Icons.arrow_drop_down,
+                                size: 20,
+                                style: NeumorphicStyle(
+                                    shape: NeumorphicShape.convex,
+                                    depth: 2,
+                                    surfaceIntensity: 0.5,
+                                    color: TextColor(),
+                                    lightSource: LightSource.topLeft),
+                              ),
+                              style: TextStyle(
+                                  color: TextColor(),
+                                  fontSize: contentTextsize()),
+                              onChanged: !isChecked_pushalarm == true
+                                  ? (String? value) {
+                                      setState(() {
+                                        changevalue = value!;
+                                        Hive.box('user_setting')
+                                            .put('alarming_time', changevalue);
+                                      });
+                                    }
+                                  : null,
+                            )
+                          : Text(
+                              '설정off상태입니다.',
+                              style: TextStyle(
+                                  fontSize: contentTextsize(),
+                                  color: TextColor()),
+                            )),
                 ),
               ),
             ),

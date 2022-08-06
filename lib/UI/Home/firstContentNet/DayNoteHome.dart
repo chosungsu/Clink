@@ -157,7 +157,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
       child: Container(
           decoration: BoxDecoration(color: BGColor()),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                   height: 80,
@@ -302,6 +302,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                       ],
                     ),
                   )),
+              ADBox(),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -318,14 +319,6 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              SearchBox(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              ADBox(),
-                              const SizedBox(
-                                height: 20,
-                              ),
                               listy_My(),
                             ],
                           ),
@@ -338,7 +331,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     );
   }
 
-  SearchBox() {
+  /*SearchBox() {
     return SizedBox(
       height: 50,
       child: Column(
@@ -382,7 +375,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
             ))
       ],
     );
-  }
+  }*/
 
   settingMemoHome(
     BuildContext context,
@@ -431,7 +424,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
 
   ADBox() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [ADEvents(context)],
     );
   }
@@ -809,27 +803,6 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                         ],
                       );
                     });
-          } else if (snapshot.hasError) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: NeumorphicText(
-                    '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
-                    style: NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: TextColor(),
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                    ),
-                  ),
-                )
-              ],
-            );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
