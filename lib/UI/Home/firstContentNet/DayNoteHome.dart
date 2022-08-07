@@ -15,6 +15,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../Page/HomePage.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../Tool/SheetGetx/selectcollection.dart';
 import '../../../sheets/addcalendar.dart';
 
 class DayNoteHome extends StatefulWidget {
@@ -35,17 +36,9 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   int searchmemo_fromsheet = 0;
   final controll_memo = Get.put(memosearchsetting());
   final controll_memo2 = Get.put(memosortsetting());
+  final scollection = Get.put(selectcollection());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final searchNode = FocusNode();
-  final List memostar = [1, 2, 1, 1, 3];
-  final List memotitle = ['memo1', 'memo2', 'memo3', 'memo4', 'memo5'];
-  final List memocontent = [
-    '하루 한번 채식식단 실천하기',
-    '대중교통 이용하여 출근하기',
-    '토익공부 하루에 유닛4과씩 진도 나가기',
-    '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기',
-    '알고리즘 하루에 4개씩 파이썬 자바 두언어로 만들기 fighting!!!',
-  ];
   String username = Hive.box('user_info').get(
     'id',
   );
@@ -80,12 +73,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
-            body: GestureDetector(
-              onTap: () {
-                searchNode.unfocus();
-              },
-              child: UI(),
-            ),
+            body: UI(),
             floatingActionButton: SpeedDial(
                 activeIcon: Icons.close,
                 icon: Icons.add,
@@ -108,8 +96,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                     ),
                     backgroundColor: Colors.blue.shade200,
                     onTap: () {
-                      addcalendar(context, searchNode, controller, username,
-                          Date, 'memo');
+                      addmemocollector(context, username, controller,
+                          searchNode, 'outside', scollection);
                     },
                     label: '컬렉션 추가',
                     labelStyle: TextStyle(
@@ -262,7 +250,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                                     .topLeft),
                                                       ),
                                                     ))),
-                                            const SizedBox(
+                                            /*const SizedBox(
                                               width: 10,
                                             ),
                                             SizedBox(
@@ -294,7 +282,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                                 LightSource
                                                                     .topLeft),
                                                       ),
-                                                    ))),
+                                                    ))),*/
                                           ],
                                         ))),
                               ],

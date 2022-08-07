@@ -6,6 +6,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -13,6 +14,7 @@ import 'package:intl/intl.dart';
 import '../../../DB/Event.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../Tool/SheetGetx/selectcollection.dart';
 import '../../../sheets/addmemocollection.dart';
 
 class DayScript extends StatefulWidget {
@@ -47,6 +49,7 @@ class _DayScriptState extends State<DayScript> {
   );
   late Map<DateTime, List<Event>> _events;
   static final cal_share_person = Get.put(PeopleAdd());
+  final scollection = Get.put(selectcollection());
   List finallist = cal_share_person.people;
   final searchNode_first_section = FocusNode();
   final searchNode_second_section = FocusNode();
@@ -89,6 +92,7 @@ class _DayScriptState extends State<DayScript> {
       differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month,
           widget.firstdate.day + i));
     }
+    scollection.resetcollection();
     selectedValue = Hive.box('user_setting').get('alarming_time') ?? '5분 전';
   }
 
@@ -107,16 +111,85 @@ class _DayScriptState extends State<DayScript> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: BGColor(),
-      body: GestureDetector(
-        onTap: () {
-          searchNode_first_section.unfocus();
-          searchNode_second_section.unfocus();
-          searchNode_third_section.unfocus();
-        },
-        child: UI(),
-      ),
-    ));
+            backgroundColor: BGColor(),
+            resizeToAvoidBottomInset: false,
+            body: GestureDetector(
+              onTap: () {
+                searchNode_first_section.unfocus();
+                searchNode_second_section.unfocus();
+                searchNode_third_section.unfocus();
+              },
+              child: UI(),
+            ),
+            floatingActionButton: widget.position == 'note'
+                ? SpeedDial(
+                    activeIcon: Icons.close,
+                    icon: Icons.add,
+                    backgroundColor: Colors.blue,
+                    overlayColor: BGColor(),
+                    overlayOpacity: 0.4,
+                    spacing: 10,
+                    spaceBetweenChildren: 10,
+                    children: [
+                        SpeedDialChild(
+                          child: NeumorphicIcon(
+                            Icons.swipe_right_alt,
+                            size: 30,
+                            style: NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                surfaceIntensity: 0.5,
+                                color: TextColor(),
+                                lightSource: LightSource.topLeft),
+                          ),
+                          backgroundColor: Colors.green.shade200,
+                          onTap: () {},
+                          label: '문장추가',
+                          labelStyle: TextStyle(
+                              color: Colors.black45,
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize()),
+                        ),
+                        SpeedDialChild(
+                          child: NeumorphicIcon(
+                            Icons.check_box_outline_blank,
+                            size: 30,
+                            style: NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                surfaceIntensity: 0.5,
+                                color: TextColor(),
+                                lightSource: LightSource.topLeft),
+                          ),
+                          backgroundColor: Colors.blue.shade200,
+                          onTap: () {},
+                          label: '체크박스',
+                          labelStyle: TextStyle(
+                              color: Colors.black45,
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize()),
+                        ),
+                        SpeedDialChild(
+                          child: NeumorphicIcon(
+                            Icons.star_rate,
+                            size: 30,
+                            style: NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                surfaceIntensity: 0.5,
+                                color: TextColor(),
+                                lightSource: LightSource.topLeft),
+                          ),
+                          backgroundColor: Colors.orange.shade200,
+                          onTap: () {},
+                          label: '중요부분',
+                          labelStyle: TextStyle(
+                              color: Colors.black45,
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize()),
+                        ),
+                      ])
+                : null));
   }
 
   UI() {
@@ -199,7 +272,7 @@ class _DayScriptState extends State<DayScript> {
                                             .text.isNotEmpty ||
                                         textEditingController3
                                             .text.isNotEmpty) {
-                                      await localnotification.notishow();
+                                      //await localnotification.notishow();
                                       if (widget.position == 'cal') {
                                         Flushbar(
                                           backgroundColor:
@@ -643,27 +716,55 @@ class _DayScriptState extends State<DayScript> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Title(),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              SetTimeTitle(),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                              WholeContent(),
+                              widget.position == 'cal'
+                                  ? const SizedBox(
+                                      height: 30,
+                                    )
+                                  : const SizedBox(
+                                      height: 0,
+                                    ),
+                              widget.position == 'cal'
+                                  ? SetTimeTitle()
+                                  : const SizedBox(
+                                      height: 0,
+                                    ),
+                              widget.position == 'cal'
+                                  ? const SizedBox(
+                                      height: 20,
+                                    )
+                                  : const SizedBox(
+                                      height: 0,
+                                    ),
                               widget.position == 'cal'
                                   ? Time()
                                   : const SizedBox(
                                       height: 0,
                                     ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              SetAlarmTitle(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Alarm(),
+                              widget.position == 'cal'
+                                  ? const SizedBox(
+                                      height: 30,
+                                    )
+                                  : const SizedBox(
+                                      height: 0,
+                                    ),
+                              widget.position == 'cal'
+                                  ? SetAlarmTitle()
+                                  : const SizedBox(
+                                      height: 0,
+                                    ),
+                              widget.position == 'cal'
+                                  ? const SizedBox(
+                                      height: 20,
+                                    )
+                                  : const SizedBox(
+                                      height: 0,
+                                    ),
+                              widget.position == 'cal'
+                                  ? Alarm()
+                                  : const SizedBox(
+                                      height: 0,
+                                    ),
                               const SizedBox(
                                 height: 50,
                               )
@@ -746,23 +847,7 @@ class _DayScriptState extends State<DayScript> {
                 )));
   }
 
-  List<DropdownMenuItem<String>> get dropdownItems_memo_collections {
-    firestore
-        .collection('MemoCollections')
-        .where('name', isEqualTo: username)
-        .get()
-        .then((value) {});
-    List<DropdownMenuItem<String>> collectionItems = [
-      const DropdownMenuItem(
-          child: Text("메모가 저장될 MY컬렉션을 지정해주세요"), value: 'first_open'),
-      const DropdownMenuItem(child: Text("5분 전"), value: "5분 전"),
-      const DropdownMenuItem(child: Text("10분 전"), value: "10분 전"),
-      const DropdownMenuItem(child: Text("30분 전"), value: "30분 전"),
-    ];
-    return collectionItems;
-  }
-
-  Title() {
+  WholeContent() {
     return widget.position == 'cal'
         ? SizedBox(
             height: 30,
@@ -783,7 +868,7 @@ class _DayScriptState extends State<DayScript> {
           )
         : (widget.position == 'note'
             ? SizedBox(
-                height: 360,
+                height: 380,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -827,10 +912,13 @@ class _DayScriptState extends State<DayScript> {
                             InkWell(
                               onTap: () {
                                 addmemocollector(
-                                    context,
-                                    username,
-                                    textEditingController_add_sheet,
-                                    searchNode_add_section);
+                                  context,
+                                  username,
+                                  textEditingController_add_sheet,
+                                  searchNode_add_section,
+                                  'inside',
+                                  scollection,
+                                );
                               },
                               child: NeumorphicIcon(
                                 Icons.add,
@@ -848,11 +936,11 @@ class _DayScriptState extends State<DayScript> {
                     const SizedBox(
                       height: 5,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                       child: Text(
                         '+아이콘으로 MY컬렉션을 추가 및 지정해주세요',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.blue),
@@ -861,26 +949,18 @@ class _DayScriptState extends State<DayScript> {
                     const SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
-                      height: 30,
-                      child: TextField(
-                        minLines: 1,
-                        maxLines: 1,
-                        readOnly: true,
-                        focusNode: searchNode_second_section,
-                        textAlign: TextAlign.start,
-                        textAlignVertical: TextAlignVertical.center,
-                        style: TextStyle(
-                            fontSize: contentTextsize(), color: TextColor()),
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          border: InputBorder.none,
-                          hintText: '지정된 컬렉션이 현재 없습니다!',
-                          hintStyle: TextStyle(
-                              fontSize: contentTextsize(), color: TextColor()),
-                        ),
-                        controller: textEditingController2,
-                      ),
+                    GetBuilder<selectcollection>(
+                      builder: (_) => SizedBox(
+                          height: 30,
+                          child: Text(
+                            scollection.collection == '' ||
+                                    scollection.collection == null
+                                ? '지정된 컬렉션이 없습니다.'
+                                : '지정한 컬렉션 이름 : ' + scollection.collection,
+                            style: TextStyle(
+                                fontSize: contentTextsize(),
+                                color: TextColor()),
+                          )),
                     ),
                     const SizedBox(
                       height: 20,
@@ -896,7 +976,17 @@ class _DayScriptState extends State<DayScript> {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 5,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                      child: Text(
+                        '우측 하단 +아이콘으로 메모내용 작성하시면 됩니다.',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.blue),
+                      ),
                     ),
                     SizedBox(
                       height: 100,
@@ -915,7 +1005,7 @@ class _DayScriptState extends State<DayScript> {
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(), color: TextColor()),
                         ),
-                        controller: textEditingController2,
+                        controller: textEditingController3,
                       ),
                     )
                   ],
@@ -1673,44 +1763,48 @@ class _DayScriptState extends State<DayScript> {
             ))
         : const SizedBox();
   }
+}
 
-  addmemocollector(
-    BuildContext context,
-    String username,
-    TextEditingController textEditingController_add_sheet,
-    FocusNode searchNode_add_section,
-  ) {
-    Get.bottomSheet(
-            Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: SingleChildScrollView(
-                  child: Container(
-                      height: 550,
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          )),
-                      child: GestureDetector(
-                        onTap: () {
-                          searchNode_add_section.unfocus();
-                        },
-                        child: SheetPagememoCollection(
-                            context,
-                            username,
-                            textEditingController_add_sheet,
-                            searchNode_add_section),
-                      )),
+addmemocollector(
+  BuildContext context,
+  String username,
+  TextEditingController textEditingController_add_sheet,
+  FocusNode searchNode_add_section,
+  String s,
+  selectcollection scollection,
+) {
+  Get.bottomSheet(
+          Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+                height: 330,
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    )),
+                child: GestureDetector(
+                  onTap: () {
+                    searchNode_add_section.unfocus();
+                  },
+                  child: SheetPagememoCollection(
+                      context,
+                      username,
+                      textEditingController_add_sheet,
+                      searchNode_add_section,
+                      s,
+                      scollection),
                 )),
-            backgroundColor: Colors.white,
-            isScrollControlled: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-        .whenComplete(() {
-      textEditingController_add_sheet.clear();
-    });
-  }
+          ),
+          backgroundColor: Colors.white,
+          isScrollControlled: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+      .whenComplete(() {
+    textEditingController_add_sheet.clear();
+    print('when ' + scollection.collection);
+  });
 }
 
 pickDates(BuildContext context, TextEditingController timecontroller,

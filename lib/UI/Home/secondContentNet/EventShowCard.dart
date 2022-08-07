@@ -1,12 +1,9 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:clickbyme/Page/EnterCheckPage.dart';
 import 'package:clickbyme/UI/Setting/BuyingPage.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class EventShowCard extends StatelessWidget {
@@ -57,7 +54,7 @@ class EventShowCard extends StatelessWidget {
             builder: (context, future) => future.connectionState ==
                     ConnectionState.waiting
                 ? const Center(
-                    child: const CircularProgressIndicator(),
+                    child: CircularProgressIndicator(),
                   )
                 : ContainerDesign(
                     color: Colors.orange.shade400,
@@ -81,8 +78,7 @@ class EventShowCard extends StatelessWidget {
                                                   transition:
                                                       Transition.fadeIn));
                                     },
-                                    child: Container(
-                                        child: Column(
+                                    child: Column(
                                       children: [
                                         Flexible(
                                             fit: FlexFit.tight,
@@ -156,7 +152,7 @@ class EventShowCard extends StatelessWidget {
                                           height: 10,
                                         ),
                                       ],
-                                    )),
+                                    ),
                                   )),
                         ),
                         Column(

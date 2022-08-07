@@ -2,7 +2,6 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:page_transition/page_transition.dart';
 import '../../Setting/BuyingPage.dart';
 
 class SpaceAD extends StatelessWidget {

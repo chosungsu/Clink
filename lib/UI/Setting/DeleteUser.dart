@@ -1,11 +1,9 @@
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../Auth/GoogleSignInController.dart';
 import '../../Auth/KakaoSignInController.dart';
-import '../../route.dart';
 
 DeleteUserVerify(BuildContext context, String name) {
   showModalBottomSheet(

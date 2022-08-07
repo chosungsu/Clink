@@ -1,6 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
 import 'package:clickbyme/UI/Setting/DeleteUser.dart';
 import 'package:clickbyme/UI/Setting/OptionChangePage.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
@@ -8,8 +7,6 @@ import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:page_transition/page_transition.dart';
-import 'BuyingPage.dart';
 import '../../Tool/ContainerDesign.dart';
 
 class UserSettings extends StatelessWidget {

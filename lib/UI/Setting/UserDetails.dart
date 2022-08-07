@@ -3,7 +3,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class UserDetails extends StatelessWidget {
   const UserDetails({Key? key, required this.height}) : super(key: key);
@@ -69,7 +68,7 @@ class UserDetails extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 SizedBox(
@@ -81,80 +80,81 @@ class UserDetails extends StatelessWidget {
                       SizedBox(
                         height: 40,
                         child: Container(
-                            alignment: Alignment.center,
-                            child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  textStyle: TextStyle(color: Colors.white),
-                                  backgroundColor: Colors.blue.shade500,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24.0),
-                                  ),
-                                ),
-                                onPressed: () => {},
-                                icon: Icon(
-                                  Icons.motion_photos_on,
+                          alignment: Alignment.center,
+                          child: TextButton.icon(
+                            style: TextButton.styleFrom(
+                              textStyle: const TextStyle(color: Colors.white),
+                              backgroundColor: Colors.blue.shade500,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                            ),
+                            onPressed: () => {},
+                            icon: const Icon(
+                              Icons.motion_photos_on,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              '포토북',
+                              style: TextStyle(
                                   color: Colors.white,
-                                ),
-                                label: Text(
-                                  '포토북',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                ),
-                              ),),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize()),
+                            ),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 40,
                         child: Container(
                             alignment: Alignment.center,
                             child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  textStyle: TextStyle(color: Colors.white),
-                                  backgroundColor: Colors.blue.shade500,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24.0),
-                                  ),
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(color: Colors.white),
+                                backgroundColor: Colors.blue.shade500,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24.0),
                                 ),
-                                onPressed: () => {},
-                                icon: Icon(
-                                  Icons.card_giftcard,
-                                  color: Colors.white,
-                                ),
-                                label: Text(
-                                  '포인트',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                ),
-                              )),
+                              ),
+                              onPressed: () => {},
+                              icon: const Icon(
+                                Icons.card_giftcard,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                '포인트',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize()),
+                              ),
+                            )),
                       ),
                       SizedBox(
                         height: 40,
                         child: Container(
                             alignment: Alignment.center,
                             child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  textStyle: TextStyle(color: Colors.white),
-                                  backgroundColor: Colors.blue.shade500,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24.0),
-                                  ),
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(color: Colors.white),
+                                backgroundColor: Colors.blue.shade500,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24.0),
                                 ),
-                                onPressed: () => {},
-                                icon: Icon(
-                                  Icons.badge,
-                                  color: Colors.white,
-                                ),
-                                label: Text(
-                                  '뱃지',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                ),
-                              )),
+                              ),
+                              onPressed: () => {},
+                              icon: const Icon(
+                                Icons.badge,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                '뱃지',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize()),
+                              ),
+                            )),
                       ),
                     ],
                   ),

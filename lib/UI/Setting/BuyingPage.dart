@@ -1,7 +1,6 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
@@ -58,7 +57,7 @@ class _BuyingPageState extends State<BuyingPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(padding: EdgeInsets.only(left: 10)),
+                    const Padding(padding: EdgeInsets.only(left: 10)),
                     SizedBox(
                         width: 50,
                         child: InkWell(
@@ -86,7 +85,7 @@ class _BuyingPageState extends State<BuyingPage> {
                     SizedBox(
                         width: MediaQuery.of(context).size.width - 60 - 160,
                         child: Padding(
-                            padding: EdgeInsets.only(left: 20, right: 20),
+                            padding: const EdgeInsets.only(left: 20, right: 20),
                             child: Row(
                               children: [
                                 Flexible(
@@ -112,7 +111,7 @@ class _BuyingPageState extends State<BuyingPage> {
                       child: SingleChildScrollView(child:
                           StatefulBuilder(builder: (_, StateSetter setState) {
                         return Padding(
-                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -120,7 +119,7 @@ class _BuyingPageState extends State<BuyingPage> {
                                 height: 20,
                               ),
                               BuyItem1(height, context),
-                              SizedBox(
+                              const SizedBox(
                                 height: 150,
                               ),
                             ],
@@ -158,7 +157,7 @@ class _BuyingPageState extends State<BuyingPage> {
           ),
           isChecked == true
               ? ConsoleBuy()
-              : SizedBox(
+              : const SizedBox(
                   height: 0,
                 )
         ],
@@ -194,7 +193,7 @@ class _BuyingPageState extends State<BuyingPage> {
                                         size: 30,
                                       )),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 20,
                                 ),
                                 Text('프로 버전 구매',
@@ -226,7 +225,7 @@ class _BuyingPageState extends State<BuyingPage> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Flexible(
@@ -243,7 +242,7 @@ class _BuyingPageState extends State<BuyingPage> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Flexible(

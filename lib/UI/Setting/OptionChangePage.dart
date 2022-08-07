@@ -1,16 +1,12 @@
-import 'package:clickbyme/Page/ProfilePage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/route.dart';
 import 'package:clickbyme/sheets/pushalarmsetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../Tool/NoBehavior.dart';
 
@@ -224,7 +220,7 @@ class _OptionChangePageState extends State<OptionChangePage> {
                   Icons.tune,
                   color: TextColor(),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(
@@ -737,7 +733,7 @@ class _OptionChangePageState extends State<OptionChangePage> {
                   Icons.notifications,
                   color: TextColor(),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(
