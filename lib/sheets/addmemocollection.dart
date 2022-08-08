@@ -368,11 +368,7 @@ content(
                                           GestureDetector(
                                               onTap: () {},
                                               child: SizedBox(
-                                                width: (MediaQuery.of(context)
-                                                            .size
-                                                            .width -
-                                                        40) *
-                                                    0.6,
+                                                width: 200,
                                                 height: 90,
                                                 child: ContainerDesign(
                                                     child: Row(
@@ -405,15 +401,6 @@ content(
                                                                   CrossAxisAlignment
                                                                       .start,
                                                               children: [
-                                                                Text('제목',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            contentTitleTextsize())),
                                                                 Text(
                                                                     snapshot.data!
                                                                             .docs[index]
@@ -426,7 +413,7 @@ content(
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontSize:
-                                                                            contentTitleTextsize())),
+                                                                            contentTextsize())),
                                                               ],
                                                             )),
                                                         InkWell(
@@ -652,7 +639,7 @@ content(
                               primary: Colors.blue,
                             ),
                             onPressed: () {
-                              if (selectvalue != '' || selectvalue != null) {
+                              if (selectvalue == '' || selectvalue == null) {
                                 Get.back();
                                 Flushbar(
                                   backgroundColor: Colors.red.shade400,

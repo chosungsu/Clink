@@ -38,32 +38,35 @@ class DayScript extends StatefulWidget {
 }
 
 class _DayScriptState extends State<DayScript> {
+  //공통변수
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
   DateTime _selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  bool isclickedshowmore = false;
   String username = Hive.box('user_info').get(
     'id',
   );
-  late Map<DateTime, List<Event>> _events;
-  static final cal_share_person = Get.put(PeopleAdd());
-  final scollection = Get.put(selectcollection());
-  List finallist = cal_share_person.people;
   final searchNode_first_section = FocusNode();
   final searchNode_second_section = FocusNode();
   final searchNode_third_section = FocusNode();
-  final searchNode_add_section = FocusNode();
-  late TextEditingController controllername;
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
-  late TextEditingController textEditingController_add_sheet;
+  //캘린더변수
+  late Map<DateTime, List<Event>> _events;
+  static final cal_share_person = Get.put(PeopleAdd());
+  List finallist = cal_share_person.people;
   String selectedValue = '선택없음';
   bool isChecked_pushalarm = false;
   int differ_date = 0;
   List differ_list = [];
+  //메모변수
+  final scollection = Get.put(selectcollection());
+  final searchNode_add_section = FocusNode();
+  late TextEditingController textEditingController_add_sheet;
+  List<TextEditingController> controllers = [];
+  List<FocusNode> nodes = [];
 
   @override
   void didChangeDependencies() {
@@ -74,9 +77,9 @@ class _DayScriptState extends State<DayScript> {
   @override
   void initState() {
     super.initState();
+    scollection.resetmemolist();
     cal_share_person.peoplecalendarrestart();
     finallist = cal_share_person.people;
-    controllername = TextEditingController();
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
@@ -100,11 +103,58 @@ class _DayScriptState extends State<DayScript> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    controllername.dispose();
     textEditingController1.dispose();
     textEditingController2.dispose();
     textEditingController3.dispose();
     textEditingController_add_sheet.dispose();
+    for (int i = 0; i < controllers.length; i++) {
+      controllers[i].dispose();
+    }
+  }
+
+  Future<bool> _onBackPressed() async {
+    return await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text('경고',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: Colors.redAccent,
+                      )),
+                  content: Text('뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                          color: Colors.blueGrey)),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text(
+                        '머무를게요',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize(),
+                            color: Colors.blue),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context, false);
+                      },
+                    ),
+                    TextButton(
+                      child: Text(
+                        '나가기',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize(),
+                            color: Colors.red),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                    )
+                  ],
+                )) ??
+        false;
   }
 
   @override
@@ -112,14 +162,21 @@ class _DayScriptState extends State<DayScript> {
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
-            resizeToAvoidBottomInset: false,
-            body: GestureDetector(
-              onTap: () {
-                searchNode_first_section.unfocus();
-                searchNode_second_section.unfocus();
-                searchNode_third_section.unfocus();
-              },
-              child: UI(),
+            resizeToAvoidBottomInset: true,
+            body: WillPopScope(
+              onWillPop: _onBackPressed,
+              child: GestureDetector(
+                onTap: () {
+                  searchNode_first_section.unfocus();
+                  searchNode_second_section.unfocus();
+                  searchNode_third_section.unfocus();
+                  searchNode_add_section.unfocus();
+                  for (int i = 0; i < nodes.length; i++) {
+                    nodes[i].unfocus();
+                  }
+                },
+                child: UI(),
+              ),
             ),
             floatingActionButton: widget.position == 'note'
                 ? SpeedDial(
@@ -143,7 +200,15 @@ class _DayScriptState extends State<DayScript> {
                                 lightSource: LightSource.topLeft),
                           ),
                           backgroundColor: Colors.green.shade200,
-                          onTap: () {},
+                          onTap: () {
+                            setState(() {
+                              scollection.addmemolist();
+                              Hive.box('user_setting')
+                                  .put('optionmemoinput', 0);
+                              scollection.addmemolistin();
+                              print(scollection.memolistin);
+                            });
+                          },
                           label: '문장추가',
                           labelStyle: TextStyle(
                               color: Colors.black45,
@@ -162,7 +227,12 @@ class _DayScriptState extends State<DayScript> {
                                 lightSource: LightSource.topLeft),
                           ),
                           backgroundColor: Colors.blue.shade200,
-                          onTap: () {},
+                          onTap: () {
+                            scollection.addmemolist();
+                            Hive.box('user_setting').put('optionmemoinput', 1);
+                            scollection.addmemolistin();
+                            print(scollection.memolistin);
+                          },
                           label: '체크박스',
                           labelStyle: TextStyle(
                               color: Colors.black45,
@@ -181,7 +251,12 @@ class _DayScriptState extends State<DayScript> {
                                 lightSource: LightSource.topLeft),
                           ),
                           backgroundColor: Colors.orange.shade200,
-                          onTap: () {},
+                          onTap: () {
+                            scollection.addmemolist();
+                            Hive.box('user_setting').put('optionmemoinput', 2);
+                            scollection.addmemolistin();
+                            print(scollection.memolistin);
+                          },
                           label: '중요부분',
                           labelStyle: TextStyle(
                               color: Colors.black45,
@@ -867,149 +942,328 @@ class _DayScriptState extends State<DayScript> {
             ),
           )
         : (widget.position == 'note'
-            ? SizedBox(
-                height: 380,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      child: TextField(
-                        minLines: 1,
-                        maxLines: 3,
-                        focusNode: searchNode_first_section,
-                        textAlign: TextAlign.start,
-                        textAlignVertical: TextAlignVertical.center,
-                        style: TextStyle(
-                            fontSize: contentTextsize(), color: TextColor()),
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          border: InputBorder.none,
-                          hintText: '제목 입력',
-                          hintStyle: TextStyle(
-                              fontSize: contentTextsize(), color: TextColor()),
-                        ),
-                        controller: textEditingController1,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
+            ? ListView.builder(
+                itemCount: 1,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
                         height: 30,
-                        child: Row(
-                          children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                '컬렉션 선택',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTitleTextsize(),
-                                    color: TextColor()),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                addmemocollector(
-                                  context,
-                                  username,
-                                  textEditingController_add_sheet,
-                                  searchNode_add_section,
-                                  'inside',
-                                  scollection,
-                                );
-                              },
-                              child: NeumorphicIcon(
-                                Icons.add,
-                                size: 30,
-                                style: NeumorphicStyle(
-                                    shape: NeumorphicShape.convex,
-                                    depth: 2,
-                                    surfaceIntensity: 0.5,
-                                    color: TextColor(),
-                                    lightSource: LightSource.topLeft),
-                              ),
-                            )
-                          ],
-                        )),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const SizedBox(
-                      height: 30,
-                      child: Text(
-                        '+아이콘으로 MY컬렉션을 추가 및 지정해주세요',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.blue),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    GetBuilder<selectcollection>(
-                      builder: (_) => SizedBox(
-                          height: 30,
-                          child: Text(
-                            scollection.collection == '' ||
-                                    scollection.collection == null
-                                ? '지정된 컬렉션이 없습니다.'
-                                : '지정한 컬렉션 이름 : ' + scollection.collection,
-                            style: TextStyle(
+                        child: TextField(
+                          minLines: 1,
+                          maxLines: 3,
+                          focusNode: searchNode_first_section,
+                          textAlign: TextAlign.start,
+                          textAlignVertical: TextAlignVertical.center,
+                          style: TextStyle(
+                              fontSize: contentTextsize(), color: TextColor()),
+                          decoration: InputDecoration(
+                            isCollapsed: true,
+                            border: InputBorder.none,
+                            hintText: '제목 입력',
+                            hintStyle: TextStyle(
                                 fontSize: contentTextsize(),
                                 color: TextColor()),
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: Text(
-                        '메모내용',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: TextColor()),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const SizedBox(
-                      height: 30,
-                      child: Text(
-                        '우측 하단 +아이콘으로 메모내용 작성하시면 됩니다.',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.blue),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100,
-                      child: TextField(
-                        minLines: 1,
-                        maxLines: 10,
-                        focusNode: searchNode_third_section,
-                        textAlign: TextAlign.start,
-                        textAlignVertical: TextAlignVertical.center,
-                        style: TextStyle(
-                            fontSize: contentTextsize(), color: TextColor()),
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          border: InputBorder.none,
-                          hintText: '내용 입력',
-                          hintStyle: TextStyle(
-                              fontSize: contentTextsize(), color: TextColor()),
+                          ),
+                          controller: textEditingController1,
                         ),
-                        controller: textEditingController3,
                       ),
-                    )
-                  ],
-                ))
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          height: 30,
+                          child: Row(
+                            children: [
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  '컬렉션 선택',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTitleTextsize(),
+                                      color: TextColor()),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  addmemocollector(
+                                    context,
+                                    username,
+                                    textEditingController_add_sheet,
+                                    searchNode_add_section,
+                                    'inside',
+                                    scollection,
+                                  );
+                                },
+                                child: NeumorphicIcon(
+                                  Icons.add,
+                                  size: 30,
+                                  style: NeumorphicStyle(
+                                      shape: NeumorphicShape.convex,
+                                      depth: 2,
+                                      surfaceIntensity: 0.5,
+                                      color: TextColor(),
+                                      lightSource: LightSource.topLeft),
+                                ),
+                              )
+                            ],
+                          )),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                        child: Text(
+                          '+아이콘으로 MY컬렉션을 추가 및 지정해주세요',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.blue),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      GetBuilder<selectcollection>(
+                        builder: (_) => SizedBox(
+                            height: 30,
+                            child: Text(
+                              scollection.collection == '' ||
+                                      scollection.collection == null
+                                  ? '지정된 컬렉션이 없습니다.'
+                                  : '지정한 컬렉션 이름 : ' + scollection.collection,
+                              style: TextStyle(
+                                  fontSize: contentTextsize(),
+                                  color: TextColor()),
+                            )),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        child: Text(
+                          '메모내용',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                              color: TextColor()),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                        child: Text(
+                          '우측 하단 +아이콘으로 메모내용 작성하시면 됩니다.',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.blue),
+                        ),
+                      ),
+                      GetBuilder<selectcollection>(
+                          builder: (_) => scollection.memolistin.isNotEmpty
+                              ? ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount: scollection.memolistin.length,
+                                  itemBuilder: (context, index) {
+                                    nodes.add(FocusNode());
+                                    controllers.add(TextEditingController());
+                                    return Row(
+                                      children: [
+                                        const SizedBox(
+                                          width: 3,
+                                        ),
+                                        scollection.memolistin[index] == 0
+                                            ? SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    60,
+                                                height: 50 * 5,
+                                                child: TextField(
+                                                  minLines: 1,
+                                                  maxLines: 5,
+                                                  focusNode: nodes[index],
+                                                  textAlign: TextAlign.start,
+                                                  textAlignVertical:
+                                                      TextAlignVertical.center,
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                      color:
+                                                          TextColor_shadowcolor()),
+                                                  decoration: InputDecoration(
+                                                    isCollapsed: true,
+                                                    border: InputBorder.none,
+                                                    suffixIcon: InkWell(
+                                                      onTap: () {
+                                                        scollection
+                                                            .removelistitem(
+                                                                index);
+                                                      },
+                                                      child: const Icon(
+                                                          Icons
+                                                              .remove_circle_outline,
+                                                          color: Colors.red),
+                                                    ),
+                                                    hintText: '내용 입력',
+                                                    hintStyle: TextStyle(
+                                                        fontSize:
+                                                            contentTextsize(),
+                                                        color:
+                                                            TextColor_shadowcolor()),
+                                                  ),
+                                                  controller:
+                                                      controllers[index],
+                                                ),
+                                              )
+                                            : (scollection.memolistin[index] ==
+                                                    1
+                                                ? SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width -
+                                                            60,
+                                                    height: 50 * 2,
+                                                    child: TextField(
+                                                      minLines: 1,
+                                                      maxLines: 2,
+                                                      focusNode: nodes[index],
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      textAlignVertical:
+                                                          TextAlignVertical
+                                                              .center,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                          color:
+                                                              TextColor_shadowcolor()),
+                                                      decoration:
+                                                          InputDecoration(
+                                                        isCollapsed: true,
+                                                        border:
+                                                            InputBorder.none,
+                                                        prefixIcon:
+                                                            const Checkbox(
+                                                                value: false,
+                                                                onChanged:
+                                                                    null),
+                                                        prefixIconColor:
+                                                            TextColor(),
+                                                        suffixIcon: InkWell(
+                                                          onTap: () {
+                                                            scollection
+                                                                .removelistitem(
+                                                                    index);
+                                                          },
+                                                          child: const Icon(
+                                                              Icons
+                                                                  .remove_circle_outline,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        hintText: '내용 입력',
+                                                        hintStyle: TextStyle(
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                            color:
+                                                                TextColor_shadowcolor()),
+                                                      ),
+                                                      controller:
+                                                          controllers[index],
+                                                    ),
+                                                  )
+                                                : SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width -
+                                                            60,
+                                                    height: 50 * 2,
+                                                    child: TextField(
+                                                      minLines: 1,
+                                                      maxLines: 2,
+                                                      focusNode: nodes[index],
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      textAlignVertical:
+                                                          TextAlignVertical
+                                                              .center,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                          color:
+                                                              TextColor_shadowcolor()),
+                                                      decoration:
+                                                          InputDecoration(
+                                                        isCollapsed: true,
+                                                        border:
+                                                            InputBorder.none,
+                                                        prefixIcon:
+                                                            NeumorphicIcon(
+                                                          Icons.star_rate,
+                                                          size: 30,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              surfaceIntensity:
+                                                                  0.5,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                        prefixIconColor:
+                                                            TextColor(),
+                                                        suffixIcon: InkWell(
+                                                          onTap: () {
+                                                            scollection
+                                                                .removelistitem(
+                                                                    index);
+                                                          },
+                                                          child: const Icon(
+                                                              Icons
+                                                                  .remove_circle_outline,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        hintText: '내용 입력',
+                                                        hintStyle: TextStyle(
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                            color:
+                                                                TextColor_shadowcolor()),
+                                                      ),
+                                                      controller:
+                                                          controllers[index],
+                                                    ),
+                                                  )),
+                                        const SizedBox(
+                                          width: 3,
+                                        ),
+                                      ],
+                                    );
+                                  })
+                              : const SizedBox())
+                    ],
+                  );
+                },
+              )
             : SizedBox(
                 height: 210,
                 child: Column(
@@ -1803,7 +2057,6 @@ addmemocollector(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
       .whenComplete(() {
     textEditingController_add_sheet.clear();
-    print('when ' + scollection.collection);
   });
 }
 
