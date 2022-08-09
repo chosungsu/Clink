@@ -6,12 +6,16 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/widgets/detectable_text.dart';
+import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../DB/Event.dart';
+import '../../../DB/MemoList.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/selectcollection.dart';
@@ -67,6 +71,12 @@ class _DayScriptState extends State<DayScript> {
   late TextEditingController textEditingController_add_sheet;
   List<TextEditingController> controllers = [];
   List<FocusNode> nodes = [];
+  List<bool> checkbottoms = [
+    false,
+    false,
+    false,
+  ];
+  List<MemoList> checklisttexts = [];
 
   @override
   void didChangeDependencies() {
@@ -77,6 +87,8 @@ class _DayScriptState extends State<DayScript> {
   @override
   void initState() {
     super.initState();
+    checklisttexts.clear();
+    controllers.clear();
     scollection.resetmemolist();
     cal_share_person.peoplecalendarrestart();
     finallist = cal_share_person.people;
@@ -161,110 +173,100 @@ class _DayScriptState extends State<DayScript> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: BGColor(),
-            resizeToAvoidBottomInset: true,
-            body: WillPopScope(
-              onWillPop: _onBackPressed,
-              child: GestureDetector(
-                onTap: () {
-                  searchNode_first_section.unfocus();
-                  searchNode_second_section.unfocus();
-                  searchNode_third_section.unfocus();
-                  searchNode_add_section.unfocus();
-                  for (int i = 0; i < nodes.length; i++) {
-                    nodes[i].unfocus();
-                  }
-                },
-                child: UI(),
-              ),
+      backgroundColor: BGColor(),
+      resizeToAvoidBottomInset: true,
+      body: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: GestureDetector(
+          onTap: () {
+            searchNode_first_section.unfocus();
+            searchNode_second_section.unfocus();
+            searchNode_third_section.unfocus();
+            searchNode_add_section.unfocus();
+            for (int i = 0; i < nodes.length; i++) {
+              nodes[i].unfocus();
+            }
+          },
+          child: UI(),
+        ),
+      ),
+      bottomNavigationBar: widget.position == 'note'
+          ? Container(
+              padding: MediaQuery.of(context).viewInsets,
+              decoration: BoxDecoration(
+                  color: BGColor_shadowcolor(),
+                  border: Border(
+                      top: BorderSide(
+                          color: TextColor_shadowcolor(), width: 2))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.post_add),
+                    color: checkbottoms[0] == false
+                        ? NaviColor(false)
+                        : NaviColor(true),
+                    iconSize: 20,
+                    onPressed: () {
+                      setState(() {
+                        checkbottoms[0] == false
+                            ? checkbottoms[0] = true
+                            : checkbottoms[0] = false;
+                        if (checkbottoms[0] == true) {
+                          scollection.addmemolist();
+                          Hive.box('user_setting').put('optionmemoinput', 0);
+                          scollection.addmemolistin();
+                          checkbottoms[0] = false;
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.check_box_outline_blank),
+                    color: checkbottoms[1] == false
+                        ? NaviColor(false)
+                        : NaviColor(true),
+                    iconSize: 20,
+                    onPressed: () {
+                      setState(() {
+                        checkbottoms[1] == false
+                            ? checkbottoms[1] = true
+                            : checkbottoms[1] = false;
+                        if (checkbottoms[1] == true) {
+                          scollection.addmemolist();
+                          Hive.box('user_setting').put('optionmemoinput', 1);
+                          scollection.addmemolistin();
+                          checkbottoms[1] = false;
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.star_rate),
+                    color: checkbottoms[2] == false
+                        ? NaviColor(false)
+                        : NaviColor(true),
+                    iconSize: 20,
+                    onPressed: () {
+                      setState(() {
+                        checkbottoms[2] == false
+                            ? checkbottoms[2] = true
+                            : checkbottoms[2] = false;
+                        if (checkbottoms[2] == true) {
+                          scollection.addmemolist();
+                          Hive.box('user_setting').put('optionmemoinput', 2);
+                          scollection.addmemolistin();
+                          checkbottoms[2] = false;
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ))
+          : const SizedBox(
+              height: 0,
             ),
-            floatingActionButton: widget.position == 'note'
-                ? SpeedDial(
-                    activeIcon: Icons.close,
-                    icon: Icons.add,
-                    backgroundColor: Colors.blue,
-                    overlayColor: BGColor(),
-                    overlayOpacity: 0.4,
-                    spacing: 10,
-                    spaceBetweenChildren: 10,
-                    children: [
-                        SpeedDialChild(
-                          child: NeumorphicIcon(
-                            Icons.swipe_right_alt,
-                            size: 30,
-                            style: NeumorphicStyle(
-                                shape: NeumorphicShape.convex,
-                                depth: 2,
-                                surfaceIntensity: 0.5,
-                                color: TextColor(),
-                                lightSource: LightSource.topLeft),
-                          ),
-                          backgroundColor: Colors.green.shade200,
-                          onTap: () {
-                            setState(() {
-                              scollection.addmemolist();
-                              Hive.box('user_setting')
-                                  .put('optionmemoinput', 0);
-                              scollection.addmemolistin();
-                              print(scollection.memolistin);
-                            });
-                          },
-                          label: '문장추가',
-                          labelStyle: TextStyle(
-                              color: Colors.black45,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize()),
-                        ),
-                        SpeedDialChild(
-                          child: NeumorphicIcon(
-                            Icons.check_box_outline_blank,
-                            size: 30,
-                            style: NeumorphicStyle(
-                                shape: NeumorphicShape.convex,
-                                depth: 2,
-                                surfaceIntensity: 0.5,
-                                color: TextColor(),
-                                lightSource: LightSource.topLeft),
-                          ),
-                          backgroundColor: Colors.blue.shade200,
-                          onTap: () {
-                            scollection.addmemolist();
-                            Hive.box('user_setting').put('optionmemoinput', 1);
-                            scollection.addmemolistin();
-                            print(scollection.memolistin);
-                          },
-                          label: '체크박스',
-                          labelStyle: TextStyle(
-                              color: Colors.black45,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize()),
-                        ),
-                        SpeedDialChild(
-                          child: NeumorphicIcon(
-                            Icons.star_rate,
-                            size: 30,
-                            style: NeumorphicStyle(
-                                shape: NeumorphicShape.convex,
-                                depth: 2,
-                                surfaceIntensity: 0.5,
-                                color: TextColor(),
-                                lightSource: LightSource.topLeft),
-                          ),
-                          backgroundColor: Colors.orange.shade200,
-                          onTap: () {
-                            scollection.addmemolist();
-                            Hive.box('user_setting').put('optionmemoinput', 2);
-                            scollection.addmemolistin();
-                            print(scollection.memolistin);
-                          },
-                          label: '중요부분',
-                          labelStyle: TextStyle(
-                              color: Colors.black45,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize()),
-                        ),
-                      ])
-                : null));
+    ));
   }
 
   UI() {
@@ -293,10 +295,64 @@ class _DayScriptState extends State<DayScript> {
                                     width: 50,
                                     child: InkWell(
                                         onTap: () {
-                                          setState(() {
-                                            //Navigator.pop(context);
-                                            Get.back();
-                                          });
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    title: Text('경고',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTitleTextsize(),
+                                                          color:
+                                                              Colors.redAccent,
+                                                        )),
+                                                    content: Text(
+                                                        '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                            color: Colors
+                                                                .blueGrey)),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        child: Text(
+                                                          '머무를게요',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                              color:
+                                                                  Colors.blue),
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context, false);
+                                                        },
+                                                      ),
+                                                      TextButton(
+                                                        child: Text(
+                                                          '나가기',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        onPressed: () {
+                                                          Get.back();
+                                                          Get.back();
+                                                        },
+                                                      )
+                                                    ],
+                                                  ));
                                         },
                                         child: Container(
                                           alignment: Alignment.center,
@@ -345,8 +401,7 @@ class _DayScriptState extends State<DayScript> {
                                   if (textEditingController1.text.isNotEmpty) {
                                     if (textEditingController2
                                             .text.isNotEmpty ||
-                                        textEditingController3
-                                            .text.isNotEmpty) {
+                                        widget.position == 'note') {
                                       //await localnotification.notishow();
                                       if (widget.position == 'cal') {
                                         Flushbar(
@@ -424,24 +479,13 @@ class _DayScriptState extends State<DayScript> {
                                                         contentTitleTextsize(),
                                                     fontWeight: FontWeight.bold,
                                                   )),
-                                              messageText: widget.position ==
-                                                      'cal'
-                                                  ? Text('일정이 정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ))
-                                                  : Text('메모가 정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      )),
+                                              messageText: Text(
+                                                  '일정이 정상적으로 추가되었습니다.',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: contentTextsize(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
                                               icon: const Icon(
                                                 Icons.info_outline,
                                                 size: 25.0,
@@ -498,24 +542,13 @@ class _DayScriptState extends State<DayScript> {
                                                         contentTitleTextsize(),
                                                     fontWeight: FontWeight.bold,
                                                   )),
-                                              messageText: widget.position ==
-                                                      'cal'
-                                                  ? Text('일정이 정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ))
-                                                  : Text('메모가 정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      )),
+                                              messageText: Text(
+                                                  '일정이 정상적으로 추가되었습니다.',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: contentTextsize(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
                                               icon: const Icon(
                                                 Icons.info_outline,
                                                 size: 25.0,
@@ -556,18 +589,41 @@ class _DayScriptState extends State<DayScript> {
                                           leftBarIndicatorColor:
                                               Colors.green.shade100,
                                         ).show(context);
+                                        print(controllers.length);
+                                        for (int i = 0;
+                                            i < scollection.memolistin.length;
+                                            i++) {
+                                          checklisttexts.add(MemoList(
+                                              memocontent: controllers[i].text,
+                                              contentindex:
+                                                  scollection.memolistin[i]));
+                                        }
+
                                         firestore
-                                            .collection('CalendarDataBase')
-                                            .add({
-                                          'Daytodo':
-                                              textEditingController1.text,
-                                          'Timestart':
-                                              textEditingController2.text,
-                                          'Timefinish':
-                                              textEditingController3.text,
-                                          'Shares': finallist,
-                                          'OriginalUser': username,
-                                        }).whenComplete(() {
+                                            .collection('MemoDataBase')
+                                            .doc()
+                                            .set(
+                                                {
+                                              'memoTitle':
+                                                  textEditingController1.text,
+                                              'Collection': scollection
+                                                              .collection ==
+                                                          '' ||
+                                                      scollection.collection ==
+                                                          null
+                                                  ? '지정된 컬렉션이 없습니다.'
+                                                  : scollection.collection,
+                                              'memolist': checklisttexts
+                                                  .map((e) => e.memocontent)
+                                                  .toList(),
+                                              'memoindex': checklisttexts
+                                                  .map((e) => e.contentindex)
+                                                  .toList(),
+                                              'OriginalUser': username
+                                            },
+                                                SetOptions(
+                                                    merge: true)).whenComplete(
+                                                () {
                                           Future.delayed(
                                               const Duration(seconds: 0), () {
                                             Flushbar(
@@ -580,24 +636,13 @@ class _DayScriptState extends State<DayScript> {
                                                         contentTitleTextsize(),
                                                     fontWeight: FontWeight.bold,
                                                   )),
-                                              messageText: widget.position ==
-                                                      'cal'
-                                                  ? Text('일정이 정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ))
-                                                  : Text('메모가 정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      )),
+                                              messageText: Text(
+                                                  '메모가 정상적으로 추가되었습니다.',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: contentTextsize(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
                                               icon: const Icon(
                                                 Icons.info_outline,
                                                 size: 25.0,
@@ -1061,7 +1106,7 @@ class _DayScriptState extends State<DayScript> {
                       const SizedBox(
                         height: 30,
                         child: Text(
-                          '우측 하단 +아이콘으로 메모내용 작성하시면 됩니다.',
+                          '하단 아이콘으로 메모내용 작성하시면 됩니다.',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -1089,33 +1134,15 @@ class _DayScriptState extends State<DayScript> {
                                                         .size
                                                         .width -
                                                     60,
-                                                height: 50 * 5,
-                                                child: TextField(
-                                                  minLines: 1,
-                                                  maxLines: 5,
+                                                child: DetectableTextField(
+                                                  minLines: null,
+                                                  maxLines: null,
                                                   focusNode: nodes[index],
-                                                  textAlign: TextAlign.start,
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          contentTextsize(),
-                                                      color:
-                                                          TextColor_shadowcolor()),
+                                                  controller:
+                                                      controllers[index],
                                                   decoration: InputDecoration(
                                                     isCollapsed: true,
                                                     border: InputBorder.none,
-                                                    suffixIcon: InkWell(
-                                                      onTap: () {
-                                                        scollection
-                                                            .removelistitem(
-                                                                index);
-                                                      },
-                                                      child: const Icon(
-                                                          Icons
-                                                              .remove_circle_outline,
-                                                          color: Colors.red),
-                                                    ),
                                                     hintText: '내용 입력',
                                                     hintStyle: TextStyle(
                                                         fontSize:
@@ -1123,22 +1150,32 @@ class _DayScriptState extends State<DayScript> {
                                                         color:
                                                             TextColor_shadowcolor()),
                                                   ),
-                                                  controller:
-                                                      controllers[index],
-                                                ),
-                                              )
+                                                  textAlign: TextAlign.start,
+                                                  textAlignVertical:
+                                                      TextAlignVertical.center,
+                                                  detectionRegExp:
+                                                      detectionRegExp()!,
+                                                  onDetectionTyped: (text) {
+                                                    print(text);
+                                                  },
+                                                  onDetectionFinished: () {
+                                                    print('finished');
+                                                  },
+                                                ))
                                             : (scollection.memolistin[index] ==
-                                                    1
+                                                        1 ||
+                                                    scollection.memolistin[
+                                                            index] ==
+                                                        999
                                                 ? SizedBox(
                                                     width:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width -
                                                             60,
-                                                    height: 50 * 2,
                                                     child: TextField(
                                                       minLines: 1,
-                                                      maxLines: 2,
+                                                      maxLines: 1,
                                                       focusNode: nodes[index],
                                                       textAlign:
                                                           TextAlign.start,
@@ -1149,24 +1186,39 @@ class _DayScriptState extends State<DayScript> {
                                                           fontSize:
                                                               contentTextsize(),
                                                           color:
-                                                              TextColor_shadowcolor()),
+                                                              TextColor_shadowcolor(),
+                                                          decoration: scollection
+                                                                          .memolistin[
+                                                                      index] ==
+                                                                  999
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null),
                                                       decoration:
                                                           InputDecoration(
                                                         isCollapsed: true,
                                                         border:
                                                             InputBorder.none,
-                                                        prefixIcon:
-                                                            const Checkbox(
-                                                                value: false,
-                                                                onChanged:
-                                                                    null),
-                                                        prefixIconColor:
-                                                            TextColor(),
+                                                        prefixIcon: InkWell(
+                                                          onTap: () {
+                                                            print('tapped');
+                                                            scollection
+                                                                .addmemocheckboxlist(
+                                                                    index);
+                                                          },
+                                                          child: Icon(
+                                                              Icons
+                                                                  .check_box_outline_blank,
+                                                              color:
+                                                                  TextColor()),
+                                                        ),
                                                         suffixIcon: InkWell(
                                                           onTap: () {
                                                             scollection
                                                                 .removelistitem(
                                                                     index);
+                                                            controllers[index]
+                                                                .text = '';
                                                           },
                                                           child: const Icon(
                                                               Icons
@@ -1191,10 +1243,9 @@ class _DayScriptState extends State<DayScript> {
                                                                 .size
                                                                 .width -
                                                             60,
-                                                    height: 50 * 2,
                                                     child: TextField(
                                                       minLines: 1,
-                                                      maxLines: 2,
+                                                      maxLines: 1,
                                                       focusNode: nodes[index],
                                                       textAlign:
                                                           TextAlign.start,
@@ -1211,23 +1262,9 @@ class _DayScriptState extends State<DayScript> {
                                                         isCollapsed: true,
                                                         border:
                                                             InputBorder.none,
-                                                        prefixIcon:
-                                                            NeumorphicIcon(
-                                                          Icons.star_rate,
-                                                          size: 30,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              surfaceIntensity:
-                                                                  0.5,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
+                                                        prefixIcon: Icon(
+                                                            Icons.star_rate,
+                                                            color: TextColor()),
                                                         prefixIconColor:
                                                             TextColor(),
                                                         suffixIcon: InkWell(
@@ -1235,6 +1272,8 @@ class _DayScriptState extends State<DayScript> {
                                                             scollection
                                                                 .removelistitem(
                                                                     index);
+                                                            controllers[index]
+                                                                .text = '';
                                                           },
                                                           child: const Icon(
                                                               Icons

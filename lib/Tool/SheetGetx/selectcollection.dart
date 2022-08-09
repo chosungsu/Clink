@@ -30,6 +30,12 @@ class selectcollection extends GetxController {
     notifyChildrens();
   }
 
+  void addmemocheckboxlist(int index) {
+    memolistin[index] == 999 ? memolistin[index] = 1 : memolistin[index] = 999;
+    update();
+    notifyChildrens();
+  }
+
   void removelistitem(int index) {
     memolistin.removeAt(index);
     memoindex--;

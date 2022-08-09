@@ -183,6 +183,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.7"
+  detectable_text_field:
+    dependency: "direct main"
+    description:
+      name: detectable_text_field
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   dio:
     dependency: "direct main"
     description:

@@ -87,6 +87,7 @@ dependencies:
   get: ^4.6.5
   another_flushbar: ^1.10.29
   alphabet_scroll_view: ^0.3.1
+  detectable_text_field : ^2.0.3
   #local db
   hive: ^2.0.6
   hive_flutter: ^1.1.0

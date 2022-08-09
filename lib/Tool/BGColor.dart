@@ -12,6 +12,16 @@ Color BGColor() {
   return color_bg;
 }
 
+Color BGColor_shadowcolor() {
+  Color color_bgstatus = Colors.white;
+  Hive.box('user_setting').get('which_color_background') == null
+      ? color_bgstatus = MyTheme.colorWhitestatus
+      : (Hive.box('user_setting').get('which_color_background') == 0
+          ? color_bgstatus = MyTheme.colorWhitestatus
+          : color_bgstatus = MyTheme.colorblackstatus);
+  return color_bgstatus;
+}
+
 Color ButtonColor() {
   Color color_btn = Colors.blue;
   return color_btn;
