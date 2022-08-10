@@ -5,6 +5,7 @@ import 'package:clickbyme/Tool/SheetGetx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -77,6 +78,9 @@ class _DayScriptState extends State<DayScript> {
     false,
   ];
   List<MemoList> checklisttexts = [];
+  Color _color = Hive.box('user_setting').get('typecolorcalendar') == null
+      ? BGColor()
+      : Color(Hive.box('user_setting').get('typecolorcalendar'));
 
   @override
   void didChangeDependencies() {
@@ -87,6 +91,10 @@ class _DayScriptState extends State<DayScript> {
   @override
   void initState() {
     super.initState();
+    Hive.box('user_setting').put('typecolorcalendar', null);
+    _color = Hive.box('user_setting').get('typecolorcalendar') == null
+        ? BGColor()
+        : Color(Hive.box('user_setting').get('typecolorcalendar'));
     checklisttexts.clear();
     controllers.clear();
     scollection.resetmemolist();
@@ -202,7 +210,7 @@ class _DayScriptState extends State<DayScript> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.post_add),
+                    icon: const Icon(Icons.post_add),
                     color: checkbottoms[0] == false
                         ? NaviColor(false)
                         : NaviColor(true),
@@ -213,7 +221,7 @@ class _DayScriptState extends State<DayScript> {
                             ? checkbottoms[0] = true
                             : checkbottoms[0] = false;
                         if (checkbottoms[0] == true) {
-                          scollection.addmemolist();
+                          scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 0);
                           scollection.addmemolistin();
                           checkbottoms[0] = false;
@@ -222,7 +230,7 @@ class _DayScriptState extends State<DayScript> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.check_box_outline_blank),
+                    icon: const Icon(Icons.check_box_outline_blank),
                     color: checkbottoms[1] == false
                         ? NaviColor(false)
                         : NaviColor(true),
@@ -233,7 +241,7 @@ class _DayScriptState extends State<DayScript> {
                             ? checkbottoms[1] = true
                             : checkbottoms[1] = false;
                         if (checkbottoms[1] == true) {
-                          scollection.addmemolist();
+                          scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 1);
                           scollection.addmemolistin();
                           checkbottoms[1] = false;
@@ -242,7 +250,7 @@ class _DayScriptState extends State<DayScript> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.star_rate),
+                    icon: const Icon(Icons.star_rate),
                     color: checkbottoms[2] == false
                         ? NaviColor(false)
                         : NaviColor(true),
@@ -253,11 +261,65 @@ class _DayScriptState extends State<DayScript> {
                             ? checkbottoms[2] = true
                             : checkbottoms[2] = false;
                         if (checkbottoms[2] == true) {
-                          scollection.addmemolist();
+                          scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 2);
                           scollection.addmemolistin();
                           checkbottoms[2] = false;
                         }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Container(
+                      width: 20.0,
+                      height: 20.0,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(100.0)),
+                        border: Border.all(
+                          color: TextColor(),
+                          width: 2.0,
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        backgroundColor: _color,
+                      ),
+                    ),
+                    color: checkbottoms[2] == false
+                        ? NaviColor(false)
+                        : NaviColor(true),
+                    iconSize: 20,
+                    onPressed: () {
+                      setState(() {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('선택'),
+                              content: SingleChildScrollView(
+                                child: ColorPicker(
+                                  pickerColor: _color,
+                                  onColorChanged: (Color color) {
+                                    setState(() {
+                                      _color = color;
+                                    });
+                                  },
+                                ),
+                              ),
+                              actions: <Widget>[
+                                ElevatedButton(
+                                  child: const Text('반영하기'),
+                                  onPressed: () {
+                                    Hive.box('user_setting').put(
+                                        'typecolorcalendar',
+                                        _color.value.toInt());
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       });
                     },
                   ),
@@ -275,7 +337,7 @@ class _DayScriptState extends State<DayScript> {
       height: height,
       child: Container(
           decoration: BoxDecoration(
-            color: BGColor(),
+            color: _color,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -619,7 +681,15 @@ class _DayScriptState extends State<DayScript> {
                                               'memoindex': checklisttexts
                                                   .map((e) => e.contentindex)
                                                   .toList(),
-                                              'OriginalUser': username
+                                              'OriginalUser': username,
+                                              'color': Hive.box('user_setting')
+                                                  .get('typecolorcalendar'),
+                                              'Date': DateFormat('yyyy-MM-dd')
+                                                      .parse(widget.firstdate
+                                                          .toString())
+                                                      .toString()
+                                                      .split(' ')[0] +
+                                                  '일',
                                             },
                                                 SetOptions(
                                                     merge: true)).whenComplete(

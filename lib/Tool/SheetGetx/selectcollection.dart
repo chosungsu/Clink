@@ -18,8 +18,8 @@ class selectcollection extends GetxController {
     notifyChildrens();
   }
 
-  void addmemolist() {
-    memoindex++;
+  void addmemolist(int length) {
+    memoindex += length;
     update();
     notifyChildrens();
   }
