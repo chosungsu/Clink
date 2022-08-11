@@ -430,7 +430,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            childAspectRatio: 3 / 5,
+                            childAspectRatio: 3 / 6,
                             mainAxisSpacing: 10,
                             crossAxisSpacing: 10),
                     physics: const BouncingScrollPhysics(),
@@ -475,7 +475,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                               children: [
                                 ContainerDesign(
                                     child: SizedBox(
-                                        height: 230,
+                                        height: 260,
                                         width:
                                             (MediaQuery.of(context).size.width -
                                                     80) /
@@ -488,22 +488,28 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                 MainAxisAlignment.end,
                                             children: [
                                               SizedBox(
-                                                height: 30,
-                                                child: Text(
-                                                  snapshot.data!.docs[index]
-                                                      ['memoTitle'],
-                                                  maxLines: 1,
-                                                  softWrap: true,
-                                                  style: TextStyle(
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        contentTitleTextsize(),
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
+                                                  height: 60,
+                                                  child: SingleChildScrollView(
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    child: Text(
+                                                      snapshot.data!.docs[index]
+                                                          ['memoTitle'],
+                                                      maxLines: 2,
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            contentTitleTextsize(),
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  )),
                                             ],
                                           ),
                                         )),
@@ -528,7 +534,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                             .start,
                                                     children: [
                                                       SizedBox(
-                                                        height: 120,
+                                                        height: 110,
                                                         child: Text(
                                                           textsummary[index],
                                                           softWrap: true,
@@ -574,12 +580,24 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                     ),
                                                   ),
                                                   onPressed: () => {},
-                                                  icon: const Icon(
-                                                    Icons.local_offer,
-                                                  ),
+                                                  icon: Icon(Icons.local_offer,
+                                                      color:
+                                                          TextColor_shadowcolor()),
                                                   label: Text(
                                                     snapshot.data!.docs[index]
                                                         ['Collection'],
+                                                    softWrap: true,
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                      color:
+                                                          TextColor_shadowcolor(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                 ),
                                               )

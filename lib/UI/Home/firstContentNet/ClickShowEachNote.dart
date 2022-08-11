@@ -84,7 +84,12 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
     scollection.addmemolist(widget.docsummary.length);
     for (int j = 0; j < widget.docindex.length; j++) {
       Hive.box('user_setting').put('optionmemoinput', widget.docindex[j]);
-      scollection.addmemolistin();
+      scollection.addmemolistin(j);
+    }
+    for (int k = 0; k < widget.docindex.length; k++) {
+      Hive.box('user_setting')
+          .put('optionmemocontentinput', widget.docsummary[k]);
+      scollection.addmemolistcontentin(k);
     }
   }
 
@@ -153,8 +158,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                 onTap: () {
                   searchNode_first_section.unfocus();
                   searchNode_add_section.unfocus();
-                  for (int i = 0; i < nodes.length; i++) {
+                  for (int i = 0;
+                      i < scollection.memolistcontentin.length;
+                      i++) {
                     nodes[i].unfocus();
+                    scollection.memolistcontentin[i] = controllers[i].text;
                   }
                 },
                 child: UI(),
@@ -177,15 +185,21 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                           : NaviColor(true),
                       iconSize: 20,
                       onPressed: () {
-                        checkbottoms[0] == false
-                            ? checkbottoms[0] = true
-                            : checkbottoms[0] = false;
-                        if (checkbottoms[0] == true) {
-                          scollection.addmemolist(1);
-                          Hive.box('user_setting').put('optionmemoinput', 0);
-                          scollection.addmemolistin();
-                          checkbottoms[0] = false;
-                        }
+                        setState(() {
+                          checkbottoms[0] == false
+                              ? checkbottoms[0] = true
+                              : checkbottoms[0] = false;
+                          if (checkbottoms[0] == true) {
+                            scollection.addmemolist(1);
+                            Hive.box('user_setting').put('optionmemoinput', 0);
+                            Hive.box('user_setting')
+                                .put('optionmemocontentinput', null);
+                            scollection.addmemolistin(scollection.memoindex);
+                            scollection
+                                .addmemolistcontentin(scollection.memoindex);
+                            checkbottoms[0] = false;
+                          }
+                        });
                       },
                     ),
                     IconButton(
@@ -195,15 +209,21 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                           : NaviColor(true),
                       iconSize: 20,
                       onPressed: () {
-                        checkbottoms[1] == false
-                            ? checkbottoms[1] = true
-                            : checkbottoms[1] = false;
-                        if (checkbottoms[1] == true) {
-                          scollection.addmemolist(1);
-                          Hive.box('user_setting').put('optionmemoinput', 1);
-                          scollection.addmemolistin();
-                          checkbottoms[1] = false;
-                        }
+                        setState(() {
+                          checkbottoms[1] == false
+                              ? checkbottoms[1] = true
+                              : checkbottoms[1] = false;
+                          if (checkbottoms[1] == true) {
+                            scollection.addmemolist(1);
+                            Hive.box('user_setting').put('optionmemoinput', 1);
+                            Hive.box('user_setting')
+                                .put('optionmemocontentinput', null);
+                            scollection.addmemolistin(scollection.memoindex);
+                            scollection
+                                .addmemolistcontentin(scollection.memoindex);
+                            checkbottoms[1] = false;
+                          }
+                        });
                       },
                     ),
                     IconButton(
@@ -213,15 +233,21 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                           : NaviColor(true),
                       iconSize: 20,
                       onPressed: () {
-                        checkbottoms[2] == false
-                            ? checkbottoms[2] = true
-                            : checkbottoms[2] = false;
-                        if (checkbottoms[2] == true) {
-                          scollection.addmemolist(1);
-                          Hive.box('user_setting').put('optionmemoinput', 2);
-                          scollection.addmemolistin();
-                          checkbottoms[2] = false;
-                        }
+                        setState(() {
+                          checkbottoms[2] == false
+                              ? checkbottoms[2] = true
+                              : checkbottoms[2] = false;
+                          if (checkbottoms[2] == true) {
+                            scollection.addmemolist(1);
+                            Hive.box('user_setting').put('optionmemoinput', 2);
+                            Hive.box('user_setting')
+                                .put('optionmemocontentinput', null);
+                            scollection.addmemolistin(scollection.memoindex);
+                            scollection
+                                .addmemolistcontentin(scollection.memoindex);
+                            checkbottoms[2] = false;
+                          }
+                        });
                       },
                     ),
                     IconButton(
@@ -245,35 +271,37 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                           : NaviColor(true),
                       iconSize: 20,
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('선택'),
-                              content: SingleChildScrollView(
-                                child: ColorPicker(
-                                  pickerColor: _color,
-                                  onColorChanged: (Color color) {
-                                    setState(() {
-                                      _color = color;
-                                    });
-                                  },
+                        setState(() {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('선택'),
+                                content: SingleChildScrollView(
+                                  child: ColorPicker(
+                                    pickerColor: _color,
+                                    onColorChanged: (Color color) {
+                                      setState(() {
+                                        _color = color;
+                                      });
+                                    },
+                                  ),
                                 ),
-                              ),
-                              actions: <Widget>[
-                                ElevatedButton(
-                                  child: const Text('반영하기'),
-                                  onPressed: () {
-                                    Hive.box('user_setting').put(
-                                        'typecolorcalendar',
-                                        _color.value.toInt());
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    child: const Text('반영하기'),
+                                    onPressed: () {
+                                      Hive.box('user_setting').put(
+                                          'typecolorcalendar',
+                                          _color.value.toInt());
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        });
                       },
                     ),
                   ],
@@ -453,8 +481,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                             i++) {
                                                           checklisttexts.add(MemoList(
                                                               memocontent:
-                                                                  controllers[i]
-                                                                      .text,
+                                                                  scollection
+                                                                          .memolistcontentin[
+                                                                      i],
                                                               contentindex:
                                                                   scollection
                                                                           .memolistin[
@@ -689,8 +718,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                               isEqualTo: widget
                                                                   .doccollection)
                                                           .where('memoTitle',
-                                                              isEqualTo: widget
-                                                                  .docname)
+                                                              isEqualTo:
+                                                                  textEditingController1
+                                                                      .text)
                                                           .where('OriginalUser',
                                                               isEqualTo:
                                                                   username)
@@ -699,8 +729,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                   .doccolor
                                                                   .toInt())
                                                           .where('memolist',
-                                                              isEqualTo: widget
-                                                                  .docsummary)
+                                                              isEqualTo: scollection
+                                                                  .memolistcontentin)
                                                           .where('Date',
                                                               isEqualTo: widget
                                                                           .date
@@ -710,15 +740,15 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                   '-' +
                                                                   widget.date
                                                                           .toString()
-                                                                          .split('-')[
+                                                                          .split(
+                                                                              '-')[
                                                                       1] +
                                                                   '-' +
                                                                   widget.date
                                                                       .toString()
-                                                                      .split('-')[
-                                                                          2]
-                                                                      .substring(
-                                                                          0, 2) +
+                                                                      .split(
+                                                                          '-')[2]
+                                                                      .substring(0, 2) +
                                                                   '일')
                                                           .get()
                                                           .then((value) {
@@ -830,8 +860,12 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                           onTap: () {
                             searchNode.unfocus();
                             searchNode_first_section.unfocus();
-                            for (int i = 0; i < nodes.length; i++) {
+                            for (int i = 0;
+                                i < scollection.memolistcontentin.length;
+                                i++) {
                               nodes[i].unfocus();
+                              scollection.memolistcontentin[i] =
+                                  controllers[i].text;
                             }
                           },
                           child: Padding(
@@ -1017,6 +1051,18 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                     color: Colors.blue),
               ),
             ),
+            /**
+             * setState(() {
+      String content = scollection.memolistcontentin[oldIndex];
+      int indexcontent = scollection.memolistcontentin[oldIndex];
+      scollection.removelistitem(oldIndex);
+      Hive.box('user_setting').put('optionmemoinput', indexcontent);
+      Hive.box('user_setting').put('optionmemocontentinput', content);
+      scollection.addmemolist(1);
+      scollection.addmemolistin(newIndex);
+      scollection.addmemolistcontentin(newIndex);
+    });
+             */
             GetBuilder<selectcollection>(
                 builder: (_) => scollection.memolistin.isNotEmpty
                     ? ListView.builder(
@@ -1027,7 +1073,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                         itemBuilder: (context, index) {
                           nodes.add(FocusNode());
                           controllers.add(TextEditingController());
-                          controllers[index].text = widget.docsummary[index];
+
+                          widget.docsummary.length <= index
+                              ? null
+                              : controllers[index].text =
+                                  scollection.memolistcontentin[index];
                           return Row(
                             children: [
                               const SizedBox(
@@ -1036,7 +1086,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                               scollection.memolistin[index] == 0
                                   ? SizedBox(
                                       width: MediaQuery.of(context).size.width -
-                                          60,
+                                          50,
                                       child: DetectableTextField(
                                         minLines: null,
                                         maxLines: null,
@@ -1055,6 +1105,100 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                         decoration: InputDecoration(
                                           isCollapsed: true,
                                           border: InputBorder.none,
+                                          suffixIcon: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    scollection
+                                                        .removelistitem(index);
+                                                    controllers[index].text =
+                                                        '';
+                                                  });
+                                                },
+                                                child: const Icon(
+                                                    Icons.remove_circle_outline,
+                                                    color: Colors.red),
+                                              ),
+                                              Column(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        String content = scollection
+                                                                .memolistcontentin[
+                                                            index];
+                                                        int indexcontent =
+                                                            scollection
+                                                                    .memolistin[
+                                                                index];
+                                                        scollection
+                                                            .removelistitem(
+                                                                index);
+                                                        Hive.box('user_setting')
+                                                            .put(
+                                                                'optionmemoinput',
+                                                                indexcontent);
+                                                        Hive.box('user_setting')
+                                                            .put(
+                                                                'optionmemocontentinput',
+                                                                content);
+                                                        scollection
+                                                            .addmemolist(1);
+                                                        scollection
+                                                            .addmemolistin(
+                                                                index - 1);
+                                                        scollection
+                                                            .addmemolistcontentin(
+                                                                index - 1);
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                        Icons.expand_less,
+                                                        color:
+                                                            TextColor_shadowcolor()),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        String content = scollection
+                                                                .memolistcontentin[
+                                                            index];
+                                                        int indexcontent =
+                                                            scollection
+                                                                    .memolistin[
+                                                                index];
+                                                        scollection
+                                                            .removelistitem(
+                                                                index);
+                                                        Hive.box('user_setting')
+                                                            .put(
+                                                                'optionmemoinput',
+                                                                indexcontent);
+                                                        Hive.box('user_setting')
+                                                            .put(
+                                                                'optionmemocontentinput',
+                                                                content);
+                                                        scollection
+                                                            .addmemolist(1);
+                                                        scollection
+                                                            .addmemolistin(
+                                                                index + 1);
+                                                        scollection
+                                                            .addmemolistcontentin(
+                                                                index + 1);
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                        Icons.expand_more,
+                                                        color:
+                                                            TextColor_shadowcolor()),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
                                           hintText: '내용 입력',
                                           hintStyle: TextStyle(
                                               fontSize: contentTextsize(),
@@ -1077,7 +1221,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width -
-                                              60,
+                                              50,
                                           child: TextField(
                                             minLines: 1,
                                             maxLines: 1,
@@ -1116,18 +1260,103 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                         .check_box_outline_blank,
                                                     color: TextColor()),
                                               ),
-                                              suffixIcon: InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    scollection
-                                                        .removelistitem(index);
-                                                    controllers[index].text =
-                                                        '';
-                                                  });
-                                                },
-                                                child: const Icon(
-                                                    Icons.remove_circle_outline,
-                                                    color: Colors.red),
+                                              suffixIcon: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        scollection
+                                                            .removelistitem(
+                                                                index);
+                                                        controllers[index]
+                                                            .text = '';
+                                                      });
+                                                    },
+                                                    child: const Icon(
+                                                        Icons
+                                                            .remove_circle_outline,
+                                                        color: Colors.red),
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            String content =
+                                                                scollection
+                                                                        .memolistcontentin[
+                                                                    index];
+                                                            int indexcontent =
+                                                                scollection
+                                                                        .memolistin[
+                                                                    index];
+                                                            scollection
+                                                                .removelistitem(
+                                                                    index);
+                                                            Hive.box('user_setting').put(
+                                                                'optionmemoinput',
+                                                                indexcontent);
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'optionmemocontentinput',
+                                                                    content);
+                                                            scollection
+                                                                .addmemolist(1);
+                                                            scollection
+                                                                .addmemolistin(
+                                                                    index - 1);
+                                                            scollection
+                                                                .addmemolistcontentin(
+                                                                    index - 1);
+                                                          });
+                                                        },
+                                                        child: Icon(
+                                                            Icons.expand_less,
+                                                            color:
+                                                                TextColor_shadowcolor()),
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            String content =
+                                                                scollection
+                                                                        .memolistcontentin[
+                                                                    index];
+                                                            int indexcontent =
+                                                                scollection
+                                                                        .memolistin[
+                                                                    index];
+                                                            scollection
+                                                                .removelistitem(
+                                                                    index);
+                                                            Hive.box('user_setting').put(
+                                                                'optionmemoinput',
+                                                                indexcontent);
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'optionmemocontentinput',
+                                                                    content);
+                                                            scollection
+                                                                .addmemolist(1);
+                                                            scollection
+                                                                .addmemolistin(
+                                                                    index + 1);
+                                                            scollection
+                                                                .addmemolistcontentin(
+                                                                    index + 1);
+                                                          });
+                                                        },
+                                                        child: Icon(
+                                                            Icons.expand_more,
+                                                            color:
+                                                                TextColor_shadowcolor()),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
                                               ),
                                               hintText: '내용 입력',
                                               hintStyle: TextStyle(
@@ -1149,7 +1378,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width -
-                                              60,
+                                              50,
                                           child: TextField(
                                             onTap: () {
                                               controllers[index].selection =
@@ -1173,18 +1402,103 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                               prefixIcon: Icon(Icons.star_rate,
                                                   color: TextColor()),
                                               prefixIconColor: TextColor(),
-                                              suffixIcon: InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    scollection
-                                                        .removelistitem(index);
-                                                    controllers[index].text =
-                                                        '';
-                                                  });
-                                                },
-                                                child: const Icon(
-                                                    Icons.remove_circle_outline,
-                                                    color: Colors.red),
+                                              suffixIcon: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        scollection
+                                                            .removelistitem(
+                                                                index);
+                                                        controllers[index]
+                                                            .text = '';
+                                                      });
+                                                    },
+                                                    child: const Icon(
+                                                        Icons
+                                                            .remove_circle_outline,
+                                                        color: Colors.red),
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            String content =
+                                                                scollection
+                                                                        .memolistcontentin[
+                                                                    index];
+                                                            int indexcontent =
+                                                                scollection
+                                                                        .memolistin[
+                                                                    index];
+                                                            scollection
+                                                                .removelistitem(
+                                                                    index);
+                                                            Hive.box('user_setting').put(
+                                                                'optionmemoinput',
+                                                                indexcontent);
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'optionmemocontentinput',
+                                                                    content);
+                                                            scollection
+                                                                .addmemolist(1);
+                                                            scollection
+                                                                .addmemolistin(
+                                                                    index - 1);
+                                                            scollection
+                                                                .addmemolistcontentin(
+                                                                    index - 1);
+                                                          });
+                                                        },
+                                                        child: Icon(
+                                                            Icons.expand_less,
+                                                            color:
+                                                                TextColor_shadowcolor()),
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            String content =
+                                                                scollection
+                                                                        .memolistcontentin[
+                                                                    index];
+                                                            int indexcontent =
+                                                                scollection
+                                                                        .memolistin[
+                                                                    index];
+                                                            scollection
+                                                                .removelistitem(
+                                                                    index);
+                                                            Hive.box('user_setting').put(
+                                                                'optionmemoinput',
+                                                                indexcontent);
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'optionmemocontentinput',
+                                                                    content);
+                                                            scollection
+                                                                .addmemolist(1);
+                                                            scollection
+                                                                .addmemolistin(
+                                                                    index + 1);
+                                                            scollection
+                                                                .addmemolistcontentin(
+                                                                    index + 1);
+                                                          });
+                                                        },
+                                                        child: Icon(
+                                                            Icons.expand_more,
+                                                            color:
+                                                                TextColor_shadowcolor()),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
                                               ),
                                               hintText: '내용 입력',
                                               hintStyle: TextStyle(

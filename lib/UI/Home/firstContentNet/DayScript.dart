@@ -223,7 +223,7 @@ class _DayScriptState extends State<DayScript> {
                         if (checkbottoms[0] == true) {
                           scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 0);
-                          scollection.addmemolistin();
+                          scollection.addmemolistin(scollection.memoindex);
                           checkbottoms[0] = false;
                         }
                       });
@@ -243,7 +243,7 @@ class _DayScriptState extends State<DayScript> {
                         if (checkbottoms[1] == true) {
                           scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 1);
-                          scollection.addmemolistin();
+                          scollection.addmemolistin(scollection.memoindex);
                           checkbottoms[1] = false;
                         }
                       });
@@ -263,7 +263,7 @@ class _DayScriptState extends State<DayScript> {
                         if (checkbottoms[2] == true) {
                           scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 2);
-                          scollection.addmemolistin();
+                          scollection.addmemolistin(scollection.memoindex);
                           checkbottoms[2] = false;
                         }
                       });

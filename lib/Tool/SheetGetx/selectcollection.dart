@@ -5,6 +5,7 @@ class selectcollection extends GetxController {
   var collection = Hive.box('user_setting').get('memocollection') ?? '';
   var memoindex;
   List memolistin = List.empty(growable: true);
+  List memolistcontentin = List.empty(growable: true);
 
   void setcollection() {
     collection = Hive.box('user_setting').get('memocollection');
@@ -24,8 +25,19 @@ class selectcollection extends GetxController {
     notifyChildrens();
   }
 
-  void addmemolistin() {
-    memolistin.add(Hive.box('user_setting').get('optionmemoinput'));
+  void addmemolistin(int index) {
+    memolistin.insert(index, Hive.box('user_setting').get('optionmemoinput'));
+    update();
+    notifyChildrens();
+  }
+
+  void addmemolistcontentin(int index) {
+    String str = '';
+    Hive.box('user_setting').get('optionmemocontentinput') == null
+        ? str = ''
+        : str = Hive.box('user_setting').get('optionmemocontentinput');
+
+    memolistcontentin.insert(index, str);
     update();
     notifyChildrens();
   }
@@ -38,6 +50,7 @@ class selectcollection extends GetxController {
 
   void removelistitem(int index) {
     memolistin.removeAt(index);
+    memolistcontentin.removeAt(index);
     memoindex--;
     update();
     notifyChildrens();
@@ -46,6 +59,7 @@ class selectcollection extends GetxController {
   void resetmemolist() {
     memoindex = 0;
     memolistin.clear();
+    memolistcontentin.clear();
     update();
     notifyChildrens();
   }
