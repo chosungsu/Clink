@@ -96,7 +96,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                 children: [
                   SpeedDialChild(
                     child: NeumorphicIcon(
-                      Icons.collections_bookmark,
+                      Icons.local_offer,
                       size: 30,
                       style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,
@@ -110,7 +110,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                       addmemocollector(context, username, controller,
                           searchNode, 'outside', scollection);
                     },
-                    label: '컬렉션 추가',
+                    label: '메모태그 추가',
                     labelStyle: TextStyle(
                         color: Colors.black45,
                         fontWeight: FontWeight.bold,

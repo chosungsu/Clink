@@ -161,7 +161,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                   for (int i = 0;
                       i < scollection.memolistcontentin.length;
                       i++) {
-                    nodes[i].unfocus();
+                    if (nodes.isNotEmpty) {
+                      nodes[i].unfocus();
+                    }
                     scollection.memolistcontentin[i] = controllers[i].text;
                   }
                 },
@@ -190,14 +192,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                               ? checkbottoms[0] = true
                               : checkbottoms[0] = false;
                           if (checkbottoms[0] == true) {
-                            scollection.addmemolist(1);
                             Hive.box('user_setting').put('optionmemoinput', 0);
                             Hive.box('user_setting')
                                 .put('optionmemocontentinput', null);
                             scollection.addmemolistin(scollection.memoindex);
                             scollection
                                 .addmemolistcontentin(scollection.memoindex);
+                            scollection.addmemolist(1);
                             checkbottoms[0] = false;
+                          }
+                          for (int i = 0;
+                              i < scollection.memolistcontentin.length;
+                              i++) {
+                            if (nodes.isNotEmpty) {
+                              nodes[i].unfocus();
+                            }
+                            scollection.memolistcontentin[i] =
+                                controllers[i].text;
                           }
                         });
                       },
@@ -214,14 +225,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                               ? checkbottoms[1] = true
                               : checkbottoms[1] = false;
                           if (checkbottoms[1] == true) {
-                            scollection.addmemolist(1);
                             Hive.box('user_setting').put('optionmemoinput', 1);
                             Hive.box('user_setting')
                                 .put('optionmemocontentinput', null);
                             scollection.addmemolistin(scollection.memoindex);
                             scollection
                                 .addmemolistcontentin(scollection.memoindex);
+                            scollection.addmemolist(1);
                             checkbottoms[1] = false;
+                          }
+                          for (int i = 0;
+                              i < scollection.memolistcontentin.length;
+                              i++) {
+                            if (nodes.isNotEmpty) {
+                              nodes[i].unfocus();
+                            }
+                            scollection.memolistcontentin[i] =
+                                controllers[i].text;
                           }
                         });
                       },
@@ -238,14 +258,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                               ? checkbottoms[2] = true
                               : checkbottoms[2] = false;
                           if (checkbottoms[2] == true) {
-                            scollection.addmemolist(1);
                             Hive.box('user_setting').put('optionmemoinput', 2);
                             Hive.box('user_setting')
                                 .put('optionmemocontentinput', null);
                             scollection.addmemolistin(scollection.memoindex);
                             scollection
                                 .addmemolistcontentin(scollection.memoindex);
+                            scollection.addmemolist(1);
                             checkbottoms[2] = false;
+                          }
+                          for (int i = 0;
+                              i < scollection.memolistcontentin.length;
+                              i++) {
+                            if (nodes.isNotEmpty) {
+                              nodes[i].unfocus();
+                            }
+                            scollection.memolistcontentin[i] =
+                                controllers[i].text;
                           }
                         });
                       },
@@ -271,6 +300,15 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                           : NaviColor(true),
                       iconSize: 20,
                       onPressed: () {
+                        for (int i = 0;
+                            i < scollection.memolistcontentin.length;
+                            i++) {
+                          if (nodes.isNotEmpty) {
+                            nodes[i].unfocus();
+                          }
+                          scollection.memolistcontentin[i] =
+                              controllers[i].text;
+                        }
                         setState(() {
                           showDialog(
                             context: context,
@@ -863,7 +901,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                             for (int i = 0;
                                 i < scollection.memolistcontentin.length;
                                 i++) {
-                              nodes[i].unfocus();
+                              if (nodes.isNotEmpty) {
+                                nodes[i].unfocus();
+                              }
                               scollection.memolistcontentin[i] =
                                   controllers[i].text;
                             }
@@ -970,6 +1010,13 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                     ),
                     InkWell(
                       onTap: () {
+                        for (int i = 0;
+                            i < scollection.memolistcontentin.length;
+                            i++) {
+                          nodes[i].unfocus();
+                          scollection.memolistcontentin[i] =
+                              controllers[i].text;
+                        }
                         addmemocollector(
                           context,
                           username,
@@ -1051,18 +1098,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                     color: Colors.blue),
               ),
             ),
-            /**
-             * setState(() {
-      String content = scollection.memolistcontentin[oldIndex];
-      int indexcontent = scollection.memolistcontentin[oldIndex];
-      scollection.removelistitem(oldIndex);
-      Hive.box('user_setting').put('optionmemoinput', indexcontent);
-      Hive.box('user_setting').put('optionmemocontentinput', content);
-      scollection.addmemolist(1);
-      scollection.addmemolistin(newIndex);
-      scollection.addmemolistcontentin(newIndex);
-    });
-             */
             GetBuilder<selectcollection>(
                 builder: (_) => scollection.memolistin.isNotEmpty
                     ? ListView.builder(
@@ -1088,9 +1123,13 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                       width: MediaQuery.of(context).size.width -
                                           50,
                                       child: DetectableTextField(
+                                        onTap: () {
+                                          scollection.memolistcontentin[index] =
+                                              controllers[index].text;
+                                        },
                                         minLines: null,
                                         maxLines: null,
-                                        focusNode: nodes[index],
+                                        focusNode: nodes[index]..hasFocus,
                                         basicStyle: TextStyle(
                                           fontSize: contentTextsize(),
                                           color: TextColor(),
@@ -1146,12 +1185,21 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                 content);
                                                         scollection
                                                             .addmemolist(1);
-                                                        scollection
-                                                            .addmemolistin(
-                                                                index - 1);
-                                                        scollection
-                                                            .addmemolistcontentin(
-                                                                index - 1);
+                                                        if (index == 0) {
+                                                          scollection
+                                                              .addmemolistin(
+                                                                  index);
+                                                          scollection
+                                                              .addmemolistcontentin(
+                                                                  index);
+                                                        } else {
+                                                          scollection
+                                                              .addmemolistin(
+                                                                  index - 1);
+                                                          scollection
+                                                              .addmemolistcontentin(
+                                                                  index - 1);
+                                                        }
                                                       });
                                                     },
                                                     child: Icon(
@@ -1182,12 +1230,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                 content);
                                                         scollection
                                                             .addmemolist(1);
-                                                        scollection
-                                                            .addmemolistin(
-                                                                index + 1);
-                                                        scollection
-                                                            .addmemolistcontentin(
-                                                                index + 1);
+                                                        if (index + 1 ==
+                                                            scollection
+                                                                .memoindex) {
+                                                          scollection
+                                                              .addmemolistin(
+                                                                  index);
+                                                          scollection
+                                                              .addmemolistcontentin(
+                                                                  index);
+                                                        } else {
+                                                          scollection
+                                                              .addmemolistin(
+                                                                  index + 1);
+                                                          scollection
+                                                              .addmemolistcontentin(
+                                                                  index + 1);
+                                                        }
                                                       });
                                                     },
                                                     child: Icon(
@@ -1225,6 +1284,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                           child: TextField(
                                             minLines: 1,
                                             maxLines: 1,
+                                            onTap: () {
+                                              scollection.memolistcontentin[
+                                                      index] =
+                                                  controllers[index].text;
+                                            },
                                             focusNode: nodes[index],
                                             textAlign: TextAlign.start,
                                             textAlignVertical:
@@ -1304,12 +1368,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                     content);
                                                             scollection
                                                                 .addmemolist(1);
-                                                            scollection
-                                                                .addmemolistin(
-                                                                    index - 1);
-                                                            scollection
-                                                                .addmemolistcontentin(
-                                                                    index - 1);
+                                                            if (index == 0) {
+                                                              scollection
+                                                                  .addmemolistin(
+                                                                      index);
+                                                              scollection
+                                                                  .addmemolistcontentin(
+                                                                      index);
+                                                            } else {
+                                                              scollection
+                                                                  .addmemolistin(
+                                                                      index -
+                                                                          1);
+                                                              scollection
+                                                                  .addmemolistcontentin(
+                                                                      index -
+                                                                          1);
+                                                            }
                                                           });
                                                         },
                                                         child: Icon(
@@ -1341,12 +1416,25 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                     content);
                                                             scollection
                                                                 .addmemolist(1);
-                                                            scollection
-                                                                .addmemolistin(
-                                                                    index + 1);
-                                                            scollection
-                                                                .addmemolistcontentin(
-                                                                    index + 1);
+                                                            if (index + 1 ==
+                                                                scollection
+                                                                    .memoindex) {
+                                                              scollection
+                                                                  .addmemolistin(
+                                                                      index);
+                                                              scollection
+                                                                  .addmemolistcontentin(
+                                                                      index);
+                                                            } else {
+                                                              scollection
+                                                                  .addmemolistin(
+                                                                      index +
+                                                                          1);
+                                                              scollection
+                                                                  .addmemolistcontentin(
+                                                                      index +
+                                                                          1);
+                                                            }
                                                           });
                                                         },
                                                         child: Icon(
@@ -1381,11 +1469,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                               50,
                                           child: TextField(
                                             onTap: () {
-                                              controllers[index].selection =
-                                                  TextSelection.collapsed(
-                                                      offset: controllers[index]
-                                                          .text
-                                                          .length);
+                                              scollection.memolistcontentin[
+                                                      index] =
+                                                  controllers[index].text;
                                             },
                                             minLines: 1,
                                             maxLines: 1,
@@ -1446,12 +1532,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                     content);
                                                             scollection
                                                                 .addmemolist(1);
-                                                            scollection
-                                                                .addmemolistin(
-                                                                    index - 1);
-                                                            scollection
-                                                                .addmemolistcontentin(
-                                                                    index - 1);
+                                                            if (index == 0) {
+                                                              scollection
+                                                                  .addmemolistin(
+                                                                      index);
+                                                              scollection
+                                                                  .addmemolistcontentin(
+                                                                      index);
+                                                            } else {
+                                                              scollection
+                                                                  .addmemolistin(
+                                                                      index -
+                                                                          1);
+                                                              scollection
+                                                                  .addmemolistcontentin(
+                                                                      index -
+                                                                          1);
+                                                            }
                                                           });
                                                         },
                                                         child: Icon(
@@ -1483,12 +1580,25 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                     content);
                                                             scollection
                                                                 .addmemolist(1);
-                                                            scollection
-                                                                .addmemolistin(
-                                                                    index + 1);
-                                                            scollection
-                                                                .addmemolistcontentin(
-                                                                    index + 1);
+                                                            if (index + 1 ==
+                                                                scollection
+                                                                    .memoindex) {
+                                                              scollection
+                                                                  .addmemolistin(
+                                                                      index);
+                                                              scollection
+                                                                  .addmemolistcontentin(
+                                                                      index);
+                                                            } else {
+                                                              scollection
+                                                                  .addmemolistin(
+                                                                      index +
+                                                                          1);
+                                                              scollection
+                                                                  .addmemolistcontentin(
+                                                                      index +
+                                                                          1);
+                                                            }
                                                           });
                                                         },
                                                         child: Icon(

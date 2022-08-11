@@ -5,6 +5,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'Dialogs/destroyBackKey.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
@@ -19,9 +20,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   //curved navi index
   int _selectedIndex = 0;
+  int page_index = Hive.box('user_setting').get('page_index') ?? 0;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   late DateTime backbuttonpressedTime;
   int navi = 0;
+  TextEditingController controller = TextEditingController();
+  var searchNode = FocusNode();
+  String name = Hive.box('user_info').get('id');
+  late DateTime Date = DateTime.now();
 
   @override
   void initState() {
@@ -39,8 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
       HomePage(),
-      //FeedPage(),
-      AnalyticPage(),
+      HomePage(),
       ProfilePage(),
     ];
 
@@ -59,7 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: (_index) {
                     //Handle button tap
                     setState(() {
-                      _selectedIndex = _index;
+                      if (_index == 1) {
+                        Hive.box('user_setting').put('page_index',
+                            Hive.box('user_setting').get('page_index'));
+                        addcalendar(context, searchNode, controller, name, Date,
+                            'home');
+                      } else {
+                        Hive.box('user_setting').put('page_index', _index);
+                      }
+                      _selectedIndex =
+                          Hive.box('user_setting').get('page_index');
                     });
                   },
                   backgroundColor: BGColor(),
@@ -77,8 +91,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       label: '홈',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.bar_chart, size: 25),
-                      label: '분석',
+                      icon: Icon(Icons.add_outlined, size: 25),
+                      label: '추가',
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.account_circle_outlined, size: 25),

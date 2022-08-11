@@ -191,8 +191,11 @@ class _DayScriptState extends State<DayScript> {
             searchNode_second_section.unfocus();
             searchNode_third_section.unfocus();
             searchNode_add_section.unfocus();
-            for (int i = 0; i < nodes.length; i++) {
-              nodes[i].unfocus();
+            for (int i = 0; i < scollection.memoindex; i++) {
+              if (nodes.isNotEmpty) {
+                nodes[i].unfocus();
+              }
+              scollection.memolistcontentin[i] = controllers[i].text;
             }
           },
           child: UI(),
@@ -221,10 +224,21 @@ class _DayScriptState extends State<DayScript> {
                             ? checkbottoms[0] = true
                             : checkbottoms[0] = false;
                         if (checkbottoms[0] == true) {
-                          scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 0);
+                          Hive.box('user_setting')
+                              .put('optionmemocontentinput', null);
                           scollection.addmemolistin(scollection.memoindex);
+                          scollection
+                              .addmemolistcontentin(scollection.memoindex);
+                          scollection.addmemolist(1);
                           checkbottoms[0] = false;
+                        }
+                        for (int i = 0; i < scollection.memoindex; i++) {
+                          if (nodes.isNotEmpty) {
+                            nodes[i].unfocus();
+                          }
+                          scollection.memolistcontentin[i] =
+                              controllers[i].text;
                         }
                       });
                     },
@@ -241,10 +255,21 @@ class _DayScriptState extends State<DayScript> {
                             ? checkbottoms[1] = true
                             : checkbottoms[1] = false;
                         if (checkbottoms[1] == true) {
-                          scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 1);
+                          Hive.box('user_setting')
+                              .put('optionmemocontentinput', null);
                           scollection.addmemolistin(scollection.memoindex);
+                          scollection
+                              .addmemolistcontentin(scollection.memoindex);
+                          scollection.addmemolist(1);
                           checkbottoms[1] = false;
+                        }
+                        for (int i = 0; i < scollection.memoindex; i++) {
+                          if (nodes.isNotEmpty) {
+                            nodes[i].unfocus();
+                          }
+                          scollection.memolistcontentin[i] =
+                              controllers[i].text;
                         }
                       });
                     },
@@ -261,10 +286,21 @@ class _DayScriptState extends State<DayScript> {
                             ? checkbottoms[2] = true
                             : checkbottoms[2] = false;
                         if (checkbottoms[2] == true) {
-                          scollection.addmemolist(1);
                           Hive.box('user_setting').put('optionmemoinput', 2);
+                          Hive.box('user_setting')
+                              .put('optionmemocontentinput', null);
                           scollection.addmemolistin(scollection.memoindex);
+                          scollection
+                              .addmemolistcontentin(scollection.memoindex);
+                          scollection.addmemolist(1);
                           checkbottoms[2] = false;
+                        }
+                        for (int i = 0; i < scollection.memoindex; i++) {
+                          if (nodes.isNotEmpty) {
+                            nodes[i].unfocus();
+                          }
+                          scollection.memolistcontentin[i] =
+                              controllers[i].text;
                         }
                       });
                     },
@@ -291,6 +327,13 @@ class _DayScriptState extends State<DayScript> {
                     iconSize: 20,
                     onPressed: () {
                       setState(() {
+                        for (int i = 0; i < scollection.memoindex; i++) {
+                          if (nodes.isNotEmpty) {
+                            nodes[i].unfocus();
+                          }
+                          scollection.memolistcontentin[i] =
+                              controllers[i].text;
+                        }
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -656,7 +699,8 @@ class _DayScriptState extends State<DayScript> {
                                             i < scollection.memolistin.length;
                                             i++) {
                                           checklisttexts.add(MemoList(
-                                              memocontent: controllers[i].text,
+                                              memocontent: scollection
+                                                  .memolistcontentin[i],
                                               contentindex:
                                                   scollection.memolistin[i]));
                                         }
@@ -683,7 +727,9 @@ class _DayScriptState extends State<DayScript> {
                                                   .toList(),
                                               'OriginalUser': username,
                                               'color': Hive.box('user_setting')
-                                                  .get('typecolorcalendar'),
+                                                      .get(
+                                                          'typecolorcalendar') ??
+                                                  BGColor(),
                                               'Date': DateFormat('yyyy-MM-dd')
                                                       .parse(widget.firstdate
                                                           .toString())
@@ -1106,6 +1152,13 @@ class _DayScriptState extends State<DayScript> {
                               ),
                               InkWell(
                                 onTap: () {
+                                  for (int i = 0;
+                                      i < scollection.memolistcontentin.length;
+                                      i++) {
+                                    nodes[i].unfocus();
+                                    scollection.memolistcontentin[i] =
+                                        controllers[i].text;
+                                  }
                                   addmemocollector(
                                     context,
                                     username,
@@ -1193,6 +1246,8 @@ class _DayScriptState extends State<DayScript> {
                                   itemBuilder: (context, index) {
                                     nodes.add(FocusNode());
                                     controllers.add(TextEditingController());
+                                    controllers[index].text =
+                                        scollection.memolistcontentin[index];
                                     return Row(
                                       children: [
                                         const SizedBox(
@@ -1203,7 +1258,7 @@ class _DayScriptState extends State<DayScript> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width -
-                                                    60,
+                                                    50,
                                                 child: DetectableTextField(
                                                   minLines: null,
                                                   maxLines: null,
@@ -1213,6 +1268,134 @@ class _DayScriptState extends State<DayScript> {
                                                   decoration: InputDecoration(
                                                     isCollapsed: true,
                                                     border: InputBorder.none,
+                                                    suffixIcon: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              scollection
+                                                                  .removelistitem(
+                                                                      index);
+                                                              controllers[index]
+                                                                  .text = '';
+                                                            });
+                                                          },
+                                                          child: const Icon(
+                                                              Icons
+                                                                  .remove_circle_outline,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  String
+                                                                      content =
+                                                                      scollection
+                                                                              .memolistcontentin[
+                                                                          index];
+                                                                  int indexcontent =
+                                                                      scollection
+                                                                              .memolistin[
+                                                                          index];
+                                                                  scollection
+                                                                      .removelistitem(
+                                                                          index);
+                                                                  Hive.box('user_setting').put(
+                                                                      'optionmemoinput',
+                                                                      indexcontent);
+                                                                  Hive.box('user_setting').put(
+                                                                      'optionmemocontentinput',
+                                                                      content);
+                                                                  scollection
+                                                                      .addmemolist(
+                                                                          1);
+                                                                  if (index ==
+                                                                      0) {
+                                                                    scollection
+                                                                        .addmemolistin(
+                                                                            index);
+                                                                    scollection
+                                                                        .addmemolistcontentin(
+                                                                            index);
+                                                                  } else {
+                                                                    scollection
+                                                                        .addmemolistin(
+                                                                            index -
+                                                                                1);
+                                                                    scollection
+                                                                        .addmemolistcontentin(
+                                                                            index -
+                                                                                1);
+                                                                  }
+                                                                });
+                                                              },
+                                                              child: Icon(
+                                                                  Icons
+                                                                      .expand_less,
+                                                                  color:
+                                                                      TextColor_shadowcolor()),
+                                                            ),
+                                                            InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  String
+                                                                      content =
+                                                                      scollection
+                                                                              .memolistcontentin[
+                                                                          index];
+                                                                  int indexcontent =
+                                                                      scollection
+                                                                              .memolistin[
+                                                                          index];
+                                                                  scollection
+                                                                      .removelistitem(
+                                                                          index);
+                                                                  Hive.box('user_setting').put(
+                                                                      'optionmemoinput',
+                                                                      indexcontent);
+                                                                  Hive.box('user_setting').put(
+                                                                      'optionmemocontentinput',
+                                                                      content);
+                                                                  scollection
+                                                                      .addmemolist(
+                                                                          1);
+                                                                  if (index +
+                                                                          1 ==
+                                                                      scollection
+                                                                          .memoindex) {
+                                                                    scollection
+                                                                        .addmemolistin(
+                                                                            index);
+                                                                    scollection
+                                                                        .addmemolistcontentin(
+                                                                            index);
+                                                                  } else {
+                                                                    scollection
+                                                                        .addmemolistin(
+                                                                            index +
+                                                                                1);
+                                                                    scollection
+                                                                        .addmemolistcontentin(
+                                                                            index +
+                                                                                1);
+                                                                  }
+                                                                });
+                                                              },
+                                                              child: Icon(
+                                                                  Icons
+                                                                      .expand_more,
+                                                                  color:
+                                                                      TextColor_shadowcolor()),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
                                                     hintText: '내용 입력',
                                                     hintStyle: TextStyle(
                                                         fontSize:
@@ -1242,7 +1425,7 @@ class _DayScriptState extends State<DayScript> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width -
-                                                            60,
+                                                            50,
                                                     child: TextField(
                                                       minLines: 1,
                                                       maxLines: 1,
@@ -1282,19 +1465,124 @@ class _DayScriptState extends State<DayScript> {
                                                               color:
                                                                   TextColor()),
                                                         ),
-                                                        suffixIcon: InkWell(
-                                                          onTap: () {
-                                                            scollection
-                                                                .removelistitem(
-                                                                    index);
-                                                            controllers[index]
-                                                                .text = '';
-                                                          },
-                                                          child: const Icon(
-                                                              Icons
-                                                                  .remove_circle_outline,
-                                                              color:
-                                                                  Colors.red),
+                                                        suffixIcon: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  scollection
+                                                                      .removelistitem(
+                                                                          index);
+                                                                  controllers[
+                                                                          index]
+                                                                      .text = '';
+                                                                });
+                                                              },
+                                                              child: const Icon(
+                                                                  Icons
+                                                                      .remove_circle_outline,
+                                                                  color: Colors
+                                                                      .red),
+                                                            ),
+                                                            Column(
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      String
+                                                                          content =
+                                                                          scollection
+                                                                              .memolistcontentin[index];
+                                                                      int indexcontent =
+                                                                          scollection
+                                                                              .memolistin[index];
+                                                                      scollection
+                                                                          .removelistitem(
+                                                                              index);
+                                                                      Hive.box('user_setting').put(
+                                                                          'optionmemoinput',
+                                                                          indexcontent);
+                                                                      Hive.box('user_setting').put(
+                                                                          'optionmemocontentinput',
+                                                                          content);
+                                                                      scollection
+                                                                          .addmemolist(
+                                                                              1);
+                                                                      if (index ==
+                                                                          0) {
+                                                                        scollection
+                                                                            .addmemolistin(index);
+                                                                        scollection
+                                                                            .addmemolistcontentin(index);
+                                                                      } else {
+                                                                        scollection.addmemolistin(
+                                                                            index -
+                                                                                1);
+                                                                        scollection.addmemolistcontentin(
+                                                                            index -
+                                                                                1);
+                                                                      }
+                                                                    });
+                                                                  },
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .expand_less,
+                                                                      color:
+                                                                          TextColor_shadowcolor()),
+                                                                ),
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      String
+                                                                          content =
+                                                                          scollection
+                                                                              .memolistcontentin[index];
+                                                                      int indexcontent =
+                                                                          scollection
+                                                                              .memolistin[index];
+                                                                      scollection
+                                                                          .removelistitem(
+                                                                              index);
+                                                                      Hive.box('user_setting').put(
+                                                                          'optionmemoinput',
+                                                                          indexcontent);
+                                                                      Hive.box('user_setting').put(
+                                                                          'optionmemocontentinput',
+                                                                          content);
+                                                                      scollection
+                                                                          .addmemolist(
+                                                                              1);
+                                                                      if (index +
+                                                                              1 ==
+                                                                          scollection
+                                                                              .memoindex) {
+                                                                        scollection
+                                                                            .addmemolistin(index);
+                                                                        scollection
+                                                                            .addmemolistcontentin(index);
+                                                                      } else {
+                                                                        scollection.addmemolistin(
+                                                                            index +
+                                                                                1);
+                                                                        scollection.addmemolistcontentin(
+                                                                            index +
+                                                                                1);
+                                                                      }
+                                                                    });
+                                                                  },
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .expand_more,
+                                                                      color:
+                                                                          TextColor_shadowcolor()),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          ],
                                                         ),
                                                         hintText: '내용 입력',
                                                         hintStyle: TextStyle(
@@ -1312,7 +1600,7 @@ class _DayScriptState extends State<DayScript> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width -
-                                                            60,
+                                                            50,
                                                     child: TextField(
                                                       minLines: 1,
                                                       maxLines: 1,
@@ -1337,19 +1625,124 @@ class _DayScriptState extends State<DayScript> {
                                                             color: TextColor()),
                                                         prefixIconColor:
                                                             TextColor(),
-                                                        suffixIcon: InkWell(
-                                                          onTap: () {
-                                                            scollection
-                                                                .removelistitem(
-                                                                    index);
-                                                            controllers[index]
-                                                                .text = '';
-                                                          },
-                                                          child: const Icon(
-                                                              Icons
-                                                                  .remove_circle_outline,
-                                                              color:
-                                                                  Colors.red),
+                                                        suffixIcon: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  scollection
+                                                                      .removelistitem(
+                                                                          index);
+                                                                  controllers[
+                                                                          index]
+                                                                      .text = '';
+                                                                });
+                                                              },
+                                                              child: const Icon(
+                                                                  Icons
+                                                                      .remove_circle_outline,
+                                                                  color: Colors
+                                                                      .red),
+                                                            ),
+                                                            Column(
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      String
+                                                                          content =
+                                                                          scollection
+                                                                              .memolistcontentin[index];
+                                                                      int indexcontent =
+                                                                          scollection
+                                                                              .memolistin[index];
+                                                                      scollection
+                                                                          .removelistitem(
+                                                                              index);
+                                                                      Hive.box('user_setting').put(
+                                                                          'optionmemoinput',
+                                                                          indexcontent);
+                                                                      Hive.box('user_setting').put(
+                                                                          'optionmemocontentinput',
+                                                                          content);
+                                                                      scollection
+                                                                          .addmemolist(
+                                                                              1);
+                                                                      if (index ==
+                                                                          0) {
+                                                                        scollection
+                                                                            .addmemolistin(index);
+                                                                        scollection
+                                                                            .addmemolistcontentin(index);
+                                                                      } else {
+                                                                        scollection.addmemolistin(
+                                                                            index -
+                                                                                1);
+                                                                        scollection.addmemolistcontentin(
+                                                                            index -
+                                                                                1);
+                                                                      }
+                                                                    });
+                                                                  },
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .expand_less,
+                                                                      color:
+                                                                          TextColor_shadowcolor()),
+                                                                ),
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      String
+                                                                          content =
+                                                                          scollection
+                                                                              .memolistcontentin[index];
+                                                                      int indexcontent =
+                                                                          scollection
+                                                                              .memolistin[index];
+                                                                      scollection
+                                                                          .removelistitem(
+                                                                              index);
+                                                                      Hive.box('user_setting').put(
+                                                                          'optionmemoinput',
+                                                                          indexcontent);
+                                                                      Hive.box('user_setting').put(
+                                                                          'optionmemocontentinput',
+                                                                          content);
+                                                                      scollection
+                                                                          .addmemolist(
+                                                                              1);
+                                                                      if (index +
+                                                                              1 ==
+                                                                          scollection
+                                                                              .memoindex) {
+                                                                        scollection
+                                                                            .addmemolistin(index);
+                                                                        scollection
+                                                                            .addmemolistcontentin(index);
+                                                                      } else {
+                                                                        scollection.addmemolistin(
+                                                                            index +
+                                                                                1);
+                                                                        scollection.addmemolistcontentin(
+                                                                            index +
+                                                                                1);
+                                                                      }
+                                                                    });
+                                                                  },
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .expand_more,
+                                                                      color:
+                                                                          TextColor_shadowcolor()),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          ],
                                                         ),
                                                         hintText: '내용 입력',
                                                         hintStyle: TextStyle(

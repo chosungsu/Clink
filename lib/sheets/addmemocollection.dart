@@ -95,7 +95,7 @@ content(
                     height: 30,
                     child: Row(
                       children: [
-                        Text('컬렉션 제목',
+                        Text('태그 제목',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -130,7 +130,7 @@ content(
                       fillColor: Colors.white,
                       border: InputBorder.none,
                       hintMaxLines: 2,
-                      hintText: '추가하실 컬렉션제목을 입력하세요',
+                      hintText: '추가하실 태그제목을 입력하세요',
                       hintStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -160,7 +160,7 @@ content(
                                   fontSize: contentTitleTextsize(),
                                   fontWeight: FontWeight.bold,
                                 )),
-                            messageText: Text('컬렉션 제목은 필수사항입니다.',
+                            messageText: Text('태그 제목은 필수사항입니다.',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: contentTextsize(),
@@ -238,7 +238,7 @@ content(
                           children: [
                             Center(
                               child: NeumorphicText(
-                                'MY컬렉션에 추가',
+                                'MY태그에 추가',
                                 style: const NeumorphicStyle(
                                   shape: NeumorphicShape.flat,
                                   depth: 3,
@@ -263,7 +263,7 @@ content(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
-                        Text('MY컬렉션 확인은 아래로 스크롤',
+                        Text('MY태그 확인은 아래로 스크롤',
                             style: TextStyle(
                                 color: Colors.black45,
                                 fontWeight: FontWeight.bold,
@@ -287,7 +287,7 @@ content(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
-                        Text('컬렉션 추가는 위로 스크롤',
+                        Text('태그 추가는 위로 스크롤',
                             style: TextStyle(
                                 color: Colors.black45,
                                 fontWeight: FontWeight.bold,
@@ -307,7 +307,7 @@ content(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: const [
-                        Text('MY 컬렉션',
+                        Text('MY 태그',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -339,7 +339,7 @@ content(
                                       children: [
                                         Center(
                                           child: NeumorphicText(
-                                            '생성된 메모컬렉션이 없습니다.\n추가 버튼으로 생성해보세요~',
+                                            '생성된 메모태그가 없습니다.\n추가 버튼으로 생성해보세요~',
                                             style: const NeumorphicStyle(
                                               shape: NeumorphicShape.flat,
                                               depth: 3,
@@ -554,7 +554,7 @@ content(
                             children: [
                               Center(
                                 child: NeumorphicText(
-                                  '생성된 메모컬렉션이 없습니다.\n추가 버튼으로 생성해보세요~',
+                                  '생성된 메모태그가 없습니다.\n추가 버튼으로 생성해보세요~',
                                   style: NeumorphicStyle(
                                     shape: NeumorphicShape.flat,
                                     depth: 3,
@@ -649,7 +649,7 @@ content(
                                         fontSize: contentTitleTextsize(),
                                         fontWeight: FontWeight.bold,
                                       )),
-                                  messageText: Text('컬렉션이 지정되지 않았습니다.',
+                                  messageText: Text('태그가 지정되지 않았습니다.',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: contentTextsize(),

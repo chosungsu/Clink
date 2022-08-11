@@ -1,11 +1,14 @@
 import 'package:clickbyme/Enums/Drawer_item.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/SheetGetx/navibool.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../route.dart';
+import 'HomePage.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -13,9 +16,15 @@ class DrawerScreen extends StatefulWidget {
 }
 
 class _DrawerScreenState extends State<DrawerScreen> {
-  int page_index = Hive.box('user_setting').get('page_index');
+  int page_index = Hive.box('user_setting').get('page_index') ?? 0;
   late bool selected;
   Color colorselection = Colors.white;
+  TextEditingController controller = TextEditingController();
+  var searchNode = FocusNode();
+  String name = Hive.box('user_info').get('id');
+  late DateTime Date = DateTime.now();
+  final draw = Get.put(navibool());
+
   @override
   void initState() {
     super.initState();
@@ -25,13 +34,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
             ? colorselection = MyTheme.colorWhite_drawer
             : colorselection = MyTheme.colorblack_drawer);
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 50,
-      decoration: BoxDecoration(
-        color: BGColor()
-      ),
+      decoration: BoxDecoration(color: BGColor()),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: drawerItems.map((element) {
@@ -40,37 +48,36 @@ class _DrawerScreenState extends State<DrawerScreen> {
               padding: const EdgeInsets.only(top: 30, bottom: 30),
               child: InkWell(
                 onTap: () {
-                  if (element.containsValue(Icons.home)) {
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const MyHomePage(
-                          index: 0,
+                  setState(() {
+                    draw.setclose();
+                    if (element.containsValue(Icons.home)) {
+                      Navigator.of(context).pushReplacement(
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: const MyHomePage(
+                            index: 0,
+                          ),
                         ),
-                      ),
-                    );
-                    Hive.box('user_setting').put('page_index', 0);
-                  } else if (element.containsValue(Icons.bar_chart)) {
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const MyHomePage(
-                          index: 1,
+                      );
+
+                      Hive.box('user_setting').put('page_index', 0);
+                    } else if (element.containsValue(Icons.add_outlined)) {
+                      addcalendar(
+                          context, searchNode, controller, name, Date, 'home');
+                      Hive.box('user_setting').put('page_index',
+                          Hive.box('user_setting').get('page_index'));
+                    } else {
+                      Navigator.of(context).pushReplacement(
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: const MyHomePage(
+                            index: 2,
+                          ),
                         ),
-                      ),
-                    );
-                    Hive.box('user_setting').put('page_index', 1);
-                  } else {
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const MyHomePage(
-                          index: 2,
-                        ),
-                      ),
-                    );
-                    Hive.box('user_setting').put('page_index', 2);
-                  }
+                      );
+                      Hive.box('user_setting').put('page_index', 2);
+                    }
+                  });
                 },
                 child: Column(
                   children: [
@@ -79,8 +86,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             element['icon'],
                             color: NaviColor(selected),
                           )
-                        : Icon(element['icon'],
-                            color: NaviColor(selected),),
+                        : Icon(
+                            element['icon'],
+                            color: NaviColor(selected),
+                          ),
                     const SizedBox(
                       height: 20,
                     ),

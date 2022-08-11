@@ -5,6 +5,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/SheetGetx/Spacesetting.dart';
+import 'package:clickbyme/Tool/SheetGetx/navibool.dart';
 import 'package:clickbyme/Tool/SheetGetx/onequeform.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
@@ -25,6 +26,7 @@ import '../Tool/ShimmerDesign/Shimmer_home.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/RoutineHome.dart';
 import '../sheets/addcalendar.dart';
+import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -43,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   late DateTime Date = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   static final spaceset = Get.put(Spacesetting());
+  final draw = Get.put(navibool());
   List showspacelist = [];
   List content = [];
   String name = Hive.box('user_info').get('id');
@@ -69,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
+    isdraweropen = draw.drawopen;
   }
 
   @override
@@ -85,7 +89,7 @@ class _HomePageState extends State<HomePage> {
         child: Scaffold(
             backgroundColor: BGColor(),
             body: navi == 0
-                ? (isdraweropen == true
+                ? (draw.drawopen == true
                     ? Stack(
                         children: [
                           Container(
@@ -118,189 +122,197 @@ class _HomePageState extends State<HomePage> {
   ) {
     double height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
-      transform: Matrix4.translationValues(xoffset, yoffset, 0)
-        ..scale(scalefactor),
-      duration: const Duration(milliseconds: 250),
-      child: SizedBox(
-        height: height,
-        child: Container(
-            color: BGColor(),
-            //decoration: BoxDecoration(color: colorselection),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 80,
+        transform: Matrix4.translationValues(xoffset, yoffset, 0)
+          ..scale(scalefactor),
+        duration: const Duration(milliseconds: 250),
+        child: GetBuilder<navibool>(
+          builder: (_) => GestureDetector(
+            onTap: () {
+              setState(() {
+                xoffset = 0;
+                yoffset = 0;
+                scalefactor = 1;
+                isdraweropen = false;
+                draw.setclose();
+                Hive.box('user_setting').put('page_opened', false);
+              });
+            },
+            child: SizedBox(
+              height: height,
+              child: Container(
+                  color: BGColor(),
+                  //decoration: BoxDecoration(color: colorselection),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(padding: EdgeInsets.only(left: 10)),
                       SizedBox(
                         height: 80,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Padding(padding: EdgeInsets.only(left: 10)),
-                            navi == 0
-                                ? SizedBox(
-                                    width: 50,
-                                    child: isdraweropen
-                                        ? InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                xoffset = 0;
-                                                yoffset = 0;
-                                                scalefactor = 1;
-                                                isdraweropen = false;
-                                              });
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                              height: 30,
-                                              child: NeumorphicIcon(
-                                                Icons.keyboard_arrow_left,
-                                                size: 30,
-                                                style: NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    depth: 2,
-                                                    surfaceIntensity: 0.5,
-                                                    color: TextColor(),
-                                                    lightSource:
-                                                        LightSource.topLeft),
-                                              ),
-                                            ))
-                                        : InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                xoffset = 50;
-                                                yoffset = 0;
-                                                scalefactor = 1;
-                                                isdraweropen = true;
-                                              });
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                              height: 30,
-                                              child: NeumorphicIcon(
-                                                Icons.menu,
-                                                size: 30,
-                                                style: NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    surfaceIntensity: 0.5,
-                                                    depth: 2,
-                                                    color: TextColor(),
-                                                    lightSource:
-                                                        LightSource.topLeft),
-                                              ),
-                                            )))
-                                : const SizedBox(),
                             SizedBox(
-                                width: navi == 0
-                                    ? MediaQuery.of(context).size.width - 60
-                                    : MediaQuery.of(context).size.width - 10,
-                                child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20, right: 20),
-                                    child: Row(
-                                      children: [
-                                        Flexible(
-                                          fit: FlexFit.tight,
-                                          child: Text('Habit Tracker',
-                                              style: GoogleFonts.lobster(
-                                                fontSize: 25,
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              Get.to(NotiAlarm());
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                              height: 30,
-                                              child: NeumorphicIcon(
-                                                Icons.notifications_none,
-                                                size: 30,
-                                                style: NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    surfaceIntensity: 0.5,
-                                                    depth: 2,
-                                                    color: TextColor(),
-                                                    lightSource:
-                                                        LightSource.topLeft),
+                              height: 80,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                      padding: EdgeInsets.only(left: 10)),
+                                  navi == 0
+                                      ? SizedBox(
+                                          width: 50,
+                                          child: draw.drawopen == true
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      xoffset = 0;
+                                                      yoffset = 0;
+                                                      scalefactor = 1;
+                                                      isdraweropen = false;
+                                                      draw.setclose();
+                                                      Hive.box('user_setting')
+                                                          .put('page_opened',
+                                                              false);
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    width: 30,
+                                                    height: 30,
+                                                    child: NeumorphicIcon(
+                                                      Icons.keyboard_arrow_left,
+                                                      size: 30,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          surfaceIntensity: 0.5,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ))
+                                              : InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      xoffset = 50;
+                                                      yoffset = 0;
+                                                      scalefactor = 1;
+                                                      isdraweropen = true;
+                                                      draw.setopen();
+                                                      Hive.box('user_setting')
+                                                          .put('page_opened',
+                                                              true);
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    width: 30,
+                                                    height: 30,
+                                                    child: NeumorphicIcon(
+                                                      Icons.menu,
+                                                      size: 30,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          surfaceIntensity: 0.5,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  )))
+                                      : const SizedBox(),
+                                  SizedBox(
+                                      width: navi == 0
+                                          ? MediaQuery.of(context).size.width -
+                                              60
+                                          : MediaQuery.of(context).size.width -
+                                              10,
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, right: 20),
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Text('Habit Tracker',
+                                                    style: GoogleFonts.lobster(
+                                                      fontSize: 25,
+                                                      color: TextColor(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
                                               ),
-                                            )),
-                                      ],
-                                    ))),
+                                              InkWell(
+                                                  onTap: () {
+                                                    Get.to(NotiAlarm());
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    width: 30,
+                                                    height: 30,
+                                                    child: NeumorphicIcon(
+                                                      Icons.notifications_none,
+                                                      size: 30,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          surfaceIntensity: 0.5,
+                                                          depth: 2,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  )),
+                                            ],
+                                          ))),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Flexible(
-                    fit: FlexFit.tight,
-                    child: SizedBox(
-                      child: ScrollConfiguration(
-                        behavior: NoBehavior(),
-                        child: SingleChildScrollView(child:
-                            StatefulBuilder(builder: (_, StateSetter setState) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                H_Container_0(
-                                  height,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                H_Container_1(height),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                H_Container_2(height),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                H_Container_3(height, _pController),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                H_Container_5(height),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                FutureBuilder<void>(
-                                  future: firestore
-                                      .collection('CalendarDataBase')
-                                      .where('OriginalUser', isEqualTo: name)
-                                      .where('Date',
-                                          isEqualTo: Date.toString()
-                                                  .split('-')[0] +
-                                              '-' +
-                                              Date.toString().split('-')[1] +
-                                              '-' +
-                                              Date.toString()
-                                                  .split('-')[2]
-                                                  .substring(0, 2) +
-                                              '일')
-                                      .get()
-                                      .then((value) {
-                                    content.clear();
-                                    value.docs.isEmpty
-                                        ? firestore
+                      Flexible(
+                          fit: FlexFit.tight,
+                          child: SizedBox(
+                            child: ScrollConfiguration(
+                              behavior: NoBehavior(),
+                              child: SingleChildScrollView(child:
+                                  StatefulBuilder(
+                                      builder: (_, StateSetter setState) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      H_Container_1(height),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      H_Container_2(height),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      H_Container_3(height, _pController),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      H_Container_5(height),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      FutureBuilder<void>(
+                                        future: firestore
                                             .collection('CalendarDataBase')
+                                            .where('OriginalUser',
+                                                isEqualTo: name)
                                             .where('Date',
                                                 isEqualTo: Date.toString()
                                                         .split('-')[0] +
@@ -313,13 +325,53 @@ class _HomePageState extends State<HomePage> {
                                                         .substring(0, 2) +
                                                     '일')
                                             .get()
-                                            .then(((value) {
-                                            value.docs.forEach((element) {
-                                              for (int i = 0;
-                                                  i < element['Shares'].length;
-                                                  i++) {
-                                                if (element['Shares'][i]
-                                                    .contains(name)) {
+                                            .then((value) {
+                                          content.clear();
+                                          value.docs.isEmpty
+                                              ? firestore
+                                                  .collection(
+                                                      'CalendarDataBase')
+                                                  .where('Date',
+                                                      isEqualTo: Date.toString()
+                                                              .split('-')[0] +
+                                                          '-' +
+                                                          Date.toString()
+                                                              .split('-')[1] +
+                                                          '-' +
+                                                          Date.toString()
+                                                              .split('-')[2]
+                                                              .substring(0, 2) +
+                                                          '일')
+                                                  .get()
+                                                  .then(((value) {
+                                                  value.docs.forEach((element) {
+                                                    for (int i = 0;
+                                                        i <
+                                                            element['Shares']
+                                                                .length;
+                                                        i++) {
+                                                      if (element['Shares'][i]
+                                                          .contains(name)) {
+                                                        if (int.parse(element[
+                                                                    'Timestart']
+                                                                .toString()
+                                                                .substring(
+                                                                    0, 2)) >=
+                                                            Date.hour) {
+                                                          content.add(SpaceContent(
+                                                              title: element[
+                                                                  'Daytodo'],
+                                                              date: element[
+                                                                      'Timestart'] +
+                                                                  '-' +
+                                                                  element[
+                                                                      'Timefinish']));
+                                                        }
+                                                      }
+                                                    }
+                                                  });
+                                                }))
+                                              : value.docs.forEach((element) {
                                                   if (int.parse(
                                                           element['Timestart']
                                                               .toString()
@@ -335,45 +387,31 @@ class _HomePageState extends State<HomePage> {
                                                             element[
                                                                 'Timefinish']));
                                                   }
-                                                }
-                                              }
-                                            });
-                                          }))
-                                        : value.docs.forEach((element) {
-                                            if (int.parse(element['Timestart']
-                                                    .toString()
-                                                    .substring(0, 2)) >=
-                                                Date.hour) {
-                                              content.add(SpaceContent(
-                                                  title: element['Daytodo'],
-                                                  date: element['Timestart'] +
-                                                      '-' +
-                                                      element['Timefinish']));
-                                            }
-                                          });
-                                  }), // a previously-obtained Future<String> or null
-                                  builder: (context, snapshot) {
-                                    return H_Container_4(
-                                      height,
-                                    );
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 50,
-                                ),
-                              ],
+                                                });
+                                        }), // a previously-obtained Future<String> or null
+                                        builder: (context, snapshot) {
+                                          return H_Container_4(
+                                            height,
+                                          );
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 50,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              })),
                             ),
-                          );
-                        })),
-                      ),
-                    )),
-              ],
-            )),
-      ),
-    );
+                          )),
+                    ],
+                  )),
+            ),
+          ),
+        ));
   }
 
-  H_Container_0(double height) {
+  /*H_Container_0(double height) {
     return SizedBox(
       height: 90,
       width: MediaQuery.of(context).size.width - 40,
@@ -437,7 +475,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
+  }*/
 
   H_Container_1(double height) {
     //프로버전 구매시 보이지 않게 함
@@ -612,8 +650,8 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             )
                                           : GestureDetector(
-                                              onTap: () async {
-                                                final reloadpage = await Get.to(
+                                              onTap: () {
+                                                /*final reloadpage = await Get.to(
                                                     () => RoutineHome(),
                                                     transition:
                                                         Transition.rightToLeft);
@@ -621,7 +659,9 @@ class _HomePageState extends State<HomePage> {
                                                   setState(() {
                                                     H_Container_4(height);
                                                   });
-                                                }
+                                                }*/
+                                                showreadycontent(context,
+                                                    height, _pController);
                                               },
                                               child: SizedBox(
                                                   height: 55,
@@ -635,7 +675,7 @@ class _HomePageState extends State<HomePage> {
                                                           width: 25,
                                                           height: 25,
                                                           child: NeumorphicIcon(
-                                                            Icons.add_task,
+                                                            Icons.more_horiz,
                                                             size: 25,
                                                             style: NeumorphicStyle(
                                                                 shape:
@@ -653,7 +693,7 @@ class _HomePageState extends State<HomePage> {
                                                       SizedBox(
                                                         height: 30,
                                                         child: Center(
-                                                          child: Text('갓생루틴',
+                                                          child: Text('준비중',
                                                               style: TextStyle(
                                                                   color:
                                                                       TextColor(),
@@ -1168,6 +1208,48 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [ADEvents(context)],
     );
+  }
+
+  showreadycontent(
+    BuildContext context,
+    double height,
+    PageController pController,
+  ) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        )),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.all(10),
+            child: Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Container(
+                  height: 280,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: readycontent(context, height, pController),
+                )),
+          );
+        }).whenComplete(() {
+      H_Container_4(height);
+    });
   }
 }
 

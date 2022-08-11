@@ -34,7 +34,9 @@ class EventShowCard extends StatelessWidget {
             future: firestore
                 .collection("EventNoticeDataBase")
                 .where('eventpage',
-                    isEqualTo: pageindex == 0 ? 'home' : 'analytic')
+                    isEqualTo: pageindex == 0
+                        ? 'home'
+                        : (pageindex == 1 ? 'analytic' : 'ready'))
                 .get()
                 .then(((QuerySnapshot querySnapshot) => {
                       eventtitle.clear(),
@@ -68,6 +70,7 @@ class EventShowCard extends StatelessWidget {
                               controller: pageController,
                               itemBuilder: (_, index) => GestureDetector(
                                     onTap: () {
+                                      //개별 인덱스 타이틀마다 이동페이지 다르게 구성
                                       eventtitle[index] == '버전 업그레이드 혜택'
                                           ? Get.to(() => BuyingPage(),
                                               transition: Transition.fadeIn)
