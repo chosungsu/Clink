@@ -223,7 +223,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                         width: 30,
                                                         height: 30,
                                                         child: NeumorphicIcon(
-                                                          Icons.swap_vert,
+                                                          Icons.filter_list,
                                                           size: 30,
                                                           style: NeumorphicStyle(
                                                               shape:

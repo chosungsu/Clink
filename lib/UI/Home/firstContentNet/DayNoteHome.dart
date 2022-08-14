@@ -245,7 +245,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       width: 30,
                                                       height: 30,
                                                       child: NeumorphicIcon(
-                                                        Icons.swap_vert,
+                                                        Icons.filter_list,
                                                         size: 30,
                                                         style: NeumorphicStyle(
                                                             shape:
@@ -405,6 +405,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            print(snapshot.data!.docs.length);
             return snapshot.data!.docs.isEmpty
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -440,10 +441,15 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                     padding: const EdgeInsets.only(left: 5, right: 5),
                     itemBuilder: (context, index) {
                       tmpsummary = '';
-                      for (String textsummarytmp in snapshot.data!.docs[index]
-                          ['memolist']) {
-                        tmpsummary += textsummarytmp + '\n';
+                      if (snapshot.data!.docs[index]['memolist'] != null) {
+                        for (String textsummarytmp in snapshot.data!.docs[index]
+                            ['memolist']) {
+                          tmpsummary += textsummarytmp + '\n';
+                        }
+                      } else {
+                        tmpsummary = '홈에서 직접 생성한 메모장입니다.';
                       }
+
                       textsummary.insert(index, tmpsummary);
                       return Column(
                         children: [
@@ -458,16 +464,19 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                         date: snapshot.data!.docs[index]
                                             ['Date'],
                                         doc: snapshot.data!.docs[index].id,
-                                        doccollection: snapshot
-                                            .data!.docs[index]['Collection'],
+                                        doccollection: snapshot.data!
+                                                .docs[index]['Collection'] ??
+                                            '',
                                         doccolor: snapshot.data!.docs[index]
                                             ['color'],
                                         docindex: snapshot.data!.docs[index]
-                                            ['memoindex'],
+                                                ['memoindex'] ??
+                                            [],
                                         docname: snapshot.data!.docs[index]
                                             ['memoTitle'],
                                         docsummary: snapshot.data!.docs[index]
-                                            ['memolist'],
+                                                ['memolist'] ??
+                                            [],
                                       ),
                                   transition: Transition.downToUp);
                             },
@@ -585,7 +594,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                           TextColor_shadowcolor()),
                                                   label: Text(
                                                     snapshot.data!.docs[index]
-                                                        ['Collection'],
+                                                            ['Collection'] ??
+                                                        '지정안됨',
                                                     softWrap: true,
                                                     maxLines: 2,
                                                     style: TextStyle(

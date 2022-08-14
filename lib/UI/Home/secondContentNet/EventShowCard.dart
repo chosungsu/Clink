@@ -6,6 +6,9 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../firstContentNet/ChooseCalendar.dart';
+import '../firstContentNet/DayNoteHome.dart';
+
 class EventShowCard extends StatelessWidget {
   EventShowCard(
       {Key? key,
@@ -71,15 +74,19 @@ class EventShowCard extends StatelessWidget {
                               itemBuilder: (_, index) => GestureDetector(
                                     onTap: () {
                                       //개별 인덱스 타이틀마다 이동페이지 다르게 구성
-                                      eventtitle[index] == '버전 업그레이드 혜택'
-                                          ? Get.to(() => BuyingPage(),
-                                              transition: Transition.fadeIn)
-                                          : (eventtitle[index] == 'PDF 형식 지원'
-                                              ? Get.to(() => BuyingPage(),
-                                                  transition: Transition.fadeIn)
-                                              : Get.to(() => BuyingPage(),
-                                                  transition:
-                                                      Transition.fadeIn));
+                                      eventtitle[index] == '일정관리는 이렇게!'
+                                          ? Get.to(
+                                              () => ChooseCalendar(),
+                                              transition:
+                                                  Transition.rightToLeft,
+                                            )
+                                          : Get.to(
+                                              () => const DayNoteHome(
+                                                title: '',
+                                              ),
+                                              transition:
+                                                  Transition.rightToLeft,
+                                            );
                                     },
                                     child: Column(
                                       children: [

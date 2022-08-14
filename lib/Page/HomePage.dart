@@ -12,7 +12,6 @@ import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
-import 'package:clickbyme/UI/Home/thirdContentNet/ChangeSpace.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -52,7 +51,6 @@ class _HomePageState extends State<HomePage> {
   List<SpaceList> _user_ad = [];
   final List<SpaceList> _default_ad = [
     SpaceList(title: '일정공간'),
-    SpaceList(title: '루틴공간'),
     SpaceList(title: '메모공간'),
   ];
 
@@ -741,7 +739,7 @@ class _HomePageState extends State<HomePage> {
     //isbought == false일 경우와 isbought == true일 경우 사이즈박스 크기를 제한 풀기...
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return SizedBox(
-        height: 80 * 3 + 50,
+        height: 80 * 2 + 50,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -757,7 +755,7 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize())),
                   ),
-                  GestureDetector(
+                  /*GestureDetector(
                     onTap: () async {
                       final reloadpage = await Get.to(() => ChangeSpace(),
                           transition: Transition.fadeIn);
@@ -774,7 +772,7 @@ class _HomePageState extends State<HomePage> {
                             color: TextColor(),
                             fontWeight: FontWeight.bold,
                             fontSize: contentTextsize())),
-                  )
+                  )*/
                 ],
               ),
             ),
@@ -782,7 +780,7 @@ class _HomePageState extends State<HomePage> {
               height: 20,
             ),
             SizedBox(
-                height: 80 * 3,
+                height: 80 * 2,
                 child: StatefulBuilder(builder: (_, StateSetter setState) {
                   return StreamBuilder<QuerySnapshot>(
                     stream: firestore
@@ -795,7 +793,7 @@ class _HomePageState extends State<HomePage> {
                         var messageText;
                         final valuespace = snapshot.data!.docs;
                         for (var sp in valuespace) {
-                          for (int i = 0; i < 3; i++) {
+                          for (int i = 0; i < 2; i++) {
                             messageText = sp.get('$i');
                             _user_ad.add(SpaceList(title: messageText));
                           }
@@ -881,18 +879,11 @@ class _HomePageState extends State<HomePage> {
                                                     transition:
                                                         Transition.rightToLeft,
                                                   )
-                                                : (_default_ad[index].title ==
-                                                        '루틴공간'
-                                                    ? Get.to(
-                                                        () => RoutineHome(),
-                                                        transition: Transition
-                                                            .rightToLeft,
-                                                      )
-                                                    : Get.to(
-                                                        () => ChooseCalendar(),
-                                                        transition: Transition
-                                                            .rightToLeft,
-                                                      ));
+                                                : Get.to(
+                                                    () => ChooseCalendar(),
+                                                    transition:
+                                                        Transition.rightToLeft,
+                                                  );
                                           },
                                           child: SizedBox(
                                             height: 80,
@@ -977,28 +968,21 @@ class _HomePageState extends State<HomePage> {
                                                                             lightSource:
                                                                                 LightSource.topLeft),
                                                                       )
-                                                                    : (_default_ad[index].title ==
-                                                                            '루틴공간'
-                                                                        ? NeumorphicIcon(
-                                                                            Icons.add_task,
-                                                                            size:
-                                                                                25,
-                                                                            style: NeumorphicStyle(
-                                                                                shape: NeumorphicShape.convex,
-                                                                                depth: 2,
-                                                                                color: TextColor(),
-                                                                                lightSource: LightSource.topLeft),
-                                                                          )
-                                                                        : NeumorphicIcon(
-                                                                            Icons.today,
-                                                                            size:
-                                                                                25,
-                                                                            style: NeumorphicStyle(
-                                                                                shape: NeumorphicShape.convex,
-                                                                                depth: 2,
-                                                                                color: TextColor(),
-                                                                                lightSource: LightSource.topLeft),
-                                                                          ))),
+                                                                    : NeumorphicIcon(
+                                                                        Icons
+                                                                            .today,
+                                                                        size:
+                                                                            25,
+                                                                        style: NeumorphicStyle(
+                                                                            shape: NeumorphicShape
+                                                                                .convex,
+                                                                            depth:
+                                                                                2,
+                                                                            color:
+                                                                                TextColor(),
+                                                                            lightSource:
+                                                                                LightSource.topLeft),
+                                                                      )),
                                                           ),
                                                         ],
                                                       ),
@@ -1030,18 +1014,11 @@ class _HomePageState extends State<HomePage> {
                                                     transition:
                                                         Transition.rightToLeft,
                                                   )
-                                                : (_user_ad[index].title ==
-                                                        '루틴공간'
-                                                    ? Get.to(
-                                                        () => RoutineHome(),
-                                                        transition: Transition
-                                                            .rightToLeft,
-                                                      )
-                                                    : Get.to(
-                                                        () => ChooseCalendar(),
-                                                        transition: Transition
-                                                            .rightToLeft,
-                                                      ));
+                                                : Get.to(
+                                                    () => ChooseCalendar(),
+                                                    transition:
+                                                        Transition.rightToLeft,
+                                                  );
                                           },
                                           child: SizedBox(
                                             height: 80,
@@ -1126,28 +1103,21 @@ class _HomePageState extends State<HomePage> {
                                                                             lightSource:
                                                                                 LightSource.topLeft),
                                                                       )
-                                                                    : (_user_ad[index].title ==
-                                                                            '루틴공간'
-                                                                        ? NeumorphicIcon(
-                                                                            Icons.add_task,
-                                                                            size:
-                                                                                25,
-                                                                            style: NeumorphicStyle(
-                                                                                shape: NeumorphicShape.convex,
-                                                                                depth: 2,
-                                                                                color: TextColor(),
-                                                                                lightSource: LightSource.topLeft),
-                                                                          )
-                                                                        : NeumorphicIcon(
-                                                                            Icons.today,
-                                                                            size:
-                                                                                25,
-                                                                            style: NeumorphicStyle(
-                                                                                shape: NeumorphicShape.convex,
-                                                                                depth: 2,
-                                                                                color: TextColor(),
-                                                                                lightSource: LightSource.topLeft),
-                                                                          ))),
+                                                                    : NeumorphicIcon(
+                                                                        Icons
+                                                                            .today,
+                                                                        size:
+                                                                            25,
+                                                                        style: NeumorphicStyle(
+                                                                            shape: NeumorphicShape
+                                                                                .convex,
+                                                                            depth:
+                                                                                2,
+                                                                            color:
+                                                                                TextColor(),
+                                                                            lightSource:
+                                                                                LightSource.topLeft),
+                                                                      )),
                                                           ),
                                                         ],
                                                       ),
@@ -1265,7 +1235,7 @@ addcalendar(
           Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: Container(
-              height: 440,
+              height: s == 'home' ? 440 : 340,
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(

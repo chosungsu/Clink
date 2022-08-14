@@ -24,7 +24,7 @@ SheetPageAC(
       ? Colors.blue
       : Color(Hive.box('user_setting').get('typecolorcalendar'));
   return SizedBox(
-      height: 420,
+      height: s == 'home' ? 420 : 320,
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Column(
@@ -91,9 +91,8 @@ content(
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   int changetype = 0;
   final List types = [
-    '달력',
-    '메모',
-    '루틴',
+    '캘린더',
+    '일상메모',
   ];
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -103,7 +102,7 @@ content(
             height: 30,
             child: Row(
               children: [
-                Text('카드 제목',
+                Text('제목',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -136,7 +135,7 @@ content(
               fillColor: Colors.white,
               border: InputBorder.none,
               hintMaxLines: 2,
-              hintText: '카드 제목을 입력하세요',
+              hintText: '제목 입력...',
               hintStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -145,122 +144,55 @@ content(
             ),
           ),
         ),
-        const SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          height: 30,
-          child: Text('현재 지원중인 타입',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize())),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
         s == 'home'
-            ? SizedBox(
-                height: 30,
-                width: MediaQuery.of(context).size.width - 40,
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          setState(() {
-                            changetype--;
-                          });
-                        },
-                        child: changetype == 0
-                            ? const SizedBox(
-                                width: 30,
-                                height: 30,
-                              )
-                            : Container(
-                                alignment: Alignment.center,
-                                width: 30,
-                                height: 30,
-                                child: NeumorphicIcon(
-                                  Icons.keyboard_arrow_left,
-                                  size: 30,
-                                  style: const NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      surfaceIntensity: 0.5,
-                                      color: Colors.black,
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              )),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100)),
-                              primary: Colors.grey.shade400,
-                              side: const BorderSide(
-                                width: 1,
-                                color: Colors.black45,
-                              )),
-                          onPressed: () {},
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    types[changetype],
-                                    style: const NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: Colors.white,
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                    ),
-                    InkWell(
-                        onTap: () {
-                          setState(() {
-                            changetype++;
-                          });
-                        },
-                        child: changetype == 2
-                            ? const SizedBox(
-                                width: 30,
-                                height: 30,
-                              )
-                            : Container(
-                                alignment: Alignment.center,
-                                width: 30,
-                                height: 30,
-                                child: NeumorphicIcon(
-                                  Icons.keyboard_arrow_right,
-                                  size: 30,
-                                  style: const NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      surfaceIntensity: 0.5,
-                                      color: Colors.black,
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              )),
-                  ],
-                ),
-              )
-            : (s == 'cal'
-                ? SizedBox(
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 30,
+                    child: Text('카테고리를 선택하세요',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize())),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
                     height: 30,
                     width: MediaQuery.of(context).size.width - 40,
                     child: Row(
                       children: [
+                        InkWell(
+                            onTap: () {
+                              setState(() {
+                                changetype--;
+                              });
+                            },
+                            child: changetype == 0
+                                ? const SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                  )
+                                : Container(
+                                    alignment: Alignment.center,
+                                    width: 30,
+                                    height: 30,
+                                    child: NeumorphicIcon(
+                                      Icons.keyboard_arrow_left,
+                                      size: 30,
+                                      style: const NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          surfaceIntensity: 0.5,
+                                          color: Colors.black,
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  )),
                         Flexible(
                           fit: FlexFit.tight,
                           child: ElevatedButton(
@@ -280,7 +212,7 @@ content(
                                   children: [
                                     Center(
                                       child: NeumorphicText(
-                                        types[0],
+                                        types[changetype],
                                         style: const NeumorphicStyle(
                                           shape: NeumorphicShape.flat,
                                           depth: 3,
@@ -296,102 +228,40 @@ content(
                                 ),
                               )),
                         ),
+                        InkWell(
+                            onTap: () {
+                              setState(() {
+                                changetype++;
+                              });
+                            },
+                            child: changetype == 1
+                                ? const SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                  )
+                                : Container(
+                                    alignment: Alignment.center,
+                                    width: 30,
+                                    height: 30,
+                                    child: NeumorphicIcon(
+                                      Icons.keyboard_arrow_right,
+                                      size: 30,
+                                      style: const NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          surfaceIntensity: 0.5,
+                                          color: Colors.black,
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  )),
                       ],
                     ),
                   )
-                : (s == 'memo'
-                    ? SizedBox(
-                        height: 30,
-                        width: MediaQuery.of(context).size.width - 40,
-                        child: Row(
-                          children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Colors.grey.shade400,
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {},
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            types[1],
-                                            style: const NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Colors.white,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ],
-                        ),
-                      )
-                    : SizedBox(
-                        height: 30,
-                        width: MediaQuery.of(context).size.width - 40,
-                        child: Row(
-                          children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Colors.grey.shade400,
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {},
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            types[2],
-                                            style: const NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Colors.white,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ))),
+                ],
+              )
+            : const SizedBox(
+                height: 0,
+              ),
         const SizedBox(
           height: 20,
         ),
@@ -526,41 +396,21 @@ content(
                                 date.toString().split('-')[2].substring(0, 2) +
                                 '일'
                           })
-                        : (types[changetype].toString() == '메모'
-                            ? firestore.collection('MemoSheetHome').add({
-                                'memoname': controller.text,
-                                'madeUser': username,
-                                'type': changetype,
-                                'share': [],
-                                'color': Hive.box('user_setting')
-                                    .get('typecolorcalendar'),
-                                'date': date.toString().split('-')[0] +
-                                    '-' +
-                                    date.toString().split('-')[1] +
-                                    '-' +
-                                    date
-                                        .toString()
-                                        .split('-')[2]
-                                        .substring(0, 2) +
-                                    '일'
-                              })
-                            : firestore.collection('RoutineSheetHome').add({
-                                'routinename': controller.text,
-                                'madeUser': username,
-                                'type': changetype,
-                                'share': [],
-                                'color': Hive.box('user_setting')
-                                    .get('typecolorcalendar'),
-                                'date': date.toString().split('-')[0] +
-                                    '-' +
-                                    date.toString().split('-')[1] +
-                                    '-' +
-                                    date
-                                        .toString()
-                                        .split('-')[2]
-                                        .substring(0, 2) +
-                                    '일'
-                              }));
+                        : firestore.collection('MemoDataBase').doc().set({
+                            'Collection': null,
+                            'memoindex': null,
+                            'memolist': null,
+                            'memoTitle': controller.text,
+                            'OriginalUser': username,
+                            'color': Hive.box('user_setting')
+                                .get('typecolorcalendar'),
+                            'Date': date.toString().split('-')[0] +
+                                '-' +
+                                date.toString().split('-')[1] +
+                                '-' +
+                                date.toString().split('-')[2].substring(0, 2) +
+                                '일'
+                          });
                   });
 
                   Flushbar(

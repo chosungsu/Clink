@@ -79,7 +79,7 @@ class _DayScriptState extends State<DayScript> {
   ];
   List<MemoList> checklisttexts = [];
   Color _color = Hive.box('user_setting').get('typecolorcalendar') == null
-      ? BGColor()
+      ? Colors.white
       : Color(Hive.box('user_setting').get('typecolorcalendar'));
 
   @override
@@ -93,7 +93,7 @@ class _DayScriptState extends State<DayScript> {
     super.initState();
     Hive.box('user_setting').put('typecolorcalendar', null);
     _color = Hive.box('user_setting').get('typecolorcalendar') == null
-        ? BGColor()
+        ? Colors.white
         : Color(Hive.box('user_setting').get('typecolorcalendar'));
     checklisttexts.clear();
     controllers.clear();
@@ -1263,8 +1263,13 @@ class _DayScriptState extends State<DayScript> {
                                                   minLines: null,
                                                   maxLines: null,
                                                   focusNode: nodes[index],
-                                                  controller:
-                                                      controllers[index],
+                                                  controller: controllers[index]
+                                                    ..selection = TextSelection
+                                                        .fromPosition(TextPosition(
+                                                            offset: controllers[
+                                                                    index]
+                                                                .text
+                                                                .length)),
                                                   decoration: InputDecoration(
                                                     isCollapsed: true,
                                                     border: InputBorder.none,
@@ -1400,8 +1405,7 @@ class _DayScriptState extends State<DayScript> {
                                                     hintStyle: TextStyle(
                                                         fontSize:
                                                             contentTextsize(),
-                                                        color:
-                                                            TextColor_shadowcolor()),
+                                                        color: TextColor()),
                                                   ),
                                                   textAlign: TextAlign.start,
                                                   textAlignVertical:
@@ -1438,8 +1442,7 @@ class _DayScriptState extends State<DayScript> {
                                                       style: TextStyle(
                                                           fontSize:
                                                               contentTextsize(),
-                                                          color:
-                                                              TextColor_shadowcolor(),
+                                                          color: TextColor(),
                                                           decoration: scollection
                                                                           .memolistin[
                                                                       index] ==
@@ -1588,11 +1591,16 @@ class _DayScriptState extends State<DayScript> {
                                                         hintStyle: TextStyle(
                                                             fontSize:
                                                                 contentTextsize(),
-                                                            color:
-                                                                TextColor_shadowcolor()),
+                                                            color: TextColor()),
                                                       ),
-                                                      controller:
-                                                          controllers[index],
+                                                      controller: controllers[
+                                                          index]
+                                                        ..selection = TextSelection
+                                                            .fromPosition(TextPosition(
+                                                                offset: controllers[
+                                                                        index]
+                                                                    .text
+                                                                    .length)),
                                                     ),
                                                   )
                                                 : SizedBox(
@@ -1613,8 +1621,7 @@ class _DayScriptState extends State<DayScript> {
                                                       style: TextStyle(
                                                           fontSize:
                                                               contentTextsize(),
-                                                          color:
-                                                              TextColor_shadowcolor()),
+                                                          color: TextColor()),
                                                       decoration:
                                                           InputDecoration(
                                                         isCollapsed: true,
@@ -1748,11 +1755,16 @@ class _DayScriptState extends State<DayScript> {
                                                         hintStyle: TextStyle(
                                                             fontSize:
                                                                 contentTextsize(),
-                                                            color:
-                                                                TextColor_shadowcolor()),
+                                                            color: TextColor()),
                                                       ),
-                                                      controller:
-                                                          controllers[index],
+                                                      controller: controllers[
+                                                          index]
+                                                        ..selection = TextSelection
+                                                            .fromPosition(TextPosition(
+                                                                offset: controllers[
+                                                                        index]
+                                                                    .text
+                                                                    .length)),
                                                     ),
                                                   )),
                                         const SizedBox(
