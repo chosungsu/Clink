@@ -1150,10 +1150,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                               InkWell(
                                                 onTap: () {
                                                   setState(() {
-                                                    scollection
-                                                        .removelistitem(index);
                                                     controllers[index].text =
                                                         '';
+                                                    scollection
+                                                        .removelistitem(index);
                                                   });
                                                 },
                                                 child: const Icon(
@@ -1330,11 +1330,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
+                                                        controllers[index]
+                                                            .text = '';
                                                         scollection
                                                             .removelistitem(
                                                                 index);
-                                                        controllers[index]
-                                                            .text = '';
                                                       });
                                                     },
                                                     child: const Icon(
@@ -1494,11 +1494,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
+                                                        controllers[index]
+                                                            .text = '';
                                                         scollection
                                                             .removelistitem(
                                                                 index);
-                                                        controllers[index]
-                                                            .text = '';
                                                       });
                                                     },
                                                     child: const Icon(
