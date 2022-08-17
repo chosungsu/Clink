@@ -81,7 +81,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
     textEditingController_add_sheet = TextEditingController();
     Hive.box('user_setting').put('memocollection', widget.doccollection);
     _color = widget.doccolor != null ? Color(widget.doccolor) : BGColor();
-    scollection.addmemolist(widget.docsummary.length);
+    //scollection.addmemolist(widget.docindex.length);
     for (int j = 0; j < widget.docindex.length; j++) {
       Hive.box('user_setting').put('optionmemoinput', widget.docindex[j]);
       scollection.addmemolistin(j);
@@ -150,200 +150,171 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: BGColor(),
-            resizeToAvoidBottomInset: true,
-            body: WillPopScope(
-              onWillPop: _onBackPressed,
-              child: GestureDetector(
-                onTap: () {
-                  searchNode_first_section.unfocus();
-                  searchNode_add_section.unfocus();
-                  for (int i = 0;
-                      i < scollection.memolistcontentin.length;
-                      i++) {
-                    if (nodes.isNotEmpty) {
-                      nodes[i].unfocus();
-                    }
-                    scollection.memolistcontentin[i] = controllers[i].text;
-                  }
-                },
-                child: UI(),
-              ),
-            ),
-            bottomNavigationBar: Container(
-                padding: MediaQuery.of(context).viewInsets,
-                decoration: BoxDecoration(
-                    color: BGColor_shadowcolor(),
-                    border: Border(
-                        top: BorderSide(
-                            color: TextColor_shadowcolor(), width: 2))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.post_add),
-                      color: checkbottoms[0] == false
-                          ? NaviColor(false)
-                          : NaviColor(true),
-                      iconSize: 20,
-                      onPressed: () {
-                        setState(() {
-                          checkbottoms[0] == false
-                              ? checkbottoms[0] = true
-                              : checkbottoms[0] = false;
-                          if (checkbottoms[0] == true) {
-                            Hive.box('user_setting').put('optionmemoinput', 0);
-                            Hive.box('user_setting')
-                                .put('optionmemocontentinput', null);
-                            scollection.addmemolistin(scollection.memoindex);
-                            scollection
-                                .addmemolistcontentin(scollection.memoindex);
-                            scollection.addmemolist(1);
-                            checkbottoms[0] = false;
-                          }
-                          for (int i = 0;
-                              i < scollection.memolistcontentin.length;
-                              i++) {
-                            if (nodes.isNotEmpty) {
-                              nodes[i].unfocus();
-                            }
-                            scollection.memolistcontentin[i] =
-                                controllers[i].text;
-                          }
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.check_box_outline_blank),
-                      color: checkbottoms[1] == false
-                          ? NaviColor(false)
-                          : NaviColor(true),
-                      iconSize: 20,
-                      onPressed: () {
-                        setState(() {
-                          checkbottoms[1] == false
-                              ? checkbottoms[1] = true
-                              : checkbottoms[1] = false;
-                          if (checkbottoms[1] == true) {
-                            Hive.box('user_setting').put('optionmemoinput', 1);
-                            Hive.box('user_setting')
-                                .put('optionmemocontentinput', null);
-                            scollection.addmemolistin(scollection.memoindex);
-                            scollection
-                                .addmemolistcontentin(scollection.memoindex);
-                            scollection.addmemolist(1);
-                            checkbottoms[1] = false;
-                          }
-                          for (int i = 0;
-                              i < scollection.memolistcontentin.length;
-                              i++) {
-                            if (nodes.isNotEmpty) {
-                              nodes[i].unfocus();
-                            }
-                            scollection.memolistcontentin[i] =
-                                controllers[i].text;
-                          }
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.star_rate),
-                      color: checkbottoms[2] == false
-                          ? NaviColor(false)
-                          : NaviColor(true),
-                      iconSize: 20,
-                      onPressed: () {
-                        setState(() {
-                          checkbottoms[2] == false
-                              ? checkbottoms[2] = true
-                              : checkbottoms[2] = false;
-                          if (checkbottoms[2] == true) {
-                            Hive.box('user_setting').put('optionmemoinput', 2);
-                            Hive.box('user_setting')
-                                .put('optionmemocontentinput', null);
-                            scollection.addmemolistin(scollection.memoindex);
-                            scollection
-                                .addmemolistcontentin(scollection.memoindex);
-                            scollection.addmemolist(1);
-                            checkbottoms[2] = false;
-                          }
-                          for (int i = 0;
-                              i < scollection.memolistcontentin.length;
-                              i++) {
-                            if (nodes.isNotEmpty) {
-                              nodes[i].unfocus();
-                            }
-                            scollection.memolistcontentin[i] =
-                                controllers[i].text;
-                          }
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: Container(
-                        width: 20.0,
-                        height: 20.0,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(100.0)),
-                          border: Border.all(
-                            color: TextColor(),
-                            width: 2.0,
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: _color,
+      backgroundColor: BGColor(),
+      resizeToAvoidBottomInset: true,
+      body: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: GestureDetector(
+          onTap: () {
+            searchNode_first_section.unfocus();
+            searchNode_add_section.unfocus();
+            for (int i = 0; i < nodes.length; i++) {
+              nodes[i].unfocus();
+            }
+          },
+          child: UI(),
+        ),
+      ),
+      bottomNavigationBar: GetBuilder<selectcollection>(
+          builder: (_) => Container(
+              padding: MediaQuery.of(context).viewInsets,
+              decoration: BoxDecoration(
+                  color: BGColor_shadowcolor(),
+                  border: Border(
+                      top: BorderSide(
+                          color: TextColor_shadowcolor(), width: 2))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.post_add),
+                    color: checkbottoms[0] == false
+                        ? NaviColor(false)
+                        : NaviColor(true),
+                    iconSize: 20,
+                    onPressed: () {
+                      setState(() {
+                        checkbottoms[0] == false
+                            ? checkbottoms[0] = true
+                            : checkbottoms[0] = false;
+                        if (checkbottoms[0] == true) {
+                          Hive.box('user_setting').put('optionmemoinput', 0);
+                          Hive.box('user_setting')
+                              .put('optionmemocontentinput', null);
+                          scollection.addmemolistin(scollection.memoindex);
+                          scollection
+                              .addmemolistcontentin(scollection.memoindex - 1);
+
+                          checkbottoms[0] = false;
+                        }
+                        for (int i = 0; i < nodes.length; i++) {
+                          nodes[i].unfocus();
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.check_box_outline_blank),
+                    color: checkbottoms[1] == false
+                        ? NaviColor(false)
+                        : NaviColor(true),
+                    iconSize: 20,
+                    onPressed: () {
+                      setState(() {
+                        checkbottoms[1] == false
+                            ? checkbottoms[1] = true
+                            : checkbottoms[1] = false;
+                        if (checkbottoms[1] == true) {
+                          Hive.box('user_setting').put('optionmemoinput', 1);
+                          Hive.box('user_setting')
+                              .put('optionmemocontentinput', null);
+                          scollection.addmemolistin(scollection.memoindex);
+                          scollection
+                              .addmemolistcontentin(scollection.memoindex - 1);
+                          checkbottoms[1] = false;
+                        }
+                        for (int i = 0; i < nodes.length; i++) {
+                          nodes[i].unfocus();
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.star_rate),
+                    color: checkbottoms[2] == false
+                        ? NaviColor(false)
+                        : NaviColor(true),
+                    iconSize: 20,
+                    onPressed: () {
+                      setState(() {
+                        checkbottoms[2] == false
+                            ? checkbottoms[2] = true
+                            : checkbottoms[2] = false;
+                        if (checkbottoms[2] == true) {
+                          Hive.box('user_setting').put('optionmemoinput', 2);
+                          Hive.box('user_setting')
+                              .put('optionmemocontentinput', null);
+                          scollection.addmemolistin(scollection.memoindex);
+                          scollection
+                              .addmemolistcontentin(scollection.memoindex - 1);
+                          checkbottoms[2] = false;
+                        }
+                        for (int i = 0; i < nodes.length; i++) {
+                          nodes[i].unfocus();
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Container(
+                      width: 20.0,
+                      height: 20.0,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(100.0)),
+                        border: Border.all(
+                          color: TextColor(),
+                          width: 2.0,
                         ),
                       ),
-                      color: checkbottoms[2] == false
-                          ? NaviColor(false)
-                          : NaviColor(true),
-                      iconSize: 20,
-                      onPressed: () {
-                        for (int i = 0;
-                            i < scollection.memolistcontentin.length;
-                            i++) {
-                          if (nodes.isNotEmpty) {
-                            nodes[i].unfocus();
-                          }
-                          scollection.memolistcontentin[i] =
-                              controllers[i].text;
-                        }
-                        setState(() {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('선택'),
-                                content: SingleChildScrollView(
-                                  child: ColorPicker(
-                                    pickerColor: _color,
-                                    onColorChanged: (Color color) {
-                                      setState(() {
-                                        _color = color;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  ElevatedButton(
-                                    child: const Text('반영하기'),
-                                    onPressed: () {
-                                      Hive.box('user_setting').put(
-                                          'typecolorcalendar',
-                                          _color.value.toInt());
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        });
-                      },
+                      child: CircleAvatar(
+                        backgroundColor: _color,
+                      ),
                     ),
-                  ],
-                ))));
+                    color: checkbottoms[2] == false
+                        ? NaviColor(false)
+                        : NaviColor(true),
+                    iconSize: 20,
+                    onPressed: () {
+                      for (int i = 0; i < nodes.length; i++) {
+                        nodes[i].unfocus();
+                      }
+                      setState(() {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('선택'),
+                              content: SingleChildScrollView(
+                                child: ColorPicker(
+                                  pickerColor: _color,
+                                  onColorChanged: (Color color) {
+                                    setState(() {
+                                      _color = color;
+                                    });
+                                  },
+                                ),
+                              ),
+                              actions: <Widget>[
+                                ElevatedButton(
+                                  child: const Text('반영하기'),
+                                  onPressed: () {
+                                    Hive.box('user_setting').put(
+                                        'typecolorcalendar',
+                                        _color.value.toInt());
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      });
+                    },
+                  ),
+                ],
+              ))),
+    ));
   }
 
   UI() {
@@ -471,6 +442,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                 child: InkWell(
                                                     onTap: () async {
                                                       //수정
+                                                      for (int i = 0;
+                                                          i < nodes.length;
+                                                          i++) {
+                                                        nodes[i].unfocus();
+                                                      }
                                                       if (textEditingController1
                                                           .text.isNotEmpty) {
                                                         Flushbar(
@@ -711,6 +687,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                 width: 30,
                                                 child: InkWell(
                                                     onTap: () {
+                                                      for (int i = 0;
+                                                          i < nodes.length;
+                                                          i++) {
+                                                        nodes[i].unfocus();
+                                                      }
                                                       //삭제
                                                       Flushbar(
                                                         backgroundColor: Colors
@@ -1108,7 +1089,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                         itemBuilder: (context, index) {
                           nodes.add(FocusNode());
                           controllers.add(TextEditingController());
-
                           widget.docsummary.length <= index
                               ? null
                               : controllers[index].text =
@@ -1126,6 +1106,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                         onTap: () {
                                           scollection.memolistcontentin[index] =
                                               controllers[index].text;
+                                        },
+                                        onChanged: (text) {
+                                          scollection.memolistcontentin[index] =
+                                              text;
                                         },
                                         minLines: null,
                                         maxLines: null,
@@ -1165,40 +1149,41 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        String content = scollection
-                                                                .memolistcontentin[
-                                                            index];
-                                                        int indexcontent =
-                                                            scollection
-                                                                    .memolistin[
-                                                                index];
-                                                        scollection
-                                                            .removelistitem(
-                                                                index);
-                                                        Hive.box('user_setting')
-                                                            .put(
-                                                                'optionmemoinput',
-                                                                indexcontent);
-                                                        Hive.box('user_setting')
-                                                            .put(
-                                                                'optionmemocontentinput',
-                                                                content);
-                                                        scollection
-                                                            .addmemolist(1);
                                                         if (index == 0) {
-                                                          scollection
-                                                              .addmemolistin(
-                                                                  index);
-                                                          scollection
-                                                              .addmemolistcontentin(
-                                                                  index);
                                                         } else {
+                                                          String content_prev =
+                                                              controllers[
+                                                                      index - 1]
+                                                                  .text;
+                                                          int indexcontent_prev =
+                                                              scollection
+                                                                      .memolistin[
+                                                                  index - 1];
+                                                          scollection
+                                                              .removelistitem(
+                                                                  index - 1);
+                                                          Hive.box('user_setting').put(
+                                                              'optionmemoinput',
+                                                              indexcontent_prev);
+                                                          Hive.box(
+                                                                  'user_setting')
+                                                              .put(
+                                                                  'optionmemocontentinput',
+                                                                  content_prev);
                                                           scollection
                                                               .addmemolistin(
-                                                                  index - 1);
+                                                                  index);
                                                           scollection
                                                               .addmemolistcontentin(
-                                                                  index - 1);
+                                                                  index);
+                                                          controllers[index - 1]
+                                                              .text = scollection
+                                                                  .memolistcontentin[
+                                                              index - 1];
+                                                          controllers[index]
+                                                              .text = scollection
+                                                                  .memolistcontentin[
+                                                              index];
                                                         }
                                                       });
                                                     },
@@ -1210,42 +1195,45 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        String content = scollection
-                                                                .memolistcontentin[
-                                                            index];
-                                                        int indexcontent =
-                                                            scollection
-                                                                    .memolistin[
-                                                                index];
-                                                        scollection
-                                                            .removelistitem(
-                                                                index);
-                                                        Hive.box('user_setting')
-                                                            .put(
-                                                                'optionmemoinput',
-                                                                indexcontent);
-                                                        Hive.box('user_setting')
-                                                            .put(
-                                                                'optionmemocontentinput',
-                                                                content);
-                                                        scollection
-                                                            .addmemolist(1);
                                                         if (index + 1 ==
                                                             scollection
                                                                 .memoindex) {
-                                                          scollection
-                                                              .addmemolistin(
-                                                                  index);
-                                                          scollection
-                                                              .addmemolistcontentin(
-                                                                  index);
                                                         } else {
+                                                          String content =
+                                                              scollection
+                                                                      .memolistcontentin[
+                                                                  index];
+                                                          int indexcontent =
+                                                              scollection
+                                                                      .memolistin[
+                                                                  index];
+                                                          scollection
+                                                              .removelistitem(
+                                                                  index);
+                                                          Hive.box(
+                                                                  'user_setting')
+                                                              .put(
+                                                                  'optionmemoinput',
+                                                                  indexcontent);
+                                                          Hive.box(
+                                                                  'user_setting')
+                                                              .put(
+                                                                  'optionmemocontentinput',
+                                                                  content);
                                                           scollection
                                                               .addmemolistin(
                                                                   index + 1);
                                                           scollection
                                                               .addmemolistcontentin(
                                                                   index + 1);
+                                                          controllers[index]
+                                                              .text = scollection
+                                                                  .memolistcontentin[
+                                                              index];
+                                                          controllers[index + 1]
+                                                              .text = scollection
+                                                                  .memolistcontentin[
+                                                              index + 1];
                                                         }
                                                       });
                                                     },
@@ -1288,6 +1276,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                               scollection.memolistcontentin[
                                                       index] =
                                                   controllers[index].text;
+                                            },
+                                            onChanged: (text) {
+                                              scollection.memolistcontentin[
+                                                  index] = text;
                                             },
                                             focusNode: nodes[index],
                                             textAlign: TextAlign.start,
@@ -1347,43 +1339,45 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                       InkWell(
                                                         onTap: () {
                                                           setState(() {
-                                                            String content =
-                                                                scollection
-                                                                        .memolistcontentin[
-                                                                    index];
-                                                            int indexcontent =
-                                                                scollection
-                                                                        .memolistin[
-                                                                    index];
-                                                            scollection
-                                                                .removelistitem(
-                                                                    index);
-                                                            Hive.box('user_setting').put(
-                                                                'optionmemoinput',
-                                                                indexcontent);
-                                                            Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'optionmemocontentinput',
-                                                                    content);
-                                                            scollection
-                                                                .addmemolist(1);
                                                             if (index == 0) {
-                                                              scollection
-                                                                  .addmemolistin(
-                                                                      index);
-                                                              scollection
-                                                                  .addmemolistcontentin(
-                                                                      index);
                                                             } else {
+                                                              String
+                                                                  content_prev =
+                                                                  controllers[
+                                                                          index -
+                                                                              1]
+                                                                      .text;
+                                                              int indexcontent_prev =
+                                                                  scollection
+                                                                          .memolistin[
+                                                                      index -
+                                                                          1];
+                                                              scollection
+                                                                  .removelistitem(
+                                                                      index -
+                                                                          1);
+                                                              Hive.box('user_setting').put(
+                                                                  'optionmemoinput',
+                                                                  indexcontent_prev);
+                                                              Hive.box('user_setting').put(
+                                                                  'optionmemocontentinput',
+                                                                  content_prev);
                                                               scollection
                                                                   .addmemolistin(
-                                                                      index -
-                                                                          1);
+                                                                      index);
                                                               scollection
                                                                   .addmemolistcontentin(
-                                                                      index -
-                                                                          1);
+                                                                      index);
+                                                              controllers[
+                                                                      index - 1]
+                                                                  .text = scollection
+                                                                      .memolistcontentin[
+                                                                  index - 1];
+                                                              controllers[index]
+                                                                      .text =
+                                                                  scollection
+                                                                          .memolistcontentin[
+                                                                      index];
                                                             }
                                                           });
                                                         },
@@ -1395,37 +1389,29 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                       InkWell(
                                                         onTap: () {
                                                           setState(() {
-                                                            String content =
-                                                                scollection
-                                                                        .memolistcontentin[
-                                                                    index];
-                                                            int indexcontent =
-                                                                scollection
-                                                                        .memolistin[
-                                                                    index];
-                                                            scollection
-                                                                .removelistitem(
-                                                                    index);
-                                                            Hive.box('user_setting').put(
-                                                                'optionmemoinput',
-                                                                indexcontent);
-                                                            Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'optionmemocontentinput',
-                                                                    content);
-                                                            scollection
-                                                                .addmemolist(1);
                                                             if (index + 1 ==
                                                                 scollection
                                                                     .memoindex) {
-                                                              scollection
-                                                                  .addmemolistin(
-                                                                      index);
-                                                              scollection
-                                                                  .addmemolistcontentin(
-                                                                      index);
                                                             } else {
+                                                              String content =
+                                                                  scollection
+                                                                          .memolistcontentin[
+                                                                      index];
+                                                              int indexcontent =
+                                                                  scollection
+                                                                          .memolistin[
+                                                                      index];
+                                                              scollection
+                                                                  .removelistitem(
+                                                                      index);
+                                                              Hive.box('user_setting').put(
+                                                                  'optionmemoinput',
+                                                                  indexcontent);
+                                                              Hive.box(
+                                                                      'user_setting')
+                                                                  .put(
+                                                                      'optionmemocontentinput',
+                                                                      content);
                                                               scollection
                                                                   .addmemolistin(
                                                                       index +
@@ -1434,6 +1420,16 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                   .addmemolistcontentin(
                                                                       index +
                                                                           1);
+                                                              controllers[index]
+                                                                      .text =
+                                                                  scollection
+                                                                          .memolistcontentin[
+                                                                      index];
+                                                              controllers[
+                                                                      index + 1]
+                                                                  .text = scollection
+                                                                      .memolistcontentin[
+                                                                  index + 1];
                                                             }
                                                           });
                                                         },
@@ -1473,6 +1469,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                       index] =
                                                   controllers[index].text;
                                             },
+                                            onChanged: (text) {
+                                              scollection.memolistcontentin[
+                                                  index] = text;
+                                            },
                                             minLines: 1,
                                             maxLines: 1,
                                             focusNode: nodes[index],
@@ -1511,43 +1511,45 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                       InkWell(
                                                         onTap: () {
                                                           setState(() {
-                                                            String content =
-                                                                scollection
-                                                                        .memolistcontentin[
-                                                                    index];
-                                                            int indexcontent =
-                                                                scollection
-                                                                        .memolistin[
-                                                                    index];
-                                                            scollection
-                                                                .removelistitem(
-                                                                    index);
-                                                            Hive.box('user_setting').put(
-                                                                'optionmemoinput',
-                                                                indexcontent);
-                                                            Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'optionmemocontentinput',
-                                                                    content);
-                                                            scollection
-                                                                .addmemolist(1);
                                                             if (index == 0) {
-                                                              scollection
-                                                                  .addmemolistin(
-                                                                      index);
-                                                              scollection
-                                                                  .addmemolistcontentin(
-                                                                      index);
                                                             } else {
+                                                              String
+                                                                  content_prev =
+                                                                  controllers[
+                                                                          index -
+                                                                              1]
+                                                                      .text;
+                                                              int indexcontent_prev =
+                                                                  scollection
+                                                                          .memolistin[
+                                                                      index -
+                                                                          1];
+                                                              scollection
+                                                                  .removelistitem(
+                                                                      index -
+                                                                          1);
+                                                              Hive.box('user_setting').put(
+                                                                  'optionmemoinput',
+                                                                  indexcontent_prev);
+                                                              Hive.box('user_setting').put(
+                                                                  'optionmemocontentinput',
+                                                                  content_prev);
                                                               scollection
                                                                   .addmemolistin(
-                                                                      index -
-                                                                          1);
+                                                                      index);
                                                               scollection
                                                                   .addmemolistcontentin(
-                                                                      index -
-                                                                          1);
+                                                                      index);
+                                                              controllers[
+                                                                      index - 1]
+                                                                  .text = scollection
+                                                                      .memolistcontentin[
+                                                                  index - 1];
+                                                              controllers[index]
+                                                                      .text =
+                                                                  scollection
+                                                                          .memolistcontentin[
+                                                                      index];
                                                             }
                                                           });
                                                         },
@@ -1559,37 +1561,29 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                       InkWell(
                                                         onTap: () {
                                                           setState(() {
-                                                            String content =
-                                                                scollection
-                                                                        .memolistcontentin[
-                                                                    index];
-                                                            int indexcontent =
-                                                                scollection
-                                                                        .memolistin[
-                                                                    index];
-                                                            scollection
-                                                                .removelistitem(
-                                                                    index);
-                                                            Hive.box('user_setting').put(
-                                                                'optionmemoinput',
-                                                                indexcontent);
-                                                            Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'optionmemocontentinput',
-                                                                    content);
-                                                            scollection
-                                                                .addmemolist(1);
                                                             if (index + 1 ==
                                                                 scollection
                                                                     .memoindex) {
-                                                              scollection
-                                                                  .addmemolistin(
-                                                                      index);
-                                                              scollection
-                                                                  .addmemolistcontentin(
-                                                                      index);
                                                             } else {
+                                                              String content =
+                                                                  scollection
+                                                                          .memolistcontentin[
+                                                                      index];
+                                                              int indexcontent =
+                                                                  scollection
+                                                                          .memolistin[
+                                                                      index];
+                                                              scollection
+                                                                  .removelistitem(
+                                                                      index);
+                                                              Hive.box('user_setting').put(
+                                                                  'optionmemoinput',
+                                                                  indexcontent);
+                                                              Hive.box(
+                                                                      'user_setting')
+                                                                  .put(
+                                                                      'optionmemocontentinput',
+                                                                      content);
                                                               scollection
                                                                   .addmemolistin(
                                                                       index +
@@ -1598,6 +1592,17 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                   .addmemolistcontentin(
                                                                       index +
                                                                           1);
+
+                                                              controllers[index]
+                                                                      .text =
+                                                                  scollection
+                                                                          .memolistcontentin[
+                                                                      index];
+                                                              controllers[
+                                                                      index + 1]
+                                                                  .text = scollection
+                                                                      .memolistcontentin[
+                                                                  index + 1];
                                                             }
                                                           });
                                                         },

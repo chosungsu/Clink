@@ -27,6 +27,7 @@ class selectcollection extends GetxController {
 
   void addmemolistin(int index) {
     memolistin.insert(index, Hive.box('user_setting').get('optionmemoinput'));
+    memoindex++;
     update();
     notifyChildrens();
   }

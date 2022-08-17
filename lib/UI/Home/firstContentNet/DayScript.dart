@@ -230,7 +230,6 @@ class _DayScriptState extends State<DayScript> {
                           scollection.addmemolistin(scollection.memoindex);
                           scollection
                               .addmemolistcontentin(scollection.memoindex);
-                          scollection.addmemolist(1);
                           checkbottoms[0] = false;
                         }
                         for (int i = 0; i < scollection.memoindex; i++) {
@@ -261,7 +260,6 @@ class _DayScriptState extends State<DayScript> {
                           scollection.addmemolistin(scollection.memoindex);
                           scollection
                               .addmemolistcontentin(scollection.memoindex);
-                          scollection.addmemolist(1);
                           checkbottoms[1] = false;
                         }
                         for (int i = 0; i < scollection.memoindex; i++) {
@@ -292,7 +290,6 @@ class _DayScriptState extends State<DayScript> {
                           scollection.addmemolistin(scollection.memoindex);
                           scollection
                               .addmemolistcontentin(scollection.memoindex);
-                          scollection.addmemolist(1);
                           checkbottoms[2] = false;
                         }
                         for (int i = 0; i < scollection.memoindex; i++) {
@@ -1316,9 +1313,6 @@ class _DayScriptState extends State<DayScript> {
                                                                   Hive.box('user_setting').put(
                                                                       'optionmemocontentinput',
                                                                       content);
-                                                                  scollection
-                                                                      .addmemolist(
-                                                                          1);
                                                                   if (index ==
                                                                       0) {
                                                                     scollection
@@ -1366,9 +1360,6 @@ class _DayScriptState extends State<DayScript> {
                                                                   Hive.box('user_setting').put(
                                                                       'optionmemocontentinput',
                                                                       content);
-                                                                  scollection
-                                                                      .addmemolist(
-                                                                          1);
                                                                   if (index +
                                                                           1 ==
                                                                       scollection
@@ -1511,9 +1502,6 @@ class _DayScriptState extends State<DayScript> {
                                                                       Hive.box('user_setting').put(
                                                                           'optionmemocontentinput',
                                                                           content);
-                                                                      scollection
-                                                                          .addmemolist(
-                                                                              1);
                                                                       if (index ==
                                                                           0) {
                                                                         scollection
@@ -1556,9 +1544,6 @@ class _DayScriptState extends State<DayScript> {
                                                                       Hive.box('user_setting').put(
                                                                           'optionmemocontentinput',
                                                                           content);
-                                                                      scollection
-                                                                          .addmemolist(
-                                                                              1);
                                                                       if (index +
                                                                               1 ==
                                                                           scollection
@@ -1675,9 +1660,6 @@ class _DayScriptState extends State<DayScript> {
                                                                       Hive.box('user_setting').put(
                                                                           'optionmemocontentinput',
                                                                           content);
-                                                                      scollection
-                                                                          .addmemolist(
-                                                                              1);
                                                                       if (index ==
                                                                           0) {
                                                                         scollection
@@ -1720,9 +1702,6 @@ class _DayScriptState extends State<DayScript> {
                                                                       Hive.box('user_setting').put(
                                                                           'optionmemocontentinput',
                                                                           content);
-                                                                      scollection
-                                                                          .addmemolist(
-                                                                              1);
                                                                       if (index +
                                                                               1 ==
                                                                           scollection

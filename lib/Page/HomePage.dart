@@ -19,8 +19,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../DB/SpaceContent.dart';
+import '../DB/Category.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/SheetGetx/SpaceShowRoom.dart';
+import '../Tool/SheetGetx/category.dart';
 import '../Tool/ShimmerDesign/Shimmer_home.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/RoutineHome.dart';
@@ -40,10 +42,12 @@ class _HomePageState extends State<HomePage> {
   bool isdraweropen = false;
   int navi = 0;
   int currentPage = 0;
+  int categorynumber = 0;
   List<SpaceContent> sc = [];
   late DateTime Date = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   static final spaceset = Get.put(Spacesetting());
+  static final categoryset = Get.put(category());
   final draw = Get.put(navibool());
   List showspacelist = [];
   List content = [];
@@ -53,6 +57,7 @@ class _HomePageState extends State<HomePage> {
     SpaceList(title: '일정공간'),
     SpaceList(title: '메모공간'),
   ];
+  static final List<Category> fillcategory = [];
 
   late final PageController _pController;
   //프로 버전 구매시 사용하게될 코드
@@ -231,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                                               10,
                                       child: Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 20, right: 20),
+                                              left: 10, right: 20),
                                           child: Row(
                                             children: [
                                               Flexible(
@@ -287,6 +292,10 @@ class _HomePageState extends State<HomePage> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: Column(
                                     children: [
+                                      /*const SizedBox(
+                                        height: 20,
+                                      ),
+                                      H_Container_0(height),*/
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -302,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      H_Container_5(height),
+                                      H_Container_1(height),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -410,69 +419,144 @@ class _HomePageState extends State<HomePage> {
   }
 
   /*H_Container_0(double height) {
-    return SizedBox(
-      height: 90,
-      width: MediaQuery.of(context).size.width - 40,
-      child: Column(
+    String categoryname = '';
+    bool readycategory = false;
+    return StatefulBuilder(builder: (_, StateSetter setState) {
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-              height: 80,
-              width: MediaQuery.of(context).size.width - 40,
-              child: ContainerDesign(
-                  color: Colors.blue.shade400,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          height: 60,
-                          child: GestureDetector(
-                            onTap: () {
-                              addcalendar(context, searchNode, controller, name,
-                                  Date, 'home');
-                            },
-                            child: SizedBox(
-                              height: 45,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: 45,
-                                    width: 45,
-                                    child: Container(
-                                        alignment: Alignment.center,
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.blue.shade500,
-                                          child: const Icon(
-                                            Icons.smart_toy,
-                                            color: Colors.white,
+          Text(name + '님,',
+              style: TextStyle(
+                fontSize: contentTitleTextsize(),
+                color: TextColor(),
+                fontWeight: FontWeight.bold,
+              )),
+          const SizedBox(
+            height: 20,
+          ),
+          StreamBuilder<QuerySnapshot>(
+            stream: firestore
+                .collection('HomeCategories')
+                .orderBy('number')
+                .snapshots(),
+            builder: (context, snapshot) {
+              categoryset.setcategory();
+              if (snapshot.hasData) {
+                fillcategory.clear();
+                final valuespace = snapshot.data!.docs;
+                for (var sp in valuespace) {
+                  categoryname = sp.get('name');
+                  readycategory = sp.get('ready');
+                  fillcategory
+                      .add(Category(title: categoryname, ready: readycategory));
+                }
+
+                return GetBuilder<category>(
+                    builder: (_) => ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: categoryset.number,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      if (fillcategory[index].ready == true) {
+                                        fillcategory[index].title == 'note'
+                                            ? Get.to(
+                                                () => const DayNoteHome(
+                                                  title: '',
+                                                ),
+                                                transition:
+                                                    Transition.rightToLeft,
+                                              )
+                                            : (fillcategory[index].title ==
+                                                    'calendar'
+                                                ? Get.to(
+                                                    () => ChooseCalendar(),
+                                                    transition:
+                                                        Transition.rightToLeft,
+                                                  )
+                                                : Get.to(
+                                                    () => ChooseCalendar(),
+                                                    transition:
+                                                        Transition.rightToLeft,
+                                                  ));
+                                      } else {}
+                                    },
+                                    child: ContainerDesign(
+                                        child: SizedBox(
+                                          height: 80,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              40,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                      fillcategory[index].title,
+                                                      style:
+                                                          GoogleFonts.lobster(
+                                                        fontSize:
+                                                            contentTitleTextsize(),
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      )),
+                                                ],
+                                              )
+                                            ],
                                           ),
-                                        )),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  const SizedBox(
-                                    height: 45,
-                                    child: Center(
-                                      child: Text(
-                                        '원큐로 기록카드 만들기',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                        overflow: TextOverflow.fade,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ))
-                    ],
-                  )))
+                                        ),
+                                        color: BGColor())),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            );
+                          },
+                        ));
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: NeumorphicText(
+                    '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: TextColor(),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                    ),
+                  ),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return Center(
+                child: NeumorphicText(
+                  '불러오는 중입니다...',
+                  style: NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    depth: 3,
+                    color: TextColor(),
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize(),
+                  ),
+                ),
+              );
+            },
+          )
         ],
-      ),
-    );
+      );
+    });
   }*/
 
   H_Container_1(double height) {
@@ -1171,13 +1255,6 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     });
-  }
-
-  H_Container_5(double height) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [ADEvents(context)],
-    );
   }
 
   showreadycontent(
