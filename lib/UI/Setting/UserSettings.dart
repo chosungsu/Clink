@@ -8,9 +8,14 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../Tool/ContainerDesign.dart';
+import '../../sheets/readycontent.dart';
 
 class UserSettings extends StatelessWidget {
-  UserSettings({Key? key, required this.height, required this.controller})
+  UserSettings(
+      {Key? key,
+      required this.height,
+      required this.controller,
+      required this.pcontroll})
       : super(key: key);
   final double height;
   final searchNode = FocusNode();
@@ -20,6 +25,7 @@ class UserSettings extends StatelessWidget {
     '친구 초대하기',
     '로그인',
   ];
+  final PageController pcontroll;
   var name = Hive.box('user_info').get('id');
   final TextEditingController controller;
 
@@ -42,8 +48,7 @@ class UserSettings extends StatelessWidget {
                               type: PageTransitionType.bottomToTop,
                               child: DayContentHome()),
                         )*/
-                      Get.to(() => OptionChangePage(),
-                          transition: Transition.rightToLeft)
+                      showreadycontent(context, height, pcontroll)
                       : (index == 1
                           ? /*Navigator.push(
                               context,
@@ -109,5 +114,45 @@ class UserSettings extends StatelessWidget {
                 ));
           }),
     );
+  }
+
+  showreadycontent(
+    BuildContext context,
+    double height,
+    PageController pController,
+  ) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        )),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.all(10),
+            child: Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Container(
+                  height: 280,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: readycontent(context, height, pController),
+                )),
+          );
+        }).whenComplete(() {});
   }
 }

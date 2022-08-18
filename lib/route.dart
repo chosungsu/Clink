@@ -39,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('app start');
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

@@ -32,6 +32,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final draw = Get.put(navibool());
   int navi = 0;
   var _controller = TextEditingController();
+  late final PageController _pController;
+  int currentPage = 0;
 
   @override
   void initState() {
@@ -40,6 +42,8 @@ class _ProfilePageState extends State<ProfilePage> {
     navi = NaviWhere();
     _controller = TextEditingController();
     isdraweropen = draw.drawopen;
+    _pController =
+        PageController(initialPage: currentPage, viewportFraction: 1);
   }
 
   @override
@@ -47,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // TODO: implement dispose
     super.dispose();
     _controller.dispose();
+    _pController.dispose();
   }
 
   @override
@@ -253,7 +258,8 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserSettings(height: height, controller: _controller),
+          UserSettings(
+              height: height, controller: _controller, pcontroll: _pController),
         ],
       ),
     );

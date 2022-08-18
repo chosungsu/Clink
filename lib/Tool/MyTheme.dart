@@ -12,6 +12,8 @@ class MyTheme {
   static Color kUnreadChatBG = const Color(0xffEE1D1D);
   static Color chatbotColor = Colors.lightGreen;
   static Color userchatColor = Colors.white;
+  static Color shimmer_home_basecolor = Colors.blueGrey.shade400;
+  static Color shimmer_home_highlightcolor = Colors.blueGrey.shade100;
   static Color colorWhite = Colors.white;
   static Color colorblack = Colors.black;
   static Color colorWhitestatus = Colors.white60;
@@ -51,12 +53,11 @@ class MyTheme {
       letterSpacing: 1.2,
       fontWeight: FontWeight.w500);
 
-  static const TextStyle bodyTextMessage =
-      TextStyle(
-        fontSize: 13, 
-        letterSpacing: 1.5, 
-        fontWeight: FontWeight.w600,
-        overflow: TextOverflow.ellipsis);
+  static const TextStyle bodyTextMessage = TextStyle(
+      fontSize: 13,
+      letterSpacing: 1.5,
+      fontWeight: FontWeight.w600,
+      overflow: TextOverflow.ellipsis);
 
   static const TextStyle bodyTextTime = TextStyle(
     color: Color(0xffAEABC9),

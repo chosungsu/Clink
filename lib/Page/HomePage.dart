@@ -18,6 +18,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:shimmer/shimmer.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
 import '../Tool/NoBehavior.dart';
@@ -75,6 +76,7 @@ class _HomePageState extends State<HomePage> {
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
+    categoryset.setcategory();
     isdraweropen = draw.drawopen;
   }
 
@@ -292,22 +294,18 @@ class _HomePageState extends State<HomePage> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: Column(
                                     children: [
-                                      /*const SizedBox(
-                                        height: 20,
-                                      ),
-                                      H_Container_0(height),*/
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      H_Container_1(height),
+                                      H_Container_0(height, _pController),
                                       const SizedBox(
                                         height: 20,
                                       ),
                                       H_Container_2(height),
-                                      const SizedBox(
+                                      /*const SizedBox(
                                         height: 20,
                                       ),
-                                      H_Container_3(height, _pController),
+                                      H_Container_3(height, _pController),*/
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -418,146 +416,22 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  /*H_Container_0(double height) {
-    String categoryname = '';
-    bool readycategory = false;
-    return StatefulBuilder(builder: (_, StateSetter setState) {
-      return Column(
+  H_Container_0(double height, PageController pController) {
+    //프로버전 구매시 보이지 않게 함
+    return SizedBox(
+      height: 160,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(name + '님,',
-              style: TextStyle(
-                fontSize: contentTitleTextsize(),
-                color: TextColor(),
-                fontWeight: FontWeight.bold,
-              )),
-          const SizedBox(
-            height: 20,
-          ),
-          StreamBuilder<QuerySnapshot>(
-            stream: firestore
-                .collection('HomeCategories')
-                .orderBy('number')
-                .snapshots(),
-            builder: (context, snapshot) {
-              categoryset.setcategory();
-              if (snapshot.hasData) {
-                fillcategory.clear();
-                final valuespace = snapshot.data!.docs;
-                for (var sp in valuespace) {
-                  categoryname = sp.get('name');
-                  readycategory = sp.get('ready');
-                  fillcategory
-                      .add(Category(title: categoryname, ready: readycategory));
-                }
-
-                return GetBuilder<category>(
-                    builder: (_) => ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: categoryset.number,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      if (fillcategory[index].ready == true) {
-                                        fillcategory[index].title == 'note'
-                                            ? Get.to(
-                                                () => const DayNoteHome(
-                                                  title: '',
-                                                ),
-                                                transition:
-                                                    Transition.rightToLeft,
-                                              )
-                                            : (fillcategory[index].title ==
-                                                    'calendar'
-                                                ? Get.to(
-                                                    () => ChooseCalendar(),
-                                                    transition:
-                                                        Transition.rightToLeft,
-                                                  )
-                                                : Get.to(
-                                                    () => ChooseCalendar(),
-                                                    transition:
-                                                        Transition.rightToLeft,
-                                                  ));
-                                      } else {}
-                                    },
-                                    child: ContainerDesign(
-                                        child: SizedBox(
-                                          height: 80,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              40,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                      fillcategory[index].title,
-                                                      style:
-                                                          GoogleFonts.lobster(
-                                                        fontSize:
-                                                            contentTitleTextsize(),
-                                                        color: TextColor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      )),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        color: BGColor())),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            );
-                          },
-                        ));
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: NeumorphicText(
-                    '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
-                    style: NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: TextColor(),
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                    ),
-                  ),
-                );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return Center(
-                child: NeumorphicText(
-                  '불러오는 중입니다...',
-                  style: NeumorphicStyle(
-                    shape: NeumorphicShape.flat,
-                    depth: 3,
-                    color: TextColor(),
-                  ),
-                  textStyle: NeumorphicTextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize(),
-                  ),
-                ),
-              );
-            },
-          )
+          EventShowCard(
+              height: height,
+              pageController: pController,
+              pageindex: 0,
+              buy: isbought),
         ],
-      );
-    });
-  }*/
+      ),
+    );
+  }
 
   H_Container_1(double height) {
     //프로버전 구매시 보이지 않게 함
@@ -567,24 +441,198 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  H_Container_4(double height) {
+    return SizedBox(
+        height: categoryset.number * 80 + 70,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '데이로그 모아보기',
+              maxLines: 2,
+              style: TextStyle(
+                  color: TextColor(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize()),
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            StatefulBuilder(builder: (_, StateSetter setState) {
+              return StreamBuilder<QuerySnapshot>(
+                  stream: firestore
+                      .collection('HomeCategories')
+                      .orderBy('number')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var nameText;
+                      var readyText;
+                      final valuespace = snapshot.data!.docs;
+                      for (var sp in valuespace) {
+                        nameText = sp.get('name');
+                        readyText = sp.get('ready');
+                        fillcategory
+                            .add(Category(title: nameText, ready: readyText));
+                      }
+                      return GetBuilder<category>(
+                          builder: (_) => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AnimatedSwitcher(
+                                      duration: Duration(seconds: 0),
+                                      child: ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: categoryset.number,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                                onTap: () {
+                                                  index == 0
+                                                      ? Get.to(
+                                                          () =>
+                                                              ChooseCalendar(),
+                                                          transition: Transition
+                                                              .rightToLeft,
+                                                        )
+                                                      : (index == 1
+                                                          ? Get.to(
+                                                              () =>
+                                                                  const DayNoteHome(
+                                                                title: '',
+                                                              ),
+                                                              transition:
+                                                                  Transition
+                                                                      .rightToLeft,
+                                                            )
+                                                          : Get.to(
+                                                              () =>
+                                                                  const DayNoteHome(
+                                                                title: '',
+                                                              ),
+                                                              transition:
+                                                                  Transition
+                                                                      .rightToLeft,
+                                                            ));
+                                                },
+                                                child: SizedBox(
+                                                  height: 80,
+                                                  child: Column(
+                                                    children: [
+                                                      ContainerDesign(
+                                                        color: BGColor(),
+                                                        child: Column(
+                                                          children: [
+                                                            Stack(
+                                                              //crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Container(
+                                                                    height: 50,
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width -
+                                                                        40,
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            const SizedBox(width: 50),
+                                                                            Text(content.isEmpty ? '' : content[0].date,
+                                                                                style: TextStyle(color: TextColor(), fontWeight: FontWeight.bold, fontSize: 18)),
+                                                                            const SizedBox(width: 20),
+                                                                            Text(
+                                                                              content.isEmpty ? '작성된 것이 없습니다.' : content[0].title,
+                                                                              maxLines: 2,
+                                                                              style: TextStyle(color: TextColor(), fontWeight: FontWeight.bold, fontSize: 18),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                            ),
+                                                                          ],
+                                                                        )
+                                                                      ],
+                                                                    )),
+                                                                Positioned(
+                                                                  top: 0,
+                                                                  left: 0,
+                                                                  child: Container(
+                                                                      width: 30,
+                                                                      height: 30,
+                                                                      child: fillcategory[index].title == 'note'
+                                                                          ? NeumorphicIcon(
+                                                                              Icons.note,
+                                                                              size: 25,
+                                                                              style: NeumorphicStyle(shape: NeumorphicShape.convex, depth: 2, color: TextColor(), lightSource: LightSource.topLeft),
+                                                                            )
+                                                                          : (fillcategory[index].title == 'calendar'
+                                                                              ? NeumorphicIcon(
+                                                                                  Icons.today,
+                                                                                  size: 25,
+                                                                                  style: NeumorphicStyle(shape: NeumorphicShape.convex, depth: 2, color: TextColor(), lightSource: LightSource.topLeft),
+                                                                                )
+                                                                              : NeumorphicIcon(
+                                                                                  Icons.payment,
+                                                                                  size: 25,
+                                                                                  style: NeumorphicStyle(shape: NeumorphicShape.convex, depth: 2, color: TextColor(), lightSource: LightSource.topLeft),
+                                                                                ))),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      )
+                                                    ],
+                                                  ),
+                                                ));
+                                          }))
+                                ],
+                              ));
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: NeumorphicText(
+                          '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: TextColor(),
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                          ),
+                        ),
+                      );
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return AnimatedSwitcher(
+                          duration: Duration(seconds: 2),
+                          child: Shimmer_home(context));
+                    }
+                    return AnimatedSwitcher(
+                        duration: Duration(seconds: 2),
+                        child: Shimmer_home(context));
+                  });
+            }),
+          ],
+        ));
+  }
+
   H_Container_2(double height) {
     return SizedBox(
-      height: 130,
+      height: 80,
       width: MediaQuery.of(context).size.width - 40,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
-            fit: FlexFit.tight,
-            child: Text('카테고리',
-                style: TextStyle(
-                    color: TextColor(),
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize())),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
           SizedBox(
               height: 80,
               width: MediaQuery.of(context).size.width - 40,
@@ -742,8 +790,6 @@ class _HomePageState extends State<HomePage> {
                                                     H_Container_4(height);
                                                   });
                                                 }*/
-                                                showreadycontent(context,
-                                                    height, _pController);
                                               },
                                               child: SizedBox(
                                                   height: 55,
@@ -757,7 +803,7 @@ class _HomePageState extends State<HomePage> {
                                                           width: 25,
                                                           height: 25,
                                                           child: NeumorphicIcon(
-                                                            Icons.more_horiz,
+                                                            Icons.payment,
                                                             size: 25,
                                                             style: NeumorphicStyle(
                                                                 shape:
@@ -775,7 +821,7 @@ class _HomePageState extends State<HomePage> {
                                                       SizedBox(
                                                         height: 30,
                                                         child: Center(
-                                                          child: Text('준비중',
+                                                          child: Text('페이스토리',
                                                               style: TextStyle(
                                                                   color:
                                                                       TextColor(),
@@ -799,24 +845,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_3(double height, PageController pController) {
-    //프로버전 구매시 보이지 않게 함
-    return SizedBox(
-      height: 160,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          EventShowCard(
-              height: height,
-              pageController: pController,
-              pageindex: 0,
-              buy: isbought),
-        ],
-      ),
-    );
-  }
-
-  H_Container_4(
+  /*H_Container_4(
     double height,
   ) {
     //프로버전 구매시 사용할 코드
@@ -1255,7 +1284,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     });
-  }
+  }*/
 
   showreadycontent(
     BuildContext context,
