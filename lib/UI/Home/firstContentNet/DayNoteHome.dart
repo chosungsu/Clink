@@ -17,7 +17,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../Page/HomePage.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/selectcollection.dart';
-import '../../../sheets/addcalendar.dart';
+import '../../../sheets/addWhole.dart';
 
 class DayNoteHome extends StatefulWidget {
   const DayNoteHome({
@@ -391,7 +391,12 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [ADEvents(context)],
+      children: [
+        ADEvents(context),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
 

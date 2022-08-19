@@ -26,8 +26,9 @@ import '../Tool/SheetGetx/SpaceShowRoom.dart';
 import '../Tool/SheetGetx/category.dart';
 import '../Tool/ShimmerDesign/Shimmer_home.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
+import '../UI/Home/firstContentNet/PayHome.dart';
 import '../UI/Home/firstContentNet/RoutineHome.dart';
-import '../sheets/addcalendar.dart';
+import '../sheets/addWhole.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 
@@ -133,14 +134,16 @@ class _HomePageState extends State<HomePage> {
         child: GetBuilder<navibool>(
           builder: (_) => GestureDetector(
             onTap: () {
-              setState(() {
-                xoffset = 0;
-                yoffset = 0;
-                scalefactor = 1;
-                isdraweropen = false;
-                draw.setclose();
-                Hive.box('user_setting').put('page_opened', false);
-              });
+              isdraweropen == true
+                  ? setState(() {
+                      xoffset = 0;
+                      yoffset = 0;
+                      scalefactor = 1;
+                      isdraweropen = false;
+                      draw.setclose();
+                      Hive.box('user_setting').put('page_opened', false);
+                    })
+                  : null;
             },
             child: SizedBox(
               height: height,
@@ -510,9 +513,7 @@ class _HomePageState extends State<HomePage> {
                                                             )
                                                           : Get.to(
                                                               () =>
-                                                                  const DayNoteHome(
-                                                                title: '',
-                                                              ),
+                                                                  const PayHome(),
                                                               transition:
                                                                   Transition
                                                                       .rightToLeft,
@@ -780,16 +781,16 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             )
                                           : GestureDetector(
-                                              onTap: () {
-                                                /*final reloadpage = await Get.to(
-                                                    () => RoutineHome(),
+                                              onTap: () async {
+                                                final reloadpage = await Get.to(
+                                                    () => const PayHome(),
                                                     transition:
                                                         Transition.rightToLeft);
                                                 if (reloadpage) {
                                                   setState(() {
                                                     H_Container_4(height);
                                                   });
-                                                }*/
+                                                }
                                               },
                                               child: SizedBox(
                                                   height: 55,
@@ -845,447 +846,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /*H_Container_4(
-    double height,
-  ) {
-    //프로버전 구매시 사용할 코드
-    //isbought == false일 경우와 isbought == true일 경우 사이즈박스 크기를 제한 풀기...
-    return StatefulBuilder(builder: (_, StateSetter setState) {
-      return SizedBox(
-        height: 80 * 2 + 50,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 30,
-              child: Row(
-                children: [
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Text('스페이스',
-                        style: TextStyle(
-                            color: TextColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize())),
-                  ),
-                  /*GestureDetector(
-                    onTap: () async {
-                      final reloadpage = await Get.to(() => ChangeSpace(),
-                          transition: Transition.fadeIn);
-                      if (reloadpage) {
-                        setState(() {
-                          H_Container_4(
-                            height,
-                          );
-                        });
-                      }
-                    },
-                    child: Text('변경',
-                        style: TextStyle(
-                            color: TextColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize())),
-                  )*/
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-                height: 80 * 2,
-                child: StatefulBuilder(builder: (_, StateSetter setState) {
-                  return StreamBuilder<QuerySnapshot>(
-                    stream: firestore
-                        .collection('UserSpaceDataBase')
-                        .where('name', isEqualTo: name)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        _user_ad.clear();
-                        var messageText;
-                        final valuespace = snapshot.data!.docs;
-                        for (var sp in valuespace) {
-                          for (int i = 0; i < 2; i++) {
-                            messageText = sp.get('$i');
-                            _user_ad.add(SpaceList(title: messageText));
-                          }
-                        }
-                        firestore
-                            .collection('CalendarDataBase')
-                            .where('OriginalUser', isEqualTo: name)
-                            .where('Date',
-                                isEqualTo: Date.toString().split('-')[0] +
-                                    '-' +
-                                    Date.toString().split('-')[1] +
-                                    '-' +
-                                    Date.toString()
-                                        .split('-')[2]
-                                        .substring(0, 2) +
-                                    '일')
-                            .get()
-                            .then((value) {
-                          content.clear();
-                          value.docs.isEmpty
-                              ? firestore
-                                  .collection('CalendarDataBase')
-                                  .where('Date',
-                                      isEqualTo: Date.toString().split('-')[0] +
-                                          '-' +
-                                          Date.toString().split('-')[1] +
-                                          '-' +
-                                          Date.toString()
-                                              .split('-')[2]
-                                              .substring(0, 2) +
-                                          '일')
-                                  .get()
-                                  .then(((value) {
-                                  value.docs.forEach((element) {
-                                    for (int i = 0;
-                                        i < element['Shares'].length;
-                                        i++) {
-                                      if (element['Shares'][i].contains(name)) {
-                                        if (int.parse(element['Timestart']
-                                                .toString()
-                                                .substring(0, 2)) >=
-                                            Date.hour) {
-                                          content.add(SpaceContent(
-                                              title: element['Daytodo'],
-                                              date: element['Timestart'] +
-                                                  '-' +
-                                                  element['Timefinish']));
-                                        }
-                                      }
-                                    }
-                                  });
-                                }))
-                              : value.docs.forEach((element) {
-                                  if (int.parse(element['Timestart']
-                                          .toString()
-                                          .substring(0, 2)) >=
-                                      Date.hour) {
-                                    content.add(SpaceContent(
-                                        title: element['Daytodo'],
-                                        date: element['Timestart'] +
-                                            '-' +
-                                            element['Timefinish']));
-                                  }
-                                });
-                        });
-
-                        return snapshot.data!.docs.isEmpty
-                            ? GetBuilder<SpaceShowRoom>(
-                                init: SpaceShowRoom(),
-                                builder: (_) => ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: _default_ad.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                          onTap: () {
-                                            _default_ad[index].title == '메모공간'
-                                                ? Get.to(
-                                                    () => const DayNoteHome(
-                                                      title: '',
-                                                    ),
-                                                    transition:
-                                                        Transition.rightToLeft,
-                                                  )
-                                                : Get.to(
-                                                    () => ChooseCalendar(),
-                                                    transition:
-                                                        Transition.rightToLeft,
-                                                  );
-                                          },
-                                          child: SizedBox(
-                                            height: 80,
-                                            child: Column(
-                                              children: [
-                                                ContainerDesign(
-                                                  color: BGColor(),
-                                                  child: Column(
-                                                    children: [
-                                                      Stack(
-                                                        //crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Container(
-                                                              height: 50,
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width -
-                                                                  40,
-                                                              child: Column(
-                                                                children: [
-                                                                  const SizedBox(
-                                                                    height: 10,
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              50),
-                                                                      Text(
-                                                                          content.isEmpty
-                                                                              ? ''
-                                                                              : content[0]
-                                                                                  .date,
-                                                                          style: TextStyle(
-                                                                              color: TextColor(),
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: 18)),
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              20),
-                                                                      Text(
-                                                                        content.isEmpty
-                                                                            ? '작성된 것이 없습니다.'
-                                                                            : content[0].title,
-                                                                        maxLines:
-                                                                            2,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                TextColor(),
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            fontSize: 18),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                    ],
-                                                                  )
-                                                                ],
-                                                              )),
-                                                          Positioned(
-                                                            top: 0,
-                                                            left: 0,
-                                                            child: Container(
-                                                                width: 30,
-                                                                height: 30,
-                                                                child: _default_ad[index]
-                                                                            .title ==
-                                                                        '메모공간'
-                                                                    ? NeumorphicIcon(
-                                                                        Icons
-                                                                            .note,
-                                                                        size:
-                                                                            25,
-                                                                        style: NeumorphicStyle(
-                                                                            shape: NeumorphicShape
-                                                                                .convex,
-                                                                            depth:
-                                                                                2,
-                                                                            color:
-                                                                                TextColor(),
-                                                                            lightSource:
-                                                                                LightSource.topLeft),
-                                                                      )
-                                                                    : NeumorphicIcon(
-                                                                        Icons
-                                                                            .today,
-                                                                        size:
-                                                                            25,
-                                                                        style: NeumorphicStyle(
-                                                                            shape: NeumorphicShape
-                                                                                .convex,
-                                                                            depth:
-                                                                                2,
-                                                                            color:
-                                                                                TextColor(),
-                                                                            lightSource:
-                                                                                LightSource.topLeft),
-                                                                      )),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                )
-                                              ],
-                                            ),
-                                          ));
-                                    }))
-                            : GetBuilder<SpaceShowRoom>(
-                                init: SpaceShowRoom(),
-                                builder: (_) => ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: _user_ad.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                          onTap: () {
-                                            _user_ad[index].title == '메모공간'
-                                                ? Get.to(
-                                                    () => const DayNoteHome(
-                                                      title: '',
-                                                    ),
-                                                    transition:
-                                                        Transition.rightToLeft,
-                                                  )
-                                                : Get.to(
-                                                    () => ChooseCalendar(),
-                                                    transition:
-                                                        Transition.rightToLeft,
-                                                  );
-                                          },
-                                          child: SizedBox(
-                                            height: 80,
-                                            child: Column(
-                                              children: [
-                                                ContainerDesign(
-                                                  color: BGColor(),
-                                                  child: Column(
-                                                    children: [
-                                                      Stack(
-                                                        //crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Container(
-                                                              height: 50,
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width -
-                                                                  40,
-                                                              child: Column(
-                                                                children: [
-                                                                  const SizedBox(
-                                                                    height: 10,
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              50),
-                                                                      Text(
-                                                                          content.isEmpty
-                                                                              ? ''
-                                                                              : content[0]
-                                                                                  .date,
-                                                                          style: TextStyle(
-                                                                              color: TextColor(),
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: 18)),
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              20),
-                                                                      Text(
-                                                                        content.isEmpty
-                                                                            ? '작성된 것이 없습니다.'
-                                                                            : content[0].title,
-                                                                        maxLines:
-                                                                            2,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                TextColor(),
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            fontSize: 18),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                    ],
-                                                                  )
-                                                                ],
-                                                              )),
-                                                          Positioned(
-                                                            top: 0,
-                                                            left: 0,
-                                                            child: Container(
-                                                                width: 30,
-                                                                height: 30,
-                                                                child: _user_ad[index]
-                                                                            .title ==
-                                                                        '메모공간'
-                                                                    ? NeumorphicIcon(
-                                                                        Icons
-                                                                            .note,
-                                                                        size:
-                                                                            25,
-                                                                        style: NeumorphicStyle(
-                                                                            shape: NeumorphicShape
-                                                                                .convex,
-                                                                            depth:
-                                                                                2,
-                                                                            color:
-                                                                                TextColor(),
-                                                                            lightSource:
-                                                                                LightSource.topLeft),
-                                                                      )
-                                                                    : NeumorphicIcon(
-                                                                        Icons
-                                                                            .today,
-                                                                        size:
-                                                                            25,
-                                                                        style: NeumorphicStyle(
-                                                                            shape: NeumorphicShape
-                                                                                .convex,
-                                                                            depth:
-                                                                                2,
-                                                                            color:
-                                                                                TextColor(),
-                                                                            lightSource:
-                                                                                LightSource.topLeft),
-                                                                      )),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                )
-                                              ],
-                                            ),
-                                          ));
-                                    }));
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: NeumorphicText(
-                            '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
-                            style: NeumorphicStyle(
-                              shape: NeumorphicShape.flat,
-                              depth: 3,
-                              color: TextColor(),
-                            ),
-                            textStyle: NeumorphicTextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return Center(
-                        child: NeumorphicText(
-                          '생성된 일정표가 없습니다.\n추가 버튼으로 생성해보세요~',
-                          style: NeumorphicStyle(
-                            shape: NeumorphicShape.flat,
-                            depth: 3,
-                            color: TextColor(),
-                          ),
-                          textStyle: NeumorphicTextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }))
-          ],
-        ),
-      );
-    });
-  }*/
-
   showreadycontent(
     BuildContext context,
     double height,
@@ -1327,44 +887,4 @@ class _HomePageState extends State<HomePage> {
       H_Container_4(height);
     });
   }
-}
-
-addcalendar(
-  BuildContext context,
-  FocusNode searchNode,
-  TextEditingController controller,
-  String username,
-  DateTime date,
-  String s,
-) {
-  Get.bottomSheet(
-          Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Container(
-              height: s == 'home' ? 440 : 340,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  )),
-              child: GestureDetector(
-                  onTap: () {
-                    searchNode.unfocus();
-                  },
-                  child: SheetPageAC(
-                      context, searchNode, controller, username, date, s)),
-            ),
-          ),
-          backgroundColor: Colors.white,
-          isScrollControlled: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-      .whenComplete(() {
-    controller.clear();
-    final cntget = Get.put(onequeform());
-    cntget.setcnt();
-    final spaceroomset = Get.put(SpaceShowRoom());
-    spaceroomset.onInit();
-  });
 }

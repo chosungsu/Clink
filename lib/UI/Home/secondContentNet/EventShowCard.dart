@@ -1,3 +1,4 @@
+import 'package:clickbyme/UI/Home/firstContentNet/PayHome.dart';
 import 'package:clickbyme/UI/Setting/BuyingPage.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -74,19 +75,31 @@ class EventShowCard extends StatelessWidget {
                               itemBuilder: (_, index) => GestureDetector(
                                     onTap: () {
                                       //개별 인덱스 타이틀마다 이동페이지 다르게 구성
-                                      eventtitle[index] == '일정관리는 이렇게!'
+                                      eventtitle[index]
+                                                  .toString()
+                                                  .substring(0, 2) ==
+                                              '일정'
                                           ? Get.to(
                                               () => ChooseCalendar(),
                                               transition:
                                                   Transition.rightToLeft,
                                             )
-                                          : Get.to(
-                                              () => const DayNoteHome(
-                                                title: '',
-                                              ),
-                                              transition:
-                                                  Transition.rightToLeft,
-                                            );
+                                          : (eventtitle[index]
+                                                      .toString()
+                                                      .substring(0, 2) ==
+                                                  '페이'
+                                              ? Get.to(
+                                                  () => const PayHome(),
+                                                  transition:
+                                                      Transition.rightToLeft,
+                                                )
+                                              : Get.to(
+                                                  () => const DayNoteHome(
+                                                    title: '',
+                                                  ),
+                                                  transition:
+                                                      Transition.rightToLeft,
+                                                ));
                                     },
                                     child: Column(
                                       children: [

@@ -94,14 +94,16 @@ class _ProfilePageState extends State<ProfilePage> {
         child: GetBuilder<navibool>(
           builder: (_) => GestureDetector(
             onTap: () {
-              setState(() {
-                xoffset = 0;
-                yoffset = 0;
-                scalefactor = 1;
-                isdraweropen = false;
-                draw.setclose();
-                Hive.box('user_setting').put('page_opened', false);
-              });
+              isdraweropen == true
+                  ? setState(() {
+                      xoffset = 0;
+                      yoffset = 0;
+                      scalefactor = 1;
+                      isdraweropen = false;
+                      draw.setclose();
+                      Hive.box('user_setting').put('page_opened', false);
+                    })
+                  : null;
             },
             child: SizedBox(
               height: height,

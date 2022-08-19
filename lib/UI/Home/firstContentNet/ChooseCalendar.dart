@@ -2,7 +2,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/PeopleGroup.dart';
-import 'package:clickbyme/sheets/addcalendar.dart';
+import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:clickbyme/sheets/settingChoiceC.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -250,7 +250,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                         Hive.box('user_setting')
                                                             .put('typecalendar',
                                                                 0);
-                                                        addcalendar(
+                                                        addWhole(
                                                             context,
                                                             searchNode,
                                                             controller,

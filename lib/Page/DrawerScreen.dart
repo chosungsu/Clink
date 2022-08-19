@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../route.dart';
+import '../sheets/addWhole.dart';
 import 'HomePage.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -62,7 +63,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
                       Hive.box('user_setting').put('page_index', 0);
                     } else if (element.containsValue(Icons.add_outlined)) {
-                      addcalendar(
+                      addWhole(
                           context, searchNode, controller, name, Date, 'home');
                       Hive.box('user_setting').put('page_index',
                           Hive.box('user_setting').get('page_index'));

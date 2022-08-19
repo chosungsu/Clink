@@ -2,6 +2,7 @@ import 'package:clickbyme/Page/AnalyticPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       if (_index == 1) {
                         Hive.box('user_setting').put('page_index',
                             Hive.box('user_setting').get('page_index'));
-                        addcalendar(context, searchNode, controller, name, Date,
+                        addWhole(context, searchNode, controller, name, Date,
                             'home');
                       } else {
                         Hive.box('user_setting').put('page_index', _index);

@@ -377,7 +377,7 @@ class _DayScriptState extends State<DayScript> {
       height: height,
       child: Container(
           decoration: BoxDecoration(
-            color: _color,
+            color: widget.position == 'note' ? _color : BGColor(),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

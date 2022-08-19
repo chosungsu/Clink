@@ -10,7 +10,48 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
+import '../Tool/SheetGetx/SpaceShowRoom.dart';
 import '../Tool/SheetGetx/onequeform.dart';
+
+addWhole(
+  BuildContext context,
+  FocusNode searchNode,
+  TextEditingController controller,
+  String username,
+  DateTime date,
+  String s,
+) {
+  Get.bottomSheet(
+          Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              height: s == 'home' ? 440 : 340,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  )),
+              child: GestureDetector(
+                  onTap: () {
+                    searchNode.unfocus();
+                  },
+                  child: SheetPageAC(
+                      context, searchNode, controller, username, date, s)),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          isScrollControlled: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+      .whenComplete(() {
+    controller.clear();
+    final cntget = Get.put(onequeform());
+    cntget.setcnt();
+    final spaceroomset = Get.put(SpaceShowRoom());
+    spaceroomset.onInit();
+  });
+}
 
 SheetPageAC(
   BuildContext context,
