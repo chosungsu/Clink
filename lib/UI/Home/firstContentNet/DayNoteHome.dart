@@ -406,7 +406,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
         stream: firestore
             .collection('MemoDataBase')
             .where('OriginalUser', isEqualTo: username)
-            .orderBy('Date', descending: sort == 0 ? true : false)
+            .orderBy('EditDate', descending: sort == 0 ? true : false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -482,6 +482,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                         docsummary: snapshot.data!.docs[index]
                                                 ['memolist'] ??
                                             [],
+                                        editdate: snapshot.data!.docs[index]
+                                            ['EditDate'],
                                       ),
                                   transition: Transition.downToUp);
                             },

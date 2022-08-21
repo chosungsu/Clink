@@ -49,7 +49,6 @@ class _HomePageState extends State<HomePage> {
   late DateTime Date = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   static final spaceset = Get.put(Spacesetting());
-  static final categoryset = Get.put(category());
   final draw = Get.put(navibool());
   List showspacelist = [];
   List content = [];
@@ -77,7 +76,6 @@ class _HomePageState extends State<HomePage> {
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
-    categoryset.setcategory();
     isdraweropen = draw.drawopen;
   }
 
@@ -305,10 +303,6 @@ class _HomePageState extends State<HomePage> {
                                         height: 20,
                                       ),
                                       H_Container_2(height),
-                                      /*const SizedBox(
-                                        height: 20,
-                                      ),
-                                      H_Container_3(height, _pController),*/
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -316,93 +310,15 @@ class _HomePageState extends State<HomePage> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      FutureBuilder<void>(
-                                        future: firestore
-                                            .collection('CalendarDataBase')
-                                            .where('OriginalUser',
-                                                isEqualTo: name)
-                                            .where('Date',
-                                                isEqualTo: Date.toString()
-                                                        .split('-')[0] +
-                                                    '-' +
-                                                    Date.toString()
-                                                        .split('-')[1] +
-                                                    '-' +
-                                                    Date.toString()
-                                                        .split('-')[2]
-                                                        .substring(0, 2) +
-                                                    '일')
-                                            .get()
-                                            .then((value) {
-                                          content.clear();
-                                          value.docs.isEmpty
-                                              ? firestore
-                                                  .collection(
-                                                      'CalendarDataBase')
-                                                  .where('Date',
-                                                      isEqualTo: Date.toString()
-                                                              .split('-')[0] +
-                                                          '-' +
-                                                          Date.toString()
-                                                              .split('-')[1] +
-                                                          '-' +
-                                                          Date.toString()
-                                                              .split('-')[2]
-                                                              .substring(0, 2) +
-                                                          '일')
-                                                  .get()
-                                                  .then(((value) {
-                                                  value.docs.forEach((element) {
-                                                    for (int i = 0;
-                                                        i <
-                                                            element['Shares']
-                                                                .length;
-                                                        i++) {
-                                                      if (element['Shares'][i]
-                                                          .contains(name)) {
-                                                        if (int.parse(element[
-                                                                    'Timestart']
-                                                                .toString()
-                                                                .substring(
-                                                                    0, 2)) >=
-                                                            Date.hour) {
-                                                          content.add(SpaceContent(
-                                                              title: element[
-                                                                  'Daytodo'],
-                                                              date: element[
-                                                                      'Timestart'] +
-                                                                  '-' +
-                                                                  element[
-                                                                      'Timefinish']));
-                                                        }
-                                                      }
-                                                    }
-                                                  });
-                                                }))
-                                              : value.docs.forEach((element) {
-                                                  if (int.parse(
-                                                          element['Timestart']
-                                                              .toString()
-                                                              .substring(
-                                                                  0, 2)) >=
-                                                      Date.hour) {
-                                                    content.add(SpaceContent(
-                                                        title:
-                                                            element['Daytodo'],
-                                                        date: element[
-                                                                'Timestart'] +
-                                                            '-' +
-                                                            element[
-                                                                'Timefinish']));
-                                                  }
-                                                });
-                                        }), // a previously-obtained Future<String> or null
-                                        builder: (context, snapshot) {
-                                          return H_Container_4(
-                                            height,
-                                          );
-                                        },
+                                      H_Container_3(height, 'cal'),
+                                      const SizedBox(
+                                        height: 20,
                                       ),
+                                      H_Container_3(height, 'note'),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      H_Container_4(height),
                                       const SizedBox(
                                         height: 50,
                                       ),
@@ -444,189 +360,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_4(double height) {
-    return SizedBox(
-        height: categoryset.number * 80 + 70,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '데이로그 모아보기',
-              maxLines: 2,
-              style: TextStyle(
-                  color: TextColor(),
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize()),
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            StatefulBuilder(builder: (_, StateSetter setState) {
-              return StreamBuilder<QuerySnapshot>(
-                  stream: firestore
-                      .collection('HomeCategories')
-                      .orderBy('number')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var nameText;
-                      var readyText;
-                      final valuespace = snapshot.data!.docs;
-                      for (var sp in valuespace) {
-                        nameText = sp.get('name');
-                        readyText = sp.get('ready');
-                        fillcategory
-                            .add(Category(title: nameText, ready: readyText));
-                      }
-                      return GetBuilder<category>(
-                          builder: (_) => Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AnimatedSwitcher(
-                                      duration: Duration(seconds: 0),
-                                      child: ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: categoryset.number,
-                                          itemBuilder: (context, index) {
-                                            return GestureDetector(
-                                                onTap: () {
-                                                  index == 0
-                                                      ? Get.to(
-                                                          () =>
-                                                              ChooseCalendar(),
-                                                          transition: Transition
-                                                              .rightToLeft,
-                                                        )
-                                                      : (index == 1
-                                                          ? Get.to(
-                                                              () =>
-                                                                  const DayNoteHome(
-                                                                title: '',
-                                                              ),
-                                                              transition:
-                                                                  Transition
-                                                                      .rightToLeft,
-                                                            )
-                                                          : Get.to(
-                                                              () =>
-                                                                  const PayHome(),
-                                                              transition:
-                                                                  Transition
-                                                                      .rightToLeft,
-                                                            ));
-                                                },
-                                                child: SizedBox(
-                                                  height: 80,
-                                                  child: Column(
-                                                    children: [
-                                                      ContainerDesign(
-                                                        color: BGColor(),
-                                                        child: Column(
-                                                          children: [
-                                                            Stack(
-                                                              //crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Container(
-                                                                    height: 50,
-                                                                    width: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width -
-                                                                        40,
-                                                                    child:
-                                                                        Column(
-                                                                      children: [
-                                                                        const SizedBox(
-                                                                          height:
-                                                                              10,
-                                                                        ),
-                                                                        Row(
-                                                                          children: [
-                                                                            const SizedBox(width: 50),
-                                                                            Text(content.isEmpty ? '' : content[0].date,
-                                                                                style: TextStyle(color: TextColor(), fontWeight: FontWeight.bold, fontSize: 18)),
-                                                                            const SizedBox(width: 20),
-                                                                            Text(
-                                                                              content.isEmpty ? '작성된 것이 없습니다.' : content[0].title,
-                                                                              maxLines: 2,
-                                                                              style: TextStyle(color: TextColor(), fontWeight: FontWeight.bold, fontSize: 18),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ],
-                                                                        )
-                                                                      ],
-                                                                    )),
-                                                                Positioned(
-                                                                  top: 0,
-                                                                  left: 0,
-                                                                  child: Container(
-                                                                      width: 30,
-                                                                      height: 30,
-                                                                      child: fillcategory[index].title == 'note'
-                                                                          ? NeumorphicIcon(
-                                                                              Icons.note,
-                                                                              size: 25,
-                                                                              style: NeumorphicStyle(shape: NeumorphicShape.convex, depth: 2, color: TextColor(), lightSource: LightSource.topLeft),
-                                                                            )
-                                                                          : (fillcategory[index].title == 'calendar'
-                                                                              ? NeumorphicIcon(
-                                                                                  Icons.today,
-                                                                                  size: 25,
-                                                                                  style: NeumorphicStyle(shape: NeumorphicShape.convex, depth: 2, color: TextColor(), lightSource: LightSource.topLeft),
-                                                                                )
-                                                                              : NeumorphicIcon(
-                                                                                  Icons.payment,
-                                                                                  size: 25,
-                                                                                  style: NeumorphicStyle(shape: NeumorphicShape.convex, depth: 2, color: TextColor(), lightSource: LightSource.topLeft),
-                                                                                ))),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      )
-                                                    ],
-                                                  ),
-                                                ));
-                                          }))
-                                ],
-                              ));
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: NeumorphicText(
-                          '불러오는 중 오류가 발생하였습니다.\n지속될 경우 문의바랍니다.',
-                          style: NeumorphicStyle(
-                            shape: NeumorphicShape.flat,
-                            depth: 3,
-                            color: TextColor(),
-                          ),
-                          textStyle: NeumorphicTextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                          ),
-                        ),
-                      );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return AnimatedSwitcher(
-                          duration: Duration(seconds: 2),
-                          child: Shimmer_home(context));
-                    }
-                    return AnimatedSwitcher(
-                        duration: Duration(seconds: 2),
-                        child: Shimmer_home(context));
-                  });
-            }),
-          ],
-        ));
-  }
-
   H_Container_2(double height) {
     return SizedBox(
       height: 80,
@@ -665,9 +398,8 @@ class _HomePageState extends State<HomePage> {
                                                     Transition.rightToLeft);
                                             print(reloadpage);
                                             if (reloadpage) {
-                                              setState(() {
-                                                H_Container_4(height);
-                                              });
+                                              H_Container_3(height, 'cal');
+                                              H_Container_3(height, 'note');
                                             }
                                           },
                                           child: SizedBox(
@@ -726,9 +458,8 @@ class _HomePageState extends State<HomePage> {
                                                     transition:
                                                         Transition.rightToLeft);
                                                 if (reloadpage) {
-                                                  setState(() {
-                                                    H_Container_4(height);
-                                                  });
+                                                  H_Container_3(height, 'cal');
+                                                  H_Container_3(height, 'note');
                                                 }
                                               },
                                               child: SizedBox(
@@ -787,9 +518,8 @@ class _HomePageState extends State<HomePage> {
                                                     transition:
                                                         Transition.rightToLeft);
                                                 if (reloadpage) {
-                                                  setState(() {
-                                                    H_Container_4(height);
-                                                  });
+                                                  H_Container_3(height, 'cal');
+                                                  H_Container_3(height, 'note');
                                                 }
                                               },
                                               child: SizedBox(
@@ -846,45 +576,402 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  showreadycontent(
-    BuildContext context,
-    double height,
-    PageController pController,
-  ) {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        )),
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return Container(
-            margin: const EdgeInsets.all(10),
-            child: Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  height: 280,
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
+  H_Container_3(double height, String s) {
+    //프로버전 구매시 보이지 않게 함
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        s == 'cal'
+            ? SizedBox(
+                height: 30,
+                child: Text('오늘의 일정',
+                    style: TextStyle(
+                        color: TextColor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize())),
+              )
+            : SizedBox(
+                height: 30,
+                child: Text('최근 수정된 메모',
+                    style: TextStyle(
+                        color: TextColor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize())),
+              ),
+        const SizedBox(height: 20),
+        ContainerDesign(
+            child: s == 'cal'
+                ? StreamBuilder<QuerySnapshot>(
+                    stream: firestore
+                        .collection('CalendarDataBase')
+                        .where('OriginalUser', isEqualTo: name)
+                        .where('Date',
+                            isEqualTo: Date.toString().split('-')[0] +
+                                '-' +
+                                Date.toString().split('-')[1] +
+                                '-' +
+                                Date.toString().split('-')[2].substring(0, 2) +
+                                '일')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        content.clear();
+                        var timsestart, timefinish, codes, todo;
+                        final valuespace = snapshot.data!.docs;
+                        for (var sp in valuespace) {
+                          todo = sp.get('Daytodo');
+                          timsestart = sp.get('Timestart');
+                          timefinish = sp.get('Timefinish');
+                          codes = sp.get('calname');
+                          if (int.parse(
+                                  timsestart.toString().substring(0, 2)) >=
+                              Date.hour) {
+                            content.add(SpaceContent(
+                                title: todo,
+                                date: timsestart + '-' + timefinish,
+                                calendarcode: codes));
+                          }
+                        }
+                        StreamBuilder<QuerySnapshot>(
+                          stream: firestore
+                              .collection('CalendarDataBase')
+                              .where('Date',
+                                  isEqualTo: Date.toString().split('-')[0] +
+                                      '-' +
+                                      Date.toString().split('-')[1] +
+                                      '-' +
+                                      Date.toString()
+                                          .split('-')[2]
+                                          .substring(0, 2) +
+                                      '일')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            List nameList = [];
+                            var timsestart, timefinish, codes, todo;
+                            final valuespace = snapshot.data!.docs;
+                            for (var sp in valuespace) {
+                              nameList = sp.get('Shares');
+                              todo = sp.get('Daytodo');
+                              timsestart = sp.get('Timestart');
+                              timefinish = sp.get('Timefinish');
+                              codes = sp.get('calname');
+                              for (int i = 0; i < nameList.length; i++) {
+                                if (nameList[i].contains(name)) {
+                                  if (int.parse(timsestart
+                                          .toString()
+                                          .substring(0, 2)) >=
+                                      Date.hour) {
+                                    content.add(SpaceContent(
+                                        title: todo,
+                                        date: timsestart + '-' + timefinish,
+                                        calendarcode: codes));
+                                  }
+                                }
+                              }
+                            }
+                            return content.isEmpty
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          '보여드릴 오늘의 일정이 없습니다.',
+                                          style: NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: TextColor(),
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: contentTextsize(),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: content.length,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: ListTile(
+                                              onTap: () {},
+                                              horizontalTitleGap: 10,
+                                              dense: true,
+                                              leading: const Icon(
+                                                  Icons.calendar_month),
+                                              subtitle: Text(
+                                                  content[index].title,
+                                                  style: TextStyle(
+                                                      color: TextColor(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize())),
+                                              title: Text(content[index].date,
+                                                  style: TextStyle(
+                                                    color: TextColor(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      );
+                                    });
+                          },
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Center(child: CircularProgressIndicator())
+                          ],
+                        );
+                      }
+                      return content.isEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: NeumorphicText(
+                                    '보여드릴 오늘의 일정이 없습니다.',
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: TextColor(),
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: contentTextsize(),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          : ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: content.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: ListTile(
+                                        onTap: () {},
+                                        horizontalTitleGap: 10,
+                                        dense: true,
+                                        leading:
+                                            const Icon(Icons.calendar_month),
+                                        subtitle: Text(content[index].title,
+                                            style: TextStyle(
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize())),
+                                        title: Text(content[index].date,
+                                            style: TextStyle(
+                                              color: TextColor(),
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                  ],
+                                );
+                              });
+                    },
+                  )
+                : StreamBuilder<QuerySnapshot>(
+                    stream: firestore
+                        .collection('MemoDataBase')
+                        .where('OriginalUser', isEqualTo: name)
+                        .where('EditDate',
+                            isEqualTo: Date.toString().split('-')[0] +
+                                '-' +
+                                Date.toString().split('-')[1] +
+                                '-' +
+                                Date.toString().split('-')[2].substring(0, 2) +
+                                '일')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        snapshot.data!.docs.isEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: NeumorphicText(
+                                      '오늘 수정된 메모는 없습니다.',
+                                      style: NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: TextColor(),
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: contentTextsize(),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            : ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: ListTile(
+                                          onTap: () {},
+                                          horizontalTitleGap: 10,
+                                          dense: true,
+                                          leading:
+                                              const Icon(Icons.description),
+                                          title: Text(
+                                              snapshot.data!.docs[index]
+                                                  ['memoTitle'],
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  );
+                                });
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Center(child: CircularProgressIndicator())
+                          ],
+                        );
+                      }
+                      return snapshot.data!.docs.isEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: NeumorphicText(
+                                    '오늘 수정된 메모는 없습니다.',
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: TextColor(),
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: contentTextsize(),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          : ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: ListTile(
+                                        onTap: () {},
+                                        horizontalTitleGap: 10,
+                                        dense: true,
+                                        leading: const Icon(Icons.description),
+                                        title: Text(
+                                            snapshot.data!.docs[index]
+                                                ['memoTitle'],
+                                            style: TextStyle(
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize())),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                  ],
+                                );
+                              });
+                    },
                   ),
-                  child: readycontent(context, height, pController),
-                )),
-          );
-        }).whenComplete(() {
-      H_Container_4(height);
-    });
+            color: BGColor())
+      ],
+    );
+  }
+
+  H_Container_4(double height) {
+    //프로버전 구매시 보이지 않게 함
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          height: 30,
+          alignment: Alignment.topCenter,
+          child: Row(
+            children: [
+              Text('홈뷰설정',
+                  style: TextStyle(
+                      color: TextColor_shadowcolor(),
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+              VerticalDivider(
+                thickness: 1,
+                color: TextColor_shadowcolor(),
+              ),
+              Text('문의하기',
+                  style: TextStyle(
+                      color: TextColor_shadowcolor(),
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+            ],
+          ),
+        )
+      ],
+    );
   }
 }

@@ -17,7 +17,7 @@ SheetPageC(
     doc_made_user,
     List finallist) {
   return SizedBox(
-      height: 280,
+      height: 300,
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Column(
@@ -90,7 +90,7 @@ content(
   List deleteid = [];
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-        height: 180,
+        height: 200,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +200,7 @@ content(
               height: 20,
             ),
             SizedBox(
-                height: 30,
+                height: 50,
                 child: Row(
                   children: [
                     ElevatedButton(
@@ -294,23 +294,23 @@ content(
                           onPressed: () {
                             setState(() {
                               firestore
-                                    .collection('CalendarSheetHome')
-                                    .doc(doc)
-                                    .update({
-                                  'calname': controller.text,
-                                  'color': _color.value.toInt(),
-                                });
-                                firestore
-                                    .collection('ShareHome')
-                                    .doc(doc +
-                                        '-' +
-                                        doc_made_user +
-                                        '-' +
-                                        username)
-                                    .update({
-                                  'calname': controller.text,
-                                  'color': _color.value.toInt(),
-                                });
+                                  .collection('CalendarSheetHome')
+                                  .doc(doc)
+                                  .update({
+                                'calname': controller.text,
+                                'color': _color.value.toInt(),
+                              });
+                              firestore
+                                  .collection('ShareHome')
+                                  .doc(doc +
+                                      '-' +
+                                      doc_made_user +
+                                      '-' +
+                                      username)
+                                  .update({
+                                'calname': controller.text,
+                                'color': _color.value.toInt(),
+                              });
 
                               Navigator.pop(context);
                             });

@@ -23,23 +23,25 @@ addWhole(
 ) {
   Get.bottomSheet(
           Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Container(
-              height: s == 'home' ? 440 : 340,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  )),
-              child: GestureDetector(
-                  onTap: () {
-                    searchNode.unfocus();
-                  },
-                  child: SheetPageAC(
-                      context, searchNode, controller, username, date, s)),
-            ),
-          ),
+              padding: MediaQuery.of(context).viewInsets,
+              child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                child: Container(
+                  height: s == 'home' ? 440 : 340,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      )),
+                  child: GestureDetector(
+                      onTap: () {
+                        searchNode.unfocus();
+                      },
+                      child: SheetPageAC(
+                          context, searchNode, controller, username, date, s)),
+                ),
+              )),
           backgroundColor: Colors.white,
           isScrollControlled: true,
           shape:

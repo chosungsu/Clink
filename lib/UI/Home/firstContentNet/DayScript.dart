@@ -733,6 +733,14 @@ class _DayScriptState extends State<DayScript> {
                                                       .toString()
                                                       .split(' ')[0] +
                                                   '일',
+                                              'EditDate':
+                                                  DateFormat('yyyy-MM-dd')
+                                                          .parse(widget
+                                                              .firstdate
+                                                              .toString())
+                                                          .toString()
+                                                          .split(' ')[0] +
+                                                      '일',
                                             },
                                                 SetOptions(
                                                     merge: true)).whenComplete(

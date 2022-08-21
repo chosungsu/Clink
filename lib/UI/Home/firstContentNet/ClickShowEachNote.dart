@@ -28,8 +28,10 @@ class ClickShowEachNote extends StatefulWidget {
     required this.docsummary,
     required this.doccolor,
     required this.docindex,
+    required this.editdate,
   }) : super(key: key);
   final String date;
+  final String editdate;
   final String doc;
   final String docname;
   final String doccollection;
@@ -65,7 +67,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
   ];
   Color _color = Colors.white;
   List<MemoList> checklisttexts = [];
-  DateTime editdate = DateTime.now();
+  DateTime editDateTo = DateTime.now();
 
   @override
   void didChangeDependencies() {
@@ -544,19 +546,19 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                             'color': _color
                                                                 .value
                                                                 .toInt(),
-                                                            'Date': editdate
+                                                            'EditDate': editDateTo
                                                                         .toString()
                                                                         .split(
                                                                             '-')[
                                                                     0] +
                                                                 '-' +
-                                                                editdate
+                                                                editDateTo
                                                                         .toString()
                                                                         .split(
                                                                             '-')[
                                                                     1] +
                                                                 '-' +
-                                                                editdate
+                                                                editDateTo
                                                                     .toString()
                                                                     .split(
                                                                         '-')[2]
@@ -919,27 +921,76 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
   }
 
   buildSheetTitle() {
-    return SizedBox(
-        height: 30,
-        child: Row(
-          children: [
-            Text(
-              '메모제목',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                  color: TextColor()),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            const Text('필수항목',
-                style: const TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15)),
-          ],
-        ));
+    return Column(
+      children: [
+        SizedBox(
+            height: 30,
+            child: Row(
+              children: [
+                Text(
+                  '최초 작성시간 : ',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: TextColor()),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text(widget.date.toString(),
+                    style: const TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+              ],
+            )),
+        SizedBox(
+            height: 30,
+            child: Row(
+              children: [
+                Text(
+                  '마지막 수정시간 : ',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: TextColor()),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text(widget.editdate.toString(),
+                    style: const TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+              ],
+            )),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+            height: 30,
+            child: Row(
+              children: [
+                Text(
+                  '메모제목',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: TextColor()),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                const Text('필수항목',
+                    style: const TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15)),
+              ],
+            ))
+      ],
+    );
   }
 
   Contents() {
