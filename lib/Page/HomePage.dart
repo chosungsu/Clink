@@ -11,6 +11,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -632,7 +633,67 @@ class _HomePageState extends State<HomePage> {
                                 calendarcode: codes));
                           }
                         }
-                        StreamBuilder<QuerySnapshot>(
+                        return content.isEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: NeumorphicText(
+                                      '보여드릴 오늘의 일정이 없습니다.',
+                                      style: NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: TextColor(),
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: contentTextsize(),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            : ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: content.length,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: ListTile(
+                                          onTap: () {},
+                                          horizontalTitleGap: 10,
+                                          dense: true,
+                                          leading: Icon(
+                                            Icons.calendar_month,
+                                            color: TextColor(),
+                                          ),
+                                          subtitle: Text(content[index].title,
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                          title: Text(content[index].date,
+                                              style: TextStyle(
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  );
+                                });
+                        /*StreamBuilder<QuerySnapshot>(
                           stream: firestore
                               .collection('CalendarDataBase')
                               .where('Date',
@@ -669,70 +730,9 @@ class _HomePageState extends State<HomePage> {
                                 }
                               }
                             }
-                            return content.isEmpty
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          '보여드릴 오늘의 일정이 없습니다.',
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: TextColor(),
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: contentTextsize(),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                : ListView.builder(
-                                    physics: const BouncingScrollPhysics(),
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: content.length,
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: ListTile(
-                                              onTap: () {},
-                                              horizontalTitleGap: 10,
-                                              dense: true,
-                                              leading: const Icon(
-                                                  Icons.calendar_month),
-                                              subtitle: Text(
-                                                  content[index].title,
-                                                  style: TextStyle(
-                                                      color: TextColor(),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize())),
-                                              title: Text(content[index].date,
-                                                  style: TextStyle(
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                        ],
-                                      );
-                                    });
+                            return 
                           },
-                        );
+                        );*/
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
                         return Column(
@@ -781,8 +781,10 @@ class _HomePageState extends State<HomePage> {
                                         onTap: () {},
                                         horizontalTitleGap: 10,
                                         dense: true,
-                                        leading:
-                                            const Icon(Icons.calendar_month),
+                                        leading: Icon(
+                                          Icons.calendar_month,
+                                          color: TextColor(),
+                                        ),
                                         subtitle: Text(content[index].title,
                                             style: TextStyle(
                                                 color: TextColor(),
@@ -855,8 +857,10 @@ class _HomePageState extends State<HomePage> {
                                           onTap: () {},
                                           horizontalTitleGap: 10,
                                           dense: true,
-                                          leading:
-                                              const Icon(Icons.description),
+                                          leading: Icon(
+                                            Icons.description,
+                                            color: TextColor(),
+                                          ),
                                           title: Text(
                                               snapshot.data!.docs[index]
                                                   ['memoTitle'],
@@ -920,7 +924,10 @@ class _HomePageState extends State<HomePage> {
                                         onTap: () {},
                                         horizontalTitleGap: 10,
                                         dense: true,
-                                        leading: const Icon(Icons.description),
+                                        leading: Icon(
+                                          Icons.description,
+                                          color: TextColor(),
+                                        ),
                                         title: Text(
                                             snapshot.data!.docs[index]
                                                 ['memoTitle'],
@@ -954,20 +961,30 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.topCenter,
           child: Row(
             children: [
-              Text('홈뷰설정',
-                  style: TextStyle(
-                      color: TextColor_shadowcolor(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize())),
+              InkWell(
+                onTap: () {
+                  Get.to(() => HomeView(), transition: Transition.zoom);
+                },
+                child: Text('홈뷰설정',
+                    style: TextStyle(
+                        color: TextColor_shadowcolor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize())),
+              ),
               VerticalDivider(
                 thickness: 1,
                 color: TextColor_shadowcolor(),
               ),
-              Text('문의하기',
-                  style: TextStyle(
-                      color: TextColor_shadowcolor(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize())),
+              InkWell(
+                onTap: () {
+                  Get.to(() => HomeView(), transition: Transition.zoom);
+                },
+                child: Text('문의하기',
+                    style: TextStyle(
+                        color: TextColor_shadowcolor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize())),
+              ),
             ],
           ),
         )

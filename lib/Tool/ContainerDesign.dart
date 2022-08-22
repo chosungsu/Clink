@@ -2,7 +2,8 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:flutter/material.dart';
 
 class ContainerDesign extends StatelessWidget {
-  const ContainerDesign({Key? key, required this.child, required this.color}) : super(key: key);
+  const ContainerDesign({Key? key, required this.child, required this.color})
+      : super(key: key);
   final Widget child;
   final Color color;
 
