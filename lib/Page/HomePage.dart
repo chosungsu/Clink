@@ -54,13 +54,25 @@ class _HomePageState extends State<HomePage> {
   List showspacelist = [];
   List content = [];
   String name = Hive.box('user_info').get('id');
-  List<SpaceList> _user_ad = [];
-  final List<SpaceList> _default_ad = [
-    SpaceList(title: '일정공간'),
-    SpaceList(title: '메모공간'),
+  String name_second = Hive.box('user_info').get('id').toString().length > 5
+      ? Hive.box('user_info').get('id').toString().substring(0, 4)
+      : Hive.box('user_info').get('id').toString().substring(0, 2);
+  String email_first =
+      Hive.box('user_info').get('email').toString().substring(0, 3);
+  String email_second = Hive.box('user_info')
+      .get('email')
+      .toString()
+      .split('@')[1]
+      .substring(0, 2);
+  String docid = '';
+  List defaulthomeviewlist = [
+    '오늘의 일정',
+    '공유된 오늘의 일정',
+    '최근에 수정된 메모',
+    '홈뷰에 저장된 메모',
   ];
+  List userviewlist = [];
   static final List<Category> fillcategory = [];
-
   late final PageController _pController;
   //프로 버전 구매시 사용하게될 코드
   bool isbought = false;
@@ -78,6 +90,21 @@ class _HomePageState extends State<HomePage> {
         PageController(initialPage: currentPage, viewportFraction: 1);
     navi = NaviWhere();
     isdraweropen = draw.drawopen;
+    docid = email_first + email_second + name_second;
+    firestore
+        .collection('HomeViewCategories')
+        .where('usercode', isEqualTo: docid)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+      } else {
+        firestore.collection('HomeViewCategories').doc(docid).set({
+          'usercode': value.docs.isEmpty ? docid : value.docs[0].id,
+          'viewcategory': defaulthomeviewlist,
+          'hidecategory': userviewlist
+        }, SetOptions(merge: true));
+      }
+    });
   }
 
   @override
@@ -311,11 +338,7 @@ class _HomePageState extends State<HomePage> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      H_Container_3(height, 'cal'),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      H_Container_3(height, 'note'),
+                                      H_Container_3(height),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -399,8 +422,7 @@ class _HomePageState extends State<HomePage> {
                                                     Transition.rightToLeft);
                                             print(reloadpage);
                                             if (reloadpage) {
-                                              H_Container_3(height, 'cal');
-                                              H_Container_3(height, 'note');
+                                              H_Container_3(height);
                                             }
                                           },
                                           child: SizedBox(
@@ -459,8 +481,7 @@ class _HomePageState extends State<HomePage> {
                                                     transition:
                                                         Transition.rightToLeft);
                                                 if (reloadpage) {
-                                                  H_Container_3(height, 'cal');
-                                                  H_Container_3(height, 'note');
+                                                  H_Container_3(height);
                                                 }
                                               },
                                               child: SizedBox(
@@ -519,8 +540,7 @@ class _HomePageState extends State<HomePage> {
                                                     transition:
                                                         Transition.rightToLeft);
                                                 if (reloadpage) {
-                                                  H_Container_3(height, 'cal');
-                                                  H_Container_3(height, 'note');
+                                                  H_Container_3(height);
                                                 }
                                               },
                                               child: SizedBox(
@@ -577,147 +597,1013 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_3(double height, String s) {
+  H_Container_3(double height) {
+    firestore
+        .collection('HomeViewCategories')
+        .where('usercode', isEqualTo: docid)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+      } else {
+        firestore.collection('HomeViewCategories').doc(docid).set({
+          'usercode': value.docs.isEmpty ? docid : value.docs[0].id,
+          'viewcategory': defaulthomeviewlist,
+          'hidecategory': userviewlist
+        }, SetOptions(merge: true));
+      }
+    });
     //프로버전 구매시 보이지 않게 함
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        s == 'cal'
-            ? SizedBox(
-                height: 30,
-                child: Text('오늘의 일정',
-                    style: TextStyle(
-                        color: TextColor(),
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize())),
-              )
-            : SizedBox(
-                height: 30,
-                child: Text('최근 수정된 메모',
-                    style: TextStyle(
-                        color: TextColor(),
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize())),
-              ),
-        const SizedBox(height: 20),
-        ContainerDesign(
-            child: s == 'cal'
-                ? StreamBuilder<QuerySnapshot>(
-                    stream: firestore
-                        .collection('CalendarDataBase')
-                        .where('OriginalUser', isEqualTo: name)
-                        .where('Date',
-                            isEqualTo: Date.toString().split('-')[0] +
-                                '-' +
-                                Date.toString().split('-')[1] +
-                                '-' +
-                                Date.toString().split('-')[2].substring(0, 2) +
-                                '일')
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        content.clear();
-                        var timsestart, timefinish, codes, todo;
-                        final valuespace = snapshot.data!.docs;
-                        for (var sp in valuespace) {
-                          todo = sp.get('Daytodo');
-                          timsestart = sp.get('Timestart');
-                          timefinish = sp.get('Timefinish');
-                          codes = sp.get('calname');
-                          if (int.parse(
-                                  timsestart.toString().substring(0, 2)) >=
-                              Date.hour) {
-                            content.add(SpaceContent(
-                                title: todo,
-                                date: timsestart + '-' + timefinish,
-                                calendarcode: codes));
-                          }
-                        }
-                        return content.isEmpty
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: NeumorphicText(
-                                      '보여드릴 오늘의 일정이 없습니다.',
-                                      style: NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: TextColor(),
+    return StreamBuilder<QuerySnapshot>(
+        stream: firestore
+            .collection('HomeViewCategories')
+            .where('usercode', isEqualTo: docid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: snapshot.data!.docs[0]['viewcategory'].length,
+                itemBuilder: (context, index) {
+                  return snapshot.data!.docs[0]['viewcategory'][index]
+                              .toString() ==
+                          '오늘의 일정'
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 30,
+                              child: Text('오늘의 일정',
+                                  style: TextStyle(
+                                      color: TextColor(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTitleTextsize())),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            StreamBuilder<QuerySnapshot>(
+                              stream: firestore
+                                  .collection('CalendarDataBase')
+                                  .where('OriginalUser', isEqualTo: name)
+                                  .where('Date',
+                                      isEqualTo: Date.toString().split('-')[0] +
+                                          '-' +
+                                          Date.toString().split('-')[1] +
+                                          '-' +
+                                          Date.toString()
+                                              .split('-')[2]
+                                              .substring(0, 2) +
+                                          '일')
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  content.clear();
+                                  var timsestart, timefinish, codes, todo;
+                                  final valuespace = snapshot.data!.docs;
+                                  for (var sp in valuespace) {
+                                    todo = sp.get('Daytodo');
+                                    timsestart = sp.get('Timestart');
+                                    timefinish = sp.get('Timefinish');
+                                    codes = sp.get('calname');
+                                    if (int.parse(timsestart
+                                            .toString()
+                                            .substring(0, 2)) >=
+                                        Date.hour) {
+                                      content.add(SpaceContent(
+                                          title: todo,
+                                          date: timsestart + '-' + timefinish,
+                                          calendarcode: codes));
+                                    }
+                                  }
+                                  return ContainerDesign(
+                                      child: content.isEmpty
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                  child: NeumorphicText(
+                                                    '보여드릴 오늘의 일정이 없습니다.',
+                                                    style: NeumorphicStyle(
+                                                      shape:
+                                                          NeumorphicShape.flat,
+                                                      depth: 3,
+                                                      color: TextColor(),
+                                                    ),
+                                                    textStyle:
+                                                        NeumorphicTextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          : ListView.builder(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              scrollDirection: Axis.vertical,
+                                              shrinkWrap: true,
+                                              itemCount: content.length,
+                                              itemBuilder: (context, index) {
+                                                return Column(
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {},
+                                                      child: ListTile(
+                                                        onTap: () {},
+                                                        horizontalTitleGap: 10,
+                                                        dense: true,
+                                                        leading: Icon(
+                                                          Icons.calendar_month,
+                                                          color: TextColor(),
+                                                        ),
+                                                        subtitle: Text(
+                                                            content[index]
+                                                                .title,
+                                                            style: TextStyle(
+                                                                color:
+                                                                    TextColor(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize:
+                                                                    contentTextsize())),
+                                                        title: Text(
+                                                            content[index].date,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            )),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                      color: BGColor());
+                                } else if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return ContainerDesign(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Center(
+                                              child:
+                                                  CircularProgressIndicator())
+                                        ],
                                       ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: contentTextsize(),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )
-                            : ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: content.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: ListTile(
-                                          onTap: () {},
-                                          horizontalTitleGap: 10,
-                                          dense: true,
-                                          leading: Icon(
-                                            Icons.calendar_month,
-                                            color: TextColor(),
+                                      color: BGColor());
+                                }
+                                return ContainerDesign(
+                                    child: content.isEmpty
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                child: NeumorphicText(
+                                                  '보여드릴 오늘의 일정이 없습니다.',
+                                                  style: NeumorphicStyle(
+                                                    shape: NeumorphicShape.flat,
+                                                    depth: 3,
+                                                    color: TextColor(),
+                                                  ),
+                                                  textStyle:
+                                                      NeumorphicTextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: contentTextsize(),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        : ListView.builder(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            scrollDirection: Axis.vertical,
+                                            shrinkWrap: true,
+                                            itemCount: content.length,
+                                            itemBuilder: (context, index) {
+                                              return Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {},
+                                                    child: ListTile(
+                                                      onTap: () {},
+                                                      horizontalTitleGap: 10,
+                                                      dense: true,
+                                                      leading: Icon(
+                                                        Icons.calendar_month,
+                                                        color: TextColor(),
+                                                      ),
+                                                      subtitle: Text(
+                                                          content[index].title,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                      title: Text(
+                                                          content[index].date,
+                                                          style: TextStyle(
+                                                            color: TextColor(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                ],
+                                              );
+                                            }),
+                                    color: BGColor());
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        )
+                      : (snapshot.data!.docs[0]['viewcategory'][index]
+                                  .toString() ==
+                              '공유된 오늘의 일정'
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                  child: Text('공유된 오늘의 일정',
+                                      style: TextStyle(
+                                          color: TextColor(),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTitleTextsize())),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                StreamBuilder<QuerySnapshot>(
+                                  stream: firestore
+                                      .collection('CalendarDataBase')
+                                      .where('Date',
+                                          isEqualTo: Date.toString()
+                                                  .split('-')[0] +
+                                              '-' +
+                                              Date.toString().split('-')[1] +
+                                              '-' +
+                                              Date.toString()
+                                                  .split('-')[2]
+                                                  .substring(0, 2) +
+                                              '일')
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      List nameList = [];
+                                      var timsestart, timefinish, codes, todo;
+                                      final valuespace = snapshot.data!.docs;
+                                      for (var sp in valuespace) {
+                                        nameList = sp.get('Shares');
+                                        todo = sp.get('Daytodo');
+                                        timsestart = sp.get('Timestart');
+                                        timefinish = sp.get('Timefinish');
+                                        codes = sp.get('calname');
+                                        for (int i = 0;
+                                            i < nameList.length;
+                                            i++) {
+                                          if (nameList[i].contains(name)) {
+                                            if (int.parse(timsestart
+                                                    .toString()
+                                                    .substring(0, 2)) >=
+                                                Date.hour) {
+                                              content.add(SpaceContent(
+                                                  title: todo,
+                                                  date: timsestart +
+                                                      '-' +
+                                                      timefinish,
+                                                  calendarcode: codes));
+                                            }
+                                          }
+                                        }
+                                      }
+                                      return ContainerDesign(
+                                          child: content.isEmpty
+                                              ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                      child: NeumorphicText(
+                                                        '보여드릴 공유된 오늘의 일정이 없습니다.',
+                                                        style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: TextColor(),
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              : ListView.builder(
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  itemCount: content.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Column(
+                                                      children: [
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {},
+                                                          child: ListTile(
+                                                            onTap: () {},
+                                                            horizontalTitleGap:
+                                                                10,
+                                                            dense: true,
+                                                            leading: Icon(
+                                                              Icons
+                                                                  .calendar_month,
+                                                              color:
+                                                                  TextColor(),
+                                                            ),
+                                                            subtitle: Text(
+                                                                content[index]
+                                                                    .title,
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize())),
+                                                            title: Text(
+                                                                content[index]
+                                                                    .date,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color:
+                                                                      TextColor(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                )),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }),
+                                          color: BGColor());
+                                    } else if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return ContainerDesign(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Center(
+                                                  child:
+                                                      CircularProgressIndicator())
+                                            ],
                                           ),
-                                          subtitle: Text(content[index].title,
-                                              style: TextStyle(
-                                                  color: TextColor(),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                          title: Text(content[index].date,
-                                              style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                    ],
-                                  );
-                                });
-                        /*StreamBuilder<QuerySnapshot>(
-                          stream: firestore
-                              .collection('CalendarDataBase')
-                              .where('Date',
-                                  isEqualTo: Date.toString().split('-')[0] +
-                                      '-' +
-                                      Date.toString().split('-')[1] +
-                                      '-' +
-                                      Date.toString()
-                                          .split('-')[2]
-                                          .substring(0, 2) +
-                                      '일')
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            List nameList = [];
-                            var timsestart, timefinish, codes, todo;
-                            final valuespace = snapshot.data!.docs;
-                            for (var sp in valuespace) {
-                              nameList = sp.get('Shares');
-                              todo = sp.get('Daytodo');
-                              timsestart = sp.get('Timestart');
-                              timefinish = sp.get('Timefinish');
-                              codes = sp.get('calname');
-                              for (int i = 0; i < nameList.length; i++) {
-                                if (nameList[i].contains(name)) {
+                                          color: BGColor());
+                                    }
+                                    return ContainerDesign(
+                                        child: content.isEmpty
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Center(
+                                                    child: NeumorphicText(
+                                                      '보여드릴 공유된 오늘의 일정이 없습니다.',
+                                                      style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .flat,
+                                                        depth: 3,
+                                                        color: TextColor(),
+                                                      ),
+                                                      textStyle:
+                                                          NeumorphicTextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize:
+                                                            contentTextsize(),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            : ListView.builder(
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                itemCount: content.length,
+                                                itemBuilder: (context, index) {
+                                                  return Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {},
+                                                        child: ListTile(
+                                                          onTap: () {},
+                                                          horizontalTitleGap:
+                                                              10,
+                                                          dense: true,
+                                                          leading: Icon(
+                                                            Icons
+                                                                .calendar_month,
+                                                            color: TextColor(),
+                                                          ),
+                                                          subtitle: Text(
+                                                              content[index]
+                                                                  .title,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      TextColor(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      contentTextsize())),
+                                                          title: Text(
+                                                              content[index]
+                                                                  .date,
+                                                              style: TextStyle(
+                                                                color:
+                                                                    TextColor(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                    ],
+                                                  );
+                                                }),
+                                        color: BGColor());
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            )
+                          : (snapshot.data!.docs[0]['viewcategory'][index]
+                                      .toString() ==
+                                  '홈뷰에 저장된 메모'
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 30,
+                                      child: Text('홈뷰에 저장된 메모',
+                                          style: TextStyle(
+                                              color: TextColor(),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  contentTitleTextsize())),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    StreamBuilder<QuerySnapshot>(
+                                      stream: firestore
+                                          .collection('MemoDataBase')
+                                          .where('OriginalUser',
+                                              isEqualTo: name)
+                                          .where('EditDate',
+                                              isEqualTo: Date.toString()
+                                                      .split('-')[0] +
+                                                  '-' +
+                                                  Date.toString()
+                                                      .split('-')[1] +
+                                                  '-' +
+                                                  Date.toString()
+                                                      .split('-')[2]
+                                                      .substring(0, 2) +
+                                                  '일')
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          ContainerDesign(
+                                              child: snapshot.data!.docs.isEmpty
+                                                  ? Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Center(
+                                                          child: NeumorphicText(
+                                                            '오늘 수정된 메모는 없습니다.',
+                                                            style:
+                                                                NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .flat,
+                                                              depth: 3,
+                                                              color:
+                                                                  TextColor(),
+                                                            ),
+                                                            textStyle:
+                                                                NeumorphicTextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    )
+                                                  : ListView.builder(
+                                                      physics:
+                                                          const BouncingScrollPhysics(),
+                                                      scrollDirection:
+                                                          Axis.vertical,
+                                                      shrinkWrap: true,
+                                                      itemCount: snapshot
+                                                          .data!.docs.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Column(
+                                                          children: [
+                                                            const SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {},
+                                                              child: ListTile(
+                                                                onTap: () {},
+                                                                horizontalTitleGap:
+                                                                    10,
+                                                                dense: true,
+                                                                leading: Icon(
+                                                                  Icons
+                                                                      .description,
+                                                                  color:
+                                                                      TextColor(),
+                                                                ),
+                                                                title: Text(
+                                                                    snapshot.data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'memoTitle'],
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                            TextColor(),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            contentTextsize())),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }),
+                                              color: BGColor());
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return ContainerDesign(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  Center(
+                                                      child:
+                                                          CircularProgressIndicator())
+                                                ],
+                                              ),
+                                              color: BGColor());
+                                        }
+                                        return ContainerDesign(
+                                            child: snapshot.data!.docs.isEmpty
+                                                ? Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Center(
+                                                        child: NeumorphicText(
+                                                          '오늘 수정된 메모는 없습니다.',
+                                                          style:
+                                                              NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .flat,
+                                                            depth: 3,
+                                                            color: TextColor(),
+                                                          ),
+                                                          textStyle:
+                                                              NeumorphicTextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                : ListView.builder(
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    shrinkWrap: true,
+                                                    itemCount: snapshot
+                                                        .data!.docs.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Column(
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {},
+                                                            child: ListTile(
+                                                              onTap: () {},
+                                                              horizontalTitleGap:
+                                                                  10,
+                                                              dense: true,
+                                                              leading: Icon(
+                                                                Icons
+                                                                    .description,
+                                                                color:
+                                                                    TextColor(),
+                                                              ),
+                                                              title: Text(
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'memoTitle'],
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          TextColor(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTextsize())),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                            color: BGColor());
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 30,
+                                      child: Text('오늘 수정 및 생성된 메모',
+                                          style: TextStyle(
+                                              color: TextColor(),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  contentTitleTextsize())),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    StreamBuilder<QuerySnapshot>(
+                                      stream: firestore
+                                          .collection('MemoDataBase')
+                                          .where('OriginalUser',
+                                              isEqualTo: name)
+                                          .where('EditDate',
+                                              isEqualTo: Date.toString()
+                                                      .split('-')[0] +
+                                                  '-' +
+                                                  Date.toString()
+                                                      .split('-')[1] +
+                                                  '-' +
+                                                  Date.toString()
+                                                      .split('-')[2]
+                                                      .substring(0, 2) +
+                                                  '일')
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          ContainerDesign(
+                                              child: snapshot.data!.docs.isEmpty
+                                                  ? Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Center(
+                                                          child: NeumorphicText(
+                                                            '오늘 수정된 메모는 없습니다.',
+                                                            style:
+                                                                NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .flat,
+                                                              depth: 3,
+                                                              color:
+                                                                  TextColor(),
+                                                            ),
+                                                            textStyle:
+                                                                NeumorphicTextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    )
+                                                  : ListView.builder(
+                                                      physics:
+                                                          const BouncingScrollPhysics(),
+                                                      scrollDirection:
+                                                          Axis.vertical,
+                                                      shrinkWrap: true,
+                                                      itemCount: snapshot
+                                                          .data!.docs.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Column(
+                                                          children: [
+                                                            const SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {},
+                                                              child: ListTile(
+                                                                onTap: () {},
+                                                                horizontalTitleGap:
+                                                                    10,
+                                                                dense: true,
+                                                                leading: Icon(
+                                                                  Icons
+                                                                      .description,
+                                                                  color:
+                                                                      TextColor(),
+                                                                ),
+                                                                title: Text(
+                                                                    snapshot.data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'memoTitle'],
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                            TextColor(),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            contentTextsize())),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }),
+                                              color: BGColor());
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return ContainerDesign(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  Center(
+                                                      child:
+                                                          CircularProgressIndicator())
+                                                ],
+                                              ),
+                                              color: BGColor());
+                                        }
+                                        return ContainerDesign(
+                                            child: snapshot.data!.docs.isEmpty
+                                                ? Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Center(
+                                                        child: NeumorphicText(
+                                                          '오늘 수정된 메모는 없습니다.',
+                                                          style:
+                                                              NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .flat,
+                                                            depth: 3,
+                                                            color: TextColor(),
+                                                          ),
+                                                          textStyle:
+                                                              NeumorphicTextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                : ListView.builder(
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    shrinkWrap: true,
+                                                    itemCount: snapshot
+                                                        .data!.docs.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Column(
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {},
+                                                            child: ListTile(
+                                                              onTap: () {},
+                                                              horizontalTitleGap:
+                                                                  10,
+                                                              dense: true,
+                                                              leading: Icon(
+                                                                Icons
+                                                                    .description,
+                                                                color:
+                                                                    TextColor(),
+                                                              ),
+                                                              title: Text(
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'memoTitle'],
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          TextColor(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTextsize())),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                            color: BGColor());
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                )));
+                });
+          }
+          return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: defaulthomeviewlist.length,
+              itemBuilder: (context, index) {
+                return defaulthomeviewlist[index].toString() == '오늘의 일정'
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 30,
+                            child: Text('오늘의 일정',
+                                style: TextStyle(
+                                    color: TextColor(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize())),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: firestore
+                                .collection('CalendarDataBase')
+                                .where('OriginalUser', isEqualTo: name)
+                                .where('Date',
+                                    isEqualTo: Date.toString().split('-')[0] +
+                                        '-' +
+                                        Date.toString().split('-')[1] +
+                                        '-' +
+                                        Date.toString()
+                                            .split('-')[2]
+                                            .substring(0, 2) +
+                                        '일')
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                content.clear();
+                                var timsestart, timefinish, codes, todo;
+                                final valuespace = snapshot.data!.docs;
+                                for (var sp in valuespace) {
+                                  todo = sp.get('Daytodo');
+                                  timsestart = sp.get('Timestart');
+                                  timefinish = sp.get('Timefinish');
+                                  codes = sp.get('calname');
                                   if (int.parse(timsestart
                                           .toString()
                                           .substring(0, 2)) >=
@@ -728,226 +1614,849 @@ class _HomePageState extends State<HomePage> {
                                         calendarcode: codes));
                                   }
                                 }
+                                return ContainerDesign(
+                                    child: content.isEmpty
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                child: NeumorphicText(
+                                                  '보여드릴 오늘의 일정이 없습니다.',
+                                                  style: NeumorphicStyle(
+                                                    shape: NeumorphicShape.flat,
+                                                    depth: 3,
+                                                    color: TextColor(),
+                                                  ),
+                                                  textStyle:
+                                                      NeumorphicTextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: contentTextsize(),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        : ListView.builder(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            scrollDirection: Axis.vertical,
+                                            shrinkWrap: true,
+                                            itemCount: content.length,
+                                            itemBuilder: (context, index) {
+                                              return Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {},
+                                                    child: ListTile(
+                                                      onTap: () {},
+                                                      horizontalTitleGap: 10,
+                                                      dense: true,
+                                                      leading: Icon(
+                                                        Icons.calendar_month,
+                                                        color: TextColor(),
+                                                      ),
+                                                      subtitle: Text(
+                                                          content[index].title,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                      title: Text(
+                                                          content[index].date,
+                                                          style: TextStyle(
+                                                            color: TextColor(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                ],
+                                              );
+                                            }),
+                                    color: BGColor());
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return ContainerDesign(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Center(
+                                            child: CircularProgressIndicator())
+                                      ],
+                                    ),
+                                    color: BGColor());
                               }
-                            }
-                            return 
-                          },
-                        );*/
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Center(child: CircularProgressIndicator())
-                          ],
-                        );
-                      }
-                      return content.isEmpty
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    '보여드릴 오늘의 일정이 없습니다.',
-                                    style: NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: TextColor(),
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: contentTextsize(),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
-                          : ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: content.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: ListTile(
-                                        onTap: () {},
-                                        horizontalTitleGap: 10,
-                                        dense: true,
-                                        leading: Icon(
-                                          Icons.calendar_month,
-                                          color: TextColor(),
-                                        ),
-                                        subtitle: Text(content[index].title,
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize())),
-                                        title: Text(content[index].date,
-                                            style: TextStyle(
-                                              color: TextColor(),
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                  ],
-                                );
-                              });
-                    },
-                  )
-                : StreamBuilder<QuerySnapshot>(
-                    stream: firestore
-                        .collection('MemoDataBase')
-                        .where('OriginalUser', isEqualTo: name)
-                        .where('EditDate',
-                            isEqualTo: Date.toString().split('-')[0] +
-                                '-' +
-                                Date.toString().split('-')[1] +
-                                '-' +
-                                Date.toString().split('-')[2].substring(0, 2) +
-                                '일')
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        snapshot.data!.docs.isEmpty
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: NeumorphicText(
-                                      '오늘 수정된 메모는 없습니다.',
-                                      style: NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
+                              return ContainerDesign(
+                                  child: content.isEmpty
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Center(
+                                              child: NeumorphicText(
+                                                '보여드릴 오늘의 일정이 없습니다.',
+                                                style: NeumorphicStyle(
+                                                  shape: NeumorphicShape.flat,
+                                                  depth: 3,
+                                                  color: TextColor(),
+                                                ),
+                                                textStyle: NeumorphicTextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: contentTextsize(),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      : ListView.builder(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: content.length,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {},
+                                                  child: ListTile(
+                                                    onTap: () {},
+                                                    horizontalTitleGap: 10,
+                                                    dense: true,
+                                                    leading: Icon(
+                                                      Icons.calendar_month,
+                                                      color: TextColor(),
+                                                    ),
+                                                    subtitle: Text(
+                                                        content[index].title,
+                                                        style: TextStyle(
+                                                            color: TextColor(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize())),
+                                                    title: Text(
+                                                        content[index].date,
+                                                        style: TextStyle(
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        )),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                  color: BGColor());
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      )
+                    : (defaulthomeviewlist[index].toString() == '공유된 오늘의 일정'
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 30,
+                                child: Text('공유된 오늘의 일정',
+                                    style: TextStyle(
                                         color: TextColor(),
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: contentTextsize(),
-                                      ),
-                                    ),
-                                  )
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTitleTextsize())),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              StreamBuilder<QuerySnapshot>(
+                                stream: firestore
+                                    .collection('CalendarDataBase')
+                                    .where('Date',
+                                        isEqualTo:
+                                            Date.toString().split('-')[0] +
+                                                '-' +
+                                                Date.toString().split('-')[1] +
+                                                '-' +
+                                                Date.toString()
+                                                    .split('-')[2]
+                                                    .substring(0, 2) +
+                                                '일')
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    List nameList = [];
+                                    var timsestart, timefinish, codes, todo;
+                                    final valuespace = snapshot.data!.docs;
+                                    for (var sp in valuespace) {
+                                      nameList = sp.get('Shares');
+                                      todo = sp.get('Daytodo');
+                                      timsestart = sp.get('Timestart');
+                                      timefinish = sp.get('Timefinish');
+                                      codes = sp.get('calname');
+                                      for (int i = 0;
+                                          i < nameList.length;
+                                          i++) {
+                                        if (nameList[i].contains(name)) {
+                                          if (int.parse(timsestart
+                                                  .toString()
+                                                  .substring(0, 2)) >=
+                                              Date.hour) {
+                                            content.add(SpaceContent(
+                                                title: todo,
+                                                date: timsestart +
+                                                    '-' +
+                                                    timefinish,
+                                                calendarcode: codes));
+                                          }
+                                        }
+                                      }
+                                    }
+                                    return ContainerDesign(
+                                        child: content.isEmpty
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Center(
+                                                    child: NeumorphicText(
+                                                      '보여드릴 공유된 오늘의 일정이 없습니다.',
+                                                      style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .flat,
+                                                        depth: 3,
+                                                        color: TextColor(),
+                                                      ),
+                                                      textStyle:
+                                                          NeumorphicTextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize:
+                                                            contentTextsize(),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            : ListView.builder(
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                itemCount: content.length,
+                                                itemBuilder: (context, index) {
+                                                  return Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {},
+                                                        child: ListTile(
+                                                          onTap: () {},
+                                                          horizontalTitleGap:
+                                                              10,
+                                                          dense: true,
+                                                          leading: Icon(
+                                                            Icons
+                                                                .calendar_month,
+                                                            color: TextColor(),
+                                                          ),
+                                                          subtitle: Text(
+                                                              content[index]
+                                                                  .title,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      TextColor(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      contentTextsize())),
+                                                          title: Text(
+                                                              content[index]
+                                                                  .date,
+                                                              style: TextStyle(
+                                                                color:
+                                                                    TextColor(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                    ],
+                                                  );
+                                                }),
+                                        color: BGColor());
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return ContainerDesign(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            Center(
+                                                child:
+                                                    CircularProgressIndicator())
+                                          ],
+                                        ),
+                                        color: BGColor());
+                                  }
+                                  return ContainerDesign(
+                                      child: content.isEmpty
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                  child: NeumorphicText(
+                                                    '보여드릴 공유된 오늘의 일정이 없습니다.',
+                                                    style: NeumorphicStyle(
+                                                      shape:
+                                                          NeumorphicShape.flat,
+                                                      depth: 3,
+                                                      color: TextColor(),
+                                                    ),
+                                                    textStyle:
+                                                        NeumorphicTextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          : ListView.builder(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              scrollDirection: Axis.vertical,
+                                              shrinkWrap: true,
+                                              itemCount: content.length,
+                                              itemBuilder: (context, index) {
+                                                return Column(
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {},
+                                                      child: ListTile(
+                                                        onTap: () {},
+                                                        horizontalTitleGap: 10,
+                                                        dense: true,
+                                                        leading: Icon(
+                                                          Icons.calendar_month,
+                                                          color: TextColor(),
+                                                        ),
+                                                        subtitle: Text(
+                                                            content[index]
+                                                                .title,
+                                                            style: TextStyle(
+                                                                color:
+                                                                    TextColor(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize:
+                                                                    contentTextsize())),
+                                                        title: Text(
+                                                            content[index].date,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            )),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                      color: BGColor());
+                                },
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          )
+                        : (defaulthomeviewlist[index].toString() == '홈뷰에 저장된 메모'
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 30,
+                                    child: Text('홈뷰에 저장된 메모',
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTitleTextsize())),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  StreamBuilder<QuerySnapshot>(
+                                    stream: firestore
+                                        .collection('MemoDataBase')
+                                        .where('OriginalUser', isEqualTo: name)
+                                        .where('EditDate',
+                                            isEqualTo: Date.toString()
+                                                    .split('-')[0] +
+                                                '-' +
+                                                Date.toString().split('-')[1] +
+                                                '-' +
+                                                Date.toString()
+                                                    .split('-')[2]
+                                                    .substring(0, 2) +
+                                                '일')
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        ContainerDesign(
+                                            child: snapshot.data!.docs.isEmpty
+                                                ? Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Center(
+                                                        child: NeumorphicText(
+                                                          '오늘 수정된 메모는 없습니다.',
+                                                          style:
+                                                              NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .flat,
+                                                            depth: 3,
+                                                            color: TextColor(),
+                                                          ),
+                                                          textStyle:
+                                                              NeumorphicTextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                : ListView.builder(
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    shrinkWrap: true,
+                                                    itemCount: snapshot
+                                                        .data!.docs.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Column(
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {},
+                                                            child: ListTile(
+                                                              onTap: () {},
+                                                              horizontalTitleGap:
+                                                                  10,
+                                                              dense: true,
+                                                              leading: Icon(
+                                                                Icons
+                                                                    .description,
+                                                                color:
+                                                                    TextColor(),
+                                                              ),
+                                                              title: Text(
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'memoTitle'],
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          TextColor(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTextsize())),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                            color: BGColor());
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return ContainerDesign(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Center(
+                                                    child:
+                                                        CircularProgressIndicator())
+                                              ],
+                                            ),
+                                            color: BGColor());
+                                      }
+                                      return ContainerDesign(
+                                          child: snapshot.data!.docs.isEmpty
+                                              ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                      child: NeumorphicText(
+                                                        '오늘 수정된 메모는 없습니다.',
+                                                        style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: TextColor(),
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              : ListView.builder(
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  itemCount: snapshot
+                                                      .data!.docs.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Column(
+                                                      children: [
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {},
+                                                          child: ListTile(
+                                                            onTap: () {},
+                                                            horizontalTitleGap:
+                                                                10,
+                                                            dense: true,
+                                                            leading: Icon(
+                                                              Icons.description,
+                                                              color:
+                                                                  TextColor(),
+                                                            ),
+                                                            title: Text(
+                                                                snapshot.data!
+                                                                            .docs[
+                                                                        index]
+                                                                    [
+                                                                    'memoTitle'],
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize())),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }),
+                                          color: BGColor());
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
                                 ],
                               )
-                            : ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: snapshot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: ListTile(
-                                          onTap: () {},
-                                          horizontalTitleGap: 10,
-                                          dense: true,
-                                          leading: Icon(
-                                            Icons.description,
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 30,
+                                    child: Text('오늘 수정 및 생성된 메모',
+                                        style: TextStyle(
                                             color: TextColor(),
-                                          ),
-                                          title: Text(
-                                              snapshot.data!.docs[index]
-                                                  ['memoTitle'],
-                                              style: TextStyle(
-                                                  color: TextColor(),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                    ],
-                                  );
-                                });
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Center(child: CircularProgressIndicator())
-                          ],
-                        );
-                      }
-                      return snapshot.data!.docs.isEmpty
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    '오늘 수정된 메모는 없습니다.',
-                                    style: NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: TextColor(),
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: contentTextsize(),
-                                    ),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTitleTextsize())),
                                   ),
-                                )
-                              ],
-                            )
-                          : ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: ListTile(
-                                        onTap: () {},
-                                        horizontalTitleGap: 10,
-                                        dense: true,
-                                        leading: Icon(
-                                          Icons.description,
-                                          color: TextColor(),
-                                        ),
-                                        title: Text(
-                                            snapshot.data!.docs[index]
-                                                ['memoTitle'],
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize())),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                  ],
-                                );
-                              });
-                    },
-                  ),
-            color: BGColor())
-      ],
-    );
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  StreamBuilder<QuerySnapshot>(
+                                    stream: firestore
+                                        .collection('MemoDataBase')
+                                        .where('OriginalUser', isEqualTo: name)
+                                        .where('EditDate',
+                                            isEqualTo: Date.toString()
+                                                    .split('-')[0] +
+                                                '-' +
+                                                Date.toString().split('-')[1] +
+                                                '-' +
+                                                Date.toString()
+                                                    .split('-')[2]
+                                                    .substring(0, 2) +
+                                                '일')
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        ContainerDesign(
+                                            child: snapshot.data!.docs.isEmpty
+                                                ? Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Center(
+                                                        child: NeumorphicText(
+                                                          '오늘 수정된 메모는 없습니다.',
+                                                          style:
+                                                              NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .flat,
+                                                            depth: 3,
+                                                            color: TextColor(),
+                                                          ),
+                                                          textStyle:
+                                                              NeumorphicTextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                : ListView.builder(
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    shrinkWrap: true,
+                                                    itemCount: snapshot
+                                                        .data!.docs.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Column(
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {},
+                                                            child: ListTile(
+                                                              onTap: () {},
+                                                              horizontalTitleGap:
+                                                                  10,
+                                                              dense: true,
+                                                              leading: Icon(
+                                                                Icons
+                                                                    .description,
+                                                                color:
+                                                                    TextColor(),
+                                                              ),
+                                                              title: Text(
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'memoTitle'],
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          TextColor(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTextsize())),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }),
+                                            color: BGColor());
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return ContainerDesign(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Center(
+                                                    child:
+                                                        CircularProgressIndicator())
+                                              ],
+                                            ),
+                                            color: BGColor());
+                                      }
+                                      return ContainerDesign(
+                                          child: snapshot.data!.docs.isEmpty
+                                              ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                      child: NeumorphicText(
+                                                        '오늘 수정된 메모는 없습니다.',
+                                                        style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: TextColor(),
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              : ListView.builder(
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  itemCount: snapshot
+                                                      .data!.docs.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Column(
+                                                      children: [
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {},
+                                                          child: ListTile(
+                                                            onTap: () {},
+                                                            horizontalTitleGap:
+                                                                10,
+                                                            dense: true,
+                                                            leading: Icon(
+                                                              Icons.description,
+                                                              color:
+                                                                  TextColor(),
+                                                            ),
+                                                            title: Text(
+                                                                snapshot.data!
+                                                                            .docs[
+                                                                        index]
+                                                                    [
+                                                                    'memoTitle'],
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize())),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }),
+                                          color: BGColor());
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              )));
+              });
+        });
   }
 
   H_Container_4(double height) {
