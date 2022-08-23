@@ -181,7 +181,7 @@ content(
                   width: 20,
                 ),
                 const Text('필수항목',
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
@@ -249,9 +249,15 @@ content(
                                   ? GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          choicelist.clear();
-                                          choicelist.add(1);
-                                          choicelist.add(0);
+                                          if (choicelist[0] == 1) {
+                                            choicelist.clear();
+                                            choicelist.add(0);
+                                            choicelist.add(0);
+                                          } else {
+                                            choicelist.clear();
+                                            choicelist.add(1);
+                                            choicelist.add(0);
+                                          }
                                         });
                                       },
                                       child: choicelist[0] == 0
@@ -355,9 +361,15 @@ content(
                                   : GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          choicelist.clear();
-                                          choicelist.add(0);
-                                          choicelist.add(1);
+                                          if (choicelist[1] == 1) {
+                                            choicelist.clear();
+                                            choicelist.add(0);
+                                            choicelist.add(0);
+                                          } else {
+                                            choicelist.clear();
+                                            choicelist.add(0);
+                                            choicelist.add(1);
+                                          }
                                         });
                                       },
                                       child: choicelist[1] == 0
@@ -461,96 +473,7 @@ content(
                             ],
                           );
                         }),
-                      )
-                      /*Row(
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              setState(() {
-                                changetype = 0;
-                              });
-                            },
-                            child: changetype == 0
-                                ? const SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                  )
-                                : Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.keyboard_arrow_left,
-                                      size: 30,
-                                      style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          surfaceIntensity: 0.5,
-                                          color: Colors.black,
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  )),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                primary: Colors.grey.shade400,
-                              ),
-                              onPressed: () {},
-                              child: Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                      child: NeumorphicText(
-                                        types[changetype],
-                                        style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.flat,
-                                          depth: 3,
-                                          color: Colors.white,
-                                        ),
-                                        textStyle: NeumorphicTextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize(),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )),
-                        ),
-                        InkWell(
-                            onTap: () {
-                              setState(() {
-                                changetype = 1;
-                              });
-                            },
-                            child: changetype == 1
-                                ? const SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                  )
-                                : Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.keyboard_arrow_right,
-                                      size: 30,
-                                      style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          surfaceIntensity: 0.5,
-                                          color: Colors.black,
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  )),
-                      ],
-                    ),*/
-                      )
+                      ))
                 ],
               )
             : const SizedBox(
