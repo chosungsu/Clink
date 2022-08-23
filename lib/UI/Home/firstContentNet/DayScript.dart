@@ -733,6 +733,7 @@ class _DayScriptState extends State<DayScript> {
                                                       .toString()
                                                       .split(' ')[0] +
                                                   '일',
+                                              'homesave': false,
                                               'EditDate':
                                                   DateFormat('yyyy-MM-dd')
                                                           .parse(widget
@@ -1442,6 +1443,8 @@ class _DayScriptState extends State<DayScript> {
                                                           fontSize:
                                                               contentTextsize(),
                                                           color: TextColor(),
+                                                          decorationThickness:
+                                                              2.3,
                                                           decoration: scollection
                                                                           .memolistin[
                                                                       index] ==

@@ -6,6 +6,64 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../Tool/TextSize.dart';
 
+settingChoiceCal(
+  BuildContext context,
+  TextEditingController controller,
+  doc,
+  doc_type,
+  doc_color,
+  doc_name,
+  doc_made_user,
+  FocusNode searchNode,
+  List finallist,
+) {
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              child: GestureDetector(
+                  onTap: () {
+                    searchNode.unfocus();
+                  },
+                  child: SizedBox(
+                    height: 320,
+                    child: SheetPageC(
+                        context,
+                        controller,
+                        searchNode,
+                        doc,
+                        doc_type,
+                        doc_color,
+                        doc_name,
+                        doc_made_user,
+                        finallist),
+                  )),
+            ));
+      }).whenComplete(() {
+    controller.clear();
+  });
+}
+
 SheetPageC(
     BuildContext context,
     TextEditingController controller,

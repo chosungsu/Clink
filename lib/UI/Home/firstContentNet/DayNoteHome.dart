@@ -17,6 +17,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../Page/HomePage.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/SheetGetx/selectcollection.dart';
+import '../../../sheets/MemoSaveAtHome.dart';
 import '../../../sheets/addWhole.dart';
 
 class DayNoteHome extends StatefulWidget {
@@ -410,7 +411,6 @@ class _DayNoteHomeState extends State<DayNoteHome> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print(snapshot.data!.docs.length);
             return snapshot.data!.docs.isEmpty
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -462,6 +462,16 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                             height: 10,
                           ),
                           GestureDetector(
+                            onLongPress: () {
+                              //홈화면에 띄울것인가를 묻는 로직
+                              MemoSave(
+                                  context,
+                                  snapshot.data!.docs[index].id,
+                                  snapshot.data!.docs[index]['Collection'],
+                                  snapshot.data!.docs[index]['color'],
+                                  snapshot.data!.docs[index]['memoTitle'],
+                                  username);
+                            },
                             onTap: () {
                               //개별 노트로 이동로직
                               Get.to(

@@ -40,7 +40,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Widget build(BuildContext context) {
     return Container(
       width: 50,
-      decoration: BoxDecoration(color: BGColor()),
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+          border:
+              Border(right: BorderSide(color: BGColor_shadowcolor(), width: 1)),
+          color: BGColor()),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: drawerItems.map((element) {
@@ -50,8 +54,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
               child: InkWell(
                 onTap: () {
                   setState(() {
-                    draw.setclose();
                     if (element.containsValue(Icons.home)) {
+                      draw.setclose();
                       Navigator.of(context).pushReplacement(
                         PageTransition(
                           type: PageTransitionType.rightToLeft,
@@ -63,11 +67,31 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
                       Hive.box('user_setting').put('page_index', 0);
                     } else if (element.containsValue(Icons.add_outlined)) {
+                      draw.setclose();
+
+                      Hive.box('user_setting').get('page_index') == 0
+                          ? Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const MyHomePage(
+                                  index: 0,
+                                ),
+                              ),
+                            )
+                          : Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const MyHomePage(
+                                  index: 2,
+                                ),
+                              ),
+                            );
                       addWhole(
                           context, searchNode, controller, name, Date, 'home');
                       Hive.box('user_setting').put('page_index',
                           Hive.box('user_setting').get('page_index'));
                     } else {
+                      draw.setclose();
                       Navigator.of(context).pushReplacement(
                         PageTransition(
                           type: PageTransitionType.rightToLeft,

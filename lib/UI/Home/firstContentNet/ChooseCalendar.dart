@@ -803,7 +803,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                 ['calname'],
                                                             snapshot.data!
                                                                     .docs[index]
-                                                                ['madeUser']);
+                                                                ['madeUser'],
+                                                            searchNode,
+                                                            finallist);
                                                       },
                                                       child: NeumorphicIcon(
                                                         Icons.edit,
@@ -1258,7 +1260,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                   snapshot.data!
                                                                               .docs[
                                                                           index]
-                                                                      ['madeUser']);
+                                                                      ['madeUser'],
+                                                                  searchNode,
+                                                                  finallist);
                                                             },
                                                             child:
                                                                 NeumorphicIcon(
@@ -1484,64 +1488,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
           );
         },
       );
-    });
-  }
-
-  settingChoiceCal(
-    BuildContext context,
-    TextEditingController controller,
-    doc,
-    doc_type,
-    doc_color,
-    doc_name,
-    doc_made_user,
-  ) {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        )),
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                child: GestureDetector(
-                    onTap: () {
-                      searchNode.unfocus();
-                    },
-                    child: SizedBox(
-                      height: 320,
-                      child: SheetPageC(
-                          context,
-                          controller,
-                          searchNode,
-                          doc,
-                          doc_type,
-                          doc_color,
-                          doc_name,
-                          doc_made_user,
-                          finallist),
-                    )),
-              ));
-        }).whenComplete(() {
-      setState(() {
-        controller.clear();
-      });
     });
   }
 }

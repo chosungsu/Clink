@@ -58,8 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
         bottomNavigationBar: navi == 1
             ? Container(
                 decoration: BoxDecoration(
-                    border:
-                        Border(top: BorderSide(color: TextColor(), width: 2))),
+                    border: Border(
+                        top: BorderSide(
+                            color: BGColor_shadowcolor(), width: 1))),
                 child: BottomNavigationBar(
                   onTap: (_index) {
                     //Handle button tap

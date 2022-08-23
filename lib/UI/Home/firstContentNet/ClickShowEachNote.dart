@@ -1339,6 +1339,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                             style: TextStyle(
                                                 fontSize: contentTextsize(),
                                                 color: TextColor(),
+                                                decorationThickness: 2.3,
                                                 decoration: scollection
                                                                 .memolistin[
                                                             index] ==

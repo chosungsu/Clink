@@ -52,7 +52,8 @@ class _HomePageState extends State<HomePage> {
   static final spaceset = Get.put(Spacesetting());
   final draw = Get.put(navibool());
   List showspacelist = [];
-  List content = [];
+  List contentmy = [];
+  List contentshare = [];
   String name = Hive.box('user_info').get('id');
   String name_second = Hive.box('user_info').get('id').toString().length > 5
       ? Hive.box('user_info').get('id').toString().substring(0, 4)
@@ -105,6 +106,17 @@ class _HomePageState extends State<HomePage> {
         }, SetOptions(merge: true));
       }
     });
+    if (draw.drawopen == true) {
+      setState(() {
+        xoffset = 50;
+        yoffset = 0;
+      });
+    } else {
+      setState(() {
+        xoffset = 0;
+        yoffset = 0;
+      });
+    }
   }
 
   @override
@@ -117,36 +129,40 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
+
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
-            body: navi == 0
-                ? (draw.drawopen == true
-                    ? Stack(
-                        children: [
-                          Container(
-                            width: 50,
-                            child: DrawerScreen(),
-                          ),
-                          HomeUi(
-                            _pController,
-                          ),
-                        ],
-                      )
-                    : Stack(
-                        children: [
-                          HomeUi(
-                            _pController,
-                          ),
-                        ],
-                      ))
-                : Stack(
-                    children: [
-                      HomeUi(
-                        _pController,
-                      ),
-                    ],
-                  )));
+            body: GetBuilder<navibool>(
+              init: navibool(),
+              builder: (_) => navi == 0
+                  ? (draw.drawopen == true
+                      ? Stack(
+                          children: [
+                            Container(
+                              width: 50,
+                              child: DrawerScreen(),
+                            ),
+                            HomeUi(
+                              _pController,
+                            ),
+                          ],
+                        )
+                      : Stack(
+                          children: [
+                            HomeUi(
+                              _pController,
+                            ),
+                          ],
+                        ))
+                  : Stack(
+                      children: [
+                        HomeUi(
+                          _pController,
+                        ),
+                      ],
+                    ),
+            )));
   }
 
   HomeUi(
@@ -659,7 +675,7 @@ class _HomePageState extends State<HomePage> {
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  content.clear();
+                                  contentmy.clear();
                                   var timsestart, timefinish, codes, todo;
                                   final valuespace = snapshot.data!.docs;
                                   for (var sp in valuespace) {
@@ -671,14 +687,14 @@ class _HomePageState extends State<HomePage> {
                                             .toString()
                                             .substring(0, 2)) >=
                                         Date.hour) {
-                                      content.add(SpaceContent(
+                                      contentmy.add(SpaceContent(
                                           title: todo,
                                           date: timsestart + '-' + timefinish,
                                           calendarcode: codes));
                                     }
                                   }
                                   return ContainerDesign(
-                                      child: content.isEmpty
+                                      child: contentmy.isEmpty
                                           ? Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
@@ -710,7 +726,7 @@ class _HomePageState extends State<HomePage> {
                                                   const BouncingScrollPhysics(),
                                               scrollDirection: Axis.vertical,
                                               shrinkWrap: true,
-                                              itemCount: content.length,
+                                              itemCount: contentmy.length,
                                               itemBuilder: (context, index) {
                                                 return Column(
                                                   children: [
@@ -728,7 +744,7 @@ class _HomePageState extends State<HomePage> {
                                                           color: TextColor(),
                                                         ),
                                                         subtitle: Text(
-                                                            content[index]
+                                                            contentmy[index]
                                                                 .title,
                                                             style: TextStyle(
                                                                 color:
@@ -739,7 +755,8 @@ class _HomePageState extends State<HomePage> {
                                                                 fontSize:
                                                                     contentTextsize())),
                                                         title: Text(
-                                                            content[index].date,
+                                                            contentmy[index]
+                                                                .date,
                                                             style: TextStyle(
                                                               color:
                                                                   TextColor(),
@@ -773,7 +790,7 @@ class _HomePageState extends State<HomePage> {
                                       color: BGColor());
                                 }
                                 return ContainerDesign(
-                                    child: content.isEmpty
+                                    child: contentmy.isEmpty
                                         ? Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
@@ -803,7 +820,7 @@ class _HomePageState extends State<HomePage> {
                                                 const BouncingScrollPhysics(),
                                             scrollDirection: Axis.vertical,
                                             shrinkWrap: true,
-                                            itemCount: content.length,
+                                            itemCount: contentmy.length,
                                             itemBuilder: (context, index) {
                                               return Column(
                                                 children: [
@@ -821,7 +838,8 @@ class _HomePageState extends State<HomePage> {
                                                         color: TextColor(),
                                                       ),
                                                       subtitle: Text(
-                                                          content[index].title,
+                                                          contentmy[index]
+                                                              .title,
                                                           style: TextStyle(
                                                               color:
                                                                   TextColor(),
@@ -831,7 +849,7 @@ class _HomePageState extends State<HomePage> {
                                                               fontSize:
                                                                   contentTextsize())),
                                                       title: Text(
-                                                          content[index].date,
+                                                          contentmy[index].date,
                                                           style: TextStyle(
                                                             color: TextColor(),
                                                             fontWeight:
@@ -887,6 +905,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       List nameList = [];
+                                      contentshare.clear();
                                       var timsestart, timefinish, codes, todo;
                                       final valuespace = snapshot.data!.docs;
                                       for (var sp in valuespace) {
@@ -903,7 +922,7 @@ class _HomePageState extends State<HomePage> {
                                                     .toString()
                                                     .substring(0, 2)) >=
                                                 Date.hour) {
-                                              content.add(SpaceContent(
+                                              contentshare.add(SpaceContent(
                                                   title: todo,
                                                   date: timsestart +
                                                       '-' +
@@ -914,7 +933,7 @@ class _HomePageState extends State<HomePage> {
                                         }
                                       }
                                       return ContainerDesign(
-                                          child: content.isEmpty
+                                          child: contentshare.isEmpty
                                               ? Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
@@ -947,7 +966,8 @@ class _HomePageState extends State<HomePage> {
                                                   scrollDirection:
                                                       Axis.vertical,
                                                   shrinkWrap: true,
-                                                  itemCount: content.length,
+                                                  itemCount:
+                                                      contentshare.length,
                                                   itemBuilder:
                                                       (context, index) {
                                                     return Column(
@@ -969,7 +989,8 @@ class _HomePageState extends State<HomePage> {
                                                                   TextColor(),
                                                             ),
                                                             subtitle: Text(
-                                                                content[index]
+                                                                contentshare[
+                                                                        index]
                                                                     .title,
                                                                 style: TextStyle(
                                                                     color:
@@ -980,7 +1001,8 @@ class _HomePageState extends State<HomePage> {
                                                                     fontSize:
                                                                         contentTextsize())),
                                                             title: Text(
-                                                                content[index]
+                                                                contentshare[
+                                                                        index]
                                                                     .date,
                                                                 style:
                                                                     TextStyle(
@@ -1016,7 +1038,7 @@ class _HomePageState extends State<HomePage> {
                                           color: BGColor());
                                     }
                                     return ContainerDesign(
-                                        child: content.isEmpty
+                                        child: contentshare.isEmpty
                                             ? Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
@@ -1048,7 +1070,7 @@ class _HomePageState extends State<HomePage> {
                                                     const BouncingScrollPhysics(),
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
-                                                itemCount: content.length,
+                                                itemCount: contentshare.length,
                                                 itemBuilder: (context, index) {
                                                   return Column(
                                                     children: [
@@ -1068,7 +1090,8 @@ class _HomePageState extends State<HomePage> {
                                                             color: TextColor(),
                                                           ),
                                                           subtitle: Text(
-                                                              content[index]
+                                                              contentshare[
+                                                                      index]
                                                                   .title,
                                                               style: TextStyle(
                                                                   color:
@@ -1079,7 +1102,8 @@ class _HomePageState extends State<HomePage> {
                                                                   fontSize:
                                                                       contentTextsize())),
                                                           title: Text(
-                                                              content[index]
+                                                              contentshare[
+                                                                      index]
                                                                   .date,
                                                               style: TextStyle(
                                                                 color:
@@ -1127,17 +1151,7 @@ class _HomePageState extends State<HomePage> {
                                           .collection('MemoDataBase')
                                           .where('OriginalUser',
                                               isEqualTo: name)
-                                          .where('EditDate',
-                                              isEqualTo: Date.toString()
-                                                      .split('-')[0] +
-                                                  '-' +
-                                                  Date.toString()
-                                                      .split('-')[1] +
-                                                  '-' +
-                                                  Date.toString()
-                                                      .split('-')[2]
-                                                      .substring(0, 2) +
-                                                  '일')
+                                          .where('homesave', isEqualTo: true)
                                           .snapshots(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
@@ -1153,7 +1167,7 @@ class _HomePageState extends State<HomePage> {
                                                       children: [
                                                         Center(
                                                           child: NeumorphicText(
-                                                            '오늘 수정된 메모는 없습니다.',
+                                                            '홈 내보내기 설정된 메모는 없습니다.',
                                                             style:
                                                                 NeumorphicStyle(
                                                               shape:
@@ -1253,7 +1267,7 @@ class _HomePageState extends State<HomePage> {
                                                     children: [
                                                       Center(
                                                         child: NeumorphicText(
-                                                          '오늘 수정된 메모는 없습니다.',
+                                                          '홈 내보내기 설정된 메모는 없습니다.',
                                                           style:
                                                               NeumorphicStyle(
                                                             shape:
@@ -1596,7 +1610,7 @@ class _HomePageState extends State<HomePage> {
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                content.clear();
+                                contentmy.clear();
                                 var timsestart, timefinish, codes, todo;
                                 final valuespace = snapshot.data!.docs;
                                 for (var sp in valuespace) {
@@ -1608,14 +1622,14 @@ class _HomePageState extends State<HomePage> {
                                           .toString()
                                           .substring(0, 2)) >=
                                       Date.hour) {
-                                    content.add(SpaceContent(
+                                    contentmy.add(SpaceContent(
                                         title: todo,
                                         date: timsestart + '-' + timefinish,
                                         calendarcode: codes));
                                   }
                                 }
                                 return ContainerDesign(
-                                    child: content.isEmpty
+                                    child: contentmy.isEmpty
                                         ? Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
@@ -1645,7 +1659,7 @@ class _HomePageState extends State<HomePage> {
                                                 const BouncingScrollPhysics(),
                                             scrollDirection: Axis.vertical,
                                             shrinkWrap: true,
-                                            itemCount: content.length,
+                                            itemCount: contentmy.length,
                                             itemBuilder: (context, index) {
                                               return Column(
                                                 children: [
@@ -1663,7 +1677,8 @@ class _HomePageState extends State<HomePage> {
                                                         color: TextColor(),
                                                       ),
                                                       subtitle: Text(
-                                                          content[index].title,
+                                                          contentmy[index]
+                                                              .title,
                                                           style: TextStyle(
                                                               color:
                                                                   TextColor(),
@@ -1673,7 +1688,7 @@ class _HomePageState extends State<HomePage> {
                                                               fontSize:
                                                                   contentTextsize())),
                                                       title: Text(
-                                                          content[index].date,
+                                                          contentmy[index].date,
                                                           style: TextStyle(
                                                             color: TextColor(),
                                                             fontWeight:
@@ -1704,7 +1719,7 @@ class _HomePageState extends State<HomePage> {
                                     color: BGColor());
                               }
                               return ContainerDesign(
-                                  child: content.isEmpty
+                                  child: contentmy.isEmpty
                                       ? Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -1732,7 +1747,7 @@ class _HomePageState extends State<HomePage> {
                                               const BouncingScrollPhysics(),
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
-                                          itemCount: content.length,
+                                          itemCount: contentmy.length,
                                           itemBuilder: (context, index) {
                                             return Column(
                                               children: [
@@ -1750,7 +1765,7 @@ class _HomePageState extends State<HomePage> {
                                                       color: TextColor(),
                                                     ),
                                                     subtitle: Text(
-                                                        content[index].title,
+                                                        contentmy[index].title,
                                                         style: TextStyle(
                                                             color: TextColor(),
                                                             fontWeight:
@@ -1758,7 +1773,7 @@ class _HomePageState extends State<HomePage> {
                                                             fontSize:
                                                                 contentTextsize())),
                                                     title: Text(
-                                                        content[index].date,
+                                                        contentmy[index].date,
                                                         style: TextStyle(
                                                           color: TextColor(),
                                                           fontWeight:
@@ -1812,6 +1827,7 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     List nameList = [];
+                                    contentshare.clear();
                                     var timsestart, timefinish, codes, todo;
                                     final valuespace = snapshot.data!.docs;
                                     for (var sp in valuespace) {
@@ -1828,7 +1844,7 @@ class _HomePageState extends State<HomePage> {
                                                   .toString()
                                                   .substring(0, 2)) >=
                                               Date.hour) {
-                                            content.add(SpaceContent(
+                                            contentshare.add(SpaceContent(
                                                 title: todo,
                                                 date: timsestart +
                                                     '-' +
@@ -1839,7 +1855,7 @@ class _HomePageState extends State<HomePage> {
                                       }
                                     }
                                     return ContainerDesign(
-                                        child: content.isEmpty
+                                        child: contentshare.isEmpty
                                             ? Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
@@ -1871,7 +1887,7 @@ class _HomePageState extends State<HomePage> {
                                                     const BouncingScrollPhysics(),
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
-                                                itemCount: content.length,
+                                                itemCount: contentshare.length,
                                                 itemBuilder: (context, index) {
                                                   return Column(
                                                     children: [
@@ -1891,7 +1907,8 @@ class _HomePageState extends State<HomePage> {
                                                             color: TextColor(),
                                                           ),
                                                           subtitle: Text(
-                                                              content[index]
+                                                              contentshare[
+                                                                      index]
                                                                   .title,
                                                               style: TextStyle(
                                                                   color:
@@ -1902,7 +1919,8 @@ class _HomePageState extends State<HomePage> {
                                                                   fontSize:
                                                                       contentTextsize())),
                                                           title: Text(
-                                                              content[index]
+                                                              contentshare[
+                                                                      index]
                                                                   .date,
                                                               style: TextStyle(
                                                                 color:
@@ -1937,7 +1955,7 @@ class _HomePageState extends State<HomePage> {
                                         color: BGColor());
                                   }
                                   return ContainerDesign(
-                                      child: content.isEmpty
+                                      child: contentshare.isEmpty
                                           ? Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
@@ -1969,7 +1987,7 @@ class _HomePageState extends State<HomePage> {
                                                   const BouncingScrollPhysics(),
                                               scrollDirection: Axis.vertical,
                                               shrinkWrap: true,
-                                              itemCount: content.length,
+                                              itemCount: contentshare.length,
                                               itemBuilder: (context, index) {
                                                 return Column(
                                                   children: [
@@ -1987,7 +2005,7 @@ class _HomePageState extends State<HomePage> {
                                                           color: TextColor(),
                                                         ),
                                                         subtitle: Text(
-                                                            content[index]
+                                                            contentshare[index]
                                                                 .title,
                                                             style: TextStyle(
                                                                 color:
@@ -1998,7 +2016,8 @@ class _HomePageState extends State<HomePage> {
                                                                 fontSize:
                                                                     contentTextsize())),
                                                         title: Text(
-                                                            content[index].date,
+                                                            contentshare[index]
+                                                                .date,
                                                             style: TextStyle(
                                                               color:
                                                                   TextColor(),
@@ -2041,16 +2060,7 @@ class _HomePageState extends State<HomePage> {
                                     stream: firestore
                                         .collection('MemoDataBase')
                                         .where('OriginalUser', isEqualTo: name)
-                                        .where('EditDate',
-                                            isEqualTo: Date.toString()
-                                                    .split('-')[0] +
-                                                '-' +
-                                                Date.toString().split('-')[1] +
-                                                '-' +
-                                                Date.toString()
-                                                    .split('-')[2]
-                                                    .substring(0, 2) +
-                                                '일')
+                                        .where('homesave', isEqualTo: true)
                                         .snapshots(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
@@ -2066,7 +2076,7 @@ class _HomePageState extends State<HomePage> {
                                                     children: [
                                                       Center(
                                                         child: NeumorphicText(
-                                                          '오늘 수정된 메모는 없습니다.',
+                                                          '홈 내보내기 설정된 메모는 없습니다.',
                                                           style:
                                                               NeumorphicStyle(
                                                             shape:
@@ -2164,7 +2174,7 @@ class _HomePageState extends State<HomePage> {
                                                   children: [
                                                     Center(
                                                       child: NeumorphicText(
-                                                        '오늘 수정된 메모는 없습니다.',
+                                                        '홈 내보내기 설정된 메모는 없습니다.',
                                                         style: NeumorphicStyle(
                                                           shape: NeumorphicShape
                                                               .flat,

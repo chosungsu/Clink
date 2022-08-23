@@ -41,6 +41,7 @@ class EventShowCard extends StatelessWidget {
                     isEqualTo: pageindex == 0
                         ? 'home'
                         : (pageindex == 1 ? 'analytic' : 'ready'))
+                .orderBy('number')
                 .get()
                 .then(((QuerySnapshot querySnapshot) => {
                       eventtitle.clear(),

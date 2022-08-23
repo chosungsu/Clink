@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
 import '../Tool/SheetGetx/SpaceShowRoom.dart';
+import '../Tool/SheetGetx/navibool.dart';
 import '../Tool/SheetGetx/onequeform.dart';
 
 addWhole(
@@ -47,6 +48,8 @@ addWhole(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
       .whenComplete(() {
+    final draw = Get.put(navibool());
+    draw.setclose();
     controller.clear();
     final cntget = Get.put(onequeform());
     cntget.setcnt();
