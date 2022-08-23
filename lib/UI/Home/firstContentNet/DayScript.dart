@@ -557,7 +557,15 @@ class _DayScriptState extends State<DayScript> {
                                                       : textEditingController2
                                                           .text,
                                               'Timefinish':
-                                                  textEditingController3.text,
+                                                  textEditingController3.text
+                                                              .split(':')[0]
+                                                              .length ==
+                                                          1
+                                                      ? '0' +
+                                                          textEditingController3
+                                                              .text
+                                                      : textEditingController3
+                                                          .text,
                                               'Shares': widget.share,
                                               'OriginalUser': widget.orig,
                                               'calname': widget.title,
@@ -620,8 +628,14 @@ class _DayScriptState extends State<DayScript> {
                                                 ? '0' +
                                                     textEditingController2.text
                                                 : textEditingController2.text,
-                                            'Timefinish':
-                                                textEditingController3.text,
+                                            'Timefinish': textEditingController3
+                                                        .text
+                                                        .split(':')[0]
+                                                        .length ==
+                                                    1
+                                                ? '0' +
+                                                    textEditingController3.text
+                                                : textEditingController3.text,
                                             'Shares': widget.share,
                                             'OriginalUser': widget.orig,
                                             'calname': widget.title,
