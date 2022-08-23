@@ -521,7 +521,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                     Hive.box('user_setting').get(
                                                                             'memocollection') ==
                                                                         null
-                                                                ? '지정된 컬렉션이 없습니다.'
+                                                                ? null
                                                                 : (widget.doccollection !=
                                                                         Hive.box('user_setting').get(
                                                                             'memocollection')
@@ -531,13 +531,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                             'memocollection')
                                                                     : widget
                                                                         .doccollection),
-                                                            'memolist':
-                                                                checklisttexts
+                                                            'memolist': checklisttexts
+                                                                    .map((e) => e
+                                                                        .memocontent)
+                                                                    .toList()
+                                                                    .isEmpty
+                                                                ? null
+                                                                : checklisttexts
                                                                     .map((e) =>
                                                                         e.memocontent)
                                                                     .toList(),
-                                                            'memoindex':
-                                                                checklisttexts
+                                                            'memoindex': checklisttexts
+                                                                    .map((e) => e
+                                                                        .contentindex)
+                                                                    .toList()
+                                                                    .isEmpty
+                                                                ? null
+                                                                : checklisttexts
                                                                     .map((e) =>
                                                                         e.contentindex)
                                                                     .toList(),
@@ -694,6 +704,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                           i++) {
                                                         nodes[i].unfocus();
                                                       }
+                                                      print(
+                                                          widget.doccollection);
                                                       //삭제
                                                       Flushbar(
                                                         backgroundColor: Colors
@@ -731,116 +743,96 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                         leftBarIndicatorColor:
                                                             Colors
                                                                 .green.shade100,
-                                                      ).show(context);
-                                                      firestore
-                                                          .collection(
-                                                              'MemoDataBase')
-                                                          .where('Collection',
-                                                              isEqualTo: widget
-                                                                  .doccollection)
-                                                          .where('memoTitle',
-                                                              isEqualTo:
-                                                                  textEditingController1
-                                                                      .text)
-                                                          .where('OriginalUser',
-                                                              isEqualTo:
-                                                                  username)
-                                                          .where('color',
-                                                              isEqualTo: widget
-                                                                  .doccolor
-                                                                  .toInt())
-                                                          .where('memolist',
-                                                              isEqualTo: scollection
-                                                                  .memolistcontentin)
-                                                          .where('Date',
-                                                              isEqualTo: widget
-                                                                          .date
-                                                                          .toString()
-                                                                          .split('-')[
-                                                                      0] +
-                                                                  '-' +
-                                                                  widget.date
-                                                                          .toString()
-                                                                          .split(
-                                                                              '-')[
-                                                                      1] +
-                                                                  '-' +
-                                                                  widget.date
-                                                                      .toString()
-                                                                      .split(
-                                                                          '-')[2]
-                                                                      .substring(0, 2) +
-                                                                  '일')
-                                                          .get()
-                                                          .then((value) {
-                                                        deleteid.clear();
-                                                        value.docs
-                                                            .forEach((element) {
-                                                          deleteid
-                                                              .add(element.id);
-                                                        });
-                                                        for (int i = 0;
-                                                            i < deleteid.length;
-                                                            i++) {
+                                                      ).show(context).whenComplete(() =>
                                                           firestore
                                                               .collection(
                                                                   'MemoDataBase')
-                                                              .doc(deleteid[i])
-                                                              .delete();
-                                                        }
-                                                      }).whenComplete(() {
-                                                        Future.delayed(
-                                                            const Duration(
-                                                                seconds: 2),
-                                                            () {
-                                                          Flushbar(
-                                                            backgroundColor:
-                                                                Colors.blue
-                                                                    .shade400,
-                                                            titleText: Text(
-                                                                'Notice',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      contentTitleTextsize(),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            messageText: Text(
-                                                                '메모가 정상적으로 삭제되었습니다.',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      contentTextsize(),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .info_outline,
-                                                              size: 25.0,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            duration:
+                                                              .where('memoTitle',
+                                                                  isEqualTo: textEditingController1
+                                                                      .text)
+                                                              .where('OriginalUser',
+                                                                  isEqualTo:
+                                                                      username)
+                                                              .where('color',
+                                                                  isEqualTo: widget
+                                                                      .doccolor
+                                                                      .toInt())
+                                                              .where('Date', isEqualTo: widget.date.toString().split('-')[0] + '-' + widget.date.toString().split('-')[1] + '-' + widget.date.toString().split('-')[2].substring(0, 2) + '일')
+                                                              .get()
+                                                              .then((value) {
+                                                            deleteid.clear();
+                                                            value.docs.forEach(
+                                                                (element) {
+                                                              deleteid.add(
+                                                                  element.id);
+                                                            });
+                                                            for (int i = 0;
+                                                                i <
+                                                                    deleteid
+                                                                        .length;
+                                                                i++) {
+                                                              firestore
+                                                                  .collection(
+                                                                      'MemoDataBase')
+                                                                  .doc(deleteid[
+                                                                      i])
+                                                                  .delete();
+                                                            }
+                                                          }).whenComplete(() {
+                                                            Future.delayed(
                                                                 const Duration(
                                                                     seconds: 2),
-                                                            leftBarIndicatorColor:
-                                                                Colors.blue
-                                                                    .shade100,
-                                                          )
-                                                              .show(context)
-                                                              .whenComplete(
-                                                                  () => Get
-                                                                      .back());
-                                                        });
-                                                      });
+                                                                () {
+                                                              Flushbar(
+                                                                backgroundColor:
+                                                                    Colors.blue
+                                                                        .shade400,
+                                                                titleText: Text(
+                                                                    'Notice',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          contentTitleTextsize(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    )),
+                                                                messageText: Text(
+                                                                    '메모가 정상적으로 삭제되었습니다.',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          contentTextsize(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    )),
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .info_outline,
+                                                                  size: 25.0,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                duration:
+                                                                    const Duration(
+                                                                        seconds:
+                                                                            2),
+                                                                leftBarIndicatorColor:
+                                                                    Colors.blue
+                                                                        .shade100,
+                                                              )
+                                                                  .show(context)
+                                                                  .whenComplete(
+                                                                      () => Get
+                                                                          .back());
+                                                            });
+                                                          }));
                                                     },
                                                     child: Container(
                                                       alignment:

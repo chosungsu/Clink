@@ -683,15 +683,10 @@ class _HomePageState extends State<HomePage> {
                                     timsestart = sp.get('Timestart');
                                     timefinish = sp.get('Timefinish');
                                     codes = sp.get('calname');
-                                    if (int.parse(timsestart
-                                            .toString()
-                                            .substring(0, 2)) >=
-                                        Date.hour) {
-                                      contentmy.add(SpaceContent(
-                                          title: todo,
-                                          date: timsestart + '-' + timefinish,
-                                          calendarcode: codes));
-                                    }
+                                    contentmy.add(SpaceContent(
+                                        title: todo,
+                                        date: timsestart + '-' + timefinish,
+                                        calendarcode: codes));
                                   }
                                   return ContainerDesign(
                                       child: contentmy.isEmpty
@@ -743,6 +738,25 @@ class _HomePageState extends State<HomePage> {
                                                           Icons.calendar_month,
                                                           color: TextColor(),
                                                         ),
+                                                        trailing: int.parse(contentmy[
+                                                                        index]
+                                                                    .date
+                                                                    .toString()
+                                                                    .substring(
+                                                                        0,
+                                                                        2)) >=
+                                                                Date.hour
+                                                            ? Icon(
+                                                                Icons
+                                                                    .splitscreen,
+                                                                color:
+                                                                    TextColor(),
+                                                              )
+                                                            : Icon(
+                                                                Icons.done,
+                                                                color:
+                                                                    TextColor(),
+                                                              ),
                                                         subtitle: Text(
                                                             contentmy[index]
                                                                 .title,
@@ -837,6 +851,25 @@ class _HomePageState extends State<HomePage> {
                                                         Icons.calendar_month,
                                                         color: TextColor(),
                                                       ),
+                                                      trailing: int.parse(
+                                                                  contentmy[
+                                                                          index]
+                                                                      .date
+                                                                      .toString()
+                                                                      .substring(
+                                                                          0,
+                                                                          2)) >=
+                                                              Date.hour
+                                                          ? Icon(
+                                                              Icons.splitscreen,
+                                                              color:
+                                                                  TextColor(),
+                                                            )
+                                                          : Icon(
+                                                              Icons.done,
+                                                              color:
+                                                                  TextColor(),
+                                                            ),
                                                       subtitle: Text(
                                                           contentmy[index]
                                                               .title,
@@ -918,17 +951,12 @@ class _HomePageState extends State<HomePage> {
                                             i < nameList.length;
                                             i++) {
                                           if (nameList[i].contains(name)) {
-                                            if (int.parse(timsestart
-                                                    .toString()
-                                                    .substring(0, 2)) >=
-                                                Date.hour) {
-                                              contentshare.add(SpaceContent(
-                                                  title: todo,
-                                                  date: timsestart +
-                                                      '-' +
-                                                      timefinish,
-                                                  calendarcode: codes));
-                                            }
+                                            contentshare.add(SpaceContent(
+                                                title: todo,
+                                                date: timsestart +
+                                                    '-' +
+                                                    timefinish,
+                                                calendarcode: codes));
                                           }
                                         }
                                       }
@@ -988,6 +1016,25 @@ class _HomePageState extends State<HomePage> {
                                                               color:
                                                                   TextColor(),
                                                             ),
+                                                            trailing: int.parse(contentshare[
+                                                                            index]
+                                                                        .date
+                                                                        .toString()
+                                                                        .substring(
+                                                                            0,
+                                                                            2)) >=
+                                                                    Date.hour
+                                                                ? Icon(
+                                                                    Icons
+                                                                        .splitscreen,
+                                                                    color:
+                                                                        TextColor(),
+                                                                  )
+                                                                : Icon(
+                                                                    Icons.done,
+                                                                    color:
+                                                                        TextColor(),
+                                                                  ),
                                                             subtitle: Text(
                                                                 contentshare[
                                                                         index]
@@ -1089,6 +1136,25 @@ class _HomePageState extends State<HomePage> {
                                                                 .calendar_month,
                                                             color: TextColor(),
                                                           ),
+                                                          trailing: int.parse(contentshare[
+                                                                          index]
+                                                                      .date
+                                                                      .toString()
+                                                                      .substring(
+                                                                          0,
+                                                                          2)) >=
+                                                                  Date.hour
+                                                              ? Icon(
+                                                                  Icons
+                                                                      .splitscreen,
+                                                                  color:
+                                                                      TextColor(),
+                                                                )
+                                                              : Icon(
+                                                                  Icons.done,
+                                                                  color:
+                                                                      TextColor(),
+                                                                ),
                                                           subtitle: Text(
                                                               contentshare[
                                                                       index]
@@ -1618,15 +1684,10 @@ class _HomePageState extends State<HomePage> {
                                   timsestart = sp.get('Timestart');
                                   timefinish = sp.get('Timefinish');
                                   codes = sp.get('calname');
-                                  if (int.parse(timsestart
-                                          .toString()
-                                          .substring(0, 2)) >=
-                                      Date.hour) {
-                                    contentmy.add(SpaceContent(
-                                        title: todo,
-                                        date: timsestart + '-' + timefinish,
-                                        calendarcode: codes));
-                                  }
+                                  contentmy.add(SpaceContent(
+                                      title: todo,
+                                      date: timsestart + '-' + timefinish,
+                                      calendarcode: codes));
                                 }
                                 return ContainerDesign(
                                     child: contentmy.isEmpty
@@ -1676,6 +1737,25 @@ class _HomePageState extends State<HomePage> {
                                                         Icons.calendar_month,
                                                         color: TextColor(),
                                                       ),
+                                                      trailing: int.parse(
+                                                                  contentmy[
+                                                                          index]
+                                                                      .date
+                                                                      .toString()
+                                                                      .substring(
+                                                                          0,
+                                                                          2)) >=
+                                                              Date.hour
+                                                          ? Icon(
+                                                              Icons.splitscreen,
+                                                              color:
+                                                                  TextColor(),
+                                                            )
+                                                          : Icon(
+                                                              Icons.done,
+                                                              color:
+                                                                  TextColor(),
+                                                            ),
                                                       subtitle: Text(
                                                           contentmy[index]
                                                               .title,
@@ -1764,6 +1844,22 @@ class _HomePageState extends State<HomePage> {
                                                       Icons.calendar_month,
                                                       color: TextColor(),
                                                     ),
+                                                    trailing: int.parse(
+                                                                contentmy[index]
+                                                                    .date
+                                                                    .toString()
+                                                                    .substring(
+                                                                        0,
+                                                                        2)) >=
+                                                            Date.hour
+                                                        ? Icon(
+                                                            Icons.splitscreen,
+                                                            color: TextColor(),
+                                                          )
+                                                        : Icon(
+                                                            Icons.done,
+                                                            color: TextColor(),
+                                                          ),
                                                     subtitle: Text(
                                                         contentmy[index].title,
                                                         style: TextStyle(
@@ -1840,17 +1936,11 @@ class _HomePageState extends State<HomePage> {
                                           i < nameList.length;
                                           i++) {
                                         if (nameList[i].contains(name)) {
-                                          if (int.parse(timsestart
-                                                  .toString()
-                                                  .substring(0, 2)) >=
-                                              Date.hour) {
-                                            contentshare.add(SpaceContent(
-                                                title: todo,
-                                                date: timsestart +
-                                                    '-' +
-                                                    timefinish,
-                                                calendarcode: codes));
-                                          }
+                                          contentshare.add(SpaceContent(
+                                              title: todo,
+                                              date:
+                                                  timsestart + '-' + timefinish,
+                                              calendarcode: codes));
                                         }
                                       }
                                     }
@@ -1906,6 +1996,25 @@ class _HomePageState extends State<HomePage> {
                                                                 .calendar_month,
                                                             color: TextColor(),
                                                           ),
+                                                          trailing: int.parse(contentshare[
+                                                                          index]
+                                                                      .date
+                                                                      .toString()
+                                                                      .substring(
+                                                                          0,
+                                                                          2)) >=
+                                                                  Date.hour
+                                                              ? Icon(
+                                                                  Icons
+                                                                      .splitscreen,
+                                                                  color:
+                                                                      TextColor(),
+                                                                )
+                                                              : Icon(
+                                                                  Icons.done,
+                                                                  color:
+                                                                      TextColor(),
+                                                                ),
                                                           subtitle: Text(
                                                               contentshare[
                                                                       index]
@@ -2004,6 +2113,25 @@ class _HomePageState extends State<HomePage> {
                                                           Icons.calendar_month,
                                                           color: TextColor(),
                                                         ),
+                                                        trailing: int.parse(contentshare[
+                                                                        index]
+                                                                    .date
+                                                                    .toString()
+                                                                    .substring(
+                                                                        0,
+                                                                        2)) >=
+                                                                Date.hour
+                                                            ? Icon(
+                                                                Icons
+                                                                    .splitscreen,
+                                                                color:
+                                                                    TextColor(),
+                                                              )
+                                                            : Icon(
+                                                                Icons.done,
+                                                                color:
+                                                                    TextColor(),
+                                                              ),
                                                         subtitle: Text(
                                                             contentshare[index]
                                                                 .title,

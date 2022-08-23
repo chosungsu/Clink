@@ -53,56 +53,34 @@ class _DrawerScreenState extends State<DrawerScreen> {
               padding: const EdgeInsets.only(top: 30, bottom: 30),
               child: InkWell(
                 onTap: () {
-                  setState(() {
-                    if (element.containsValue(Icons.home)) {
-                      draw.setclose();
-                      Navigator.of(context).pushReplacement(
-                        PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: const MyHomePage(
-                            index: 0,
-                          ),
+                  if (element.containsValue(Icons.home)) {
+                    draw.setclose();
+                    Navigator.of(context).pushReplacement(
+                      PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: const MyHomePage(
+                          index: 0,
                         ),
-                      );
+                      ),
+                    );
 
-                      Hive.box('user_setting').put('page_index', 0);
-                    } else if (element.containsValue(Icons.add_outlined)) {
-                      draw.setclose();
-
-                      Hive.box('user_setting').get('page_index') == 0
-                          ? Navigator.of(context).pushReplacement(
-                              PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: const MyHomePage(
-                                  index: 0,
-                                ),
-                              ),
-                            )
-                          : Navigator.of(context).pushReplacement(
-                              PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: const MyHomePage(
-                                  index: 2,
-                                ),
-                              ),
-                            );
-                      addWhole(
-                          context, searchNode, controller, name, Date, 'home');
-                      Hive.box('user_setting').put('page_index',
-                          Hive.box('user_setting').get('page_index'));
-                    } else {
-                      draw.setclose();
-                      Navigator.of(context).pushReplacement(
-                        PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: const MyHomePage(
-                            index: 2,
-                          ),
+                    Hive.box('user_setting').put('page_index', 0);
+                  } else if (element.containsValue(Icons.add_outlined)) {
+                    //draw.setclose();
+                    addWhole(
+                        context, searchNode, controller, name, Date, 'home');
+                  } else {
+                    draw.setclose();
+                    Navigator.of(context).pushReplacement(
+                      PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: const MyHomePage(
+                          index: 2,
                         ),
-                      );
-                      Hive.box('user_setting').put('page_index', 2);
-                    }
-                  });
+                      ),
+                    );
+                    Hive.box('user_setting').put('page_index', 2);
+                  }
                 },
                 child: Column(
                   children: [

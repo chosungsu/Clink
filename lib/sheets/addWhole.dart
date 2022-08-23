@@ -9,26 +9,27 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../Tool/SheetGetx/SpaceShowRoom.dart';
 import '../Tool/SheetGetx/navibool.dart';
 import '../Tool/SheetGetx/onequeform.dart';
+import '../route.dart';
 
 addWhole(
-  BuildContext context,
-  FocusNode searchNode,
-  TextEditingController controller,
-  String username,
-  DateTime date,
-  String s,
-) {
+    BuildContext context,
+    FocusNode searchNode,
+    TextEditingController controller,
+    String username,
+    DateTime date,
+    String s) {
   Get.bottomSheet(
           Padding(
               padding: MediaQuery.of(context).viewInsets,
               child: SingleChildScrollView(
                 physics: NeverScrollableScrollPhysics(),
                 child: Container(
-                  height: s == 'home' ? 440 : 340,
+                  //height: s == 'home' ? 440 : 340,
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -55,6 +56,23 @@ addWhole(
     cntget.setcnt();
     final spaceroomset = Get.put(SpaceShowRoom());
     spaceroomset.onInit();
+    Hive.box('user_setting').get('page_index') == 0
+        ? Navigator.of(context).pushReplacement(
+            PageTransition(
+              type: PageTransitionType.rightToLeft,
+              child: const MyHomePage(
+                index: 0,
+              ),
+            ),
+          )
+        : Navigator.of(context).pushReplacement(
+            PageTransition(
+              type: PageTransitionType.rightToLeft,
+              child: const MyHomePage(
+                index: 2,
+              ),
+            ),
+          );
   });
 }
 
@@ -66,11 +84,12 @@ SheetPageAC(
   DateTime date,
   String s,
 ) {
+  List choicelist = List.filled(2, 0, growable: true);
   Color _color = Hive.box('user_setting').get('typecolorcalendar') == null
       ? Colors.blue
       : Color(Hive.box('user_setting').get('typecolorcalendar'));
   return SizedBox(
-      height: s == 'home' ? 420 : 320,
+      //height: s == 'home' ? 420 : 320,
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Column(
@@ -101,8 +120,11 @@ SheetPageAC(
               const SizedBox(
                 height: 20,
               ),
-              content(
-                  context, searchNode, controller, username, _color, date, s)
+              content(context, searchNode, controller, username, _color, date,
+                  s, choicelist),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           )));
 }
@@ -133,13 +155,15 @@ content(
   Color _color,
   DateTime date,
   String s,
+  List choicelist,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  int changetype = 0;
+  /*int changetype = 0;
   final List types = [
     '캘린더',
-    '일상메모',
-  ];
+    '메모',
+  ];*/
+
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,14 +233,241 @@ content(
                     height: 20,
                   ),
                   SizedBox(
-                    height: 30,
-                    width: MediaQuery.of(context).size.width - 40,
-                    child: Row(
+                      height: 80,
+                      width: MediaQuery.of(context).size.width - 40,
+                      child: GridView.count(
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 10,
+                        shrinkWrap: true,
+                        childAspectRatio: 2 / 1,
+                        children: List.generate(2, (index) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              index == 0
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          choicelist.clear();
+                                          choicelist.add(1);
+                                          choicelist.add(0);
+                                        });
+                                      },
+                                      child: choicelist[0] == 0
+                                          ? SizedBox(
+                                              height: 55,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 25,
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      width: 25,
+                                                      height: 25,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.calendar_month,
+                                                          size: 25,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 30,
+                                                    child: Center(
+                                                      child: Text('캘린더',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 55,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 25,
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      width: 25,
+                                                      height: 25,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.check,
+                                                          size: 25,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color: Colors.blue
+                                                                  .shade300,
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 30,
+                                                    child: Center(
+                                                      child: Text('캘린더',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                    )
+                                  : GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          choicelist.clear();
+                                          choicelist.add(0);
+                                          choicelist.add(1);
+                                        });
+                                      },
+                                      child: choicelist[1] == 0
+                                          ? SizedBox(
+                                              height: 55,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 25,
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      width: 25,
+                                                      height: 25,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.description,
+                                                          size: 25,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 30,
+                                                    child: Center(
+                                                      child: Text('일상메모',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 55,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 25,
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      width: 25,
+                                                      height: 25,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: NeumorphicIcon(
+                                                          Icons.check,
+                                                          size: 25,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              color: Colors.blue
+                                                                  .shade300,
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 30,
+                                                    child: Center(
+                                                      child: Text('일상메모',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  TextColor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                    )
+                            ],
+                          );
+                        }),
+                      )
+                      /*Row(
                       children: [
                         InkWell(
                             onTap: () {
                               setState(() {
-                                changetype--;
+                                changetype = 0;
                               });
                             },
                             child: changetype == 0
@@ -243,13 +494,10 @@ content(
                           fit: FlexFit.tight,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(100)),
-                                  primary: Colors.grey.shade400,
-                                  side: const BorderSide(
-                                    width: 1,
-                                    color: Colors.black45,
-                                  )),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100)),
+                                primary: Colors.grey.shade400,
+                              ),
                               onPressed: () {},
                               child: Center(
                                 child: Column(
@@ -277,7 +525,7 @@ content(
                         InkWell(
                             onTap: () {
                               setState(() {
-                                changetype++;
+                                changetype = 1;
                               });
                             },
                             child: changetype == 1
@@ -301,8 +549,8 @@ content(
                                     ),
                                   )),
                       ],
-                    ),
-                  )
+                    ),*/
+                      )
                 ],
               )
             : const SizedBox(
@@ -334,7 +582,7 @@ content(
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (BuildContext context) {
+                          builder: (context) {
                             return AlertDialog(
                               title: const Text('선택'),
                               content: SingleChildScrollView(
@@ -427,11 +675,11 @@ content(
                       duration: const Duration(seconds: 1),
                       leftBarIndicatorColor: Colors.green.shade100,
                     ).show(context);
-                    types[changetype].toString() == '달력'
+                    choicelist[0] == 1
                         ? firestore.collection('CalendarSheetHome').add({
                             'calname': controller.text,
                             'madeUser': username,
-                            'type': changetype,
+                            'type': 0,
                             'share': [],
                             'color': Hive.box('user_setting')
                                 .get('typecolorcalendar'),
@@ -446,6 +694,13 @@ content(
                             'Collection': null,
                             'memoindex': null,
                             'memolist': null,
+                            'homesave': false,
+                            'EditDate': date.toString().split('-')[0] +
+                                '-' +
+                                date.toString().split('-')[1] +
+                                '-' +
+                                date.toString().split('-')[2].substring(0, 2) +
+                                '일',
                             'memoTitle': controller.text,
                             'OriginalUser': username,
                             'color': Hive.box('user_setting')
