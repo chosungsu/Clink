@@ -1,3 +1,4 @@
+import 'package:clickbyme/Sub/HowToUsePage.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/PayHome.dart';
 import 'package:clickbyme/UI/Setting/BuyingPage.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
@@ -81,25 +82,26 @@ class EventShowCard extends StatelessWidget {
                                                   .substring(0, 2) ==
                                               '일정'
                                           ? Get.to(
-                                              () => ChooseCalendar(),
-                                              transition:
-                                                  Transition.rightToLeft,
+                                              () => const HowToUsePage(
+                                                stringsend: '캘린더',
+                                              ),
+                                              transition: Transition.zoom,
                                             )
                                           : (eventtitle[index]
                                                       .toString()
                                                       .substring(0, 2) ==
-                                                  '페이'
+                                                  '메모'
                                               ? Get.to(
-                                                  () => const PayHome(),
-                                                  transition:
-                                                      Transition.rightToLeft,
+                                                  () => const HowToUsePage(
+                                                    stringsend: '메모',
+                                                  ),
+                                                  transition: Transition.zoom,
                                                 )
                                               : Get.to(
-                                                  () => const DayNoteHome(
-                                                    title: '',
+                                                  () => const HowToUsePage(
+                                                    stringsend: 'PDF 공유',
                                                   ),
-                                                  transition:
-                                                      Transition.rightToLeft,
+                                                  transition: Transition.zoom,
                                                 ));
                                     },
                                     child: Column(

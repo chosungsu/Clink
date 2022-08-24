@@ -23,6 +23,7 @@ class UserSettings extends StatelessWidget {
     '도움 & 문의',
     '설정값 변경',
     '친구 초대하기',
+    '라이선스',
     '로그인',
   ];
   final PageController pcontroll;
@@ -42,27 +43,18 @@ class UserSettings extends StatelessWidget {
             return GestureDetector(
                 onTap: () {
                   index == 0
-                      ? /*Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              child: DayContentHome()),
-                        )*/
-                      showreadycontent(context, height, pcontroll)
+                      ? showreadycontent(context, height, pcontroll)
                       : (index == 1
-                          ? /*Navigator.push(
-                              context,
-                              PageTransition(
-                                  type: PageTransitionType.bottomToTop,
-                                  child: OptionChangePage()),
-                            )*/
-                          Get.to(() => OptionChangePage(),
+                          ? Get.to(() => OptionChangePage(),
                               transition: Transition.rightToLeft)
                           : (index == 2
                               ? addgroupmember(context, searchNode, controller)
-                              : (index == 3 && name == null
-                                  ? GoToLogin(context)
-                                  : DeleteUserVerify(context, name))));
+                              : (index == 3
+                                  ? Get.to(() => OptionChangePage(),
+                                      transition: Transition.rightToLeft)
+                                  : (index == 4 && name == null
+                                      ? GoToLogin(context)
+                                      : DeleteUserVerify(context, name)))));
                 },
                 child: Column(
                   children: [
@@ -73,7 +65,7 @@ class UserSettings extends StatelessWidget {
                         color: BGColor(),
                         child: SizedBox(
                           height: 40,
-                          width: MediaQuery.of(context).size.width - 80,
+                          width: MediaQuery.of(context).size.width - 60,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,7 +74,7 @@ class UserSettings extends StatelessWidget {
                                 fit: FlexFit.tight,
                                 child: Text(
                                     Hive.box('user_info').get('id') != null &&
-                                            index == 3
+                                            index == 4
                                         ? '회원탈퇴'
                                         : list_title[index],
                                     style: TextStyle(

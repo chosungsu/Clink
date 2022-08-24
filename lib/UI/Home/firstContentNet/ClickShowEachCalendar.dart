@@ -13,7 +13,7 @@ import '../../../Tool/TextSize.dart';
 import 'DayScript.dart';
 
 class ClickShowEachCalendar extends StatefulWidget {
-  ClickShowEachCalendar(
+  const ClickShowEachCalendar(
       {Key? key,
       required this.start,
       required this.finish,
