@@ -1,6 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachCalendar.dart';
@@ -15,9 +14,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../DB/Event.dart';
+import '../../../Tool/Getx/calendarshowsetting.dart';
+import '../../../Tool/Getx/calendarthemesetting.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../Tool/SheetGetx/SpaceShowRoom.dart';
-import '../../../Tool/SheetGetx/calendarthemesetting.dart';
 
 class DayContentHome extends StatefulWidget {
   const DayContentHome({
@@ -796,16 +795,17 @@ class _DayContentHomeState extends State<DayContentHome> {
                                       //수정 및 삭제 시트 띄우기
                                       Get.to(
                                           () => ClickShowEachCalendar(
-                                              start: snapshot.data!.docs[index]
-                                                  ['Timestart'],
-                                              finish: snapshot.data!.docs[index]
-                                                  ['Timefinish'],
-                                              calinfo: snapshot
-                                                  .data!.docs[index]['Daytodo'],
-                                              date: _selectedDay,
-                                              doc: widget.title,
-                                              alarm: snapshot
-                                                  .data!.docs[index]['Alarm'],),
+                                                start: snapshot.data!
+                                                    .docs[index]['Timestart'],
+                                                finish: snapshot.data!
+                                                    .docs[index]['Timefinish'],
+                                                calinfo: snapshot.data!
+                                                    .docs[index]['Daytodo'],
+                                                date: _selectedDay,
+                                                doc: widget.title,
+                                                alarm: snapshot
+                                                    .data!.docs[index]['Alarm'],
+                                              ),
                                           transition: Transition.downToUp);
                                     },
                                     child: Container(

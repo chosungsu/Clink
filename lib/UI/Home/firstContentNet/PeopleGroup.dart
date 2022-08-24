@@ -1,17 +1,14 @@
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../../../Tool/BGColor.dart';
+import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../Tool/SheetGetx/PeopleAdd.dart';
 import '../../../Tool/TextSize.dart';
-import 'package:contacts_service/contacts_service.dart';
 import '../../../sheets/addgroupmember.dart';
 
 class PeopleGroup extends StatefulWidget {

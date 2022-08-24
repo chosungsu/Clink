@@ -1,8 +1,6 @@
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -10,10 +8,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:page_transition/page_transition.dart';
-
-import '../Tool/SheetGetx/SpaceShowRoom.dart';
-import '../Tool/SheetGetx/navibool.dart';
-import '../Tool/SheetGetx/onequeform.dart';
+import '../Tool/Getx/navibool.dart';
+import '../Tool/Getx/onequeform.dart';
 import '../route.dart';
 
 addWhole(
@@ -54,25 +50,25 @@ addWhole(
     controller.clear();
     final cntget = Get.put(onequeform());
     cntget.setcnt();
-    final spaceroomset = Get.put(SpaceShowRoom());
-    spaceroomset.onInit();
-    Hive.box('user_setting').get('page_index') == 0
-        ? Navigator.of(context).pushReplacement(
-            PageTransition(
-              type: PageTransitionType.rightToLeft,
-              child: const MyHomePage(
-                index: 0,
+    if (s == 'home') {
+      Hive.box('user_setting').get('page_index') == 0
+          ? Navigator.of(context).pushReplacement(
+              PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child: const MyHomePage(
+                  index: 0,
+                ),
               ),
-            ),
-          )
-        : Navigator.of(context).pushReplacement(
-            PageTransition(
-              type: PageTransitionType.rightToLeft,
-              child: const MyHomePage(
-                index: 2,
+            )
+          : Navigator.of(context).pushReplacement(
+              PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child: const MyHomePage(
+                  index: 2,
+                ),
               ),
-            ),
-          );
+            );
+    }
   });
 }
 
@@ -222,13 +218,24 @@ content(
                     height: 20,
                   ),
                   SizedBox(
-                    height: 30,
-                    child: Text('카테고리를 선택하세요',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize())),
-                  ),
+                      height: 30,
+                      child: Row(
+                        children: [
+                          Text('카테고리를 선택하세요',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize())),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          const Text('필수항목',
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15)),
+                        ],
+                      )),
                   const SizedBox(
                     height: 20,
                   ),
@@ -561,6 +568,29 @@ content(
                           fontWeight: FontWeight.bold,
                         )),
                     messageText: Text('카드제목은 필수사항입니다.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    icon: const Icon(
+                      Icons.info_outline,
+                      size: 25.0,
+                      color: Colors.white,
+                    ),
+                    duration: const Duration(seconds: 1),
+                    leftBarIndicatorColor: Colors.red.shade100,
+                  ).show(context);
+                } else if (choicelist[0] == 0 && choicelist[1] == 0) {
+                  Flushbar(
+                    backgroundColor: Colors.red.shade400,
+                    titleText: Text('Notice',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTitleTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    messageText: Text('카테고리는 필수 선택사항입니다.',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: contentTextsize(),

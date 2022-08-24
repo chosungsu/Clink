@@ -1,19 +1,15 @@
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 
-import '../Tool/SheetGetx/calendarthemesetting.dart';
-
+import '../Tool/Getx/calendarshowsetting.dart';
+import '../Tool/Getx/calendarthemesetting.dart';
 
 SheetPage(
-  BuildContext context, int setcal_fromsheet,
-    calendarshowsetting controll_cals, calendarthemesetting controll_cals2, int themecal_fromsheet
-) {
-
+    BuildContext context,
+    int setcal_fromsheet,
+    calendarshowsetting controll_cals,
+    calendarthemesetting controll_cals2,
+    int themecal_fromsheet) {
   return SizedBox(
       height: 300,
       child: Padding(
@@ -47,7 +43,8 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              content(context, setcal_fromsheet, controll_cals, controll_cals2, themecal_fromsheet)
+              content(context, setcal_fromsheet, controll_cals, controll_cals2,
+                  themecal_fromsheet)
             ],
           )));
 }
@@ -70,9 +67,11 @@ title(
 }
 
 content(
-  BuildContext context, int setcal_fromsheet,
-    calendarshowsetting controll_cals, calendarthemesetting controll_cals2, int themecal_fromsheet
-) {
+    BuildContext context,
+    int setcal_fromsheet,
+    calendarshowsetting controll_cals,
+    calendarthemesetting controll_cals2,
+    int themecal_fromsheet) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
         height: 180,
@@ -103,8 +102,7 @@ content(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
-                                primary: setcal_fromsheet ==
-                                    0
+                                primary: setcal_fromsheet == 0
                                     ? Colors.grey.shade400
                                     : Colors.white,
                                 side: const BorderSide(
@@ -128,8 +126,7 @@ content(
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: setcal_fromsheet ==
-                                            0
+                                        color: setcal_fromsheet == 0
                                             ? Colors.white
                                             : Colors.black45,
                                       ),
@@ -154,8 +151,7 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: setcal_fromsheet ==
-                                  1
+                              primary: setcal_fromsheet == 1
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               side: const BorderSide(
@@ -179,8 +175,7 @@ content(
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: setcal_fromsheet ==
-                                          1
+                                      color: setcal_fromsheet == 1
                                           ? Colors.white
                                           : Colors.black45,
                                     ),
@@ -206,8 +201,7 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: setcal_fromsheet ==
-                                  2
+                              primary: setcal_fromsheet == 2
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               side: const BorderSide(
@@ -231,8 +225,7 @@ content(
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: setcal_fromsheet ==
-                                          2
+                                      color: setcal_fromsheet == 2
                                           ? Colors.white
                                           : Colors.black45,
                                     ),
@@ -276,8 +269,7 @@ content(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
-                                primary: themecal_fromsheet ==
-                                        0
+                                primary: themecal_fromsheet == 0
                                     ? Colors.grey.shade400
                                     : Colors.white,
                                 side: const BorderSide(
@@ -287,7 +279,8 @@ content(
                             onPressed: () {
                               setState(() {
                                 controll_cals2.themecals1();
-                                themecal_fromsheet = controll_cals2.themecalendar;
+                                themecal_fromsheet =
+                                    controll_cals2.themecalendar;
                               });
                             },
                             child: Center(
@@ -301,8 +294,7 @@ content(
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: themecal_fromsheet ==
-                                                0
+                                        color: themecal_fromsheet == 0
                                             ? Colors.white
                                             : Colors.black45,
                                       ),
@@ -327,8 +319,7 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: themecal_fromsheet ==
-                                      1
+                              primary: themecal_fromsheet == 1
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               side: const BorderSide(
@@ -352,8 +343,7 @@ content(
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: themecal_fromsheet ==
-                                              1
+                                      color: themecal_fromsheet == 1
                                           ? Colors.white
                                           : Colors.black45,
                                     ),

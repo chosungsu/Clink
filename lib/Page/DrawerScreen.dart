@@ -1,12 +1,12 @@
 import 'package:clickbyme/Enums/Drawer_item.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/Tool/SheetGetx/navibool.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
+import '../Tool/Getx/navibool.dart';
 import '../route.dart';
 import '../sheets/addWhole.dart';
 import 'HomePage.dart';

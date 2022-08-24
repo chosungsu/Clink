@@ -5,18 +5,14 @@ import 'package:clickbyme/UI/Home/firstContentNet/PeopleGroup.dart';
 import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:clickbyme/sheets/settingChoiceC.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../../../Page/HomePage.dart';
 import '../../../Tool/ContainerDesign.dart';
+import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../Tool/SheetGetx/PeopleAdd.dart';
-import '../../../Tool/SheetGetx/SpaceShowRoom.dart';
-import '../../../route.dart';
 import '../../../sheets/settingChoiceC_Cards.dart';
 
 class ChooseCalendar extends StatefulWidget {
@@ -80,7 +76,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _scrollController.dispose();
     super.dispose();
   }

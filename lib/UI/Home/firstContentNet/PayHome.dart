@@ -1,25 +1,18 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/SheetGetx/memosearchsetting.dart';
-import 'package:clickbyme/Tool/SheetGetx/memosortsetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachNote.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
-import 'package:clickbyme/sheets/settingMemoHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../../../Page/HomePage.dart';
+import '../../../Tool/Getx/memosearchsetting.dart';
+import '../../../Tool/Getx/memosortsetting.dart';
+import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../Tool/SheetGetx/selectcollection.dart';
 import '../../../sheets/addPayStory.dart';
-import '../../../sheets/addWhole.dart';
-import '../secondContentNet/EventShowCard.dart';
 
 class PayHome extends StatefulWidget {
   const PayHome({

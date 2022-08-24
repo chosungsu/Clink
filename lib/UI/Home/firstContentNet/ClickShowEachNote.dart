@@ -1,25 +1,21 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Tool/BGColor.dart';
+import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../Tool/SheetGetx/selectcollection.dart';
 import '../../../Tool/TextSize.dart';
 import 'DayScript.dart';
 
 class ClickShowEachNote extends StatefulWidget {
-  ClickShowEachNote({
+  const ClickShowEachNote({
     Key? key,
     required this.date,
     required this.doc,
@@ -83,7 +79,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
     textEditingController_add_sheet = TextEditingController();
     Hive.box('user_setting').put('memocollection', widget.doccollection);
     _color = widget.doccolor != null ? Color(widget.doccolor) : BGColor();
-    //scollection.addmemolist(widget.docindex.length);
     for (int j = 0; j < widget.docindex.length; j++) {
       Hive.box('user_setting').put('optionmemoinput', widget.docindex[j]);
       scollection.addmemolistin(j);
@@ -97,7 +92,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     textEditingController1.dispose();
     textEditingController_add_sheet.dispose();
@@ -975,7 +969,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                   width: 20,
                 ),
                 const Text('필수항목',
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
@@ -1070,7 +1064,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
               height: 30,
               child: Text(
                 '+아이콘으로 MY컬렉션을 추가 및 지정해주세요',
-                style: const TextStyle(
+                style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                     color: Colors.blue),
@@ -1116,7 +1110,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
               height: 30,
               child: Text(
                 '하단 아이콘으로 메모내용 작성하시면 됩니다.',
-                style: const TextStyle(
+                style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                     color: Colors.blue),

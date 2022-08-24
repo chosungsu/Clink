@@ -1,4 +1,3 @@
-import 'package:clickbyme/Page/AnalyticPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -22,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //curved navi index
   int _selectedIndex = 0;
   int page_index = Hive.box('user_setting').get('page_index') ?? 0;
-  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   late DateTime backbuttonpressedTime;
   int navi = 0;
   TextEditingController controller = TextEditingController();
@@ -32,7 +31,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _selectedIndex = widget.index;
     navi = NaviWhere();

@@ -1,14 +1,15 @@
-import 'package:clickbyme/Tool/SheetGetx/memosearchsetting.dart';
-import 'package:clickbyme/Tool/SheetGetx/memosortsetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:hive/hive.dart';
+
+import '../Tool/Getx/memosearchsetting.dart';
+import '../Tool/Getx/memosortsetting.dart';
 
 SheetPage_memo(
-  BuildContext context, int sortmemo_fromsheet,
-    memosearchsetting controll_memo, memosortsetting controll_memo2, int searchmemo_fromsheet,
+  BuildContext context,
+  int sortmemo_fromsheet,
+  memosearchsetting controll_memo,
+  memosortsetting controll_memo2,
+  int searchmemo_fromsheet,
 ) {
   return SizedBox(
       height: 300,
@@ -42,7 +43,8 @@ SheetPage_memo(
               const SizedBox(
                 height: 20,
               ),
-              content(context, sortmemo_fromsheet, controll_memo, controll_memo2, searchmemo_fromsheet)
+              content(context, sortmemo_fromsheet, controll_memo,
+                  controll_memo2, searchmemo_fromsheet)
             ],
           )));
 }
@@ -65,8 +67,11 @@ title(
 }
 
 content(
-  BuildContext context, int sortmemo_fromsheet,
-    memosearchsetting controll_memo, memosortsetting controll_memo2, int searchmemo_fromsheet,
+  BuildContext context,
+  int sortmemo_fromsheet,
+  memosearchsetting controll_memo,
+  memosortsetting controll_memo2,
+  int searchmemo_fromsheet,
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -97,8 +102,7 @@ content(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
-                                primary: searchmemo_fromsheet ==
-                                        0
+                                primary: searchmemo_fromsheet == 0
                                     ? Colors.grey.shade400
                                     : Colors.white,
                                 side: const BorderSide(
@@ -122,8 +126,7 @@ content(
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: searchmemo_fromsheet ==
-                                                0
+                                        color: searchmemo_fromsheet == 0
                                             ? Colors.white
                                             : Colors.black45,
                                       ),
@@ -148,8 +151,7 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: searchmemo_fromsheet ==
-                                      1
+                              primary: searchmemo_fromsheet == 1
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               side: const BorderSide(
@@ -173,8 +175,7 @@ content(
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: searchmemo_fromsheet ==
-                                              1
+                                      color: searchmemo_fromsheet == 1
                                           ? Colors.white
                                           : Colors.black45,
                                     ),
@@ -200,8 +201,7 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: searchmemo_fromsheet ==
-                                      2
+                              primary: searchmemo_fromsheet == 2
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               side: const BorderSide(
@@ -225,8 +225,7 @@ content(
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: searchmemo_fromsheet ==
-                                              2
+                                      color: searchmemo_fromsheet == 2
                                           ? Colors.white
                                           : Colors.black45,
                                     ),
@@ -270,8 +269,7 @@ content(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
-                                primary: sortmemo_fromsheet ==
-                                    0
+                                primary: sortmemo_fromsheet == 0
                                     ? Colors.grey.shade400
                                     : Colors.white,
                                 side: const BorderSide(
@@ -295,8 +293,7 @@ content(
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: sortmemo_fromsheet ==
-                                            0
+                                        color: sortmemo_fromsheet == 0
                                             ? Colors.white
                                             : Colors.black45,
                                       ),
@@ -321,8 +318,7 @@ content(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100)),
-                              primary: sortmemo_fromsheet ==
-                                  1
+                              primary: sortmemo_fromsheet == 1
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               side: const BorderSide(
@@ -346,8 +342,7 @@ content(
                                     style: NeumorphicStyle(
                                       shape: NeumorphicShape.flat,
                                       depth: 3,
-                                      color: sortmemo_fromsheet ==
-                                          1
+                                      color: sortmemo_fromsheet == 1
                                           ? Colors.white
                                           : Colors.black45,
                                     ),

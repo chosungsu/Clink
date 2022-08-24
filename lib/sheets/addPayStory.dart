@@ -1,17 +1,12 @@
-import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
-import 'package:another_flushbar/flushbar.dart';
 
-import '../Tool/SheetGetx/SpaceShowRoom.dart';
-import '../Tool/SheetGetx/onequeform.dart';
+import '../Tool/Getx/onequeform.dart';
 
 addPaystory(
   BuildContext context,
@@ -47,8 +42,6 @@ addPaystory(
     controller.clear();
     final cntget = Get.put(onequeform());
     cntget.setcnt();
-    final spaceroomset = Get.put(SpaceShowRoom());
-    spaceroomset.onInit();
   });
 }
 

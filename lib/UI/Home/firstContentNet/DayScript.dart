@@ -1,25 +1,21 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:clickbyme/LocalNotiPlatform/localnotification.dart';
-import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/SheetGetx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../DB/Event.dart';
 import '../../../DB/MemoList.dart';
+import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
+import '../../../Tool/Getx/PeopleAdd.dart';
+import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../Tool/SheetGetx/selectcollection.dart';
 import '../../../sheets/addmemocollection.dart';
 
 class DayScript extends StatefulWidget {

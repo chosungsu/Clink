@@ -1,13 +1,6 @@
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/Tool/SheetGetx/calendarshowsetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-
-import '../Tool/BGColor.dart';
-import '../Tool/SheetGetx/calendarthemesetting.dart';
 
 SheetPageCC(BuildContext context, doc_id, doc_shares, doc_change) {
   return SizedBox(

@@ -1,7 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/SheetGetx/memosearchsetting.dart';
-import 'package:clickbyme/Tool/SheetGetx/memosortsetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachNote.dart';
@@ -14,11 +12,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../../../Page/HomePage.dart';
+import '../../../Tool/Getx/memosearchsetting.dart';
+import '../../../Tool/Getx/memosortsetting.dart';
+import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../Tool/SheetGetx/selectcollection.dart';
 import '../../../sheets/MemoSaveAtHome.dart';
-import '../../../sheets/addWhole.dart';
 
 class DayNoteHome extends StatefulWidget {
   const DayNoteHome({
@@ -49,6 +47,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   String tmpsummary = '';
   DateTime Date = DateTime.now();
   TextEditingController controller = TextEditingController();
+  ScrollController _scrollController = ScrollController();
+  bool _showBackToTopButton = false;
 
   @override
   void didChangeDependencies() {
@@ -63,13 +63,31 @@ class _DayNoteHomeState extends State<DayNoteHome> {
     sortmemo_fromsheet = controll_memo2.memosort;
     controller = TextEditingController();
     sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
+    _scrollController = ScrollController()
+      ..addListener(() {
+        setState(() {
+          if (_scrollController.offset >= 150) {
+            _showBackToTopButton = true; // show the back-to-top button
+          } else {
+            _showBackToTopButton = false; // hide the back-to-top button
+          }
+        });
+      });
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
+    _scrollController.dispose();
     controller.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.easeIn);
+    if (_scrollController.offset == 300) {
+      _showBackToTopButton = false; // show the back-to-top button
+    }
   }
 
   Future<bool> _onWillPop() async {
@@ -86,68 +104,85 @@ class _DayNoteHomeState extends State<DayNoteHome> {
               onWillPop: _onWillPop,
               child: UI(),
             ),
-            floatingActionButton: SpeedDial(
-                activeIcon: Icons.close,
-                icon: Icons.add,
-                backgroundColor: Colors.blue,
-                overlayColor: BGColor(),
-                overlayOpacity: 0.4,
-                spacing: 10,
-                spaceBetweenChildren: 10,
-                children: [
-                  SpeedDialChild(
-                    child: NeumorphicIcon(
-                      Icons.local_offer,
-                      size: 30,
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          depth: 2,
-                          surfaceIntensity: 0.5,
+            floatingActionButton: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _showBackToTopButton == false
+                    ? const SizedBox()
+                    : FloatingActionButton(
+                        onPressed: _scrollToTop,
+                        backgroundColor: BGColor(),
+                        child: Icon(
+                          Icons.arrow_upward,
                           color: TextColor(),
-                          lightSource: LightSource.topLeft),
-                    ),
-                    backgroundColor: Colors.blue.shade200,
-                    onTap: () {
-                      addmemocollector(context, username, controller,
-                          searchNode, 'outside', scollection);
-                    },
-                    label: '메모태그 추가',
-                    labelStyle: TextStyle(
-                        color: Colors.black45,
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize()),
-                  ),
-                  SpeedDialChild(
-                    child: NeumorphicIcon(
-                      Icons.add,
-                      size: 30,
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          depth: 2,
-                          surfaceIntensity: 0.5,
-                          color: TextColor(),
-                          lightSource: LightSource.topLeft),
-                    ),
-                    backgroundColor: Colors.orange.shade200,
-                    onTap: () {
-                      Get.to(
-                          () => DayScript(
-                                firstdate: DateTime.now(),
-                                lastdate: DateTime.now(),
-                                position: 'note',
-                                title: '',
-                                share: [],
-                                orig: '',
-                              ),
-                          transition: Transition.downToUp);
-                    },
-                    label: '메모 추가',
-                    labelStyle: TextStyle(
-                        color: Colors.black45,
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize()),
-                  ),
-                ])));
+                        ),
+                      ),
+                const SizedBox(width: 10),
+                SpeedDial(
+                    activeIcon: Icons.close,
+                    icon: Icons.add,
+                    backgroundColor: Colors.blue,
+                    overlayColor: BGColor(),
+                    overlayOpacity: 0.4,
+                    spacing: 10,
+                    spaceBetweenChildren: 10,
+                    children: [
+                      SpeedDialChild(
+                        child: NeumorphicIcon(
+                          Icons.local_offer,
+                          size: 30,
+                          style: NeumorphicStyle(
+                              shape: NeumorphicShape.convex,
+                              depth: 2,
+                              surfaceIntensity: 0.5,
+                              color: TextColor(),
+                              lightSource: LightSource.topLeft),
+                        ),
+                        backgroundColor: Colors.blue.shade200,
+                        onTap: () {
+                          addmemocollector(context, username, controller,
+                              searchNode, 'outside', scollection);
+                        },
+                        label: '메모태그 추가',
+                        labelStyle: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize()),
+                      ),
+                      SpeedDialChild(
+                        child: NeumorphicIcon(
+                          Icons.add,
+                          size: 30,
+                          style: NeumorphicStyle(
+                              shape: NeumorphicShape.convex,
+                              depth: 2,
+                              surfaceIntensity: 0.5,
+                              color: TextColor(),
+                              lightSource: LightSource.topLeft),
+                        ),
+                        backgroundColor: Colors.orange.shade200,
+                        onTap: () {
+                          Get.to(
+                              () => DayScript(
+                                    firstdate: DateTime.now(),
+                                    lastdate: DateTime.now(),
+                                    position: 'note',
+                                    title: '',
+                                    share: const [],
+                                    orig: '',
+                                  ),
+                              transition: Transition.downToUp);
+                        },
+                        label: '메모 추가',
+                        labelStyle: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize()),
+                      ),
+                    ]),
+              ],
+            )));
   }
 
   UI() {
@@ -274,22 +309,25 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                   child: SizedBox(
                     child: ScrollConfiguration(
                       behavior: NoBehavior(),
-                      child: SingleChildScrollView(child:
-                          StatefulBuilder(builder: (_, StateSetter setState) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 20,
+                      child: SingleChildScrollView(
+                          controller: _scrollController,
+                          physics: const ScrollPhysics(),
+                          child: StatefulBuilder(
+                              builder: (_, StateSetter setState) {
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  listy_My(),
+                                ],
                               ),
-                              listy_My(),
-                            ],
-                          ),
-                        );
-                      })),
+                            );
+                          })),
                     ),
                   )),
             ],
@@ -345,8 +383,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
 
   settingMemoHome(
     BuildContext context,
-    memosearchsetting controll_memo,
-    memosortsetting controll_memo2,
+    memosearchsetting controllMemo,
+    memosortsetting controllMemo2,
   ) {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -378,12 +416,12 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
                     child: SheetPage_memo(context, sortmemo_fromsheet,
-                        controll_memo, controll_memo2, searchmemo_fromsheet),
+                        controllMemo, controllMemo2, searchmemo_fromsheet),
                   )));
         }).whenComplete(() {
       setState(() {
-        sortmemo_fromsheet = controll_memo2.memosort;
-        searchmemo_fromsheet = controll_memo.memosearch;
+        sortmemo_fromsheet = controllMemo2.memosort;
+        searchmemo_fromsheet = controllMemo.memosearch;
       });
     });
   }
@@ -649,7 +687,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [const Center(child: CircularProgressIndicator())],
+              children: const [Center(child: CircularProgressIndicator())],
             );
           }
           return Column(
