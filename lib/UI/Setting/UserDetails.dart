@@ -5,7 +5,9 @@ import 'package:focused_menu/modals.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../../Auth/GoogleSignInController.dart';
+import '../../Auth/KakaoSignInController.dart';
 import '../Sign/UserCheck.dart';
 import 'DeleteUser.dart';
 
@@ -24,22 +26,14 @@ class UserDetails extends StatelessWidget {
                           Icons.account_circle,
                           size: 30,
                         ),
-                        backgroundColor: Hive.box('user_info').get('id') == null
-                            ? Colors.blue.shade200
-                            : Colors.red.shade200,
-                        title: Text(
-                            Hive.box('user_info').get('id') == null
-                                ? '로그인'
-                                : '회원탈퇴',
+                        backgroundColor: Colors.blue.shade200,
+                        title: Text('로그인',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize())),
                         onPressed: () {
-                          Hive.box('user_info').get('id') == null
-                              ? GoToLogin(context)
-                              : DeleteUserVerify(
-                                  context, Hive.box('user_info').get('id'));
+                          GoToLogin(context);
                         })
                   ],
                 duration: const Duration(seconds: 0),
@@ -54,41 +48,22 @@ class UserDetails extends StatelessWidget {
                     child: Column(
                       children: [
                         ListTile(
-                          subtitle: Hive.box('user_info').get('id') == null
-                              ? const Text(
-                                  '이 카드를 클릭하셔서 로그인하세요!',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                  overflow: TextOverflow.fade,
-                                )
-                              : const Text(
-                                  'MY 정보 확인하시려면 카드 클릭하세요!',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                  overflow: TextOverflow.fade,
-                                ),
-                          title: Hive.box('user_info').get('id') == null
-                              ? Text(
-                                  '현재 로그인이 되어있지 않습니다.',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                  overflow: TextOverflow.fade,
-                                )
-                              : Text(
-                                  Hive.box('user_info').get('id').toString() +
-                                      '님 Profile Card',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                  overflow: TextOverflow.fade,
-                                ),
+                          subtitle: const Text(
+                            '이 카드를 클릭하셔서 로그인하세요!',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                            overflow: TextOverflow.fade,
+                          ),
+                          title: Text(
+                            '현재 로그인이 되어있지 않습니다.',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize()),
+                            overflow: TextOverflow.fade,
+                          ),
                         )
                       ],
                     )))
@@ -105,6 +80,12 @@ class UserDetails extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize())),
                         onPressed: () {
+                          Provider.of<GoogleSignInController>(context,
+                                  listen: false)
+                              .logout(context, Hive.box('user_info').get('id'));
+                          Provider.of<KakaoSignInController>(context,
+                                  listen: false)
+                              .logout(context, Hive.box('user_info').get('id'));
                           GoToLogin(context);
                         }),
                     FocusedMenuItem(
@@ -123,22 +104,15 @@ class UserDetails extends StatelessWidget {
                           Icons.account_circle,
                           size: 30,
                         ),
-                        backgroundColor: Hive.box('user_info').get('id') == null
-                            ? Colors.blue.shade200
-                            : Colors.red.shade200,
-                        title: Text(
-                            Hive.box('user_info').get('id') == null
-                                ? '로그인'
-                                : '회원탈퇴',
+                        backgroundColor: Colors.red.shade200,
+                        title: Text('회원탈퇴',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize())),
                         onPressed: () {
-                          Hive.box('user_info').get('id') == null
-                              ? GoToLogin(context)
-                              : DeleteUserVerify(
-                                  context, Hive.box('user_info').get('id'));
+                          DeleteUserVerify(
+                              context, Hive.box('user_info').get('id'));
                         })
                   ],
                 duration: const Duration(seconds: 0),
@@ -153,41 +127,23 @@ class UserDetails extends StatelessWidget {
                     child: Column(
                       children: [
                         ListTile(
-                          subtitle: Hive.box('user_info').get('id') == null
-                              ? const Text(
-                                  '이 카드를 클릭하셔서 로그인하세요!',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                  overflow: TextOverflow.fade,
-                                )
-                              : const Text(
-                                  'MY 정보 확인하시려면 카드 클릭하세요!',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                  overflow: TextOverflow.fade,
-                                ),
-                          title: Hive.box('user_info').get('id') == null
-                              ? Text(
-                                  '현재 로그인이 되어있지 않습니다.',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                  overflow: TextOverflow.fade,
-                                )
-                              : Text(
-                                  Hive.box('user_info').get('id').toString() +
-                                      '님 Profile Card',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                  overflow: TextOverflow.fade,
-                                ),
+                          subtitle: const Text(
+                            'MY 정보 확인하시려면 카드 클릭하세요!',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                            overflow: TextOverflow.fade,
+                          ),
+                          title: Text(
+                            Hive.box('user_info').get('id').toString() +
+                                '님 Profile Card',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize()),
+                            overflow: TextOverflow.fade,
+                          ),
                         )
                       ],
                     ))));

@@ -74,10 +74,10 @@ DeleteUserVerify(BuildContext context, String name) {
                           onPressed: () async {
                             Provider.of<GoogleSignInController>(context,
                                     listen: false)
-                                .logout(context, name);
+                                .Deletelogout(context, name);
                             Provider.of<KakaoSignInController>(context,
                                     listen: false)
-                                .logout(context, name);
+                                .Deletelogout(context, name);
                             GoToLogin(context);
                           },
                           style: ElevatedButton.styleFrom(

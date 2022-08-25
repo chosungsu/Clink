@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
@@ -1035,96 +1036,185 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                   child: FocusedMenuHolder(
                                     menuItems: [
                                       FocusedMenuItem(
-                                          trailingIcon: const Icon(
-                                            Icons.share,
-                                            size: 30,
-                                          ),
+                                          trailingIcon:
+                                              snapshot.data!.docs[index]
+                                                      ['allowance_share']
+                                                  ? const Icon(
+                                                      Icons.share,
+                                                      size: 30,
+                                                    )
+                                                  : const Icon(
+                                                      Icons.block,
+                                                      size: 30,
+                                                      color: Colors.red,
+                                                    ),
                                           title: Text('재공유하기',
                                               style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize(),
-                                                  decorationThickness: 2.3,
-                                                  decoration: snapshot
-                                                              .data!.docs[index]
-                                                          ['allowance_share']
-                                                      ? null
-                                                      : TextDecoration
-                                                          .lineThrough)),
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize(),
+                                              )),
                                           onPressed: () {
                                             //공유자 검색
-                                            Hive.box('user_setting').put(
-                                                'share_cal_person',
-                                                snapshot.data!.docs[index]
-                                                    ['share']);
+                                            if (snapshot.data!.docs[index]
+                                                ['allowance_share']) {
+                                              Hive.box('user_setting').put(
+                                                  'share_cal_person',
+                                                  snapshot.data!.docs[index]
+                                                      ['share']);
 
-                                            Future.delayed(
-                                                const Duration(seconds: 1), () {
-                                              Get.to(
-                                                () => PeopleGroup(
-                                                  doc: snapshot
-                                                      .data!.docs[index]['doc'],
-                                                  when: snapshot.data!
-                                                      .docs[index]['date'],
-                                                  type: snapshot.data!
-                                                      .docs[index]['type'],
-                                                  color: snapshot.data!
-                                                      .docs[index]['color'],
-                                                  nameid: snapshot.data!
-                                                      .docs[index]['calname'],
-                                                  share: snapshot.data!
-                                                      .docs[index]['share'],
-                                                  made: snapshot.data!
-                                                      .docs[index]['madeUser'],
-                                                  allow_share:
-                                                      snapshot.data!.docs[index]
-                                                          ['allowance_share'],
-                                                  allow_change_set: snapshot
-                                                          .data!.docs[index]
-                                                      ['allowance_change_set'],
+                                              Future.delayed(
+                                                  const Duration(seconds: 1),
+                                                  () {
+                                                Get.to(
+                                                  () => PeopleGroup(
+                                                    doc: snapshot.data!
+                                                        .docs[index]['doc'],
+                                                    when: snapshot.data!
+                                                        .docs[index]['date'],
+                                                    type: snapshot.data!
+                                                        .docs[index]['type'],
+                                                    color: snapshot.data!
+                                                        .docs[index]['color'],
+                                                    nameid: snapshot.data!
+                                                        .docs[index]['calname'],
+                                                    share: snapshot.data!
+                                                        .docs[index]['share'],
+                                                    made: snapshot
+                                                            .data!.docs[index]
+                                                        ['madeUser'],
+                                                    allow_share: snapshot
+                                                            .data!.docs[index]
+                                                        ['allowance_share'],
+                                                    allow_change_set: snapshot
+                                                            .data!.docs[index][
+                                                        'allowance_change_set'],
+                                                  ),
+                                                  transition:
+                                                      Transition.downToUp,
+                                                );
+                                              });
+                                            } else {
+                                              Flushbar(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    bottom: 10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                backgroundColor:
+                                                    Colors.red.shade400,
+                                                titleText: Text('Notice',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize:
+                                                          contentTitleTextsize(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
+                                                messageText:
+                                                    Text('원작성자에게 권한을 요청하세요!',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        )),
+                                                icon: const Icon(
+                                                  Icons.info_outline,
+                                                  size: 25.0,
+                                                  color: Colors.white,
                                                 ),
-                                                transition: Transition.downToUp,
-                                              );
-                                            });
+                                                duration:
+                                                    const Duration(seconds: 1),
+                                                leftBarIndicatorColor:
+                                                    Colors.red.shade100,
+                                              ).show(context);
+                                            }
                                           }),
                                       FocusedMenuItem(
                                           backgroundColor: Colors.red.shade200,
-                                          trailingIcon: const Icon(
-                                            Icons.edit,
-                                            size: 30,
-                                          ),
+                                          trailingIcon:
+                                              snapshot.data!.docs[index]
+                                                      ['allowance_change_set']
+                                                  ? const Icon(
+                                                      Icons.edit,
+                                                      size: 30,
+                                                    )
+                                                  : const Icon(
+                                                      Icons.block,
+                                                      size: 30,
+                                                      color: Colors.red,
+                                                    ),
                                           title: Text('카드 설정',
                                               style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize(),
-                                                  decorationThickness: 2.3,
-                                                  decoration: snapshot.data!
-                                                              .docs[index][
-                                                          'allowance_change_set']
-                                                      ? null
-                                                      : TextDecoration
-                                                          .lineThrough)),
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize(),
+                                              )),
                                           onPressed: () {
                                             //삭제 및 이름변경 띄우기
-                                            controller = TextEditingController(
-                                                text: snapshot.data!.docs[index]
-                                                    ['calname']);
-                                            settingChoiceCal(
-                                                context,
-                                                controller,
-                                                snapshot.data!.docs[index]
-                                                    ['doc'],
-                                                snapshot.data!.docs[index]
-                                                    ['type'],
-                                                snapshot.data!.docs[index]
-                                                    ['color'],
-                                                snapshot.data!.docs[index]
-                                                    ['calname'],
-                                                snapshot.data!.docs[index]
-                                                    ['madeUser'],
-                                                searchNode,
-                                                finallist);
+                                            if (snapshot.data!.docs[index]
+                                                ['allowance_change_set']) {
+                                              controller =
+                                                  TextEditingController(
+                                                      text: snapshot
+                                                              .data!.docs[index]
+                                                          ['calname']);
+                                              settingChoiceCal(
+                                                  context,
+                                                  controller,
+                                                  snapshot.data!.docs[index]
+                                                      ['doc'],
+                                                  snapshot.data!.docs[index]
+                                                      ['type'],
+                                                  snapshot.data!.docs[index]
+                                                      ['color'],
+                                                  snapshot.data!.docs[index]
+                                                      ['calname'],
+                                                  snapshot.data!.docs[index]
+                                                      ['madeUser'],
+                                                  searchNode,
+                                                  finallist);
+                                            } else {
+                                              Flushbar(
+                                                margin: const EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    bottom: 10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                backgroundColor:
+                                                    Colors.red.shade400,
+                                                titleText: Text('Notice',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize:
+                                                          contentTitleTextsize(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
+                                                messageText:
+                                                    Text('원작성자에게 권한을 요청하세요!',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        )),
+                                                icon: const Icon(
+                                                  Icons.info_outline,
+                                                  size: 25.0,
+                                                  color: Colors.white,
+                                                ),
+                                                duration:
+                                                    const Duration(seconds: 1),
+                                                leftBarIndicatorColor:
+                                                    Colors.red.shade100,
+                                              ).show(context);
+                                            }
                                           }),
                                     ],
                                     duration: const Duration(seconds: 0),

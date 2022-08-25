@@ -23,33 +23,42 @@ class GoogleSignInController with ChangeNotifier {
     Hive.box('user_info').put('autologin', ischecked);
     String codes = Hive.box('user_info').get('id').toString().length > 5
         ? Hive.box('user_info').get('email').toString().substring(0, 3) +
-        Hive.box('user_info')
-            .get('email')
-            .toString()
-            .split('@')[1]
-            .substring(0, 2) +
+            Hive.box('user_info')
+                .get('email')
+                .toString()
+                .split('@')[1]
+                .substring(0, 2) +
             Hive.box('user_info').get('id').toString().substring(0, 4)
         : Hive.box('user_info').get('email').toString().substring(0, 3) +
-        Hive.box('user_info')
-            .get('email')
-            .toString()
-            .split('@')[1]
-            .substring(0, 2) + 
+            Hive.box('user_info')
+                .get('email')
+                .toString()
+                .split('@')[1]
+                .substring(0, 2) +
             Hive.box('user_info').get('id').toString().substring(0, 2);
     //firestore 저장
     await firestore.collection('User').doc(nick).set({
       'name': nick,
       'email': email,
       'login_where': 'google_user',
-      'time': DateTime.now(), 
-      'autologin' : ischecked,
-      'code' : codes
+      'time': DateTime.now(),
+      'autologin': ischecked,
+      'code': codes
     });
 
     notifyListeners();
   }
 
   logout(BuildContext context, String name) async {
+    count = -1;
+    googleSignInAccount = await _googleSignIn.signOut();
+    Hive.box('user_info').delete('id');
+    //firestore 삭제
+    await firestore.collection('User').doc(name).delete();
+    notifyListeners();
+  }
+
+  Deletelogout(BuildContext context, String name) async {
     count = -1;
     googleSignInAccount = await _googleSignIn.signOut();
     Hive.box('user_info').delete('id');

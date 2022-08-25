@@ -560,6 +560,9 @@ content(
               onPressed: () {
                 if (controller.text.isEmpty) {
                   Flushbar(
+                    margin:
+                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    borderRadius: BorderRadius.circular(10),
                     backgroundColor: Colors.red.shade400,
                     titleText: Text('Notice',
                         style: TextStyle(
@@ -583,6 +586,9 @@ content(
                   ).show(context);
                 } else if (choicelist[0] == 0 && choicelist[1] == 0) {
                   Flushbar(
+                    margin:
+                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    borderRadius: BorderRadius.circular(10),
                     backgroundColor: Colors.red.shade400,
                     titleText: Text('Notice',
                         style: TextStyle(
@@ -607,6 +613,9 @@ content(
                 } else {
                   setState(() {
                     Flushbar(
+                      margin: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 10),
+                      borderRadius: BorderRadius.circular(10),
                       backgroundColor: Colors.green.shade400,
                       titleText: Text('Notice',
                           style: TextStyle(
@@ -668,6 +677,9 @@ content(
                   });
 
                   Flushbar(
+                    margin:
+                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    borderRadius: BorderRadius.circular(10),
                     backgroundColor: Colors.blue.shade400,
                     titleText: Text('Notice',
                         style: TextStyle(

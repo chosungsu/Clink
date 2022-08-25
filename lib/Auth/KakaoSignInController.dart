@@ -64,4 +64,13 @@ class KakaoSignInController with ChangeNotifier {
     await firestore.collection('User').doc(name).delete();
     notifyListeners();
   }
+
+  Deletelogout(BuildContext context, String name) async {
+    count = -2;
+    Hive.box('user_info').delete('id');
+    await UserApi.instance.logout();
+    //firestore 삭제
+    await firestore.collection('User').doc(name).delete();
+    notifyListeners();
+  }
 }

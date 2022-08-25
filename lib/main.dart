@@ -38,11 +38,11 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => GoogleSignInController(),
-          child: LoginSignPage(),
+          child: const LoginSignPage(),
         ),
         ChangeNotifierProvider(
           create: (context) => KakaoSignInController(),
-          child: LoginSignPage(),
+          child: const LoginSignPage(),
         ),
         /*ChangeNotifierProvider(
           create: (context) => GoogleSignInController(),
@@ -117,7 +117,7 @@ class _SplashPageState extends State<SplashPage>
     scaleAnimation =
         Tween<double>(begin: 0.0, end: 12).animate(scaleController);
 
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       setState(() {
         scaleController.forward();
       });
