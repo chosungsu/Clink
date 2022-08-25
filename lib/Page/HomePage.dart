@@ -867,7 +867,7 @@ class _HomePageState extends State<HomePage> {
                                                       children: [
                                                         Center(
                                                           child: NeumorphicText(
-                                                            '보여드릴 공유된 오늘의 일정이 없습니다.',
+                                                            '보여드릴 공유된 일정이 없습니다.',
                                                             style:
                                                                 NeumorphicStyle(
                                                               shape:

@@ -8,6 +8,8 @@ import 'package:clickbyme/sheets/settingMemoHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -16,7 +18,6 @@ import '../../../Tool/Getx/memosearchsetting.dart';
 import '../../../Tool/Getx/memosortsetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/MemoSaveAtHome.dart';
 
 class DayNoteHome extends StatefulWidget {
   const DayNoteHome({
@@ -500,17 +501,58 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                             height: 10,
                           ),
                           GestureDetector(
-                            onLongPress: () {
-                              //홈화면에 띄울것인가를 묻는 로직
-                              MemoSave(
-                                  context,
-                                  snapshot.data!.docs[index].id,
-                                  snapshot.data!.docs[index]['Collection'],
-                                  snapshot.data!.docs[index]['color'],
-                                  snapshot.data!.docs[index]['memoTitle'],
-                                  username);
-                            },
-                            onTap: () {
+                              child: FocusedMenuHolder(
+                            menuItems: [
+                              FocusedMenuItem(
+                                  trailingIcon: Icon(
+                                    snapshot.data!.docs[index]['homesave'] ==
+                                            false
+                                        ? Icons.launch
+                                        : Icons.block,
+                                    color: snapshot.data!.docs[index]
+                                                ['homesave'] ==
+                                            false
+                                        ? Colors.blue.shade400
+                                        : Colors.red.shade400,
+                                  ),
+                                  title: Text(
+                                      snapshot.data!.docs[index]['homesave'] ==
+                                              false
+                                          ? '내보내기'
+                                          : '내보내기 중단',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize())),
+                                  onPressed: () {
+                                    setState(() {
+                                      snapshot.data!.docs[index]['homesave'] ==
+                                              false
+                                          ? firestore
+                                              .collection('MemoDataBase')
+                                              .doc(
+                                                  snapshot.data!.docs[index].id)
+                                              .update({
+                                              'homesave': true,
+                                            })
+                                          : firestore
+                                              .collection('MemoDataBase')
+                                              .doc(
+                                                  snapshot.data!.docs[index].id)
+                                              .update({
+                                              'homesave': false,
+                                            });
+                                    });
+                                  }),
+                            ],
+                            duration: const Duration(seconds: 0),
+                            animateMenuItems: true,
+                            menuOffset: 20,
+                            bottomOffsetHeight: 10,
+                            menuWidth:
+                                (MediaQuery.of(context).size.width - 50) / 2,
+                            openWithTap: false,
+                            onPressed: () {
                               //개별 노트로 이동로직
                               Get.to(
                                   () => ClickShowEachNote(
@@ -679,7 +721,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                 ),
                               ],
                             ),
-                          )
+                          ))
                         ],
                       );
                     });

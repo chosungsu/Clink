@@ -24,7 +24,6 @@ class UserSettings extends StatelessWidget {
     '설정값 변경',
     '친구 초대하기',
     '라이선스',
-    '로그인',
   ];
   final PageController pcontroll;
   var name = Hive.box('user_info').get('id');
@@ -49,12 +48,8 @@ class UserSettings extends StatelessWidget {
                               transition: Transition.rightToLeft)
                           : (index == 2
                               ? addgroupmember(context, searchNode, controller)
-                              : (index == 3
-                                  ? Get.to(() => OptionChangePage(),
-                                      transition: Transition.rightToLeft)
-                                  : (index == 4 && name == null
-                                      ? GoToLogin(context)
-                                      : DeleteUserVerify(context, name)))));
+                              : Get.to(() => OptionChangePage(),
+                                  transition: Transition.rightToLeft)));
                 },
                 child: Column(
                   children: [
@@ -72,11 +67,7 @@ class UserSettings extends StatelessWidget {
                             children: [
                               Flexible(
                                 fit: FlexFit.tight,
-                                child: Text(
-                                    Hive.box('user_info').get('id') != null &&
-                                            index == 4
-                                        ? '회원탈퇴'
-                                        : list_title[index],
+                                child: Text(list_title[index],
                                     style: TextStyle(
                                         color: TextColor(),
                                         fontWeight: FontWeight.bold,

@@ -228,12 +228,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   S_Container1(double height) {
     return SizedBox(
-      height: 155,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 150,
             child: UserDetails(height: height),
           )
         ],

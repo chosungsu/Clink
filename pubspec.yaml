@@ -95,6 +95,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   contacts_service: ^0.6.3
   flutter_app_badger: ^1.4.0
+  focused_menu: ^1.0.5
 
 dev_dependencies:
   flutter_test:

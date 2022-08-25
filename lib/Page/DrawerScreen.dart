@@ -39,79 +39,80 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-          border:
-              Border(right: BorderSide(color: BGColor_shadowcolor(), width: 1)),
-          color: BGColor()),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: drawerItems.map((element) {
-          selected = drawerItems.indexOf(element) == page_index;
-          return Padding(
-              padding: const EdgeInsets.only(top: 30, bottom: 30),
-              child: InkWell(
-                onTap: () {
-                  if (element.containsValue(Icons.home)) {
-                    draw.setclose();
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const MyHomePage(
-                          index: 0,
-                        ),
-                      ),
-                    );
-
-                    Hive.box('user_setting').put('page_index', 0);
-                  } else if (element.containsValue(Icons.add_outlined)) {
-                    //draw.setclose();
-                    addWhole(
-                        context, searchNode, controller, name, Date, 'home');
-                  } else {
-                    draw.setclose();
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const MyHomePage(
-                          index: 2,
-                        ),
-                      ),
-                    );
-                    Hive.box('user_setting').put('page_index', 2);
-                  }
-                },
-                child: Column(
-                  children: [
-                    selected
-                        ? Icon(
-                            element['icon'],
-                            color: NaviColor(selected),
-                          )
-                        : Icon(
-                            element['icon'],
-                            color: NaviColor(selected),
+        width: 50,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            border: Border(
+                right: BorderSide(color: BGColor_shadowcolor(), width: 1)),
+            color: BGColor()),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: drawerItems.map((element) {
+              selected = drawerItems.indexOf(element) == page_index;
+              return Padding(
+                  padding: const EdgeInsets.only(top: 30, bottom: 30),
+                  child: InkWell(
+                    onTap: () {
+                      if (element.containsValue(Icons.home)) {
+                        draw.setclose();
+                        Navigator.of(context).pushReplacement(
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: const MyHomePage(
+                              index: 0,
+                            ),
                           ),
-                    const SizedBox(
-                      height: 20,
+                        );
+
+                        Hive.box('user_setting').put('page_index', 0);
+                      } else if (element.containsValue(Icons.add_outlined)) {
+                        //draw.setclose();
+                        addWhole(context, searchNode, controller, name, Date,
+                            'home');
+                      } else {
+                        draw.setclose();
+                        Navigator.of(context).pushReplacement(
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: const MyHomePage(
+                              index: 2,
+                            ),
+                          ),
+                        );
+                        Hive.box('user_setting').put('page_index', 2);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        selected
+                            ? Icon(
+                                element['icon'],
+                                color: NaviColor(selected),
+                              )
+                            : Icon(
+                                element['icon'],
+                                color: NaviColor(selected),
+                              ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        selected
+                            ? Text(element['title'],
+                                style: TextStyle(
+                                    color: NaviColor(selected),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize()))
+                            : Text(element['title'],
+                                style: TextStyle(
+                                    color: NaviColor(selected),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize())),
+                      ],
                     ),
-                    selected
-                        ? Text(element['title'],
-                            style: TextStyle(
-                                color: NaviColor(selected),
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize()))
-                        : Text(element['title'],
-                            style: TextStyle(
-                                color: NaviColor(selected),
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize())),
-                  ],
-                ),
-              ));
-        }).toList(),
-      ),
-    );
+                  ));
+            }).toList(),
+          ),
+        ));
   }
 }

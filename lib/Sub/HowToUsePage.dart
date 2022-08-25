@@ -27,6 +27,8 @@ class _HowToUsePageState extends State<HowToUsePage> {
   double myWidth = 0.0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
+  List eventsmalltitle = [];
+  List eventsmallcontent = [];
 
   @override
   void didChangeDependencies() {
@@ -161,27 +163,162 @@ class _HowToUsePageState extends State<HowToUsePage> {
   }
 
   BuildTitle() {
-    return Row(
-      children: [
-        Flexible(
-          child: Text(widget.stringsend + '를 다음과 같이 사용해보세요~',
-              maxLines: 3,
-              softWrap: false,
+    return Container(
+      width: MediaQuery.of(context).size.width - 80,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Flexible(
+            child: RichText(
+              text: TextSpan(
+                  text: widget.stringsend + '를 다음과 같이\n사용해보세요~',
+                  style: GoogleFonts.jua(
+                    fontSize: secondTitleTextsize(),
+                    color: TextColor(),
+                    fontWeight: FontWeight.bold,
+                  )),
+              maxLines: 2,
               overflow: TextOverflow.fade,
-              style: GoogleFonts.jua(
-                fontSize: secondTitleTextsize(),
-                color: TextColor(),
-                fontWeight: FontWeight.bold,
-              )),
-        )
-      ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
   BuildContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [],
-    );
+    List<Widget> list_all = [];
+    return FutureBuilder(
+        future: firestore
+            .collection("EventNoticeDataBase")
+            .where('eventpage', isEqualTo: 'home')
+            .where('eventname',
+                isEqualTo: widget.stringsend == '캘린더'
+                    ? '일정관리는 이렇게!'
+                    : (widget.stringsend == '메모'
+                        ? '메모에 숨겨진 다양한 기능'
+                        : 'PDF 형식 지원'))
+            .get()
+            .then(((QuerySnapshot querySnapshot) => {
+                  eventsmalltitle.clear(),
+                  eventsmallcontent.clear(),
+                  querySnapshot.docs.forEach((doc) {
+                    for (int i = 0;
+                        i < doc.get('pagesmalltitles').length;
+                        i++) {
+                      eventsmalltitle.add(doc.get('pagesmalltitles')[i]);
+                      eventsmallcontent.add(doc.get('pagesmallcontent')[i]);
+                    }
+                  })
+                })),
+        builder: (context, future) {
+          if (future.hasData) {
+            list_all = <Widget>[
+              ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: eventsmalltitle.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        ContainerDesign(
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  horizontalTitleGap: 10,
+                                  dense: true,
+                                  title: Text(
+                                      (index + 1).toString() +
+                                          '.  ' +
+                                          eventsmalltitle[index].toString(),
+                                      style: TextStyle(
+                                        color: TextColor(),
+                                        fontSize: contentTextsize(),
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ),
+                                Divider(
+                                  color: TextColor_shadowcolor(),
+                                  thickness: 1,
+                                  endIndent: 30,
+                                  indent: 30,
+                                ),
+                                ListTile(
+                                  horizontalTitleGap: 10,
+                                  dense: true,
+                                  title:
+                                      Text(eventsmallcontent[index].toString(),
+                                          style: TextStyle(
+                                            color: TextColor_shadowcolor(),
+                                            fontSize: contentTextsize(),
+                                          )),
+                                ),
+                              ],
+                            ),
+                            color: BGColor()),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    );
+                  })
+            ];
+          } else if (future.hasError) {
+            list_all = <Widget>[
+              ContainerDesign(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child:
+                            Text('서버에 해당 이벤트 내용이 존재하지 않습니다. 오류가 지속되면 문의바랍니다.',
+                                style: TextStyle(
+                                  color: TextColor(),
+                                  fontWeight: FontWeight.bold,
+                                )),
+                      )
+                    ],
+                  ),
+                  color: BGColor())
+            ];
+          } else if (future.connectionState == ConnectionState.waiting) {
+            list_all = <Widget>[
+              ContainerDesign(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                  color: BGColor())
+            ];
+          } else {
+            list_all = <Widget>[
+              ContainerDesign(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child:
+                            Text('서버에 해당 이벤트 내용이 존재하지 않습니다. 오류가 지속되면 문의바랍니다.',
+                                style: TextStyle(
+                                  color: TextColor(),
+                                  fontWeight: FontWeight.bold,
+                                )),
+                      )
+                    ],
+                  ),
+                  color: BGColor())
+            ];
+          }
+          return Column(children: list_all);
+        });
   }
 }

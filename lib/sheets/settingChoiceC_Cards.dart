@@ -64,226 +64,225 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
   bool isselected_change_set = doc_change == true ? true : false;
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-        height: 160,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 30,
-              child: Row(
-                children: [
-                  Flexible(
-                      fit: FlexFit.tight,
-                      child: SizedBox(
-                        height: 30,
-                        child: Text('모든 권한',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize())),
-                      )),
-                  Theme(
-                      data: Theme.of(context).copyWith(
-                        unselectedWidgetColor: Colors.black,
-                      ),
-                      child: Checkbox(
-                        side: BorderSide(
-                          // POINT
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        activeColor: Colors.white,
-                        checkColor: Colors.blue,
-                        onChanged: (value) {
-                          setState(() {
-                            isselected_all = value!;
-                            if (isselected_all) {
-                              isselected_share = true;
-                              isselected_change_set = true;
-                            } else {
-                              isselected_share = false;
-                              isselected_change_set = false;
-                            }
-                          });
-                        },
-                        value: isselected_all,
-                      ))
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: 30,
-              child: Row(
-                children: [
-                  Flexible(
-                      fit: FlexFit.tight,
-                      child: SizedBox(
-                        height: 30,
-                        child: Text('재공유 권한',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize())),
-                      )),
-                  Theme(
-                      data: Theme.of(context).copyWith(
-                        unselectedWidgetColor: Colors.black,
-                      ),
-                      child: Checkbox(
-                        side: BorderSide(
-                          // POINT
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        activeColor: Colors.white,
-                        checkColor: Colors.blue,
-                        onChanged: (value) {
-                          setState(() {
-                            isselected_share = value!;
-                            if (isselected_share == false &&
-                                isselected_all == true) {
-                              isselected_all = false;
-                            } else if (isselected_share == true &&
-                                isselected_change_set == false) {
-                              isselected_all = false;
-                            } else if (isselected_share == false &&
-                                isselected_change_set == false) {
-                              isselected_all = false;
-                            } else if (isselected_share == true &&
-                                isselected_change_set == true) {
-                              isselected_all = true;
-                            } else {}
-                          });
-                        },
-                        value: isselected_share,
-                      ))
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: 30,
-              child: Row(
-                children: [
-                  Flexible(
-                      fit: FlexFit.tight,
-                      child: SizedBox(
-                        height: 30,
-                        child: Text('카드제목 및 배경색 변경권한',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize())),
-                      )),
-                  Theme(
-                      data: Theme.of(context).copyWith(
-                        unselectedWidgetColor: Colors.black,
-                      ),
-                      child: Checkbox(
-                        side: BorderSide(
-                          // POINT
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        activeColor: Colors.white,
-                        checkColor: Colors.blue,
-                        onChanged: (value) {
-                          setState(() {
-                            isselected_change_set = value!;
-                            if (isselected_change_set == false &&
-                                isselected_all == true) {
-                              isselected_all = false;
-                            } else if (isselected_share == true &&
-                                isselected_change_set == false) {
-                              isselected_all = false;
-                            } else if (isselected_share == false &&
-                                isselected_change_set == false) {
-                              isselected_all = false;
-                            } else if (isselected_share == true &&
-                                isselected_change_set == true) {
-                              isselected_all = true;
-                            } else {}
-                          });
-                        },
-                        value: isselected_change_set,
-                      ))
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height: 30,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100)),
-                    primary: Colors.blue,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 30,
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: SizedBox(
+                    height: 30,
+                    child: Text('모든 권한',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize())),
+                  )),
+              Theme(
+                  data: Theme.of(context).copyWith(
+                    unselectedWidgetColor: Colors.black,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      firestore
-                          .collection('CalendarSheetHome')
-                          .doc(doc_id)
-                          .update({
-                        'allowance_share': isselected_share,
-                        'allowance_change_set': isselected_change_set,
-                      }).whenComplete(() {
+                  child: Checkbox(
+                    side: BorderSide(
+                      // POINT
+                      color: Colors.black,
+                      width: 2.0,
+                    ),
+                    activeColor: Colors.white,
+                    checkColor: Colors.blue,
+                    onChanged: (value) {
+                      setState(() {
+                        isselected_all = value!;
+                        if (isselected_all) {
+                          isselected_share = true;
+                          isselected_change_set = true;
+                        } else {
+                          isselected_share = false;
+                          isselected_change_set = false;
+                        }
+                      });
+                    },
+                    value: isselected_all,
+                  ))
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 30,
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: SizedBox(
+                    height: 30,
+                    child: Text('재공유 권한',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize())),
+                  )),
+              Theme(
+                  data: Theme.of(context).copyWith(
+                    unselectedWidgetColor: Colors.black,
+                  ),
+                  child: Checkbox(
+                    side: BorderSide(
+                      // POINT
+                      color: Colors.black,
+                      width: 2.0,
+                    ),
+                    activeColor: Colors.white,
+                    checkColor: Colors.blue,
+                    onChanged: (value) {
+                      setState(() {
+                        isselected_share = value!;
+                        if (isselected_share == false &&
+                            isselected_all == true) {
+                          isselected_all = false;
+                        } else if (isselected_share == true &&
+                            isselected_change_set == false) {
+                          isselected_all = false;
+                        } else if (isselected_share == false &&
+                            isselected_change_set == false) {
+                          isselected_all = false;
+                        } else if (isselected_share == true &&
+                            isselected_change_set == true) {
+                          isselected_all = true;
+                        } else {}
+                      });
+                    },
+                    value: isselected_share,
+                  ))
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 30,
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: SizedBox(
+                    height: 30,
+                    child: Text('카드제목 및 배경색 변경권한',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize())),
+                  )),
+              Theme(
+                  data: Theme.of(context).copyWith(
+                    unselectedWidgetColor: Colors.black,
+                  ),
+                  child: Checkbox(
+                    side: BorderSide(
+                      // POINT
+                      color: Colors.black,
+                      width: 2.0,
+                    ),
+                    activeColor: Colors.white,
+                    checkColor: Colors.blue,
+                    onChanged: (value) {
+                      setState(() {
+                        isselected_change_set = value!;
+                        if (isselected_change_set == false &&
+                            isselected_all == true) {
+                          isselected_all = false;
+                        } else if (isselected_share == true &&
+                            isselected_change_set == false) {
+                          isselected_all = false;
+                        } else if (isselected_share == false &&
+                            isselected_change_set == false) {
+                          isselected_all = false;
+                        } else if (isselected_share == true &&
+                            isselected_change_set == true) {
+                          isselected_all = true;
+                        } else {}
+                      });
+                    },
+                    value: isselected_change_set,
+                  ))
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          height: 40,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100)),
+                primary: Colors.blue,
+              ),
+              onPressed: () {
+                setState(() {
+                  firestore.collection('CalendarSheetHome').doc(doc_id).update({
+                    'allowance_share': isselected_share,
+                    'allowance_change_set': isselected_change_set,
+                  }).whenComplete(() {
+                    firestore
+                        .collection('ShareHome')
+                        .where('doc', isEqualTo: doc_id)
+                        .get()
+                        .then((value) {
+                      value.docs.forEach((element) {
                         firestore
                             .collection('ShareHome')
-                            .where('doc', isEqualTo: doc_id)
-                            .get()
-                            .then((value) {
-                          value.docs.forEach((element) {
-                            firestore
-                                .collection('ShareHome')
-                                .doc(doc_id +
-                                    '-' +
-                                    element['madeUser'] +
-                                    '-' +
-                                    element['showingUser'])
-                                .update({
-                              'allowance_share': isselected_share,
-                              'allowance_change_set': isselected_change_set,
-                            });
-                          });
-                        }).whenComplete(() {
-                          Navigator.pop(context);
+                            .doc(doc_id +
+                                '-' +
+                                element['madeUser'] +
+                                '-' +
+                                element['showingUser'])
+                            .update({
+                          'allowance_share': isselected_share,
+                          'allowance_change_set': isselected_change_set,
                         });
                       });
+                    }).whenComplete(() {
+                      Navigator.pop(context);
                     });
-                  },
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: NeumorphicText(
-                            '설정완료',
-                            style: const NeumorphicStyle(
-                              shape: NeumorphicShape.flat,
-                              depth: 3,
-                              color: Colors.white,
-                            ),
-                            textStyle: NeumorphicTextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize(),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )),
-            ),
-          ],
-        ));
+                  });
+                });
+              },
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: NeumorphicText(
+                        '설정완료',
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: Colors.white,
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
+    ));
   });
 }

@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,6 @@ DeleteUserVerify(BuildContext context, String name) {
       context: context,
       builder: (BuildContext context) {
         return Container(
-            height: 220,
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -20,6 +20,7 @@ DeleteUserVerify(BuildContext context, String name) {
             child: Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
@@ -46,37 +47,31 @@ DeleteUserVerify(BuildContext context, String name) {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text(
+                    Text(
                       '회원탈퇴',
                       style: TextStyle(
                         color: Colors.black54,
-                        fontSize: 20,
+                        fontSize: contentTitleTextsize(),
                         fontWeight: FontWeight.w600, // bold
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      '회원탈퇴 진행하겠습니까?\n'
-                      '아래 버튼을 클릭하시면 회원탈퇴처리가 완료됩니다.\n'
+                    Text(
+                      '회원탈퇴 진행하겠습니까? '
+                      '아래 버튼을 클릭하시면 회원탈퇴처리가 완료됩니다. '
                       '더 좋은 서비스로 다음 기회에 찾아뵙겠습니다.',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 15,
+                        fontSize: contentTextsize(),
                         fontWeight: FontWeight.w600, // bold
                       ),
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.8,
+                        width: MediaQuery.of(context).size.width - 40,
+                        height: 40,
                         child: ElevatedButton(
                           onPressed: () async {
-                            //탈퇴 로직 구현
-                            /*Navigator.of(context).pushReplacement(
-                  PageTransition(
-                    type: PageTransitionType.bottomToTop,
-                    child: const MyHomePage(title: 'HabitMind', index: 0,),
-                  ),
-                );*/
                             Provider.of<GoogleSignInController>(context,
                                     listen: false)
                                 .logout(context, name);
@@ -88,18 +83,21 @@ DeleteUserVerify(BuildContext context, String name) {
                           style: ElevatedButton.styleFrom(
                               primary: Colors.amberAccent,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(15.0),
                               ),
                               elevation: 2.0),
-                          child: const Text(
+                          child: Text(
                             '탈퇴하기',
                             style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600, // bold
+                              fontSize: contentTextsize(),
+                              fontWeight: FontWeight.bold, // bold
                             ),
                           ),
-                        ))
+                        )),
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ],
                 )));
       });
