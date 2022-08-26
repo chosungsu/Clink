@@ -537,54 +537,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
       ],
     );
   }*/
-  settingCalendarHome(
-    int index,
-    doc_name,
-    doc_shares,
-    doc_change,
-  ) {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        )),
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return Container(
-            margin: const EdgeInsets.all(10),
-            child: Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        )),
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SheetPageCC(context, doc_name, doc_shares, doc_change),
-                      ],
-                    ))),
-          );
-        }).whenComplete(() {
-      setState(() {
-        //setcal_fromsheet = controll_cals.showcalendar;
-        //themecal_fromsheet = controll_cals2.themecalendar;
-      });
-    });
-  }
 
   listy_My() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -647,13 +599,13 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                           onPressed: () {
                                             //카드별 설정 ex.공유자 권한설정
                                             settingCalendarHome(
-                                              index,
-                                              snapshot.data!.docs[index].id,
-                                              snapshot.data!.docs[index]
-                                                  ['allowance_share'],
-                                              snapshot.data!.docs[index]
-                                                  ['allowance_change_set'],
-                                            );
+                                                index,
+                                                snapshot.data!.docs[index].id,
+                                                snapshot.data!.docs[index]
+                                                    ['allowance_share'],
+                                                snapshot.data!.docs[index]
+                                                    ['allowance_change_set'],
+                                                context);
                                           }),
                                       FocusedMenuItem(
                                           trailingIcon: const Icon(
@@ -753,6 +705,10 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                               ['share'],
                                           origin: snapshot.data!.docs[index]
                                               ['madeUser'],
+                                          theme: snapshot.data!.docs[index]
+                                              ['themesetting'],
+                                          view: snapshot.data!.docs[index]
+                                              ['viewsetting'],
                                         ),
                                         transition: Transition.rightToLeft,
                                       );
@@ -1237,6 +1193,10 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                               ['share'],
                                           origin: snapshot.data!.docs[index]
                                               ['madeUser'],
+                                          theme: snapshot.data!.docs[index]
+                                              ['themesetting'],
+                                          view: snapshot.data!.docs[index]
+                                              ['viewsetting'],
                                         ),
                                         transition: Transition.rightToLeft,
                                       );

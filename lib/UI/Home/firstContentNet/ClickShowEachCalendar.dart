@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:clickbyme/Dialogs/checkdeletecandm.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -367,148 +368,163 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                             SizedBox(
                                                 width: 30,
                                                 child: InkWell(
-                                                    onTap: () {
+                                                    onTap: () async {
                                                       //삭제
-                                                      Flushbar(
-                                                        backgroundColor: Colors
-                                                            .green.shade400,
-                                                        titleText: Text(
-                                                            'Uploading...',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTitleTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        messageText: Text(
-                                                            '잠시만 기다려주세요~',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        icon: const Icon(
-                                                          Icons.info_outline,
-                                                          size: 25.0,
-                                                          color: Colors.white,
-                                                        ),
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 1),
-                                                        leftBarIndicatorColor:
-                                                            Colors
-                                                                .green.shade100,
-                                                      ).show(context);
-                                                      firestore
-                                                          .collection(
-                                                              'CalendarDataBase')
-                                                          .where('calname',
-                                                              isEqualTo: widget
-                                                                  .doc)
-                                                          .where('Daytodo',
-                                                              isEqualTo: widget
-                                                                  .calinfo)
-                                                          .where('Date',
-                                                              isEqualTo: widget
-                                                                          .date
-                                                                          .toString()
-                                                                          .split('-')[
-                                                                      0] +
-                                                                  '-' +
-                                                                  widget.date
-                                                                          .toString()
-                                                                          .split(
-                                                                              '-')[
-                                                                      1] +
-                                                                  '-' +
-                                                                  widget.date
-                                                                      .toString()
-                                                                      .split('-')[
-                                                                          2]
-                                                                      .substring(
-                                                                          0,
-                                                                          2) +
-                                                                  '일')
-                                                          .where('Timestart',
-                                                              isEqualTo:
-                                                                  widget.start)
-                                                          .get()
-                                                          .then((value) {
-                                                        deleteid.clear();
-                                                        value.docs
-                                                            .forEach((element) {
-                                                          deleteid
-                                                              .add(element.id);
-                                                        });
-                                                        for (int i = 0;
-                                                            i < deleteid.length;
-                                                            i++) {
+                                                      final reloadpage =
+                                                          await Get.dialog(
+                                                              checkdeletecandm(
+                                                                  context,
+                                                                  '일정'));
+                                                      if (reloadpage) {
+                                                        Flushbar(
+                                                          backgroundColor:
+                                                              Colors.green
+                                                                  .shade400,
+                                                          titleText: Text(
+                                                              'Uploading...',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    contentTitleTextsize(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                          messageText: Text(
+                                                              '잠시만 기다려주세요~',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                          icon: const Icon(
+                                                            Icons.info_outline,
+                                                            size: 25.0,
+                                                            color: Colors.white,
+                                                          ),
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 1),
+                                                          leftBarIndicatorColor:
+                                                              Colors.green
+                                                                  .shade100,
+                                                        )
+                                                            .show(context)
+                                                            .whenComplete(() {
                                                           firestore
                                                               .collection(
                                                                   'CalendarDataBase')
-                                                              .doc(deleteid[i])
-                                                              .delete();
-                                                        }
-                                                      }).whenComplete(() {
-                                                        Future.delayed(
-                                                            const Duration(
-                                                                seconds: 2),
-                                                            () {
-                                                          Flushbar(
-                                                            backgroundColor:
-                                                                Colors.blue
-                                                                    .shade400,
-                                                            titleText: Text(
-                                                                'Notice',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      contentTitleTextsize(),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            messageText: Text(
-                                                                '일정이 정상적으로 삭제되었습니다.',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      contentTextsize(),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .info_outline,
-                                                              size: 25.0,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            duration:
+                                                              .where('calname',
+                                                                  isEqualTo: widget
+                                                                      .doc)
+                                                              .where('Daytodo',
+                                                                  isEqualTo: widget
+                                                                      .calinfo)
+                                                              .where('Date',
+                                                                  isEqualTo: widget
+                                                                              .date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          0] +
+                                                                      '-' +
+                                                                      widget.date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          1] +
+                                                                      '-' +
+                                                                      widget.date
+                                                                          .toString()
+                                                                          .split('-')[
+                                                                              2]
+                                                                          .substring(
+                                                                              0,
+                                                                              2) +
+                                                                      '일')
+                                                              .where('Timestart',
+                                                                  isEqualTo:
+                                                                      widget.start)
+                                                              .get()
+                                                              .then((value) {
+                                                            deleteid.clear();
+                                                            value.docs.forEach(
+                                                                (element) {
+                                                              deleteid.add(
+                                                                  element.id);
+                                                            });
+                                                            for (int i = 0;
+                                                                i <
+                                                                    deleteid
+                                                                        .length;
+                                                                i++) {
+                                                              firestore
+                                                                  .collection(
+                                                                      'CalendarDataBase')
+                                                                  .doc(deleteid[
+                                                                      i])
+                                                                  .delete();
+                                                            }
+                                                          }).whenComplete(() {
+                                                            Future.delayed(
                                                                 const Duration(
                                                                     seconds: 2),
-                                                            leftBarIndicatorColor:
-                                                                Colors.blue
-                                                                    .shade100,
-                                                          )
-                                                              .show(context)
-                                                              .whenComplete(
-                                                                  () => Get
-                                                                      .back());
+                                                                () {
+                                                              Flushbar(
+                                                                backgroundColor:
+                                                                    Colors.blue
+                                                                        .shade400,
+                                                                titleText: Text(
+                                                                    'Notice',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          contentTitleTextsize(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    )),
+                                                                messageText: Text(
+                                                                    '일정이 정상적으로 삭제되었습니다.',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          contentTextsize(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    )),
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .info_outline,
+                                                                  size: 25.0,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                duration:
+                                                                    const Duration(
+                                                                        seconds:
+                                                                            2),
+                                                                leftBarIndicatorColor:
+                                                                    Colors.blue
+                                                                        .shade100,
+                                                              )
+                                                                  .show(context)
+                                                                  .whenComplete(
+                                                                      () => Get
+                                                                          .back());
+                                                            });
+                                                          });
                                                         });
-                                                      });
+                                                      }
                                                     },
                                                     child: Container(
                                                       alignment:

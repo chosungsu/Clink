@@ -54,19 +54,13 @@ SheetPage(BuildContext context, FocusNode searchNode,
             children: [
               SizedBox(
                   height: 5,
-                  width: MediaQuery.of(context).size.width - 40,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
-                      ),
                       Container(
                           width: (MediaQuery.of(context).size.width - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
-                      ),
                     ],
                   )),
               const SizedBox(

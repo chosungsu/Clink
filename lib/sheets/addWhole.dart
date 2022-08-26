@@ -94,19 +94,13 @@ SheetPageAC(
             children: [
               SizedBox(
                   height: 5,
-                  width: MediaQuery.of(context).size.width - 40,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
-                      ),
                       Container(
                           width: (MediaQuery.of(context).size.width - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
-                      ),
                     ],
                   )),
               const SizedBox(
@@ -584,7 +578,9 @@ content(
                     duration: const Duration(seconds: 1),
                     leftBarIndicatorColor: Colors.red.shade100,
                   ).show(context);
-                } else if (choicelist[0] == 0 && choicelist[1] == 0) {
+                } else if (choicelist[0] == 0 &&
+                    choicelist[1] == 0 &&
+                    s == 'home') {
                   Flushbar(
                     margin:
                         const EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -637,43 +633,76 @@ content(
                       duration: const Duration(seconds: 1),
                       leftBarIndicatorColor: Colors.green.shade100,
                     ).show(context);
-                    choicelist[0] == 1
-                        ? firestore.collection('CalendarSheetHome').add({
-                            'calname': controller.text,
-                            'madeUser': username,
-                            'type': 0,
-                            'share': [],
-                            'color': Hive.box('user_setting')
-                                .get('typecolorcalendar'),
-                            'date': date.toString().split('-')[0] +
-                                '-' +
-                                date.toString().split('-')[1] +
-                                '-' +
-                                date.toString().split('-')[2].substring(0, 2) +
-                                '일'
-                          })
-                        : firestore.collection('MemoDataBase').doc().set({
-                            'Collection': null,
-                            'memoindex': null,
-                            'memolist': null,
-                            'homesave': false,
-                            'EditDate': date.toString().split('-')[0] +
-                                '-' +
-                                date.toString().split('-')[1] +
-                                '-' +
-                                date.toString().split('-')[2].substring(0, 2) +
-                                '일',
-                            'memoTitle': controller.text,
-                            'OriginalUser': username,
-                            'color': Hive.box('user_setting')
-                                .get('typecolorcalendar'),
-                            'Date': date.toString().split('-')[0] +
-                                '-' +
-                                date.toString().split('-')[1] +
-                                '-' +
-                                date.toString().split('-')[2].substring(0, 2) +
-                                '일'
-                          });
+                    if (s == 'home') {
+                      choicelist[0] == 1
+                          ? firestore.collection('CalendarSheetHome').add({
+                              'calname': controller.text,
+                              'madeUser': username,
+                              'type': 0,
+                              'share': [],
+                              'viewsetting': 0,
+                              'themesetting': 0,
+                              'color': Hive.box('user_setting')
+                                      .get('typecolorcalendar') ??
+                                  _color.value.toInt(),
+                              'date': date.toString().split('-')[0] +
+                                  '-' +
+                                  date.toString().split('-')[1] +
+                                  '-' +
+                                  date
+                                      .toString()
+                                      .split('-')[2]
+                                      .substring(0, 2) +
+                                  '일'
+                            })
+                          : firestore.collection('MemoDataBase').doc().set({
+                              'Collection': null,
+                              'memoindex': null,
+                              'memolist': null,
+                              'homesave': false,
+                              'EditDate': date.toString().split('-')[0] +
+                                  '-' +
+                                  date.toString().split('-')[1] +
+                                  '-' +
+                                  date
+                                      .toString()
+                                      .split('-')[2]
+                                      .substring(0, 2) +
+                                  '일',
+                              'memoTitle': controller.text,
+                              'OriginalUser': username,
+                              'color': Hive.box('user_setting')
+                                      .get('typecolorcalendar') ??
+                                  _color.value.toInt(),
+                              'Date': date.toString().split('-')[0] +
+                                  '-' +
+                                  date.toString().split('-')[1] +
+                                  '-' +
+                                  date
+                                      .toString()
+                                      .split('-')[2]
+                                      .substring(0, 2) +
+                                  '일'
+                            });
+                    } else {
+                      firestore.collection('CalendarSheetHome').add({
+                        'calname': controller.text,
+                        'madeUser': username,
+                        'type': 0,
+                        'share': [],
+                        'viewsetting': 0,
+                        'themesetting': 0,
+                        'color':
+                            Hive.box('user_setting').get('typecolorcalendar') ??
+                                _color.value.toInt(),
+                        'date': date.toString().split('-')[0] +
+                            '-' +
+                            date.toString().split('-')[1] +
+                            '-' +
+                            date.toString().split('-')[2].substring(0, 2) +
+                            '일'
+                      });
+                    }
                   });
 
                   Flushbar(

@@ -6,7 +6,8 @@ import 'package:hive/hive.dart';
 pushalarmsetting(
   BuildContext context,
   int i,
-  bool isChecked, DateTime selectedDay,
+  bool isChecked,
+  DateTime selectedDay,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.white,
@@ -36,7 +37,8 @@ pushalarmsetting(
 SheetPage(
   BuildContext context,
   int i,
-  bool isChecked, DateTime selectedDay,
+  bool isChecked,
+  DateTime selectedDay,
 ) {
   return SizedBox(
       height: 200,
@@ -47,19 +49,13 @@ SheetPage(
             children: [
               SizedBox(
                   height: 5,
-                  width: MediaQuery.of(context).size.width - 40,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
-                      ),
                       Container(
                           width: (MediaQuery.of(context).size.width - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 40) * 0.4,
-                      ),
                     ],
                   )),
               const SizedBox(
@@ -77,7 +73,8 @@ SheetPage(
 title(
   BuildContext context,
   int i,
-  bool isChecked, DateTime selectedDay,
+  bool isChecked,
+  DateTime selectedDay,
 ) {
   return SizedBox(
       height: 50,
@@ -102,7 +99,8 @@ title(
 content(
   BuildContext context,
   int i,
-  bool isChecked, DateTime selectedDay,
+  bool isChecked,
+  DateTime selectedDay,
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -111,16 +109,20 @@ content(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             i == 0
-              ? Text(selectedDay.toString() + '\n해당 일자로 수신에 동의하셨습니다.\n동의는 언제든 해제할 수 있습니다.',
-                  style: const TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15))
-              : Text(selectedDay.toString() + '\n해당 일자로 수신에 동의하셨습니다.\n동의는 언제든 해제할 수 있습니다.',
-                  style: const TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15))
+                ? Text(
+                    selectedDay.toString() +
+                        '\n해당 일자로 수신에 동의하셨습니다.\n동의는 언제든 해제할 수 있습니다.',
+                    style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15))
+                : Text(
+                    selectedDay.toString() +
+                        '\n해당 일자로 수신에 동의하셨습니다.\n동의는 언제든 해제할 수 있습니다.',
+                    style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15))
           ],
         ));
   });

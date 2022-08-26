@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../../Auth/GoogleSignInController.dart';
 import '../../Auth/KakaoSignInController.dart';
 import '../Sign/UserCheck.dart';
-import 'DeleteUser.dart';
+import '../../sheets/DeleteUser.dart';
 
 class UserDetails extends StatelessWidget {
   const UserDetails({Key? key, required this.height}) : super(key: key);

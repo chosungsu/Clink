@@ -3,8 +3,8 @@ import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../Auth/GoogleSignInController.dart';
-import '../../Auth/KakaoSignInController.dart';
+import '../Auth/GoogleSignInController.dart';
+import '../Auth/KakaoSignInController.dart';
 
 DeleteUserVerify(BuildContext context, String name) {
   showModalBottomSheet(
@@ -21,27 +21,19 @@ DeleteUserVerify(BuildContext context, String name) {
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                         height: 5,
-                        width: MediaQuery.of(context).size.width - 40,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              width: (MediaQuery.of(context).size.width - 40) *
-                                  0.4,
-                            ),
                             Container(
                                 width:
                                     (MediaQuery.of(context).size.width - 40) *
                                         0.2,
                                 alignment: Alignment.topCenter,
                                 color: Colors.black45),
-                            SizedBox(
-                              width: (MediaQuery.of(context).size.width - 40) *
-                                  0.4,
-                            ),
                           ],
                         )),
                     const SizedBox(
@@ -50,9 +42,9 @@ DeleteUserVerify(BuildContext context, String name) {
                     Text(
                       '회원탈퇴',
                       style: TextStyle(
-                        color: Colors.black54,
+                        color: Colors.black,
                         fontSize: contentTitleTextsize(),
-                        fontWeight: FontWeight.w600, // bold
+                        fontWeight: FontWeight.bold, // bold
                       ),
                     ),
                     const SizedBox(height: 20),

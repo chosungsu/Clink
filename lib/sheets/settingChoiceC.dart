@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../Dialogs/checkdeletecandm.dart';
 import '../Tool/TextSize.dart';
 
 settingChoiceCal(
@@ -84,19 +86,13 @@ SheetPageC(
             children: [
               SizedBox(
                   height: 5,
-                  width: MediaQuery.of(context).size.width - 70,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 70) * 0.4,
-                      ),
                       Container(
-                          width: (MediaQuery.of(context).size.width - 70) * 0.2,
+                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 70) * 0.4,
-                      ),
                     ],
                   )),
               const SizedBox(
@@ -267,8 +263,10 @@ content(
                               borderRadius: BorderRadius.circular(100)),
                           primary: Colors.white,
                         ),
-                        onPressed: () {
-                          setState(() {
+                        onPressed: () async {
+                          final reloadpage = await Get.dialog(
+                              checkdeletecandm(context, '일정표'));
+                          if (reloadpage) {
                             if (Hive.box('user_setting')
                                         .get('noti_calendar_click') ==
                                     null ||
@@ -314,7 +312,7 @@ content(
                             }
 
                             Navigator.pop(context);
-                          });
+                          }
                         },
                         child: Center(
                           child: Column(

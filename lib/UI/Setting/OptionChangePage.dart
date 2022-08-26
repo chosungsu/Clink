@@ -1,9 +1,12 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/route.dart';
 import 'package:clickbyme/sheets/pushalarmsetting.dart';
+import 'package:clickbyme/sheets/userinfo_draggable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
@@ -32,7 +35,9 @@ class _OptionChangePageState extends State<OptionChangePage> {
   ];
   final List<String> list_noti_setting = <String>[
     '앱 푸쉬알림 설정',
-    '광고성 정보수신 동의',
+  ];
+  final List<String> list_user_setting = <String>[
+    '개인정보 수집 및 이용 동의',
   ];
 
   @override
@@ -177,18 +182,14 @@ class _OptionChangePageState extends State<OptionChangePage> {
 
   OptionChoice(double height, BuildContext context) {
     return SizedBox(
-      height: 60 * list_app_setting.length.toDouble() +
-          40 +
-          60 * list_noti_setting.length.toDouble() +
-          40 +
-          170,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             children: [
-              Text('옵션을 원하는대로\n 변경하는 공간입니다.',
-                  style: GoogleFonts.jua(
+              Text('옵션 설정',
+                  style: TextStyle(
                     fontSize: secondTitleTextsize(),
                     color: TextColor(),
                     fontWeight: FontWeight.bold,
@@ -203,6 +204,10 @@ class _OptionChangePageState extends State<OptionChangePage> {
             height: 20,
           ),
           OptView2(),
+          const SizedBox(
+            height: 20,
+          ),
+          OptView3(),
         ],
       ),
     );
@@ -210,44 +215,52 @@ class _OptionChangePageState extends State<OptionChangePage> {
 
   OptView1() {
     return SizedBox(
-        height: 60 * list_app_setting.length.toDouble() + 40,
         width: MediaQuery.of(context).size.width - 40,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.tune,
-                  color: TextColor(),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  '앱 UI 설정',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize(),
-                      color: TextColor()),
-                ),
-              ],
-            ),
-            Divider(
-              height: 10,
-              thickness: 2,
-              color: Colors.grey.shade400,
-            ),
-            Opt1_body()
-          ],
+        child: ContainerDesign(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        backgroundColor: BGColor_shadowcolor(),
+                        foregroundColor: BGColor_shadowcolor(),
+                        child: Icon(
+                          Icons.tune,
+                          color: TextColor(),
+                        ),
+                      )),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    '앱 UI 설정',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize(),
+                        color: TextColor()),
+                  ),
+                ],
+              ),
+              Divider(
+                height: 10,
+                thickness: 2,
+                color: Colors.grey.shade400,
+              ),
+              Opt1_body()
+            ],
+          ),
+          color: BGColor_shadowcolor(),
         ));
   }
 
   Opt1_body() {
     return SizedBox(
-      height: 50 * list_app_setting.length.toDouble(),
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
+          shrinkWrap: true,
           itemCount: list_app_setting.length,
           itemBuilder: (context, index) {
             return Column(
@@ -723,44 +736,52 @@ class _OptionChangePageState extends State<OptionChangePage> {
 
   OptView2() {
     return SizedBox(
-        height: 60 * list_noti_setting.length.toDouble() + 40,
         width: MediaQuery.of(context).size.width - 40,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.notifications,
-                  color: TextColor(),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  '알림 설정',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize(),
-                      color: TextColor()),
-                ),
-              ],
-            ),
-            Divider(
-              height: 10,
-              thickness: 2,
-              color: Colors.grey.shade400,
-            ),
-            Opt2_body()
-          ],
+        child: ContainerDesign(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        backgroundColor: BGColor_shadowcolor(),
+                        foregroundColor: BGColor_shadowcolor(),
+                        child: Icon(
+                          Icons.notifications,
+                          color: TextColor(),
+                        ),
+                      )),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    '알림 설정',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize(),
+                        color: TextColor()),
+                  ),
+                ],
+              ),
+              Divider(
+                height: 10,
+                thickness: 2,
+                color: Colors.grey.shade400,
+              ),
+              Opt2_body()
+            ],
+          ),
+          color: BGColor_shadowcolor(),
         ));
   }
 
   Opt2_body() {
     return SizedBox(
-      height: 50 * list_noti_setting.length.toDouble(),
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
+          shrinkWrap: true,
           itemCount: list_noti_setting.length,
           itemBuilder: (context, index) {
             return Column(
@@ -781,6 +802,9 @@ class _OptionChangePageState extends State<OptionChangePage> {
                           ? Transform.scale(
                               scale: 0.7,
                               child: Switch(
+                                  activeColor: Colors.blue.shade400,
+                                  inactiveThumbColor: Colors.white,
+                                  inactiveTrackColor: TextColor(),
                                   value: isChecked_pushalarm,
                                   onChanged: (bool val) {
                                     setState(() {
@@ -799,6 +823,9 @@ class _OptionChangePageState extends State<OptionChangePage> {
                           : Transform.scale(
                               scale: 0.7,
                               child: Switch(
+                                  activeColor: Colors.blue.shade400,
+                                  inactiveThumbColor: Colors.white,
+                                  inactiveTrackColor: TextColor(),
                                   value: isChecked_adok,
                                   onChanged: (bool val) {
                                     setState(() {
@@ -814,6 +841,88 @@ class _OptionChangePageState extends State<OptionChangePage> {
                                   }),
                             )
                     ],
+                  ),
+                )
+              ],
+            );
+          }),
+    );
+  }
+
+  OptView3() {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width - 40,
+        child: ContainerDesign(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        backgroundColor: BGColor_shadowcolor(),
+                        foregroundColor: BGColor_shadowcolor(),
+                        child: Icon(
+                          Icons.portrait,
+                          color: TextColor(),
+                        ),
+                      )),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    '약관 및 정책',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize(),
+                        color: TextColor()),
+                  ),
+                ],
+              ),
+              Divider(
+                height: 10,
+                thickness: 2,
+                color: Colors.grey.shade400,
+              ),
+              Opt3_body()
+            ],
+          ),
+          color: BGColor_shadowcolor(),
+        ));
+  }
+
+  Opt3_body() {
+    return SizedBox(
+      child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: list_user_setting.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    userinfo_draggable(context);
+                  },
+                  child: SizedBox(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          list_user_setting[index],
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize(),
+                              color: TextColor()),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          color: TextColor(),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],

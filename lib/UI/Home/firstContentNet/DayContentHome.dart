@@ -14,8 +14,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../DB/Event.dart';
-import '../../../Tool/Getx/calendarshowsetting.dart';
-import '../../../Tool/Getx/calendarthemesetting.dart';
+import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
 
 class DayContentHome extends StatefulWidget {
@@ -24,10 +23,14 @@ class DayContentHome extends StatefulWidget {
     required this.title,
     required this.share,
     required this.origin,
+    required this.theme,
+    required this.view,
   }) : super(key: key);
   final String title;
   final List share;
   final String origin;
+  final int theme;
+  final int view;
   @override
   State<StatefulWidget> createState() => _DayContentHomeState();
 }
@@ -36,10 +39,9 @@ class _DayContentHomeState extends State<DayContentHome> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  final controll_cals = Get.put(calendarshowsetting());
-  static final controll_cals2 = Get.put(calendarthemesetting());
+  var controll_cals = Get.put(calendarsetting());
   int setcal_fromsheet = 0;
-  int themecal_fromsheet = controll_cals2.themecalendar;
+  int themecal_fromsheet = 0;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   late Map<DateTime, List<Event>> _events;
@@ -65,8 +67,8 @@ class _DayContentHomeState extends State<DayContentHome> {
   @override
   void initState() {
     super.initState();
-    setcal_fromsheet = controll_cals.showcalendar;
-    themecal_fromsheet = controll_cals2.themecalendar;
+    setcal_fromsheet = widget.view;
+    themecal_fromsheet = widget.theme;
     fromDate = DateTime.now();
     toDate = DateTime.now().add(const Duration(hours: 2));
     _events = {};
@@ -75,12 +77,12 @@ class _DayContentHomeState extends State<DayContentHome> {
         if (setcal_fromsheet == 2) {
           if (_scrollController.offset >= 170 * 4) {
             setState(() {
-              controll_cals.setcals1w();
+              controll_cals.setcals1w(widget.title);
               setcal_fromsheet = controll_cals.showcalendar;
             });
           } else {
             setState(() {
-              controll_cals.setcals1m();
+              controll_cals.setcals1m(widget.title);
               setcal_fromsheet = controll_cals.showcalendar;
             });
           }
@@ -114,12 +116,13 @@ class _DayContentHomeState extends State<DayContentHome> {
         child: Scaffold(
       resizeToAvoidBottomInset: false,
       //backgroundColor: BGColor(),
-      body: EnterCheckUi(controll_cals, controll_cals2),
+      body: EnterCheckUi(
+        controll_cals,
+      ),
     ));
   }
 
-  EnterCheckUi(
-      calendarshowsetting controll_cals, calendarthemesetting controll_cals2) {
+  EnterCheckUi(calendarsetting controll_cals) {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
@@ -130,7 +133,10 @@ class _DayContentHomeState extends State<DayContentHome> {
             children: [
               SizedBox(
                   child: calendarView(
-                      height, context, controll_cals, controll_cals2)),
+                height,
+                context,
+                controll_cals,
+              )),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -169,8 +175,11 @@ class _DayContentHomeState extends State<DayContentHome> {
     );
   }
 
-  calendarView(double height, BuildContext context,
-      calendarshowsetting controll_cals, calendarthemesetting controll_cals2) {
+  calendarView(
+    double height,
+    BuildContext context,
+    calendarsetting controll_cals,
+  ) {
     List<Widget> list_calendar = [];
     return StreamBuilder<QuerySnapshot>(
         stream: firestore
@@ -365,8 +374,8 @@ class _DayContentHomeState extends State<DayContentHome> {
                                 padding: const EdgeInsets.only(right: 10),
                                 constraints: const BoxConstraints(),
                                 onPressed: () {
-                                  settingCalendarHome(
-                                      context, controll_cals, controll_cals2);
+                                  settingCalendarHome(context, controll_cals,
+                                      widget.theme, widget.view, widget.title);
                                 },
                                 icon: NeumorphicIcon(
                                   Icons.settings,
@@ -411,8 +420,10 @@ class _DayContentHomeState extends State<DayContentHome> {
 
   settingCalendarHome(
     BuildContext context,
-    calendarshowsetting controll_cals,
-    calendarthemesetting controll_cals2,
+    calendarsetting controll_cals,
+    int theme,
+    int view,
+    String title,
   ) {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -444,13 +455,13 @@ class _DayContentHomeState extends State<DayContentHome> {
                     bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
                   child: SheetPage(context, setcal_fromsheet, controll_cals,
-                      controll_cals2, themecal_fromsheet),
+                      themecal_fromsheet, theme, view, title),
                 )),
           );
         }).whenComplete(() {
       setState(() {
         setcal_fromsheet = controll_cals.showcalendar;
-        themecal_fromsheet = controll_cals2.themecalendar;
+        themecal_fromsheet = controll_cals.themecalendar;
       });
     });
   }

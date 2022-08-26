@@ -2,6 +2,46 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
+settingCalendarHome(
+    int index, doc_name, doc_shares, doc_change, BuildContext context) {
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.all(10),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SheetPageCC(context, doc_name, doc_shares, doc_change),
+                    ],
+                  ))),
+        );
+      }).whenComplete(() {});
+}
+
 SheetPageCC(BuildContext context, doc_id, doc_shares, doc_change) {
   return SizedBox(
       child: Padding(
@@ -13,19 +53,13 @@ SheetPageCC(BuildContext context, doc_id, doc_shares, doc_change) {
             children: [
               SizedBox(
                   height: 5,
-                  width: MediaQuery.of(context).size.width - 70,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 70) * 0.4,
-                      ),
                       Container(
-                          width: (MediaQuery.of(context).size.width - 70) * 0.2,
+                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 70) * 0.4,
-                      ),
                     ],
                   )),
               const SizedBox(

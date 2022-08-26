@@ -1,13 +1,17 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:clickbyme/Dialogs/checkbackincandm.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../DB/MemoList.dart';
+import '../../../Dialogs/checkdeletecandm.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -61,6 +65,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
     false,
     false,
   ];
+  bool ischeckedtohideminus = false;
   Color _color = Colors.white;
   List<MemoList> checklisttexts = [];
   DateTime editDateTo = DateTime.now();
@@ -98,48 +103,12 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
   }
 
   Future<bool> _onBackPressed() async {
-    return await showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text('경고',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: Colors.redAccent,
-                      )),
-                  content: Text('뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                          color: Colors.blueGrey)),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text(
-                        '머무를게요',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize(),
-                            color: Colors.blue),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context, false);
-                      },
-                    ),
-                    TextButton(
-                      child: Text(
-                        '나가기',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize(),
-                            color: Colors.red),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                    )
-                  ],
-                )) ??
-        false;
+    final reloadpage = await Get.dialog(checkbackincandm(context)) ?? false;
+    print(reloadpage);
+    if (reloadpage) {
+      Get.back();
+    }
+    return reloadpage;
   }
 
   @override
@@ -168,146 +137,254 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                   color: BGColor_shadowcolor(),
                   border: Border(
                       top: BorderSide(
-                          color: TextColor_shadowcolor(), width: 2))),
+                          color: TextColor_shadowcolor(), width: 1))),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.post_add),
-                    color: checkbottoms[0] == false
-                        ? NaviColor(false)
-                        : NaviColor(true),
-                    iconSize: 20,
-                    onPressed: () {
-                      setState(() {
-                        checkbottoms[0] == false
-                            ? checkbottoms[0] = true
-                            : checkbottoms[0] = false;
-                        if (checkbottoms[0] == true) {
-                          Hive.box('user_setting').put('optionmemoinput', 0);
-                          Hive.box('user_setting')
-                              .put('optionmemocontentinput', null);
-                          scollection.addmemolistin(scollection.memoindex);
-                          scollection
-                              .addmemolistcontentin(scollection.memoindex - 1);
+                  SizedBox(
+                    height: 40,
+                    child: ListView.builder(
+                        padding: const EdgeInsets.only(left: 20),
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: 2,
+                        itemBuilder: ((context, index) {
+                          return Row(
+                            children: [
+                              index == 0
+                                  ? FocusedMenuHolder(
+                                      child: NeumorphicIcon(
+                                        Icons.post_add,
+                                        size: 30,
+                                        style: NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            depth: 2,
+                                            surfaceIntensity: 0.5,
+                                            color: checkbottoms[0] == false
+                                                ? NaviColor(false)
+                                                : NaviColor(true),
+                                            lightSource: LightSource.topLeft),
+                                      ),
+                                      onPressed: () {},
+                                      duration: const Duration(seconds: 0),
+                                      animateMenuItems: true,
+                                      menuOffset: 20,
+                                      menuBoxDecoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40.0))),
+                                      bottomOffsetHeight: 10,
+                                      menuWidth: 60,
+                                      openWithTap: true,
+                                      menuItems: [
+                                          FocusedMenuItem(
+                                              trailingIcon: const Icon(
+                                                Icons.post_add,
+                                                size: 30,
+                                              ),
+                                              title: Text('',
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize())),
+                                              onPressed: () {
+                                                setState(() {
+                                                  checkbottoms[0] == false
+                                                      ? checkbottoms[0] = true
+                                                      : checkbottoms[0] = false;
+                                                  if (checkbottoms[0] == true) {
+                                                    Hive.box('user_setting')
+                                                        .put('optionmemoinput',
+                                                            0);
+                                                    Hive.box('user_setting').put(
+                                                        'optionmemocontentinput',
+                                                        null);
+                                                    scollection.addmemolistin(
+                                                        scollection.memoindex);
+                                                    scollection
+                                                        .addmemolistcontentin(
+                                                            scollection
+                                                                    .memoindex -
+                                                                1);
 
-                          checkbottoms[0] = false;
-                        }
-                        for (int i = 0; i < nodes.length; i++) {
-                          nodes[i].unfocus();
-                        }
-                      });
-                    },
+                                                    checkbottoms[0] = false;
+                                                  }
+                                                  for (int i = 0;
+                                                      i < nodes.length;
+                                                      i++) {
+                                                    nodes[i].unfocus();
+                                                  }
+                                                });
+                                              }),
+                                          FocusedMenuItem(
+                                              trailingIcon: const Icon(
+                                                Icons.check_box_outline_blank,
+                                                size: 30,
+                                              ),
+                                              title: Text('',
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize())),
+                                              onPressed: () {
+                                                setState(() {
+                                                  checkbottoms[1] == false
+                                                      ? checkbottoms[1] = true
+                                                      : checkbottoms[1] = false;
+                                                  if (checkbottoms[1] == true) {
+                                                    Hive.box('user_setting')
+                                                        .put('optionmemoinput',
+                                                            1);
+                                                    Hive.box('user_setting').put(
+                                                        'optionmemocontentinput',
+                                                        null);
+                                                    scollection.addmemolistin(
+                                                        scollection.memoindex);
+                                                    scollection
+                                                        .addmemolistcontentin(
+                                                            scollection
+                                                                    .memoindex -
+                                                                1);
+                                                    checkbottoms[1] = false;
+                                                  }
+                                                  for (int i = 0;
+                                                      i < nodes.length;
+                                                      i++) {
+                                                    nodes[i].unfocus();
+                                                  }
+                                                });
+                                              }),
+                                          FocusedMenuItem(
+                                              trailingIcon: const Icon(
+                                                Icons.star_rate,
+                                                size: 30,
+                                              ),
+                                              title: Text('',
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize())),
+                                              onPressed: () {
+                                                setState(() {
+                                                  checkbottoms[2] == false
+                                                      ? checkbottoms[2] = true
+                                                      : checkbottoms[2] = false;
+                                                  if (checkbottoms[2] == true) {
+                                                    Hive.box('user_setting')
+                                                        .put('optionmemoinput',
+                                                            2);
+                                                    Hive.box('user_setting').put(
+                                                        'optionmemocontentinput',
+                                                        null);
+                                                    scollection.addmemolistin(
+                                                        scollection.memoindex);
+                                                    scollection
+                                                        .addmemolistcontentin(
+                                                            scollection
+                                                                    .memoindex -
+                                                                1);
+                                                    checkbottoms[2] = false;
+                                                  }
+                                                  for (int i = 0;
+                                                      i < nodes.length;
+                                                      i++) {
+                                                    nodes[i].unfocus();
+                                                  }
+                                                });
+                                              })
+                                        ])
+                                  : IconButton(
+                                      icon: Container(
+                                        width: 20.0,
+                                        height: 20.0,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(100.0)),
+                                          border: Border.all(
+                                            color: TextColor(),
+                                            width: 2.0,
+                                          ),
+                                        ),
+                                        child: CircleAvatar(
+                                          backgroundColor: _color,
+                                        ),
+                                      ),
+                                      color: checkbottoms[2] == false
+                                          ? NaviColor(false)
+                                          : NaviColor(true),
+                                      iconSize: 20,
+                                      onPressed: () {
+                                        for (int i = 0; i < nodes.length; i++) {
+                                          nodes[i].unfocus();
+                                        }
+                                        setState(() {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text('선택'),
+                                                content: SingleChildScrollView(
+                                                  child: ColorPicker(
+                                                    pickerColor: _color,
+                                                    onColorChanged:
+                                                        (Color color) {
+                                                      setState(() {
+                                                        _color = color;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                                actions: <Widget>[
+                                                  ElevatedButton(
+                                                    child: const Text('반영하기'),
+                                                    onPressed: () {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'typecolorcalendar',
+                                                              _color.value
+                                                                  .toInt());
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        });
+                                      },
+                                    ),
+                            ],
+                          );
+                        })),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.check_box_outline_blank),
-                    color: checkbottoms[1] == false
-                        ? NaviColor(false)
-                        : NaviColor(true),
-                    iconSize: 20,
+                  TextButton.icon(
                     onPressed: () {
                       setState(() {
-                        checkbottoms[1] == false
-                            ? checkbottoms[1] = true
-                            : checkbottoms[1] = false;
-                        if (checkbottoms[1] == true) {
-                          Hive.box('user_setting').put('optionmemoinput', 1);
-                          Hive.box('user_setting')
-                              .put('optionmemocontentinput', null);
-                          scollection.addmemolistin(scollection.memoindex);
-                          scollection
-                              .addmemolistcontentin(scollection.memoindex - 1);
-                          checkbottoms[1] = false;
-                        }
-                        for (int i = 0; i < nodes.length; i++) {
-                          nodes[i].unfocus();
+                        if (ischeckedtohideminus) {
+                          ischeckedtohideminus = false;
+                        } else {
+                          ischeckedtohideminus = true;
                         }
                       });
                     },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.star_rate),
-                    color: checkbottoms[2] == false
-                        ? NaviColor(false)
-                        : NaviColor(true),
-                    iconSize: 20,
-                    onPressed: () {
-                      setState(() {
-                        checkbottoms[2] == false
-                            ? checkbottoms[2] = true
-                            : checkbottoms[2] = false;
-                        if (checkbottoms[2] == true) {
-                          Hive.box('user_setting').put('optionmemoinput', 2);
-                          Hive.box('user_setting')
-                              .put('optionmemocontentinput', null);
-                          scollection.addmemolistin(scollection.memoindex);
-                          scollection
-                              .addmemolistcontentin(scollection.memoindex - 1);
-                          checkbottoms[2] = false;
-                        }
-                        for (int i = 0; i < nodes.length; i++) {
-                          nodes[i].unfocus();
-                        }
-                      });
-                    },
-                  ),
-                  IconButton(
-                    icon: Container(
-                      width: 20.0,
-                      height: 20.0,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(100.0)),
-                        border: Border.all(
-                          color: TextColor(),
-                          width: 2.0,
-                        ),
-                      ),
-                      child: CircleAvatar(
-                        backgroundColor: _color,
-                      ),
+                    icon: const Icon(
+                      Icons.remove_circle_outline,
+                      size: 30,
                     ),
-                    color: checkbottoms[2] == false
-                        ? NaviColor(false)
-                        : NaviColor(true),
-                    iconSize: 20,
-                    onPressed: () {
-                      for (int i = 0; i < nodes.length; i++) {
-                        nodes[i].unfocus();
-                      }
-                      setState(() {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('선택'),
-                              content: SingleChildScrollView(
-                                child: ColorPicker(
-                                  pickerColor: _color,
-                                  onColorChanged: (Color color) {
-                                    setState(() {
-                                      _color = color;
-                                    });
-                                  },
-                                ),
-                              ),
-                              actions: <Widget>[
-                                ElevatedButton(
-                                  child: const Text('반영하기'),
-                                  onPressed: () {
-                                    Hive.box('user_setting').put(
-                                        'typecolorcalendar',
-                                        _color.value.toInt());
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      });
-                    },
-                  ),
+                    label: Text(ischeckedtohideminus == true ? 'hide' : 'on',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize())),
+                  )
                 ],
               ))),
     ));
@@ -338,65 +415,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                 SizedBox(
                                     width: 50,
                                     child: InkWell(
-                                        onTap: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                    title: Text('경고',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTitleTextsize(),
-                                                          color:
-                                                              Colors.redAccent,
-                                                        )),
-                                                    content: Text(
-                                                        '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize(),
-                                                            color: Colors
-                                                                .blueGrey)),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        child: Text(
-                                                          '머무를게요',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              color:
-                                                                  Colors.blue),
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context, false);
-                                                        },
-                                                      ),
-                                                      TextButton(
-                                                        child: Text(
-                                                          '나가기',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              color:
-                                                                  Colors.red),
-                                                        ),
-                                                        onPressed: () {
-                                                          Get.back();
-                                                          Get.back();
-                                                        },
-                                                      )
-                                                    ],
-                                                  ));
+                                        onTap: () async {
+                                          final reloadpage = await Get.dialog(
+                                                  checkbackincandm(context)) ??
+                                              false;
+                                          print(reloadpage);
+                                          if (reloadpage) {
+                                            Get.back();
+                                          }
                                         },
                                         child: Container(
                                           alignment: Alignment.center,
@@ -692,66 +718,93 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                             SizedBox(
                                                 width: 30,
                                                 child: InkWell(
-                                                    onTap: () {
+                                                    onTap: () async {
+                                                      //삭제
                                                       for (int i = 0;
                                                           i < nodes.length;
                                                           i++) {
                                                         nodes[i].unfocus();
                                                       }
-                                                      print(
-                                                          widget.doccollection);
-                                                      //삭제
-                                                      Flushbar(
-                                                        backgroundColor: Colors
-                                                            .green.shade400,
-                                                        titleText: Text(
-                                                            'Uploading...',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTitleTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        messageText: Text(
-                                                            '잠시만 기다려주세요~',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        icon: const Icon(
-                                                          Icons.info_outline,
-                                                          size: 25.0,
-                                                          color: Colors.white,
-                                                        ),
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 1),
-                                                        leftBarIndicatorColor:
-                                                            Colors
-                                                                .green.shade100,
-                                                      ).show(context).whenComplete(() =>
+                                                      final reloadpage =
+                                                          await Get.dialog(
+                                                              checkdeletecandm(
+                                                                  context,
+                                                                  '메모'));
+                                                      if (reloadpage) {
+                                                        Flushbar(
+                                                          backgroundColor:
+                                                              Colors.green
+                                                                  .shade400,
+                                                          titleText: Text(
+                                                              'Uploading...',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    contentTitleTextsize(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                          messageText: Text(
+                                                              '잠시만 기다려주세요~',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                          icon: const Icon(
+                                                            Icons.info_outline,
+                                                            size: 25.0,
+                                                            color: Colors.white,
+                                                          ),
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 1),
+                                                          leftBarIndicatorColor:
+                                                              Colors.green
+                                                                  .shade100,
+                                                        )
+                                                            .show(context)
+                                                            .whenComplete(() {
                                                           firestore
                                                               .collection(
                                                                   'MemoDataBase')
                                                               .where('memoTitle',
-                                                                  isEqualTo: textEditingController1
-                                                                      .text)
-                                                              .where('OriginalUser',
+                                                                  isEqualTo:
+                                                                      textEditingController1
+                                                                          .text)
+                                                              .where(
+                                                                  'OriginalUser',
                                                                   isEqualTo:
                                                                       username)
                                                               .where('color',
                                                                   isEqualTo: widget
                                                                       .doccolor
                                                                       .toInt())
-                                                              .where('Date', isEqualTo: widget.date.toString().split('-')[0] + '-' + widget.date.toString().split('-')[1] + '-' + widget.date.toString().split('-')[2].substring(0, 2) + '일')
+                                                              .where('Date',
+                                                                  isEqualTo: widget
+                                                                              .date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          0] +
+                                                                      '-' +
+                                                                      widget.date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          1] +
+                                                                      '-' +
+                                                                      widget.date
+                                                                          .toString()
+                                                                          .split('-')[
+                                                                              2]
+                                                                          .substring(
+                                                                              0, 2) +
+                                                                      '일')
                                                               .get()
                                                               .then((value) {
                                                             deleteid.clear();
@@ -826,7 +879,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                       () => Get
                                                                           .back());
                                                             });
-                                                          }));
+                                                          });
+                                                        });
+                                                      }
                                                     },
                                                     child: Container(
                                                       alignment:
@@ -1168,19 +1223,27 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                           suffixIcon: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    controllers[index].text =
-                                                        '';
-                                                    scollection
-                                                        .removelistitem(index);
-                                                  });
-                                                },
-                                                child: const Icon(
-                                                    Icons.remove_circle_outline,
-                                                    color: Colors.red),
-                                              ),
+                                              ischeckedtohideminus == true
+                                                  ? InkWell(
+                                                      onTap: () {},
+                                                      child: const SizedBox(
+                                                          width: 30),
+                                                    )
+                                                  : InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          controllers[index]
+                                                              .text = '';
+                                                          scollection
+                                                              .removelistitem(
+                                                                  index);
+                                                        });
+                                                      },
+                                                      child: const Icon(
+                                                          Icons
+                                                              .remove_circle_outline,
+                                                          color: Colors.red),
+                                                    ),
                                               Column(
                                                 children: [
                                                   InkWell(
@@ -1357,21 +1420,29 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                               suffixIcon: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        controllers[index]
-                                                            .text = '';
-                                                        scollection
-                                                            .removelistitem(
-                                                                index);
-                                                      });
-                                                    },
-                                                    child: const Icon(
-                                                        Icons
-                                                            .remove_circle_outline,
-                                                        color: Colors.red),
-                                                  ),
+                                                  ischeckedtohideminus == true
+                                                      ? InkWell(
+                                                          onTap: () {},
+                                                          child: const SizedBox(
+                                                            width: 30,
+                                                          ),
+                                                        )
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              controllers[index]
+                                                                  .text = '';
+                                                              scollection
+                                                                  .removelistitem(
+                                                                      index);
+                                                            });
+                                                          },
+                                                          child: const Icon(
+                                                              Icons
+                                                                  .remove_circle_outline,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
                                                   Column(
                                                     children: [
                                                       InkWell(
@@ -1529,21 +1600,28 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                               suffixIcon: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        controllers[index]
-                                                            .text = '';
-                                                        scollection
-                                                            .removelistitem(
-                                                                index);
-                                                      });
-                                                    },
-                                                    child: const Icon(
-                                                        Icons
-                                                            .remove_circle_outline,
-                                                        color: Colors.red),
-                                                  ),
+                                                  ischeckedtohideminus == true
+                                                      ? InkWell(
+                                                          onTap: () {},
+                                                          child: const SizedBox(
+                                                              width: 30),
+                                                        )
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              controllers[index]
+                                                                  .text = '';
+                                                              scollection
+                                                                  .removelistitem(
+                                                                      index);
+                                                            });
+                                                          },
+                                                          child: const Icon(
+                                                              Icons
+                                                                  .remove_circle_outline,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
                                                   Column(
                                                     children: [
                                                       InkWell(
