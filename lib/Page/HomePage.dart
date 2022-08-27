@@ -22,6 +22,7 @@ import '../Tool/NoBehavior.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/ClickShowEachCalendar.dart';
 import '../UI/Home/firstContentNet/ClickShowEachNote.dart';
+import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -1410,7 +1411,7 @@ class _HomePageState extends State<HomePage> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => HomeView(), transition: Transition.zoom);
+                  showreadycontent(context, height);
                 },
                 child: Text('문의하기',
                     style: TextStyle(

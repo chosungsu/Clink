@@ -42,7 +42,7 @@ class UserSettings extends StatelessWidget {
             return GestureDetector(
                 onTap: () {
                   index == 0
-                      ? showreadycontent(context, height, pcontroll)
+                      ? showreadycontent(context, height)
                       : (index == 1
                           ? Get.to(() => OptionChangePage(),
                               transition: Transition.rightToLeft)
@@ -97,45 +97,5 @@ class UserSettings extends StatelessWidget {
                 ));
           }),
     );
-  }
-
-  showreadycontent(
-    BuildContext context,
-    double height,
-    PageController pController,
-  ) {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        )),
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return Container(
-            margin: const EdgeInsets.all(10),
-            child: Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  height: 280,
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: readycontent(context, height, pController),
-                )),
-          );
-        }).whenComplete(() {});
   }
 }

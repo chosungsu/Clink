@@ -759,6 +759,7 @@ class _DayScriptState extends State<DayScript> {
                                                   '일',
                                               'homesave': false,
                                               'security': false,
+                                              'pinnumber': '0000',
                                               'EditDate':
                                                   DateFormat('yyyy-MM-dd')
                                                           .parse(widget

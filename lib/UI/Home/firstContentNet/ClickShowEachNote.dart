@@ -512,146 +512,151 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                           leftBarIndicatorColor:
                                                               Colors.green
                                                                   .shade100,
-                                                        ).show(context);
-                                                        for (int i = 0;
-                                                            i <
-                                                                scollection
-                                                                    .memolistin
-                                                                    .length;
-                                                            i++) {
-                                                          checklisttexts.add(MemoList(
-                                                              memocontent:
+                                                        )
+                                                            .show(context)
+                                                            .whenComplete(() {
+                                                          for (int i = 0;
+                                                              i <
                                                                   scollection
-                                                                          .memolistcontentin[
-                                                                      i],
-                                                              contentindex:
-                                                                  scollection
-                                                                          .memolistin[
-                                                                      i]));
-                                                        }
+                                                                      .memolistin
+                                                                      .length;
+                                                              i++) {
+                                                            checklisttexts.add(MemoList(
+                                                                memocontent:
+                                                                    scollection
+                                                                            .memolistcontentin[
+                                                                        i],
+                                                                contentindex:
+                                                                    scollection
+                                                                            .memolistin[
+                                                                        i]));
+                                                          }
 
-                                                        firestore
-                                                            .collection(
-                                                                'MemoDataBase')
-                                                            .doc(widget.doc)
-                                                            .update(
-                                                          {
-                                                            'memoTitle':
-                                                                textEditingController1
-                                                                    .text,
-                                                            'Collection': Hive.box('user_setting').get(
-                                                                            'memocollection') ==
-                                                                        '' ||
-                                                                    Hive.box('user_setting').get(
-                                                                            'memocollection') ==
-                                                                        null
-                                                                ? null
-                                                                : (widget.doccollection !=
-                                                                        Hive.box('user_setting').get(
-                                                                            'memocollection')
-                                                                    ? Hive.box(
-                                                                            'user_setting')
-                                                                        .get(
-                                                                            'memocollection')
-                                                                    : widget
-                                                                        .doccollection),
-                                                            'memolist': checklisttexts
-                                                                    .map((e) => e
-                                                                        .memocontent)
-                                                                    .toList()
-                                                                    .isEmpty
-                                                                ? null
-                                                                : checklisttexts
-                                                                    .map((e) =>
-                                                                        e.memocontent)
-                                                                    .toList(),
-                                                            'memoindex': checklisttexts
-                                                                    .map((e) => e
-                                                                        .contentindex)
-                                                                    .toList()
-                                                                    .isEmpty
-                                                                ? null
-                                                                : checklisttexts
-                                                                    .map((e) =>
-                                                                        e.contentindex)
-                                                                    .toList(),
-                                                            'OriginalUser':
-                                                                username,
-                                                            'color': _color
-                                                                .value
-                                                                .toInt(),
-                                                            'EditDate': editDateTo
-                                                                        .toString()
-                                                                        .split(
-                                                                            '-')[
-                                                                    0] +
-                                                                '-' +
-                                                                editDateTo
-                                                                        .toString()
-                                                                        .split(
-                                                                            '-')[
-                                                                    1] +
-                                                                '-' +
-                                                                editDateTo
-                                                                    .toString()
-                                                                    .split(
-                                                                        '-')[2]
-                                                                    .substring(
-                                                                        0, 2) +
-                                                                '일',
-                                                          },
-                                                        ).whenComplete(() {
-                                                          Future.delayed(
-                                                              const Duration(
-                                                                  seconds: 0),
-                                                              () {
-                                                            Flushbar(
-                                                              backgroundColor:
-                                                                  Colors.blue
-                                                                      .shade400,
-                                                              titleText: Text(
-                                                                  'Notice',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        contentTitleTextsize(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  )),
-                                                              messageText: Text(
-                                                                  '메모가 정상적으로 변경되었습니다.',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        contentTextsize(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  )),
-                                                              icon: const Icon(
-                                                                Icons
-                                                                    .info_outline,
-                                                                size: 25.0,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              duration:
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          2),
-                                                              leftBarIndicatorColor:
-                                                                  Colors.blue
-                                                                      .shade100,
-                                                            )
-                                                                .show(context)
-                                                                .whenComplete(
-                                                                    () => Get
-                                                                        .back());
+                                                          firestore
+                                                              .collection(
+                                                                  'MemoDataBase')
+                                                              .doc(widget.doc)
+                                                              .update(
+                                                            {
+                                                              'memoTitle':
+                                                                  textEditingController1
+                                                                      .text,
+                                                              'Collection': Hive.box('user_setting').get(
+                                                                              'memocollection') ==
+                                                                          '' ||
+                                                                      Hive.box('user_setting').get(
+                                                                              'memocollection') ==
+                                                                          null
+                                                                  ? null
+                                                                  : (widget.doccollection !=
+                                                                          Hive.box('user_setting').get(
+                                                                              'memocollection')
+                                                                      ? Hive.box(
+                                                                              'user_setting')
+                                                                          .get(
+                                                                              'memocollection')
+                                                                      : widget
+                                                                          .doccollection),
+                                                              'memolist': checklisttexts
+                                                                      .map((e) => e
+                                                                          .memocontent)
+                                                                      .toList()
+                                                                      .isEmpty
+                                                                  ? null
+                                                                  : checklisttexts
+                                                                      .map((e) =>
+                                                                          e.memocontent)
+                                                                      .toList(),
+                                                              'memoindex': checklisttexts
+                                                                      .map((e) => e
+                                                                          .contentindex)
+                                                                      .toList()
+                                                                      .isEmpty
+                                                                  ? null
+                                                                  : checklisttexts
+                                                                      .map((e) =>
+                                                                          e.contentindex)
+                                                                      .toList(),
+                                                              'OriginalUser':
+                                                                  username,
+                                                              'color': _color
+                                                                  .value
+                                                                  .toInt(),
+                                                              'EditDate': editDateTo
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[
+                                                                      0] +
+                                                                  '-' +
+                                                                  editDateTo
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[
+                                                                      1] +
+                                                                  '-' +
+                                                                  editDateTo
+                                                                      .toString()
+                                                                      .split('-')[
+                                                                          2]
+                                                                      .substring(
+                                                                          0,
+                                                                          2) +
+                                                                  '일',
+                                                            },
+                                                          ).whenComplete(() {
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    seconds: 0),
+                                                                () {
+                                                              Flushbar(
+                                                                backgroundColor:
+                                                                    Colors.blue
+                                                                        .shade400,
+                                                                titleText: Text(
+                                                                    'Notice',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          contentTitleTextsize(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    )),
+                                                                messageText: Text(
+                                                                    '메모가 정상적으로 변경되었습니다.',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          contentTextsize(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    )),
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .info_outline,
+                                                                  size: 25.0,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                duration:
+                                                                    const Duration(
+                                                                        seconds:
+                                                                            2),
+                                                                leftBarIndicatorColor:
+                                                                    Colors.blue
+                                                                        .shade100,
+                                                              )
+                                                                  .show(context)
+                                                                  .whenComplete(
+                                                                      () => Get
+                                                                          .back());
+                                                            });
                                                           });
                                                         });
                                                       } else {

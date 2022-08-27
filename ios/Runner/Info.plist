@@ -10,6 +10,8 @@
 	<string>To Choose photo when you post photo</string>
 	<key>NSCameraUsageDescription</key>
 	<string>To take photo when you post photo</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>To lock your memos with face id</string>
 	<key>CFBundleDisplayName</key>
 	<string>Clickbyme</string>
 	<key>CFBundleExecutable</key>

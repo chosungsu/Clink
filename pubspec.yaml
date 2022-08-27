@@ -96,6 +96,9 @@ dependencies:
   contacts_service: ^0.6.3
   flutter_app_badger: ^1.4.0
   focused_menu: ^1.0.5
+  local_auth: ^2.1.2
+  local_auth_ios: ^1.0.9
+  local_auth_android: ^1.0.11
 
 dev_dependencies:
   flutter_test:
@@ -118,18 +121,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/google_signin.png
-    - assets/images/kakao_login_medium_wide.png
-    - assets/images/fingerprint.png
-    - assets/images/icon-link.png
-    - assets/images/icon-chat.png
-    - assets/images/date.png
-    - assets/images/food.png
-    - assets/images/challenge.png
-    - assets/images/playlist.png
-    - assets/images/phrase.png
-    - assets/images/run.png
-    - assets/images/book.png
+    - assets/images/instagram.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

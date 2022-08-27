@@ -660,6 +660,8 @@ content(
                               'memoindex': null,
                               'memolist': null,
                               'homesave': false,
+                              'security': false,
+                              'pinnumber': '0000',
                               'EditDate': date.toString().split('-')[0] +
                                   '-' +
                                   date.toString().split('-')[1] +

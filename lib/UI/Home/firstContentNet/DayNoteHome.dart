@@ -5,6 +5,7 @@ import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachNote.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/settingMemoHome.dart';
+import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -568,22 +569,13 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                   onPressed: () {
                                     setState(() {
                                       //하단 시트로 지문, 얼굴인식 로직 띄우기
-                                      snapshot.data!.docs[index]['security'] ==
-                                              false
-                                          ? firestore
-                                              .collection('MemoDataBase')
-                                              .doc(
-                                                  snapshot.data!.docs[index].id)
-                                              .update({
-                                              'security': true,
-                                            })
-                                          : firestore
-                                              .collection('MemoDataBase')
-                                              .doc(
-                                                  snapshot.data!.docs[index].id)
-                                              .update({
-                                              'security': false,
-                                            });
+                                      settingsecurityform(
+                                          context,
+                                          snapshot.data!.docs[index].id,
+                                          snapshot.data!.docs[index]
+                                              ['security'],
+                                          snapshot.data!.docs[index]
+                                              ['pinnumber']);
                                     });
                                   }),
                             ],
@@ -683,20 +675,51 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                     children: [
                                                       SizedBox(
                                                         height: 110,
-                                                        child: Text(
-                                                          textsummary[index],
-                                                          softWrap: true,
-                                                          maxLines: 3,
-                                                          style: TextStyle(
-                                                            color: TextColor(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize(),
-                                                          ),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
+                                                        child: snapshot.data!
+                                                                            .docs[
+                                                                        index][
+                                                                    'security'] ==
+                                                                false
+                                                            ? Text(
+                                                                textsummary[
+                                                                    index],
+                                                                softWrap: true,
+                                                                maxLines: 3,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color:
+                                                                      TextColor(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      contentTextsize(),
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              )
+                                                            : Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child:
+                                                                    NeumorphicIcon(
+                                                                  Icons.lock,
+                                                                  size: 50,
+                                                                  style: NeumorphicStyle(
+                                                                      shape: NeumorphicShape
+                                                                          .convex,
+                                                                      depth: 2,
+                                                                      surfaceIntensity:
+                                                                          0.5,
+                                                                      color:
+                                                                          TextColor_shadowcolor(),
+                                                                      lightSource:
+                                                                          LightSource
+                                                                              .topLeft),
+                                                                ),
+                                                              ),
                                                       ),
                                                     ],
                                                   ))),
