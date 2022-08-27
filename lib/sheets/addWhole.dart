@@ -23,7 +23,7 @@ addWhole(
           Padding(
               padding: MediaQuery.of(context).viewInsets,
               child: SingleChildScrollView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 child: Container(
                   //height: s == 'home' ? 440 : 340,
                   decoration: const BoxDecoration(
@@ -279,13 +279,13 @@ content(
                                                         child: NeumorphicIcon(
                                                           Icons.calendar_month,
                                                           size: 25,
-                                                          style: NeumorphicStyle(
+                                                          style: const NeumorphicStyle(
                                                               shape:
                                                                   NeumorphicShape
                                                                       .convex,
                                                               depth: 2,
                                                               color:
-                                                                  TextColor(),
+                                                                  Colors.black,
                                                               lightSource:
                                                                   LightSource
                                                                       .topLeft),
@@ -299,7 +299,7 @@ content(
                                                       child: Text('캘린더',
                                                           style: TextStyle(
                                                               color:
-                                                                  TextColor(),
+                                                                  Colors.black,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
@@ -347,7 +347,7 @@ content(
                                                       child: Text('캘린더',
                                                           style: TextStyle(
                                                               color:
-                                                                  TextColor(),
+                                                                  Colors.black,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
@@ -391,13 +391,13 @@ content(
                                                         child: NeumorphicIcon(
                                                           Icons.description,
                                                           size: 25,
-                                                          style: NeumorphicStyle(
+                                                          style: const NeumorphicStyle(
                                                               shape:
                                                                   NeumorphicShape
                                                                       .convex,
                                                               depth: 2,
                                                               color:
-                                                                  TextColor(),
+                                                                  Colors.black,
                                                               lightSource:
                                                                   LightSource
                                                                       .topLeft),
@@ -411,7 +411,7 @@ content(
                                                       child: Text('일상메모',
                                                           style: TextStyle(
                                                               color:
-                                                                  TextColor(),
+                                                                  Colors.black,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
@@ -459,7 +459,7 @@ content(
                                                       child: Text('일상메모',
                                                           style: TextStyle(
                                                               color:
-                                                                  TextColor(),
+                                                                  Colors.black,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,

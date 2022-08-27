@@ -544,6 +544,48 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                             });
                                     });
                                   }),
+                              FocusedMenuItem(
+                                  trailingIcon: Icon(
+                                    snapshot.data!.docs[index]['security'] ==
+                                            false
+                                        ? Icons.lock_open
+                                        : Icons.lock,
+                                    color: snapshot.data!.docs[index]
+                                                ['security'] ==
+                                            false
+                                        ? Colors.blue.shade400
+                                        : Colors.red.shade400,
+                                  ),
+                                  title: Text(
+                                      snapshot.data!.docs[index]['security'] ==
+                                              false
+                                          ? '잠금설정'
+                                          : '잠금해제',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize())),
+                                  onPressed: () {
+                                    setState(() {
+                                      //하단 시트로 지문, 얼굴인식 로직 띄우기
+                                      snapshot.data!.docs[index]['security'] ==
+                                              false
+                                          ? firestore
+                                              .collection('MemoDataBase')
+                                              .doc(
+                                                  snapshot.data!.docs[index].id)
+                                              .update({
+                                              'security': true,
+                                            })
+                                          : firestore
+                                              .collection('MemoDataBase')
+                                              .doc(
+                                                  snapshot.data!.docs[index].id)
+                                              .update({
+                                              'security': false,
+                                            });
+                                    });
+                                  }),
                             ],
                             duration: const Duration(seconds: 0),
                             animateMenuItems: true,

@@ -201,7 +201,11 @@ class _DayScriptState extends State<DayScript> {
                                                 : NaviColor(true),
                                             lightSource: LightSource.topLeft),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        for (int i = 0; i < nodes.length; i++) {
+                                          nodes[i].unfocus();
+                                        }
+                                      },
                                       duration: const Duration(seconds: 0),
                                       animateMenuItems: true,
                                       menuOffset: 20,
@@ -414,7 +418,7 @@ class _DayScriptState extends State<DayScript> {
                       Icons.remove_circle_outline,
                       size: 30,
                     ),
-                    label: Text(ischeckedtohideminus == true ? 'hide' : 'on',
+                    label: Text(ischeckedtohideminus == true ? 'on' : 'hide',
                         style: TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
@@ -754,6 +758,7 @@ class _DayScriptState extends State<DayScript> {
                                                       .split(' ')[0] +
                                                   '일',
                                               'homesave': false,
+                                              'security': false,
                                               'EditDate':
                                                   DateFormat('yyyy-MM-dd')
                                                           .parse(widget

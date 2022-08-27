@@ -13,7 +13,8 @@ checkdeletecandm(BuildContext context, String s) {
           fontSize: contentTitleTextsize(),
           color: Colors.redAccent,
         )),
-    content: Text('정말 이 ' + s + '를 삭제하시겠습니까?',
+    content: Text(
+        s == '일정' ? '정말 이 ' + s + '을 삭제하시겠습니까?' : '정말 이 ' + s + '를 삭제하시겠습니까?',
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: contentTextsize(),

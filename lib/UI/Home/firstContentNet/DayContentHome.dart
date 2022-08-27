@@ -75,7 +75,7 @@ class _DayContentHomeState extends State<DayContentHome> {
     _scrollController = ScrollController()
       ..addListener(() {
         if (setcal_fromsheet == 2) {
-          if (_scrollController.offset >= 170 * 4) {
+          if (_scrollController.offset >= 170 * 2) {
             setState(() {
               controll_cals.setcals1w(widget.title);
               setcal_fromsheet = controll_cals.showcalendar;

@@ -166,7 +166,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                 : NaviColor(true),
                                             lightSource: LightSource.topLeft),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        for (int i = 0; i < nodes.length; i++) {
+                                          nodes[i].unfocus();
+                                        }
+                                      },
                                       duration: const Duration(seconds: 0),
                                       animateMenuItems: true,
                                       menuOffset: 20,
@@ -379,7 +383,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                       Icons.remove_circle_outline,
                       size: 30,
                     ),
-                    label: Text(ischeckedtohideminus == true ? 'hide' : 'on',
+                    label: Text(ischeckedtohideminus == true ? 'on' : 'hide',
                         style: TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
