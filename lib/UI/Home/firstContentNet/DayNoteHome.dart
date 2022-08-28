@@ -4,7 +4,6 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachNote.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
-import 'package:clickbyme/sheets/settingMemoHome.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -16,8 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../Sub/SecureAuth.dart';
-import '../../../Tool/Getx/memosearchsetting.dart';
-import '../../../Tool/Getx/memosortsetting.dart';
+import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
 
@@ -37,8 +35,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   double myWidth = 0.0;
   int sortmemo_fromsheet = 0;
   int searchmemo_fromsheet = 0;
-  final controll_memo = Get.put(memosearchsetting());
-  final controll_memo2 = Get.put(memosortsetting());
+  final controll_memo = Get.put(memosetting());
   final scollection = Get.put(selectcollection());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final searchNode = FocusNode();
@@ -62,8 +59,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   @override
   void initState() {
     super.initState();
-    searchmemo_fromsheet = controll_memo.memosearch;
-    sortmemo_fromsheet = controll_memo2.memosort;
+    sortmemo_fromsheet = controll_memo.memosort;
     controller = TextEditingController();
     sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
     _scrollController = ScrollController()
@@ -383,51 +379,6 @@ class _DayNoteHomeState extends State<DayNoteHome> {
       ],
     );
   }*/
-
-  settingMemoHome(
-    BuildContext context,
-    memosearchsetting controllMemo,
-    memosortsetting controllMemo2,
-  ) {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        )),
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return Container(
-              margin: const EdgeInsets.all(10),
-              child: Padding(
-                  padding: MediaQuery.of(context).viewInsets,
-                  child: Container(
-                    height: 320,
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        )),
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: SheetPage_memo(context, sortmemo_fromsheet,
-                        controllMemo, controllMemo2, searchmemo_fromsheet),
-                  )));
-        }).whenComplete(() {
-      setState(() {
-        sortmemo_fromsheet = controllMemo2.memosort;
-        searchmemo_fromsheet = controllMemo.memosearch;
-      });
-    });
-  }
 
   ADBox() {
     return Column(

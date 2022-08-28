@@ -1,5 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
+import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -17,6 +19,7 @@ import '../../../Dialogs/checkbackincandm.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
+import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../sheets/addmemocollection.dart';
@@ -60,6 +63,7 @@ class _DayScriptState extends State<DayScript> {
   //캘린더변수
   late Map<DateTime, List<Event>> _events;
   static final cal_share_person = Get.put(PeopleAdd());
+  final controll_memo = Get.put(memosetting());
   List finallist = cal_share_person.people;
   String selectedValue = '선택없음';
   bool isChecked_pushalarm = false;
@@ -78,9 +82,7 @@ class _DayScriptState extends State<DayScript> {
   ];
   bool ischeckedtohideminus = false;
   List<MemoList> checklisttexts = [];
-  Color _color = Hive.box('user_setting').get('typecolorcalendar') == null
-      ? Colors.white
-      : Color(Hive.box('user_setting').get('typecolorcalendar'));
+  Color _color = Colors.white;
 
   @override
   void didChangeDependencies() {
@@ -92,9 +94,9 @@ class _DayScriptState extends State<DayScript> {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('typecolorcalendar', null);
-    _color = Hive.box('user_setting').get('typecolorcalendar') == null
-        ? Colors.white
-        : Color(Hive.box('user_setting').get('typecolorcalendar'));
+    Hive.box('user_setting').put('coloreachmemo', Colors.white.value.toInt());
+    controll_memo.setcolor();
+    _color = controll_memo.color;
     checklisttexts.clear();
     controllers.clear();
     scollection.resetmemolist();
@@ -134,7 +136,6 @@ class _DayScriptState extends State<DayScript> {
 
   Future<bool> _onBackPressed() async {
     final reloadpage = await Get.dialog(checkbackincandm(context)) ?? false;
-    print(reloadpage);
     if (reloadpage) {
       Get.back();
     }
@@ -179,251 +180,32 @@ class _DayScriptState extends State<DayScript> {
                   SizedBox(
                     height: 40,
                     child: ListView.builder(
-                        padding: const EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.only(left: 20, right: 10),
                         physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
-                        itemCount: 2,
+                        itemCount: 3,
                         itemBuilder: ((context, index) {
                           return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               index == 0
-                                  ? FocusedMenuHolder(
-                                      child: NeumorphicIcon(
-                                        Icons.post_add,
-                                        size: 30,
-                                        style: NeumorphicStyle(
-                                            shape: NeumorphicShape.convex,
-                                            depth: 2,
-                                            surfaceIntensity: 0.5,
-                                            color: checkbottoms[0] == false
-                                                ? NaviColor(false)
-                                                : NaviColor(true),
-                                            lightSource: LightSource.topLeft),
-                                      ),
-                                      onPressed: () {
-                                        for (int i = 0; i < nodes.length; i++) {
-                                          nodes[i].unfocus();
-                                        }
-                                      },
-                                      duration: const Duration(seconds: 0),
-                                      animateMenuItems: true,
-                                      menuOffset: 20,
-                                      menuBoxDecoration: const BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(40.0))),
-                                      bottomOffsetHeight: 10,
-                                      menuWidth: 60,
-                                      openWithTap: true,
-                                      menuItems: [
-                                          FocusedMenuItem(
-                                              trailingIcon: const Icon(
-                                                Icons.post_add,
-                                                size: 30,
-                                              ),
-                                              title: Text('',
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize())),
-                                              onPressed: () {
-                                                setState(() {
-                                                  checkbottoms[0] == false
-                                                      ? checkbottoms[0] = true
-                                                      : checkbottoms[0] = false;
-                                                  if (checkbottoms[0] == true) {
-                                                    Hive.box('user_setting')
-                                                        .put('optionmemoinput',
-                                                            0);
-                                                    Hive.box('user_setting').put(
-                                                        'optionmemocontentinput',
-                                                        null);
-                                                    scollection.addmemolistin(
-                                                        scollection.memoindex);
-                                                    scollection
-                                                        .addmemolistcontentin(
-                                                            scollection
-                                                                    .memoindex -
-                                                                1);
-
-                                                    checkbottoms[0] = false;
-                                                  }
-                                                  for (int i = 0;
-                                                      i < nodes.length;
-                                                      i++) {
-                                                    nodes[i].unfocus();
-                                                  }
-                                                });
-                                              }),
-                                          FocusedMenuItem(
-                                              trailingIcon: const Icon(
-                                                Icons.check_box_outline_blank,
-                                                size: 30,
-                                              ),
-                                              title: Text('',
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize())),
-                                              onPressed: () {
-                                                setState(() {
-                                                  checkbottoms[1] == false
-                                                      ? checkbottoms[1] = true
-                                                      : checkbottoms[1] = false;
-                                                  if (checkbottoms[1] == true) {
-                                                    Hive.box('user_setting')
-                                                        .put('optionmemoinput',
-                                                            1);
-                                                    Hive.box('user_setting').put(
-                                                        'optionmemocontentinput',
-                                                        null);
-                                                    scollection.addmemolistin(
-                                                        scollection.memoindex);
-                                                    scollection
-                                                        .addmemolistcontentin(
-                                                            scollection
-                                                                    .memoindex -
-                                                                1);
-                                                    checkbottoms[1] = false;
-                                                  }
-                                                  for (int i = 0;
-                                                      i < nodes.length;
-                                                      i++) {
-                                                    nodes[i].unfocus();
-                                                  }
-                                                });
-                                              }),
-                                          FocusedMenuItem(
-                                              trailingIcon: const Icon(
-                                                Icons.star_rate,
-                                                size: 30,
-                                              ),
-                                              title: Text('',
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize())),
-                                              onPressed: () {
-                                                setState(() {
-                                                  checkbottoms[2] == false
-                                                      ? checkbottoms[2] = true
-                                                      : checkbottoms[2] = false;
-                                                  if (checkbottoms[2] == true) {
-                                                    Hive.box('user_setting')
-                                                        .put('optionmemoinput',
-                                                            2);
-                                                    Hive.box('user_setting').put(
-                                                        'optionmemocontentinput',
-                                                        null);
-                                                    scollection.addmemolistin(
-                                                        scollection.memoindex);
-                                                    scollection
-                                                        .addmemolistcontentin(
-                                                            scollection
-                                                                    .memoindex -
-                                                                1);
-                                                    checkbottoms[2] = false;
-                                                  }
-                                                  for (int i = 0;
-                                                      i < nodes.length;
-                                                      i++) {
-                                                    nodes[i].unfocus();
-                                                  }
-                                                });
-                                              })
-                                        ])
-                                  : IconButton(
-                                      icon: Container(
-                                        width: 20.0,
-                                        height: 20.0,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(100.0)),
-                                          border: Border.all(
-                                            color: TextColor(),
-                                            width: 2.0,
-                                          ),
-                                        ),
-                                        child: CircleAvatar(
-                                          backgroundColor: _color,
-                                        ),
-                                      ),
-                                      color: checkbottoms[2] == false
-                                          ? NaviColor(false)
-                                          : NaviColor(true),
-                                      iconSize: 20,
-                                      onPressed: () {
-                                        for (int i = 0; i < nodes.length; i++) {
-                                          nodes[i].unfocus();
-                                        }
-                                        setState(() {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text('선택'),
-                                                content: SingleChildScrollView(
-                                                  child: ColorPicker(
-                                                    pickerColor: _color,
-                                                    onColorChanged:
-                                                        (Color color) {
-                                                      setState(() {
-                                                        _color = color;
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
-                                                actions: <Widget>[
-                                                  ElevatedButton(
-                                                    child: const Text('반영하기'),
-                                                    onPressed: () {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'typecolorcalendar',
-                                                              _color.value
-                                                                  .toInt());
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        });
-                                      },
-                                    ),
+                                  ? MFHolderfirst(
+                                      checkbottoms, nodes, scollection)
+                                  : (index == 1
+                                      ? MFthird(
+                                          nodes,
+                                          _color,
+                                        )
+                                      : MFsecond(
+                                          nodes,
+                                          _color,
+                                        )),
                             ],
                           );
                         })),
                   ),
-                  TextButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        if (ischeckedtohideminus) {
-                          ischeckedtohideminus = false;
-                        } else {
-                          ischeckedtohideminus = true;
-                        }
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.remove_circle_outline,
-                      size: 30,
-                    ),
-                    label: Text(ischeckedtohideminus == true ? 'on' : 'hide',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize())),
-                  )
+                  MFforth(ischeckedtohideminus)
                 ],
               ))
           : const SizedBox(
@@ -434,617 +216,440 @@ class _DayScriptState extends State<DayScript> {
 
   UI() {
     double height = MediaQuery.of(context).size.height;
-    return SizedBox(
-      height: height,
-      child: Container(
-          decoration: BoxDecoration(
-            color: widget.position == 'note' ? _color : BGColor(),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                  height: 80,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+    return StatefulBuilder(builder: ((context, setState) {
+      return GetBuilder<memosetting>(
+          builder: (_) => SizedBox(
+                height: height,
+                child: Container(
+                    decoration: BoxDecoration(
+                      color: widget.position == 'note'
+                          ? (_color == controll_memo.color
+                              ? _color
+                              : controll_memo.color)
+                          : BGColor(),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(
+                            height: 80,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                              width: 50,
+                                              child: InkWell(
+                                                  onTap: () async {
+                                                    final reloadpage =
+                                                        await Get.dialog(
+                                                                checkbackincandm(
+                                                                    context)) ??
+                                                            false;
+                                                    if (reloadpage) {
+                                                      Get.back();
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    width: 30,
+                                                    height: 30,
+                                                    child: NeumorphicIcon(
+                                                      Icons.keyboard_arrow_left,
+                                                      size: 30,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          surfaceIntensity: 0.5,
+                                                          color: TextColor(),
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ))),
+                                          SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  60 -
+                                                  160,
+                                              child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20, right: 20),
+                                                  child: Row(
+                                                    children: [
+                                                      Flexible(
+                                                        fit: FlexFit.tight,
+                                                        child: Text(
+                                                          '작성하기',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  secondTitleTextsize(),
+                                                              color:
+                                                                  TextColor()),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ))),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                      width: 50,
+                                      child: InkWell(
+                                          onTap: () async {
+                                            if (textEditingController1
+                                                .text.isNotEmpty) {
+                                              if (textEditingController2
+                                                      .text.isNotEmpty ||
+                                                  widget.position == 'note') {
+                                                //await localnotification.notishow();
+                                                if (widget.position == 'cal') {
+                                                  CreateCalandmemoSuccessFlushbar(
+                                                      context);
+                                                  if (differ_list.isNotEmpty) {
+                                                    for (int j = 0;
+                                                        j < differ_list.length;
+                                                        j++) {
+                                                      firestore
+                                                          .collection(
+                                                              'CalendarDataBase')
+                                                          .add({
+                                                        'Daytodo':
+                                                            textEditingController1
+                                                                .text,
+                                                        'Alarm': isChecked_pushalarm ==
+                                                                true
+                                                            ? Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'alarming_time',
+                                                                    selectedValue)
+                                                            : '설정off',
+                                                        'Timestart': textEditingController2
+                                                                    .text
+                                                                    .split(
+                                                                        ':')[0]
+                                                                    .length ==
+                                                                1
+                                                            ? '0' +
+                                                                textEditingController2
+                                                                    .text
+                                                            : textEditingController2
+                                                                .text,
+                                                        'Timefinish': textEditingController3
+                                                                    .text
+                                                                    .split(
+                                                                        ':')[0]
+                                                                    .length ==
+                                                                1
+                                                            ? '0' +
+                                                                textEditingController3
+                                                                    .text
+                                                            : textEditingController3
+                                                                .text,
+                                                        'Shares': widget.share,
+                                                        'OriginalUser':
+                                                            widget.orig,
+                                                        'calname': widget.title,
+                                                        'Date': DateFormat(
+                                                                    'yyyy-MM-dd')
+                                                                .parse(differ_list[
+                                                                        j]
+                                                                    .toString())
+                                                                .toString()
+                                                                .split(' ')[0] +
+                                                            '일',
+                                                      });
+                                                    }
+                                                    CreateCalandmemoSuccessFlushbarSub(
+                                                        context, '일정');
+                                                  } else {
+                                                    firestore
+                                                        .collection(
+                                                            'CalendarDataBase')
+                                                        .add({
+                                                      'Daytodo':
+                                                          textEditingController1
+                                                              .text,
+                                                      'Alarm': isChecked_pushalarm ==
+                                                              true
+                                                          ? Hive.box(
+                                                                  'user_setting')
+                                                              .put(
+                                                                  'alarming_time',
+                                                                  selectedValue)
+                                                          : '설정off',
+                                                      'Timestart': textEditingController2
+                                                                  .text
+                                                                  .split(':')[0]
+                                                                  .length ==
+                                                              1
+                                                          ? '0' +
+                                                              textEditingController2
+                                                                  .text
+                                                          : textEditingController2
+                                                              .text,
+                                                      'Timefinish': textEditingController3
+                                                                  .text
+                                                                  .split(':')[0]
+                                                                  .length ==
+                                                              1
+                                                          ? '0' +
+                                                              textEditingController3
+                                                                  .text
+                                                          : textEditingController3
+                                                              .text,
+                                                      'Shares': widget.share,
+                                                      'OriginalUser':
+                                                          widget.orig,
+                                                      'calname': widget.title,
+                                                      'Date': DateFormat(
+                                                                  'yyyy-MM-dd')
+                                                              .parse(widget
+                                                                  .firstdate
+                                                                  .toString())
+                                                              .toString()
+                                                              .split(' ')[0] +
+                                                          '일',
+                                                    });
+                                                    CreateCalandmemoSuccessFlushbarSub(
+                                                        context, '일정');
+                                                  }
+                                                } else {
+                                                  CreateCalandmemoSuccessFlushbar(
+                                                      context);
+                                                  for (int i = 0;
+                                                      i <
+                                                          scollection.memolistin
+                                                              .length;
+                                                      i++) {
+                                                    checklisttexts.add(MemoList(
+                                                        memocontent: scollection
+                                                                .memolistcontentin[
+                                                            i],
+                                                        contentindex:
+                                                            scollection
+                                                                    .memolistin[
+                                                                i]));
+                                                  }
+
+                                                  firestore
+                                                      .collection(
+                                                          'MemoDataBase')
+                                                      .doc()
+                                                      .set(
+                                                          {
+                                                        'memoTitle':
+                                                            textEditingController1
+                                                                .text,
+                                                        'Collection': scollection
+                                                                        .collection ==
+                                                                    '' ||
+                                                                scollection
+                                                                        .collection ==
+                                                                    null
+                                                            ? null
+                                                            : scollection
+                                                                .collection,
+                                                        'memolist':
+                                                            checklisttexts
+                                                                .map((e) => e
+                                                                    .memocontent)
+                                                                .toList(),
+                                                        'memoindex':
+                                                            checklisttexts
+                                                                .map((e) => e
+                                                                    .contentindex)
+                                                                .toList(),
+                                                        'OriginalUser':
+                                                            username,
+                                                        'color': Hive.box(
+                                                                    'user_setting')
+                                                                .get(
+                                                                    'typecolorcalendar') ??
+                                                            _color.value
+                                                                .toInt(),
+                                                        'Date': DateFormat(
+                                                                    'yyyy-MM-dd')
+                                                                .parse(widget
+                                                                    .firstdate
+                                                                    .toString())
+                                                                .toString()
+                                                                .split(' ')[0] +
+                                                            '일',
+                                                        'homesave': false,
+                                                        'security': false,
+                                                        'pinnumber': '0000',
+                                                        'EditDate': DateFormat(
+                                                                    'yyyy-MM-dd')
+                                                                .parse(widget
+                                                                    .firstdate
+                                                                    .toString())
+                                                                .toString()
+                                                                .split(' ')[0] +
+                                                            '일',
+                                                      },
+                                                          SetOptions(
+                                                              merge:
+                                                                  true)).whenComplete(
+                                                          () {
+                                                    //사진 저장로직 필요
+                                                    /*firestore
+                                                        .collection(
+                                                            'MemoPictureDataBase')
+                                                        .doc()
+                                                        .set({
+                                                      'memoTitle':
+                                                          textEditingController1
+                                                              .text,
+                                                      'Collection': scollection
+                                                                      .collection ==
+                                                                  '' ||
+                                                              scollection
+                                                                      .collection ==
+                                                                  null
+                                                          ? null
+                                                          : scollection
+                                                              .collection,
+                                                      'OriginalUser': username,
+                                                      'Date': DateFormat(
+                                                                  'yyyy-MM-dd')
+                                                              .parse(widget
+                                                                  .firstdate
+                                                                  .toString())
+                                                              .toString()
+                                                              .split(' ')[0] +
+                                                          '일',
+                                                    }, SetOptions(merge: true));*/
+                                                    CreateCalandmemoSuccessFlushbarSub(
+                                                        context, '메모');
+                                                  });
+                                                }
+                                              } else {
+                                                CreateCalandmemoFailSaveTimeCal(
+                                                    context);
+                                              }
+                                            } else {
+                                              CreateCalandmemoFailSaveTitle(
+                                                  context);
+                                            }
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            width: 30,
+                                            height: 30,
+                                            child: NeumorphicIcon(
+                                              Icons.done_all,
+                                              size: 30,
+                                              style: NeumorphicStyle(
+                                                  shape: NeumorphicShape.convex,
+                                                  depth: 2,
+                                                  surfaceIntensity: 0.5,
+                                                  color: TextColor(),
+                                                  lightSource:
+                                                      LightSource.topLeft),
+                                            ),
+                                          ))),
+                                ],
+                              ),
+                            )),
                         Flexible(
                             fit: FlexFit.tight,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                    width: 50,
-                                    child: InkWell(
-                                        onTap: () async {
-                                          final reloadpage = await Get.dialog(
-                                                  checkbackincandm(context)) ??
-                                              false;
-                                          print(reloadpage);
-                                          if (reloadpage) {
-                                            Get.back();
-                                          }
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.keyboard_arrow_left,
-                                            size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: TextColor(),
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                        ))),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width -
-                                        60 -
-                                        160,
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20, right: 20),
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text(
-                                                '작성하기',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        secondTitleTextsize(),
-                                                    color: TextColor()),
-                                              ),
-                                            ),
-                                          ],
-                                        ))),
-                              ],
-                            )),
-                        SizedBox(
-                            width: 50,
-                            child: InkWell(
-                                onTap: () async {
-                                  if (textEditingController1.text.isNotEmpty) {
-                                    if (textEditingController2
-                                            .text.isNotEmpty ||
-                                        widget.position == 'note') {
-                                      //await localnotification.notishow();
-                                      if (widget.position == 'cal') {
-                                        Flushbar(
-                                          backgroundColor:
-                                              Colors.green.shade400,
-                                          titleText: Text('Uploading...',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                    contentTitleTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          messageText: Text('잠시만 기다려주세요~',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: contentTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          icon: const Icon(
-                                            Icons.info_outline,
-                                            size: 25.0,
-                                            color: Colors.white,
-                                          ),
-                                          duration: const Duration(seconds: 1),
-                                          leftBarIndicatorColor:
-                                              Colors.green.shade100,
-                                        ).show(context);
-                                        if (differ_list.isNotEmpty) {
-                                          for (int j = 0;
-                                              j < differ_list.length;
-                                              j++) {
-                                            firestore
-                                                .collection('CalendarDataBase')
-                                                .add({
-                                              'Daytodo':
-                                                  textEditingController1.text,
-                                              'Alarm':
-                                                  isChecked_pushalarm == true
-                                                      ? Hive.box('user_setting')
-                                                          .put('alarming_time',
-                                                              selectedValue)
-                                                      : '설정off',
-                                              'Timestart':
-                                                  textEditingController2.text
-                                                              .split(':')[0]
-                                                              .length ==
-                                                          1
-                                                      ? '0' +
-                                                          textEditingController2
-                                                              .text
-                                                      : textEditingController2
-                                                          .text,
-                                              'Timefinish':
-                                                  textEditingController3.text
-                                                              .split(':')[0]
-                                                              .length ==
-                                                          1
-                                                      ? '0' +
-                                                          textEditingController3
-                                                              .text
-                                                      : textEditingController3
-                                                          .text,
-                                              'Shares': widget.share,
-                                              'OriginalUser': widget.orig,
-                                              'calname': widget.title,
-                                              'Date': DateFormat('yyyy-MM-dd')
-                                                      .parse(differ_list[j]
-                                                          .toString())
-                                                      .toString()
-                                                      .split(' ')[0] +
-                                                  '일',
-                                            });
-                                          }
-                                          Future.delayed(
-                                              const Duration(seconds: 2), () {
-                                            Flushbar(
-                                              backgroundColor:
-                                                  Colors.blue.shade400,
-                                              titleText: Text('Notice',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize:
-                                                        contentTitleTextsize(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              messageText: Text(
-                                                  '일정이 정상적으로 추가되었습니다.',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: contentTextsize(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              icon: const Icon(
-                                                Icons.info_outline,
-                                                size: 25.0,
-                                                color: Colors.white,
-                                              ),
-                                              duration:
-                                                  const Duration(seconds: 1),
-                                              leftBarIndicatorColor:
-                                                  Colors.blue.shade100,
-                                            )
-                                                .show(context)
-                                                .whenComplete(() => Get.back());
-                                          });
-                                        } else {
-                                          firestore
-                                              .collection('CalendarDataBase')
-                                              .add({
-                                            'Daytodo':
-                                                textEditingController1.text,
-                                            'Alarm': isChecked_pushalarm == true
-                                                ? Hive.box('user_setting').put(
-                                                    'alarming_time',
-                                                    selectedValue)
-                                                : '설정off',
-                                            'Timestart': textEditingController2
-                                                        .text
-                                                        .split(':')[0]
-                                                        .length ==
-                                                    1
-                                                ? '0' +
-                                                    textEditingController2.text
-                                                : textEditingController2.text,
-                                            'Timefinish': textEditingController3
-                                                        .text
-                                                        .split(':')[0]
-                                                        .length ==
-                                                    1
-                                                ? '0' +
-                                                    textEditingController3.text
-                                                : textEditingController3.text,
-                                            'Shares': widget.share,
-                                            'OriginalUser': widget.orig,
-                                            'calname': widget.title,
-                                            'Date': DateFormat('yyyy-MM-dd')
-                                                    .parse(widget.firstdate
-                                                        .toString())
-                                                    .toString()
-                                                    .split(' ')[0] +
-                                                '일',
-                                          });
-                                          Future.delayed(
-                                              const Duration(seconds: 0), () {
-                                            Flushbar(
-                                              backgroundColor:
-                                                  Colors.blue.shade400,
-                                              titleText: Text('Notice',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize:
-                                                        contentTitleTextsize(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              messageText: Text(
-                                                  '일정이 정상적으로 추가되었습니다.',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: contentTextsize(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              icon: const Icon(
-                                                Icons.info_outline,
-                                                size: 25.0,
-                                                color: Colors.white,
-                                              ),
-                                              duration:
-                                                  const Duration(seconds: 2),
-                                              leftBarIndicatorColor:
-                                                  Colors.blue.shade100,
-                                            )
-                                                .show(context)
-                                                .whenComplete(() => Get.back());
-                                          });
-                                        }
-                                      } else if (widget.position == 'note') {
-                                        Flushbar(
-                                          backgroundColor:
-                                              Colors.green.shade400,
-                                          titleText: Text('Uploading...',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                    contentTitleTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          messageText: Text('잠시만 기다려주세요~',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: contentTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          icon: const Icon(
-                                            Icons.info_outline,
-                                            size: 25.0,
-                                            color: Colors.white,
-                                          ),
-                                          duration: const Duration(seconds: 1),
-                                          leftBarIndicatorColor:
-                                              Colors.green.shade100,
-                                        ).show(context);
-                                        print(controllers.length);
-                                        for (int i = 0;
-                                            i < scollection.memolistin.length;
-                                            i++) {
-                                          checklisttexts.add(MemoList(
-                                              memocontent: scollection
-                                                  .memolistcontentin[i],
-                                              contentindex:
-                                                  scollection.memolistin[i]));
-                                        }
-
-                                        firestore
-                                            .collection('MemoDataBase')
-                                            .doc()
-                                            .set(
-                                                {
-                                              'memoTitle':
-                                                  textEditingController1.text,
-                                              'Collection': scollection
-                                                              .collection ==
-                                                          '' ||
-                                                      scollection.collection ==
-                                                          null
-                                                  ? null
-                                                  : scollection.collection,
-                                              'memolist': checklisttexts
-                                                  .map((e) => e.memocontent)
-                                                  .toList(),
-                                              'memoindex': checklisttexts
-                                                  .map((e) => e.contentindex)
-                                                  .toList(),
-                                              'OriginalUser': username,
-                                              'color': Hive.box('user_setting')
-                                                      .get(
-                                                          'typecolorcalendar') ??
-                                                  _color.value.toInt(),
-                                              'Date': DateFormat('yyyy-MM-dd')
-                                                      .parse(widget.firstdate
-                                                          .toString())
-                                                      .toString()
-                                                      .split(' ')[0] +
-                                                  '일',
-                                              'homesave': false,
-                                              'security': false,
-                                              'pinnumber': '0000',
-                                              'EditDate':
-                                                  DateFormat('yyyy-MM-dd')
-                                                          .parse(widget
-                                                              .firstdate
-                                                              .toString())
-                                                          .toString()
-                                                          .split(' ')[0] +
-                                                      '일',
-                                            },
-                                                SetOptions(
-                                                    merge: true)).whenComplete(
-                                                () {
-                                          Future.delayed(
-                                              const Duration(seconds: 0), () {
-                                            Flushbar(
-                                              backgroundColor:
-                                                  Colors.blue.shade400,
-                                              titleText: Text('Notice',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize:
-                                                        contentTitleTextsize(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              messageText: Text(
-                                                  '메모가 정상적으로 추가되었습니다.',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: contentTextsize(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              icon: const Icon(
-                                                Icons.info_outline,
-                                                size: 25.0,
-                                                color: Colors.white,
-                                              ),
-                                              duration:
-                                                  const Duration(seconds: 2),
-                                              leftBarIndicatorColor:
-                                                  Colors.blue.shade100,
-                                            )
-                                                .show(context)
-                                                .whenComplete(() => Get.back());
-                                          });
-                                        });
-                                      } else {
-                                        Flushbar(
-                                          backgroundColor:
-                                              Colors.green.shade400,
-                                          titleText: Text('Uploading...',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                    contentTitleTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          messageText: Text('잠시만 기다려주세요~',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: contentTextsize(),
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          icon: const Icon(
-                                            Icons.info_outline,
-                                            size: 25.0,
-                                            color: Colors.white,
-                                          ),
-                                          duration: const Duration(seconds: 1),
-                                          leftBarIndicatorColor:
-                                              Colors.green.shade100,
-                                        ).show(context);
-                                        firestore
-                                            .collection('CalendarDataBase')
-                                            .add({
-                                          'Daytodo':
-                                              textEditingController1.text,
-                                          'Timestart':
-                                              textEditingController2.text,
-                                          'Timefinish':
-                                              textEditingController3.text,
-                                          'Shares': finallist,
-                                          'OriginalUser': username,
-                                        }).whenComplete(() {
-                                          Future.delayed(
-                                              const Duration(seconds: 0), () {
-                                            Flushbar(
-                                              backgroundColor:
-                                                  Colors.blue.shade400,
-                                              titleText: Text('Notice',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize:
-                                                        contentTitleTextsize(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              messageText: widget.position ==
-                                                      'cal'
-                                                  ? Text('일정이 정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ))
-                                                  : Text('메모가 정상적으로 추가되었습니다.',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      )),
-                                              icon: const Icon(
-                                                Icons.info_outline,
-                                                size: 25.0,
-                                                color: Colors.white,
-                                              ),
-                                              duration:
-                                                  const Duration(seconds: 2),
-                                              leftBarIndicatorColor:
-                                                  Colors.blue.shade100,
-                                            )
-                                                .show(context)
-                                                .whenComplete(() => Get.back());
-                                          });
-                                        });
-                                      }
-                                    } else {
-                                      Flushbar(
-                                        backgroundColor: Colors.red.shade400,
-                                        titleText: Text('Notice',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: contentTitleTextsize(),
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        messageText: widget.position == 'cal'
-                                            ? Text('시작시각은 필수 입력사항입니다!',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: contentTextsize(),
-                                                  fontWeight: FontWeight.bold,
-                                                ))
-                                            : Text('메모내용은 필수 입력사항입니다!',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: contentTextsize(),
-                                                  fontWeight: FontWeight.bold,
-                                                )),
-                                        icon: const Icon(
-                                          Icons.info_outline,
-                                          size: 25.0,
-                                          color: Colors.white,
+                            child: SizedBox(
+                              child: ScrollConfiguration(
+                                behavior: NoBehavior(),
+                                child: SingleChildScrollView(child:
+                                    StatefulBuilder(
+                                        builder: (_, StateSetter setState) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 20,
                                         ),
-                                        duration: const Duration(seconds: 1),
-                                        leftBarIndicatorColor:
-                                            Colors.red.shade100,
-                                      ).show(context);
-                                    }
-                                  } else {
-                                    Flushbar(
-                                      backgroundColor: Colors.red.shade400,
-                                      titleText: Text('Notice',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: contentTitleTextsize(),
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                      messageText: Text('제목은 필수 입력사항입니다!',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: contentTextsize(),
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                      icon: const Icon(
-                                        Icons.info_outline,
-                                        size: 25.0,
-                                        color: Colors.white,
-                                      ),
-                                      duration: const Duration(seconds: 1),
-                                      leftBarIndicatorColor:
-                                          Colors.red.shade100,
-                                    ).show(context);
-                                  }
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 30,
-                                  height: 30,
-                                  child: NeumorphicIcon(
-                                    Icons.done_all,
-                                    size: 30,
-                                    style: NeumorphicStyle(
-                                        shape: NeumorphicShape.convex,
-                                        depth: 2,
-                                        surfaceIntensity: 0.5,
-                                        color: TextColor(),
-                                        lightSource: LightSource.topLeft),
-                                  ),
-                                ))),
+                                        buildSheetTitle(widget.firstdate),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        WholeContent(),
+                                        widget.position == 'cal'
+                                            ? const SizedBox(
+                                                height: 30,
+                                              )
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        widget.position == 'cal'
+                                            ? SetTimeTitle()
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        widget.position == 'cal'
+                                            ? const SizedBox(
+                                                height: 20,
+                                              )
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        widget.position == 'cal'
+                                            ? Time()
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        widget.position == 'cal'
+                                            ? const SizedBox(
+                                                height: 30,
+                                              )
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        widget.position == 'cal'
+                                            ? SetAlarmTitle()
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        widget.position == 'cal'
+                                            ? const SizedBox(
+                                                height: 20,
+                                              )
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        widget.position == 'cal'
+                                            ? Alarm()
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        const SizedBox(
+                                          height: 50,
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                })),
+                              ),
+                            )),
                       ],
-                    ),
-                  )),
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: SizedBox(
-                    child: ScrollConfiguration(
-                      behavior: NoBehavior(),
-                      child: SingleChildScrollView(child:
-                          StatefulBuilder(builder: (_, StateSetter setState) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              buildSheetTitle(widget.firstdate),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              WholeContent(),
-                              widget.position == 'cal'
-                                  ? const SizedBox(
-                                      height: 30,
-                                    )
-                                  : const SizedBox(
-                                      height: 0,
-                                    ),
-                              widget.position == 'cal'
-                                  ? SetTimeTitle()
-                                  : const SizedBox(
-                                      height: 0,
-                                    ),
-                              widget.position == 'cal'
-                                  ? const SizedBox(
-                                      height: 20,
-                                    )
-                                  : const SizedBox(
-                                      height: 0,
-                                    ),
-                              widget.position == 'cal'
-                                  ? Time()
-                                  : const SizedBox(
-                                      height: 0,
-                                    ),
-                              widget.position == 'cal'
-                                  ? const SizedBox(
-                                      height: 30,
-                                    )
-                                  : const SizedBox(
-                                      height: 0,
-                                    ),
-                              widget.position == 'cal'
-                                  ? SetAlarmTitle()
-                                  : const SizedBox(
-                                      height: 0,
-                                    ),
-                              widget.position == 'cal'
-                                  ? const SizedBox(
-                                      height: 20,
-                                    )
-                                  : const SizedBox(
-                                      height: 0,
-                                    ),
-                              widget.position == 'cal'
-                                  ? Alarm()
-                                  : const SizedBox(
-                                      height: 0,
-                                    ),
-                              const SizedBox(
-                                height: 50,
-                              )
-                            ],
-                          ),
-                        );
-                      })),
-                    ),
-                  )),
-            ],
-          )),
-    );
+                    )),
+              ));
+    }));
   }
 
   buildSheetTitle(DateTime fromDate) {
@@ -1165,6 +770,31 @@ class _DayScriptState extends State<DayScript> {
                           controller: textEditingController1,
                         ),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        child: Text(
+                          '첨부사진',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                              color: TextColor()),
+                        ),
+                      ),
+                      SizedBox(
+                          height: 100,
+                          child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: 0,
+                              itemBuilder: ((context, index) {
+                                return Row(
+                                  children: [],
+                                );
+                              }))),
                       const SizedBox(
                         height: 20,
                       ),
@@ -1309,7 +939,8 @@ class _DayScriptState extends State<DayScript> {
                                                       mainAxisSize:
                                                           MainAxisSize.min,
                                                       children: [
-                                                        ischeckedtohideminus ==
+                                                        controll_memo
+                                                                    .ischeckedtohideminus ==
                                                                 true
                                                             ? InkWell(
                                                                 onTap: () {},
@@ -1510,7 +1141,8 @@ class _DayScriptState extends State<DayScript> {
                                                           mainAxisSize:
                                                               MainAxisSize.min,
                                                           children: [
-                                                            ischeckedtohideminus ==
+                                                            controll_memo
+                                                                        .ischeckedtohideminus ==
                                                                     true
                                                                 ? InkWell(
                                                                     onTap:
@@ -1677,7 +1309,8 @@ class _DayScriptState extends State<DayScript> {
                                                           mainAxisSize:
                                                               MainAxisSize.min,
                                                           children: [
-                                                            ischeckedtohideminus ==
+                                                            controll_memo
+                                                                        .ischeckedtohideminus ==
                                                                     true
                                                                 ? InkWell(
                                                                     onTap:

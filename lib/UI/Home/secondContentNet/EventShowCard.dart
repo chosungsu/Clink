@@ -1,15 +1,10 @@
 import 'package:clickbyme/Sub/HowToUsePage.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/PayHome.dart';
-import 'package:clickbyme/UI/Setting/BuyingPage.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import '../firstContentNet/ChooseCalendar.dart';
-import '../firstContentNet/DayNoteHome.dart';
 
 class EventShowCard extends StatelessWidget {
   EventShowCard(

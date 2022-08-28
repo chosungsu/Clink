@@ -1,5 +1,6 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -148,11 +149,6 @@ content(
   List choicelist,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  /*int changetype = 0;
-  final List types = [
-    '캘린더',
-    '메모',
-  ];*/
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -553,86 +549,14 @@ content(
               ),
               onPressed: () {
                 if (controller.text.isEmpty) {
-                  Flushbar(
-                    margin:
-                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    borderRadius: BorderRadius.circular(10),
-                    backgroundColor: Colors.red.shade400,
-                    titleText: Text('Notice',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTitleTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    messageText: Text('카드제목은 필수사항입니다.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    icon: const Icon(
-                      Icons.info_outline,
-                      size: 25.0,
-                      color: Colors.white,
-                    ),
-                    duration: const Duration(seconds: 1),
-                    leftBarIndicatorColor: Colors.red.shade100,
-                  ).show(context);
+                  CreateCalandmemoFailSaveTitle(context);
                 } else if (choicelist[0] == 0 &&
                     choicelist[1] == 0 &&
                     s == 'home') {
-                  Flushbar(
-                    margin:
-                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    borderRadius: BorderRadius.circular(10),
-                    backgroundColor: Colors.red.shade400,
-                    titleText: Text('Notice',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTitleTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    messageText: Text('카테고리는 필수 선택사항입니다.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    icon: const Icon(
-                      Icons.info_outline,
-                      size: 25.0,
-                      color: Colors.white,
-                    ),
-                    duration: const Duration(seconds: 1),
-                    leftBarIndicatorColor: Colors.red.shade100,
-                  ).show(context);
+                  CreateCalandmemoFailSaveCategory(context);
                 } else {
                   setState(() {
-                    Flushbar(
-                      margin: const EdgeInsets.only(
-                          left: 10, right: 10, bottom: 10),
-                      borderRadius: BorderRadius.circular(10),
-                      backgroundColor: Colors.green.shade400,
-                      titleText: Text('Notice',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: contentTitleTextsize(),
-                            fontWeight: FontWeight.bold,
-                          )),
-                      messageText: Text('잠시만 기다려주세요~',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: contentTextsize(),
-                            fontWeight: FontWeight.bold,
-                          )),
-                      icon: const Icon(
-                        Icons.info_outline,
-                        size: 25.0,
-                        color: Colors.white,
-                      ),
-                      duration: const Duration(seconds: 1),
-                      leftBarIndicatorColor: Colors.green.shade100,
-                    ).show(context);
+                    CreateCalandmemoSuccessFlushbar(context);
                     if (s == 'home') {
                       choicelist[0] == 1
                           ? firestore.collection('CalendarSheetHome').add({
@@ -654,6 +578,8 @@ content(
                                       .split('-')[2]
                                       .substring(0, 2) +
                                   '일'
+                            }).whenComplete(() {
+                              CreateCalandmemoSuccessFlushbarSub(context, '일정');
                             })
                           : firestore.collection('MemoDataBase').doc().set({
                               'Collection': null,
@@ -685,6 +611,8 @@ content(
                                       .split('-')[2]
                                       .substring(0, 2) +
                                   '일'
+                            }).whenComplete(() {
+                              CreateCalandmemoSuccessFlushbarSub(context, '메모');
                             });
                     } else {
                       firestore.collection('CalendarSheetHome').add({
@@ -703,37 +631,10 @@ content(
                             '-' +
                             date.toString().split('-')[2].substring(0, 2) +
                             '일'
+                      }).whenComplete(() {
+                        CreateCalandmemoSuccessFlushbarSub(context, '일정');
                       });
                     }
-                  });
-
-                  Flushbar(
-                    margin:
-                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    borderRadius: BorderRadius.circular(10),
-                    backgroundColor: Colors.blue.shade400,
-                    titleText: Text('Notice',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTitleTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    messageText: Text('정상적으로 추가되었습니다.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    icon: const Icon(
-                      Icons.info_outline,
-                      size: 25.0,
-                      color: Colors.white,
-                    ),
-                    duration: const Duration(seconds: 2),
-                    leftBarIndicatorColor: Colors.blue.shade100,
-                  ).show(context).whenComplete(() {
-                    //전면광고띄우기
-                    Get.back();
                   });
                 }
               },
