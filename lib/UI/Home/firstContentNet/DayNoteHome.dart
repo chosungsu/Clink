@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosearchsetting.dart';
 import '../../../Tool/Getx/memosortsetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
@@ -575,7 +576,9 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                           snapshot.data!.docs[index]
                                               ['security'],
                                           snapshot.data!.docs[index]
-                                              ['pinnumber']);
+                                              ['pinnumber'],
+                                          snapshot.data!.docs[index]
+                                              ['securewith']);
                                     });
                                   }),
                             ],
@@ -586,30 +589,155 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                             menuWidth:
                                 (MediaQuery.of(context).size.width - 50) / 2,
                             openWithTap: false,
-                            onPressed: () {
+                            onPressed: () async {
                               //개별 노트로 이동로직
-                              Get.to(
-                                  () => ClickShowEachNote(
-                                        date: snapshot.data!.docs[index]
-                                            ['Date'],
-                                        doc: snapshot.data!.docs[index].id,
-                                        doccollection: snapshot.data!
-                                                .docs[index]['Collection'] ??
-                                            '',
-                                        doccolor: snapshot.data!.docs[index]
-                                            ['color'],
-                                        docindex: snapshot.data!.docs[index]
-                                                ['memoindex'] ??
-                                            [],
-                                        docname: snapshot.data!.docs[index]
-                                            ['memoTitle'],
-                                        docsummary: snapshot.data!.docs[index]
-                                                ['memolist'] ??
-                                            [],
-                                        editdate: snapshot.data!.docs[index]
-                                            ['EditDate'],
-                                      ),
-                                  transition: Transition.downToUp);
+                              if (snapshot.data!.docs[index]['security'] ==
+                                      false ||
+                                  snapshot.data!.docs[index]['securewith'] ==
+                                      999) {
+                                Get.to(
+                                    () => ClickShowEachNote(
+                                          date: snapshot.data!.docs[index]
+                                              ['Date'],
+                                          doc: snapshot.data!.docs[index].id,
+                                          doccollection: snapshot.data!
+                                                  .docs[index]['Collection'] ??
+                                              '',
+                                          doccolor: snapshot.data!.docs[index]
+                                              ['color'],
+                                          docindex: snapshot.data!.docs[index]
+                                                  ['memoindex'] ??
+                                              [],
+                                          docname: snapshot.data!.docs[index]
+                                              ['memoTitle'],
+                                          docsummary: snapshot.data!.docs[index]
+                                                  ['memolist'] ??
+                                              [],
+                                          editdate: snapshot.data!.docs[index]
+                                              ['EditDate'],
+                                        ),
+                                    transition: Transition.downToUp);
+                              } else if (snapshot.data!.docs[index]
+                                      ['securewith'] ==
+                                  0) {
+                                if (GetPlatform.isAndroid) {
+                                  final reloadpage = await Get.to(
+                                      () => SecureAuth(
+                                          string: '지문',
+                                          id: snapshot.data!.docs[index].id,
+                                          doc_secret_bool: snapshot
+                                              .data!.docs[index]['security'],
+                                          doc_pin_number: snapshot
+                                              .data!.docs[index]['pinnumber'],
+                                          unlock: true),
+                                      transition: Transition.downToUp);
+                                  if (reloadpage != null &&
+                                      reloadpage == true) {
+                                    Get.to(
+                                        () => ClickShowEachNote(
+                                              date: snapshot.data!.docs[index]
+                                                  ['Date'],
+                                              doc:
+                                                  snapshot.data!.docs[index].id,
+                                              doccollection:
+                                                  snapshot.data!.docs[index]
+                                                          ['Collection'] ??
+                                                      '',
+                                              doccolor: snapshot
+                                                  .data!.docs[index]['color'],
+                                              docindex:
+                                                  snapshot.data!.docs[index]
+                                                          ['memoindex'] ??
+                                                      [],
+                                              docname: snapshot.data!
+                                                  .docs[index]['memoTitle'],
+                                              docsummary:
+                                                  snapshot.data!.docs[index]
+                                                          ['memolist'] ??
+                                                      [],
+                                              editdate: snapshot.data!
+                                                  .docs[index]['EditDate'],
+                                            ),
+                                        transition: Transition.downToUp);
+                                  }
+                                } else {
+                                  final reloadpage = await Get.to(
+                                      () => SecureAuth(
+                                          string: '얼굴',
+                                          id: snapshot.data!.docs[index].id,
+                                          doc_secret_bool: snapshot
+                                              .data!.docs[index]['security'],
+                                          doc_pin_number: snapshot
+                                              .data!.docs[index]['pinnumber'],
+                                          unlock: true),
+                                      transition: Transition.downToUp);
+                                  if (reloadpage != null &&
+                                      reloadpage == true) {
+                                    Get.to(
+                                        () => ClickShowEachNote(
+                                              date: snapshot.data!.docs[index]
+                                                  ['Date'],
+                                              doc:
+                                                  snapshot.data!.docs[index].id,
+                                              doccollection:
+                                                  snapshot.data!.docs[index]
+                                                          ['Collection'] ??
+                                                      '',
+                                              doccolor: snapshot
+                                                  .data!.docs[index]['color'],
+                                              docindex:
+                                                  snapshot.data!.docs[index]
+                                                          ['memoindex'] ??
+                                                      [],
+                                              docname: snapshot.data!
+                                                  .docs[index]['memoTitle'],
+                                              docsummary:
+                                                  snapshot.data!.docs[index]
+                                                          ['memolist'] ??
+                                                      [],
+                                              editdate: snapshot.data!
+                                                  .docs[index]['EditDate'],
+                                            ),
+                                        transition: Transition.downToUp);
+                                  }
+                                }
+                              } else {
+                                final reloadpage = await Get.to(
+                                    () => SecureAuth(
+                                        string: '핀',
+                                        id: snapshot.data!.docs[index].id,
+                                        doc_secret_bool: snapshot
+                                            .data!.docs[index]['security'],
+                                        doc_pin_number: snapshot
+                                            .data!.docs[index]['pinnumber'],
+                                        unlock: true),
+                                    transition: Transition.downToUp);
+                                if (reloadpage != null && reloadpage == true) {
+                                  Get.to(
+                                      () => ClickShowEachNote(
+                                            date: snapshot.data!.docs[index]
+                                                ['Date'],
+                                            doc: snapshot.data!.docs[index].id,
+                                            doccollection:
+                                                snapshot.data!.docs[index]
+                                                        ['Collection'] ??
+                                                    '',
+                                            doccolor: snapshot.data!.docs[index]
+                                                ['color'],
+                                            docindex: snapshot.data!.docs[index]
+                                                    ['memoindex'] ??
+                                                [],
+                                            docname: snapshot.data!.docs[index]
+                                                ['memoTitle'],
+                                            docsummary: snapshot.data!
+                                                    .docs[index]['memolist'] ??
+                                                [],
+                                            editdate: snapshot.data!.docs[index]
+                                                ['EditDate'],
+                                          ),
+                                      transition: Transition.downToUp);
+                                }
+                              }
                             },
                             child: Stack(
                               children: [

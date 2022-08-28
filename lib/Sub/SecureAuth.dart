@@ -21,11 +21,13 @@ class SecureAuth extends StatefulWidget {
     required this.id,
     required this.doc_secret_bool,
     required this.doc_pin_number,
+    required this.unlock,
   }) : super(key: key);
   final String string;
   final String id;
   final String doc_pin_number;
   final bool doc_secret_bool;
+  final bool unlock;
   @override
   State<StatefulWidget> createState() => _SecureAuthState();
 }
@@ -76,14 +78,14 @@ class _SecureAuthState extends State<SecureAuth> {
     try {
       _auth = await auth.authenticate(
           localizedReason:
-              widget.string == '지문' ? '지문인식이 필요합니다!' : '얼굴인식이 필요합니다!',
+              widget.string == '지문' ? '지문 또는 홍채인식이 필요합니다!' : '얼굴인식이 필요합니다!',
           options: const AuthenticationOptions(
             useErrorDialogs: false,
             stickyAuth: true,
           ),
           authMessages: <AuthMessages>[
             AndroidAuthMessages(
-              signInTitle: widget.string == '지문' ? '지문인식' : '얼굴인식',
+              signInTitle: widget.string == '지문' ? '지문 또는 홍채인식' : '얼굴인식',
               cancelButton: '취소',
             ),
             const IOSAuthMessages(
@@ -94,65 +96,95 @@ class _SecureAuthState extends State<SecureAuth> {
     setState(() {
       signauth = _auth ? '인증에 성공하였습니다!' : '인증에 실패하였습니다!';
       if (_auth) {
-        widget.doc_secret_bool == true
-            ? firestore.collection('MemoDataBase').doc(widget.id).update({
-                'security': false,
-                'pinnumber': '0000',
-              }).whenComplete(() {
-                Flushbar(
-                  backgroundColor: Colors.blue.shade400,
-                  titleText: Text('Notice',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentTitleTextsize(),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  messageText: Text('정상적으로 잠금이 해제되었습니다.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentTextsize(),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  icon: const Icon(
-                    Icons.info_outline,
-                    size: 25.0,
-                    color: Colors.white,
-                  ),
-                  duration: const Duration(seconds: 2),
-                  leftBarIndicatorColor: Colors.blue.shade100,
-                ).show(context).whenComplete(() {
-                  Get.back();
+        if (!widget.unlock) {
+          widget.doc_secret_bool == true
+              ? firestore.collection('MemoDataBase').doc(widget.id).update({
+                  'security': false,
+                  'pinnumber': '0000',
+                  'securewith': 999,
+                }).whenComplete(() {
+                  Flushbar(
+                    backgroundColor: Colors.blue.shade400,
+                    titleText: Text('Notice',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTitleTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    messageText: Text('정상적으로 잠금이 해제되었습니다.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    icon: const Icon(
+                      Icons.info_outline,
+                      size: 25.0,
+                      color: Colors.white,
+                    ),
+                    duration: const Duration(seconds: 2),
+                    leftBarIndicatorColor: Colors.blue.shade100,
+                  ).show(context).whenComplete(() {
+                    Get.back();
+                  });
+                })
+              : firestore.collection('MemoDataBase').doc(widget.id).update({
+                  'security': true,
+                  'pinnumber': '0000',
+                  'securewith': 0,
+                }).whenComplete(() {
+                  Flushbar(
+                    backgroundColor: Colors.blue.shade400,
+                    titleText: Text('Notice',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTitleTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    messageText: Text('정상적으로 잠금이 설정되었습니다.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    icon: const Icon(
+                      Icons.info_outline,
+                      size: 25.0,
+                      color: Colors.white,
+                    ),
+                    duration: const Duration(seconds: 2),
+                    leftBarIndicatorColor: Colors.blue.shade100,
+                  ).show(context).whenComplete(() {
+                    Get.back();
+                  });
                 });
-              })
-            : firestore.collection('MemoDataBase').doc(widget.id).update({
-                'security': true,
-                'pinnumber': '0000',
-              }).whenComplete(() {
-                Flushbar(
-                  backgroundColor: Colors.blue.shade400,
-                  titleText: Text('Notice',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentTitleTextsize(),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  messageText: Text('정상적으로 잠금이 설정되었습니다.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentTextsize(),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  icon: const Icon(
-                    Icons.info_outline,
-                    size: 25.0,
-                    color: Colors.white,
-                  ),
-                  duration: const Duration(seconds: 2),
-                  leftBarIndicatorColor: Colors.blue.shade100,
-                ).show(context).whenComplete(() {
-                  Get.back();
-                });
-              });
+        } else {
+          //잠금해제하지 않고 내용보는 로직
+          Flushbar(
+            backgroundColor: Colors.blue.shade400,
+            titleText: Text('Notice',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: contentTitleTextsize(),
+                  fontWeight: FontWeight.bold,
+                )),
+            messageText: Text('인증되었습니다.',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: contentTextsize(),
+                  fontWeight: FontWeight.bold,
+                )),
+            icon: const Icon(
+              Icons.info_outline,
+              size: 25.0,
+              color: Colors.white,
+            ),
+            duration: const Duration(seconds: 2),
+            leftBarIndicatorColor: Colors.blue.shade100,
+          ).show(context).whenComplete(() {
+            Get.back(result: true);
+          });
+        }
       }
     });
   }
@@ -185,65 +217,95 @@ class _SecureAuthState extends State<SecureAuth> {
     } else {
       //승인
       if (widget.doc_pin_number == strpin || widget.doc_pin_number == '0000') {
-        widget.doc_secret_bool == true
-            ? firestore.collection('MemoDataBase').doc(widget.id).update({
-                'security': false,
-                'pinnumber': '0000',
-              }).whenComplete(() {
-                Flushbar(
-                  backgroundColor: Colors.blue.shade400,
-                  titleText: Text('Notice',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentTitleTextsize(),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  messageText: Text('정상적으로 잠금이 해제되었습니다.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentTextsize(),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  icon: const Icon(
-                    Icons.info_outline,
-                    size: 25.0,
-                    color: Colors.white,
-                  ),
-                  duration: const Duration(seconds: 2),
-                  leftBarIndicatorColor: Colors.blue.shade100,
-                ).show(context).whenComplete(() {
-                  Get.back();
+        if (!widget.unlock) {
+          widget.doc_secret_bool == true
+              ? firestore.collection('MemoDataBase').doc(widget.id).update({
+                  'security': false,
+                  'pinnumber': '0000',
+                  'securewith': 999,
+                }).whenComplete(() {
+                  Flushbar(
+                    backgroundColor: Colors.blue.shade400,
+                    titleText: Text('Notice',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTitleTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    messageText: Text('정상적으로 잠금이 해제되었습니다.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    icon: const Icon(
+                      Icons.info_outline,
+                      size: 25.0,
+                      color: Colors.white,
+                    ),
+                    duration: const Duration(seconds: 2),
+                    leftBarIndicatorColor: Colors.blue.shade100,
+                  ).show(context).whenComplete(() {
+                    Get.back();
+                  });
+                })
+              : firestore.collection('MemoDataBase').doc(widget.id).update({
+                  'security': true,
+                  'pinnumber': strpin,
+                  'securewith': 1,
+                }).whenComplete(() {
+                  Flushbar(
+                    backgroundColor: Colors.blue.shade400,
+                    titleText: Text('Notice',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTitleTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    messageText: Text('정상적으로 잠금이 설정되었습니다.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: contentTextsize(),
+                          fontWeight: FontWeight.bold,
+                        )),
+                    icon: const Icon(
+                      Icons.info_outline,
+                      size: 25.0,
+                      color: Colors.white,
+                    ),
+                    duration: const Duration(seconds: 2),
+                    leftBarIndicatorColor: Colors.blue.shade100,
+                  ).show(context).whenComplete(() {
+                    Get.back();
+                  });
                 });
-              })
-            : firestore.collection('MemoDataBase').doc(widget.id).update({
-                'security': true,
-                'pinnumber': strpin,
-              }).whenComplete(() {
-                Flushbar(
-                  backgroundColor: Colors.blue.shade400,
-                  titleText: Text('Notice',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentTitleTextsize(),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  messageText: Text('정상적으로 잠금이 설정되었습니다.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: contentTextsize(),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  icon: const Icon(
-                    Icons.info_outline,
-                    size: 25.0,
-                    color: Colors.white,
-                  ),
-                  duration: const Duration(seconds: 2),
-                  leftBarIndicatorColor: Colors.blue.shade100,
-                ).show(context).whenComplete(() {
-                  Get.back();
-                });
-              });
+        } else {
+          //잠금해제하지 않고 내용보는 로직
+          Flushbar(
+            backgroundColor: Colors.blue.shade400,
+            titleText: Text('Notice',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: contentTitleTextsize(),
+                  fontWeight: FontWeight.bold,
+                )),
+            messageText: Text('인증되었습니다.',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: contentTextsize(),
+                  fontWeight: FontWeight.bold,
+                )),
+            icon: const Icon(
+              Icons.info_outline,
+              size: 25.0,
+              color: Colors.white,
+            ),
+            duration: const Duration(seconds: 2),
+            leftBarIndicatorColor: Colors.blue.shade100,
+          ).show(context).whenComplete(() {
+            Get.back(result: true);
+          });
+        }
       } else {
         Flushbar(
           backgroundColor: Colors.red.shade400,

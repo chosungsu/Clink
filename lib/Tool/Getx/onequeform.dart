@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../DB/SpaceList.dart';
-
 class onequeform extends GetxController {
   int cnt = Hive.box('user_setting').get('count_formcard') ?? 5;
   DateTime dt = DateTime.now();

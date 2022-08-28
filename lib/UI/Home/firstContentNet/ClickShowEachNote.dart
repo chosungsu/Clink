@@ -104,7 +104,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
 
   Future<bool> _onBackPressed() async {
     final reloadpage = await Get.dialog(checkbackincandm(context)) ?? false;
-    print(reloadpage);
     if (reloadpage) {
       Get.back();
     }
@@ -423,7 +422,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                           final reloadpage = await Get.dialog(
                                                   checkbackincandm(context)) ??
                                               false;
-                                          print(reloadpage);
                                           if (reloadpage) {
                                             Get.back();
                                           }

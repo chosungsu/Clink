@@ -10,6 +10,7 @@ settingsecurityform(
   String id,
   bool doc,
   String doc_pin_number,
+  int doc_what_secure,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -37,7 +38,8 @@ settingsecurityform(
                   )),
               child: GestureDetector(
                 onTap: () {},
-                child: SheetSecurity(context, id, doc, doc_pin_number),
+                child: SheetSecurity(
+                    context, id, doc, doc_pin_number, doc_what_secure),
               ),
             ));
       }).whenComplete(() {});
@@ -48,6 +50,7 @@ SheetSecurity(
   String id,
   doc,
   String doc_pin_number,
+  int doc_what_secure,
 ) {
   return SizedBox(
       child: Padding(
@@ -70,7 +73,7 @@ SheetSecurity(
               const SizedBox(
                 height: 20,
               ),
-              content(context, id, doc, doc_pin_number)
+              content(context, id, doc, doc_pin_number, doc_what_secure)
             ],
           )));
 }
@@ -80,6 +83,7 @@ content(
   String id,
   doc,
   String doc_pin_number,
+  int doc_what_secure,
 ) {
   String username = Hive.box('user_info').get(
     'id',
@@ -92,85 +96,95 @@ content(
       children: [
         GetPlatform.isMobile == true
             ? (GetPlatform.isAndroid == true
-                ? ListTile(
-                    dense: true,
-                    minLeadingWidth: 30,
-                    horizontalTitleGap: 10,
-                    leading: Icon(
-                      Icons.fingerprint,
-                      color: Colors.blue.shade400,
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Get.to(
-                          () => SecureAuth(
-                              string: '지문',
-                              id: id,
-                              doc_secret_bool: doc,
-                              doc_pin_number: doc_pin_number),
-                          transition: Transition.downToUp);
-                    },
-                    trailing: Icon(Icons.keyboard_arrow_right,
-                        color: Colors.grey.shade400),
-                    title: Text(doc == true ? '지문인식 잠금해제' : '지문인식 잠금설정',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize())),
-                  )
-                : ListTile(
-                    dense: true,
-                    minLeadingWidth: 30,
-                    horizontalTitleGap: 10,
-                    leading: Icon(
-                      Icons.face,
-                      color: Colors.blue.shade400,
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Get.to(
-                          () => SecureAuth(
-                              string: '얼굴',
-                              id: id,
-                              doc_secret_bool: doc,
-                              doc_pin_number: doc_pin_number),
-                          transition: Transition.downToUp);
-                    },
-                    trailing: Icon(Icons.keyboard_arrow_right,
-                        color: Colors.grey.shade400),
-                    title: Text(doc == true ? '얼굴인식 잠금해제' : '얼굴인식 잠금설정',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize())),
-                  ))
+                ? (doc_what_secure == 0 || doc_what_secure == 999
+                    ? ListTile(
+                        dense: true,
+                        minLeadingWidth: 30,
+                        horizontalTitleGap: 10,
+                        leading: Icon(
+                          Icons.fingerprint,
+                          color: Colors.blue.shade400,
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(
+                              () => SecureAuth(
+                                  string: '지문',
+                                  id: id,
+                                  doc_secret_bool: doc,
+                                  doc_pin_number: doc_pin_number,
+                                  unlock: false),
+                              transition: Transition.downToUp);
+                        },
+                        trailing: Icon(Icons.keyboard_arrow_right,
+                            color: Colors.grey.shade400),
+                        title: Text(doc == true ? '지문인식 잠금해제' : '지문인식 잠금설정',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize())),
+                      )
+                    : SizedBox())
+                : (doc_what_secure == 0
+                    ? ListTile(
+                        dense: true,
+                        minLeadingWidth: 30,
+                        horizontalTitleGap: 10,
+                        leading: Icon(
+                          Icons.face,
+                          color: Colors.blue.shade400,
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(
+                              () => SecureAuth(
+                                    string: '얼굴',
+                                    id: id,
+                                    doc_secret_bool: doc,
+                                    doc_pin_number: doc_pin_number,
+                                    unlock: false,
+                                  ),
+                              transition: Transition.downToUp);
+                        },
+                        trailing: Icon(Icons.keyboard_arrow_right,
+                            color: Colors.grey.shade400),
+                        title: Text(doc == true ? '얼굴인식 잠금해제' : '얼굴인식 잠금설정',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize())),
+                      )
+                    : SizedBox()))
             : (SizedBox()),
-        ListTile(
-          dense: true,
-          minLeadingWidth: 30,
-          horizontalTitleGap: 10,
-          leading: Icon(
-            Icons.pin,
-            color: Colors.blue.shade400,
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            Get.to(
-                () => SecureAuth(
-                    string: '핀',
-                    id: id,
-                    doc_secret_bool: doc,
-                    doc_pin_number: doc_pin_number),
-                transition: Transition.downToUp);
-          },
-          trailing:
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400),
-          title: Text(doc == true ? '핀번호 잠금해제' : '핀번호 잠금설정',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize())),
-        ),
+        (doc_what_secure == 1 || doc_what_secure == 999
+            ? ListTile(
+                dense: true,
+                minLeadingWidth: 30,
+                horizontalTitleGap: 10,
+                leading: Icon(
+                  Icons.pin,
+                  color: Colors.blue.shade400,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Get.to(
+                      () => SecureAuth(
+                          string: '핀',
+                          id: id,
+                          doc_secret_bool: doc,
+                          doc_pin_number: doc_pin_number,
+                          unlock: false),
+                      transition: Transition.downToUp);
+                },
+                trailing: Icon(Icons.keyboard_arrow_right,
+                    color: Colors.grey.shade400),
+                title: Text(doc == true ? '핀번호 잠금해제' : '핀번호 잠금설정',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize())),
+              )
+            : SizedBox()),
         const SizedBox(
           height: 20,
         ),
