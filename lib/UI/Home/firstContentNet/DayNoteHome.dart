@@ -49,6 +49,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   TextEditingController controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
   bool _showBackToTopButton = false;
+  bool isresponsive = false;
 
   @override
   void didChangeDependencies() {
@@ -60,6 +61,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   void initState() {
     super.initState();
     sortmemo_fromsheet = controll_memo.memosort;
+    controll_memo.resetimagelist();
     controller = TextEditingController();
     sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
     _scrollController = ScrollController()
@@ -96,6 +98,9 @@ class _DayNoteHomeState extends State<DayNoteHome> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQuery.of(context).size.height > 900
+        ? isresponsive = true
+        : isresponsive = false;
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
@@ -141,7 +146,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                         backgroundColor: Colors.blue.shade200,
                         onTap: () {
                           addmemocollector(context, username, controller,
-                              searchNode, 'outside', scollection);
+                              searchNode, 'outside', scollection, isresponsive);
                         },
                         label: '메모태그 추가',
                         labelStyle: TextStyle(
@@ -566,6 +571,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                               [],
                                           editdate: snapshot.data!.docs[index]
                                               ['EditDate'],
+                                          image: snapshot.data!.docs[index]
+                                              ['saveimage'],
                                         ),
                                     transition: Transition.downToUp);
                               } else if (snapshot.data!.docs[index]
@@ -608,6 +615,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       [],
                                               editdate: snapshot.data!
                                                   .docs[index]['EditDate'],
+                                              image: snapshot.data!.docs[index]
+                                                  ['saveimage'],
                                             ),
                                         transition: Transition.downToUp);
                                   }
@@ -648,6 +657,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                       [],
                                               editdate: snapshot.data!
                                                   .docs[index]['EditDate'],
+                                              image: snapshot.data!.docs[index]
+                                                  ['saveimage'],
                                             ),
                                         transition: Transition.downToUp);
                                   }
@@ -685,6 +696,8 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                                 [],
                                             editdate: snapshot.data!.docs[index]
                                                 ['EditDate'],
+                                            image: snapshot.data!.docs[index]
+                                                ['saveimage'],
                                           ),
                                       transition: Transition.downToUp);
                                 }

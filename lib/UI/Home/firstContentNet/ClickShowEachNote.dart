@@ -1,16 +1,14 @@
-import 'package:another_flushbar/flushbar.dart';
+import 'dart:io';
 import 'package:clickbyme/Dialogs/checkbackincandm.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/checkdeletecandm.dart';
@@ -19,6 +17,7 @@ import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
+import '../Widgets/ImageSlider.dart';
 import 'DayScript.dart';
 
 class ClickShowEachNote extends StatefulWidget {
@@ -32,12 +31,14 @@ class ClickShowEachNote extends StatefulWidget {
     required this.doccolor,
     required this.docindex,
     required this.editdate,
+    required this.image,
   }) : super(key: key);
   final String date;
   final String editdate;
   final String doc;
   final String docname;
   final String doccollection;
+  final List image;
   final List docsummary;
   final int doccolor;
   final List docindex;
@@ -69,7 +70,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
     false,
     false,
   ];
+  List savepicturelist = [];
+  final imagePicker = ImagePicker();
   bool ischeckedtohideminus = false;
+  bool isresponsive = false;
   Color _color = Colors.white;
   Color tmpcolor = Colors.white;
   List<MemoList> checklisttexts = [];
@@ -85,6 +89,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
   void initState() {
     super.initState();
     scollection.resetmemolist();
+    controll_memo.resetimagelist();
     Hive.box('user_setting').put('coloreachmemo', widget.doccolor);
     controll_memo.setcolor();
     textEditingController1 = TextEditingController(text: widget.docname);
@@ -99,6 +104,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
       Hive.box('user_setting')
           .put('optionmemocontentinput', widget.docsummary[k]);
       scollection.addmemolistcontentin(k);
+    }
+    for (int i = 0; i < widget.image.length; i++) {
+      if (widget.image[i] != null) {
+        controll_memo.setimagelist(widget.image[i]);
+      }
     }
   }
 
@@ -119,6 +129,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQuery.of(context).size.height > 900
+        ? isresponsive = true
+        : isresponsive = false;
     return SafeArea(
         child: Scaffold(
       backgroundColor: BGColor(),
@@ -294,6 +307,17 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                         contentindex:
                                                                             scollection.memolistin[i]));
                                                                   }
+                                                                  for (int j =
+                                                                          0;
+                                                                      j <
+                                                                          controll_memo
+                                                                              .imagelist
+                                                                              .length;
+                                                                      j++) {
+                                                                    savepicturelist.add(
+                                                                        controll_memo
+                                                                            .imagelist[j]);
+                                                                  }
 
                                                                   firestore
                                                                       .collection(
@@ -305,6 +329,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                       'memoTitle':
                                                                           textEditingController1
                                                                               .text,
+                                                                      'saveimage':
+                                                                          savepicturelist,
                                                                       'Collection': Hive.box('user_setting').get('memocollection') == '' ||
                                                                               Hive.box('user_setting').get('memocollection') ==
                                                                                   null
@@ -663,18 +689,53 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                     color: TextColor()),
               ),
             ),
-            SizedBox(
-                height: 100,
-                child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: 0,
-                    itemBuilder: ((context, index) {
-                      return Row(
-                        children: [],
-                      );
-                    }))),
+            GetBuilder<memosetting>(
+              builder: (_) => SizedBox(
+                  height: 100,
+                  child: controll_memo.imagelist.isEmpty
+                      ? Center(
+                          child: Text(
+                            '하단바의 사진아이콘을 클릭하여 추가하세요',
+                            style: TextStyle(
+                                fontSize: contentTextsize(),
+                                color: TextColor()),
+                          ),
+                        )
+                      : ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: controll_memo.imagelist.length,
+                          itemBuilder: ((context, index) {
+                            return Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    controll_memo.setimageindex(index);
+                                    Get.to(
+                                        () => ImageSliderPage(
+                                              index: index,
+                                            ),
+                                        transition: Transition.rightToLeft);
+                                  },
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: SizedBox(
+                                          height: 90,
+                                          width: 90,
+                                          child: Image.file(
+                                            File(
+                                                controll_memo.imagelist[index]),
+                                            fit: BoxFit.fill,
+                                          ))),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            );
+                          }))),
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -702,13 +763,13 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                               controllers[i].text;
                         }
                         addmemocollector(
-                          context,
-                          username,
-                          textEditingController_add_sheet,
-                          searchNode_add_section,
-                          'inside',
-                          scollection,
-                        );
+                            context,
+                            username,
+                            textEditingController_add_sheet,
+                            searchNode_add_section,
+                            'inside',
+                            scollection,
+                            isresponsive);
                       },
                       child: NeumorphicIcon(
                         Icons.add,

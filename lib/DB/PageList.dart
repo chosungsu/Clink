@@ -1,9 +1,9 @@
 class PageList {
   final String title;
-  final String date;
+  final String sub;
 
   PageList({
     required this.title,
-    required this.date,
+    required this.sub,
 });
 }

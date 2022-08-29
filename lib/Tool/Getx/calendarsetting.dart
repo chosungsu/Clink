@@ -6,12 +6,28 @@ class calendarsetting extends GetxController {
   int showcalendar = Hive.box('user_setting').get('viewcalsettings') ?? 0;
   int themecalendar = Hive.box('user_setting').get('origorpastel') ?? 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List sharehomeid = [];
 
   void themecals1(String id) {
     themecalendar = 0;
     Hive.box('user_setting').put('origorpastel', 0);
     firestore.collection('CalendarSheetHome').doc(id).update({
       'themesetting': themecalendar,
+    });
+    firestore
+        .collection('ShareHome')
+        .where('doc', isEqualTo: id)
+        .get()
+        .then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        sharehomeid.add(value.docs[i].id);
+      }
+    }).whenComplete(() {
+      for (int j = 0; j < sharehomeid.length; j++) {
+        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
+          'themesetting': themecalendar,
+        });
+      }
     });
     update();
     notifyChildrens();
@@ -23,6 +39,21 @@ class calendarsetting extends GetxController {
     firestore.collection('CalendarSheetHome').doc(id).update({
       'themesetting': themecalendar,
     });
+    firestore
+        .collection('ShareHome')
+        .where('doc', isEqualTo: id)
+        .get()
+        .then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        sharehomeid.add(value.docs[i].id);
+      }
+    }).whenComplete(() {
+      for (int j = 0; j < sharehomeid.length; j++) {
+        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
+          'themesetting': themecalendar,
+        });
+      }
+    });
     update();
     notifyChildrens();
   }
@@ -32,6 +63,21 @@ class calendarsetting extends GetxController {
     Hive.box('user_setting').put('viewcalsettings', 0);
     firestore.collection('CalendarSheetHome').doc(id).update({
       'viewsetting': showcalendar,
+    });
+    firestore
+        .collection('ShareHome')
+        .where('doc', isEqualTo: id)
+        .get()
+        .then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        sharehomeid.add(value.docs[i].id);
+      }
+    }).whenComplete(() {
+      for (int j = 0; j < sharehomeid.length; j++) {
+        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
+          'viewsetting': showcalendar,
+        });
+      }
     });
     update();
     notifyChildrens();
@@ -43,6 +89,21 @@ class calendarsetting extends GetxController {
     firestore.collection('CalendarSheetHome').doc(id).update({
       'viewsetting': showcalendar,
     });
+    firestore
+        .collection('ShareHome')
+        .where('doc', isEqualTo: id)
+        .get()
+        .then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        sharehomeid.add(value.docs[i].id);
+      }
+    }).whenComplete(() {
+      for (int j = 0; j < sharehomeid.length; j++) {
+        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
+          'viewsetting': showcalendar,
+        });
+      }
+    });
     update();
     notifyChildrens();
   }
@@ -52,6 +113,21 @@ class calendarsetting extends GetxController {
     Hive.box('user_setting').put('viewcalsettings', 2);
     firestore.collection('CalendarSheetHome').doc(id).update({
       'viewsetting': showcalendar,
+    });
+    firestore
+        .collection('ShareHome')
+        .where('doc', isEqualTo: id)
+        .get()
+        .then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        sharehomeid.add(value.docs[i].id);
+      }
+    }).whenComplete(() {
+      for (int j = 0; j < sharehomeid.length; j++) {
+        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
+          'viewsetting': showcalendar,
+        });
+      }
     });
     update();
     notifyChildrens();

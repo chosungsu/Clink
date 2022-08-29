@@ -1,6 +1,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -19,9 +20,9 @@ SheetPagememoCollection(
   FocusNode searchNode_add_section,
   String s,
   selectcollection scollection,
+  bool isresponsive,
 ) {
   return SizedBox(
-      height: 290,
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Column(
@@ -43,7 +44,7 @@ SheetPagememoCollection(
                 height: 20,
               ),
               content(context, username, textEditingController_add_sheet,
-                  searchNode_add_section, s, scollection)
+                  searchNode_add_section, s, scollection, isresponsive)
             ],
           )));
 }
@@ -54,14 +55,15 @@ content(
     TextEditingController textEditingController_add_sheet,
     FocusNode searchNode_add_section,
     String s,
-    selectcollection scollection) {
+    selectcollection scollection,
+    bool isresponsive) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   PageController pageController =
       PageController(initialPage: s == 'outside' ? 0 : 1);
   String selectvalue = '';
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-      height: 290,
+      height: isresponsive == true ? 290 * 2 - 50 : 290,
       child: PageView(
         controller: pageController,
         scrollDirection: Axis.vertical,
@@ -70,7 +72,7 @@ content(
             child: Column(
               children: [
                 SizedBox(
-                    height: 50,
+                    height: isresponsive == true ? 100 : 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: const [
@@ -81,11 +83,11 @@ content(
                                 fontSize: 25)),
                       ],
                     )),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: isresponsive == true ? 40 : 20,
                 ),
                 SizedBox(
-                    height: 30,
+                    height: isresponsive == true ? 60 : 30,
                     child: Row(
                       children: [
                         Text('태그 제목',
@@ -97,17 +99,17 @@ content(
                           width: 20,
                         ),
                         const Text('필수항목',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15)),
                       ],
                     )),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: isresponsive == true ? 40 : 20,
                 ),
                 SizedBox(
-                  height: 40,
+                  height: isresponsive == true ? 80 : 40,
                   child: TextField(
                     controller: textEditingController_add_sheet,
                     maxLines: 2,
@@ -132,11 +134,11 @@ content(
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: isresponsive == true ? 40 : 20,
                 ),
                 SizedBox(
-                  height: 50,
+                  height: isresponsive == true ? 50 : 50,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -169,28 +171,7 @@ content(
                           ).show(context);
                         } else {
                           setState(() {
-                            Flushbar(
-                              backgroundColor: Colors.green.shade400,
-                              titleText: Text('Notice',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: contentTitleTextsize(),
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                              messageText: Text('잠시만 기다려주세요~',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: contentTextsize(),
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                              icon: const Icon(
-                                Icons.info_outline,
-                                size: 25.0,
-                                color: Colors.white,
-                              ),
-                              duration: const Duration(seconds: 2),
-                              leftBarIndicatorColor: Colors.green.shade100,
-                            ).show(context);
+                            CreateCalandmemoSuccessFlushbar(context);
                             firestore.collection('MemoCollections').add({
                               'madeUser': username,
                               'title': textEditingController_add_sheet.text,
@@ -248,10 +229,10 @@ content(
                       )),
                 ),
                 SizedBox(
-                  height: 5,
+                  height: isresponsive == true ? 10 : 5,
                 ),
                 SizedBox(
-                    height: 40,
+                    height: isresponsive == true ? 80 : 40,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -275,7 +256,7 @@ content(
             child: Column(
               children: [
                 SizedBox(
-                    height: 40,
+                    height: isresponsive == true ? 80 : 40,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -293,10 +274,10 @@ content(
                       ],
                     )),
                 SizedBox(
-                  height: 5,
+                  height: isresponsive == true ? 10 : 5,
                 ),
                 SizedBox(
-                    height: 50,
+                    height: isresponsive == true ? 100 : 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: const [
@@ -307,11 +288,11 @@ content(
                                 fontSize: 25)),
                       ],
                     )),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: isresponsive == true ? 20 : 10,
                 ),
                 SizedBox(
-                    height: 110,
+                    height: isresponsive == true ? 220 : 110,
                     child: StatefulBuilder(builder: (_, StateSetter setState) {
                       return StreamBuilder<QuerySnapshot>(
                         stream: firestore
@@ -336,7 +317,7 @@ content(
                                             style: const NeumorphicStyle(
                                               shape: NeumorphicShape.flat,
                                               depth: 3,
-                                              color: Colors.green,
+                                              color: Colors.black45,
                                             ),
                                             textStyle: NeumorphicTextStyle(
                                               fontWeight: FontWeight.bold,
@@ -515,7 +496,7 @@ content(
                                                               });
                                                             });
                                                           },
-                                                          child: Icon(
+                                                          child: const Icon(
                                                             Icons.delete,
                                                             size: 25,
                                                             color: Colors.red,
@@ -564,8 +545,8 @@ content(
                         },
                       );
                     })),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: isresponsive == true ? 40 : 20,
                 ),
                 s == 'outside'
                     ? SizedBox(

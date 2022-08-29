@@ -1,16 +1,15 @@
-import 'package:another_flushbar/flushbar.dart';
+import 'dart:io';
+import 'package:clickbyme/UI/Home/Widgets/ImageSlider.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../DB/Event.dart';
@@ -49,11 +48,13 @@ class _DayScriptState extends State<DayScript> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  DateTime _selectedDay = DateTime.now();
+  final DateTime _selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String username = Hive.box('user_info').get(
     'id',
   );
+  bool isresponsible = false;
+  final imagePicker = ImagePicker();
   final searchNode_first_section = FocusNode();
   final searchNode_second_section = FocusNode();
   final searchNode_third_section = FocusNode();
@@ -74,6 +75,7 @@ class _DayScriptState extends State<DayScript> {
   final searchNode_add_section = FocusNode();
   late TextEditingController textEditingController_add_sheet;
   List<TextEditingController> controllers = [];
+  List savepicturelist = [];
   List<FocusNode> nodes = [];
   List<bool> checkbottoms = [
     false,
@@ -94,8 +96,9 @@ class _DayScriptState extends State<DayScript> {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('typecolorcalendar', null);
-    Hive.box('user_setting').put('coloreachmemo', Colors.white.value.toInt());
+    Hive.box('user_setting').put('coloreachmemo', BGColor().value.toInt());
     controll_memo.setcolor();
+    controll_memo.resetimagelist();
     _color = controll_memo.color;
     checklisttexts.clear();
     controllers.clear();
@@ -144,6 +147,10 @@ class _DayScriptState extends State<DayScript> {
 
   @override
   Widget build(BuildContext context) {
+    bool isresponsive = false;
+    MediaQuery.of(context).size.height > 900
+        ? isresponsive = true
+        : isresponsive = false;
     return SafeArea(
         child: Scaffold(
       backgroundColor: BGColor(),
@@ -443,7 +450,15 @@ class _DayScriptState extends State<DayScript> {
                                                                     .memolistin[
                                                                 i]));
                                                   }
-
+                                                  for (int j = 0;
+                                                      j <
+                                                          controll_memo
+                                                              .imagelist.length;
+                                                      j++) {
+                                                    savepicturelist.add(
+                                                        controll_memo
+                                                            .imagelist[j]);
+                                                  }
                                                   firestore
                                                       .collection(
                                                           'MemoDataBase')
@@ -453,6 +468,8 @@ class _DayScriptState extends State<DayScript> {
                                                         'memoTitle':
                                                             textEditingController1
                                                                 .text,
+                                                        'saveimage':
+                                                            savepicturelist,
                                                         'Collection': scollection
                                                                         .collection ==
                                                                     '' ||
@@ -783,18 +800,56 @@ class _DayScriptState extends State<DayScript> {
                               color: TextColor()),
                         ),
                       ),
-                      SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemCount: 0,
-                              itemBuilder: ((context, index) {
-                                return Row(
-                                  children: [],
-                                );
-                              }))),
+                      GetBuilder<memosetting>(
+                        builder: (_) => SizedBox(
+                            height: 100,
+                            child: controll_memo.imagelist.isEmpty
+                                ? Center(
+                                    child: Text(
+                                      '하단바의 사진아이콘을 클릭하여 추가하세요',
+                                      style: TextStyle(
+                                          fontSize: contentTextsize(),
+                                          color: TextColor()),
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemCount: controll_memo.imagelist.length,
+                                    itemBuilder: ((context, index) {
+                                      return Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              controll_memo
+                                                  .setimageindex(index);
+                                              Get.to(
+                                                  () => ImageSliderPage(
+                                                        index: index,
+                                                      ),
+                                                  transition:
+                                                      Transition.rightToLeft);
+                                            },
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                child: SizedBox(
+                                                    height: 90,
+                                                    width: 90,
+                                                    child: Image.file(
+                                                      File(controll_memo
+                                                          .imagelist[index]),
+                                                      fit: BoxFit.fill,
+                                                    ))),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          )
+                                        ],
+                                      );
+                                    }))),
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -822,13 +877,13 @@ class _DayScriptState extends State<DayScript> {
                                         controllers[i].text;
                                   }
                                   addmemocollector(
-                                    context,
-                                    username,
-                                    textEditingController_add_sheet,
-                                    searchNode_add_section,
-                                    'inside',
-                                    scollection,
-                                  );
+                                      context,
+                                      username,
+                                      textEditingController_add_sheet,
+                                      searchNode_add_section,
+                                      'inside',
+                                      scollection,
+                                      isresponsible);
                                 },
                                 child: NeumorphicIcon(
                                   Icons.add,
@@ -2210,18 +2265,17 @@ class _DayScriptState extends State<DayScript> {
 }
 
 addmemocollector(
-  BuildContext context,
-  String username,
-  TextEditingController textEditingController_add_sheet,
-  FocusNode searchNode_add_section,
-  String s,
-  selectcollection scollection,
-) {
+    BuildContext context,
+    String username,
+    TextEditingController textEditingController_add_sheet,
+    FocusNode searchNode_add_section,
+    String s,
+    selectcollection scollection,
+    bool isresponsive) {
   Get.bottomSheet(
           Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: Container(
-                height: 330,
                 decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -2229,17 +2283,22 @@ addmemocollector(
                       topRight: Radius.circular(20),
                     )),
                 child: GestureDetector(
-                  onTap: () {
-                    searchNode_add_section.unfocus();
-                  },
-                  child: SheetPagememoCollection(
-                      context,
-                      username,
-                      textEditingController_add_sheet,
-                      searchNode_add_section,
-                      s,
-                      scollection),
-                )),
+                    onTap: () {
+                      searchNode_add_section.unfocus();
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SheetPagememoCollection(
+                            context,
+                            username,
+                            textEditingController_add_sheet,
+                            searchNode_add_section,
+                            s,
+                            scollection,
+                            isresponsive),
+                      ],
+                    ))),
           ),
           backgroundColor: Colors.white,
           isScrollControlled: true,

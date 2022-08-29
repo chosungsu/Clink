@@ -39,12 +39,13 @@ CreateCalandmemoSuccessFlushbarSub(BuildContext context, String s) {
             fontSize: contentTitleTextsize(),
             fontWeight: FontWeight.bold,
           )),
-      messageText: Text(s + '이 정상적으로 입력되었습니다.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: contentTextsize(),
-            fontWeight: FontWeight.bold,
-          )),
+      messageText:
+          Text(s == '메모' ? '메모가 정상적으로 입력되었습니다.' : s + '이 정상적으로 입력되었습니다.',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: contentTextsize(),
+                fontWeight: FontWeight.bold,
+              )),
       icon: const Icon(
         Icons.info_outline,
         size: 25.0,

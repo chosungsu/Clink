@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clickbyme/Tool/Getx/selectcollection.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -5,6 +7,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
@@ -147,9 +150,14 @@ MFsecond(
   final controll_memo = Get.put(memosetting());
   return StatefulBuilder(builder: ((context, setState) {
     return IconButton(
-      icon: CircleAvatar(
-        backgroundColor:
-            _color == controll_memo.color ? _color : controll_memo.color,
+      icon: Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: TextColor()),
+            shape: BoxShape.circle),
+        child: CircleAvatar(
+          backgroundColor:
+              _color == controll_memo.color ? _color : controll_memo.color,
+        ),
       ),
       iconSize: 30,
       alignment: Alignment.center,
@@ -197,6 +205,8 @@ MFthird(
   List<FocusNode> nodes,
   Color _color,
 ) {
+  List _image = [];
+  final imagePicker = ImagePicker();
   final controll_memo = Get.put(memosetting());
   return StatefulBuilder(builder: ((context, setState) {
     return Container(
@@ -226,28 +236,41 @@ MFthird(
                   content: SingleChildScrollView(
                       child: Column(
                     children: [
-                      ListTile(
-                        title: Text('사진 촬영',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize())),
-                        leading: Icon(
-                          Icons.add_a_photo,
-                          color: Colors.blue.shade400,
-                          size: 30,
+                      GestureDetector(
+                        onTap: () async {
+                          Navigator.pop(context);
+                          final image = await imagePicker.pickImage(
+                              source: ImageSource.camera);
+                          setState(() {
+                            controll_memo.setimagelist(image!.path);
+                          });
+                        },
+                        child: ListTile(
+                          title: Text('사진 촬영',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize())),
+                          leading: Icon(
+                            Icons.add_a_photo,
+                            color: Colors.blue.shade400,
+                            size: 30,
+                          ),
                         ),
                       ),
-                      ListTile(
-                        title: Text('갤러리 선택',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize())),
-                        leading: Icon(
-                          Icons.add_photo_alternate,
-                          color: Colors.blue.shade400,
-                          size: 30,
+                      GestureDetector(
+                        onTap: () {},
+                        child: ListTile(
+                          title: Text('갤러리 선택',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize())),
+                          leading: Icon(
+                            Icons.add_photo_alternate,
+                            color: Colors.blue.shade400,
+                            size: 30,
+                          ),
                         ),
                       )
                     ],

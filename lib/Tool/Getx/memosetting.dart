@@ -10,6 +10,8 @@ class memosetting extends GetxController {
       : BGColor();
   int memosort = 0;
   bool ischeckedtohideminus = false;
+  List imagelist = [];
+  int imageindex = 0;
 
   void sort1() {
     memosort = 0;
@@ -31,6 +33,24 @@ class memosetting extends GetxController {
 
   void sethideminus(bool b) {
     ischeckedtohideminus = b;
+    update();
+    notifyChildrens();
+  }
+
+  void setimagelist(String path) {
+    imagelist.insert(0, path);
+    update();
+    notifyChildrens();
+  }
+
+  void resetimagelist() {
+    imagelist.clear();
+    update();
+    notifyChildrens();
+  }
+
+  void setimageindex(int index) {
+    imageindex = index;
     update();
     notifyChildrens();
   }

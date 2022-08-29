@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   double yoffset = 0;
   double scalefactor = 1;
   bool isdraweropen = false;
+  bool isresponsive = false;
   int navi = 0;
   int currentPage = 0;
   int categorynumber = 0;
@@ -117,7 +118,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
-
+    MediaQuery.of(context).size.height > 900
+        ? isresponsive = true
+        : isresponsive = false;
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
@@ -390,158 +393,113 @@ class _HomePageState extends State<HomePage> {
 
   H_Container_2(double height) {
     return SizedBox(
-      height: 100,
-      width: MediaQuery.of(context).size.width - 40,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-              height: 100,
-              width: MediaQuery.of(context).size.width - 40,
-              child: ContainerDesign(
-                  color: BGColor(),
-                  child: Column(
-                    children: [
-                      //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
-                      //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
-                      SizedBox(
-                          height: 70,
-                          child: GridView.count(
-                            physics: const NeverScrollableScrollPhysics(),
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            shrinkWrap: true,
-                            childAspectRatio: 2 / 1,
-                            children: List.generate(2, (index) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  index == 0
-                                      ? GestureDetector(
-                                          onTap: () async {
-                                            final reloadpage = await Get.to(
-                                                () => ChooseCalendar(),
-                                                transition:
-                                                    Transition.rightToLeft);
-                                            print(reloadpage);
-                                            if (reloadpage) {
-                                              H_Container_3(height);
-                                            }
-                                          },
-                                          child: SizedBox(
-                                            height: 60,
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 25,
-                                                  child: Container(
-                                                    alignment:
-                                                        Alignment.topCenter,
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: NeumorphicIcon(
-                                                        Icons.calendar_month,
-                                                        size: 25,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 30,
-                                                  child: Center(
-                                                    child: Text('캘린더',
-                                                        style: TextStyle(
-                                                            color: TextColor(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize())),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+        width: MediaQuery.of(context).size.width - 40,
+        child: ContainerDesign(
+            color: BGColor(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
+                //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
+                GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  shrinkWrap: true,
+                  childAspectRatio: 2 / 1,
+                  children: List.generate(2, (index) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        index == 0
+                            ? GestureDetector(
+                                onTap: () async {
+                                  final reloadpage = await Get.to(
+                                      () => ChooseCalendar(),
+                                      transition: Transition.rightToLeft);
+                                  print(reloadpage);
+                                  if (reloadpage) {
+                                    H_Container_3(height);
+                                  }
+                                },
+                                child: SizedBox(
+                                  height: isresponsive == true ? 110 : 60,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: NeumorphicIcon(
+                                          Icons.calendar_month,
+                                          size: isresponsive == true ? 50 : 25,
+                                          style: NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              depth: 2,
+                                              color: TextColor(),
+                                              lightSource: LightSource.topLeft),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: isresponsive == true ? 40 : 30,
+                                        child: Center(
+                                          child: Text('캘린더',
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () async {
+                                  final reloadpage = await Get.to(
+                                      () => const DayNoteHome(
+                                            title: '',
                                           ),
-                                        )
-                                      : GestureDetector(
-                                          onTap: () async {
-                                            final reloadpage = await Get.to(
-                                                () => const DayNoteHome(
-                                                      title: '',
-                                                    ),
-                                                transition:
-                                                    Transition.rightToLeft);
-                                            if (reloadpage) {
-                                              H_Container_3(height);
-                                            }
-                                          },
-                                          child: SizedBox(
-                                            height: 60,
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 25,
-                                                  child: Container(
-                                                    alignment:
-                                                        Alignment.topCenter,
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: NeumorphicIcon(
-                                                        Icons.description,
-                                                        size: 25,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 30,
-                                                  child: Center(
-                                                    child: Text('일상메모',
-                                                        style: TextStyle(
-                                                            color: TextColor(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize())),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                ],
-                              );
-                            }),
-                          ))
-                    ],
-                  )))
-        ],
-      ),
-    );
+                                      transition: Transition.rightToLeft);
+                                  if (reloadpage) {
+                                    H_Container_3(height);
+                                  }
+                                },
+                                child: SizedBox(
+                                  height: isresponsive == true ? 110 : 60,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: NeumorphicIcon(
+                                          Icons.description,
+                                          size: isresponsive == true ? 50 : 25,
+                                          style: NeumorphicStyle(
+                                              shape: NeumorphicShape.convex,
+                                              depth: 2,
+                                              color: TextColor(),
+                                              lightSource: LightSource.topLeft),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: isresponsive == true ? 40 : 30,
+                                        child: Center(
+                                          child: Text('일상메모',
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                      ],
+                    );
+                  }),
+                )
+              ],
+            )));
   }
 
   H_Container_3(double height) {
@@ -712,7 +670,7 @@ class _HomePageState extends State<HomePage> {
                                                             ),
                                                             trailing: int.parse(contentmy[
                                                                             index]
-                                                                        .date
+                                                                        .sub
                                                                         .toString()
                                                                         .substring(
                                                                             0,
@@ -742,7 +700,7 @@ class _HomePageState extends State<HomePage> {
                                                                         contentTextsize())),
                                                             title: Text(
                                                                 contentmy[index]
-                                                                    .date,
+                                                                    .sub,
                                                                 style:
                                                                     TextStyle(
                                                                   color:
@@ -935,7 +893,7 @@ class _HomePageState extends State<HomePage> {
                                                                       TextColor(),
                                                                 ),
                                                                 trailing: int.parse(contentshare[index]
-                                                                            .date
+                                                                            .sub
                                                                             .toString()
                                                                             .substring(0,
                                                                                 2)) >=
@@ -967,7 +925,7 @@ class _HomePageState extends State<HomePage> {
                                                                 title: Text(
                                                                     contentshare[
                                                                             index]
-                                                                        .date,
+                                                                        .sub,
                                                                     style:
                                                                         TextStyle(
                                                                       color:
@@ -1107,19 +1065,17 @@ class _HomePageState extends State<HomePage> {
                                                                           snapshot.data!.docs[index]['securewith'] ==
                                                                               999) {
                                                                         Get.to(
-                                                                            () =>
-                                                                                ClickShowEachNote(
-                                                                                  date: snapshot.data!.docs[index]['Date'],
-                                                                                  doc: snapshot.data!.docs[index].id,
-                                                                                  doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                                  doccolor: snapshot.data!.docs[index]['color'],
-                                                                                  docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                                  docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                                  docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                                  editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                ),
-                                                                            transition:
-                                                                                Transition.downToUp);
+                                                                            () => ClickShowEachNote(
+                                                                                date: snapshot.data!.docs[index]['Date'],
+                                                                                doc: snapshot.data!.docs[index].id,
+                                                                                doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                doccolor: snapshot.data!.docs[index]['color'],
+                                                                                docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                image: snapshot.data!.docs[index]['saveimage']),
+                                                                            transition: Transition.downToUp);
                                                                       } else if (snapshot
                                                                               .data!
                                                                               .docs[index]['securewith'] ==
@@ -1131,17 +1087,7 @@ class _HomePageState extends State<HomePage> {
                                                                               transition: Transition.downToUp);
                                                                           if (reloadpage != null &&
                                                                               reloadpage == true) {
-                                                                            Get.to(
-                                                                                () => ClickShowEachNote(
-                                                                                      date: snapshot.data!.docs[index]['Date'],
-                                                                                      doc: snapshot.data!.docs[index].id,
-                                                                                      doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                                      doccolor: snapshot.data!.docs[index]['color'],
-                                                                                      docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                                      docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                                      docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                                      editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                    ),
+                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
                                                                                 transition: Transition.downToUp);
                                                                           }
                                                                         } else {
@@ -1150,17 +1096,7 @@ class _HomePageState extends State<HomePage> {
                                                                               transition: Transition.downToUp);
                                                                           if (reloadpage != null &&
                                                                               reloadpage == true) {
-                                                                            Get.to(
-                                                                                () => ClickShowEachNote(
-                                                                                      date: snapshot.data!.docs[index]['Date'],
-                                                                                      doc: snapshot.data!.docs[index].id,
-                                                                                      doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                                      doccolor: snapshot.data!.docs[index]['color'],
-                                                                                      docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                                      docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                                      docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                                      editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                    ),
+                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
                                                                                 transition: Transition.downToUp);
                                                                           }
                                                                         }
@@ -1178,16 +1114,7 @@ class _HomePageState extends State<HomePage> {
                                                                             reloadpage ==
                                                                                 true) {
                                                                           Get.to(
-                                                                              () => ClickShowEachNote(
-                                                                                    date: snapshot.data!.docs[index]['Date'],
-                                                                                    doc: snapshot.data!.docs[index].id,
-                                                                                    doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                                    doccolor: snapshot.data!.docs[index]['color'],
-                                                                                    docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                                    docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                                    docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                                    editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                  ),
+                                                                              () => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
                                                                               transition: Transition.downToUp);
                                                                         }
                                                                       }
@@ -1359,19 +1286,17 @@ class _HomePageState extends State<HomePage> {
                                                                           snapshot.data!.docs[index]['securewith'] ==
                                                                               999) {
                                                                         Get.to(
-                                                                            () =>
-                                                                                ClickShowEachNote(
-                                                                                  date: snapshot.data!.docs[index]['Date'],
-                                                                                  doc: snapshot.data!.docs[index].id,
-                                                                                  doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                                  doccolor: snapshot.data!.docs[index]['color'],
-                                                                                  docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                                  docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                                  docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                                  editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                ),
-                                                                            transition:
-                                                                                Transition.downToUp);
+                                                                            () => ClickShowEachNote(
+                                                                                date: snapshot.data!.docs[index]['Date'],
+                                                                                doc: snapshot.data!.docs[index].id,
+                                                                                doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                doccolor: snapshot.data!.docs[index]['color'],
+                                                                                docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                image: snapshot.data!.docs[index]['saveimage']),
+                                                                            transition: Transition.downToUp);
                                                                       } else if (snapshot
                                                                               .data!
                                                                               .docs[index]['securewith'] ==
@@ -1383,17 +1308,7 @@ class _HomePageState extends State<HomePage> {
                                                                               transition: Transition.downToUp);
                                                                           if (reloadpage != null &&
                                                                               reloadpage == true) {
-                                                                            Get.to(
-                                                                                () => ClickShowEachNote(
-                                                                                      date: snapshot.data!.docs[index]['Date'],
-                                                                                      doc: snapshot.data!.docs[index].id,
-                                                                                      doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                                      doccolor: snapshot.data!.docs[index]['color'],
-                                                                                      docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                                      docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                                      docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                                      editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                    ),
+                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
                                                                                 transition: Transition.downToUp);
                                                                           }
                                                                         } else {
@@ -1402,17 +1317,7 @@ class _HomePageState extends State<HomePage> {
                                                                               transition: Transition.downToUp);
                                                                           if (reloadpage != null &&
                                                                               reloadpage == true) {
-                                                                            Get.to(
-                                                                                () => ClickShowEachNote(
-                                                                                      date: snapshot.data!.docs[index]['Date'],
-                                                                                      doc: snapshot.data!.docs[index].id,
-                                                                                      doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                                      doccolor: snapshot.data!.docs[index]['color'],
-                                                                                      docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                                      docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                                      docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                                      editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                    ),
+                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
                                                                                 transition: Transition.downToUp);
                                                                           }
                                                                         }
@@ -1439,6 +1344,7 @@ class _HomePageState extends State<HomePage> {
                                                                                     docname: snapshot.data!.docs[index]['memoTitle'],
                                                                                     docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
                                                                                     editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                    image: snapshot.data!.docs[index]['saveimage'],
                                                                                   ),
                                                                               transition: Transition.downToUp);
                                                                         }

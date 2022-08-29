@@ -1,4 +1,4 @@
-
+import 'package:clickbyme/DB/Expandable.dart';
 import 'package:clickbyme/DB/PageList.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
@@ -117,10 +117,12 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                     child: Text(
                                                       '알림',
                                                       style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: secondTitleTextsize(),
-                                                          color:TextColor(),),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            secondTitleTextsize(),
+                                                        color: TextColor(),
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -379,7 +381,10 @@ class _NotiAlarmState extends State<NotiAlarm> {
                 for (var sp in valuespace) {
                   final messageText = sp.get('title');
                   final messageDate = sp.get('date');
-                  _list_ad.add(PageList(title: messageText, date: messageDate));
+                  _list_ad.add(PageList(
+                    title: messageText,
+                    sub: messageDate,
+                  ));
                 }
 
                 return ListView.builder(
@@ -419,7 +424,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                           color: TextColor(),
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: contentTextsize()),
+                                                          fontSize:
+                                                              contentTextsize()),
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     )
@@ -431,13 +437,14 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                               children: [
                                                 Text(
                                                   _list_ad[index]
-                                                      .date
+                                                      .sub
                                                       .toString(),
                                                   style: TextStyle(
                                                       color: TextColor(),
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: contentTextsize()),
+                                                      fontSize:
+                                                          contentTextsize()),
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
@@ -481,7 +488,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                 for (var sp in valuespace) {
                   final messageText = sp.get('title');
                   final messageDate = sp.get('date');
-                  _list_ad.add(PageList(title: messageText, date: messageDate));
+                  _list_ad.add(PageList(title: messageText, sub: messageDate));
                 }
 
                 return ListView.builder(
@@ -521,7 +528,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                           color: TextColor(),
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: contentTextsize()),
+                                                          fontSize:
+                                                              contentTextsize()),
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     )
@@ -533,13 +541,14 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                               children: [
                                                 Text(
                                                   _list_ad[index]
-                                                      .date
+                                                      .sub
                                                       .toString(),
                                                   style: TextStyle(
                                                       color: TextColor(),
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: contentTextsize()),
+                                                      fontSize:
+                                                          contentTextsize()),
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),

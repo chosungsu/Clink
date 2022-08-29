@@ -2,7 +2,6 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/addWhole.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,7 +20,6 @@ class _MyHomePageState extends State<MyHomePage> {
   //curved navi index
   int _selectedIndex = 0;
   int page_index = Hive.box('user_setting').get('page_index') ?? 0;
-  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   late DateTime backbuttonpressedTime;
   int navi = 0;
   TextEditingController controller = TextEditingController();
@@ -83,7 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   showSelectedLabels: true,
                   showUnselectedLabels: true,
                   currentIndex: _selectedIndex,
-                  key: _bottomNavigationKey,
                   items: const <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
                       icon: Icon(Icons.home, size: 25),

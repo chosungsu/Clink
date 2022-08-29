@@ -1,5 +1,6 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/Setting/ShowLicense.dart';
 import 'package:clickbyme/sheets/DeleteUser.dart';
 import 'package:clickbyme/UI/Setting/OptionChangePage.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
@@ -48,7 +49,7 @@ class UserSettings extends StatelessWidget {
                               transition: Transition.rightToLeft)
                           : (index == 2
                               ? addgroupmember(context, searchNode, controller)
-                              : Get.to(() => OptionChangePage(),
+                              : Get.to(() => ShowLicense(),
                                   transition: Transition.rightToLeft)));
                 },
                 child: Column(

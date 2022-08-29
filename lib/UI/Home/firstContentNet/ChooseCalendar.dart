@@ -1194,9 +1194,11 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                           origin: snapshot.data!.docs[index]
                                               ['madeUser'],
                                           theme: snapshot.data!.docs[index]
-                                              ['themesetting'],
+                                                  ['themesetting'] ??
+                                              0,
                                           view: snapshot.data!.docs[index]
-                                              ['viewsetting'],
+                                                  ['viewsetting'] ??
+                                              0,
                                         ),
                                         transition: Transition.rightToLeft,
                                       );
