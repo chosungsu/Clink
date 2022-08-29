@@ -259,7 +259,14 @@ MFthird(
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          Navigator.pop(context);
+                          final image = await imagePicker.pickImage(
+                              source: ImageSource.gallery);
+                          setState(() {
+                            controll_memo.setimagelist(image!.path);
+                          });
+                        },
                         child: ListTile(
                           title: Text('갤러리 선택',
                               style: TextStyle(
