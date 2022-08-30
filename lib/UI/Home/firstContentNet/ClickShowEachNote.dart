@@ -124,12 +124,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     textEditingController_add_sheet.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      SystemNavigator.pop();
-    }
-  }
 
   Future<bool> _onBackPressed() async {
     final reloadpage = await Get.dialog(checkbackincandm(context)) ?? false;

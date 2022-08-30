@@ -51,13 +51,6 @@ class _HowToUsePageState extends State<HowToUsePage>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      SystemNavigator.pop();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(

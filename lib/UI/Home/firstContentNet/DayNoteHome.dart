@@ -86,13 +86,6 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     controller.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      SystemNavigator.pop();
-    }
-  }
-
   void _scrollToTop() {
     _scrollController.animateTo(0,
         duration: const Duration(seconds: 1), curve: Curves.easeIn);

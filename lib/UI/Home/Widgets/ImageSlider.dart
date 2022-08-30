@@ -51,13 +51,6 @@ class _ImageSliderPageState extends State<ImageSliderPage>
     super.didChangeDependencies();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      SystemNavigator.pop();
-    }
-  }
-
   Future _uploadFile(BuildContext context, File _image, String doc) async {
     await Permission.photos.request();
     var pstatus = await Permission.photos.status;

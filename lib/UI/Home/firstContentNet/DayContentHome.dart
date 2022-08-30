@@ -96,12 +96,6 @@ class _DayContentHomeState extends State<DayContentHome>
       });
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      SystemNavigator.pop();
-    }
-  }
 
   @override
   void dispose() {

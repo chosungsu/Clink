@@ -54,13 +54,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     initializeDateFormatting(Localizations.localeOf(context).languageCode);
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeDependencies();
-    if (state == AppLifecycleState.inactive) {
-      SystemNavigator.pop();
-    }
-  }
 
   @override
   void initState() {
