@@ -43,6 +43,12 @@ class memosetting extends GetxController {
     notifyChildrens();
   }
 
+  void deleteimagelist(int index) {
+    imagelist.removeAt(index);
+    update();
+    notifyChildrens();
+  }
+
   void resetimagelist() {
     imagelist.clear();
     update();

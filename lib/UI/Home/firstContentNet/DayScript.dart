@@ -200,10 +200,7 @@ class _DayScriptState extends State<DayScript> {
                                   ? MFHolderfirst(
                                       checkbottoms, nodes, scollection)
                                   : (index == 1
-                                      ? MFthird(
-                                          nodes,
-                                          _color,
-                                        )
+                                      ? MFthird(nodes, _color, '')
                                       : MFsecond(
                                           nodes,
                                           _color,
@@ -507,6 +504,13 @@ class _DayScriptState extends State<DayScript> {
                                                             '일',
                                                         'homesave': false,
                                                         'security': false,
+                                                        'photoUrl':
+                                                            controll_memo
+                                                                    .imagelist
+                                                                    .isEmpty
+                                                                ? []
+                                                                : controll_memo
+                                                                    .imagelist,
                                                         'pinnumber': '0000',
                                                         'EditDate': DateFormat(
                                                                     'yyyy-MM-dd')
@@ -826,8 +830,7 @@ class _DayScriptState extends State<DayScript> {
                                                   .setimageindex(index);
                                               Get.to(
                                                   () => ImageSliderPage(
-                                                        index: index,
-                                                      ),
+                                                      index: index, doc: ''),
                                                   transition:
                                                       Transition.rightToLeft);
                                             },
@@ -837,11 +840,34 @@ class _DayScriptState extends State<DayScript> {
                                                 child: SizedBox(
                                                     height: 90,
                                                     width: 90,
-                                                    child: Image.file(
-                                                      File(controll_memo
-                                                          .imagelist[index]),
-                                                      fit: BoxFit.fill,
-                                                    ))),
+                                                    child: Image.network(
+                                                        controll_memo
+                                                            .imagelist[index],
+                                                        fit: BoxFit.fill,
+                                                        loadingBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                Widget child,
+                                                                ImageChunkEvent?
+                                                                    loadingProgress) {
+                                                      if (loadingProgress ==
+                                                          null) {
+                                                        return child;
+                                                      }
+                                                      return Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          value: loadingProgress
+                                                                      .expectedTotalBytes !=
+                                                                  null
+                                                              ? loadingProgress
+                                                                      .cumulativeBytesLoaded /
+                                                                  loadingProgress
+                                                                      .expectedTotalBytes!
+                                                              : null,
+                                                        ),
+                                                      );
+                                                    }))),
                                           ),
                                           const SizedBox(
                                             width: 10,

@@ -572,7 +572,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                           editdate: snapshot.data!.docs[index]
                                               ['EditDate'],
                                           image: snapshot.data!.docs[index]
-                                              ['saveimage'],
+                                              ['photoUrl'],
                                         ),
                                     transition: Transition.downToUp);
                               } else if (snapshot.data!.docs[index]
@@ -616,7 +616,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                               editdate: snapshot.data!
                                                   .docs[index]['EditDate'],
                                               image: snapshot.data!.docs[index]
-                                                  ['saveimage'],
+                                                  ['photoUrl'],
                                             ),
                                         transition: Transition.downToUp);
                                   }
@@ -658,7 +658,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                               editdate: snapshot.data!
                                                   .docs[index]['EditDate'],
                                               image: snapshot.data!.docs[index]
-                                                  ['saveimage'],
+                                                  ['photoUrl'],
                                             ),
                                         transition: Transition.downToUp);
                                   }
@@ -697,7 +697,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
                                             editdate: snapshot.data!.docs[index]
                                                 ['EditDate'],
                                             image: snapshot.data!.docs[index]
-                                                ['saveimage'],
+                                                ['photoUrl'],
                                           ),
                                       transition: Transition.downToUp);
                                 }

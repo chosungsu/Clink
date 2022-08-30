@@ -13,6 +13,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/checkdeletecandm.dart';
 import '../../../Tool/BGColor.dart';
+import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -176,10 +177,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                   ? MFHolderfirst(
                                       checkbottoms, nodes, scollection)
                                   : (index == 1
-                                      ? MFthird(
-                                          nodes,
-                                          _color,
-                                        )
+                                      ? MFthird(nodes, _color, widget.doc)
                                       : MFsecond(
                                           nodes,
                                           _color,
@@ -329,7 +327,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                       'memoTitle':
                                                                           textEditingController1
                                                                               .text,
-                                                                      'saveimage':
+                                                                      'photoUrl':
                                                                           savepicturelist,
                                                                       'Collection': Hive.box('user_setting').get('memocollection') == '' ||
                                                                               Hive.box('user_setting').get('memocollection') ==
@@ -647,6 +645,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
   }
 
   Contents() {
+    List<Widget> children_imagelist = [];
     return ListView.builder(
       itemCount: 1,
       shrinkWrap: true,
@@ -691,50 +690,182 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
             ),
             GetBuilder<memosetting>(
               builder: (_) => SizedBox(
-                  height: 100,
-                  child: controll_memo.imagelist.isEmpty
-                      ? Center(
-                          child: Text(
-                            '하단바의 사진아이콘을 클릭하여 추가하세요',
-                            style: TextStyle(
-                                fontSize: contentTextsize(),
-                                color: TextColor()),
-                          ),
-                        )
-                      : ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: controll_memo.imagelist.length,
-                          itemBuilder: ((context, index) {
-                            return Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    controll_memo.setimageindex(index);
-                                    Get.to(
-                                        () => ImageSliderPage(
-                                              index: index,
+                height: 100,
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: firestore
+                        .collection('MemoDataBase')
+                        .where('memoTitle',
+                            isEqualTo: textEditingController1.text)
+                        .where('OriginalUser', isEqualTo: username)
+                        .where('color', isEqualTo: widget.doccolor.toInt())
+                        .where('Date',
+                            isEqualTo: widget.date.toString().split('-')[0] +
+                                '-' +
+                                widget.date.toString().split('-')[1] +
+                                '-' +
+                                widget.date
+                                    .toString()
+                                    .split('-')[2]
+                                    .substring(0, 2) +
+                                '일')
+                        .snapshots(),
+                    builder: ((context, snapshot) {
+                      if (snapshot.hasData) {
+                        children_imagelist = [
+                          controll_memo.imagelist.isNotEmpty
+                              ? SizedBox(
+                                  height: 90,
+                                  child: ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemCount: controll_memo.imagelist.length,
+                                      itemBuilder: ((context, index) {
+                                        return Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                controll_memo
+                                                    .setimageindex(index);
+                                                Get.to(
+                                                    () => ImageSliderPage(
+                                                        index: index,
+                                                        doc: widget.doc),
+                                                    transition:
+                                                        Transition.rightToLeft);
+                                              },
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  child: SizedBox(
+                                                      height: 90,
+                                                      width: 90,
+                                                      child: Image.network(
+                                                          controll_memo
+                                                              .imagelist[index],
+                                                          fit: BoxFit.fill,
+                                                          loadingBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  Widget child,
+                                                                  ImageChunkEvent?
+                                                                      loadingProgress) {
+                                                        if (loadingProgress ==
+                                                            null) {
+                                                          return child;
+                                                        }
+                                                        return Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            value: loadingProgress
+                                                                        .expectedTotalBytes !=
+                                                                    null
+                                                                ? loadingProgress
+                                                                        .cumulativeBytesLoaded /
+                                                                    loadingProgress
+                                                                        .expectedTotalBytes!
+                                                                : null,
+                                                          ),
+                                                        );
+                                                      }))),
                                             ),
-                                        transition: Transition.rightToLeft);
-                                  },
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: SizedBox(
-                                          height: 90,
-                                          width: 90,
-                                          child: Image.file(
-                                            File(
-                                                controll_memo.imagelist[index]),
-                                            fit: BoxFit.fill,
-                                          ))),
-                                ),
-                                SizedBox(
-                                  width: 10,
+                                            const SizedBox(
+                                              width: 10,
+                                            )
+                                          ],
+                                        );
+                                      })))
+                              : Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    SizedBox(
+                                      height: 70,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                              '하단바의 사진아이콘을 클릭하여 추가하세요',
+                                              style: TextStyle(
+                                                  fontSize: contentTextsize(),
+                                                  color: TextColor()),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    )
+                                  ],
                                 )
+                        ];
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        print('wait');
+                        children_imagelist = <Widget>[
+                          SizedBox(
+                            height: 70,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                    child: CircularProgressIndicator(
+                                  color: TextColor_shadowcolor(),
+                                ))
                               ],
-                            );
-                          }))),
+                            ),
+                          )
+                        ];
+                      } else {
+                        children_imagelist = <Widget>[
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              SizedBox(
+                                height: 70,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        '하단바의 사진아이콘을 클릭하여 추가하세요',
+                                        style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: TextColor()),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              )
+                            ],
+                          )
+                        ];
+                      }
+                      return Column(children: children_imagelist);
+                    })),
+                /*controll_memo.imagelist.isEmpty
+                    ? Center(
+                        child: Text(
+                          '하단바의 사진아이콘을 클릭하여 추가하세요',
+                          style: TextStyle(
+                              fontSize: contentTextsize(), color: TextColor()),
+                        ),
+                      )
+                    : */
+              ),
             ),
             const SizedBox(
               height: 20,

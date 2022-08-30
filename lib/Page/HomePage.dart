@@ -1074,7 +1074,7 @@ class _HomePageState extends State<HomePage> {
                                                                                 docname: snapshot.data!.docs[index]['memoTitle'],
                                                                                 docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
                                                                                 editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                image: snapshot.data!.docs[index]['saveimage']),
+                                                                                image: snapshot.data!.docs[index]['photoUrl']),
                                                                             transition: Transition.downToUp);
                                                                       } else if (snapshot
                                                                               .data!
@@ -1087,7 +1087,7 @@ class _HomePageState extends State<HomePage> {
                                                                               transition: Transition.downToUp);
                                                                           if (reloadpage != null &&
                                                                               reloadpage == true) {
-                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
+                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['photoUrl']),
                                                                                 transition: Transition.downToUp);
                                                                           }
                                                                         } else {
@@ -1096,7 +1096,7 @@ class _HomePageState extends State<HomePage> {
                                                                               transition: Transition.downToUp);
                                                                           if (reloadpage != null &&
                                                                               reloadpage == true) {
-                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
+                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['photoUrl']),
                                                                                 transition: Transition.downToUp);
                                                                           }
                                                                         }
@@ -1114,7 +1114,7 @@ class _HomePageState extends State<HomePage> {
                                                                             reloadpage ==
                                                                                 true) {
                                                                           Get.to(
-                                                                              () => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
+                                                                              () => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['photoUrl']),
                                                                               transition: Transition.downToUp);
                                                                         }
                                                                       }
@@ -1295,7 +1295,7 @@ class _HomePageState extends State<HomePage> {
                                                                                 docname: snapshot.data!.docs[index]['memoTitle'],
                                                                                 docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
                                                                                 editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                image: snapshot.data!.docs[index]['saveimage']),
+                                                                                image: snapshot.data!.docs[index]['photoUrl']),
                                                                             transition: Transition.downToUp);
                                                                       } else if (snapshot
                                                                               .data!
@@ -1317,7 +1317,7 @@ class _HomePageState extends State<HomePage> {
                                                                               transition: Transition.downToUp);
                                                                           if (reloadpage != null &&
                                                                               reloadpage == true) {
-                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
+                                                                            Get.to(() => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['photoUrl']),
                                                                                 transition: Transition.downToUp);
                                                                           }
                                                                         }
@@ -1344,7 +1344,7 @@ class _HomePageState extends State<HomePage> {
                                                                                     docname: snapshot.data!.docs[index]['memoTitle'],
                                                                                     docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
                                                                                     editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                    image: snapshot.data!.docs[index]['saveimage'],
+                                                                                    image: snapshot.data!.docs[index]['photoUrl'],
                                                                                   ),
                                                                               transition: Transition.downToUp);
                                                                         }

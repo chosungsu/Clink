@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:clickbyme/Tool/Getx/selectcollection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -8,6 +10,8 @@ import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
@@ -204,10 +208,11 @@ MFsecond(
 MFthird(
   List<FocusNode> nodes,
   Color _color,
+  String doc,
 ) {
   List _image = [];
   final imagePicker = ImagePicker();
-  final controll_memo = Get.put(memosetting());
+
   return StatefulBuilder(builder: ((context, setState) {
     return Container(
       alignment: Alignment.center,
@@ -242,7 +247,7 @@ MFthird(
                           final image = await imagePicker.pickImage(
                               source: ImageSource.camera);
                           setState(() {
-                            controll_memo.setimagelist(image!.path);
+                            _uploadFile(context, File(image!.path), doc);
                           });
                         },
                         child: ListTile(
@@ -264,7 +269,7 @@ MFthird(
                           final image = await imagePicker.pickImage(
                               source: ImageSource.gallery);
                           setState(() {
-                            controll_memo.setimagelist(image!.path);
+                            _uploadFile(context, File(image!.path), doc);
                           });
                         },
                         child: ListTile(
@@ -318,4 +323,39 @@ MFforth(bool ischeckedtohideminus) {
               fontSize: contentTextsize())),
     );
   }));
+}
+
+Future _uploadFile(BuildContext context, File _image, String doc) async {
+  final controll_memo = Get.put(memosetting());
+  await Permission.photos.request();
+  var pstatus = await Permission.photos.status;
+  if (pstatus.isGranted) {
+    DateTime now = DateTime.now();
+    var datestamp = DateFormat("yyyyMMdd'T'HHmmss");
+    String currentdate = datestamp.format(now);
+    // 스토리지에 업로드할 파일 경로
+    final firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(doc).child('$currentdate.jpg');
+
+    // 파일 업로드
+    final uploadTask = firebaseStorageRef.putFile(
+        _image, SettableMetadata(contentType: 'image/png'));
+
+    // 완료까지 기다림
+    await uploadTask.whenComplete(() {});
+
+    // 업로드 완료 후 url
+    final downloadUrl = await firebaseStorageRef.getDownloadURL();
+    controll_memo.setimagelist(downloadUrl);
+
+    // 문서 작성
+    if (doc != '') {
+      await FirebaseFirestore.instance
+          .collection('MemoDataBase')
+          .doc(doc)
+          .update({
+        'photoUrl': controll_memo.imagelist,
+      });
+    } else {}
+  }
 }
