@@ -53,7 +53,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.inactive) {
       SystemNavigator.pop();
     }
   }

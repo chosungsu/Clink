@@ -64,7 +64,7 @@ class _OptionChangePageState extends State<OptionChangePage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeDependencies();
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.inactive) {
       SystemNavigator.pop();
     }
   }

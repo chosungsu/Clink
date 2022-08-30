@@ -15,8 +15,29 @@ class LoginSignPage extends StatefulWidget {
   State<StatefulWidget> createState() => _LoginSignPageState();
 }
 
-class _LoginSignPageState extends State<LoginSignPage> {
+class _LoginSignPageState extends State<LoginSignPage>
+    with WidgetsBindingObserver {
   bool _ischecked = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      SystemNavigator.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -57,7 +57,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeDependencies();
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.inactive) {
       SystemNavigator.pop();
     }
   }

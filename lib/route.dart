@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.inactive) {
       SystemNavigator.pop();
     }
   }

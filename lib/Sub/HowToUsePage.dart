@@ -2,6 +2,7 @@ import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,7 +22,8 @@ class HowToUsePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HowToUsePageState();
 }
 
-class _HowToUsePageState extends State<HowToUsePage> {
+class _HowToUsePageState extends State<HowToUsePage>
+    with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -38,13 +40,21 @@ class _HowToUsePageState extends State<HowToUsePage> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      SystemNavigator.pop();
+    }
   }
 
   @override

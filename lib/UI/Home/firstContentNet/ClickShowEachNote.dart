@@ -126,7 +126,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.inactive) {
       SystemNavigator.pop();
     }
   }

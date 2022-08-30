@@ -127,7 +127,6 @@ class _SplashPageState extends State<SplashPage>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     scaleController.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -135,7 +134,7 @@ class _SplashPageState extends State<SplashPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.inactive) {
       SystemNavigator.pop();
     }
   }
