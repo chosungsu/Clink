@@ -6,6 +6,7 @@ import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachCalendar.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/settingCalendarHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,7 +36,8 @@ class DayContentHome extends StatefulWidget {
   State<StatefulWidget> createState() => _DayContentHomeState();
 }
 
-class _DayContentHomeState extends State<DayContentHome> {
+class _DayContentHomeState extends State<DayContentHome>
+    with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -57,6 +59,9 @@ class _DayContentHomeState extends State<DayContentHome> {
   var _rangeStart = null;
   var _rangeEnd = null;
   ScrollController _scrollController = ScrollController();
+  List<Event> getList(DateTime date) {
+    return _events[date] ?? [];
+  }
 
   @override
   void didChangeDependencies() {
@@ -67,6 +72,7 @@ class _DayContentHomeState extends State<DayContentHome> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     setcal_fromsheet = widget.view;
     themecal_fromsheet = widget.theme;
     fromDate = DateTime.now();
@@ -90,8 +96,11 @@ class _DayContentHomeState extends State<DayContentHome> {
       });
   }
 
-  List<Event> getList(DateTime date) {
-    return _events[date] ?? [];
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
   }
 
   @override
@@ -99,6 +108,7 @@ class _DayContentHomeState extends State<DayContentHome> {
     // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {

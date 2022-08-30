@@ -2,6 +2,7 @@ import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -16,7 +17,7 @@ class HomeView extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -50,6 +51,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     docid = email_first + email_second + name_second;
     firestore
         .collection('HomeViewCategories')
@@ -79,8 +81,15 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
   }
 
   @override

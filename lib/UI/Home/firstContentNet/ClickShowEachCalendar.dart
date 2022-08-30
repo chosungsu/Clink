@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Dialogs/checkdeletecandm.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -32,7 +33,8 @@ class ClickShowEachCalendar extends StatefulWidget {
   State<StatefulWidget> createState() => _ClickShowEachCalendarState();
 }
 
-class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
+class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
+    with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -53,8 +55,17 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeDependencies();
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     textEditingController1 = TextEditingController(text: widget.calinfo);
     textEditingController2 = TextEditingController(text: widget.start);
     textEditingController3 = TextEditingController(text: widget.finish);
@@ -62,8 +73,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     textEditingController1.dispose();
     textEditingController2.dispose();
     textEditingController3.dispose();

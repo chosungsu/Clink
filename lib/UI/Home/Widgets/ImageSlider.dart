@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,7 +25,8 @@ class ImageSliderPage extends StatefulWidget {
   State<StatefulWidget> createState() => _ImageSliderPageState();
 }
 
-class _ImageSliderPageState extends State<ImageSliderPage> {
+class _ImageSliderPageState extends State<ImageSliderPage>
+    with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -40,12 +42,20 @@ class _ImageSliderPageState extends State<ImageSliderPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
+    WidgetsBinding.instance.removeObserver(this);
     super.didChangeDependencies();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
   }
 
   Future _uploadFile(BuildContext context, File _image, String doc) async {

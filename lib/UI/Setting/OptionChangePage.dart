@@ -5,6 +5,7 @@ import 'package:clickbyme/route.dart';
 import 'package:clickbyme/sheets/pushalarmsetting.dart';
 import 'package:clickbyme/sheets/userinfo_draggable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +19,8 @@ class OptionChangePage extends StatefulWidget {
   State<StatefulWidget> createState() => _OptionChangePageState();
 }
 
-class _OptionChangePageState extends State<OptionChangePage> {
+class _OptionChangePageState extends State<OptionChangePage>
+    with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -43,6 +45,7 @@ class _OptionChangePageState extends State<OptionChangePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').get('isChecked_pushalarm') == null
         ? isChecked_pushalarm = false
         : isChecked_pushalarm =
@@ -53,9 +56,17 @@ class _OptionChangePageState extends State<OptionChangePage> {
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeDependencies();
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
   }
 
   @override

@@ -6,6 +6,7 @@ import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachNote.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -29,7 +30,7 @@ class DayNoteHome extends StatefulWidget {
   State<StatefulWidget> createState() => _DayNoteHomeState();
 }
 
-class _DayNoteHomeState extends State<DayNoteHome> {
+class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -60,6 +61,7 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     sortmemo_fromsheet = controll_memo.memosort;
     controll_memo.resetimagelist();
     controller = TextEditingController();
@@ -79,8 +81,16 @@ class _DayNoteHomeState extends State<DayNoteHome> {
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     _scrollController.dispose();
     controller.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
   }
 
   void _scrollToTop() {

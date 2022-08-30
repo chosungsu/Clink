@@ -5,6 +5,7 @@ import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -47,7 +48,8 @@ class ClickShowEachNote extends StatefulWidget {
   State<StatefulWidget> createState() => _ClickShowEachNoteState();
 }
 
-class _ClickShowEachNoteState extends State<ClickShowEachNote> {
+class _ClickShowEachNoteState extends State<ClickShowEachNote>
+    with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -89,6 +91,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     scollection.resetmemolist();
     controll_memo.resetimagelist();
     Hive.box('user_setting').put('coloreachmemo', widget.doccolor);
@@ -116,8 +119,16 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     textEditingController1.dispose();
     textEditingController_add_sheet.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
   }
 
   Future<bool> _onBackPressed() async {

@@ -6,6 +6,7 @@ import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -135,7 +136,7 @@ class _SplashPageState extends State<SplashPage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      FlutterAppBadger.removeBadge();
+      SystemNavigator.pop();
     }
   }
 

@@ -7,6 +7,7 @@ import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:clickbyme/sheets/settingChoiceC.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,7 @@ class ChooseCalendar extends StatefulWidget {
 }
 
 class _ChooseCalendarState extends State<ChooseCalendar>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -59,6 +60,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('noti_calendar_click', 0);
     Hive.box('user_setting').put('sort_cal_card', 0);
     code = Hive.box('user_setting').get('noti_calendar_click') ?? 0;
@@ -81,7 +83,15 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   @override
   void dispose() {
     _scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
   }
 
   void _scrollToTop() {

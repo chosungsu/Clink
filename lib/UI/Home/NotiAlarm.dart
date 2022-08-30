@@ -5,6 +5,7 @@ import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../Tool/NoBehavior.dart';
@@ -14,7 +15,7 @@ class NotiAlarm extends StatefulWidget {
   State<StatefulWidget> createState() => _NotiAlarmState();
 }
 
-class _NotiAlarmState extends State<NotiAlarm> {
+class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -31,14 +32,22 @@ class _NotiAlarmState extends State<NotiAlarm> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('noti_home_click', 0);
     whatwantnotice = 0;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SystemNavigator.pop();
+    }
   }
 
   @override
