@@ -22,25 +22,26 @@ addWhole(
     String s) {
   Get.bottomSheet(
           Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                child: Container(
-                  //height: s == 'home' ? 440 : 340,
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      )),
-                  child: GestureDetector(
-                      onTap: () {
-                        searchNode.unfocus();
-                      },
-                      child: SheetPageAC(
-                          context, searchNode, controller, username, date, s)),
-                ),
-              )),
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              //height: s == 'home' ? 440 : 340,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  )),
+              child: GestureDetector(
+                  onTap: () {
+                    searchNode.unfocus();
+                  },
+                  child: SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: SheetPageAC(
+                        context, searchNode, controller, username, date, s),
+                  )),
+            ),
+          ),
           backgroundColor: Colors.white,
           isScrollControlled: true,
           shape:
@@ -85,8 +86,11 @@ SheetPageAC(
   Color _color = Hive.box('user_setting').get('typecolorcalendar') == null
       ? Colors.blue
       : Color(Hive.box('user_setting').get('typecolorcalendar'));
+  bool isresponsible = false;
+  MediaQuery.of(context).size.height > 900
+      ? isresponsible = true
+      : isresponsible = false;
   return SizedBox(
-      //height: s == 'home' ? 420 : 320,
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Column(
@@ -104,17 +108,17 @@ SheetPageAC(
                           color: Colors.black45),
                     ],
                   )),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: isresponsible == true ? 40 : 20,
               ),
-              title(context, controller),
-              const SizedBox(
-                height: 20,
+              title(context, controller, isresponsible),
+              SizedBox(
+                height: isresponsible == true ? 40 : 20,
               ),
               content(context, searchNode, controller, username, _color, date,
-                  s, choicelist),
-              const SizedBox(
-                height: 20,
+                  s, choicelist, isresponsible),
+              SizedBox(
+                height: isresponsible == true ? 40 : 20,
               ),
             ],
           )));
@@ -123,9 +127,10 @@ SheetPageAC(
 title(
   BuildContext context,
   TextEditingController controller,
+  bool isresponsible,
 ) {
   return SizedBox(
-      height: 50,
+      height: isresponsible == true ? 80 : 50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: const [
@@ -147,6 +152,7 @@ content(
   DateTime date,
   String s,
   List choicelist,
+  bool isresponsible,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -155,7 +161,7 @@ content(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-            height: 30,
+            height: isresponsible == true ? 60 : 30,
             child: Row(
               children: [
                 Text('제목',
@@ -173,11 +179,11 @@ content(
                         fontSize: 15)),
               ],
             )),
-        const SizedBox(
-          height: 20,
+        SizedBox(
+          height: isresponsible == true ? 40 : 20,
         ),
         SizedBox(
-          height: 40,
+          height: isresponsible == true ? 80 : 40,
           child: TextField(
             controller: controller,
             maxLines: 2,
@@ -204,11 +210,11 @@ content(
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: isresponsible == true ? 40 : 20,
                   ),
                   SizedBox(
-                      height: 30,
+                      height: isresponsible == true ? 60 : 30,
                       child: Row(
                         children: [
                           Text('카테고리를 선택하세요',
@@ -226,8 +232,8 @@ content(
                                   fontSize: 15)),
                         ],
                       )),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: isresponsible == true ? 40 : 20,
                   ),
                   SizedBox(
                       height: 80,
@@ -476,11 +482,11 @@ content(
             : const SizedBox(
                 height: 0,
               ),
-        const SizedBox(
-          height: 20,
+        SizedBox(
+          height: isresponsible == true ? 40 : 20,
         ),
         SizedBox(
-          height: 30,
+          height: isresponsible == true ? 60 : 30,
           width: MediaQuery.of(context).size.width - 40,
           child: Row(
             children: [
@@ -536,8 +542,8 @@ content(
             ],
           ),
         ),
-        const SizedBox(
-          height: 30,
+        SizedBox(
+          height: isresponsible == true ? 60 : 30,
         ),
         SizedBox(
           height: 50,

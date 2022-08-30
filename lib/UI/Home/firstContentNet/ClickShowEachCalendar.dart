@@ -1,9 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Dialogs/checkdeletecandm.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/sheets/settingRoutineHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,6 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
+import '../Widgets/CreateCalandmemo.dart';
 import 'DayScript.dart';
 
 class ClickShowEachCalendar extends StatefulWidget {
@@ -150,43 +149,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                 child: InkWell(
                                                     onTap: () {
                                                       //수정
-                                                      Flushbar(
-                                                        backgroundColor: Colors
-                                                            .green.shade400,
-                                                        titleText: Text(
-                                                            'Uploading...',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTitleTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        messageText: Text(
-                                                            '잠시만 기다려주세요~',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        icon: const Icon(
-                                                          Icons.info_outline,
-                                                          size: 25.0,
-                                                          color: Colors.white,
-                                                        ),
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 1),
-                                                        leftBarIndicatorColor:
-                                                            Colors
-                                                                .green.shade100,
-                                                      ).show(context);
+                                                      CreateCalandmemoSuccessFlushbar(
+                                                          context);
                                                       firestore
                                                           .collection(
                                                               'CalendarDataBase')
@@ -223,11 +187,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                           .get()
                                                           .then((value) {
                                                         updateid.clear();
-                                                        value.docs
-                                                            .forEach((element) {
+                                                        for (var element
+                                                            in value.docs) {
                                                           updateid
                                                               .add(element.id);
-                                                        });
+                                                        }
                                                         for (int i = 0;
                                                             i < updateid.length;
                                                             i++) {
@@ -292,52 +256,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                             const Duration(
                                                                 seconds: 2),
                                                             () {
-                                                          Flushbar(
-                                                            backgroundColor:
-                                                                Colors.blue
-                                                                    .shade400,
-                                                            titleText: Text(
-                                                                'Notice',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      contentTitleTextsize(),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            messageText: Text(
-                                                                '일정이 정상적으로 변경되었습니다.',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      contentTextsize(),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .info_outline,
-                                                              size: 25.0,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            duration:
-                                                                const Duration(
-                                                                    seconds: 2),
-                                                            leftBarIndicatorColor:
-                                                                Colors.blue
-                                                                    .shade100,
-                                                          )
-                                                              .show(context)
-                                                              .whenComplete(
-                                                                  () => Get
-                                                                      .back());
+                                                          CreateCalandmemoSuccessFlushbarSub(
+                                                              context, '일정');
                                                         });
                                                       });
                                                     },
@@ -376,45 +296,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                                   context,
                                                                   '일정'));
                                                       if (reloadpage) {
-                                                        Flushbar(
-                                                          backgroundColor:
-                                                              Colors.green
-                                                                  .shade400,
-                                                          titleText: Text(
-                                                              'Uploading...',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize:
-                                                                    contentTitleTextsize(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              )),
-                                                          messageText: Text(
-                                                              '잠시만 기다려주세요~',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              )),
-                                                          icon: const Icon(
-                                                            Icons.info_outline,
-                                                            size: 25.0,
-                                                            color: Colors.white,
-                                                          ),
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 1),
-                                                          leftBarIndicatorColor:
-                                                              Colors.green
-                                                                  .shade100,
-                                                        )
-                                                            .show(context)
+                                                        CreateCalandmemoSuccessFlushbar(
+                                                                context)
                                                             .whenComplete(() {
                                                           firestore
                                                               .collection(
@@ -451,11 +334,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                               .get()
                                                               .then((value) {
                                                             deleteid.clear();
-                                                            value.docs.forEach(
-                                                                (element) {
+                                                            for (var element
+                                                                in value.docs) {
                                                               deleteid.add(
                                                                   element.id);
-                                                            });
+                                                            }
                                                             for (int i = 0;
                                                                 i <
                                                                     deleteid
@@ -473,54 +356,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar> {
                                                                 const Duration(
                                                                     seconds: 2),
                                                                 () {
-                                                              Flushbar(
-                                                                backgroundColor:
-                                                                    Colors.blue
-                                                                        .shade400,
-                                                                titleText: Text(
-                                                                    'Notice',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          contentTitleTextsize(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    )),
-                                                                messageText: Text(
-                                                                    '일정이 정상적으로 삭제되었습니다.',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          contentTextsize(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    )),
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .info_outline,
-                                                                  size: 25.0,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                                duration:
-                                                                    const Duration(
-                                                                        seconds:
-                                                                            2),
-                                                                leftBarIndicatorColor:
-                                                                    Colors.blue
-                                                                        .shade100,
-                                                              )
-                                                                  .show(context)
-                                                                  .whenComplete(
-                                                                      () => Get
-                                                                          .back());
+                                                              CreateCalandmemoFlushbardelete(
+                                                                  context,
+                                                                  '일정');
                                                             });
                                                           });
                                                         });

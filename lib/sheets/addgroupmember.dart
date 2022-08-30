@@ -17,7 +17,6 @@ addgroupmember(
           Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: Container(
-              height: 440,
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -25,11 +24,13 @@ addgroupmember(
                     topRight: Radius.circular(20),
                   )),
               child: GestureDetector(
-                onTap: () {
-                  searchNode.unfocus();
-                },
-                child: SheetPage(context, searchNode, controller),
-              ),
+                  onTap: () {
+                    searchNode.unfocus();
+                  },
+                  child: SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: SheetPage(context, searchNode, controller),
+                  )),
             ),
           ),
           backgroundColor: Colors.white,
@@ -46,10 +47,10 @@ SheetPage(BuildContext context, FocusNode searchNode,
     TextEditingController controller) {
   final List<String> list_user = <String>[];
   return SizedBox(
-      height: 420,
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
@@ -88,8 +89,8 @@ title(
       height: 50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const Flexible(
+        children: const [
+          Flexible(
             fit: FlexFit.tight,
             child: Text('피플',
                 style: TextStyle(
@@ -152,8 +153,8 @@ content(
               height: 40,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Flexible(
+                children: const [
+                  Flexible(
                     fit: FlexFit.tight,
                     child: Text('피플 추가하기',
                         style: TextStyle(
@@ -161,16 +162,6 @@ content(
                             fontWeight: FontWeight.bold,
                             fontSize: 20)),
                   ),
-                  /*TextButton(
-                    onPressed: () {
-                      searchNode.unfocus();
-                    },
-                    child: Text('검색',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20)),
-                  )*/
                 ],
               ),
             ),

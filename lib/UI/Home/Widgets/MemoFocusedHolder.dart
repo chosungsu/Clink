@@ -212,8 +212,11 @@ MFthird(
 ) {
   List _image = [];
   final imagePicker = ImagePicker();
-
+  bool isresponsible = false;
   return StatefulBuilder(builder: ((context, setState) {
+    MediaQuery.of(context).size.height > 900
+        ? isresponsible = true
+        : isresponsible = false;
     return Container(
       alignment: Alignment.center,
       child: IconButton(
@@ -237,57 +240,68 @@ MFthird(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: const Text('선택'),
-                  content: SingleChildScrollView(
-                      child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          final image = await imagePicker.pickImage(
-                              source: ImageSource.camera);
-                          setState(() {
-                            _uploadFile(context, File(image!.path), doc);
-                          });
-                        },
-                        child: ListTile(
-                          title: Text('사진 촬영',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                          leading: Icon(
-                            Icons.add_a_photo,
-                            color: Colors.blue.shade400,
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          final image = await imagePicker.pickImage(
-                              source: ImageSource.gallery);
-                          setState(() {
-                            _uploadFile(context, File(image!.path), doc);
-                          });
-                        },
-                        child: ListTile(
-                          title: Text('갤러리 선택',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                          leading: Icon(
-                            Icons.add_photo_alternate,
-                            color: Colors.blue.shade400,
-                            size: 30,
-                          ),
-                        ),
-                      )
-                    ],
-                  )),
-                );
+                    title: const Text('선택'),
+                    content: Builder(
+                      builder: (context) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width * 0.85,
+                          decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100))),
+                          child: SingleChildScrollView(
+                              child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  Navigator.pop(context);
+                                  final image = await imagePicker.pickImage(
+                                      source: ImageSource.camera);
+                                  setState(() {
+                                    _uploadFile(
+                                        context, File(image!.path), doc);
+                                  });
+                                },
+                                child: ListTile(
+                                  title: Text('사진 촬영',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize())),
+                                  leading: Icon(
+                                    Icons.add_a_photo,
+                                    color: Colors.blue.shade400,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  Navigator.pop(context);
+                                  final image = await imagePicker.pickImage(
+                                      source: ImageSource.gallery);
+                                  setState(() {
+                                    _uploadFile(
+                                        context, File(image!.path), doc);
+                                  });
+                                },
+                                child: ListTile(
+                                  title: Text('갤러리 선택',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize())),
+                                  leading: Icon(
+                                    Icons.add_photo_alternate,
+                                    color: Colors.blue.shade400,
+                                    size: 30,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
+                        );
+                      },
+                    ));
               },
             );
           });

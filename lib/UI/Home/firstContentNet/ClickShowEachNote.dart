@@ -479,8 +479,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote> {
                                                                     }
                                                                   }).whenComplete(
                                                                           () {
-                                                                    CreateCalandmemoFailFlushbarSaveMemo(
-                                                                        context);
+                                                                    CreateCalandmemoFlushbardelete(
+                                                                        context,
+                                                                        '메모');
                                                                   });
                                                                 }
                                                               },

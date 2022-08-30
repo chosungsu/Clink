@@ -147,10 +147,9 @@ class _DayScriptState extends State<DayScript> {
 
   @override
   Widget build(BuildContext context) {
-    bool isresponsive = false;
     MediaQuery.of(context).size.height > 900
-        ? isresponsive = true
-        : isresponsive = false;
+        ? isresponsible = true
+        : isresponsible = false;
     return SafeArea(
         child: Scaffold(
       backgroundColor: BGColor(),

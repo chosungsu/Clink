@@ -57,7 +57,7 @@ CreateCalandmemoSuccessFlushbarSub(BuildContext context, String s) {
   });
 }
 
-CreateCalandmemoFailFlushbarSaveMemo(BuildContext context) {
+CreateCalandmemoFlushbardelete(BuildContext context, String s) {
   return Future.delayed(const Duration(seconds: 2), () {
     Flushbar(
       backgroundColor: Colors.blue.shade400,
@@ -67,12 +67,13 @@ CreateCalandmemoFailFlushbarSaveMemo(BuildContext context) {
             fontSize: contentTitleTextsize(),
             fontWeight: FontWeight.bold,
           )),
-      messageText: Text('메모가 정상적으로 삭제되었습니다.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: contentTextsize(),
-            fontWeight: FontWeight.bold,
-          )),
+      messageText:
+          Text(s == '메모' ? s + '가 정상적으로 삭제되었습니다.' : s + '이 정상적으로 삭제되었습니다.',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: contentTextsize(),
+                fontWeight: FontWeight.bold,
+              )),
       icon: const Icon(
         Icons.info_outline,
         size: 25.0,
