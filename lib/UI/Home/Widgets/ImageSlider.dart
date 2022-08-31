@@ -289,59 +289,72 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text('선택'),
-                      content: SingleChildScrollView(
-                          child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              Navigator.pop(context);
-                              final image = await imagePicker.pickImage(
-                                  source: ImageSource.camera);
-                              setState(() {
-                                _uploadFile(
-                                    context, File(image!.path), widget.doc);
-                              });
-                            },
-                            child: ListTile(
-                              title: Text('사진 촬영',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize())),
-                              leading: Icon(
-                                Icons.add_a_photo,
-                                color: Colors.blue.shade400,
-                                size: 30,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              Navigator.pop(context);
-                              final image = await imagePicker.pickImage(
-                                  source: ImageSource.gallery);
-                              setState(() {
-                                _uploadFile(
-                                    context, File(image!.path), widget.doc);
-                              });
-                            },
-                            child: ListTile(
-                              title: Text('갤러리 선택',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize())),
-                              leading: Icon(
-                                Icons.add_photo_alternate,
-                                color: Colors.blue.shade400,
-                                size: 30,
-                              ),
-                            ),
-                          )
-                        ],
-                      )),
-                    );
+                        title: Text('선택',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize())),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        content: Builder(
+                          builder: (context) {
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              child: SingleChildScrollView(
+                                  child: Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                      final image = await imagePicker.pickImage(
+                                          source: ImageSource.camera);
+                                      setState(() {
+                                        _uploadFile(context, File(image!.path),
+                                            widget.doc);
+                                      });
+                                    },
+                                    child: ListTile(
+                                      title: Text('사진 촬영',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize())),
+                                      leading: Icon(
+                                        Icons.add_a_photo,
+                                        color: Colors.blue.shade400,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                      final image = await imagePicker.pickImage(
+                                          source: ImageSource.gallery);
+                                      setState(() {
+                                        _uploadFile(context, File(image!.path),
+                                            widget.doc);
+                                      });
+                                    },
+                                    child: ListTile(
+                                      title: Text('갤러리 선택',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize())),
+                                      leading: Icon(
+                                        Icons.add_photo_alternate,
+                                        color: Colors.blue.shade400,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )),
+                            );
+                          },
+                        ));
                   },
                 );
               },

@@ -7,18 +7,32 @@ import '../UI/Sign/UserCheck.dart';
 
 checkdeletecandm(BuildContext context, String s) {
   return AlertDialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
     title: Text('경고',
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: contentTitleTextsize(),
           color: Colors.redAccent,
         )),
-    content: Text(
-        s == '일정' ? '정말 이 ' + s + '을 삭제하시겠습니까?' : '정말 이 ' + s + '를 삭제하시겠습니까?',
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: contentTextsize(),
-            color: Colors.blueGrey)),
+    content: Builder(
+      builder: (context) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width * 0.85,
+          child: SingleChildScrollView(
+            child: Text(
+                s == '일정'
+                    ? '정말 이 ' + s + '을 삭제하시겠습니까?'
+                    : '정말 이 ' + s + '를 삭제하시겠습니까?',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize(),
+                    color: Colors.blueGrey)),
+          ),
+        );
+      },
+    ),
     actions: <Widget>[
       TextButton(
         child: Text(

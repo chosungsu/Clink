@@ -670,7 +670,7 @@ class _HomePageState extends State<HomePage> {
                                                             ),
                                                             trailing: int.parse(contentmy[
                                                                             index]
-                                                                        .sub
+                                                                        .startdate
                                                                         .toString()
                                                                         .substring(
                                                                             0,
@@ -700,7 +700,7 @@ class _HomePageState extends State<HomePage> {
                                                                         contentTextsize())),
                                                             title: Text(
                                                                 contentmy[index]
-                                                                    .sub,
+                                                                    .date,
                                                                 style:
                                                                     TextStyle(
                                                                   color:

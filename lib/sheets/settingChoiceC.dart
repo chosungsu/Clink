@@ -215,16 +215,32 @@ content(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text('선택'),
-                                  content: SingleChildScrollView(
-                                    child: ColorPicker(
-                                      pickerColor: _color,
-                                      onColorChanged: (Color color) {
-                                        setState(() {
-                                          _color = color;
-                                        });
-                                      },
-                                    ),
+                                  title: Text('선택',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTitleTextsize())),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  content: Builder(
+                                    builder: (context) {
+                                      return SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.85,
+                                          child: SingleChildScrollView(
+                                            child: ColorPicker(
+                                              pickerColor: _color,
+                                              onColorChanged: (Color color) {
+                                                setState(() {
+                                                  _color = color;
+                                                });
+                                              },
+                                            ),
+                                          ));
+                                    },
                                   ),
                                   actions: <Widget>[
                                     ElevatedButton(

@@ -87,59 +87,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
     ));
   }
 
-  /*Future<bool> ContactsPermissionIsGranted() async {
-    var _status = await Permission.contacts.status.isGranted;
-    iscontactyes = _status;
-    contacts = ContactsService.getContacts();
-    setState(() {
-      usercontactlist = contacts;
-    });
-    return _status;
-  }
-
-  checkPermissions() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text(
-              "알림",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600, // bold
-              ),
-            ),
-            content: const Text(
-              "[설정] > [권한 설정]에서 연락처 읽기 권한설정을 확인해주세요.",
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 15,
-                fontWeight: FontWeight.w600, // bold
-              ),
-            ),
-            actions: [
-              TextButton(
-                child: Text("바로승인"),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await [Permission.contacts].request();
-                  ContactsPermissionIsGranted();
-                },
-              ),
-              TextButton(
-                child: Text("설정변경"),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await openAppSettings();
-                  ContactsPermissionIsGranted();
-                },
-              ),
-            ],
-          );
-        });
-  }*/
-
   UI() {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(

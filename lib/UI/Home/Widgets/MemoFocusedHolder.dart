@@ -174,19 +174,32 @@ MFsecond(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('선택'),
-                content: SingleChildScrollView(
-                  child: ColorPicker(
-                    pickerColor: _color,
-                    onColorChanged: (Color color) {
-                      setState(() {
-                        Hive.box('user_setting')
-                            .put('coloreachmemo', color.value.toInt());
-                        controll_memo.setcolor();
-                        _color = controll_memo.color;
-                      });
-                    },
-                  ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                title: Text('선택',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize())),
+                content: Builder(
+                  builder: (context) {
+                    return SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        child: SingleChildScrollView(
+                          child: ColorPicker(
+                            pickerColor: _color,
+                            onColorChanged: (Color color) {
+                              setState(() {
+                                Hive.box('user_setting')
+                                    .put('coloreachmemo', color.value.toInt());
+                                controll_memo.setcolor();
+                                _color = controll_memo.color;
+                              });
+                            },
+                          ),
+                        ));
+                  },
                 ),
                 actions: <Widget>[
                   ElevatedButton(
@@ -240,14 +253,18 @@ MFthird(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                    title: const Text('선택'),
+                    title: Text('선택',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize())),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     content: Builder(
                       builder: (context) {
-                        return Container(
+                        return SizedBox(
                           width: MediaQuery.of(context).size.width * 0.85,
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100))),
                           child: SingleChildScrollView(
                               child: Column(
                             children: [
