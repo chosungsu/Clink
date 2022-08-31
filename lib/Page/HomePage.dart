@@ -893,7 +893,7 @@ class _HomePageState extends State<HomePage> {
                                                                       TextColor(),
                                                                 ),
                                                                 trailing: int.parse(contentshare[index]
-                                                                            .sub
+                                                                            .startdate
                                                                             .toString()
                                                                             .substring(0,
                                                                                 2)) >=
@@ -925,7 +925,7 @@ class _HomePageState extends State<HomePage> {
                                                                 title: Text(
                                                                     contentshare[
                                                                             index]
-                                                                        .sub,
+                                                                        .date,
                                                                     style:
                                                                         TextStyle(
                                                                       color:
