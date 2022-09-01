@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Tool/TextSize.dart';
 
-checkdeletecandm(BuildContext context, String s) {
+checkdeleteimagememo(BuildContext context) {
   return AlertDialog(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20),
@@ -18,10 +18,7 @@ checkdeletecandm(BuildContext context, String s) {
         return SizedBox(
           width: MediaQuery.of(context).size.width * 0.85,
           child: SingleChildScrollView(
-            child: Text(
-                s == '일정'
-                    ? '정말 이 ' + s + '을 삭제하시겠습니까?'
-                    : '정말 이 ' + s + '를 삭제하시겠습니까?',
+            child: Text('정말 이 이미지를 삭제하시겠습니까?',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: contentTextsize(),

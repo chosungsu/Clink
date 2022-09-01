@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../../Dialogs/checkdeleteimagememo.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,12 +38,20 @@ class _ImageSliderPageState extends State<ImageSliderPage>
   var controll_memo = Get.put(memosetting());
   List _image = [];
   final imagePicker = ImagePicker();
-  int isclickwhat = 0;
+  late final PageController pageController;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    pageController =
+        PageController(initialPage: widget.index, viewportFraction: 1);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
   }
 
   @override
@@ -54,7 +63,6 @@ class _ImageSliderPageState extends State<ImageSliderPage>
   Future _uploadFile(BuildContext context, File _image, String doc) async {
     await Permission.photos.request();
     var pstatus = await Permission.photos.status;
-    isclickwhat = 1;
     if (pstatus.isGranted) {
       DateTime now = DateTime.now();
       var datestamp = DateFormat("yyyyMMdd'T'HHmmss");
@@ -87,7 +95,6 @@ class _ImageSliderPageState extends State<ImageSliderPage>
   }
 
   Future _deleteFile(String doc, int index) async {
-    isclickwhat = 2;
     await FirebaseStorage.instance
         .refFromURL(controll_memo.imagelist[index])
         .delete();
@@ -109,6 +116,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
         child: Scaffold(
       backgroundColor: Colors.white,
       body: imageSlide(),
+      bottomNavigationBar: SelectionBtn(),
     ));
   }
 
@@ -153,24 +161,22 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                     lightSource: LightSource.topLeft),
                               ),
                             ))),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width - 60 - 160,
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  child: Text(
-                                    '',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTitleTextsize(),
-                                        color: TextColor()),
-                                  ),
-                                ),
-                              ],
-                            ))),
+                    GetBuilder<memosetting>(
+                      builder: (_) => SizedBox(
+                          width: MediaQuery.of(context).size.width - 120,
+                          child: Center(
+                            child: Text(
+                              (controll_memo.imageindex + 1).toString() +
+                                  '/' +
+                                  controll_memo.imagelist.length.toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize(),
+                                  color: TextColor()),
+                            ),
+                          )),
+                    ),
+                    const Padding(padding: EdgeInsets.only(right: 10)),
                   ],
                 ),
               ),
@@ -186,21 +192,11 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
                               ImageShow(widget.index, context),
-                              const SizedBox(
+                              /*const SizedBox(
                                 height: 20,
                               ),
-                              SelectionBtn(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              ImageSlider(context),
-                              const SizedBox(
-                                height: 50,
-                              ),
+                              ImageSlider(context),*/
                             ],
                           ),
                         );
@@ -217,208 +213,222 @@ class _ImageSliderPageState extends State<ImageSliderPage>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              const SizedBox(width: 10),
-              GetBuilder<memosetting>(
+          SizedBox(
+            height: MediaQuery.of(context).size.height - 170,
+            width: MediaQuery.of(context).size.width - 40,
+            child: GetBuilder<memosetting>(
                 builder: (_) => controll_memo.imagelist.isEmpty
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: SizedBox(
-                          height: 300,
-                          width: MediaQuery.of(context).size.width - 60,
-                          child: Text('불러올 이미지가 없습니다.',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                        ))
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: SizedBox(
-                            height: 300,
-                            width: MediaQuery.of(context).size.width - 60,
-                            child: Image.network(
-                                controll_memo.imagelist[isclickwhat == 1
-                                    ? 0
-                                    : (isclickwhat == 2
-                                        ? (controll_memo.imagelist.length <
-                                                controll_memo.imageindex
-                                            ? controll_memo.imageindex - 1
-                                            : 0)
-                                        : controll_memo.imageindex)],
-                                fit: BoxFit.fill, loadingBuilder:
-                                    (BuildContext context, Widget child,
-                                        ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            }))),
-              ),
-              const SizedBox(width: 10)
-            ],
-          )
+                    ? Center(
+                        child: Text('불러올 이미지가 없습니다.',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize())),
+                      )
+                    : PageView.builder(
+                        onPageChanged: (int pageindex) {
+                          setState(() {
+                            controll_memo.setimageindex(pageindex);
+                          });
+                        },
+                        itemCount: controll_memo.imagelist.length,
+                        controller: pageController,
+                        itemBuilder: (context, index) {
+                          return ClipRRect(
+                              borderRadius: BorderRadius.circular(0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height -
+                                              170,
+                                      width: MediaQuery.of(context).size.width -
+                                          60,
+                                      child: Image.network(
+                                          controll_memo.imagelist[index],
+                                          fit: BoxFit.fill, loadingBuilder:
+                                              (BuildContext context,
+                                                  Widget child,
+                                                  ImageChunkEvent?
+                                                      loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        );
+                                      }))
+                                ],
+                              ));
+                        })),
+          ),
         ],
       ),
     );
   }
 
   SelectionBtn() {
-    return Column(
+    return Row(
       children: [
-        SizedBox(
-          height: 50,
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                primary: Colors.grey,
-              ),
-              onPressed: () {
-                //추가기능
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                        title: Text('선택',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize())),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+        Flexible(
+          flex: 1,
+          child: SizedBox(
+            height: 50,
+            child: InkWell(
+                onTap: () {
+                  //추가기능
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                          title: Text('선택',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize())),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          content: Builder(
+                            builder: (context) {
+                              return SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.85,
+                                child: SingleChildScrollView(
+                                    child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        final image =
+                                            await imagePicker.pickImage(
+                                                source: ImageSource.camera);
+                                        setState(() {
+                                          _uploadFile(context,
+                                              File(image!.path), widget.doc);
+                                        });
+                                      },
+                                      child: ListTile(
+                                        title: Text('사진 촬영',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize())),
+                                        leading: Icon(
+                                          Icons.add_a_photo,
+                                          color: Colors.blue.shade400,
+                                          size: 30,
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        final image =
+                                            await imagePicker.pickImage(
+                                                source: ImageSource.gallery);
+                                        setState(() {
+                                          _uploadFile(context,
+                                              File(image!.path), widget.doc);
+                                        });
+                                      },
+                                      child: ListTile(
+                                        title: Text('갤러리 선택',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize())),
+                                        leading: Icon(
+                                          Icons.add_photo_alternate,
+                                          color: Colors.blue.shade400,
+                                          size: 30,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )),
+                              );
+                            },
+                          ));
+                    },
+                  );
+                },
+                child: Container(
+                  color: Colors.grey.shade400,
+                  child: Center(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: NeumorphicText(
+                            '추가하기',
+                            style: const NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 3,
+                              color: Colors.white,
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize(),
+                            ),
+                          ),
                         ),
-                        content: Builder(
-                          builder: (context) {
-                            return SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.85,
-                              child: SingleChildScrollView(
-                                  child: Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.pop(context);
-                                      final image = await imagePicker.pickImage(
-                                          source: ImageSource.camera);
-                                      setState(() {
-                                        _uploadFile(context, File(image!.path),
-                                            widget.doc);
-                                      });
-                                    },
-                                    child: ListTile(
-                                      title: Text('사진 촬영',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize())),
-                                      leading: Icon(
-                                        Icons.add_a_photo,
-                                        color: Colors.blue.shade400,
-                                        size: 30,
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      Navigator.pop(context);
-                                      final image = await imagePicker.pickImage(
-                                          source: ImageSource.gallery);
-                                      setState(() {
-                                        _uploadFile(context, File(image!.path),
-                                            widget.doc);
-                                      });
-                                    },
-                                    child: ListTile(
-                                      title: Text('갤러리 선택',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize())),
-                                      leading: Icon(
-                                        Icons.add_photo_alternate,
-                                        color: Colors.blue.shade400,
-                                        size: 30,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )),
-                            );
-                          },
-                        ));
+                      ],
+                    ),
+                  ),
+                )),
+          ),
+        ),
+        Flexible(
+            flex: 1,
+            child: SizedBox(
+              height: 50,
+              child: InkWell(
+                  onTap: () async {
+                    //삭제기능
+                    final reloadpage =
+                        await Get.dialog(checkdeleteimagememo(context)) ??
+                            false;
+                    if (reloadpage) {
+                      _deleteFile(widget.doc, controll_memo.imageindex);
+                    }
                   },
-                );
-              },
-              child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: NeumorphicText(
-                        '추가하기',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.white,
+                  child: Container(
+                      color: Colors.red.shade400,
+                      child: Center(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: NeumorphicText(
+                                '삭제하기',
+                                style: const NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: Colors.white,
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize(),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          height: 50,
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                primary: Colors.red.shade400,
-              ),
-              onPressed: () {
-                //삭제기능
-                _deleteFile(widget.doc, controll_memo.imageindex);
-              },
-              child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: NeumorphicText(
-                        '삭제하기',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.white,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-        )
+                      ))),
+            ))
       ],
     );
   }
@@ -445,9 +455,9 @@ class _ImageSliderPageState extends State<ImageSliderPage>
             ),
             GetBuilder<memosetting>(
                 builder: (_) => SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       child: GridView.builder(
-                          physics: ScrollPhysics(),
+                          physics: const ScrollPhysics(),
                           shrinkWrap: true,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -458,7 +468,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                           ),
                           itemCount: controll_memo.imagelist.length,
                           itemBuilder: ((context, index) {
-                            return controll_memo.imagelist.length == 0
+                            return controll_memo.imagelist.isEmpty
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
                                     child: SizedBox(
@@ -475,7 +485,11 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          controll_memo.setimageindex(index);
+                                          setState(() {
+                                            print('yes');
+                                            controll_memo.setimageindex(index);
+                                            ImageShow(index, context);
+                                          });
                                         },
                                         child: ClipRRect(
                                             borderRadius:
