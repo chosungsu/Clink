@@ -219,9 +219,9 @@ class _ImageSliderPageState extends State<ImageSliderPage>
             child: GetBuilder<memosetting>(
                 builder: (_) => controll_memo.imagelist.isEmpty
                     ? Center(
-                        child: Text('불러올 이미지가 없습니다.',
+                        child: Text('불러올 이미지가 없습니다!',
                             style: TextStyle(
-                                color: Colors.black,
+                                color: TextColor(),
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize())),
                       )
