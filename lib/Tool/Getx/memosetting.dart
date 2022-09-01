@@ -39,6 +39,7 @@ class memosetting extends GetxController {
 
   void setimagelist(String path) {
     imagelist.insert(0, path);
+    imageindex++;
     update();
     notifyChildrens();
   }
