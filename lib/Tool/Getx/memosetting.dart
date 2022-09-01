@@ -45,6 +45,7 @@ class memosetting extends GetxController {
 
   void deleteimagelist(int index) {
     imagelist.removeAt(index);
+    setimageindex(index - 1);
     update();
     notifyChildrens();
   }
