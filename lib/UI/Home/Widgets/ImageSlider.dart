@@ -217,24 +217,24 @@ class _ImageSliderPageState extends State<ImageSliderPage>
             height: MediaQuery.of(context).size.height - 170,
             width: MediaQuery.of(context).size.width - 40,
             child: GetBuilder<memosetting>(
-                builder: (_) => controll_memo.imagelist.isEmpty
-                    ? Center(
-                        child: Text('불러올 이미지가 없습니다!',
-                            style: TextStyle(
-                                color: TextColor(),
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize())),
-                      )
-                    : PageView.builder(
-                        onPageChanged: (int pageindex) {
-                          setState(() {
-                            controll_memo.setimageindex(pageindex);
-                          });
-                        },
-                        itemCount: controll_memo.imagelist.length,
-                        controller: pageController,
-                        itemBuilder: (context, index) {
-                          return ClipRRect(
+                builder: (_) => PageView.builder(
+                    onPageChanged: (int pageindex) {
+                      setState(() {
+                        controll_memo.setimageindex(pageindex);
+                      });
+                    },
+                    itemCount: controll_memo.imagelist.length,
+                    controller: pageController,
+                    itemBuilder: (context, index) {
+                      return controll_memo.imagelist.isEmpty
+                          ? Center(
+                              child: Text('불러올 이미지가 없습니다!',
+                                  style: TextStyle(
+                                      color: TextColor(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize())),
+                            )
+                          : ClipRRect(
                               borderRadius: BorderRadius.circular(0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -271,7 +271,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                       }))
                                 ],
                               ));
-                        })),
+                    })),
           ),
         ],
       ),
