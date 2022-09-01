@@ -444,68 +444,77 @@ class _ImageSliderPageState extends State<ImageSliderPage>
               height: 20,
             ),
             GetBuilder<memosetting>(
-              builder: (_) => GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
-                    childAspectRatio: 1 / 1, //item 의 가로 1, 세로 2 의 비율
-                    mainAxisSpacing: 20, //수평 Padding
-                    crossAxisSpacing: 20, //수직 Padding
-                  ),
-                  itemCount: controll_memo.imagelist.length,
-                  itemBuilder: ((context, index) {
-                    return controll_memo.imagelist.length == 0
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: SizedBox(
-                              height: 100,
-                              width: MediaQuery.of(context).size.width - 60,
-                              child: Text('불러올 이미지가 없습니다.',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize())),
-                            ))
-                        : Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  controll_memo.setimageindex(index);
-                                },
-                                child: ClipRRect(
+                builder: (_) => SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: GridView.builder(
+                          physics: ScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
+                            childAspectRatio: 1 / 1, //item 의 가로 1, 세로 2 의 비율
+                            mainAxisSpacing: 20, //수평 Padding
+                            crossAxisSpacing: 20, //수직 Padding
+                          ),
+                          itemCount: controll_memo.imagelist.length,
+                          itemBuilder: ((context, index) {
+                            return controll_memo.imagelist.length == 0
+                                ? ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
                                     child: SizedBox(
-                                        height: 90,
-                                        width: 90,
-                                        child: Image.network(
-                                            controll_memo.imagelist[index],
-                                            fit: BoxFit.fill, loadingBuilder:
-                                                (BuildContext context,
-                                                    Widget child,
-                                                    ImageChunkEvent?
-                                                        loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          );
-                                        }))),
-                              ),
-                              const SizedBox(width: 10)
-                            ],
-                          );
-                  })),
-            )
+                                      height: 100,
+                                      width: MediaQuery.of(context).size.width -
+                                          60,
+                                      child: Text('불러올 이미지가 없습니다.',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize())),
+                                    ))
+                                : Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          controll_memo.setimageindex(index);
+                                        },
+                                        child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: SizedBox(
+                                                height: 90,
+                                                width: 90,
+                                                child: Image.network(
+                                                    controll_memo
+                                                        .imagelist[index],
+                                                    fit: BoxFit.fill,
+                                                    loadingBuilder: (BuildContext
+                                                            context,
+                                                        Widget child,
+                                                        ImageChunkEvent?
+                                                            loadingProgress) {
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  }
+                                                  return Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      value: loadingProgress
+                                                                  .expectedTotalBytes !=
+                                                              null
+                                                          ? loadingProgress
+                                                                  .cumulativeBytesLoaded /
+                                                              loadingProgress
+                                                                  .expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  );
+                                                }))),
+                                      ),
+                                      const SizedBox(width: 10)
+                                    ],
+                                  );
+                          })),
+                    ))
           ],
         ));
   }
