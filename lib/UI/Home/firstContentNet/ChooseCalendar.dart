@@ -3,12 +3,9 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/PeopleGroup.dart';
 import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:clickbyme/sheets/settingChoiceC.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
@@ -20,6 +17,7 @@ import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/NoBehavior.dart';
 import 'package:focused_menu/focused_menu.dart';
 import '../../../sheets/settingChoiceC_Cards.dart';
+import '../secondContentNet/PeopleGroup.dart';
 
 class ChooseCalendar extends StatefulWidget {
   @override

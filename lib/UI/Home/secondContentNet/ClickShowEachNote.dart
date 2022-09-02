@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:clickbyme/Dialogs/checkbackincandm.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
@@ -6,7 +5,6 @@ import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -15,13 +13,12 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/checkdeletecandm.dart';
 import '../../../Tool/BGColor.dart';
-import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/ImageSlider.dart';
-import 'DayScript.dart';
+import '../firstContentNet/DayScript.dart';
 
 class ClickShowEachNote extends StatefulWidget {
   const ClickShowEachNote({

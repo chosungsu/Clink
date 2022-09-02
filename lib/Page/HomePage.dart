@@ -21,8 +21,8 @@ import '../Sub/SecureAuth.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
-import '../UI/Home/firstContentNet/ClickShowEachCalendar.dart';
-import '../UI/Home/firstContentNet/ClickShowEachNote.dart';
+import '../UI/Home/secondContentNet/ClickShowEachCalendar.dart';
+import '../UI/Home/secondContentNet/ClickShowEachNote.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 

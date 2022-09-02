@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class calendarsetting extends GetxController {
   int showcalendar = Hive.box('user_setting').get('viewcalsettings') ?? 0;
   int themecalendar = Hive.box('user_setting').get('origorpastel') ?? 0;
+  int stylecalendar = Hive.box('user_setting').get('origordday') ?? 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List sharehomeid = [];
 
@@ -51,6 +52,56 @@ class calendarsetting extends GetxController {
       for (int j = 0; j < sharehomeid.length; j++) {
         firestore.collection('ShareHome').doc(sharehomeid[j]).update({
           'themesetting': themecalendar,
+        });
+      }
+    });
+    update();
+    notifyChildrens();
+  }
+
+  void stylecalorigin(String id) {
+    stylecalendar = 0;
+    Hive.box('user_setting').put('origordday', 0);
+    firestore.collection('CalendarSheetHome').doc(id).update({
+      'type': stylecalendar,
+    });
+    firestore
+        .collection('ShareHome')
+        .where('doc', isEqualTo: id)
+        .get()
+        .then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        sharehomeid.add(value.docs[i].id);
+      }
+    }).whenComplete(() {
+      for (int j = 0; j < sharehomeid.length; j++) {
+        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
+          'type': stylecalendar,
+        });
+      }
+    });
+    update();
+    notifyChildrens();
+  }
+
+  void stylecaldday(String id) {
+    stylecalendar = 1;
+    Hive.box('user_setting').put('origordday', 1);
+    firestore.collection('CalendarSheetHome').doc(id).update({
+      'type': stylecalendar,
+    });
+    firestore
+        .collection('ShareHome')
+        .where('doc', isEqualTo: id)
+        .get()
+        .then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        sharehomeid.add(value.docs[i].id);
+      }
+    }).whenComplete(() {
+      for (int j = 0; j < sharehomeid.length; j++) {
+        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
+          'type': stylecalendar,
         });
       }
     });

@@ -4,11 +4,9 @@ import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachNote.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -21,6 +19,7 @@ import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../secondContentNet/ClickShowEachNote.dart';
 
 class DayNoteHome extends StatefulWidget {
   const DayNoteHome({
