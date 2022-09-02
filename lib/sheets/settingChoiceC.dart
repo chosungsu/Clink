@@ -359,7 +359,7 @@ content(
                           children: [
                             Center(
                               child: NeumorphicText(
-                                'D-Day',
+                                '주간반복일상',
                                 style: NeumorphicStyle(
                                   shape: NeumorphicShape.flat,
                                   depth: 3,

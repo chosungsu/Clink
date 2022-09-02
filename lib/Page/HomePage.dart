@@ -86,12 +86,12 @@ class _HomePageState extends State<HomePage> {
     navi = NaviWhere();
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
-    status = newversion.getVersionStatus();
+    /*status = newversion.getVersionStatus();
     if (status.localVersion != status.storeVersion) {
       sameversion = false;
     } else {
       sameversion = true;
-    }
+    }*/
     firestore
         .collection('HomeViewCategories')
         .where('usercode', isEqualTo: docid)
@@ -381,13 +381,12 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           EventShowCard(
-            height: height,
-            pageController: pController,
-            pageindex: 0,
-            buy: isbought,
-            sameversion: sameversion,
-            newver: newversion
-          ),
+              height: height,
+              pageController: pController,
+              pageindex: 0,
+              buy: isbought,
+              sameversion: sameversion,
+              newver: newversion),
         ],
       ),
     );

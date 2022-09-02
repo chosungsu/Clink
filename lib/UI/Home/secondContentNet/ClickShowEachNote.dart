@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clickbyme/Dialogs/checkbackincandm.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
@@ -10,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/checkdeletecandm.dart';
 import '../../../Tool/BGColor.dart';
@@ -19,6 +22,8 @@ import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/ImageSlider.dart';
 import '../firstContentNet/DayScript.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class ClickShowEachNote extends StatefulWidget {
   const ClickShowEachNote({
@@ -274,6 +279,56 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                             color: TextColor(),
                                                           ),
                                                         ),
+                                                      ),
+                                                      IconBtn(
+                                                          child: IconButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                await MakePDF(
+                                                                  textEditingController1
+                                                                      .text,
+                                                                  savepicturelist,
+                                                                  Hive.box('user_setting').get('memocollection') ==
+                                                                              '' ||
+                                                                          Hive.box('user_setting').get('memocollection') ==
+                                                                              null
+                                                                      ? null
+                                                                      : (widget.doccollection !=
+                                                                              Hive.box('user_setting').get(
+                                                                                  'memocollection')
+                                                                          ? Hive.box('user_setting').get(
+                                                                              'memocollection')
+                                                                          : widget
+                                                                              .doccollection),
+                                                                );
+                                                              },
+                                                              icon: Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                width: 30,
+                                                                height: 30,
+                                                                child:
+                                                                    NeumorphicIcon(
+                                                                  Icons
+                                                                      .picture_as_pdf,
+                                                                  size: 30,
+                                                                  style: NeumorphicStyle(
+                                                                      shape: NeumorphicShape
+                                                                          .convex,
+                                                                      depth: 2,
+                                                                      surfaceIntensity:
+                                                                          0.5,
+                                                                      color:
+                                                                          TextColor(),
+                                                                      lightSource:
+                                                                          LightSource
+                                                                              .topLeft),
+                                                                ),
+                                                              )),
+                                                          color: TextColor()),
+                                                      const SizedBox(
+                                                        width: 10,
                                                       ),
                                                       IconBtn(
                                                           child: IconButton(
@@ -1572,5 +1627,68 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
         );
       },
     );
+  }
+
+  MakePDF(
+    String titletext,
+    List savepicturelist,
+    collection,
+  ) async {
+    final pdf = pw.Document();
+    final output = await getApplicationDocumentsDirectory();
+    final file = File("${output.path}/$titletext.pdf");
+    var imagenet;
+    pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Container(
+              child: pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                pw.Text(titletext, style: const pw.TextStyle(fontSize: 40)),
+                pw.SizedBox(height: 50),
+                pw.Text('컬렉션 : ' + collection,
+                    style: const pw.TextStyle(
+                      fontSize: 20,
+                    )),
+                pw.SizedBox(height: 20),
+                pw.Text('메모내용',
+                    style: const pw.TextStyle(
+                      fontSize: 25,
+                    )),
+                pw.SizedBox(height: 10),
+                pw.Table(
+                    border: pw.TableBorder.all(color: PdfColors.black),
+                    children: [
+                      ...checklisttexts.map((e) => pw.TableRow(children: [
+                            pw.Expanded(
+                                child: pw.Text(e.memocontent,
+                                    style: const pw.TextStyle(
+                                      fontSize: 20,
+                                    )))
+                          ]))
+                    ]),
+                pw.SizedBox(height: 20),
+                pw.Text('첨부사진',
+                    style: const pw.TextStyle(
+                      fontSize: 25,
+                    )),
+                pw.SizedBox(height: 10),
+                ...savepicturelist.map((element) => pw.Padding(
+                    padding: pw.EdgeInsets.symmetric(
+                      vertical: 30,
+                    ),
+                    child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        children: [pw.Image(element)])))
+              ]));
+        }));
+    if (file.existsSync()) {
+      await file.writeAsBytes(await pdf.save());
+    } else {
+      await file.create(recursive: true);
+      await file.writeAsBytes(await pdf.save());
+    }
   }
 }

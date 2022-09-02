@@ -69,6 +69,7 @@ dependencies:
   #permission 허용여부 묻기
   permission_handler: ^9.2.0
   flutter_email_sender: any
+  path_provider: ^2.0.11
   #UI
   flutter_neumorphic: ^3.0.3
   flutter_switch: ^0.3.2
@@ -98,6 +99,7 @@ dependencies:
   local_auth_ios: ^1.0.9
   local_auth_android: ^1.0.11
   device_info: ^2.0.3
+  pdf: ^3.8.3
   
 
 dev_dependencies:
