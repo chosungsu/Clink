@@ -7,7 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import '../../Tool/IconBtn.dart';
 import '../../Tool/NoBehavior.dart';
 
 class NotiAlarm extends StatefulWidget {
@@ -70,7 +72,8 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                     SizedBox(
                         height: 80,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 20, bottom: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -79,56 +82,57 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                   child: Row(
                                     children: [
                                       SizedBox(
-                                          width: 50,
-                                          child: InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  Navigator.pop(context);
-                                                });
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 30,
-                                                height: 30,
-                                                child: NeumorphicIcon(
-                                                  Icons.keyboard_arrow_left,
-                                                  size: 30,
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .convex,
-                                                      depth: 2,
-                                                      surfaceIntensity: 0.5,
-                                                      color: TextColor(),
-                                                      lightSource:
-                                                          LightSource.topLeft),
-                                                ),
-                                              ))),
-                                      SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width -
-                                              60 -
-                                              160,
+                                              20,
                                           child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 20, right: 20),
+                                                  left: 10),
                                               child: Row(
                                                 children: [
                                                   Flexible(
                                                     fit: FlexFit.tight,
-                                                    child: Text(
-                                                      '알림',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            secondTitleTextsize(),
-                                                        color: TextColor(),
-                                                      ),
-                                                    ),
+                                                    child: Text('알림',
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              secondTitleTextsize(),
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        )),
                                                   ),
+                                                  IconBtn(
+                                                      child: IconButton(
+                                                          onPressed: () {
+                                                            Get.back();
+                                                          },
+                                                          icon: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 30,
+                                                            height: 30,
+                                                            child:
+                                                                NeumorphicIcon(
+                                                              Icons.close,
+                                                              size: 30,
+                                                              style: NeumorphicStyle(
+                                                                  shape:
+                                                                      NeumorphicShape
+                                                                          .convex,
+                                                                  depth: 2,
+                                                                  surfaceIntensity:
+                                                                      0.5,
+                                                                  color:
+                                                                      TextColor(),
+                                                                  lightSource:
+                                                                      LightSource
+                                                                          .topLeft),
+                                                            ),
+                                                          )),
+                                                      color: TextColor())
                                                 ],
-                                              )))
+                                              ))),
                                     ],
                                   )),
                               whatwantnotice == 1

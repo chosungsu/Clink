@@ -4,6 +4,7 @@ import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -11,6 +12,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
+import '../Tool/IconBtn.dart';
 
 class HowToUsePage extends StatefulWidget {
   const HowToUsePage({
@@ -73,28 +75,36 @@ class _HowToUsePageState extends State<HowToUsePage>
               SizedBox(
                   height: 80,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 20, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Flexible(
-                            fit: FlexFit.tight,
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width - 20,
                             child: Row(
                               children: [
-                                SizedBox(
-                                    width: 50,
-                                    child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            Navigator.pop(context);
-                                          });
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Text(
+                                    '',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTitleTextsize(),
+                                        color: TextColor()),
+                                  ),
+                                ),
+                                IconBtn(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          Get.back();
                                         },
-                                        child: Container(
+                                        icon: Container(
                                           alignment: Alignment.center,
                                           width: 30,
                                           height: 30,
                                           child: NeumorphicIcon(
-                                            Icons.keyboard_arrow_left,
+                                            Icons.close,
                                             size: 30,
                                             style: NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
@@ -104,27 +114,8 @@ class _HowToUsePageState extends State<HowToUsePage>
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
-                                        ))),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width -
-                                        60 -
-                                        160,
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20, right: 20),
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text('',
-                                                  style: GoogleFonts.lobster(
-                                                    fontSize: 23,
-                                                    //color: widget.coloritems,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                          ],
-                                        ))),
+                                        )),
+                                    color: TextColor())
                               ],
                             )),
                       ],
