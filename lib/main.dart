@@ -17,7 +17,6 @@ import 'package:provider/provider.dart';
 import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
 import 'Page/LoginSignPage.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 import 'Tool/BGColor.dart';
 

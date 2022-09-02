@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:new_version/new_version.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_siren/flutter_siren.dart';
 
 class EventShowCard extends StatelessWidget {
   EventShowCard(
@@ -12,11 +14,15 @@ class EventShowCard extends StatelessWidget {
       required this.height,
       required this.pageController,
       required this.pageindex,
-      required this.buy})
+      required this.buy,
+      required this.sameversion,
+      required this.newver})
       : super(key: key);
   final double height;
   final int pageindex;
   final bool buy;
+  final bool sameversion;
+  final NewVersion newver;
   final PageController pageController;
   final double translateX = 0.0;
   final double translateY = 0.0;
@@ -24,9 +30,12 @@ class EventShowCard extends StatelessWidget {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final List eventtitle = [];
   final List eventcontent = [];
+  final siren = Siren();
 
   @override
   Widget build(BuildContext context) {
+    final newversion = NewVersion();
+    final status = newversion.getVersionStatus();
     return SizedBox(
         height: 150,
         width: MediaQuery.of(context).size.width - 40,
@@ -42,17 +51,22 @@ class EventShowCard extends StatelessWidget {
                 .then(((QuerySnapshot querySnapshot) => {
                       eventtitle.clear(),
                       eventcontent.clear(),
-                      buy == true
-                          ? querySnapshot.docs.forEach((doc) {
-                              if (doc.get('eventname') != '버전 업그레이드 혜택') {
-                                eventtitle.add(doc.get('eventname'));
-                                eventcontent.add(doc.get('eventcontent'));
-                              }
-                            })
-                          : querySnapshot.docs.forEach((doc) {
+                      if (sameversion == false)
+                        {
+                          querySnapshot.docs.forEach((doc) {
+                            eventtitle.add(doc.get('eventname'));
+                            eventcontent.add(doc.get('eventcontent'));
+                          })
+                        }
+                      else
+                        {
+                          querySnapshot.docs.forEach((doc) {
+                            if (doc.get('eventname') != 'New version 출시') {
                               eventtitle.add(doc.get('eventname'));
                               eventcontent.add(doc.get('eventcontent'));
-                            })
+                            }
+                          })
+                        }
                     })),
             builder: (context, future) => future.connectionState ==
                     ConnectionState.waiting
@@ -92,12 +106,7 @@ class EventShowCard extends StatelessWidget {
                                                   ),
                                                   transition: Transition.zoom,
                                                 )
-                                              : Get.to(
-                                                  () => const HowToUsePage(
-                                                    stringsend: 'PDF 공유',
-                                                  ),
-                                                  transition: Transition.zoom,
-                                                ));
+                                              : PromptAlert(context));
                                     },
                                     child: Column(
                                       children: [
@@ -195,5 +204,9 @@ class EventShowCard extends StatelessWidget {
                         )
                       ],
                     ))));
+  }
+
+  PromptAlert(BuildContext context) {
+    newver.showAlertIfNecessary(context: context);
   }
 }

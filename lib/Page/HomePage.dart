@@ -15,6 +15,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:new_version/new_version.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
 import '../Sub/SecureAuth.dart';
@@ -71,6 +72,9 @@ class _HomePageState extends State<HomePage> {
   bool isbought = false;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
+  final newversion = NewVersion();
+  var status;
+  bool sameversion = true;
 
   @override
   void initState() {
@@ -82,6 +86,12 @@ class _HomePageState extends State<HomePage> {
     navi = NaviWhere();
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
+    status = newversion.getVersionStatus();
+    if (status.localVersion != status.storeVersion) {
+      sameversion = false;
+    } else {
+      sameversion = true;
+    }
     firestore
         .collection('HomeViewCategories')
         .where('usercode', isEqualTo: docid)
@@ -371,10 +381,13 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           EventShowCard(
-              height: height,
-              pageController: pController,
-              pageindex: 0,
-              buy: isbought),
+            height: height,
+            pageController: pController,
+            pageindex: 0,
+            buy: isbought,
+            sameversion: sameversion,
+            newver: newversion
+          ),
         ],
       ),
     );

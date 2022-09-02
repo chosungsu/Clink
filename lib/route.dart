@@ -5,6 +5,7 @@ import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:new_version/new_version.dart';
 import 'Dialogs/destroyBackKey.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
