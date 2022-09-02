@@ -11,7 +11,6 @@ SheetPage(
     int view,
     String docid) {
   return SizedBox(
-      height: 300,
       child: Padding(
           padding:
               const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
@@ -70,298 +69,297 @@ content(
     String docid) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-        height: 180,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 30,
-              child: Text('달력 설정',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize())),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: 30,
-              child: Row(
-                children: [
-                  Flexible(
-                      flex: 1,
-                      child: SizedBox(
-                        height: 30,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                primary: setcal_fromsheet == 0
-                                    ? Colors.grey.shade400
-                                    : Colors.white,
-                                side: const BorderSide(
-                                  width: 1,
-                                  color: Colors.black45,
-                                )),
-                            onPressed: () {
-                              setState(() {
-                                controll_cals.setcals1w(docid);
-                                view = controll_cals.showcalendar;
-                                setcal_fromsheet = view;
-                              });
-                            },
-                            child: Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: NeumorphicText(
-                                      '1주씩',
-                                      style: NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: setcal_fromsheet == 0
-                                            ? Colors.white
-                                            : Colors.black45,
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 30,
+          child: Text('달력 설정',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 30,
+          child: Row(
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: SizedBox(
+                    height: 30,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100)),
+                            primary: setcal_fromsheet == 0
+                                ? Colors.grey.shade400
+                                : Colors.white,
+                            side: const BorderSide(
+                              width: 1,
+                              color: Colors.black45,
                             )),
-                      )),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 30,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100)),
-                              primary: setcal_fromsheet == 1
-                                  ? Colors.grey.shade400
-                                  : Colors.white,
-                              side: const BorderSide(
-                                width: 1,
-                                color: Colors.black45,
-                              )),
-                          onPressed: () {
-                            setState(() {
-                              controll_cals.setcals2w(docid);
-                              view = controll_cals.showcalendar;
-                              setcal_fromsheet = view;
-                            });
-                          },
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    '2주씩',
-                                    style: NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: setcal_fromsheet == 1
-                                          ? Colors.white
-                                          : Colors.black45,
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
-                                    ),
+                        onPressed: () {
+                          setState(() {
+                            controll_cals.setcals1w(docid);
+                            view = controll_cals.showcalendar;
+                            setcal_fromsheet = view;
+                          });
+                        },
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: NeumorphicText(
+                                  '1주씩',
+                                  style: NeumorphicStyle(
+                                    shape: NeumorphicShape.flat,
+                                    depth: 3,
+                                    color: setcal_fromsheet == 0
+                                        ? Colors.white
+                                        : Colors.black45,
                                   ),
-                                )
-                              ],
-                            ),
-                          )),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 30,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100)),
-                              primary: setcal_fromsheet == 2
-                                  ? Colors.grey.shade400
-                                  : Colors.white,
-                              side: const BorderSide(
-                                width: 1,
-                                color: Colors.black45,
-                              )),
-                          onPressed: () {
-                            setState(() {
-                              controll_cals.setcals1m(docid);
-                              view = controll_cals.showcalendar;
-                              setcal_fromsheet = view;
-                            });
-                          },
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    '1달씩',
-                                    style: NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: setcal_fromsheet == 2
-                                          ? Colors.white
-                                          : Colors.black45,
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
-                                    ),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
                                   ),
-                                )
-                              ],
-                            ),
-                          )),
-                    ),
-                  ),
-                ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                  )),
+              const SizedBox(
+                width: 20,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: 30,
-              child: Text('일정카드테마',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize())),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: 30,
-              child: Row(
-                children: [
-                  Flexible(
-                      flex: 1,
-                      child: SizedBox(
-                        height: 30,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                primary: themecal_fromsheet == 0
-                                    ? Colors.grey.shade400
-                                    : Colors.white,
-                                side: const BorderSide(
-                                  width: 1,
-                                  color: Colors.black45,
-                                )),
-                            onPressed: () {
-                              setState(() {
-                                controll_cals.themecals1(docid);
-                                theme = controll_cals.themecalendar;
-                                themecal_fromsheet = theme;
-                              });
-                            },
-                            child: Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: NeumorphicText(
-                                      '기본원색',
-                                      style: NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: themecal_fromsheet == 0
-                                            ? Colors.white
-                                            : Colors.black45,
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                      ),
-                                    ),
-                                  )
-                                ],
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  height: 30,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100)),
+                          primary: setcal_fromsheet == 1
+                              ? Colors.grey.shade400
+                              : Colors.white,
+                          side: const BorderSide(
+                            width: 1,
+                            color: Colors.black45,
+                          )),
+                      onPressed: () {
+                        setState(() {
+                          controll_cals.setcals2w(docid);
+                          view = controll_cals.showcalendar;
+                          setcal_fromsheet = view;
+                        });
+                      },
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: NeumorphicText(
+                                '2주씩',
+                                style: NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: setcal_fromsheet == 1
+                                      ? Colors.white
+                                      : Colors.black45,
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize(),
+                                ),
                               ),
-                            )),
+                            )
+                          ],
+                        ),
                       )),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 30,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100)),
-                              primary: themecal_fromsheet == 1
-                                  ? Colors.grey.shade400
-                                  : Colors.white,
-                              side: const BorderSide(
-                                width: 1,
-                                color: Colors.black45,
-                              )),
-                          onPressed: () {
-                            setState(() {
-                              controll_cals.themecals2(docid);
-                              theme = controll_cals.themecalendar;
-                              themecal_fromsheet = theme;
-                            });
-                          },
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    '파스텔',
-                                    style: NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: themecal_fromsheet == 1
-                                          ? Colors.white
-                                          : Colors.black45,
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
-        ));
+              const SizedBox(
+                width: 20,
+              ),
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  height: 30,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100)),
+                          primary: setcal_fromsheet == 2
+                              ? Colors.grey.shade400
+                              : Colors.white,
+                          side: const BorderSide(
+                            width: 1,
+                            color: Colors.black45,
+                          )),
+                      onPressed: () {
+                        setState(() {
+                          controll_cals.setcals1m(docid);
+                          view = controll_cals.showcalendar;
+                          setcal_fromsheet = view;
+                        });
+                      },
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: NeumorphicText(
+                                '1달씩',
+                                style: NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: setcal_fromsheet == 2
+                                      ? Colors.white
+                                      : Colors.black45,
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize(),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 30,
+          child: Text('일정카드컬러',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 30,
+          child: Row(
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: SizedBox(
+                    height: 30,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100)),
+                            primary: themecal_fromsheet == 0
+                                ? Colors.grey.shade400
+                                : Colors.white,
+                            side: const BorderSide(
+                              width: 1,
+                              color: Colors.black45,
+                            )),
+                        onPressed: () {
+                          setState(() {
+                            controll_cals.themecals1(docid);
+                            theme = controll_cals.themecalendar;
+                            themecal_fromsheet = theme;
+                          });
+                        },
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: NeumorphicText(
+                                  '기본원색',
+                                  style: NeumorphicStyle(
+                                    shape: NeumorphicShape.flat,
+                                    depth: 3,
+                                    color: themecal_fromsheet == 0
+                                        ? Colors.white
+                                        : Colors.black45,
+                                  ),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                  )),
+              const SizedBox(
+                width: 20,
+              ),
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  height: 30,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100)),
+                          primary: themecal_fromsheet == 1
+                              ? Colors.grey.shade400
+                              : Colors.white,
+                          side: const BorderSide(
+                            width: 1,
+                            color: Colors.black45,
+                          )),
+                      onPressed: () {
+                        setState(() {
+                          controll_cals.themecals2(docid);
+                          theme = controll_cals.themecalendar;
+                          themecal_fromsheet = theme;
+                        });
+                      },
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: NeumorphicText(
+                                '파스텔',
+                                style: NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: themecal_fromsheet == 1
+                                      ? Colors.white
+                                      : Colors.black45,
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize(),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ));
   });
 }

@@ -454,7 +454,6 @@ class _DayContentHomeState extends State<DayContentHome>
             child: Padding(
                 padding: MediaQuery.of(context).viewInsets,
                 child: Container(
-                  height: 320,
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(

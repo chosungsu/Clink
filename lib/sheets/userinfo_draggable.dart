@@ -56,39 +56,39 @@ userinfo_draggable(BuildContext context) {
                               ),
                             ),
                             SizedBox(
-                              height: 50,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.blue,
-                                  ),
-                                  onPressed: () {
+                                height: 50,
+                                child: InkWell(
+                                  onTap: () {
                                     Get.back();
                                   },
-                                  child: Center(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '모두 확인하였습니다.',
-                                            style: const NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Colors.white,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
+                                  child: Container(
+                                    color: ButtonColor(),
+                                    child: Center(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Center(
+                                            child: NeumorphicText(
+                                              '모두 확인하였습니다.',
+                                              style: const NeumorphicStyle(
+                                                shape: NeumorphicShape.flat,
+                                                depth: 3,
+                                                color: Colors.white,
+                                              ),
+                                              textStyle: NeumorphicTextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize(),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  )),
-                            ),
+                                  ),
+                                )),
                           ],
                         ),
                       );

@@ -1,5 +1,6 @@
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -101,7 +102,8 @@ class _PeopleGroupState extends State<PeopleGroup> {
               SizedBox(
                   height: 80,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 20, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -109,15 +111,12 @@ class _PeopleGroupState extends State<PeopleGroup> {
                             fit: FlexFit.tight,
                             child: Row(
                               children: [
-                                SizedBox(
-                                    width: 50,
-                                    child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            Get.back();
-                                          });
+                                IconBtn(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          Get.back();
                                         },
-                                        child: Container(
+                                        icon: Container(
                                           alignment: Alignment.center,
                                           width: 30,
                                           height: 30,
@@ -132,13 +131,14 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
-                                        ))),
+                                        )),
+                                    color: TextColor()),
                                 SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width - 70,
                                     child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 10),
+                                            left: 10, right: 10),
                                         child: Row(
                                           children: [
                                             Flexible(
@@ -151,16 +151,15 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                                     color: TextColor()),
                                               ),
                                             ),
-                                            SizedBox(
-                                                width: 30,
-                                                child: InkWell(
-                                                    onTap: () {
+                                            IconBtn(
+                                                child: IconButton(
+                                                    onPressed: () {
                                                       addgroupmember(
                                                           context,
                                                           searchNode,
                                                           _controller);
                                                     },
-                                                    child: Container(
+                                                    icon: Container(
                                                       alignment:
                                                           Alignment.center,
                                                       width: 30,
@@ -180,7 +179,8 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                                                 LightSource
                                                                     .topLeft),
                                                       ),
-                                                    ))),
+                                                    )),
+                                                color: TextColor()),
                                           ],
                                         ))),
                               ],
@@ -227,10 +227,10 @@ class _PeopleGroupState extends State<PeopleGroup> {
     return SizedBox(
         height: 50,
         child: Text(
-          '아래 목록에서 공유자를 선택해보세요',
+          '공유자 선택',
           style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: contentTitleTextsize(),
+              fontSize: secondTitleTextsize(),
               color: TextColor()),
         ));
   }
@@ -368,6 +368,8 @@ class _PeopleGroupState extends State<PeopleGroup> {
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: ButtonColor(),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
                       ),
                       onPressed: () {
                         setState(() {
