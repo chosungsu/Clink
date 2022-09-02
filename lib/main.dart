@@ -19,6 +19,8 @@ import 'Auth/KakaoSignInController.dart';
 import 'Page/LoginSignPage.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 
+import 'Tool/BGColor.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(nativeAppKey: 'b5e60a90f0204c0bb09625df79a11772');
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -131,6 +135,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
