@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/PeopleGroup.dart';
@@ -140,7 +141,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                 SizedBox(
                     height: 80,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 20, bottom: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -148,18 +150,17 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                               fit: FlexFit.tight,
                               child: Row(
                                 children: [
-                                  SizedBox(
-                                      width: 50,
-                                      child: InkWell(
-                                          onTap: () {
+                                  IconBtn(
+                                      child: IconButton(
+                                          onPressed: () {
                                             setState(() {
                                               Get.back(result: true);
                                             });
                                           },
-                                          child: Container(
+                                          icon: Container(
                                             alignment: Alignment.center,
-                                            width: 30,
                                             height: 30,
+                                            width: 30,
                                             child: NeumorphicIcon(
                                               Icons.keyboard_arrow_left,
                                               size: 30,
@@ -171,13 +172,14 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                   lightSource:
                                                       LightSource.topLeft),
                                             ),
-                                          ))),
+                                          )),
+                                      color: TextColor()),
                                   SizedBox(
                                       width: MediaQuery.of(context).size.width -
-                                          70,
+                                          80,
                                       child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, right: 10),
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
                                           child: Row(
                                             children: [
                                               Flexible(
@@ -190,10 +192,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                           FontWeight.bold,
                                                     )),
                                               ),
-                                              SizedBox(
-                                                  width: 30,
-                                                  child: InkWell(
-                                                      onTap: () {
+                                              IconBtn(
+                                                  child: IconButton(
+                                                      onPressed: () {
                                                         //리스트 정렬
                                                         setState(() {
                                                           sort == 0
@@ -219,7 +220,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                               : sort = 1;
                                                         });
                                                       },
-                                                      child: Container(
+                                                      icon: Container(
                                                         alignment:
                                                             Alignment.center,
                                                         width: 30,
@@ -240,14 +241,14 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                   LightSource
                                                                       .topLeft),
                                                         ),
-                                                      ))),
+                                                      )),
+                                                  color: TextColor()),
                                               const SizedBox(
                                                 width: 10,
                                               ),
-                                              SizedBox(
-                                                  width: 30,
-                                                  child: InkWell(
-                                                      onTap: () {
+                                              IconBtn(
+                                                  child: IconButton(
+                                                      onPressed: () {
                                                         //리스트 추가하는 창 띄우기
                                                         Hive.box('user_setting')
                                                             .put('typecalendar',
@@ -260,7 +261,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             Date,
                                                             'cal');
                                                       },
-                                                      child: Container(
+                                                      icon: Container(
                                                         alignment:
                                                             Alignment.center,
                                                         width: 30,
@@ -281,7 +282,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                   LightSource
                                                                       .topLeft),
                                                         ),
-                                                      ))),
+                                                      )),
+                                                  color: TextColor()),
                                             ],
                                           ))),
                                 ],

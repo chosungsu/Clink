@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
@@ -95,7 +96,6 @@ class _DayContentHomeState extends State<DayContentHome>
         }
       });
   }
-
 
   @override
   void dispose() {
@@ -316,82 +316,90 @@ class _DayContentHomeState extends State<DayContentHome>
                           titleTextFormatter: (date, locale) =>
                               DateFormat.yMMM(locale).format(date),
                           leftChevronVisible: true,
-                          leftChevronPadding: const EdgeInsets.only(left: 10),
+                          leftChevronPadding:
+                              const EdgeInsets.only(left: 10, right: 10),
                           leftChevronMargin: EdgeInsets.zero,
-                          leftChevronIcon: IconButton(
-                              onPressed: () {
-                                //Navigator.pop(context);
-                                Get.back();
-                              },
-                              icon: Container(
-                                alignment: Alignment.center,
-                                width: 30,
-                                height: 30,
-                                child: NeumorphicIcon(
-                                  Icons.keyboard_arrow_left,
-                                  size: 30,
-                                  style: NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      surfaceIntensity: 0.5,
-                                      color: TextColor(),
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              )),
+                          leftChevronIcon: IconBtn(
+                              child: IconButton(
+                                  onPressed: () {
+                                    //Navigator.pop(context);
+                                    Get.back();
+                                  },
+                                  icon: Container(
+                                    alignment: Alignment.center,
+                                    width: 30,
+                                    height: 30,
+                                    child: NeumorphicIcon(
+                                      Icons.keyboard_arrow_left,
+                                      size: 30,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          surfaceIntensity: 0.5,
+                                          color: TextColor(),
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  )),
+                              color: TextColor()),
                           rightChevronVisible: true,
                           rightChevronPadding: const EdgeInsets.only(right: 10),
                           rightChevronMargin: EdgeInsets.zero,
                           rightChevronIcon: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  Get.to(
-                                      () => DayScript(
-                                            firstdate:
-                                                _rangeStart ?? _selectedDay,
-                                            lastdate: _rangeEnd ?? _selectedDay,
-                                            position: 'cal',
-                                            title: widget.title,
-                                            share: widget.share,
-                                            orig: widget.origin,
-                                          ),
-                                      transition: Transition.downToUp);
-                                },
-                                icon: NeumorphicIcon(
-                                  Icons.add,
-                                  size: 30,
-                                  style: NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      surfaceIntensity: 0.5,
-                                      color: TextColor(),
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              ),
+                              IconBtn(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Get.to(
+                                          () => DayScript(
+                                                firstdate:
+                                                    _rangeStart ?? _selectedDay,
+                                                lastdate:
+                                                    _rangeEnd ?? _selectedDay,
+                                                position: 'cal',
+                                                title: widget.title,
+                                                share: widget.share,
+                                                orig: widget.origin,
+                                              ),
+                                          transition: Transition.downToUp);
+                                    },
+                                    icon: NeumorphicIcon(
+                                      Icons.add,
+                                      size: 30,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          surfaceIntensity: 0.5,
+                                          color: TextColor(),
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  ),
+                                  color: TextColor()),
                               const SizedBox(
                                 width: 10,
                               ),
-                              IconButton(
-                                padding: const EdgeInsets.only(right: 10),
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  settingCalendarHome(context, controll_cals,
-                                      widget.theme, widget.view, widget.title);
-                                },
-                                icon: NeumorphicIcon(
-                                  Icons.settings,
-                                  size: 30,
-                                  style: NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      surfaceIntensity: 0.5,
-                                      color: TextColor(),
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              ),
+                              IconBtn(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      settingCalendarHome(
+                                          context,
+                                          controll_cals,
+                                          widget.theme,
+                                          widget.view,
+                                          widget.title);
+                                    },
+                                    icon: NeumorphicIcon(
+                                      Icons.settings,
+                                      size: 30,
+                                      style: NeumorphicStyle(
+                                          shape: NeumorphicShape.convex,
+                                          depth: 2,
+                                          surfaceIntensity: 0.5,
+                                          color: TextColor(),
+                                          lightSource: LightSource.topLeft),
+                                    ),
+                                  ),
+                                  color: TextColor())
                             ],
                           ),
                           titleTextStyle: TextStyle(

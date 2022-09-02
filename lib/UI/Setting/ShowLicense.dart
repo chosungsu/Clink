@@ -3,6 +3,7 @@ import 'package:clickbyme/DB/Expandable.dart';
 import 'package:clickbyme/DB/PageList.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/licenseget.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:get/get.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -24,17 +25,29 @@ class _ShowLicenseState extends State<ShowLicense> {
   List eventsmalltitle = List.empty(growable: true);
   List eventsmallcontent = List.empty(growable: true);
   List<Expandable> _data = [];
-  int listid_len = 0;
+  List listid_list = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final getlicense = Get.put(licenseget());
 
   @override
   void initState() {
     super.initState();
-    firestore.collection("AppLicense").get().then((value) {
-      listid_len = value.size;
+    firestore.collection("AppLicense").doc('License').get().then((value) {
+      for (int i = 0; i < value.get('licensetitle').length; i++) {
+        getlicense.setlicense(
+            value.get('licensetitle')[i], value.get('content')[i]);
+        _data.insert(
+            0,
+            Expandable(
+                title: value.get('licensetitle')[i],
+                sub: value.get('content')[i],
+                isExpanded: false));
+      }
+    });
+    /*firestore.collection("AppLicense").get().then((value) {
+      listid_list = value.docs.id;
     }).whenComplete(() {
-      for (int i = 1; i < listid_len + 1; i++) {
+      for (int i = 1; i < listid_list + 1; i++) {
         firestore.collection("AppLicense").doc('$i').get().then((value) {
           /*eventsmalltitle.add(value.get('licensetitle'));
           eventsmallcontent.add(value.get('content'));*/
@@ -48,7 +61,7 @@ class _ShowLicenseState extends State<ShowLicense> {
                   isExpanded: false));
         });
       }
-    });
+    });*/
   }
 
   @override
@@ -78,15 +91,15 @@ class _ShowLicenseState extends State<ShowLicense> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Padding(padding: EdgeInsets.only(left: 10)),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width - 10,
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 10),
+                  height: 80,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 20, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width - 20,
                             child: Row(
                               children: [
                                 Flexible(
@@ -99,16 +112,12 @@ class _ShowLicenseState extends State<ShowLicense> {
                                         color: TextColor()),
                                   ),
                                 ),
-                                SizedBox(
-                                    width: 50,
-                                    child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            //Navigator.pop(context);
-                                            Get.back();
-                                          });
+                                IconBtn(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          Get.back();
                                         },
-                                        child: Container(
+                                        icon: Container(
                                           alignment: Alignment.center,
                                           width: 30,
                                           height: 30,
@@ -123,12 +132,13 @@ class _ShowLicenseState extends State<ShowLicense> {
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
-                                        ))),
+                                        )),
+                                    color: TextColor())
                               ],
-                            ))),
-                  ],
-                ),
-              ),
+                            )),
+                      ],
+                    ),
+                  )),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(

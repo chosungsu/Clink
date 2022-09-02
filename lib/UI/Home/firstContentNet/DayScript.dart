@@ -20,6 +20,7 @@ import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
+import '../../../Tool/IconBtn.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../sheets/addmemocollection.dart';
 
@@ -237,8 +238,8 @@ class _DayScriptState extends State<DayScript> {
                         SizedBox(
                             height: 80,
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, top: 20, bottom: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -246,10 +247,9 @@ class _DayScriptState extends State<DayScript> {
                                       fit: FlexFit.tight,
                                       child: Row(
                                         children: [
-                                          SizedBox(
-                                              width: 50,
-                                              child: InkWell(
-                                                  onTap: () async {
+                                          IconBtn(
+                                              child: IconButton(
+                                                  onPressed: () async {
                                                     final reloadpage =
                                                         await Get.dialog(
                                                                 checkbackincandm(
@@ -259,7 +259,7 @@ class _DayScriptState extends State<DayScript> {
                                                       Get.back();
                                                     }
                                                   },
-                                                  child: Container(
+                                                  icon: Container(
                                                     alignment: Alignment.center,
                                                     width: 30,
                                                     height: 30,
@@ -276,17 +276,17 @@ class _DayScriptState extends State<DayScript> {
                                                               LightSource
                                                                   .topLeft),
                                                     ),
-                                                  ))),
+                                                  )),
+                                              color: TextColor()),
                                           SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width -
-                                                  60 -
-                                                  160,
+                                                  70,
                                               child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          left: 20, right: 20),
+                                                          left: 10, right: 10),
                                                   child: Row(
                                                     children: [
                                                       Flexible(
@@ -303,284 +303,189 @@ class _DayScriptState extends State<DayScript> {
                                                                   TextColor()),
                                                         ),
                                                       ),
+                                                      IconBtn(
+                                                          child: IconButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                if (textEditingController1
+                                                                    .text
+                                                                    .isNotEmpty) {
+                                                                  if (textEditingController2
+                                                                          .text
+                                                                          .isNotEmpty ||
+                                                                      widget.position ==
+                                                                          'note') {
+                                                                    //await localnotification.notishow();
+                                                                    if (widget
+                                                                            .position ==
+                                                                        'cal') {
+                                                                      CreateCalandmemoSuccessFlushbar(
+                                                                          context);
+                                                                      if (differ_list
+                                                                          .isNotEmpty) {
+                                                                        for (int j =
+                                                                                0;
+                                                                            j < differ_list.length;
+                                                                            j++) {
+                                                                          firestore
+                                                                              .collection('CalendarDataBase')
+                                                                              .add({
+                                                                            'Daytodo':
+                                                                                textEditingController1.text,
+                                                                            'Alarm': isChecked_pushalarm == true
+                                                                                ? Hive.box('user_setting').put('alarming_time', selectedValue)
+                                                                                : '설정off',
+                                                                            'Timestart': textEditingController2.text.split(':')[0].length == 1
+                                                                                ? '0' + textEditingController2.text
+                                                                                : textEditingController2.text,
+                                                                            'Timefinish': textEditingController3.text.split(':')[0].length == 1
+                                                                                ? '0' + textEditingController3.text
+                                                                                : textEditingController3.text,
+                                                                            'Shares':
+                                                                                widget.share,
+                                                                            'OriginalUser':
+                                                                                widget.orig,
+                                                                            'calname':
+                                                                                widget.title,
+                                                                            'Date':
+                                                                                DateFormat('yyyy-MM-dd').parse(differ_list[j].toString()).toString().split(' ')[0] + '일',
+                                                                          });
+                                                                        }
+                                                                        CreateCalandmemoSuccessFlushbarSub(
+                                                                            context,
+                                                                            '일정');
+                                                                      } else {
+                                                                        firestore
+                                                                            .collection('CalendarDataBase')
+                                                                            .add({
+                                                                          'Daytodo':
+                                                                              textEditingController1.text,
+                                                                          'Alarm': isChecked_pushalarm == true
+                                                                              ? Hive.box('user_setting').put('alarming_time', selectedValue)
+                                                                              : '설정off',
+                                                                          'Timestart': textEditingController2.text.split(':')[0].length == 1
+                                                                              ? '0' + textEditingController2.text
+                                                                              : textEditingController2.text,
+                                                                          'Timefinish': textEditingController3.text.split(':')[0].length == 1
+                                                                              ? '0' + textEditingController3.text
+                                                                              : textEditingController3.text,
+                                                                          'Shares':
+                                                                              widget.share,
+                                                                          'OriginalUser':
+                                                                              widget.orig,
+                                                                          'calname':
+                                                                              widget.title,
+                                                                          'Date':
+                                                                              DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] + '일',
+                                                                        });
+                                                                        CreateCalandmemoSuccessFlushbarSub(
+                                                                            context,
+                                                                            '일정');
+                                                                      }
+                                                                    } else {
+                                                                      CreateCalandmemoSuccessFlushbar(
+                                                                          context);
+                                                                      for (int i =
+                                                                              0;
+                                                                          i < scollection.memolistin.length;
+                                                                          i++) {
+                                                                        checklisttexts.add(MemoList(
+                                                                            memocontent:
+                                                                                scollection.memolistcontentin[i],
+                                                                            contentindex: scollection.memolistin[i]));
+                                                                      }
+                                                                      for (int j =
+                                                                              0;
+                                                                          j < controll_memo.imagelist.length;
+                                                                          j++) {
+                                                                        savepicturelist
+                                                                            .add(controll_memo.imagelist[j]);
+                                                                      }
+                                                                      firestore
+                                                                          .collection(
+                                                                              'MemoDataBase')
+                                                                          .doc()
+                                                                          .set({
+                                                                        'memoTitle':
+                                                                            textEditingController1.text,
+                                                                        'saveimage':
+                                                                            savepicturelist,
+                                                                        'Collection': scollection.collection == '' ||
+                                                                                scollection.collection == null
+                                                                            ? null
+                                                                            : scollection.collection,
+                                                                        'memolist': checklisttexts
+                                                                            .map((e) =>
+                                                                                e.memocontent)
+                                                                            .toList(),
+                                                                        'memoindex': checklisttexts
+                                                                            .map((e) =>
+                                                                                e.contentindex)
+                                                                            .toList(),
+                                                                        'OriginalUser':
+                                                                            username,
+                                                                        'color':
+                                                                            Hive.box('user_setting').get('typecolorcalendar') ??
+                                                                                _color.value.toInt(),
+                                                                        'Date': DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] +
+                                                                            '일',
+                                                                        'homesave':
+                                                                            false,
+                                                                        'security':
+                                                                            false,
+                                                                        'photoUrl': controll_memo.imagelist.isEmpty
+                                                                            ? []
+                                                                            : controll_memo.imagelist,
+                                                                        'pinnumber':
+                                                                            '0000',
+                                                                        'EditDate':
+                                                                            DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] +
+                                                                                '일',
+                                                                      }, SetOptions(merge: true)).whenComplete(
+                                                                              () {
+                                                                        CreateCalandmemoSuccessFlushbarSub(
+                                                                            context,
+                                                                            '메모');
+                                                                      });
+                                                                    }
+                                                                  } else {
+                                                                    CreateCalandmemoFailSaveTimeCal(
+                                                                        context);
+                                                                  }
+                                                                } else {
+                                                                  CreateCalandmemoFailSaveTitle(
+                                                                      context);
+                                                                }
+                                                              },
+                                                              icon: Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                width: 30,
+                                                                height: 30,
+                                                                child:
+                                                                    NeumorphicIcon(
+                                                                  Icons
+                                                                      .done_all,
+                                                                  size: 30,
+                                                                  style: NeumorphicStyle(
+                                                                      shape: NeumorphicShape
+                                                                          .convex,
+                                                                      depth: 2,
+                                                                      surfaceIntensity:
+                                                                          0.5,
+                                                                      color:
+                                                                          TextColor(),
+                                                                      lightSource:
+                                                                          LightSource
+                                                                              .topLeft),
+                                                                ),
+                                                              )),
+                                                          color: TextColor()),
                                                     ],
                                                   ))),
                                         ],
                                       )),
-                                  SizedBox(
-                                      width: 50,
-                                      child: InkWell(
-                                          onTap: () async {
-                                            if (textEditingController1
-                                                .text.isNotEmpty) {
-                                              if (textEditingController2
-                                                      .text.isNotEmpty ||
-                                                  widget.position == 'note') {
-                                                //await localnotification.notishow();
-                                                if (widget.position == 'cal') {
-                                                  CreateCalandmemoSuccessFlushbar(
-                                                      context);
-                                                  if (differ_list.isNotEmpty) {
-                                                    for (int j = 0;
-                                                        j < differ_list.length;
-                                                        j++) {
-                                                      firestore
-                                                          .collection(
-                                                              'CalendarDataBase')
-                                                          .add({
-                                                        'Daytodo':
-                                                            textEditingController1
-                                                                .text,
-                                                        'Alarm': isChecked_pushalarm ==
-                                                                true
-                                                            ? Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'alarming_time',
-                                                                    selectedValue)
-                                                            : '설정off',
-                                                        'Timestart': textEditingController2
-                                                                    .text
-                                                                    .split(
-                                                                        ':')[0]
-                                                                    .length ==
-                                                                1
-                                                            ? '0' +
-                                                                textEditingController2
-                                                                    .text
-                                                            : textEditingController2
-                                                                .text,
-                                                        'Timefinish': textEditingController3
-                                                                    .text
-                                                                    .split(
-                                                                        ':')[0]
-                                                                    .length ==
-                                                                1
-                                                            ? '0' +
-                                                                textEditingController3
-                                                                    .text
-                                                            : textEditingController3
-                                                                .text,
-                                                        'Shares': widget.share,
-                                                        'OriginalUser':
-                                                            widget.orig,
-                                                        'calname': widget.title,
-                                                        'Date': DateFormat(
-                                                                    'yyyy-MM-dd')
-                                                                .parse(differ_list[
-                                                                        j]
-                                                                    .toString())
-                                                                .toString()
-                                                                .split(' ')[0] +
-                                                            '일',
-                                                      });
-                                                    }
-                                                    CreateCalandmemoSuccessFlushbarSub(
-                                                        context, '일정');
-                                                  } else {
-                                                    firestore
-                                                        .collection(
-                                                            'CalendarDataBase')
-                                                        .add({
-                                                      'Daytodo':
-                                                          textEditingController1
-                                                              .text,
-                                                      'Alarm': isChecked_pushalarm ==
-                                                              true
-                                                          ? Hive.box(
-                                                                  'user_setting')
-                                                              .put(
-                                                                  'alarming_time',
-                                                                  selectedValue)
-                                                          : '설정off',
-                                                      'Timestart': textEditingController2
-                                                                  .text
-                                                                  .split(':')[0]
-                                                                  .length ==
-                                                              1
-                                                          ? '0' +
-                                                              textEditingController2
-                                                                  .text
-                                                          : textEditingController2
-                                                              .text,
-                                                      'Timefinish': textEditingController3
-                                                                  .text
-                                                                  .split(':')[0]
-                                                                  .length ==
-                                                              1
-                                                          ? '0' +
-                                                              textEditingController3
-                                                                  .text
-                                                          : textEditingController3
-                                                              .text,
-                                                      'Shares': widget.share,
-                                                      'OriginalUser':
-                                                          widget.orig,
-                                                      'calname': widget.title,
-                                                      'Date': DateFormat(
-                                                                  'yyyy-MM-dd')
-                                                              .parse(widget
-                                                                  .firstdate
-                                                                  .toString())
-                                                              .toString()
-                                                              .split(' ')[0] +
-                                                          '일',
-                                                    });
-                                                    CreateCalandmemoSuccessFlushbarSub(
-                                                        context, '일정');
-                                                  }
-                                                } else {
-                                                  CreateCalandmemoSuccessFlushbar(
-                                                      context);
-                                                  for (int i = 0;
-                                                      i <
-                                                          scollection.memolistin
-                                                              .length;
-                                                      i++) {
-                                                    checklisttexts.add(MemoList(
-                                                        memocontent: scollection
-                                                                .memolistcontentin[
-                                                            i],
-                                                        contentindex:
-                                                            scollection
-                                                                    .memolistin[
-                                                                i]));
-                                                  }
-                                                  for (int j = 0;
-                                                      j <
-                                                          controll_memo
-                                                              .imagelist.length;
-                                                      j++) {
-                                                    savepicturelist.add(
-                                                        controll_memo
-                                                            .imagelist[j]);
-                                                  }
-                                                  firestore
-                                                      .collection(
-                                                          'MemoDataBase')
-                                                      .doc()
-                                                      .set(
-                                                          {
-                                                        'memoTitle':
-                                                            textEditingController1
-                                                                .text,
-                                                        'saveimage':
-                                                            savepicturelist,
-                                                        'Collection': scollection
-                                                                        .collection ==
-                                                                    '' ||
-                                                                scollection
-                                                                        .collection ==
-                                                                    null
-                                                            ? null
-                                                            : scollection
-                                                                .collection,
-                                                        'memolist':
-                                                            checklisttexts
-                                                                .map((e) => e
-                                                                    .memocontent)
-                                                                .toList(),
-                                                        'memoindex':
-                                                            checklisttexts
-                                                                .map((e) => e
-                                                                    .contentindex)
-                                                                .toList(),
-                                                        'OriginalUser':
-                                                            username,
-                                                        'color': Hive.box(
-                                                                    'user_setting')
-                                                                .get(
-                                                                    'typecolorcalendar') ??
-                                                            _color.value
-                                                                .toInt(),
-                                                        'Date': DateFormat(
-                                                                    'yyyy-MM-dd')
-                                                                .parse(widget
-                                                                    .firstdate
-                                                                    .toString())
-                                                                .toString()
-                                                                .split(' ')[0] +
-                                                            '일',
-                                                        'homesave': false,
-                                                        'security': false,
-                                                        'photoUrl':
-                                                            controll_memo
-                                                                    .imagelist
-                                                                    .isEmpty
-                                                                ? []
-                                                                : controll_memo
-                                                                    .imagelist,
-                                                        'pinnumber': '0000',
-                                                        'EditDate': DateFormat(
-                                                                    'yyyy-MM-dd')
-                                                                .parse(widget
-                                                                    .firstdate
-                                                                    .toString())
-                                                                .toString()
-                                                                .split(' ')[0] +
-                                                            '일',
-                                                      },
-                                                          SetOptions(
-                                                              merge:
-                                                                  true)).whenComplete(
-                                                          () {
-                                                    //사진 저장로직 필요
-                                                    /*firestore
-                                                        .collection(
-                                                            'MemoPictureDataBase')
-                                                        .doc()
-                                                        .set({
-                                                      'memoTitle':
-                                                          textEditingController1
-                                                              .text,
-                                                      'Collection': scollection
-                                                                      .collection ==
-                                                                  '' ||
-                                                              scollection
-                                                                      .collection ==
-                                                                  null
-                                                          ? null
-                                                          : scollection
-                                                              .collection,
-                                                      'OriginalUser': username,
-                                                      'Date': DateFormat(
-                                                                  'yyyy-MM-dd')
-                                                              .parse(widget
-                                                                  .firstdate
-                                                                  .toString())
-                                                              .toString()
-                                                              .split(' ')[0] +
-                                                          '일',
-                                                    }, SetOptions(merge: true));*/
-                                                    CreateCalandmemoSuccessFlushbarSub(
-                                                        context, '메모');
-                                                  });
-                                                }
-                                              } else {
-                                                CreateCalandmemoFailSaveTimeCal(
-                                                    context);
-                                              }
-                                            } else {
-                                              CreateCalandmemoFailSaveTitle(
-                                                  context);
-                                            }
-                                          },
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            width: 30,
-                                            height: 30,
-                                            child: NeumorphicIcon(
-                                              Icons.done_all,
-                                              size: 30,
-                                              style: NeumorphicStyle(
-                                                  shape: NeumorphicShape.convex,
-                                                  depth: 2,
-                                                  surfaceIntensity: 0.5,
-                                                  color: TextColor(),
-                                                  lightSource:
-                                                      LightSource.topLeft),
-                                            ),
-                                          ))),
                                 ],
                               ),
                             )),

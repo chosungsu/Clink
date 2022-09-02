@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:clickbyme/Dialogs/checkbackincandm.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -124,7 +125,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     textEditingController_add_sheet.dispose();
   }
 
-
   Future<bool> _onBackPressed() async {
     final reloadpage = await Get.dialog(checkbackincandm(context)) ?? false;
     if (reloadpage) {
@@ -215,8 +215,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                         SizedBox(
                             height: 80,
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, top: 20, bottom: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -224,10 +224,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                       fit: FlexFit.tight,
                                       child: Row(
                                         children: [
-                                          SizedBox(
-                                              width: 50,
-                                              child: InkWell(
-                                                  onTap: () async {
+                                          IconBtn(
+                                              child: IconButton(
+                                                  onPressed: () async {
                                                     final reloadpage =
                                                         await Get.dialog(
                                                                 checkbackincandm(
@@ -237,7 +236,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                       Get.back();
                                                     }
                                                   },
-                                                  child: Container(
+                                                  icon: Container(
                                                     alignment: Alignment.center,
                                                     width: 30,
                                                     height: 30,
@@ -254,7 +253,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                               LightSource
                                                                   .topLeft),
                                                     ),
-                                                  ))),
+                                                  )),
+                                              color: TextColor()),
                                           SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -263,7 +263,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                               child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          left: 20, right: 10),
+                                                          left: 10, right: 10),
                                                   child: Row(
                                                     children: [
                                                       Flexible(
@@ -278,10 +278,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
-                                                          width: 30,
-                                                          child: InkWell(
-                                                              onTap: () async {
+                                                      IconBtn(
+                                                          child: IconButton(
+                                                              onPressed:
+                                                                  () async {
                                                                 //수정
                                                                 for (int i = 0;
                                                                     i <
@@ -386,7 +386,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                       context);
                                                                 }
                                                               },
-                                                              child: Container(
+                                                              icon: Container(
                                                                 alignment:
                                                                     Alignment
                                                                         .center,
@@ -408,14 +408,15 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                           LightSource
                                                                               .topLeft),
                                                                 ),
-                                                              ))),
+                                                              )),
+                                                          color: TextColor()),
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
-                                                      SizedBox(
-                                                          width: 30,
-                                                          child: InkWell(
-                                                              onTap: () async {
+                                                      IconBtn(
+                                                          child: IconButton(
+                                                              onPressed:
+                                                                  () async {
                                                                 //삭제
                                                                 for (int i = 0;
                                                                     i <
@@ -490,7 +491,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                   });
                                                                 }
                                                               },
-                                                              child: Container(
+                                                              icon: Container(
                                                                 alignment:
                                                                     Alignment
                                                                         .center,
@@ -512,7 +513,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                           LightSource
                                                                               .topLeft),
                                                                 ),
-                                                              ))),
+                                                              )),
+                                                          color: TextColor()),
                                                     ],
                                                   ))),
                                         ],

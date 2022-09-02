@@ -13,6 +13,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../../../Tool/NoBehavior.dart';
+import '../../Tool/IconBtn.dart';
 
 class OptionChangePage extends StatefulWidget {
   @override
@@ -104,63 +105,65 @@ class _OptionChangePageState extends State<OptionChangePage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Padding(padding: EdgeInsets.only(left: 10)),
-                    SizedBox(
-                        width: 50,
-                        child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                Navigator.push(
-                                  context,
-                                  PageTransition(
-                                    type: PageTransitionType.leftToRight,
-                                    child: const MyHomePage(
-                                      index: 2,
-                                    ),
-                                  ),
-                                );
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 30,
-                              height: 30,
-                              child: NeumorphicIcon(
-                                Icons.keyboard_arrow_left,
-                                size: 30,
-                                style: NeumorphicStyle(
-                                    shape: NeumorphicShape.convex,
-                                    depth: 2,
-                                    surfaceIntensity: 0.5,
-                                    color: TextColor(),
-                                    lightSource: LightSource.topLeft),
-                              ),
-                            ))),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width - 60 - 160,
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
+                  height: 80,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 20, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width - 20,
                             child: Row(
-                              children: const [
+                              children: [
                                 Flexible(
                                   fit: FlexFit.tight,
                                   child: Text(
                                     '',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.black45),
+                                        fontSize: contentTitleTextsize(),
+                                        color: TextColor()),
                                   ),
                                 ),
+                                IconBtn(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                type: PageTransitionType
+                                                    .leftToRight,
+                                                child: const MyHomePage(
+                                                  index: 2,
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                        },
+                                        icon: Container(
+                                          alignment: Alignment.center,
+                                          width: 30,
+                                          height: 30,
+                                          child: NeumorphicIcon(
+                                            Icons.close,
+                                            size: 30,
+                                            style: NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                depth: 2,
+                                                surfaceIntensity: 0.5,
+                                                color: TextColor(),
+                                                lightSource:
+                                                    LightSource.topLeft),
+                                          ),
+                                        )),
+                                    color: TextColor())
                               ],
-                            ))),
-                  ],
-                ),
-              ),
+                            )),
+                      ],
+                    ),
+                  )),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(

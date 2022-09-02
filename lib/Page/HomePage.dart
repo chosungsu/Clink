@@ -1,6 +1,7 @@
 import 'package:clickbyme/LocalNotiPlatform/localnotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
@@ -187,136 +188,132 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 80,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(padding: EdgeInsets.only(left: 10)),
-                            SizedBox(
-                              height: 80,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Padding(
-                                      padding: EdgeInsets.only(left: 10)),
-                                  navi == 0
-                                      ? SizedBox(
-                                          width: 50,
-                                          child: draw.drawopen == true
-                                              ? InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      xoffset = 0;
-                                                      yoffset = 0;
-                                                      scalefactor = 1;
-                                                      isdraweropen = false;
-                                                      draw.setclose();
-                                                      Hive.box('user_setting')
-                                                          .put('page_opened',
-                                                              false);
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: NeumorphicIcon(
-                                                      Icons.keyboard_arrow_left,
-                                                      size: 30,
-                                                      style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .convex,
-                                                          depth: 2,
-                                                          surfaceIntensity: 0.5,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                              LightSource
-                                                                  .topLeft),
-                                                    ),
-                                                  ))
-                                              : InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      xoffset = 50;
-                                                      yoffset = 0;
-                                                      scalefactor = 1;
-                                                      isdraweropen = true;
-                                                      draw.setopen();
-                                                      Hive.box('user_setting')
-                                                          .put('page_opened',
-                                                              true);
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: NeumorphicIcon(
-                                                      Icons.menu,
-                                                      size: 30,
-                                                      style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .convex,
-                                                          surfaceIntensity: 0.5,
-                                                          depth: 2,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                              LightSource
-                                                                  .topLeft),
-                                                    ),
-                                                  )))
-                                      : const SizedBox(),
-                                  SizedBox(
-                                      width: navi == 0
-                                          ? MediaQuery.of(context).size.width -
-                                              60
-                                          : MediaQuery.of(context).size.width -
-                                              10,
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, right: 20),
-                                          child: Row(
-                                            children: [
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Text('Habit Tracker',
-                                                    style: GoogleFonts.lobster(
-                                                      fontSize: 25,
-                                                      color: TextColor(),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    )),
-                                              ),
-                                              InkWell(
-                                                  onTap: () {
-                                                    Get.to(NotiAlarm());
-                                                  },
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: NeumorphicIcon(
-                                                      Icons.notifications_none,
-                                                      size: 30,
-                                                      style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .convex,
-                                                          surfaceIntensity: 0.5,
-                                                          depth: 2,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                              LightSource
-                                                                  .topLeft),
-                                                    ),
+                          height: 80,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, top: 20, bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                navi == 0
+                                    ? draw.drawopen == true
+                                        ? IconBtn(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    xoffset = 0;
+                                                    yoffset = 0;
+                                                    scalefactor = 1;
+                                                    isdraweropen = false;
+                                                    draw.setclose();
+                                                    Hive.box('user_setting')
+                                                        .put('page_opened',
+                                                            false);
+                                                  });
+                                                },
+                                                icon: Container(
+                                                  alignment: Alignment.center,
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: NeumorphicIcon(
+                                                    Icons.keyboard_arrow_left,
+                                                    size: 30,
+                                                    style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .convex,
+                                                        depth: 2,
+                                                        surfaceIntensity: 0.5,
+                                                        color: TextColor(),
+                                                        lightSource: LightSource
+                                                            .topLeft),
+                                                  ),
+                                                )),
+                                            color: TextColor())
+                                        : IconBtn(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    xoffset = 50;
+                                                    yoffset = 0;
+                                                    scalefactor = 1;
+                                                    isdraweropen = true;
+                                                    draw.setopen();
+                                                    Hive.box('user_setting')
+                                                        .put('page_opened',
+                                                            true);
+                                                  });
+                                                },
+                                                icon: Container(
+                                                  alignment: Alignment.center,
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: NeumorphicIcon(
+                                                    Icons.menu,
+                                                    size: 30,
+                                                    style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .convex,
+                                                        surfaceIntensity: 0.5,
+                                                        depth: 2,
+                                                        color: TextColor(),
+                                                        lightSource: LightSource
+                                                            .topLeft),
+                                                  ),
+                                                )),
+                                            color: TextColor())
+                                    : const SizedBox(),
+                                SizedBox(
+                                    width: navi == 0
+                                        ? MediaQuery.of(context).size.width - 70
+                                        : MediaQuery.of(context).size.width -
+                                            20,
+                                    child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Text('Habit Tracker',
+                                                  style: GoogleFonts.lobster(
+                                                    fontSize: 25,
+                                                    color: TextColor(),
+                                                    fontWeight: FontWeight.bold,
                                                   )),
-                                            ],
-                                          ))),
-                                ],
-                              ),
+                                            ),
+                                            IconBtn(
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      Get.to(NotiAlarm());
+                                                    },
+                                                    icon: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons
+                                                            .notifications_none,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            depth: 2,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    )),
+                                                color: TextColor())
+                                          ],
+                                        ))),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
+                          )),
                       Flexible(
                           fit: FlexFit.tight,
                           child: SizedBox(

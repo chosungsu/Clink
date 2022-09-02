@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -132,54 +132,53 @@ class _ImageSliderPageState extends State<ImageSliderPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Padding(padding: EdgeInsets.only(left: 10)),
-                    SizedBox(
-                        width: 50,
-                        child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                //Navigator.pop(context);
-                                Get.back();
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 30,
-                              height: 30,
-                              child: NeumorphicIcon(
-                                Icons.keyboard_arrow_left,
-                                size: 30,
-                                style: NeumorphicStyle(
-                                    shape: NeumorphicShape.convex,
-                                    depth: 2,
-                                    surfaceIntensity: 0.5,
-                                    color: TextColor(),
-                                    lightSource: LightSource.topLeft),
-                              ),
-                            ))),
-                    GetBuilder<memosetting>(
-                      builder: (_) => SizedBox(
-                          width: MediaQuery.of(context).size.width - 120,
-                          child: Center(
-                            child: Text(
-                              (controll_memo.imageindex + 1).toString() +
-                                  '/' +
-                                  controll_memo.imagelist.length.toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize(),
-                                  color: TextColor()),
-                            ),
-                          )),
+                  height: 80,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 20, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconBtn(
+                            child: IconButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                icon: Container(
+                                  alignment: Alignment.center,
+                                  width: 30,
+                                  height: 30,
+                                  child: NeumorphicIcon(
+                                    Icons.keyboard_arrow_left,
+                                    size: 30,
+                                    style: NeumorphicStyle(
+                                        shape: NeumorphicShape.convex,
+                                        depth: 2,
+                                        surfaceIntensity: 0.5,
+                                        color: TextColor(),
+                                        lightSource: LightSource.topLeft),
+                                  ),
+                                )),
+                            color: TextColor()),
+                        GetBuilder<memosetting>(
+                          builder: (_) => SizedBox(
+                              width: MediaQuery.of(context).size.width - 120,
+                              child: Center(
+                                child: Text(
+                                  (controll_memo.imageindex + 1).toString() +
+                                      '/' +
+                                      controll_memo.imagelist.length.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTitleTextsize(),
+                                      color: TextColor()),
+                                ),
+                              )),
+                        ),
+                        const Padding(padding: EdgeInsets.only(right: 10)),
+                      ],
                     ),
-                    const Padding(padding: EdgeInsets.only(right: 10)),
-                  ],
-                ),
-              ),
+                  )),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -244,31 +243,30 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                       height:
                                           MediaQuery.of(context).size.height -
                                               170,
-                                      width: MediaQuery.of(context).size.width -
-                                          60,
-                                      child: Image.network(
-                                          controll_memo.imagelist[index],
-                                          fit: BoxFit.fill, loadingBuilder:
-                                              (BuildContext context,
-                                                  Widget child,
-                                                  ImageChunkEvent?
-                                                      loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        );
-                                      }))
+                                      child: PhotoView(
+                                        enableRotation: true,
+                                        backgroundDecoration:
+                                            const BoxDecoration(
+                                                color: Colors.transparent),
+                                        loadingBuilder: (BuildContext context,
+                                            ImageChunkEvent? loadingProgress) {
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress!
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                        imageProvider: NetworkImage(
+                                            controll_memo.imagelist[index],
+                                            scale: 1),
+                                      ))
                                 ],
                               ));
                     })),

@@ -1,5 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/ClickShowEachNote.dart';
@@ -94,6 +96,103 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     }
   }
 
+  Speeddialmemo(
+      BuildContext context,
+      bool showBackToTopButton,
+      String username,
+      TextEditingController controller,
+      FocusNode searchNode,
+      selectcollection scollection,
+      bool isresponsive,
+      ScrollController scrollController) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        showBackToTopButton == false
+            ? const SizedBox()
+            : FloatingActionButton(
+                onPressed: () {
+                  scrollController.animateTo(0,
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.easeIn);
+                  if (scrollController.offset == 300) {
+                    showBackToTopButton = false; // show the back-to-top button
+                  }
+                },
+                backgroundColor: BGColor(),
+                child: Icon(
+                  Icons.arrow_upward,
+                  color: TextColor(),
+                ),
+              ),
+        const SizedBox(width: 10),
+        SpeedDial(
+            activeIcon: Icons.close,
+            icon: Icons.add,
+            backgroundColor: Colors.blue,
+            overlayColor: BGColor(),
+            overlayOpacity: 0.4,
+            spacing: 10,
+            spaceBetweenChildren: 10,
+            children: [
+              SpeedDialChild(
+                child: NeumorphicIcon(
+                  Icons.local_offer,
+                  size: 30,
+                  style: NeumorphicStyle(
+                      shape: NeumorphicShape.convex,
+                      depth: 2,
+                      surfaceIntensity: 0.5,
+                      color: TextColor(),
+                      lightSource: LightSource.topLeft),
+                ),
+                backgroundColor: Colors.blue.shade200,
+                onTap: () {
+                  addmemocollector(context, username, controller, searchNode,
+                      'outside', scollection, isresponsive);
+                },
+                label: '메모태그 추가',
+                labelStyle: TextStyle(
+                    color: Colors.black45,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize()),
+              ),
+              SpeedDialChild(
+                child: NeumorphicIcon(
+                  Icons.add,
+                  size: 30,
+                  style: NeumorphicStyle(
+                      shape: NeumorphicShape.convex,
+                      depth: 2,
+                      surfaceIntensity: 0.5,
+                      color: TextColor(),
+                      lightSource: LightSource.topLeft),
+                ),
+                backgroundColor: Colors.orange.shade200,
+                onTap: () {
+                  Get.to(
+                      () => DayScript(
+                            firstdate: DateTime.now(),
+                            lastdate: DateTime.now(),
+                            position: 'note',
+                            title: '',
+                            share: const [],
+                            orig: '',
+                          ),
+                      transition: Transition.downToUp);
+                },
+                label: '메모 추가',
+                labelStyle: TextStyle(
+                    color: Colors.black45,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize()),
+              ),
+            ]),
+      ],
+    );
+  }
+
   Future<bool> _onWillPop() async {
     Get.back(result: true);
     return true;
@@ -111,85 +210,15 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
               onWillPop: _onWillPop,
               child: UI(),
             ),
-            floatingActionButton: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _showBackToTopButton == false
-                    ? const SizedBox()
-                    : FloatingActionButton(
-                        onPressed: _scrollToTop,
-                        backgroundColor: BGColor(),
-                        child: Icon(
-                          Icons.arrow_upward,
-                          color: TextColor(),
-                        ),
-                      ),
-                const SizedBox(width: 10),
-                SpeedDial(
-                    activeIcon: Icons.close,
-                    icon: Icons.add,
-                    backgroundColor: Colors.blue,
-                    overlayColor: BGColor(),
-                    overlayOpacity: 0.4,
-                    spacing: 10,
-                    spaceBetweenChildren: 10,
-                    children: [
-                      SpeedDialChild(
-                        child: NeumorphicIcon(
-                          Icons.local_offer,
-                          size: 30,
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              surfaceIntensity: 0.5,
-                              color: TextColor(),
-                              lightSource: LightSource.topLeft),
-                        ),
-                        backgroundColor: Colors.blue.shade200,
-                        onTap: () {
-                          addmemocollector(context, username, controller,
-                              searchNode, 'outside', scollection, isresponsive);
-                        },
-                        label: '메모태그 추가',
-                        labelStyle: TextStyle(
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize()),
-                      ),
-                      SpeedDialChild(
-                        child: NeumorphicIcon(
-                          Icons.add,
-                          size: 30,
-                          style: NeumorphicStyle(
-                              shape: NeumorphicShape.convex,
-                              depth: 2,
-                              surfaceIntensity: 0.5,
-                              color: TextColor(),
-                              lightSource: LightSource.topLeft),
-                        ),
-                        backgroundColor: Colors.orange.shade200,
-                        onTap: () {
-                          Get.to(
-                              () => DayScript(
-                                    firstdate: DateTime.now(),
-                                    lastdate: DateTime.now(),
-                                    position: 'note',
-                                    title: '',
-                                    share: const [],
-                                    orig: '',
-                                  ),
-                              transition: Transition.downToUp);
-                        },
-                        label: '메모 추가',
-                        labelStyle: TextStyle(
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize()),
-                      ),
-                    ]),
-              ],
-            )));
+            floatingActionButton: Speeddialmemo(
+                context,
+                _showBackToTopButton,
+                username,
+                controller,
+                searchNode,
+                scollection,
+                isresponsive,
+                _scrollController)));
   }
 
   UI() {
@@ -204,7 +233,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
               SizedBox(
                   height: 80,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 20, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -212,15 +242,12 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                             fit: FlexFit.tight,
                             child: Row(
                               children: [
-                                SizedBox(
-                                    width: 50,
-                                    child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            Get.back(result: true);
-                                          });
+                                IconBtn(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          Get.back(result: true);
                                         },
-                                        child: Container(
+                                        icon: Container(
                                           alignment: Alignment.center,
                                           width: 30,
                                           height: 30,
@@ -235,13 +262,14 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
-                                        ))),
+                                        )),
+                                    color: TextColor()),
                                 SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width - 70,
                                     child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 10),
+                                            left: 10, right: 10),
                                         child: Row(
                                           children: [
                                             Flexible(
@@ -253,10 +281,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                     fontWeight: FontWeight.bold,
                                                   )),
                                             ),
-                                            SizedBox(
-                                                width: 30,
-                                                child: InkWell(
-                                                    onTap: () {
+                                            IconBtn(
+                                                child: IconButton(
+                                                    onPressed: () {
                                                       //리스트 정렬
                                                       setState(() {
                                                         sort == 0
@@ -282,7 +309,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                             : sort = 1;
                                                       });
                                                     },
-                                                    child: Container(
+                                                    icon: Container(
                                                       alignment:
                                                           Alignment.center,
                                                       width: 30,
@@ -302,7 +329,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                                 LightSource
                                                                     .topLeft),
                                                       ),
-                                                    ))),
+                                                    )),
+                                                color: TextColor())
                                           ],
                                         ))),
                               ],

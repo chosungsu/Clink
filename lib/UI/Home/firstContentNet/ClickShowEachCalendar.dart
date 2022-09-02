@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Dialogs/checkdeletecandm.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -54,7 +55,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     initializeDateFormatting(Localizations.localeOf(context).languageCode);
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -97,7 +97,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               SizedBox(
                   height: 80,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 20, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -105,15 +106,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                             fit: FlexFit.tight,
                             child: Row(
                               children: [
-                                SizedBox(
-                                    width: 50,
-                                    child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            Navigator.pop(context);
-                                          });
+                                IconBtn(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          Get.back();
                                         },
-                                        child: Container(
+                                        icon: Container(
                                           alignment: Alignment.center,
                                           width: 30,
                                           height: 30,
@@ -128,13 +126,14 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
-                                        ))),
+                                        )),
+                                    color: TextColor()),
                                 SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width - 70,
                                     child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 10),
+                                            left: 10, right: 10),
                                         child: Row(
                                           children: [
                                             Flexible(
@@ -148,10 +147,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
-                                                width: 30,
-                                                child: InkWell(
-                                                    onTap: () {
+                                            IconBtn(
+                                                child: IconButton(
+                                                    onPressed: () {
                                                       //수정
                                                       CreateCalandmemoSuccessFlushbar(
                                                           context);
@@ -265,7 +263,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                         });
                                                       });
                                                     },
-                                                    child: Container(
+                                                    icon: Container(
                                                       alignment:
                                                           Alignment.center,
                                                       width: 30,
@@ -285,14 +283,14 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                 LightSource
                                                                     .topLeft),
                                                       ),
-                                                    ))),
+                                                    )),
+                                                color: TextColor()),
                                             const SizedBox(
                                               width: 10,
                                             ),
-                                            SizedBox(
-                                                width: 30,
-                                                child: InkWell(
-                                                    onTap: () async {
+                                            IconBtn(
+                                                child: IconButton(
+                                                    onPressed: () async {
                                                       //삭제
                                                       final reloadpage =
                                                           await Get.dialog(
@@ -368,7 +366,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                         });
                                                       }
                                                     },
-                                                    child: Container(
+                                                    icon: Container(
                                                       alignment:
                                                           Alignment.center,
                                                       width: 30,
@@ -388,7 +386,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                 LightSource
                                                                     .topLeft),
                                                       ),
-                                                    ))),
+                                                    )),
+                                                color: TextColor()),
                                           ],
                                         ))),
                               ],

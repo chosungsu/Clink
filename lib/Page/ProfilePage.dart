@@ -4,8 +4,10 @@ import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Tool/Getx/navibool.dart';
+import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Setting/UserDetails.dart';
 import '../UI/Setting/UserSettings.dart';
@@ -106,86 +108,104 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 80,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Padding(padding: EdgeInsets.only(left: 10)),
-                            navi == 0
-                                ? SizedBox(
-                                    width: 50,
-                                    child: draw.drawopen == true
-                                        ? InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                xoffset = 0;
-                                                yoffset = 0;
-                                                scalefactor = 1;
-                                                isdraweropen = false;
-                                                draw.setclose();
-                                                Hive.box('user_setting')
-                                                    .put('page_opened', false);
-                                              });
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                              height: 30,
-                                              child: NeumorphicIcon(
-                                                Icons.keyboard_arrow_left,
-                                                size: 30,
-                                                style: NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    depth: 2,
-                                                    surfaceIntensity: 0.5,
+                          height: 80,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, top: 20, bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                navi == 0
+                                    ? draw.drawopen == true
+                                        ? IconBtn(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    xoffset = 0;
+                                                    yoffset = 0;
+                                                    scalefactor = 1;
+                                                    isdraweropen = false;
+                                                    draw.setclose();
+                                                    Hive.box('user_setting')
+                                                        .put('page_opened',
+                                                            false);
+                                                  });
+                                                },
+                                                icon: Container(
+                                                  alignment: Alignment.center,
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: NeumorphicIcon(
+                                                    Icons.keyboard_arrow_left,
+                                                    size: 30,
+                                                    style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .convex,
+                                                        depth: 2,
+                                                        surfaceIntensity: 0.5,
+                                                        color: TextColor(),
+                                                        lightSource: LightSource
+                                                            .topLeft),
+                                                  ),
+                                                )),
+                                            color: TextColor())
+                                        : IconBtn(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    xoffset = 50;
+                                                    yoffset = 0;
+                                                    scalefactor = 1;
+                                                    isdraweropen = true;
+                                                    draw.setopen();
+                                                    Hive.box('user_setting')
+                                                        .put('page_opened',
+                                                            true);
+                                                  });
+                                                },
+                                                icon: Container(
+                                                  alignment: Alignment.center,
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: NeumorphicIcon(
+                                                    Icons.menu,
+                                                    size: 30,
+                                                    style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .convex,
+                                                        surfaceIntensity: 0.5,
+                                                        depth: 2,
+                                                        color: TextColor(),
+                                                        lightSource: LightSource
+                                                            .topLeft),
+                                                  ),
+                                                )),
+                                            color: TextColor())
+                                    : const SizedBox(),
+                                SizedBox(
+                                    width: navi == 0
+                                        ? MediaQuery.of(context).size.width - 70
+                                        : MediaQuery.of(context).size.width -
+                                            20,
+                                    child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Text('',
+                                                  style: GoogleFonts.lobster(
+                                                    fontSize: 25,
                                                     color: TextColor(),
-                                                    lightSource:
-                                                        LightSource.topLeft),
-                                              ),
-                                            ))
-                                        : InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                xoffset = 50;
-                                                yoffset = 0;
-                                                scalefactor = 1;
-                                                isdraweropen = true;
-                                                draw.setopen();
-                                                Hive.box('user_setting')
-                                                    .put('page_opened', true);
-                                              });
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                              height: 30,
-                                              child: NeumorphicIcon(
-                                                Icons.menu,
-                                                size: 30,
-                                                style: NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    surfaceIntensity: 0.5,
-                                                    depth: 2,
-                                                    color: TextColor(),
-                                                    lightSource:
-                                                        LightSource.topLeft),
-                                              ),
-                                            )))
-                                : const SizedBox(),
-                            SizedBox(
-                                child: Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Text('',
-                                  style: TextStyle(
-                                      color: TextColor(),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                            )),
-                          ],
-                        ),
-                      ),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ),
+                                          ],
+                                        ))),
+                              ],
+                            ),
+                          )),
                       Flexible(
                         fit: FlexFit.tight,
                         child: SizedBox(

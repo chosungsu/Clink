@@ -95,6 +95,7 @@ dependencies:
   device_info: ^2.0.3
   ios_utsname_ext: ^2.1.0
   flutter_image_slideshow: ^0.1.4
+  photo_view: ^0.14.0
 
 dev_dependencies:
   flutter_test:
