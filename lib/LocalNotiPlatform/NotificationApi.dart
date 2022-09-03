@@ -1,14 +1,31 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationApi {
   static final _notifications = FlutterLocalNotificationsPlugin();
-  static final onNotifications = BehaviorSubject<String?>();
 
-  static Future showNotification(
-      {int id = 0, String? title, String? body, String? payload}) async {
-    _notifications.show(id, title, body, await _notificationDetails(),
-        payload: payload);
+  static Future showNotification({
+    int id = 0,
+    String? title,
+    String? body,
+  }) async {
+    _notifications.show(id, title, body, await _notificationDetails());
+  }
+
+  static void showScheduledNotification(
+      {int id = 0,
+      String? title,
+      String? body,
+      required DateTime scheduledate}) async {
+    _notifications.zonedSchedule(
+        id,
+        title,
+        body,
+        tz.TZDateTime.from(scheduledate, tz.local),
+        await _notificationDetails(),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 
   static Future _notificationDetails() async {
@@ -20,13 +37,12 @@ class NotificationApi {
   }
 
   static Future init({bool initScheduled = false}) async {
-    final android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    final iOS = IOSInitializationSettings();
-    final settings = InitializationSettings(android: android, iOS: iOS);
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iOS = IOSInitializationSettings();
+    const settings = InitializationSettings(android: android, iOS: iOS);
 
-    await _notifications.initialize(settings,
-        onSelectNotification: ((payload) async {
-      onNotifications.add(payload);
-    }));
+    await _notifications.initialize(
+      settings,
+    );
   }
 }

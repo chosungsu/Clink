@@ -6,6 +6,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../../../LocalNotiPlatform/NotificationApi.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
@@ -149,6 +150,30 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                 child: IconButton(
                                                     onPressed: () {
                                                       //수정
+                                                      var firsttxt = '0' +
+                                                          textEditingController2
+                                                              .text +
+                                                          ' - 0' +
+                                                          textEditingController3
+                                                              .text;
+                                                      var secondtxt = '0' +
+                                                          textEditingController2
+                                                              .text +
+                                                          ' - ' +
+                                                          textEditingController3
+                                                              .text;
+                                                      var thirdtxt =
+                                                          textEditingController2
+                                                                  .text +
+                                                              ' - 0' +
+                                                              textEditingController3
+                                                                  .text;
+                                                      var forthtxt =
+                                                          textEditingController2
+                                                                  .text +
+                                                              ' - ' +
+                                                              textEditingController3
+                                                                  .text;
                                                       CreateCalandmemoSuccessFlushbar(
                                                           context);
                                                       firestore
@@ -258,6 +283,81 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                             () {
                                                           CreateCalandmemoSuccessFlushbarSub(
                                                               context, '일정');
+                                                          if (isChecked_pushalarm ==
+                                                              true) {
+                                                            NotificationApi
+                                                                .showScheduledNotification(
+                                                                    title:
+                                                                        textEditingController1
+                                                                            .text,
+                                                                    body: textEditingController2.text.split(':')[0].length ==
+                                                                            1
+                                                                        ? (textEditingController3.text.split(':')[0].length ==
+                                                                                1
+                                                                            ? firsttxt
+                                                                            : secondtxt)
+                                                                        : (textEditingController3.text.split(':')[0].length ==
+                                                                                1
+                                                                            ? thirdtxt
+                                                                            : forthtxt),
+                                                                    scheduledate:
+                                                                        DateTime
+                                                                            .utc(
+                                                                      int.parse(widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[0]),
+                                                                      int.parse(widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[1]),
+                                                                      int.parse(widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[2]),
+                                                                      int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                          ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) -
+                                                                              1
+                                                                          : int.parse(textEditingController2.text.split(':')[0].length == 1
+                                                                              ? '0' + textEditingController2.text.split(':')[0]
+                                                                              : textEditingController2.text.split(':')[0]),
+                                                                      int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                          ? 60 -
+                                                                              (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                          : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)),
+                                                                    ));
+                                                          } else {
+                                                            NotificationApi
+                                                                .showNotification(
+                                                              title:
+                                                                  textEditingController1
+                                                                      .text,
+                                                              body: textEditingController2
+                                                                          .text
+                                                                          .split(':')[
+                                                                              0]
+                                                                          .length ==
+                                                                      1
+                                                                  ? (textEditingController3
+                                                                              .text
+                                                                              .split(':')[
+                                                                                  0]
+                                                                              .length ==
+                                                                          1
+                                                                      ? firsttxt
+                                                                      : secondtxt)
+                                                                  : (textEditingController3
+                                                                              .text
+                                                                              .split(':')[0]
+                                                                              .length ==
+                                                                          1
+                                                                      ? thirdtxt
+                                                                      : forthtxt),
+                                                            );
+                                                          }
                                                         });
                                                       });
                                                     },

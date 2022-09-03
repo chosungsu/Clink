@@ -58,7 +58,6 @@ class _DayContentHomeState extends State<DayContentHome>
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   var _rangeStart = null;
   var _rangeEnd = null;
-  ScrollController _scrollController = ScrollController();
   List<Event> getList(DateTime date) {
     return _events[date] ?? [];
   }
@@ -78,29 +77,12 @@ class _DayContentHomeState extends State<DayContentHome>
     fromDate = DateTime.now();
     toDate = DateTime.now().add(const Duration(hours: 2));
     _events = {};
-    _scrollController = ScrollController()
-      ..addListener(() {
-        if (setcal_fromsheet == 2) {
-          if (_scrollController.offset >= 170 * 2) {
-            setState(() {
-              controll_cals.setcals1w(widget.title);
-              setcal_fromsheet = controll_cals.showcalendar;
-            });
-          } else {
-            setState(() {
-              controll_cals.setcals1m(widget.title);
-              setcal_fromsheet = controll_cals.showcalendar;
-            });
-          }
-        }
-      });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
 
@@ -147,7 +129,6 @@ class _DayContentHomeState extends State<DayContentHome>
                       behavior: NoBehavior(),
                       child: SingleChildScrollView(
                           physics: const ScrollPhysics(),
-                          controller: _scrollController,
                           child: StatefulBuilder(
                               builder: (_, StateSetter setState) {
                             return Padding(

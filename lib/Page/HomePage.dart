@@ -585,6 +585,7 @@ class _HomePageState extends State<HomePage> {
                                                     .split('-')[2]
                                                     .substring(0, 2) +
                                                 '일')
+                                    .orderBy('Timestart')
                                     .snapshots(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
@@ -792,6 +793,7 @@ class _HomePageState extends State<HomePage> {
                                                     .split('-')[2]
                                                     .substring(0, 2) +
                                                 '일')
+                                        .orderBy('Timestart')
                                         .snapshots(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {

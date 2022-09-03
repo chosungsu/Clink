@@ -337,13 +337,6 @@ class _DayScriptState extends State<DayScript> {
                                                                         'cal') {
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
-                                                                      print(widget
-                                                                              .lastdate
-                                                                              .toString() +
-                                                                          '-' +
-                                                                          widget
-                                                                              .firstdate
-                                                                              .toString());
                                                                       widget.lastdate !=
                                                                               widget
                                                                                   .firstdate
@@ -404,14 +397,27 @@ class _DayScriptState extends State<DayScript> {
                                                                             '일정');
                                                                         if (isChecked_pushalarm ==
                                                                             true) {
-                                                                          NotificationApi.showNotification(
+                                                                          NotificationApi.showScheduledNotification(
                                                                               title: textEditingController1.text,
                                                                               body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? firsttxt : secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? thirdtxt : forthtxt),
-                                                                              payload: 'Show calendar');
+                                                                              scheduledate: DateTime.utc(
+                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)),
+                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(5, 7)),
+                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(8, 10)),
+                                                                                int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1 : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]),
+                                                                                int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
+                                                                              ));
+                                                                        } else {
+                                                                          NotificationApi
+                                                                              .showNotification(
+                                                                            title:
+                                                                                textEditingController1.text,
+                                                                            body: textEditingController2.text.split(':')[0].length == 1
+                                                                                ? (textEditingController3.text.split(':')[0].length == 1 ? firsttxt : secondtxt)
+                                                                                : (textEditingController3.text.split(':')[0].length == 1 ? thirdtxt : forthtxt),
+                                                                          );
                                                                         }
                                                                       } else {
-                                                                        print(
-                                                                            'notdiffer');
                                                                         firestore
                                                                             .collection('CalendarDataBase')
                                                                             .add({
@@ -440,10 +446,25 @@ class _DayScriptState extends State<DayScript> {
                                                                             '일정');
                                                                         if (isChecked_pushalarm ==
                                                                             true) {
-                                                                          NotificationApi.showNotification(
+                                                                          NotificationApi.showScheduledNotification(
                                                                               title: textEditingController1.text,
                                                                               body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? firsttxt : secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? thirdtxt : forthtxt),
-                                                                              payload: 'Show calendar');
+                                                                              scheduledate: DateTime.utc(
+                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)),
+                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(5, 7)),
+                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(8, 10)),
+                                                                                int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1 : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]),
+                                                                                int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
+                                                                              ));
+                                                                        } else {
+                                                                          NotificationApi
+                                                                              .showNotification(
+                                                                            title:
+                                                                                textEditingController1.text,
+                                                                            body: textEditingController2.text.split(':')[0].length == 1
+                                                                                ? (textEditingController3.text.split(':')[0].length == 1 ? firsttxt : secondtxt)
+                                                                                : (textEditingController3.text.split(':')[0].length == 1 ? thirdtxt : forthtxt),
+                                                                          );
                                                                         }
                                                                       }
                                                                     } else {

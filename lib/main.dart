@@ -89,7 +89,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     NotificationApi.init();
-    listenNotifications();
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notifications = PushNotification(
         title: message.notification?.title,
@@ -129,11 +128,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       });
     });
   }
-
-  void listenNotifications() =>
-      NotificationApi.onNotifications.stream.listen((event) {
-        Get.to(() => ChooseCalendar(), transition: Transition.leftToRight);
-      });
 
   @override
   void dispose() {
