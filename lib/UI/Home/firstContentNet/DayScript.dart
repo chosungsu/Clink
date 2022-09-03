@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
 import 'package:clickbyme/UI/Home/Widgets/ImageSlider.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
@@ -111,16 +112,7 @@ class _DayScriptState extends State<DayScript> {
     textEditingController3 = TextEditingController();
     textEditingController_add_sheet = TextEditingController();
     _events = {};
-    widget.lastdate != widget.firstdate
-        ? differ_date = int.parse(widget.lastdate
-            .difference(DateTime.parse(widget.firstdate.toString()))
-            .inDays
-            .toString())
-        : differ_date = 0;
-    for (int i = 0; i <= differ_date; i++) {
-      differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month,
-          widget.firstdate.day + i));
-    }
+
     scollection.resetcollection();
     selectedValue = Hive.box('user_setting').get('alarming_time') ?? '5분 전';
   }
@@ -307,6 +299,30 @@ class _DayScriptState extends State<DayScript> {
                                                           child: IconButton(
                                                               onPressed:
                                                                   () async {
+                                                                var firsttxt = '0' +
+                                                                    textEditingController2
+                                                                        .text +
+                                                                    ' - 0' +
+                                                                    textEditingController3
+                                                                        .text;
+                                                                var secondtxt = '0' +
+                                                                    textEditingController2
+                                                                        .text +
+                                                                    ' - ' +
+                                                                    textEditingController3
+                                                                        .text;
+                                                                var thirdtxt =
+                                                                    textEditingController2
+                                                                            .text +
+                                                                        ' - 0' +
+                                                                        textEditingController3
+                                                                            .text;
+                                                                var forthtxt =
+                                                                    textEditingController2
+                                                                            .text +
+                                                                        ' - ' +
+                                                                        textEditingController3
+                                                                            .text;
                                                                 if (textEditingController1
                                                                     .text
                                                                     .isNotEmpty) {
@@ -321,6 +337,38 @@ class _DayScriptState extends State<DayScript> {
                                                                         'cal') {
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
+                                                                      print(widget
+                                                                              .lastdate
+                                                                              .toString() +
+                                                                          '-' +
+                                                                          widget
+                                                                              .firstdate
+                                                                              .toString());
+                                                                      widget.lastdate !=
+                                                                              widget
+                                                                                  .firstdate
+                                                                          ? differ_date = int.parse(widget
+                                                                              .lastdate
+                                                                              .difference(DateTime.parse(widget.firstdate
+                                                                                  .toString()))
+                                                                              .inDays
+                                                                              .toString())
+                                                                          : differ_date =
+                                                                              0;
+                                                                      for (int i =
+                                                                              0;
+                                                                          i <=
+                                                                              differ_date;
+                                                                          i++) {
+                                                                        if (differ_date ==
+                                                                            0) {
+                                                                        } else {
+                                                                          differ_list.add(DateTime(
+                                                                              widget.firstdate.year,
+                                                                              widget.firstdate.month,
+                                                                              widget.firstdate.day + i));
+                                                                        }
+                                                                      }
                                                                       if (differ_list
                                                                           .isNotEmpty) {
                                                                         for (int j =
@@ -333,7 +381,7 @@ class _DayScriptState extends State<DayScript> {
                                                                             'Daytodo':
                                                                                 textEditingController1.text,
                                                                             'Alarm': isChecked_pushalarm == true
-                                                                                ? Hive.box('user_setting').put('alarming_time', selectedValue)
+                                                                                ? Hive.box('user_setting').get('alarming_time')
                                                                                 : '설정off',
                                                                             'Timestart': textEditingController2.text.split(':')[0].length == 1
                                                                                 ? '0' + textEditingController2.text
@@ -354,14 +402,23 @@ class _DayScriptState extends State<DayScript> {
                                                                         CreateCalandmemoSuccessFlushbarSub(
                                                                             context,
                                                                             '일정');
+                                                                        if (isChecked_pushalarm ==
+                                                                            true) {
+                                                                          NotificationApi.showNotification(
+                                                                              title: textEditingController1.text,
+                                                                              body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? firsttxt : secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? thirdtxt : forthtxt),
+                                                                              payload: 'Show calendar');
+                                                                        }
                                                                       } else {
+                                                                        print(
+                                                                            'notdiffer');
                                                                         firestore
                                                                             .collection('CalendarDataBase')
                                                                             .add({
                                                                           'Daytodo':
                                                                               textEditingController1.text,
                                                                           'Alarm': isChecked_pushalarm == true
-                                                                              ? Hive.box('user_setting').put('alarming_time', selectedValue)
+                                                                              ? Hive.box('user_setting').get('alarming_time')
                                                                               : '설정off',
                                                                           'Timestart': textEditingController2.text.split(':')[0].length == 1
                                                                               ? '0' + textEditingController2.text
@@ -381,6 +438,13 @@ class _DayScriptState extends State<DayScript> {
                                                                         CreateCalandmemoSuccessFlushbarSub(
                                                                             context,
                                                                             '일정');
+                                                                        if (isChecked_pushalarm ==
+                                                                            true) {
+                                                                          NotificationApi.showNotification(
+                                                                              title: textEditingController1.text,
+                                                                              body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? firsttxt : secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? thirdtxt : forthtxt),
+                                                                              payload: 'Show calendar');
+                                                                        }
                                                                       }
                                                                     } else {
                                                                       CreateCalandmemoSuccessFlushbar(

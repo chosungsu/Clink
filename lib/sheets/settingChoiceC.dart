@@ -264,7 +264,7 @@ content(
             ],
           ),
         ),
-        const SizedBox(
+        /*const SizedBox(
           height: 10,
         ),
         SizedBox(
@@ -514,7 +514,7 @@ content(
                       )),
                 )
               ],
-            )),
+            )),*/
       ],
     ));
   });

@@ -3,6 +3,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/LocalNotiPlatform/localnotification.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/ChooseCalendar.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,6 +17,7 @@ import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:provider/provider.dart';
 import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
+import 'LocalNotiPlatform/NotificationApi.dart';
 import 'Page/LoginSignPage.dart';
 
 import 'Tool/BGColor.dart';
@@ -86,6 +88,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    NotificationApi.init();
+    listenNotifications();
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notifications = PushNotification(
         title: message.notification?.title,
@@ -125,6 +129,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       });
     });
   }
+
+  void listenNotifications() =>
+      NotificationApi.onNotifications.stream.listen((event) {
+        Get.to(() => ChooseCalendar(), transition: Transition.leftToRight);
+      });
 
   @override
   void dispose() {

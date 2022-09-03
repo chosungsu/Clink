@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clickbyme/LocalNotiPlatform/localnotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
@@ -72,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   bool isbought = false;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
-  final newversion = NewVersion();
+  var newversion;
   var status;
   bool sameversion = true;
 
@@ -86,12 +88,10 @@ class _HomePageState extends State<HomePage> {
     navi = NaviWhere();
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
-    /*status = newversion.getVersionStatus();
-    if (status.localVersion != status.storeVersion) {
-      sameversion = false;
-    } else {
-      sameversion = true;
-    }*/
+    newversion = NewVersion(androidId: 'com.example.clickbyme');
+    Timer(const Duration(milliseconds: 800), () {
+      checkversion(newversion);
+    });
     firestore
         .collection('HomeViewCategories')
         .where('usercode', isEqualTo: docid)
@@ -123,6 +123,14 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     _pController.dispose();
+  }
+  Future<void> checkversion(newversion) async {
+    status = await newversion.getVersionStatus();
+    if (status.localVersion != status.storeVersion) {
+      sameversion = false;
+    } else {
+      sameversion = true;
+    }
   }
 
   @override

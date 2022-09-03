@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:clickbyme/Dialogs/checkbackincandm.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
@@ -7,12 +6,14 @@ import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:printing/printing.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/checkdeletecandm.dart';
 import '../../../Tool/BGColor.dart';
@@ -24,6 +25,9 @@ import '../Widgets/ImageSlider.dart';
 import '../firstContentNet/DayScript.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:open_file/open_file.dart';
+import 'package:http/http.dart' show get;
 
 class ClickShowEachNote extends StatefulWidget {
   const ClickShowEachNote({
@@ -284,23 +288,37 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           child: IconButton(
                                                               onPressed:
                                                                   () async {
-                                                                await MakePDF(
-                                                                  textEditingController1
-                                                                      .text,
-                                                                  savepicturelist,
-                                                                  Hive.box('user_setting').get('memocollection') ==
-                                                                              '' ||
-                                                                          Hive.box('user_setting').get('memocollection') ==
-                                                                              null
-                                                                      ? null
-                                                                      : (widget.doccollection !=
-                                                                              Hive.box('user_setting').get(
-                                                                                  'memocollection')
-                                                                          ? Hive.box('user_setting').get(
-                                                                              'memocollection')
-                                                                          : widget
-                                                                              .doccollection),
-                                                                );
+                                                                checklisttexts
+                                                                    .clear();
+                                                                for (int i = 0;
+                                                                    i <
+                                                                        scollection
+                                                                            .memolistin
+                                                                            .length;
+                                                                    i++) {
+                                                                  checklisttexts.add(MemoList(
+                                                                      memocontent:
+                                                                          scollection.memolistcontentin[
+                                                                              i],
+                                                                      contentindex:
+                                                                          scollection
+                                                                              .memolistin[i]));
+                                                                }
+                                                                final pdfFile = await MakePDF(
+                                                                    textEditingController1
+                                                                        .text,
+                                                                    controll_memo
+                                                                        .imagelist,
+                                                                    Hive.box('user_setting').get('memocollection') ==
+                                                                                '' ||
+                                                                            Hive.box('user_setting').get('memocollection') ==
+                                                                                null
+                                                                        ? null
+                                                                        : (widget.doccollection !=
+                                                                                Hive.box('user_setting').get('memocollection')
+                                                                            ? Hive.box('user_setting').get('memocollection')
+                                                                            : widget.doccollection),
+                                                                    checklisttexts);
                                                               },
                                                               icon: Container(
                                                                 alignment:
@@ -1633,11 +1651,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     String titletext,
     List savepicturelist,
     collection,
+    List<MemoList> checklisttexts,
   ) async {
     final pdf = pw.Document();
-    final output = await getApplicationDocumentsDirectory();
-    final file = File("${output.path}/$titletext.pdf");
-    var imagenet;
+    final fontData = await rootBundle.load('fonts/NanumMyeongjo-Regular.ttf');
+    final ttf = pw.Font.ttf(fontData);
+    final headers = ['작성내용'];
+    var images = [];
+    try {
+      for (int i = 0; i < savepicturelist.length; i++) {
+        final provider =
+            await flutterImageProvider(NetworkImage(savepicturelist[i]));
+        images.add(provider);
+      }
+    } catch (e) {
+      print("****ERROR: $e****");
+      return;
+    }
     pdf.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
@@ -1646,49 +1676,73 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                   mainAxisAlignment: pw.MainAxisAlignment.start,
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                pw.Text(titletext, style: const pw.TextStyle(fontSize: 40)),
+                pw.Text(titletext,
+                    style: pw.TextStyle(fontSize: 40, font: ttf)),
                 pw.SizedBox(height: 50),
                 pw.Text('컬렉션 : ' + collection,
-                    style: const pw.TextStyle(
-                      fontSize: 20,
-                    )),
+                    style: pw.TextStyle(fontSize: 20, font: ttf)),
                 pw.SizedBox(height: 20),
-                pw.Text('메모내용',
-                    style: const pw.TextStyle(
-                      fontSize: 25,
-                    )),
+                pw.Text('메모내용', style: pw.TextStyle(fontSize: 25, font: ttf)),
                 pw.SizedBox(height: 10),
                 pw.Table(
                     border: pw.TableBorder.all(color: PdfColors.black),
                     children: [
-                      ...checklisttexts.map((e) => pw.TableRow(children: [
-                            pw.Expanded(
-                                child: pw.Text(e.memocontent,
-                                    style: const pw.TextStyle(
-                                      fontSize: 20,
-                                    )))
+                      pw.TableRow(children: [
+                        pw.Padding(
+                          child: pw.Text(headers[0],
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(font: ttf, fontSize: 15)),
+                          padding: const pw.EdgeInsets.all(20),
+                        )
+                      ]),
+                      ...checklisttexts.map((memo) => pw.TableRow(children: [
+                            pw.Padding(
+                              child: pw.Expanded(
+                                  flex: 2,
+                                  child: pw.Text(memo.memocontent,
+                                      style: pw.TextStyle(
+                                          font: ttf, fontSize: 12))),
+                              padding: const pw.EdgeInsets.all(10),
+                            )
                           ]))
                     ]),
                 pw.SizedBox(height: 20),
-                pw.Text('첨부사진',
-                    style: const pw.TextStyle(
-                      fontSize: 25,
-                    )),
+                /*pw.Text('첨부사진', style: pw.TextStyle(fontSize: 25, font: ttf)),
                 pw.SizedBox(height: 10),
-                ...savepicturelist.map((element) => pw.Padding(
-                    padding: pw.EdgeInsets.symmetric(
+                ...savepicturelist.map((element) {
+                  return ;
+                })
+                pw.Padding(
+                    padding: const pw.EdgeInsets.symmetric(
                       vertical: 30,
                     ),
                     child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.center,
-                        children: [pw.Image(element)])))
+                        children: [
+                          pw.Image(images[0], width: 300, height: 300)
+                        ]))*/
               ]));
         }));
-    if (file.existsSync()) {
-      await file.writeAsBytes(await pdf.save());
-    } else {
-      await file.create(recursive: true);
-      await file.writeAsBytes(await pdf.save());
-    }
+    return savefile(name: titletext, pdf: pdf);
+  }
+}
+
+urlimage(element) async {
+  final providerimage = await get(Uri.parse(element));
+  var data = providerimage.bodyBytes;
+  return data;
+}
+
+savefile({
+  required String name,
+  required pw.Document pdf,
+}) async {
+  final bytes = await pdf.save();
+  final output = await getApplicationDocumentsDirectory();
+  final file = File("${output.path}/$name.pdf");
+  await file.writeAsBytes(bytes);
+  final url = file.path;
+  if (url.isNotEmpty) {
+    await OpenFile.open(url);
   }
 }
