@@ -29,6 +29,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
+  NotificationApi.init(initScheduled: true);
   runApp(const MyApp());
 }
 
@@ -88,7 +89,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    NotificationApi.init();
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notifications = PushNotification(
         title: message.notification?.title,

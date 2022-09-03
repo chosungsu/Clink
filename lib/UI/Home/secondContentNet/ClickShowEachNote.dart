@@ -13,6 +13,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/checkdeletecandm.dart';
@@ -25,8 +26,6 @@ import '../Widgets/ImageSlider.dart';
 import '../firstContentNet/DayScript.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:open_file/open_file.dart';
 import 'package:http/http.dart' show get;
 
 class ClickShowEachNote extends StatefulWidget {
@@ -1738,11 +1737,33 @@ savefile({
   required pw.Document pdf,
 }) async {
   final bytes = await pdf.save();
-  final output = await getApplicationDocumentsDirectory();
-  final file = File("${output.path}/$name.pdf");
-  await file.writeAsBytes(bytes);
-  final url = file.path;
-  if (url.isNotEmpty) {
-    await OpenFile.open(url);
+  Directory? directory;
+
+  try {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    } else {
+      if (Platform.isIOS) {
+        directory = await getApplicationDocumentsDirectory();
+      } else {
+        directory = Directory('/storage/emulated/0/Download');
+        // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
+        // ignore: avoid_slow_async_io
+        if (!await directory.exists())
+          directory = await getExternalStorageDirectory();
+      }
+    }
+  } catch (err, stack) {
+    print("Cannot get download folder path");
+  }
+  File file = File("${directory!.path}/$name.pdf");
+  if (file.existsSync()) {
+    //존재시 저장로직
+    await file.writeAsBytes(await pdf.save());
+  } else {
+    //미존재시 생성로직
+    file.create(recursive: true);
+    await file.writeAsBytes(await pdf.save());
   }
 }
