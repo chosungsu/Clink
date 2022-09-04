@@ -278,13 +278,11 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               NoticeLists(whatwantnotice),
-                              const SizedBox(
-                                height: 150,
-                              )
                             ],
                           ),
                         );
@@ -461,9 +459,10 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
 
   NoticeLists(int whatwantnotice) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 160,
-      width: MediaQuery.of(context).size.width - 40,
-      child: whatwantnotice == 0 ? CompanyNotice() : UserNotice(),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [whatwantnotice == 0 ? CompanyNotice() : UserNotice()],
+      ),
     );
   }
 
@@ -490,6 +489,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
               physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               itemCount: _list_ad.length,
+              shrinkWrap: true,
               itemBuilder: (context, index) {
                 return GestureDetector(
                     onTap: () {},
@@ -504,7 +504,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                             children: [
                               SizedBox(
                                   height: 100,
-                                  width: MediaQuery.of(context).size.width - 40,
+                                  width: MediaQuery.of(context).size.width - 60,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -592,6 +592,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                 ? ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
                     itemCount: notilist.listad.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
@@ -609,7 +610,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                         height: 100,
                                         width:
                                             MediaQuery.of(context).size.width -
-                                                40,
+                                                60,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
