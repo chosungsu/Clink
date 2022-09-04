@@ -91,7 +91,9 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                       timefinish,
                                       codes,
                                       todo,
-                                      alarm;
+                                      alarm,
+                                      cname,
+                                      share;
                                   final valuespace = snapshot.data!.docs;
                                   for (var sp in valuespace) {
                                     todo = sp.get('Daytodo');
@@ -99,14 +101,23 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                     timefinish = sp.get('Timefinish');
                                     alarm = sp.get('Alarm');
                                     codes = sp.get('calname');
+                                    share = sp.get('Shares');
+                                    firestore
+                                        .collection('CalendarSheetHome')
+                                        .doc(codes)
+                                        .get()
+                                        .then((value) {
+                                      cname = value.data()!['calname'];
+                                    });
+
                                     contentmy.add(SpaceContent(
                                         title: todo,
                                         date: timsestart + '-' + timefinish,
-                                        calendarcode: codes,
+                                        calendarcode: cname,
                                         alarm: alarm,
                                         finishdate: timefinish,
                                         startdate: timsestart,
-                                        share: []));
+                                        share: share));
                                   }
                                   children_cal1 = <Widget>[
                                     ContainerDesign(
@@ -173,7 +184,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                       alarm: contentmy[
                                                                               index]
                                                                           .alarm,
-                                                                      share: [],
+                                                                      share: contentmy[index].share,
                                                                       calname: contentmy[
                                                                               index]
                                                                           .calendarcode,
@@ -315,15 +326,23 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                           timefinish,
                                           codes,
                                           todo,
-                                          alarm;
+                                          alarm,
+                                          cname;
                                       final valuespace = snapshot.data!.docs;
                                       for (var sp in valuespace) {
-                                        nameList = sp.get('Shares');
+                                        nameList = sp.get('share');
                                         todo = sp.get('Daytodo');
                                         timsestart = sp.get('Timestart');
                                         timefinish = sp.get('Timefinish');
                                         codes = sp.get('calname');
                                         alarm = sp.get('Alarm');
+                                        firestore
+                                            .collection('CalendarSheetHome')
+                                            .doc(codes)
+                                            .get()
+                                            .then((value) {
+                                          cname = value.data()!['calname'];
+                                        });
                                         for (int i = 0;
                                             i < nameList.length;
                                             i++) {
@@ -333,7 +352,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                 date: timsestart +
                                                     '-' +
                                                     timefinish,
-                                                calendarcode: codes,
+                                                calendarcode: cname,
                                                 alarm: alarm,
                                                 finishdate: timefinish,
                                                 startdate: timsestart,
@@ -410,7 +429,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                           alarm:
                                                                               contentshare[index].alarm,
                                                                           share:
-                                                                              contentshare[index]['Shares'],
+                                                                              contentshare[index].share,
                                                                           calname:
                                                                               contentshare[index].calendarcode,
                                                                         ),
