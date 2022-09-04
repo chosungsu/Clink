@@ -309,18 +309,18 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                             NotificationApi
                                                                 .showScheduledNotification(
                                                                     title:
-                                                                        textEditingController1
+                                                                        '알람설정된 일정 : ' + textEditingController1
                                                                             .text,
                                                                     body: textEditingController2.text.split(':')[0].length ==
                                                                             1
                                                                         ? (textEditingController3.text.split(':')[0].length ==
                                                                                 1
-                                                                            ? firsttxt
-                                                                            : secondtxt)
+                                                                            ? '예정된 시각 : ' + firsttxt
+                                                                            : '예정된 시각 : ' + secondtxt)
                                                                         : (textEditingController3.text.split(':')[0].length ==
                                                                                 1
-                                                                            ? thirdtxt
-                                                                            : forthtxt),
+                                                                            ? '예정된 시각 : ' + thirdtxt
+                                                                            : '예정된 시각 : ' + forthtxt),
                                                                     scheduledate:
                                                                         DateTime
                                                                             .utc(
@@ -354,7 +354,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                             NotificationApi
                                                                 .showNotification(
                                                               title:
-                                                                  textEditingController1
+                                                                  '알람설정된 일정 : ' + textEditingController1
                                                                       .text,
                                                               body: textEditingController2
                                                                           .text
@@ -368,15 +368,15 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                                   0]
                                                                               .length ==
                                                                           1
-                                                                      ? firsttxt
-                                                                      : secondtxt)
+                                                                      ? '예정된 시각 : ' + firsttxt
+                                                                      : '예정된 시각 : ' + secondtxt)
                                                                   : (textEditingController3
                                                                               .text
                                                                               .split(':')[0]
                                                                               .length ==
                                                                           1
-                                                                      ? thirdtxt
-                                                                      : forthtxt),
+                                                                      ? '예정된 시각 : ' + thirdtxt
+                                                                      : '예정된 시각 : ' + forthtxt),
                                                             );
                                                           }
                                                         });
