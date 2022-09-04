@@ -3,16 +3,18 @@ class SpaceContent {
   final String date;
   final String startdate;
   final String finishdate;
-  final String calendarcode;
+  final List cname;
   final String alarm;
   final List share;
+  final String code;
 
   SpaceContent(
       {required this.title,
       required this.date,
       required this.startdate,
       required this.finishdate,
-      required this.calendarcode,
+      required this.cname,
       required this.alarm,
-      required this.share});
+      required this.share,
+      required this.code});
 }

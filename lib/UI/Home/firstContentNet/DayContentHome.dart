@@ -602,12 +602,13 @@ class _DayContentHomeState extends State<DayContentHome>
                                                 calinfo: snapshot.data!
                                                     .docs[index]['Daytodo'],
                                                 date: _selectedDay,
-                                                doc: widget.title,
                                                 alarm: snapshot
                                                     .data!.docs[index]['Alarm'],
                                                 share: snapshot.data!
                                                     .docs[index]['Shares'],
-                                                calname: widget.calname),
+                                                calname: widget.calname,
+                                                code: snapshot.data!.docs[index]
+                                                    ['calname']),
                                             transition: Transition.downToUp);
                                       },
                                       child: Container(

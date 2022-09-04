@@ -92,8 +92,8 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                       codes,
                                       todo,
                                       alarm,
-                                      cname,
                                       share;
+                                  List cname = [];
                                   final valuespace = snapshot.data!.docs;
                                   for (var sp in valuespace) {
                                     todo = sp.get('Daytodo');
@@ -107,17 +107,22 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                         .doc(codes)
                                         .get()
                                         .then((value) {
-                                      cname = value.data()!['calname'];
+                                      value.data()!.forEach((key, value) {
+                                        //print(key + '-' + value);
+                                        if (key == 'calname') {
+                                          cname.add(value);
+                                        }
+                                      });
                                     });
-
                                     contentmy.add(SpaceContent(
                                         title: todo,
                                         date: timsestart + '-' + timefinish,
-                                        calendarcode: cname,
+                                        cname: cname,
                                         alarm: alarm,
                                         finishdate: timefinish,
                                         startdate: timsestart,
-                                        share: share));
+                                        share: share,
+                                        code: codes));
                                   }
                                   children_cal1 = <Widget>[
                                     ContainerDesign(
@@ -165,30 +170,28 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                         child: ListTile(
                                                           onTap: () {
                                                             Get.to(
-                                                                () =>
-                                                                    ClickShowEachCalendar(
-                                                                      start: contentmy[
-                                                                              index]
-                                                                          .startdate,
-                                                                      finish: contentmy[
-                                                                              index]
-                                                                          .finishdate,
-                                                                      calinfo: contentmy[
-                                                                              index]
-                                                                          .title,
-                                                                      date: DateTime
-                                                                          .now(),
-                                                                      doc: contentmy[
-                                                                              index]
-                                                                          .calendarcode,
-                                                                      alarm: contentmy[
-                                                                              index]
-                                                                          .alarm,
-                                                                      share: contentmy[index].share,
-                                                                      calname: contentmy[
-                                                                              index]
-                                                                          .calendarcode,
-                                                                    ),
+                                                                () => ClickShowEachCalendar(
+                                                                    start: contentmy[index]
+                                                                        .startdate,
+                                                                    finish: contentmy[index]
+                                                                        .finishdate,
+                                                                    calinfo:
+                                                                        contentmy[index]
+                                                                            .title,
+                                                                    date: DateTime
+                                                                        .now(),
+                                                                    alarm: contentmy[index]
+                                                                        .alarm,
+                                                                    share: contentmy[index]
+                                                                        .share,
+                                                                    calname: contentmy[
+                                                                            index]
+                                                                        .cname[
+                                                                            index]
+                                                                        .toString(),
+                                                                    code: contentmy[
+                                                                            index]
+                                                                        .code),
                                                                 transition:
                                                                     Transition
                                                                         .downToUp);
@@ -326,11 +329,11 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                           timefinish,
                                           codes,
                                           todo,
-                                          alarm,
-                                          cname;
+                                          alarm;
+                                      List cname = [];
                                       final valuespace = snapshot.data!.docs;
                                       for (var sp in valuespace) {
-                                        nameList = sp.get('share');
+                                        nameList = sp.get('Shares');
                                         todo = sp.get('Daytodo');
                                         timsestart = sp.get('Timestart');
                                         timefinish = sp.get('Timefinish');
@@ -341,7 +344,12 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                             .doc(codes)
                                             .get()
                                             .then((value) {
-                                          cname = value.data()!['calname'];
+                                          value.data()!.forEach((key, value) {
+                                            //print(key + '-' + value);
+                                            if (key == 'calname') {
+                                              cname.add(value);
+                                            }
+                                          });
                                         });
                                         for (int i = 0;
                                             i < nameList.length;
@@ -352,11 +360,12 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                 date: timsestart +
                                                     '-' +
                                                     timefinish,
-                                                calendarcode: cname,
+                                                cname: cname,
                                                 alarm: alarm,
                                                 finishdate: timefinish,
                                                 startdate: timsestart,
-                                                share: nameList));
+                                                share: nameList,
+                                                code: codes));
                                           }
                                         }
                                       }
@@ -414,25 +423,26 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                             child: ListTile(
                                                               onTap: () {
                                                                 Get.to(
-                                                                    () =>
-                                                                        ClickShowEachCalendar(
-                                                                          start:
-                                                                              contentshare[index].startdate,
-                                                                          finish:
-                                                                              contentshare[index].finishdate,
-                                                                          calinfo:
-                                                                              contentshare[index].title,
-                                                                          date:
-                                                                              DateTime.now(),
-                                                                          doc: contentshare[index]
-                                                                              .calendarcode,
-                                                                          alarm:
-                                                                              contentshare[index].alarm,
-                                                                          share:
-                                                                              contentshare[index].share,
-                                                                          calname:
-                                                                              contentshare[index].calendarcode,
-                                                                        ),
+                                                                    () => ClickShowEachCalendar(
+                                                                        start: contentshare[index]
+                                                                            .startdate,
+                                                                        finish: contentshare[index]
+                                                                            .finishdate,
+                                                                        calinfo:
+                                                                            contentshare[index]
+                                                                                .title,
+                                                                        date: DateTime
+                                                                            .now(),
+                                                                        alarm: contentshare[index]
+                                                                            .alarm,
+                                                                        share: contentshare[index]
+                                                                            .share,
+                                                                        calname: contentshare[index]
+                                                                            .cname[
+                                                                                index]
+                                                                            .toString(),
+                                                                        code: contentshare[index]
+                                                                            .code),
                                                                     transition:
                                                                         Transition
                                                                             .downToUp);

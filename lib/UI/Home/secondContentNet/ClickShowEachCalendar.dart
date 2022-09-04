@@ -21,19 +21,19 @@ class ClickShowEachCalendar extends StatefulWidget {
       required this.finish,
       required this.calinfo,
       required this.date,
-      required this.doc,
       required this.alarm,
       required this.share,
-      required this.calname})
+      required this.calname,
+      required this.code})
       : super(key: key);
   final String start;
   final String finish;
   final String calinfo;
   final DateTime date;
-  final String doc;
   final String alarm;
   final List share;
   final String calname;
+  final String code;
   @override
   State<StatefulWidget> createState() => _ClickShowEachCalendarState();
 }
@@ -196,189 +196,189 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                             .toString()
                                                             .split(' ')[0],
                                                         'username': widget.share
-                                                      });
-                                                      firestore
-                                                          .collection(
-                                                              'CalendarDataBase')
-                                                          .where('calname',
-                                                              isEqualTo: widget
-                                                                  .doc)
-                                                          .where('Daytodo',
-                                                              isEqualTo: widget
-                                                                  .calinfo)
-                                                          .where('Date',
-                                                              isEqualTo: widget
-                                                                          .date
-                                                                          .toString()
-                                                                          .split('-')[
-                                                                      0] +
-                                                                  '-' +
-                                                                  widget.date
-                                                                          .toString()
-                                                                          .split(
-                                                                              '-')[
-                                                                      1] +
-                                                                  '-' +
-                                                                  widget.date
-                                                                      .toString()
-                                                                      .split('-')[
-                                                                          2]
-                                                                      .substring(
-                                                                          0,
-                                                                          2) +
-                                                                  '일')
-                                                          .where('Timestart',
-                                                              isEqualTo:
-                                                                  widget.start)
-                                                          .get()
-                                                          .then((value) {
-                                                        updateid.clear();
-                                                        for (var element
-                                                            in value.docs) {
-                                                          updateid
-                                                              .add(element.id);
-                                                        }
-                                                        for (int i = 0;
-                                                            i < updateid.length;
-                                                            i++) {
-                                                          firestore
-                                                              .collection(
-                                                                  'CalendarDataBase')
-                                                              .doc(updateid[i])
-                                                              .update({
-                                                            'Daytodo':
-                                                                textEditingController1
-                                                                        .text
-                                                                        .isEmpty
-                                                                    ? widget
-                                                                        .calinfo
-                                                                    : textEditingController1
-                                                                        .text,
-                                                            'Alarm': widget
-                                                                        .alarm ==
-                                                                    '설정off'
-                                                                ? (isChecked_pushalarm ==
-                                                                        true
-                                                                    ? changevalue
-                                                                    : '설정off')
-                                                                : (!isChecked_pushalarm ==
-                                                                        true
-                                                                    ? changevalue
-                                                                    : '설정off'),
-                                                            'Timestart': textEditingController2
-                                                                    .text
-                                                                    .isEmpty
-                                                                ? widget.start
-                                                                : (textEditingController2
-                                                                            .text
-                                                                            .split(':')[
-                                                                                0]
-                                                                            .length ==
-                                                                        1
-                                                                    ? '0' +
-                                                                        textEditingController2
-                                                                            .text
-                                                                    : textEditingController2
-                                                                        .text),
-                                                            'Timefinish': textEditingController3
-                                                                    .text
-                                                                    .isEmpty
-                                                                ? widget.finish
-                                                                : (textEditingController3
-                                                                            .text
-                                                                            .split(':')[
-                                                                                0]
-                                                                            .length ==
-                                                                        1
-                                                                    ? '0' +
-                                                                        textEditingController3
-                                                                            .text
-                                                                    : textEditingController3
-                                                                        .text),
-                                                          });
-                                                        }
                                                       }).whenComplete(() {
-                                                        Future.delayed(
-                                                            const Duration(
-                                                                seconds: 2),
-                                                            () {
-                                                          CreateCalandmemoSuccessFlushbarSub(
-                                                              context, '일정');
-                                                          if (isChecked_pushalarm ==
-                                                              true) {
-                                                            NotificationApi
-                                                                .showScheduledNotification(
-                                                                    title:
-                                                                        '알람설정된 일정 : ' + textEditingController1
-                                                                            .text,
-                                                                    body: textEditingController2.text.split(':')[0].length ==
-                                                                            1
-                                                                        ? (textEditingController3.text.split(':')[0].length ==
-                                                                                1
-                                                                            ? '예정된 시각 : ' + firsttxt
-                                                                            : '예정된 시각 : ' + secondtxt)
-                                                                        : (textEditingController3.text.split(':')[0].length ==
-                                                                                1
-                                                                            ? '예정된 시각 : ' + thirdtxt
-                                                                            : '예정된 시각 : ' + forthtxt),
-                                                                    scheduledate:
-                                                                        DateTime
-                                                                            .utc(
-                                                                      int.parse(widget
-                                                                          .date
-                                                                          .toString()
-                                                                          .split(
-                                                                              '-')[0]),
-                                                                      int.parse(widget
-                                                                          .date
-                                                                          .toString()
-                                                                          .split(
-                                                                              '-')[1]),
-                                                                      int.parse(widget
-                                                                          .date
-                                                                          .toString()
-                                                                          .split(
-                                                                              '-')[2]),
-                                                                      int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
-                                                                          ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) -
-                                                                              1
-                                                                          : int.parse(textEditingController2.text.split(':')[0].length == 1
-                                                                              ? '0' + textEditingController2.text.split(':')[0]
-                                                                              : textEditingController2.text.split(':')[0]),
-                                                                      int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
-                                                                          ? 60 -
-                                                                              (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
-                                                                          : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)),
-                                                                    ));
-                                                          } else {
-                                                            NotificationApi
-                                                                .showNotification(
-                                                              title:
-                                                                  '알람설정된 일정 : ' + textEditingController1
+                                                        firestore
+                                                            .collection(
+                                                                'CalendarDataBase')
+                                                            .where('calname',
+                                                                isEqualTo:
+                                                                    widget.code)
+                                                            .where('Daytodo',
+                                                                isEqualTo: widget
+                                                                    .calinfo)
+                                                            .where('Date',
+                                                                isEqualTo: widget
+                                                                            .date
+                                                                            .toString()
+                                                                            .split('-')[
+                                                                        0] +
+                                                                    '-' +
+                                                                    widget.date
+                                                                            .toString()
+                                                                            .split('-')[
+                                                                        1] +
+                                                                    '-' +
+                                                                    widget
+                                                                        .date
+                                                                        .toString()
+                                                                        .split('-')[
+                                                                            2]
+                                                                        .substring(
+                                                                            0,
+                                                                            2) +
+                                                                    '일')
+                                                            .where('Timestart',
+                                                                isEqualTo:
+                                                                    widget.start)
+                                                            .get()
+                                                            .then((value) {
+                                                          updateid.clear();
+                                                          for (var element
+                                                              in value.docs) {
+                                                            updateid.add(
+                                                                element.id);
+                                                          }
+                                                          for (int i = 0;
+                                                              i <
+                                                                  updateid
+                                                                      .length;
+                                                              i++) {
+                                                            firestore
+                                                                .collection(
+                                                                    'CalendarDataBase')
+                                                                .doc(
+                                                                    updateid[i])
+                                                                .update({
+                                                              'Daytodo': textEditingController1
+                                                                      .text
+                                                                      .isEmpty
+                                                                  ? widget
+                                                                      .calinfo
+                                                                  : textEditingController1
                                                                       .text,
-                                                              body: textEditingController2
-                                                                          .text
-                                                                          .split(':')[
-                                                                              0]
-                                                                          .length ==
-                                                                      1
-                                                                  ? (textEditingController3
+                                                              'Alarm': widget
+                                                                          .alarm ==
+                                                                      '설정off'
+                                                                  ? (isChecked_pushalarm ==
+                                                                          true
+                                                                      ? changevalue
+                                                                      : '설정off')
+                                                                  : (!isChecked_pushalarm ==
+                                                                          true
+                                                                      ? changevalue
+                                                                      : '설정off'),
+                                                              'Timestart': textEditingController2
+                                                                      .text
+                                                                      .isEmpty
+                                                                  ? widget.start
+                                                                  : (textEditingController2
                                                                               .text
                                                                               .split(':')[
                                                                                   0]
                                                                               .length ==
                                                                           1
-                                                                      ? '예정된 시각 : ' + firsttxt
-                                                                      : '예정된 시각 : ' + secondtxt)
+                                                                      ? '0' +
+                                                                          textEditingController2
+                                                                              .text
+                                                                      : textEditingController2
+                                                                          .text),
+                                                              'Timefinish': textEditingController3
+                                                                      .text
+                                                                      .isEmpty
+                                                                  ? widget
+                                                                      .finish
                                                                   : (textEditingController3
                                                                               .text
-                                                                              .split(':')[0]
+                                                                              .split(':')[
+                                                                                  0]
                                                                               .length ==
                                                                           1
-                                                                      ? '예정된 시각 : ' + thirdtxt
-                                                                      : '예정된 시각 : ' + forthtxt),
-                                                            );
+                                                                      ? '0' +
+                                                                          textEditingController3
+                                                                              .text
+                                                                      : textEditingController3
+                                                                          .text),
+                                                            });
                                                           }
+                                                        }).whenComplete(() {
+                                                          Future.delayed(
+                                                              const Duration(
+                                                                  seconds: 2),
+                                                              () {
+                                                            CreateCalandmemoSuccessFlushbarSub(
+                                                                context, '일정');
+                                                            if (isChecked_pushalarm ==
+                                                                true) {
+                                                              NotificationApi
+                                                                  .showScheduledNotification(
+                                                                      title: '알람설정된 일정 : ' +
+                                                                          textEditingController1
+                                                                              .text,
+                                                                      body: textEditingController2.text.split(':')[0].length ==
+                                                                              1
+                                                                          ? (textEditingController3.text.split(':')[0].length == 1
+                                                                              ? '예정된 시각 : ' +
+                                                                                  firsttxt
+                                                                              : '예정된 시각 : ' +
+                                                                                  secondtxt)
+                                                                          : (textEditingController3.text.split(':')[0].length == 1
+                                                                              ? '예정된 시각 : ' +
+                                                                                  thirdtxt
+                                                                              : '예정된 시각 : ' +
+                                                                                  forthtxt),
+                                                                      scheduledate:
+                                                                          DateTime
+                                                                              .utc(
+                                                                        int.parse(widget
+                                                                            .date
+                                                                            .toString()
+                                                                            .split('-')[0]),
+                                                                        int.parse(widget
+                                                                            .date
+                                                                            .toString()
+                                                                            .split('-')[1]),
+                                                                        int.parse(widget
+                                                                            .date
+                                                                            .toString()
+                                                                            .split('-')[2]),
+                                                                        int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                            ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) -
+                                                                                1
+                                                                            : int.parse(textEditingController2.text.split(':')[0].length == 1
+                                                                                ? '0' + textEditingController2.text.split(':')[0]
+                                                                                : textEditingController2.text.split(':')[0]),
+                                                                        int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                            ? 60 -
+                                                                                (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                            : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)),
+                                                                      ));
+                                                            } else {
+                                                              NotificationApi
+                                                                  .showNotification(
+                                                                title: '알람설정된 일정 : ' +
+                                                                    textEditingController1
+                                                                        .text,
+                                                                body: textEditingController2
+                                                                            .text
+                                                                            .split(':')[
+                                                                                0]
+                                                                            .length ==
+                                                                        1
+                                                                    ? (textEditingController3.text.split(':')[0].length ==
+                                                                            1
+                                                                        ? '예정된 시각 : ' +
+                                                                            firsttxt
+                                                                        : '예정된 시각 : ' +
+                                                                            secondtxt)
+                                                                    : (textEditingController3.text.split(':')[0].length ==
+                                                                            1
+                                                                        ? '예정된 시각 : ' +
+                                                                            thirdtxt
+                                                                        : '예정된 시각 : ' +
+                                                                            forthtxt),
+                                                              );
+                                                            }
+                                                          });
                                                         });
                                                       });
                                                     },
@@ -436,67 +436,70 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                 .split(' ')[0],
                                                             'username':
                                                                 widget.share
-                                                          });
-                                                          firestore
-                                                              .collection(
-                                                                  'CalendarDataBase')
-                                                              .where('calname',
-                                                                  isEqualTo: widget
-                                                                      .doc)
-                                                              .where('Daytodo',
-                                                                  isEqualTo: widget
-                                                                      .calinfo)
-                                                              .where('Date',
-                                                                  isEqualTo: widget
-                                                                              .date
-                                                                              .toString()
-                                                                              .split('-')[
-                                                                          0] +
-                                                                      '-' +
-                                                                      widget.date
-                                                                              .toString()
-                                                                              .split('-')[
-                                                                          1] +
-                                                                      '-' +
-                                                                      widget.date
-                                                                          .toString()
-                                                                          .split('-')[
-                                                                              2]
-                                                                          .substring(
-                                                                              0,
-                                                                              2) +
-                                                                      '일')
-                                                              .where('Timestart',
-                                                                  isEqualTo:
-                                                                      widget.start)
-                                                              .get()
-                                                              .then((value) {
-                                                            deleteid.clear();
-                                                            for (var element
-                                                                in value.docs) {
-                                                              deleteid.add(
-                                                                  element.id);
-                                                            }
-                                                            for (int i = 0;
-                                                                i <
-                                                                    deleteid
-                                                                        .length;
-                                                                i++) {
-                                                              firestore
-                                                                  .collection(
-                                                                      'CalendarDataBase')
-                                                                  .doc(deleteid[
-                                                                      i])
-                                                                  .delete();
-                                                            }
                                                           }).whenComplete(() {
-                                                            Future.delayed(
-                                                                const Duration(
-                                                                    seconds: 2),
-                                                                () {
-                                                              CreateCalandmemoFlushbardelete(
-                                                                  context,
-                                                                  '일정');
+                                                            firestore
+                                                                .collection(
+                                                                    'CalendarDataBase')
+                                                                .where('calname',
+                                                                    isEqualTo: widget
+                                                                        .code)
+                                                                .where(
+                                                                    'Daytodo',
+                                                                    isEqualTo:
+                                                                        widget
+                                                                            .calinfo)
+                                                                .where(
+                                                                    'Date',
+                                                                    isEqualTo: widget.date.toString().split('-')[0] +
+                                                                        '-' +
+                                                                        widget.date.toString().split('-')[
+                                                                            1] +
+                                                                        '-' +
+                                                                        widget
+                                                                            .date
+                                                                            .toString()
+                                                                            .split('-')[
+                                                                                2]
+                                                                            .substring(0,
+                                                                                2) +
+                                                                        '일')
+                                                                .where(
+                                                                    'Timestart',
+                                                                    isEqualTo:
+                                                                        widget
+                                                                            .start)
+                                                                .get()
+                                                                .then((value) {
+                                                              deleteid.clear();
+                                                              for (var element
+                                                                  in value
+                                                                      .docs) {
+                                                                deleteid.add(
+                                                                    element.id);
+                                                              }
+                                                              for (int i = 0;
+                                                                  i <
+                                                                      deleteid
+                                                                          .length;
+                                                                  i++) {
+                                                                firestore
+                                                                    .collection(
+                                                                        'CalendarDataBase')
+                                                                    .doc(
+                                                                        deleteid[
+                                                                            i])
+                                                                    .delete();
+                                                              }
+                                                            }).whenComplete(() {
+                                                              Future.delayed(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          2),
+                                                                  () {
+                                                                CreateCalandmemoFlushbardelete(
+                                                                    context,
+                                                                    '일정');
+                                                              });
                                                             });
                                                           });
                                                         });
