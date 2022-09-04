@@ -19,6 +19,7 @@ settingChoiceCal(
   doc_made_user,
   FocusNode searchNode,
   List finallist,
+  doc_share,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -58,7 +59,8 @@ settingChoiceCal(
                         doc_color,
                         doc_name,
                         doc_made_user,
-                        finallist),
+                        finallist,
+                        doc_share),
                   )),
             ));
       }).whenComplete(() {
@@ -75,7 +77,8 @@ SheetPageC(
     doc_color,
     doc_name,
     doc_made_user,
-    List finallist) {
+    List finallist,
+    doc_share) {
   return SizedBox(
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
@@ -102,7 +105,7 @@ SheetPageC(
                 height: 20,
               ),
               content(context, searchNode, controller, doc, doc_type, doc_color,
-                  doc_name, doc_made_user, finallist),
+                  doc_name, doc_made_user, finallist, doc_share),
               const SizedBox(
                 height: 20,
               ),
@@ -136,10 +139,12 @@ content(
     doc_color,
     doc_name,
     doc_made_user,
-    List finallist) {
+    List finallist,
+    doc_share) {
   String username = Hive.box('user_info').get(
     'id',
   );
+  DateTime date = DateTime.now();
   Color _color = doc_color == null ? Colors.blue : Color(doc_color);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var controll_cals = Get.put(calendarsetting());
@@ -380,7 +385,7 @@ content(
               ),
             ],
           ),
-        ),
+        ),*/
         const SizedBox(
           height: 20,
         ),
@@ -433,6 +438,15 @@ content(
                               .doc(doc + '-' + doc_made_user + '-' + username)
                               .delete();
                         }
+                        firestore.collection('AppNoticeByUsers').add({
+                          'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
+                          'date': date.toString().split('-')[0] +
+                              '-' +
+                              date.toString().split('-')[1] +
+                              '-' +
+                              date.toString().split('-')[2].substring(0, 2),
+                          'username': doc_share
+                        });
 
                         Navigator.pop(context);
                       }
@@ -486,6 +500,15 @@ content(
                             'calname': controller.text,
                             'color': _color.value.toInt(),
                           });
+                          firestore.collection('AppNoticeByUsers').add({
+                            'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
+                            'date': date.toString().split('-')[0] +
+                                '-' +
+                                date.toString().split('-')[1] +
+                                '-' +
+                                date.toString().split('-')[2].substring(0, 2),
+                            'username': doc_share
+                          });
 
                           Navigator.pop(context);
                         });
@@ -514,7 +537,7 @@ content(
                       )),
                 )
               ],
-            )),*/
+            )),
       ],
     ));
   });

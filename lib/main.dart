@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
-import 'package:clickbyme/LocalNotiPlatform/localnotification.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/ChooseCalendar.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -97,7 +95,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       );
     });
     checkForInitialMessage();
-    checkForInitialMessagefromlocal();
     /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);*/
     scaleController = AnimationController(
@@ -155,10 +152,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         body: initialMessage.notification?.body,
       );
     }
-  }
-
-  checkForInitialMessagefromlocal() async {
-    localnotification.initLocalNotificationPlugin();
   }
 
   body() {

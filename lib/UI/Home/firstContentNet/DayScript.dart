@@ -33,7 +33,8 @@ class DayScript extends StatefulWidget {
       required this.title,
       required this.share,
       required this.orig,
-      required this.lastdate})
+      required this.lastdate,
+      required this.calname})
       : super(key: key);
   final DateTime firstdate;
   final DateTime lastdate;
@@ -41,6 +42,7 @@ class DayScript extends StatefulWidget {
   final String title;
   final String orig;
   final List share;
+  final String calname;
   @override
   State<StatefulWidget> createState() => _DayScriptState();
 }
@@ -337,6 +339,20 @@ class _DayScriptState extends State<DayScript> {
                                                                         'cal') {
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
+                                                                      firestore
+                                                                          .collection(
+                                                                              'AppNoticeByUsers')
+                                                                          .add({
+                                                                        'title': '[' +
+                                                                            widget.calname +
+                                                                            '] 캘린더의 일정 ${textEditingController1.text}이(가) 추가되었습니다.',
+                                                                        'date': DateFormat('yyyy-MM-dd')
+                                                                            .parse(widget.firstdate.toString())
+                                                                            .toString()
+                                                                            .split(' ')[0],
+                                                                        'username':
+                                                                            widget.share
+                                                                      });
                                                                       widget.lastdate !=
                                                                               widget
                                                                                   .firstdate
@@ -470,6 +486,19 @@ class _DayScriptState extends State<DayScript> {
                                                                     } else {
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
+                                                                      firestore
+                                                                          .collection(
+                                                                              'AppNoticeByUsers')
+                                                                          .add({
+                                                                        'title':
+                                                                            '메모 ${textEditingController1.text}가 추가되었습니다.',
+                                                                        'date': DateFormat('yyyy-MM-dd')
+                                                                            .parse(widget.firstdate.toString())
+                                                                            .toString()
+                                                                            .split(' ')[0],
+                                                                        'username':
+                                                                            widget.share
+                                                                      });
                                                                       for (int i =
                                                                               0;
                                                                           i < scollection.memolistin.length;

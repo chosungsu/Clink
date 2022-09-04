@@ -178,6 +178,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                             title: '',
                             share: const [],
                             orig: '',
+                            calname: '',
                           ),
                       transition: Transition.downToUp);
                 },

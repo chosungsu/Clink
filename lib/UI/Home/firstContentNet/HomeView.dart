@@ -237,7 +237,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(
-                                  Icons.drag_handle,
+                                  Icons.drag_indicator,
                                   color: Colors.blue.shade400,
                                 ),
                                 const SizedBox(

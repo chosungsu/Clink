@@ -236,6 +236,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
   }
 
   Content_real_user() {
+    DateTime date = DateTime.now();
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return Column(
         children: [
@@ -378,6 +379,16 @@ class _PeopleGroupState extends State<PeopleGroup> {
                               .put('share_cal_person', listselected_sp);
                           cal_share_person.peoplecalendar();
                           listselected_sp = cal_share_person.people;
+                          firestore.collection('AppNoticeByUsers').add({
+                            'title':
+                                '[' + widget.nameid + '] 캘린더의 공유자명단이 변경되었습니다.',
+                            'date': date.toString().split('-')[0] +
+                                '-' +
+                                date.toString().split('-')[1] +
+                                '-' +
+                                date.toString().split('-')[2].substring(0, 2),
+                            'username': username
+                          });
                           firestore
                               .collection('CalendarSheetHome')
                               .doc(widget.doc)
@@ -584,7 +595,9 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                   ),
                                   duration: const Duration(seconds: 1),
                                   leftBarIndicatorColor: Colors.blue.shade100,
-                                ).show(context).whenComplete(() => Get.back());
+                                ).show(context).whenComplete(() {
+                                  Get.back();
+                                });
                               }
                             });
                           });

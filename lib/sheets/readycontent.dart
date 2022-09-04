@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
 import '../Tool/TextSize.dart';
-import 'package:device_info/device_info.dart';
-import 'package:ios_utsname_ext/extension.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 showreadycontent(
   BuildContext context,
@@ -261,7 +260,7 @@ Map<String, dynamic> _readAndroidDeviceInfo(AndroidDeviceInfo info) {
 Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo info) {
   var systemName = info.systemName;
   var version = info.systemVersion;
-  var machine = info.utsname.machine.iOSProductName;
+  var machine = info.utsname.machine;
 
   return {"OS 버전": "$systemName $version", "기기": "$machine"};
 }

@@ -6,6 +6,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import '../../../LocalNotiPlatform/NotificationApi.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -21,7 +22,9 @@ class ClickShowEachCalendar extends StatefulWidget {
       required this.calinfo,
       required this.date,
       required this.doc,
-      required this.alarm})
+      required this.alarm,
+      required this.share,
+      required this.calname})
       : super(key: key);
   final String start;
   final String finish;
@@ -29,6 +32,8 @@ class ClickShowEachCalendar extends StatefulWidget {
   final DateTime date;
   final String doc;
   final String alarm;
+  final List share;
+  final String calname;
   @override
   State<StatefulWidget> createState() => _ClickShowEachCalendarState();
 }
@@ -176,6 +181,22 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                   .text;
                                                       CreateCalandmemoSuccessFlushbar(
                                                           context);
+                                                      firestore
+                                                          .collection(
+                                                              'AppNoticeByUsers')
+                                                          .add({
+                                                        'title': '[' +
+                                                            widget.calname +
+                                                            '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 변경되었습니다.',
+                                                        'date': DateFormat(
+                                                                'yyyy-MM-dd')
+                                                            .parse(
+                                                                DateTime.now()
+                                                                    .toString())
+                                                            .toString()
+                                                            .split(' ')[0],
+                                                        'username': widget.share
+                                                      });
                                                       firestore
                                                           .collection(
                                                               'CalendarDataBase')
@@ -399,6 +420,23 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                         CreateCalandmemoSuccessFlushbar(
                                                                 context)
                                                             .whenComplete(() {
+                                                          firestore
+                                                              .collection(
+                                                                  'AppNoticeByUsers')
+                                                              .add({
+                                                            'title': '[' +
+                                                                widget.calname +
+                                                                '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 삭제되었습니다.',
+                                                            'date': DateFormat(
+                                                                    'yyyy-MM-dd')
+                                                                .parse(DateTime
+                                                                        .now()
+                                                                    .toString())
+                                                                .toString()
+                                                                .split(' ')[0],
+                                                            'username':
+                                                                widget.share
+                                                          });
                                                           firestore
                                                               .collection(
                                                                   'CalendarDataBase')

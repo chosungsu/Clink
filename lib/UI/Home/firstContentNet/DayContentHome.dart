@@ -26,10 +26,12 @@ class DayContentHome extends StatefulWidget {
     required this.origin,
     required this.theme,
     required this.view,
+    required this.calname,
   }) : super(key: key);
   final String title;
   final List share;
   final String origin;
+  final String calname;
   final int theme;
   final int view;
   @override
@@ -332,15 +334,15 @@ class _DayContentHomeState extends State<DayContentHome>
                                     onPressed: () {
                                       Get.to(
                                           () => DayScript(
-                                                firstdate:
-                                                    _rangeStart ?? _selectedDay,
-                                                lastdate:
-                                                    _rangeEnd ?? _selectedDay,
-                                                position: 'cal',
-                                                title: widget.title,
-                                                share: widget.share,
-                                                orig: widget.origin,
-                                              ),
+                                              firstdate:
+                                                  _rangeStart ?? _selectedDay,
+                                              lastdate:
+                                                  _rangeEnd ?? _selectedDay,
+                                              position: 'cal',
+                                              title: widget.title,
+                                              share: widget.share,
+                                              orig: widget.origin,
+                                              calname: widget.calname),
                                           transition: Transition.downToUp);
                                     },
                                     icon: NeumorphicIcon(
@@ -593,18 +595,19 @@ class _DayContentHomeState extends State<DayContentHome>
                                         //수정 및 삭제 시트 띄우기
                                         Get.to(
                                             () => ClickShowEachCalendar(
-                                                  start: snapshot.data!
-                                                      .docs[index]['Timestart'],
-                                                  finish:
-                                                      snapshot.data!.docs[index]
-                                                          ['Timefinish'],
-                                                  calinfo: snapshot.data!
-                                                      .docs[index]['Daytodo'],
-                                                  date: _selectedDay,
-                                                  doc: widget.title,
-                                                  alarm: snapshot.data!
-                                                      .docs[index]['Alarm'],
-                                                ),
+                                                start: snapshot.data!
+                                                    .docs[index]['Timestart'],
+                                                finish: snapshot.data!
+                                                    .docs[index]['Timefinish'],
+                                                calinfo: snapshot.data!
+                                                    .docs[index]['Daytodo'],
+                                                date: _selectedDay,
+                                                doc: widget.title,
+                                                alarm: snapshot
+                                                    .data!.docs[index]['Alarm'],
+                                                share: snapshot.data!
+                                                    .docs[index]['Shares'],
+                                                calname: widget.calname),
                                             transition: Transition.downToUp);
                                       },
                                       child: Container(

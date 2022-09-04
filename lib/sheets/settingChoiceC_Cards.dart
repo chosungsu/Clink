@@ -1,9 +1,10 @@
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 settingCalendarHome(
-    int index, doc_name, doc_shares, doc_change, BuildContext context) {
+    int index, doc_name, doc_shares, doc_change, BuildContext context, doc) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
@@ -35,14 +36,15 @@ settingCalendarHome(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SheetPageCC(context, doc_name, doc_shares, doc_change),
+                      SheetPageCC(
+                          context, doc_name, doc_shares, doc_change, doc),
                     ],
                   ))),
         );
       }).whenComplete(() {});
 }
 
-SheetPageCC(BuildContext context, doc_id, doc_shares, doc_change) {
+SheetPageCC(BuildContext context, doc_name, doc_shares, doc_change, doc) {
   return SizedBox(
       child: Padding(
           padding:
@@ -69,7 +71,7 @@ SheetPageCC(BuildContext context, doc_id, doc_shares, doc_change) {
               const SizedBox(
                 height: 20,
               ),
-              content(context, doc_id, doc_change, doc_shares)
+              content(context, doc_name, doc_change, doc_shares, doc)
             ],
           )));
 }
@@ -91,8 +93,12 @@ title(
       ));
 }
 
-content(BuildContext context, doc_id, doc_change, doc_shares) {
+content(BuildContext context, doc_id, doc_change, doc_shares, doc) {
+  DateTime date = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String username = Hive.box('user_info').get(
+    'id',
+  );
   bool isselected_all = doc_shares == true && doc_change == true ? true : false;
   bool isselected_share = doc_shares == true ? true : false;
   bool isselected_change_set = doc_change == true ? true : false;
@@ -121,7 +127,7 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                     unselectedWidgetColor: Colors.black,
                   ),
                   child: Checkbox(
-                    side: BorderSide(
+                    side: const BorderSide(
                       // POINT
                       color: Colors.black,
                       width: 2.0,
@@ -138,6 +144,15 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                           isselected_share = false;
                           isselected_change_set = false;
                         }
+                        firestore.collection('AppNoticeByUsers').add({
+                          'title': '[' + doc + '] 캘린더의 공유자 권한설정이 변경되었습니다.',
+                          'date': date.toString().split('-')[0] +
+                              '-' +
+                              date.toString().split('-')[1] +
+                              '-' +
+                              date.toString().split('-')[2].substring(0, 2),
+                          'username': doc_shares
+                        });
                       });
                     },
                     value: isselected_all,
@@ -167,7 +182,7 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                     unselectedWidgetColor: Colors.black,
                   ),
                   child: Checkbox(
-                    side: BorderSide(
+                    side: const BorderSide(
                       // POINT
                       color: Colors.black,
                       width: 2.0,
@@ -190,6 +205,15 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                             isselected_change_set == true) {
                           isselected_all = true;
                         } else {}
+                        firestore.collection('AppNoticeByUsers').add({
+                          'title': '[' + doc + '] 캘린더의 공유자 권한설정이 변경되었습니다.',
+                          'date': date.toString().split('-')[0] +
+                              '-' +
+                              date.toString().split('-')[1] +
+                              '-' +
+                              date.toString().split('-')[2].substring(0, 2),
+                          'username': username
+                        });
                       });
                     },
                     value: isselected_share,
@@ -219,7 +243,7 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                     unselectedWidgetColor: Colors.black,
                   ),
                   child: Checkbox(
-                    side: BorderSide(
+                    side: const BorderSide(
                       // POINT
                       color: Colors.black,
                       width: 2.0,
@@ -242,6 +266,15 @@ content(BuildContext context, doc_id, doc_change, doc_shares) {
                             isselected_change_set == true) {
                           isselected_all = true;
                         } else {}
+                        firestore.collection('AppNoticeByUsers').add({
+                          'title': '[' + doc + '] 캘린더의 공유자 권한설정이 변경되었습니다.',
+                          'date': date.toString().split('-')[0] +
+                              '-' +
+                              date.toString().split('-')[1] +
+                              '-' +
+                              date.toString().split('-')[2].substring(0, 2),
+                          'username': username
+                        });
                       });
                     },
                     value: isselected_change_set,

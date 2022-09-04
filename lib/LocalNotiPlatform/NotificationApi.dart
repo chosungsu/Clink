@@ -69,7 +69,10 @@ class NotificationApi {
 
   static Future init({bool initScheduled = false}) async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iOS = IOSInitializationSettings();
+    const iOS = IOSInitializationSettings(
+        requestSoundPermission: true,
+        requestAlertPermission: true,
+        requestBadgePermission: true);
     const settings = InitializationSettings(android: android, iOS: iOS);
 
     await _notifications.initialize(

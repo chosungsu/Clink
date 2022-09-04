@@ -43,13 +43,12 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   #firebase 기능
   cloud_firestore: ^3.1.15
-  firebase_auth: ^3.3.6
-  firebase_messaging: ^11.4.0
+  firebase_auth: ^3.7.0
+  firebase_messaging: ^13.0.0
   flutter_local_notifications: any
   google_sign_in: ^5.3.1
   firebase_core: ^1.12.0
   firebase_storage: ^10.3.7
-  flutter_secure_storage: ^5.0.2
   #카카오 sdk
   kakao_flutter_sdk: ^1.2.1
   dio: ^4.0.0
@@ -70,6 +69,7 @@ dependencies:
   permission_handler: ^9.2.0
   flutter_email_sender: any
   path_provider: ^2.0.11
+  device_info_plus: ^4.1.2
   #UI
   flutter_neumorphic: ^3.0.3
   flutter_switch: ^0.3.2
@@ -93,8 +93,7 @@ dependencies:
   new_version: ^0.3.0
   pdf: ^3.8.3
   printing: ^5.9.2
-  url_launcher: ^6.1.5
-  flutter_pdfview: ^1.2.3
+  share_plus: ^4.0.10+1
   #local db
   hive: ^2.0.6
   hive_flutter: ^1.1.0
@@ -102,7 +101,7 @@ dependencies:
   local_auth: ^2.1.2
   local_auth_ios: ^1.0.9
   local_auth_android: ^1.0.11
-  device_info: ^2.0.3
+  
   
   
 

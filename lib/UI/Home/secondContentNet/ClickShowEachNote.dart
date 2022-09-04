@@ -12,9 +12,10 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/checkdeletecandm.dart';
 import '../../../Tool/BGColor.dart';
@@ -327,8 +328,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                 height: 30,
                                                                 child:
                                                                     NeumorphicIcon(
-                                                                  Icons
-                                                                      .picture_as_pdf,
+                                                                  Icons.share,
                                                                   size: 30,
                                                                   style: NeumorphicStyle(
                                                                       shape: NeumorphicShape
@@ -365,6 +365,24 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     .isNotEmpty) {
                                                                   CreateCalandmemoSuccessFlushbar(
                                                                       context);
+                                                                  firestore
+                                                                      .collection(
+                                                                          'AppNoticeByUsers')
+                                                                      .add({
+                                                                    'title': '[' +
+                                                                        widget
+                                                                            .docname +
+                                                                        '] 메모가 변경되었습니다.',
+                                                                    'date': DateFormat(
+                                                                            'yyyy-MM-dd')
+                                                                        .parse(DateTime.now()
+                                                                            .toString())
+                                                                        .toString()
+                                                                        .split(
+                                                                            ' ')[0],
+                                                                    'username':
+                                                                        username
+                                                                  });
                                                                   for (int i =
                                                                           0;
                                                                       i <
@@ -503,6 +521,24 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                 if (reloadpage) {
                                                                   CreateCalandmemoSuccessFlushbar(
                                                                       context);
+                                                                  firestore
+                                                                      .collection(
+                                                                          'AppNoticeByUsers')
+                                                                      .add({
+                                                                    'title': '[' +
+                                                                        widget
+                                                                            .docname +
+                                                                        '] 메모가 삭제되었습니다.',
+                                                                    'date': DateFormat(
+                                                                            'yyyy-MM-dd')
+                                                                        .parse(DateTime.now()
+                                                                            .toString())
+                                                                        .toString()
+                                                                        .split(
+                                                                            ' ')[0],
+                                                                    'username':
+                                                                        username
+                                                                  });
                                                                   firestore
                                                                       .collection(
                                                                           'MemoDataBase')
@@ -1667,46 +1703,56 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
       print("****ERROR: $e****");
       return;
     }
-    pdf.addPage(pw.Page(
+    pdf.addPage(pw.MultiPage(
+        margin: const pw.EdgeInsets.all(10),
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return pw.Container(
-              child: pw.Column(
-                  mainAxisAlignment: pw.MainAxisAlignment.start,
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                pw.Text(titletext,
-                    style: pw.TextStyle(fontSize: 40, font: ttf)),
-                pw.SizedBox(height: 50),
-                pw.Text('컬렉션 : ' + collection,
-                    style: pw.TextStyle(fontSize: 20, font: ttf)),
-                pw.SizedBox(height: 20),
-                pw.Text('메모내용', style: pw.TextStyle(fontSize: 25, font: ttf)),
-                pw.SizedBox(height: 10),
-                pw.Table(
-                    border: pw.TableBorder.all(color: PdfColors.black),
-                    children: [
-                      pw.TableRow(children: [
-                        pw.Padding(
-                          child: pw.Text(headers[0],
-                              textAlign: pw.TextAlign.center,
-                              style: pw.TextStyle(font: ttf, fontSize: 15)),
-                          padding: const pw.EdgeInsets.all(20),
-                        )
+          return <pw.Widget>[
+            pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                crossAxisAlignment: pw.CrossAxisAlignment.center,
+                mainAxisSize: pw.MainAxisSize.min,
+                children: [
+                  pw.Text(titletext,
+                      textAlign: pw.TextAlign.center,
+                      style: pw.TextStyle(fontSize: 30, font: ttf)),
+                  pw.Divider(),
+                ]),
+            pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.start,
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                mainAxisSize: pw.MainAxisSize.min,
+                children: [
+                  pw.SizedBox(height: 10),
+                  pw.Text('컬렉션 : ' + collection,
+                      style: pw.TextStyle(fontSize: 15, font: ttf)),
+                  pw.SizedBox(height: 10),
+                  pw.Text('메모내용', style: pw.TextStyle(fontSize: 15, font: ttf)),
+                  pw.SizedBox(height: 10),
+                  pw.Table(
+                      border: pw.TableBorder.all(color: PdfColors.black),
+                      children: [
+                        pw.TableRow(children: [
+                          pw.Padding(
+                            child: pw.Text(headers[0],
+                                textAlign: pw.TextAlign.center,
+                                style: pw.TextStyle(font: ttf, fontSize: 15)),
+                            padding: const pw.EdgeInsets.all(20),
+                          )
+                        ]),
+                        ...checklisttexts.map((memo) => pw.TableRow(children: [
+                              pw.Padding(
+                                child: pw.Expanded(
+                                    flex: 2,
+                                    child: pw.Text(memo.memocontent,
+                                        style: pw.TextStyle(
+                                            font: ttf, fontSize: 12))),
+                                padding: const pw.EdgeInsets.all(10),
+                              )
+                            ]))
                       ]),
-                      ...checklisttexts.map((memo) => pw.TableRow(children: [
-                            pw.Padding(
-                              child: pw.Expanded(
-                                  flex: 2,
-                                  child: pw.Text(memo.memocontent,
-                                      style: pw.TextStyle(
-                                          font: ttf, fontSize: 12))),
-                              padding: const pw.EdgeInsets.all(10),
-                            )
-                          ]))
-                    ]),
-                pw.SizedBox(height: 20),
-                /*pw.Text('첨부사진', style: pw.TextStyle(fontSize: 25, font: ttf)),
+                  pw.SizedBox(height: 20),
+                  /*pw.Text('첨부사진', style: pw.TextStyle(fontSize: 25, font: ttf)),
                 pw.SizedBox(height: 10),
                 ...savepicturelist.map((element) {
                   return ;
@@ -1720,50 +1766,34 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                         children: [
                           pw.Image(images[0], width: 300, height: 300)
                         ]))*/
-              ]));
+                ])
+          ];
         }));
     return savefile(name: titletext, pdf: pdf);
   }
-}
 
-urlimage(element) async {
-  final providerimage = await get(Uri.parse(element));
-  var data = providerimage.bodyBytes;
-  return data;
-}
-
-savefile({
-  required String name,
-  required pw.Document pdf,
-}) async {
-  final bytes = await pdf.save();
-  Directory? directory;
-
-  try {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    } else {
-      if (Platform.isIOS) {
-        directory = await getApplicationDocumentsDirectory();
-      } else {
-        directory = Directory('/storage/emulated/0/Download');
-        // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
-        // ignore: avoid_slow_async_io
-        if (!await directory.exists())
-          directory = await getExternalStorageDirectory();
-      }
-    }
-  } catch (err, stack) {
-    print("Cannot get download folder path");
+  urlimage(element) async {
+    final providerimage = await get(Uri.parse(element));
+    var data = providerimage.bodyBytes;
+    return data;
   }
-  File file = File("${directory!.path}/$name.pdf");
-  if (file.existsSync()) {
-    //존재시 저장로직
-    await file.writeAsBytes(await pdf.save());
-  } else {
-    //미존재시 생성로직
-    file.create(recursive: true);
-    await file.writeAsBytes(await pdf.save());
+
+  savefile({
+    required String name,
+    required pw.Document pdf,
+  }) async {
+    final bytes = await pdf.save();
+    Directory? directory;
+    directory = await getApplicationDocumentsDirectory();
+    File file = File("${directory.path}/$name.pdf");
+    if (file.existsSync()) {
+      //존재시 저장로직
+      await file.writeAsBytes(await pdf.save());
+    } else {
+      //미존재시 생성로직
+      file.create(recursive: true);
+      await file.writeAsBytes(await pdf.save());
+    }
+    Share.shareFiles(['${directory.path}/$name.pdf']);
   }
 }

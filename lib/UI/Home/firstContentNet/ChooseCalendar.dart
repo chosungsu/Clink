@@ -602,13 +602,16 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                           onPressed: () {
                                             //카드별 설정 ex.공유자 권한설정
                                             settingCalendarHome(
-                                                index,
-                                                snapshot.data!.docs[index].id,
-                                                snapshot.data!.docs[index]
-                                                    ['allowance_share'],
-                                                snapshot.data!.docs[index]
-                                                    ['allowance_change_set'],
-                                                context);
+                                              index,
+                                              snapshot.data!.docs[index].id,
+                                              snapshot.data!.docs[index]
+                                                  ['allowance_share'],
+                                              snapshot.data!.docs[index]
+                                                  ['allowance_change_set'],
+                                              context,
+                                              snapshot.data!.docs[index]
+                                                  ['calname'],
+                                            );
                                           }),
                                       FocusedMenuItem(
                                           trailingIcon: const Icon(
@@ -686,7 +689,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                 snapshot.data!.docs[index]
                                                     ['madeUser'],
                                                 searchNode,
-                                                finallist);
+                                                finallist,
+                                                snapshot.data!.docs[index]
+                                                    ['share']);
                                           })
                                     ],
                                     duration: const Duration(seconds: 0),
@@ -712,6 +717,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                               ['themesetting'],
                                           view: snapshot.data!.docs[index]
                                               ['viewsetting'],
+                                          calname: snapshot.data!.docs[index]
+                                              ['calname'],
                                         ),
                                         transition: Transition.rightToLeft,
                                       );
@@ -1135,7 +1142,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                   snapshot.data!.docs[index]
                                                       ['madeUser'],
                                                   searchNode,
-                                                  finallist);
+                                                  finallist,
+                                                  snapshot.data!.docs[index]
+                                                      ['share']);
                                             } else {
                                               Flushbar(
                                                 margin: const EdgeInsets.only(
@@ -1202,6 +1211,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                           view: snapshot.data!.docs[index]
                                                   ['viewsetting'] ??
                                               0,
+                                          calname: snapshot.data!.docs[index]
+                                              ['calname'],
                                         ),
                                         transition: Transition.rightToLeft,
                                       );
