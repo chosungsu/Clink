@@ -10,6 +10,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +18,22 @@ import 'Auth/GoogleSignInController.dart';
 import 'Auth/KakaoSignInController.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
 import 'Page/LoginSignPage.dart';
-
+import 'package:flutter/foundation.dart';
 import 'Tool/BGColor.dart';
 
+const Map<String, String> UNIT_ID = kReleaseMode
+    ? {
+        'ios': 'ca-app-pub-5775667984133884~4968515094',
+        'android': 'ca-app-pub-5775667984133884~4968515094',
+      }
+    : {
+        'ios': 'ca-app-pub-5775667984133884/9014699179',
+        'android': 'ca-app-pub-5775667984133884/1962792390',
+      };
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(nativeAppKey: 'b5e60a90f0204c0bb09625df79a11772');
+  MobileAds.instance.initialize();
   await Firebase.initializeApp();
   await Hive.initFlutter();
   await Hive.openBox('user_info');

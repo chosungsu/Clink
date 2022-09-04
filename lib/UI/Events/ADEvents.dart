@@ -1,22 +1,19 @@
-import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+import '../../main.dart';
 
 ADEvents(BuildContext context) {
-    return ContainerDesign(
-        child: SizedBox(
-          height: 30,
-          width: MediaQuery.of(context).size.width - 40,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Text(
-                '광고공간입니다',
-                style: MyTheme.bodyTextMessage,
-              ),
-            ],
-          ),
-        ),
-        color: Colors.yellow);
-  }
+  TargetPlatform os = Theme.of(context).platform;
+
+  BannerAd banner = BannerAd(
+    listener: BannerAdListener(
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {},
+      onAdLoaded: (_) {},
+    ),
+    size: AdSize.banner,
+    adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
+    request: const AdRequest(),
+  )..load();
+  return AdWidget(ad: banner);
+}

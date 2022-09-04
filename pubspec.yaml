@@ -101,6 +101,7 @@ dependencies:
   local_auth: ^2.1.2
   local_auth_ios: ^1.0.9
   local_auth_android: ^1.0.11
+  google_mobile_ads: ^2.0.1
   
   
   
