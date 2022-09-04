@@ -157,15 +157,23 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                                         updateusername.removeWhere((element) => element
                                                                             .toString()
                                                                             .contains(name));
-                                                                        firestore
-                                                                            .collection(
-                                                                                'AppNoticeByUsers')
-                                                                            .doc(
-                                                                                updateid)
-                                                                            .update({
-                                                                          'username':
-                                                                              updateusername
-                                                                        });
+                                                                        if (updateusername
+                                                                            .isEmpty) {
+                                                                          firestore
+                                                                              .collection('AppNoticeByUsers')
+                                                                              .doc(updateid)
+                                                                              .delete();
+                                                                        } else {
+                                                                          firestore
+                                                                              .collection(
+                                                                                  'AppNoticeByUsers')
+                                                                              .doc(
+                                                                                  updateid)
+                                                                              .update({
+                                                                            'username':
+                                                                                updateusername
+                                                                          });
+                                                                        }
                                                                       }
                                                                     });
                                                                   }).whenComplete(
