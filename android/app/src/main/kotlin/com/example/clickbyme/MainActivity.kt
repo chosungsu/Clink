@@ -1,4 +1,4 @@
-package com.example.clickbyme
+package com.jss.habittracker
 
 import io.flutter.embedding.android.FlutterFragmentActivity;
 

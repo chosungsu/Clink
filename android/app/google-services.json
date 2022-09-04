@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:521871835550:android:a2ffcc482c595f7754568f",
         "android_client_info": {
-          "package_name": "com.example.clickbyme"
+          "package_name": "com.jss.habittracker"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "521871835550-k64gc5ki8avvn5qmpijvo7f8tbb175vr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.clickbyme",
+            "package_name": "com.jss.habittracker",
             "certificate_hash": "61318003635763a154662d16ade576011c883634"
           }
         },

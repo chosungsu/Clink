@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
     navi = NaviWhere();
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
-    newversion = NewVersion(androidId: 'com.example.clickbyme');
+    newversion = NewVersion(androidId: 'com.jss.habittracker');
     Timer(const Duration(milliseconds: 800), () {
       checkversion(newversion);
     });

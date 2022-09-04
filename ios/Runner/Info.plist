@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>GADApplicationIdentifier</key>
-  <string>[YOUR iOS APP ID]</string>
+  <string>ca-app-pub-5775667984133884~4010656648</string>
   <key>LSRequiresIPhoneOS</key>
   <true/>
   <key>SKAdNetworkItems</key>
