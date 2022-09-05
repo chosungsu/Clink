@@ -33,7 +33,7 @@ class UserDetails extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize())),
                         onPressed: () {
-                          GoToLogin(context);
+                          GoToLogin(context, 'isnotfirst');
                         })
                   ],
                 duration: const Duration(seconds: 0),
@@ -86,7 +86,7 @@ class UserDetails extends StatelessWidget {
                           Provider.of<KakaoSignInController>(context,
                                   listen: false)
                               .logout(context, Hive.box('user_info').get('id'));
-                          GoToLogin(context);
+                          GoToLogin(context, 'isnotfirst');
                         }),
                     FocusedMenuItem(
                         trailingIcon: const Icon(

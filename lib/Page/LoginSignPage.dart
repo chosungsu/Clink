@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../Auth/GoogleSignInController.dart';
@@ -9,8 +11,8 @@ import '../Dialogs/destroyBackKey.dart';
 import '../route.dart';
 
 class LoginSignPage extends StatefulWidget {
-  const LoginSignPage({Key? key}) : super(key: key);
-
+  const LoginSignPage({Key? key, required this.first}) : super(key: key);
+  final String first;
   @override
   State<StatefulWidget> createState() => _LoginSignPageState();
 }
@@ -85,7 +87,50 @@ class _LoginSignPageState extends State<LoginSignPage>
                           ],
                         ))
                   ],
-                )
+                ),
+                widget.first == 'first'
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    letterSpacing: 2),
+                                text: '구글로그인(Google Login)을 클릭하여 로그인 시 ',
+                              ),
+                              TextSpan(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 16,
+                                    color: Colors.blue.shade400,
+                                    letterSpacing: 2),
+                                text: '앱의 개인정보처리방침',
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    final url = Uri.parse(
+                                        'https://habittrack.oopy.io/');
+                                    await launchBrowserTab(
+                                      url,
+                                    );
+                                  },
+                              ),
+                              const TextSpan(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    letterSpacing: 2),
+                                text: '에 동의하는 것으로 간주합니다.',
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : const SizedBox()
               ],
             )
           ],
@@ -152,7 +197,7 @@ LoginPlus(BuildContext context, bool ischecked, double height) {
               fit: BoxFit.fitWidth,
             ),
           )),
-      const SizedBox(
+      /*const SizedBox(
         height: 10,
       ),
       InkWell(
@@ -175,7 +220,7 @@ LoginPlus(BuildContext context, bool ischecked, double height) {
               'assets/images/kakao_login_medium_wide.png',
               fit: BoxFit.fitWidth,
             ),
-          )),
+          )),*/
     ],
   );
 }

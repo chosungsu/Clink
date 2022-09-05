@@ -70,7 +70,7 @@ DeleteUserVerify(BuildContext context, String name) {
                             Provider.of<KakaoSignInController>(context,
                                     listen: false)
                                 .Deletelogout(context, name);
-                            GoToLogin(context);
+                            GoToLogin(context, 'first');
                           },
                           style: ElevatedButton.styleFrom(
                               primary: Colors.amberAccent,

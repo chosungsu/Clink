@@ -25,9 +25,9 @@ GoToMain(BuildContext context) {
   return _time;
 }
 
-GoToLogin(BuildContext context) {
+GoToLogin(BuildContext context, String s) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
-    Get.to(const LoginSignPage());
+    Get.to(() => LoginSignPage(first: s));
     /*Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const LoginSignPage()));*/
   });

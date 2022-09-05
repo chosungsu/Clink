@@ -27,8 +27,10 @@ const Map<String, String> UNIT_ID = kReleaseMode
         'android': 'ca-app-pub-5775667984133884~4968515094',
       }
     : {
-        'ios': 'ca-app-pub-5775667984133884/9014699179',
-        'android': 'ca-app-pub-5775667984133884/1962792390',
+        'ios': 'ca-app-pub-3940256099942544/2934735716',
+        'android': 'ca-app-pub-3940256099942544/6300978111',
+        //'ios': 'ca-app-pub-5775667984133884/9014699179',
+        //'android': 'ca-app-pub-5775667984133884/1962792390'
       };
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,11 +56,15 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => GoogleSignInController(),
-          child: const LoginSignPage(),
+          child: const LoginSignPage(
+            first: 'first',
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) => KakaoSignInController(),
-          child: const LoginSignPage(),
+          child: const LoginSignPage(
+            first: 'first',
+          ),
         ),
         /*ChangeNotifierProvider(
           create: (context) => GoogleSignInController(),
@@ -203,7 +209,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                                     primary: Colors.grey.shade400,
                                   ),
                                   onPressed: () {
-                                    GoToLogin(context);
+                                    GoToLogin(context, 'first');
                                   },
                                   child: Center(
                                     child: Column(

@@ -15,5 +15,8 @@ ADEvents(BuildContext context) {
     adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
     request: const AdRequest(),
   )..load();
-  return AdWidget(ad: banner);
+  return Container(
+    height: 50,
+    child: AdWidget(ad: banner),
+  );
 }

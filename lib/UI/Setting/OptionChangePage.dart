@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../Tool/NoBehavior.dart';
@@ -785,7 +786,7 @@ class _OptionChangePageState extends State<OptionChangePage>
             return Column(
               children: [
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     userinfo_draggable(context);
                   },
                   child: SizedBox(
