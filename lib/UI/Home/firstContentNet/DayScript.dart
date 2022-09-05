@@ -508,13 +508,6 @@ class _DayScriptState extends State<DayScript> {
                                                                                 scollection.memolistcontentin[i],
                                                                             contentindex: scollection.memolistin[i]));
                                                                       }
-                                                                      for (int j =
-                                                                              0;
-                                                                          j < controll_memo.imagelist.length;
-                                                                          j++) {
-                                                                        savepicturelist
-                                                                            .add(controll_memo.imagelist[j]);
-                                                                      }
                                                                       firestore
                                                                           .collection(
                                                                               'MemoDataBase')
@@ -522,8 +515,6 @@ class _DayScriptState extends State<DayScript> {
                                                                           .set({
                                                                         'memoTitle':
                                                                             textEditingController1.text,
-                                                                        'saveimage':
-                                                                            savepicturelist,
                                                                         'Collection': scollection.collection == '' ||
                                                                                 scollection.collection == null
                                                                             ? null
@@ -552,6 +543,8 @@ class _DayScriptState extends State<DayScript> {
                                                                             : controll_memo.imagelist,
                                                                         'pinnumber':
                                                                             '0000',
+                                                                        'securewith':
+                                                                            999,
                                                                         'EditDate':
                                                                             DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] +
                                                                                 '일',

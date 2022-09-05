@@ -636,17 +636,21 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                         snapshot.data!.docs[index]['securewith'] ==
                                                                             999) {
                                                                       Get.to(
-                                                                          () => ClickShowEachNote(
-                                                                              date: snapshot.data!.docs[index]['Date'],
-                                                                              doc: snapshot.data!.docs[index].id,
-                                                                              doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                              doccolor: snapshot.data!.docs[index]['color'],
-                                                                              docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                              docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                              docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                              editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                              image: snapshot.data!.docs[index]['photoUrl']),
-                                                                          transition: Transition.downToUp);
+                                                                          () =>
+                                                                              ClickShowEachNote(
+                                                                                date: snapshot.data!.docs[index]['Date'],
+                                                                                doc: snapshot.data!.docs[index].id,
+                                                                                doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                doccolor: snapshot.data!.docs[index]['color'],
+                                                                                docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                image: snapshot.data!.docs[index]['photoUrl'],
+                                                                                securewith: snapshot.data!.docs[index]['securewith'] ?? 999,
+                                                                              ),
+                                                                          transition:
+                                                                              Transition.downToUp);
                                                                     } else if (snapshot
                                                                             .data!
                                                                             .docs[index]['securewith'] ==
@@ -666,7 +670,18 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                             reloadpage ==
                                                                                 true) {
                                                                           Get.to(
-                                                                              () => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['photoUrl']),
+                                                                              () => ClickShowEachNote(
+                                                                                    date: snapshot.data!.docs[index]['Date'],
+                                                                                    doc: snapshot.data!.docs[index].id,
+                                                                                    doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                    doccolor: snapshot.data!.docs[index]['color'],
+                                                                                    docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                    docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                    docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                    editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                    image: snapshot.data!.docs[index]['photoUrl'],
+                                                                                    securewith: snapshot.data!.docs[index]['securewith'] ?? 999,
+                                                                                  ),
                                                                               transition: Transition.downToUp);
                                                                         }
                                                                       } else {
@@ -683,7 +698,18 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                             reloadpage ==
                                                                                 true) {
                                                                           Get.to(
-                                                                              () => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['photoUrl']),
+                                                                              () => ClickShowEachNote(
+                                                                                    date: snapshot.data!.docs[index]['Date'],
+                                                                                    doc: snapshot.data!.docs[index].id,
+                                                                                    doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                    doccolor: snapshot.data!.docs[index]['color'],
+                                                                                    docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                    docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                    docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                    editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                    image: snapshot.data!.docs[index]['photoUrl'],
+                                                                                    securewith: snapshot.data!.docs[index]['securewith'] ?? 999,
+                                                                                  ),
                                                                               transition: Transition.downToUp);
                                                                         }
                                                                       }
@@ -701,17 +727,21 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                           reloadpage ==
                                                                               true) {
                                                                         Get.to(
-                                                                            () => ClickShowEachNote(
-                                                                                date: snapshot.data!.docs[index]['Date'],
-                                                                                doc: snapshot.data!.docs[index].id,
-                                                                                doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                                doccolor: snapshot.data!.docs[index]['color'],
-                                                                                docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                                docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                                docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                                editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                                image: snapshot.data!.docs[index]['photoUrl']),
-                                                                            transition: Transition.downToUp);
+                                                                            () =>
+                                                                                ClickShowEachNote(
+                                                                                  date: snapshot.data!.docs[index]['Date'],
+                                                                                  doc: snapshot.data!.docs[index].id,
+                                                                                  doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                  doccolor: snapshot.data!.docs[index]['color'],
+                                                                                  docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                  docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                  docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                  editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                  image: snapshot.data!.docs[index]['photoUrl'],
+                                                                                  securewith: snapshot.data!.docs[index]['securewith'] ?? 999,
+                                                                                ),
+                                                                            transition:
+                                                                                Transition.downToUp);
                                                                       }
                                                                     }
                                                                   },
@@ -879,17 +909,21 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                         snapshot.data!.docs[index]['securewith'] ==
                                                                             999) {
                                                                       Get.to(
-                                                                          () => ClickShowEachNote(
-                                                                              date: snapshot.data!.docs[index]['Date'],
-                                                                              doc: snapshot.data!.docs[index].id,
-                                                                              doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
-                                                                              doccolor: snapshot.data!.docs[index]['color'],
-                                                                              docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
-                                                                              docname: snapshot.data!.docs[index]['memoTitle'],
-                                                                              docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
-                                                                              editdate: snapshot.data!.docs[index]['EditDate'],
-                                                                              image: snapshot.data!.docs[index]['photoUrl']),
-                                                                          transition: Transition.downToUp);
+                                                                          () =>
+                                                                              ClickShowEachNote(
+                                                                                date: snapshot.data!.docs[index]['Date'],
+                                                                                doc: snapshot.data!.docs[index].id,
+                                                                                doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                doccolor: snapshot.data!.docs[index]['color'],
+                                                                                docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                image: snapshot.data!.docs[index]['photoUrl'],
+                                                                                securewith: snapshot.data!.docs[index]['securewith'] ?? 999,
+                                                                              ),
+                                                                          transition:
+                                                                              Transition.downToUp);
                                                                     } else if (snapshot
                                                                             .data!
                                                                             .docs[index]['securewith'] ==
@@ -909,7 +943,18 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                             reloadpage ==
                                                                                 true) {
                                                                           Get.to(
-                                                                              () => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['saveimage']),
+                                                                              () => ClickShowEachNote(
+                                                                                    date: snapshot.data!.docs[index]['Date'],
+                                                                                    doc: snapshot.data!.docs[index].id,
+                                                                                    doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                    doccolor: snapshot.data!.docs[index]['color'],
+                                                                                    docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                    docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                    docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                    editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                    image: snapshot.data!.docs[index]['photoUrl'],
+                                                                                    securewith: snapshot.data!.docs[index]['securewith'] ?? 999,
+                                                                                  ),
                                                                               transition: Transition.downToUp);
                                                                         }
                                                                       } else {
@@ -926,7 +971,18 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                             reloadpage ==
                                                                                 true) {
                                                                           Get.to(
-                                                                              () => ClickShowEachNote(date: snapshot.data!.docs[index]['Date'], doc: snapshot.data!.docs[index].id, doccollection: snapshot.data!.docs[index]['Collection'] ?? '', doccolor: snapshot.data!.docs[index]['color'], docindex: snapshot.data!.docs[index]['memoindex'] ?? [], docname: snapshot.data!.docs[index]['memoTitle'], docsummary: snapshot.data!.docs[index]['memolist'] ?? [], editdate: snapshot.data!.docs[index]['EditDate'], image: snapshot.data!.docs[index]['photoUrl']),
+                                                                              () => ClickShowEachNote(
+                                                                                    date: snapshot.data!.docs[index]['Date'],
+                                                                                    doc: snapshot.data!.docs[index].id,
+                                                                                    doccollection: snapshot.data!.docs[index]['Collection'] ?? '',
+                                                                                    doccolor: snapshot.data!.docs[index]['color'],
+                                                                                    docindex: snapshot.data!.docs[index]['memoindex'] ?? [],
+                                                                                    docname: snapshot.data!.docs[index]['memoTitle'],
+                                                                                    docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
+                                                                                    editdate: snapshot.data!.docs[index]['EditDate'],
+                                                                                    image: snapshot.data!.docs[index]['photoUrl'],
+                                                                                    securewith: snapshot.data!.docs[index]['securewith'] ?? 999,
+                                                                                  ),
                                                                               transition: Transition.downToUp);
                                                                         }
                                                                       }
@@ -955,6 +1011,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                                                   docsummary: snapshot.data!.docs[index]['memolist'] ?? [],
                                                                                   editdate: snapshot.data!.docs[index]['EditDate'],
                                                                                   image: snapshot.data!.docs[index]['photoUrl'],
+                                                                                  securewith: snapshot.data!.docs[index]['securewith'] ?? 999,
                                                                                 ),
                                                                             transition:
                                                                                 Transition.downToUp);

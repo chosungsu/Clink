@@ -2,7 +2,6 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/route.dart';
-import 'package:clickbyme/sheets/pushalarmsetting.dart';
 import 'package:clickbyme/sheets/userinfo_draggable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -35,9 +34,6 @@ class _OptionChangePageState extends State<OptionChangePage>
     '글자크기',
     '메뉴바 위치',
   ];
-  final List<String> list_noti_setting = <String>[
-    '앱 푸쉬알림 설정',
-  ];
   final List<String> list_user_setting = <String>[
     '개인정보 수집 및 이용 동의',
   ];
@@ -46,13 +42,6 @@ class _OptionChangePageState extends State<OptionChangePage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    Hive.box('user_setting').get('isChecked_pushalarm') == null
-        ? isChecked_pushalarm = false
-        : isChecked_pushalarm =
-            Hive.box('user_setting').get('isChecked_pushalarm');
-    Hive.box('user_setting').get('isChecked_adok') == null
-        ? isChecked_adok = false
-        : isChecked_adok = Hive.box('user_setting').get('isChecked_adok');
   }
 
   @override
@@ -213,10 +202,6 @@ class _OptionChangePageState extends State<OptionChangePage>
             height: 50,
           ),
           OptView1(),
-          const SizedBox(
-            height: 20,
-          ),
-          OptView2(),
           const SizedBox(
             height: 20,
           ),
@@ -747,121 +732,6 @@ class _OptionChangePageState extends State<OptionChangePage>
     );
   }
 
-  OptView2() {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width - 40,
-        child: ContainerDesign(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                      alignment: Alignment.center,
-                      child: CircleAvatar(
-                        backgroundColor: BGColor_shadowcolor(),
-                        foregroundColor: BGColor_shadowcolor(),
-                        child: Icon(
-                          Icons.notifications,
-                          color: TextColor(),
-                        ),
-                      )),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    '알림 설정',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize(),
-                        color: TextColor()),
-                  ),
-                ],
-              ),
-              Divider(
-                height: 10,
-                thickness: 2,
-                color: Colors.grey.shade400,
-              ),
-              Opt2_body()
-            ],
-          ),
-          color: BGColor_shadowcolor(),
-        ));
-  }
-
-  Opt2_body() {
-    return SizedBox(
-      child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: list_noti_setting.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                SizedBox(
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        list_noti_setting[index],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize(),
-                            color: TextColor()),
-                      ),
-                      index == 0
-                          ? Transform.scale(
-                              scale: 0.7,
-                              child: Switch(
-                                  activeColor: Colors.blue.shade400,
-                                  inactiveThumbColor: Colors.white,
-                                  inactiveTrackColor: TextColor(),
-                                  value: isChecked_pushalarm,
-                                  onChanged: (bool val) {
-                                    setState(() {
-                                      selectedDay = DateTime.now();
-                                      isChecked_pushalarm = val;
-                                      Hive.box('user_setting').put(
-                                          'isChecked_pushalarm',
-                                          isChecked_pushalarm);
-                                      if (isChecked_pushalarm == true) {
-                                        pushalarmsetting(context, 0,
-                                            isChecked_pushalarm, selectedDay);
-                                      }
-                                    });
-                                  }),
-                            )
-                          : Transform.scale(
-                              scale: 0.7,
-                              child: Switch(
-                                  activeColor: Colors.blue.shade400,
-                                  inactiveThumbColor: Colors.white,
-                                  inactiveTrackColor: TextColor(),
-                                  value: isChecked_adok,
-                                  onChanged: (bool val) {
-                                    setState(() {
-                                      selectedDay = DateTime.now();
-                                      isChecked_adok = val;
-                                      Hive.box('user_setting').put(
-                                          'isChecked_adok', isChecked_adok);
-                                      if (isChecked_adok == true) {
-                                        pushalarmsetting(context, 1,
-                                            isChecked_pushalarm, selectedDay);
-                                      }
-                                    });
-                                  }),
-                            )
-                    ],
-                  ),
-                )
-              ],
-            );
-          }),
-    );
-  }
-
   OptView3() {
     return SizedBox(
         width: MediaQuery.of(context).size.width - 40,
@@ -942,26 +812,5 @@ class _OptionChangePageState extends State<OptionChangePage>
             );
           }),
     );
-  }
-}
-
-_launchURLApp() async {
-  var url = Uri.parse("https://habittrack.oopy.io/");
-  if (await canLaunchUrl(url)) {
-    Get.to(() => launchUrl(url));
-  } else {
-    throw 'Could not launch $url';
-  }
-}
-
-launchBrowser() async {
-  var url = Uri.parse("https://habittrack.oopy.io/");
-  if (await canLaunchUrl(url)) {
-    await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    );
-    await Future.delayed(Duration(seconds: 10));
-    await closeInAppWebView();
   }
 }

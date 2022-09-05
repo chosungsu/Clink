@@ -604,6 +604,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                               ['EditDate'],
                                           image: snapshot.data!.docs[index]
                                               ['photoUrl'],
+                                          securewith: snapshot.data!.docs[index]
+                                                  ['securewith'] ??
+                                              999,
                                         ),
                                     transition: Transition.downToUp);
                               } else if (snapshot.data!.docs[index]
@@ -648,6 +651,10 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                   .docs[index]['EditDate'],
                                               image: snapshot.data!.docs[index]
                                                   ['photoUrl'],
+                                              securewith:
+                                                  snapshot.data!.docs[index]
+                                                          ['securewith'] ??
+                                                      999,
                                             ),
                                         transition: Transition.downToUp);
                                   }
@@ -690,6 +697,10 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                   .docs[index]['EditDate'],
                                               image: snapshot.data!.docs[index]
                                                   ['photoUrl'],
+                                              securewith:
+                                                  snapshot.data!.docs[index]
+                                                          ['securewith'] ??
+                                                      999,
                                             ),
                                         transition: Transition.downToUp);
                                   }
@@ -729,6 +740,10 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                 ['EditDate'],
                                             image: snapshot.data!.docs[index]
                                                 ['photoUrl'],
+                                            securewith:
+                                                snapshot.data!.docs[index]
+                                                        ['securewith'] ??
+                                                    999,
                                           ),
                                       transition: Transition.downToUp);
                                 }
@@ -779,6 +794,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                     color: BGColor()),
                                 SizedBox(
                                   height: 200,
+                                  width:
+                                      (MediaQuery.of(context).size.width - 40) /
+                                          2,
                                   child: ContainerDesign(
                                       child: Column(
                                         children: [

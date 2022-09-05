@@ -41,6 +41,7 @@ class ClickShowEachNote extends StatefulWidget {
     required this.docindex,
     required this.editdate,
     required this.image,
+    required this.securewith,
   }) : super(key: key);
   final String date;
   final String editdate;
@@ -51,6 +52,7 @@ class ClickShowEachNote extends StatefulWidget {
   final List docsummary;
   final int doccolor;
   final List docindex;
+  final int securewith;
   @override
   State<StatefulWidget> createState() => _ClickShowEachNoteState();
 }
@@ -448,6 +450,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                               .toList(),
                                                                       'OriginalUser':
                                                                           username,
+                                                                      'securewith':
+                                                                          widget
+                                                                              .securewith,
                                                                       'color': Hive.box('user_setting').get(
                                                                               'coloreachmemo') ??
                                                                           _color
