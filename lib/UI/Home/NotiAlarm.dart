@@ -485,73 +485,91 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
             ));
           }
 
-          return ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: _list_ad.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ContainerDesign(
-                          color: BGColor(),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                  height: 100,
-                                  width: MediaQuery.of(context).size.width - 60,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                          fit: FlexFit.tight,
-                                          child: Column(
+          return _list_ad.isEmpty
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height - 160,
+                  child: Center(
+                    child: Text(
+                      '공지사항이 없습니다;;;',
+                      style: TextStyle(
+                          color: TextColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: secondTitleTextsize()),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ))
+              : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: _list_ad.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () {},
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ContainerDesign(
+                              color: BGColor(),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                      height: 100,
+                                      width: MediaQuery.of(context).size.width -
+                                          60,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    _list_ad[index].title,
+                                                    softWrap: true,
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            contentTextsize()),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  )
+                                                ],
+                                              )),
+                                          Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                CrossAxisAlignment.end,
                                             children: [
                                               Text(
-                                                _list_ad[index].title,
-                                                softWrap: true,
-                                                maxLines: 2,
+                                                _list_ad[index].sub.toString(),
                                                 style: TextStyle(
                                                     color: TextColor(),
                                                     fontWeight: FontWeight.bold,
                                                     fontSize:
                                                         contentTextsize()),
                                                 overflow: TextOverflow.ellipsis,
-                                              )
+                                              ),
                                             ],
-                                          )),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            _list_ad[index].sub.toString(),
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize()),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                                          )
                                         ],
-                                      )
-                                    ],
-                                  )),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    ));
-              });
+                                      )),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        ));
+                  });
         }
         return SizedBox(
             height: MediaQuery.of(context).size.height - 160,

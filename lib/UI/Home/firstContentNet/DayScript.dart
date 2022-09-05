@@ -539,7 +539,7 @@ class _DayScriptState extends State<DayScript> {
                                                                         'OriginalUser':
                                                                             username,
                                                                         'color':
-                                                                            Hive.box('user_setting').get('typecolorcalendar') ??
+                                                                            Hive.box('user_setting').get('coloreachmemo') ??
                                                                                 _color.value.toInt(),
                                                                         'Date': DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] +
                                                                             '일',

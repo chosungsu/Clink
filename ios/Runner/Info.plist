@@ -6,6 +6,11 @@
   <string>ca-app-pub-5775667984133884~4010656648</string>
   <key>LSRequiresIPhoneOS</key>
   <true/>
+  <key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>https</string>
+  <string>http</string>
+</array>
   <key>SKAdNetworkItems</key>
     <array>
       <dict>

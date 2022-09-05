@@ -8,10 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../Tool/NoBehavior.dart';
 import '../../Tool/IconBtn.dart';
 
@@ -943,5 +942,26 @@ class _OptionChangePageState extends State<OptionChangePage>
             );
           }),
     );
+  }
+}
+
+_launchURLApp() async {
+  var url = Uri.parse("https://habittrack.oopy.io/");
+  if (await canLaunchUrl(url)) {
+    Get.to(() => launchUrl(url));
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+launchBrowser() async {
+  var url = Uri.parse("https://habittrack.oopy.io/");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    );
+    await Future.delayed(Duration(seconds: 10));
+    await closeInAppWebView();
   }
 }

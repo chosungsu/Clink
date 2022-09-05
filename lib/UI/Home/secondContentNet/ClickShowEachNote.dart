@@ -448,9 +448,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                               .toList(),
                                                                       'OriginalUser':
                                                                           username,
-                                                                      'color': _color
-                                                                          .value
-                                                                          .toInt(),
+                                                                      'color': Hive.box('user_setting').get(
+                                                                              'coloreachmemo') ??
+                                                                          _color
+                                                                              .value
+                                                                              .toInt(),
                                                                       'EditDate': editDateTo.toString().split('-')[0] +
                                                                           '-' +
                                                                           editDateTo.toString().split('-')[

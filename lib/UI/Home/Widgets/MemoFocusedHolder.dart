@@ -35,11 +35,7 @@ MFHolderfirst(List<bool> checkbottoms, List<FocusNode> nodes,
                       : NaviColor(true),
                   lightSource: LightSource.topLeft),
             ),
-            onPressed: () {
-              for (int i = 0; i < nodes.length; i++) {
-                nodes[i].unfocus();
-              }
-            },
+            onPressed: () {},
             duration: const Duration(seconds: 0),
             animateMenuItems: true,
             menuOffset: 20,
