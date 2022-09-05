@@ -1,20 +1,28 @@
 {
   "project_info": {
-    "project_number": "521871835550",
-    "project_id": "clickbyme-78082",
-    "storage_bucket": "clickbyme-78082.appspot.com"
+    "project_number": "789398252263",
+    "project_id": "habit-tracker-8dad1",
+    "storage_bucket": "habit-tracker-8dad1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:521871835550:android:a2ffcc482c595f7754568f",
+        "mobilesdk_app_id": "1:789398252263:android:21d69620fcd7caaa8e5042",
         "android_client_info": {
           "package_name": "com.jss.habittracker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "521871835550-k64gc5ki8avvn5qmpijvo7f8tbb175vr.apps.googleusercontent.com",
+          "client_id": "789398252263-h7agkchmv3mg12k79vrra0stpgf39mob.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jss.habittracker",
+            "certificate_hash": "d3daa635941e72daec02ce722ae95ca943b83ff1"
+          }
+        },
+        {
+          "client_id": "789398252263-uqicttk0cuek4l02r8b17j54gujj0q2m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.jss.habittracker",
@@ -22,20 +30,20 @@
           }
         },
         {
-          "client_id": "521871835550-3m8h8s4un93og8283t92ogfuin1uqroc.apps.googleusercontent.com",
+          "client_id": "789398252263-0egnmrhp7qso704ekt7pclkbmkia1s6f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCDLtwMmCZTHlNI4innJ9yoVrItYfbrJ-Q"
+          "current_key": "AIzaSyDxr_WwyQp9PNCH3Irv6P7s2DYCGRvt_XQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "521871835550-3m8h8s4un93og8283t92ogfuin1uqroc.apps.googleusercontent.com",
+              "client_id": "789398252263-0egnmrhp7qso704ekt7pclkbmkia1s6f.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

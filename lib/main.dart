@@ -32,7 +32,7 @@ const Map<String, String> UNIT_ID = kReleaseMode
       };
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  KakaoSdk.init(nativeAppKey: 'b5e60a90f0204c0bb09625df79a11772');
+  KakaoSdk.init(nativeAppKey: '	caac43875f322f45a8cec21c52741a24');
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
   await Hive.initFlutter();
