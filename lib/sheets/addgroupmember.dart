@@ -384,7 +384,12 @@ Search(
                                                               leftBarIndicatorColor:
                                                                   Colors.blue
                                                                       .shade100,
-                                                            ).show(context);
+                                                            )
+                                                                .show(context)
+                                                                .whenComplete(
+                                                                    () {
+                                                              Get.back();
+                                                            });
                                                           } else {
                                                             list_sp.remove(
                                                                 list_user[
@@ -435,7 +440,12 @@ Search(
                                                               leftBarIndicatorColor:
                                                                   Colors.red
                                                                       .shade100,
-                                                            ).show(context);
+                                                            )
+                                                                .show(context)
+                                                                .whenComplete(
+                                                                    () {
+                                                              Get.back();
+                                                            });
                                                           }
                                                           for (int i = 0;
                                                               i <

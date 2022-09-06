@@ -23,7 +23,9 @@ class PeopleGroup extends StatefulWidget {
       required this.share,
       required this.made,
       required this.allow_share,
-      required this.allow_change_set})
+      required this.allow_change_set,
+      required this.themesetting,
+      required this.viewsetting})
       : super(key: key);
   final String nameid;
   final String made;
@@ -34,6 +36,8 @@ class PeopleGroup extends StatefulWidget {
   final int color;
   final bool allow_share;
   final bool allow_change_set;
+  final int themesetting;
+  final int viewsetting;
   @override
   State<StatefulWidget> createState() => _PeopleGroupState();
 }
@@ -346,10 +350,10 @@ class _PeopleGroupState extends State<PeopleGroup> {
                       children: [
                         NeumorphicText(
                           '친구목록이 비어있습니다.\n 추가하는 방법 : 상단 플러스아이콘 클릭',
-                          style: const NeumorphicStyle(
+                          style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
-                            color: Colors.black,
+                            color: TextColor(),
                           ),
                           textStyle: NeumorphicTextStyle(
                             fontWeight: FontWeight.bold,
@@ -420,6 +424,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                               }
                             }).whenComplete(() {
                               if (widget.share.isNotEmpty) {
+                                print(1);
                                 firestore
                                     .collection('ShareHome')
                                     .where('doc', isEqualTo: widget.doc)
@@ -436,6 +441,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         .delete();
                                   }
                                 }).whenComplete(() {
+                                  print(2);
                                   for (int i = 0;
                                       i < listselected_sp.length;
                                       i++) {
@@ -468,8 +474,11 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                           'allowance_share': widget.allow_share,
                                           'allowance_change_set':
                                               widget.allow_change_set,
+                                          'themesetting': widget.themesetting,
+                                          'viewsetting': widget.viewsetting
                                         });
                                       } else {
+                                        print(3);
                                         firestore
                                             .collection('ShareHome')
                                             .doc(widget.doc +
@@ -488,6 +497,8 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                           'allowance_share': widget.allow_share,
                                           'allowance_change_set':
                                               widget.allow_change_set,
+                                          'themesetting': widget.themesetting,
+                                          'viewsetting': widget.viewsetting
                                         });
                                       }
                                     });
@@ -531,6 +542,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                       .get()
                                       .then((value) {
                                     if (value.data() == null) {
+                                      print(11);
                                       firestore
                                           .collection('ShareHome')
                                           .doc(widget.doc +
@@ -550,8 +562,11 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         'allowance_share': widget.allow_share,
                                         'allowance_change_set':
                                             widget.allow_change_set,
+                                        'themesetting': widget.themesetting,
+                                        'viewsetting': widget.viewsetting
                                       });
                                     } else {
+                                      print(22);
                                       firestore
                                           .collection('ShareHome')
                                           .doc(widget.doc +
@@ -570,6 +585,8 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         'allowance_share': widget.allow_share,
                                         'allowance_change_set':
                                             widget.allow_change_set,
+                                        'themesetting': widget.themesetting,
+                                        'viewsetting': widget.viewsetting
                                       });
                                     }
                                   });

@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-settingCalendarHome(
-    int index, doc_name, doc_shares, doc_change, BuildContext context, doc) {
+settingCalendarHome(int index, doc_name, doc_shares, doc_change,
+    BuildContext context, doc, doc_theme, doc_view) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
@@ -36,15 +36,16 @@ settingCalendarHome(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SheetPageCC(
-                          context, doc_name, doc_shares, doc_change, doc),
+                      SheetPageCC(context, doc_name, doc_shares, doc_change,
+                          doc, doc_theme, doc_view),
                     ],
                   ))),
         );
       }).whenComplete(() {});
 }
 
-SheetPageCC(BuildContext context, doc_name, doc_shares, doc_change, doc) {
+SheetPageCC(BuildContext context, doc_name, doc_shares, doc_change, doc,
+    doc_theme, doc_view) {
   return SizedBox(
       child: Padding(
           padding:
@@ -71,7 +72,8 @@ SheetPageCC(BuildContext context, doc_name, doc_shares, doc_change, doc) {
               const SizedBox(
                 height: 20,
               ),
-              content(context, doc_name, doc_change, doc_shares, doc)
+              content(context, doc_name, doc_change, doc_shares, doc, doc_theme,
+                  doc_view)
             ],
           )));
 }
@@ -93,7 +95,8 @@ title(
       ));
 }
 
-content(BuildContext context, doc_id, doc_change, doc_shares, doc) {
+content(BuildContext context, doc_id, doc_change, doc_shares, doc, doc_theme,
+    doc_view) {
   DateTime date = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String username = Hive.box('user_info').get(
@@ -315,6 +318,8 @@ content(BuildContext context, doc_id, doc_change, doc_shares, doc) {
                             .update({
                           'allowance_share': isselected_share,
                           'allowance_change_set': isselected_change_set,
+                          'themesetting': doc_theme,
+                          'viewsetting': doc_view
                         });
                       });
                     }).whenComplete(() {

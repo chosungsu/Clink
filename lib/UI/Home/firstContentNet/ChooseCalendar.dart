@@ -570,6 +570,10 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                               context,
                                               snapshot.data!.docs[index]
                                                   ['calname'],
+                                              snapshot.data!.docs[index]
+                                                  ['themesetting'],
+                                              snapshot.data!.docs[index]
+                                                  ['viewsetting'],
                                             );
                                           }),
                                       FocusedMenuItem(
@@ -584,6 +588,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                   fontSize: contentTextsize())),
                                           onPressed: () {
                                             //공유자 검색
+                                            print(0);
                                             Hive.box('user_setting').put(
                                                 'share_cal_person',
                                                 snapshot.data!.docs[index]
@@ -614,6 +619,12 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                   allow_change_set: snapshot
                                                           .data!.docs[index]
                                                       ['allowance_change_set'],
+                                                  themesetting:
+                                                      snapshot.data!.docs[index]
+                                                          ['themesetting'],
+                                                  viewsetting:
+                                                      snapshot.data!.docs[index]
+                                                          ['viewsetting'],
                                                 ),
                                                 transition: Transition.downToUp,
                                               );
@@ -1019,6 +1030,12 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                     allow_change_set: snapshot
                                                             .data!.docs[index][
                                                         'allowance_change_set'],
+                                                    themesetting: snapshot
+                                                            .data!.docs[index]
+                                                        ['themesetting'],
+                                                    viewsetting: snapshot
+                                                            .data!.docs[index]
+                                                        ['viewsetting'],
                                                   ),
                                                   transition:
                                                       Transition.downToUp,
