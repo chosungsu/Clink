@@ -148,22 +148,25 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                                           true) {
                                                                         updateid =
                                                                             element.id;
-                                                                        updateusername =
-                                                                            element.get('username');
+                                                                        updateusername = element
+                                                                            .get('username')
+                                                                            .toString()
+                                                                            .split(',')
+                                                                            .toList();
                                                                         returntitle
                                                                             .add(element.get('title'));
                                                                         returndate
                                                                             .add(element.get('date'));
-                                                                        updateusername.removeWhere((element) => element
-                                                                            .toString()
-                                                                            .contains(name));
-                                                                        if (updateusername
-                                                                            .isEmpty) {
+                                                                        if (updateusername.length ==
+                                                                            1) {
                                                                           firestore
                                                                               .collection('AppNoticeByUsers')
                                                                               .doc(updateid)
                                                                               .delete();
                                                                         } else {
+                                                                          updateusername.removeWhere((element) => element
+                                                                              .toString()
+                                                                              .contains(name));
                                                                           firestore
                                                                               .collection(
                                                                                   'AppNoticeByUsers')
