@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/Home/Widgets/SortMenuHolder.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
 import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:clickbyme/sheets/settingChoiceC.dart';
@@ -190,57 +191,10 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                           FontWeight.bold,
                                                     )),
                                               ),
-                                              IconBtn(
-                                                  child: IconButton(
-                                                      onPressed: () {
-                                                        //리스트 정렬
-                                                        setState(() {
-                                                          sort == 0
-                                                              ? Hive.box(
-                                                                      'user_setting')
-                                                                  .put(
-                                                                      'sort_cal_card',
-                                                                      1)
-                                                              : Hive.box(
-                                                                      'user_setting')
-                                                                  .put(
-                                                                      'sort_cal_card',
-                                                                      0);
-                                                          Hive.box('user_setting')
-                                                                          .get(
-                                                                              'sort_cal_card') ==
-                                                                      0 ||
-                                                                  Hive.box('user_setting')
-                                                                          .get(
-                                                                              'sort_cal_card') ==
-                                                                      null
-                                                              ? sort = 0
-                                                              : sort = 1;
-                                                        });
-                                                      },
-                                                      icon: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 30,
-                                                        height: 30,
-                                                        child: NeumorphicIcon(
-                                                          Icons.filter_list,
-                                                          size: 30,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              surfaceIntensity:
-                                                                  0.5,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      )),
-                                                  color: TextColor()),
+                                              SortMenuHolder(
+                                                  Hive.box('user_setting')
+                                                      .get('sort_cal_card'),
+                                                  '캘린더'),
                                               const SizedBox(
                                                 width: 10,
                                               ),
@@ -547,7 +501,12 @@ class _ChooseCalendarState extends State<ChooseCalendar>
         stream: firestore
             .collection('CalendarSheetHome')
             .where('madeUser', isEqualTo: username)
-            .orderBy('date', descending: sort == 0 ? true : false)
+            .orderBy('date',
+                descending: Hive.box('user_setting').get('sort_cal_card') ==
+                            0 ||
+                        Hive.box('user_setting').get('sort_cal_card') == null
+                    ? true
+                    : false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -954,7 +913,12 @@ class _ChooseCalendarState extends State<ChooseCalendar>
         stream: firestore
             .collection('ShareHome')
             .where('showingUser', isEqualTo: username)
-            .orderBy('date', descending: sort == 0 ? true : false)
+            .orderBy('date',
+                descending: Hive.box('user_setting').get('sort_cal_card') ==
+                            0 ||
+                        Hive.box('user_setting').get('sort_cal_card') == null
+                    ? true
+                    : false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {

@@ -392,7 +392,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                       children: [
                         SizedBox(
                             height: 30,
-                            width: (MediaQuery.of(context).size.width - 40) / 4,
+                            width: (MediaQuery.of(context).size.width - 40) / 3,
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -592,7 +592,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
         future: firestore
             .collection('AppNoticeByUsers')
             //.where('username', arrayContainsAny: [name])
-            .orderBy('date')
+            .orderBy('date', descending: true)
             .get()
             .then(((QuerySnapshot querySnapshot) => {
                   notilist.resetnoti(),

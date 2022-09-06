@@ -17,7 +17,6 @@ class UserDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 100,
         child: Hive.box('user_info').get('id') == null
             ? FocusedMenuHolder(
                 menuItems: [
@@ -88,17 +87,6 @@ class UserDetails extends StatelessWidget {
                               .logout(context, Hive.box('user_info').get('id'));
                           GoToLogin(context, 'isnotfirst');
                         }),
-                    FocusedMenuItem(
-                        trailingIcon: const Icon(
-                          Icons.confirmation_number,
-                          size: 30,
-                        ),
-                        title: Text('이용권 확인(준비중)',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize())),
-                        onPressed: () {}),
                     FocusedMenuItem(
                         trailingIcon: const Icon(
                           Icons.account_circle,

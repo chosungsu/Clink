@@ -161,24 +161,13 @@ content(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-            height: isresponsible == true ? 60 : 30,
-            child: Row(
-              children: [
-                Text('제목',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize())),
-                const SizedBox(
-                  width: 20,
-                ),
-                const Text('필수항목',
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15)),
-              ],
-            )),
+          height: isresponsible == true ? 60 : 30,
+          child: Text('제목',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+        ),
         SizedBox(
           height: isresponsible == true ? 40 : 20,
         ),
@@ -186,23 +175,33 @@ content(
           height: isresponsible == true ? 80 : 40,
           child: TextField(
             controller: controller,
-            maxLines: 2,
+            maxLines: 1,
             focusNode: searchNode,
             textAlign: TextAlign.start,
             textAlignVertical: TextAlignVertical.center,
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              border: InputBorder.none,
-              hintMaxLines: 2,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: TextColor(),
+                  width: 2,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.blue,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              contentPadding: const EdgeInsets.only(left: 10),
               hintText: '제목 입력...',
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.black45),
-              isCollapsed: true,
             ),
           ),
         ),
@@ -587,6 +586,8 @@ content(
                               'share': [],
                               'viewsetting': 0,
                               'themesetting': 0,
+                              'allowance_share': false,
+                              'allowance_change_set': false,
                               'color': Hive.box('user_setting')
                                       .get('typecolorcalendar') ??
                                   _color.value.toInt(),
@@ -631,7 +632,9 @@ content(
                                       .toString()
                                       .split('-')[2]
                                       .substring(0, 2) +
-                                  '일'
+                                  '일',
+                              'photoUrl': [],
+                              'securewith': 999,
                             }).whenComplete(() {
                               CreateCalandmemoSuccessFlushbarSub(context, '메모');
                             });
@@ -643,6 +646,8 @@ content(
                         'share': [],
                         'viewsetting': 0,
                         'themesetting': 0,
+                        'allowance_share': false,
+                        'allowance_change_set': false,
                         'color':
                             Hive.box('user_setting').get('typecolorcalendar') ??
                                 _color.value.toInt(),

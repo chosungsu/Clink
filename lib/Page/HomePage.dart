@@ -8,7 +8,7 @@ import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
-import 'package:clickbyme/UI/Home/secondContentNet/EventShowCard.dart';
+import 'package:clickbyme/UI/Home/secondContentNet/ShowTips.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -83,10 +83,6 @@ class _HomePageState extends State<HomePage> {
     navi = NaviWhere();
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
-    newversion = NewVersion(androidId: 'com.jss.habittracker');
-    Timer(const Duration(milliseconds: 800), () {
-      checkversion(newversion);
-    });
     firestore
         .collection('HomeViewCategories')
         .where('usercode', isEqualTo: docid)
@@ -118,15 +114,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     _pController.dispose();
-  }
-
-  Future<void> checkversion(newversion) async {
-    status = await newversion.getVersionStatus();
-    if (status.localVersion != status.storeVersion) {
-      sameversion = false;
-    } else {
-      sameversion = true;
-    }
   }
 
   @override
@@ -344,6 +331,8 @@ class _HomePageState extends State<HomePage> {
                                       const SizedBox(
                                         height: 20,
                                       ),
+                                      H_Container_0_eventcompany(
+                                          height, _pController),
                                       H_Container_0(height, _pController),
                                       const SizedBox(
                                         height: 20,
@@ -362,7 +351,8 @@ class _HomePageState extends State<HomePage> {
                                           defaulthomeviewlist,
                                           userviewlist,
                                           contentmy,
-                                          contentshare),
+                                          contentshare,
+                                          isresponsive),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -383,6 +373,15 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
+  H_Container_0_eventcompany(double height, PageController pController) {
+    //프로버전 구매시 보이지 않게 함
+    return EventApps(
+      height: height,
+      pageController: pController,
+      pageindex: 0,
+    );
+  }
+
   H_Container_0(double height, PageController pController) {
     //프로버전 구매시 보이지 않게 함
     return SizedBox(
@@ -390,13 +389,11 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          EventShowCard(
-              height: height,
-              pageController: pController,
-              pageindex: 0,
-              buy: isbought,
-              sameversion: sameversion,
-              newver: newversion),
+          ShowTips(
+            height: height,
+            pageController: pController,
+            pageindex: 0,
+          ),
         ],
       ),
     );
@@ -439,8 +436,14 @@ class _HomePageState extends State<HomePage> {
                                       transition: Transition.rightToLeft);
                                   print(reloadpage);
                                   if (reloadpage) {
-                                    ViewSet(height, docid, defaulthomeviewlist,
-                                        userviewlist, contentmy, contentshare);
+                                    ViewSet(
+                                        height,
+                                        docid,
+                                        defaulthomeviewlist,
+                                        userviewlist,
+                                        contentmy,
+                                        contentshare,
+                                        isresponsive);
                                   }
                                 },
                                 child: SizedBox(
@@ -481,8 +484,14 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                       transition: Transition.rightToLeft);
                                   if (reloadpage) {
-                                    ViewSet(height, docid, defaulthomeviewlist,
-                                        userviewlist, contentmy, contentshare);
+                                    ViewSet(
+                                        height,
+                                        docid,
+                                        defaulthomeviewlist,
+                                        userviewlist,
+                                        contentmy,
+                                        contentshare,
+                                        isresponsive);
                                   }
                                 },
                                 child: SizedBox(

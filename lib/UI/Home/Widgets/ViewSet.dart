@@ -13,7 +13,7 @@ import '../secondContentNet/ClickShowEachCalendar.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
 ViewSet(double height, String docid, List defaulthomeviewlist,
-    List userviewlist, List contentmy, List contentshare) {
+    List userviewlist, List contentmy, List contentshare, bool isresponsive) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
   late DateTime Date = DateTime.now();
@@ -57,15 +57,13 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                           '오늘의 일정'
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(
-                              height: 30,
-                              child: Text('오늘의 일정',
-                                  style: TextStyle(
-                                      color: TextColor(),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTitleTextsize())),
-                            ),
+                            Text('오늘의 일정',
+                                style: TextStyle(
+                                    color: TextColor(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize())),
                             const SizedBox(
                               height: 20,
                             ),
@@ -128,26 +126,32 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                     ContainerDesign(
                                         child: contentmy.isEmpty
                                             ? Column(
+                                                mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
-                                                  Center(
-                                                    child: NeumorphicText(
-                                                      '보여드릴 오늘의 일정이 없습니다.',
-                                                      style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .flat,
-                                                        depth: 3,
-                                                        color: TextColor(),
-                                                      ),
-                                                      textStyle:
-                                                          NeumorphicTextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontSize:
-                                                            contentTextsize(),
+                                                  SizedBox(
+                                                    height: isresponsive == true
+                                                        ? 300
+                                                        : 50,
+                                                    child: Center(
+                                                      child: NeumorphicText(
+                                                        '보여드릴 오늘의 일정이 없습니다.',
+                                                        style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: TextColor(),
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                        ),
                                                       ),
                                                     ),
                                                   )
@@ -268,14 +272,19 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                   children_cal1 = <Widget>[
                                     ContainerDesign(
                                         child: Column(
+                                          mainAxisSize: MainAxisSize.min,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          children: const [
-                                            Center(
-                                                child:
-                                                    CircularProgressIndicator())
+                                          children: [
+                                            SizedBox(
+                                                height: isresponsive == true
+                                                    ? 300
+                                                    : 50,
+                                                child: const Center(
+                                                    child:
+                                                        CircularProgressIndicator()))
                                           ],
                                         ),
                                         color: BGColor())
@@ -294,15 +303,13 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                               '공유된 오늘의 일정'
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(
-                                  height: 30,
-                                  child: Text('공유된 오늘의 일정',
-                                      style: TextStyle(
-                                          color: TextColor(),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTitleTextsize())),
-                                ),
+                                Text('공유된 오늘의 일정',
+                                    style: TextStyle(
+                                        color: TextColor(),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTitleTextsize())),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -373,6 +380,8 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                         ContainerDesign(
                                             child: contentshare.isEmpty
                                                 ? Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .center,
@@ -380,27 +389,35 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                         MainAxisAlignment
                                                             .center,
                                                     children: [
-                                                      Center(
-                                                        child: NeumorphicText(
-                                                          '보여드릴 공유된 일정이 없습니다.',
-                                                          style:
-                                                              NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .flat,
-                                                            depth: 3,
-                                                            color: TextColor(),
-                                                          ),
-                                                          textStyle:
-                                                              NeumorphicTextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontSize:
-                                                                contentTextsize(),
-                                                          ),
-                                                        ),
-                                                      )
+                                                      SizedBox(
+                                                          height:
+                                                              isresponsive ==
+                                                                      true
+                                                                  ? 300
+                                                                  : 50,
+                                                          child: Center(
+                                                            child:
+                                                                NeumorphicText(
+                                                              '보여드릴 공유된 일정이 없습니다.',
+                                                              style:
+                                                                  NeumorphicStyle(
+                                                                shape:
+                                                                    NeumorphicShape
+                                                                        .flat,
+                                                                depth: 3,
+                                                                color:
+                                                                    TextColor(),
+                                                              ),
+                                                              textStyle:
+                                                                  NeumorphicTextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                              ),
+                                                            ),
+                                                          ))
                                                     ],
                                                   )
                                                 : ListView.builder(
@@ -524,14 +541,19 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                       children_cal2 = <Widget>[
                                         ContainerDesign(
                                             child: Column(
+                                              mainAxisSize: MainAxisSize.min,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: const [
-                                                Center(
-                                                    child:
-                                                        CircularProgressIndicator())
+                                              children: [
+                                                SizedBox(
+                                                    height: isresponsive == true
+                                                        ? 300
+                                                        : 50,
+                                                    child: const Center(
+                                                        child:
+                                                            CircularProgressIndicator()))
                                               ],
                                             ),
                                             color: BGColor())
@@ -551,17 +573,14 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                       .toString() ==
                                   '홈뷰에 저장된 메모'
                               ? Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      height: 30,
-                                      child: Text('홈뷰에 저장된 메모',
-                                          style: TextStyle(
-                                              color: TextColor(),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  contentTitleTextsize())),
-                                    ),
+                                    Text('홈뷰에 저장된 메모',
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTitleTextsize())),
                                     const SizedBox(
                                       height: 20,
                                     ),
@@ -579,6 +598,8 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                 child: snapshot
                                                         .data!.docs.isEmpty
                                                     ? Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .center,
@@ -586,29 +607,35 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          Center(
-                                                            child:
-                                                                NeumorphicText(
-                                                              '홈 내보내기 설정된 메모는 없습니다.',
-                                                              style:
-                                                                  NeumorphicStyle(
-                                                                shape:
-                                                                    NeumorphicShape
-                                                                        .flat,
-                                                                depth: 3,
-                                                                color:
-                                                                    TextColor(),
-                                                              ),
-                                                              textStyle:
-                                                                  NeumorphicTextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                              ),
-                                                            ),
-                                                          )
+                                                          SizedBox(
+                                                              height:
+                                                                  isresponsive ==
+                                                                          true
+                                                                      ? 300
+                                                                      : 50,
+                                                              child: Center(
+                                                                child:
+                                                                    NeumorphicText(
+                                                                  '홈 내보내기 설정된 메모는 없습니다.',
+                                                                  style:
+                                                                      NeumorphicStyle(
+                                                                    shape:
+                                                                        NeumorphicShape
+                                                                            .flat,
+                                                                    depth: 3,
+                                                                    color:
+                                                                        TextColor(),
+                                                                  ),
+                                                                  textStyle:
+                                                                      NeumorphicTextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                  ),
+                                                                ),
+                                                              ))
                                                         ],
                                                       )
                                                     : ListView.builder(
@@ -792,14 +819,21 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                           children_memo1 = <Widget>[
                                             ContainerDesign(
                                                 child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
-                                                  children: const [
-                                                    Center(
-                                                        child:
-                                                            CircularProgressIndicator())
+                                                  children: [
+                                                    SizedBox(
+                                                        height:
+                                                            isresponsive == true
+                                                                ? 300
+                                                                : 50,
+                                                        child: const Center(
+                                                            child:
+                                                                CircularProgressIndicator()))
                                                   ],
                                                 ),
                                                 color: BGColor())
@@ -814,17 +848,14 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                   ],
                                 )
                               : Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      height: 30,
-                                      child: Text('오늘 수정 및 생성된 메모',
-                                          style: TextStyle(
-                                              color: TextColor(),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  contentTitleTextsize())),
-                                    ),
+                                    Text('오늘 수정 및 생성된 메모',
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTitleTextsize())),
                                     const SizedBox(
                                       height: 20,
                                     ),
@@ -852,6 +883,8 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                 child: snapshot
                                                         .data!.docs.isEmpty
                                                     ? Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .center,
@@ -859,29 +892,35 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          Center(
-                                                            child:
-                                                                NeumorphicText(
-                                                              '오늘 수정된 메모는 없습니다.',
-                                                              style:
-                                                                  NeumorphicStyle(
-                                                                shape:
-                                                                    NeumorphicShape
-                                                                        .flat,
-                                                                depth: 3,
-                                                                color:
-                                                                    TextColor(),
-                                                              ),
-                                                              textStyle:
-                                                                  NeumorphicTextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                              ),
-                                                            ),
-                                                          )
+                                                          SizedBox(
+                                                              height:
+                                                                  isresponsive ==
+                                                                          true
+                                                                      ? 300
+                                                                      : 50,
+                                                              child: Center(
+                                                                child:
+                                                                    NeumorphicText(
+                                                                  '오늘 수정된 메모는 없습니다.',
+                                                                  style:
+                                                                      NeumorphicStyle(
+                                                                    shape:
+                                                                        NeumorphicShape
+                                                                            .flat,
+                                                                    depth: 3,
+                                                                    color:
+                                                                        TextColor(),
+                                                                  ),
+                                                                  textStyle:
+                                                                      NeumorphicTextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                  ),
+                                                                ),
+                                                              ))
                                                         ],
                                                       )
                                                     : ListView.builder(
@@ -1065,14 +1104,21 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                           children_memo2 = <Widget>[
                                             ContainerDesign(
                                                 child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
-                                                  children: const [
-                                                    Center(
-                                                        child:
-                                                            CircularProgressIndicator())
+                                                  children: [
+                                                    SizedBox(
+                                                        height:
+                                                            isresponsive == true
+                                                                ? 300
+                                                                : 50,
+                                                        child: const Center(
+                                                            child:
+                                                                CircularProgressIndicator()))
                                                   ],
                                                 ),
                                                 color: BGColor())
@@ -1092,16 +1138,19 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
           list_all = <Widget>[
             ContainerDesign(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(
-                      child: Text('데이터를 불러오는데 실패하였습니다\n상황이 지속될 경우 문의바랍니다.',
-                          style: TextStyle(
-                              color: TextColor(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize())),
-                    )
+                    SizedBox(
+                        height: isresponsive == true ? 300 : 50,
+                        child: Center(
+                          child: Text('데이터를 불러오는데 실패하였습니다\n상황이 지속될 경우 문의바랍니다.',
+                              style: TextStyle(
+                                  color: TextColor(),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize())),
+                        ))
                   ],
                 ),
                 color: BGColor())
@@ -1110,6 +1159,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
           list_all = <Widget>[
             ContainerDesign(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [Center(child: CircularProgressIndicator())],

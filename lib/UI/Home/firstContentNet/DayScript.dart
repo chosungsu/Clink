@@ -114,7 +114,7 @@ class _DayScriptState extends State<DayScript> {
     textEditingController3 = TextEditingController();
     textEditingController_add_sheet = TextEditingController();
     _events = {};
-
+    ischeckedtohideminus = controll_memo.ischeckedtohideminus;
     scollection.resetcollection();
     selectedValue = Hive.box('user_setting').get('alarming_time') ?? '5분 전';
   }
@@ -167,48 +167,6 @@ class _DayScriptState extends State<DayScript> {
           child: UI(),
         ),
       ),
-      bottomNavigationBar: widget.position == 'note'
-          ? Container(
-              padding: MediaQuery.of(context).viewInsets,
-              decoration: BoxDecoration(
-                  color: BGColor_shadowcolor(),
-                  border: Border(
-                      top: BorderSide(
-                          color: TextColor_shadowcolor(), width: 2))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    height: 40,
-                    child: ListView.builder(
-                        padding: const EdgeInsets.only(left: 20, right: 10),
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: 3,
-                        itemBuilder: ((context, index) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              index == 0
-                                  ? MFHolderfirst(
-                                      checkbottoms, nodes, scollection)
-                                  : (index == 1
-                                      ? MFthird(nodes, _color, '')
-                                      : MFsecond(
-                                          nodes,
-                                          _color,
-                                        )),
-                            ],
-                          );
-                        })),
-                  ),
-                  MFforth(ischeckedtohideminus)
-                ],
-              ))
-          : const SizedBox(
-              height: 0,
-            ),
     ));
   }
 
@@ -296,6 +254,17 @@ class _DayScriptState extends State<DayScript> {
                                                               color:
                                                                   TextColor()),
                                                         ),
+                                                      ),
+                                                      MFHolder(
+                                                          checkbottoms,
+                                                          nodes,
+                                                          scollection,
+                                                          _color,
+                                                          '',
+                                                          controll_memo
+                                                              .ischeckedtohideminus),
+                                                      const SizedBox(
+                                                        width: 10,
                                                       ),
                                                       IconBtn(
                                                           child: IconButton(
@@ -608,6 +577,7 @@ class _DayScriptState extends State<DayScript> {
                                     padding:
                                         const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                     child: Column(
+                                      mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
@@ -686,90 +656,39 @@ class _DayScriptState extends State<DayScript> {
 
   buildSheetTitle(DateTime fromDate) {
     return widget.position == 'cal'
-        ? SizedBox(
-            height: 30,
-            child: Row(
-              children: [
-                Text(
-                  '일정제목',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor()),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                const Text('필수항목',
-                    style: const TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15)),
-              ],
-            ))
-        : (widget.position == 'note'
-            ? SizedBox(
-                height: 30,
-                child: Row(
-                  children: [
-                    Text(
-                      '메모제목',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTitleTextsize(),
-                          color: TextColor()),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const Text('필수항목',
-                        style: const TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                  ],
-                ))
-            : SizedBox(
-                height: 30,
-                child: Row(
-                  children: [
-                    Text(
-                      '루틴제목',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTitleTextsize(),
-                          color: TextColor()),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const Text('필수항목',
-                        style: const TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15)),
-                  ],
-                )));
+        ? Text(
+            '일정제목',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: contentTitleTextsize(),
+                color: TextColor()),
+          )
+        : Text(
+            '메모제목',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: contentTitleTextsize(),
+                color: TextColor()),
+          );
   }
 
   WholeContent() {
     return widget.position == 'cal'
-        ? SizedBox(
-            height: 30,
-            child: TextField(
-              minLines: 1,
-              maxLines: 3,
-              focusNode: searchNode_first_section,
-              style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                isCollapsed: true,
-                hintText: '일정 제목 추가',
-                hintStyle:
-                    TextStyle(fontSize: contentTextsize(), color: TextColor()),
+        ? TextField(
+            minLines: 1,
+            maxLines: 3,
+            focusNode: searchNode_first_section,
+            style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
-              controller: textEditingController1,
+              isCollapsed: true,
+              hintText: '일정 제목 추가',
+              hintStyle:
+                  TextStyle(fontSize: contentTextsize(), color: TextColor()),
             ),
+            controller: textEditingController1,
           )
         : (widget.position == 'note'
             ? ListView.builder(
@@ -779,54 +698,83 @@ class _DayScriptState extends State<DayScript> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 30,
-                        child: TextField(
-                          minLines: 1,
-                          maxLines: 3,
-                          focusNode: searchNode_first_section,
-                          textAlign: TextAlign.start,
-                          textAlignVertical: TextAlignVertical.center,
-                          style: TextStyle(
-                              fontSize: contentTextsize(), color: TextColor()),
-                          decoration: InputDecoration(
-                            isCollapsed: true,
-                            border: InputBorder.none,
-                            hintText: '제목 입력',
-                            hintStyle: TextStyle(
-                                fontSize: contentTextsize(),
-                                color: TextColor()),
+                      TextField(
+                        minLines: 1,
+                        maxLines: 1,
+                        focusNode: searchNode_first_section,
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                            fontSize: contentTextsize(), color: TextColor()),
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: TextColor(),
+                              width: 2,
+                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20.0)),
                           ),
-                          controller: textEditingController1,
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                              width: 2,
+                            ),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                          ),
+                          contentPadding: const EdgeInsets.only(left: 10),
+                          hintText: '제목 입력...',
+                          hintStyle: TextStyle(
+                              fontSize: contentTextsize(),
+                              color: TextColor_shadowcolor()),
                         ),
+                        controller: textEditingController1,
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      SizedBox(
-                        height: 30,
-                        child: Text(
-                          '첨부사진',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                              color: TextColor()),
-                        ),
+                      Text(
+                        '첨부사진',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                            color: TextColor()),
                       ),
                       GetBuilder<memosetting>(
                         builder: (_) => SizedBox(
                             height: 100,
                             child: controll_memo.imagelist.isEmpty
                                 ? Center(
-                                    child: Text(
-                                      '하단바의 사진아이콘을 클릭하여 추가하세요',
-                                      style: TextStyle(
-                                          fontSize: contentTextsize(),
-                                          color: TextColor()),
-                                    ),
-                                  )
+                                    child: RichText(
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        text: '상단바의 ',
+                                        style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: TextColor_shadowcolor()),
+                                      ),
+                                      WidgetSpan(
+                                        child: Icon(
+                                          Icons.more_vert,
+                                          color: TextColor(),
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '아이콘을 클릭하여 추가하세요',
+                                        style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: TextColor_shadowcolor()),
+                                      ),
+                                    ]),
+                                  ))
                                 : ListView.builder(
                                     physics: const BouncingScrollPhysics(),
                                     scrollDirection: Axis.horizontal,
@@ -891,63 +839,53 @@ class _DayScriptState extends State<DayScript> {
                         height: 20,
                       ),
                       SizedBox(
-                          height: 30,
                           child: Row(
-                            children: [
-                              Flexible(
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  '컬렉션 선택',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTitleTextsize(),
-                                      color: TextColor()),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  for (int i = 0;
-                                      i < scollection.memolistcontentin.length;
-                                      i++) {
-                                    nodes[i].unfocus();
-                                    scollection.memolistcontentin[i] =
-                                        controllers[i].text;
-                                  }
-                                  addmemocollector(
-                                      context,
-                                      username,
-                                      textEditingController_add_sheet,
-                                      searchNode_add_section,
-                                      'inside',
-                                      scollection,
-                                      isresponsible);
-                                },
-                                child: NeumorphicIcon(
-                                  Icons.add,
-                                  size: 30,
-                                  style: NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      surfaceIntensity: 0.5,
-                                      color: TextColor(),
-                                      lightSource: LightSource.topLeft),
-                                ),
-                              )
-                            ],
-                          )),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                        child: Text(
-                          '+아이콘으로 MY컬렉션을 추가 및 지정해주세요',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.blue),
-                        ),
-                      ),
+                        children: [
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Text(
+                              '컬렉션 선택',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize(),
+                                  color: TextColor()),
+                            ),
+                          ),
+                          IconBtn(
+                              child: InkWell(
+                                  onTap: () {
+                                    for (int i = 0;
+                                        i <
+                                            scollection
+                                                .memolistcontentin.length;
+                                        i++) {
+                                      nodes[i].unfocus();
+                                      scollection.memolistcontentin[i] =
+                                          controllers[i].text;
+                                    }
+                                    addmemocollector(
+                                        context,
+                                        username,
+                                        textEditingController_add_sheet,
+                                        searchNode_add_section,
+                                        'inside',
+                                        scollection,
+                                        isresponsible);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    child: Text(
+                                      'Click',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                          color: Colors.blue),
+                                    ),
+                                  )),
+                              color: TextColor())
+                        ],
+                      )),
                       const SizedBox(
                         height: 10,
                       ),
@@ -961,7 +899,7 @@ class _DayScriptState extends State<DayScript> {
                                   : '지정한 컬렉션 이름 : ' + scollection.collection,
                               style: TextStyle(
                                   fontSize: contentTextsize(),
-                                  color: TextColor()),
+                                  color: TextColor_shadowcolor()),
                             )),
                       ),
                       const SizedBox(
@@ -980,15 +918,30 @@ class _DayScriptState extends State<DayScript> {
                       const SizedBox(
                         height: 5,
                       ),
-                      const SizedBox(
-                        height: 30,
-                        child: Text(
-                          '하단 아이콘으로 메모내용 작성하시면 됩니다.',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.blue),
-                        ),
+                      RichText(
+                        softWrap: true,
+                        textAlign: TextAlign.start,
+                        maxLines: 2,
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: '상단바의 ',
+                            style: TextStyle(
+                                fontSize: contentTextsize(),
+                                color: TextColor_shadowcolor()),
+                          ),
+                          WidgetSpan(
+                            child: Icon(
+                              Icons.more_vert,
+                              color: TextColor(),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '아이콘을 클릭하여 추가하세요',
+                            style: TextStyle(
+                                fontSize: contentTextsize(),
+                                color: TextColor_shadowcolor()),
+                          ),
+                        ]),
                       ),
                       GetBuilder<selectcollection>(
                           builder: (_) => scollection.memolistin.isNotEmpty

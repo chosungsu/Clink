@@ -91,6 +91,7 @@ class _OptionChangePageState extends State<OptionChangePage>
             color: BGColor(),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
@@ -163,6 +164,7 @@ class _OptionChangePageState extends State<OptionChangePage>
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const SizedBox(
@@ -217,6 +219,7 @@ class _OptionChangePageState extends State<OptionChangePage>
         width: MediaQuery.of(context).size.width - 40,
         child: ContainerDesign(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
@@ -263,6 +266,7 @@ class _OptionChangePageState extends State<OptionChangePage>
           itemCount: list_app_setting.length,
           itemBuilder: (context, index) {
             return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
                   height: 50,
@@ -279,300 +283,373 @@ class _OptionChangePageState extends State<OptionChangePage>
                       index == 0
                           ? SizedBox(
                               height: 30,
-                              width: 183,
+                              width: 80,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Flexible(
                                       flex: 1,
                                       child: SizedBox(
-                                        width: 90,
-                                        child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100)),
-                                                primary: Hive.box(
-                                                                'user_setting')
-                                                            .get(
-                                                                'which_color_background') ==
-                                                        0
-                                                    ? Colors.grey.shade400
-                                                    : (Hive.box('user_setting').get(
-                                                                'which_color_background') ==
-                                                            null
-                                                        ? Colors.grey.shade400
-                                                        : Colors.white),
-                                                side: const BorderSide(
-                                                  width: 1,
-                                                  color: Colors.black45,
-                                                )),
-                                            onPressed: () {
+                                          width: 30,
+                                          height: 30,
+                                          child: InkWell(
+                                            onTap: () {
                                               setState(() {
-                                                Hive.box('user_setting').put(
-                                                    'which_color_background',
-                                                    0);
+                                                if (Hive.box('user_setting').get(
+                                                            'which_color_background') ==
+                                                        1 ||
+                                                    Hive.box('user_setting').get(
+                                                            'which_color_background') ==
+                                                        null) {
+                                                  Hive.box('user_setting').put(
+                                                      'which_color_background',
+                                                      0);
+                                                } else {
+                                                  Hive.box('user_setting').put(
+                                                      'which_color_background',
+                                                      1);
+                                                }
                                               });
                                             },
-                                            child: Center(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Center(
-                                                    child: NeumorphicText(
-                                                      '낮컬러',
-                                                      style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .flat,
-                                                        depth: 3,
-                                                        color: Hive.box('user_setting')
-                                                                    .get(
-                                                                        'which_color_background') ==
-                                                                0
-                                                            ? Colors.white
-                                                            : (Hive.box('user_setting')
-                                                                        .get(
-                                                                            'which_color_background') ==
-                                                                    null
-                                                                ? Colors.white
-                                                                : Colors
-                                                                    .black45),
+                                            child: CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              child: Hive.box('user_setting').get(
+                                                          'which_color_background') ==
+                                                      0
+                                                  ? Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: NeumorphicIcon(
+                                                        Icons.check,
+                                                        size: 25,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            color: Colors
+                                                                .blue.shade300,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
                                                       ),
-                                                      textStyle:
-                                                          NeumorphicTextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
-                                      )),
+                                                    )
+                                                  : null,
+                                            ),
+                                          ))),
                                   const SizedBox(
                                     width: 3,
                                   ),
                                   Flexible(
-                                    flex: 1,
-                                    child: SizedBox(
-                                      width: 90,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100)),
-                                              primary: Hive.box('user_setting').get(
+                                      flex: 1,
+                                      child: SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                if (Hive.box('user_setting').get(
+                                                        'which_color_background') ==
+                                                    0) {
+                                                  Hive.box('user_setting').put(
+                                                      'which_color_background',
+                                                      1);
+                                                } else {
+                                                  Hive.box('user_setting').put(
+                                                      'which_color_background',
+                                                      0);
+                                                }
+                                              });
+                                            },
+                                            child: CircleAvatar(
+                                              backgroundColor: Colors.black,
+                                              child: Hive.box('user_setting').get(
                                                           'which_color_background') ==
                                                       1
-                                                  ? Colors.grey.shade400
-                                                  : Colors.white,
-                                              side: const BorderSide(
-                                                width: 1,
-                                                color: Colors.black45,
-                                              )),
-                                          onPressed: () {
-                                            setState(() {
-                                              Hive.box('user_setting').put(
-                                                  'which_color_background', 1);
-                                            });
-                                          },
-                                          child: Center(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Center(
-                                                  child: NeumorphicText(
-                                                    '밤컬러',
-                                                    style: NeumorphicStyle(
-                                                      shape:
-                                                          NeumorphicShape.flat,
-                                                      depth: 3,
-                                                      color: Hive.box('user_setting')
-                                                                  .get(
-                                                                      'which_color_background') ==
-                                                              1
-                                                          ? Colors.white
-                                                          : Colors.black45,
-                                                    ),
-                                                    textStyle:
-                                                        NeumorphicTextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
+                                                  ? Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: NeumorphicIcon(
+                                                        Icons.check,
+                                                        size: 25,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            color: Colors
+                                                                .blue.shade300,
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    )
+                                                  : null,
                                             ),
-                                          )),
-                                    ),
-                                  ),
+                                          ))),
                                 ],
                               ),
                             )
                           : (index == 1
                               ? SizedBox(
                                   height: 30,
-                                  width: 183,
+                                  width: 80,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Flexible(
                                           flex: 1,
                                           child: SizedBox(
-                                            width: 90,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        100)),
-                                                    primary: Hive.box(
-                                                                    'user_setting')
+                                              width: 30,
+                                              height: 30,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (Hive.box('user_setting')
                                                                 .get(
                                                                     'which_text_size') ==
-                                                            0
-                                                        ? Colors.grey.shade400
-                                                        : (Hive.box('user_setting')
-                                                                    .get(
-                                                                        'which_text_size') ==
-                                                                null
-                                                            ? Colors
-                                                                .grey.shade400
-                                                            : Colors.white),
-                                                    side: const BorderSide(
-                                                      width: 1,
-                                                      color: Colors.black45,
-                                                    )),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    Hive.box('user_setting')
-                                                        .put('which_text_size',
-                                                            0);
+                                                            1 ||
+                                                        Hive.box('user_setting')
+                                                                .get(
+                                                                    'which_text_size') ==
+                                                            null) {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'which_text_size',
+                                                              0);
+                                                    } else {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'which_text_size',
+                                                              1);
+                                                    }
                                                   });
                                                 },
-                                                child: Center(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Center(
-                                                        child: NeumorphicText(
-                                                          '중간',
-                                                          style:
-                                                              NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .flat,
-                                                            depth: 3,
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      BGColor_shadowcolor(),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                            width: 2,
                                                             color: Hive.box('user_setting')
                                                                         .get(
                                                                             'which_text_size') ==
                                                                     0
-                                                                ? Colors.white
-                                                                : (Hive.box('user_setting').get(
-                                                                            'which_text_size') ==
-                                                                        null
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors
-                                                                        .black45),
-                                                          ),
-                                                          textStyle:
-                                                              NeumorphicTextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 18,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
+                                                                ? Colors.blue
+                                                                    .shade400
+                                                                : BGColor_shadowcolor())),
+                                                    alignment: Alignment.center,
+                                                    child: NeumorphicIcon(
+                                                      Icons.format_size,
+                                                      size: 15,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          color: Colors
+                                                              .blue.shade300,
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
                                                   ),
-                                                )),
-                                          )),
+                                                ),
+                                              ))),
                                       const SizedBox(
                                         width: 3,
                                       ),
                                       Flexible(
-                                        flex: 1,
-                                        child: SizedBox(
-                                          width: 70,
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100)),
-                                                  primary: Hive.box(
-                                                                  'user_setting')
-                                                              .get(
-                                                                  'which_text_size') ==
-                                                          1
-                                                      ? Colors.grey.shade400
-                                                      : Colors.white,
-                                                  side: const BorderSide(
-                                                    width: 1,
-                                                    color: Colors.black45,
-                                                  )),
-                                              onPressed: () {
-                                                setState(() {
-                                                  Hive.box('user_setting').put(
-                                                      'which_text_size', 1);
-                                                });
-                                              },
-                                              child: Center(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Center(
-                                                      child: NeumorphicText(
-                                                        '큼',
-                                                        style: NeumorphicStyle(
+                                          flex: 1,
+                                          child: SizedBox(
+                                              width: 30,
+                                              height: 30,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (Hive.box('user_setting')
+                                                            .get(
+                                                                'which_text_size') ==
+                                                        0) {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'which_text_size',
+                                                              1);
+                                                    } else {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'which_text_size',
+                                                              0);
+                                                    }
+                                                  });
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      BGColor_shadowcolor(),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                            width: 2,
+                                                            color: Hive.box('user_setting')
+                                                                        .get(
+                                                                            'which_text_size') ==
+                                                                    1
+                                                                ? Colors.blue
+                                                                    .shade400
+                                                                : BGColor_shadowcolor())),
+                                                    alignment: Alignment.center,
+                                                    child: NeumorphicIcon(
+                                                      Icons.text_fields,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
                                                           shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
-                                                          color: Hive.box('user_setting')
-                                                                      .get(
-                                                                          'which_text_size') ==
-                                                                  1
-                                                              ? Colors.white
-                                                              : Colors.black45,
-                                                        ),
-                                                        textStyle:
-                                                            NeumorphicTextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
+                                                              .convex,
+                                                          depth: 2,
+                                                          color: Colors
+                                                              .blue.shade300,
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ),
                                                 ),
-                                              )),
-                                        ),
-                                      ),
+                                              ))),
                                     ],
                                   ),
                                 )
                               : SizedBox(
+                                  height: 30,
+                                  width: 80,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Flexible(
+                                          flex: 1,
+                                          child: SizedBox(
+                                              width: 30,
+                                              height: 30,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (Hive.box('user_setting')
+                                                                .get(
+                                                                    'which_menu_pick') ==
+                                                            1 ||
+                                                        Hive.box('user_setting')
+                                                                .get(
+                                                                    'which_menu_pick') ==
+                                                            null) {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'which_menu_pick',
+                                                              0);
+                                                    } else {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'which_menu_pick',
+                                                              1);
+                                                    }
+                                                  });
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      BGColor_shadowcolor(),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                            width: 2,
+                                                            color: Hive.box('user_setting')
+                                                                        .get(
+                                                                            'which_menu_pick') ==
+                                                                    0
+                                                                ? Colors.blue
+                                                                    .shade400
+                                                                : BGColor_shadowcolor())),
+                                                    alignment: Alignment.center,
+                                                    child: NeumorphicIcon(
+                                                      Icons
+                                                          .align_horizontal_left,
+                                                      size: 15,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          color: Colors
+                                                              .blue.shade300,
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ))),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Flexible(
+                                          flex: 1,
+                                          child: SizedBox(
+                                              width: 30,
+                                              height: 30,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (Hive.box('user_setting')
+                                                            .get(
+                                                                'which_menu_pick') ==
+                                                        0) {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'which_menu_pick',
+                                                              1);
+                                                    } else {
+                                                      Hive.box('user_setting')
+                                                          .put(
+                                                              'which_menu_pick',
+                                                              0);
+                                                    }
+                                                  });
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      BGColor_shadowcolor(),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                            width: 2,
+                                                            color: Hive.box('user_setting')
+                                                                        .get(
+                                                                            'which_menu_pick') ==
+                                                                    1
+                                                                ? Colors.blue
+                                                                    .shade400
+                                                                : BGColor_shadowcolor())),
+                                                    alignment: Alignment.center,
+                                                    child: NeumorphicIcon(
+                                                      Icons
+                                                          .align_vertical_bottom,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          color: Colors
+                                                              .blue.shade300,
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ))),
+                                    ],
+                                  ),
+                                )
+                          /*SizedBox(
                                   height: 30,
                                   width: 183,
                                   child: Row(
@@ -723,7 +800,8 @@ class _OptionChangePageState extends State<OptionChangePage>
                                       ),
                                     ],
                                   ),
-                                ))
+                                )*/
+                          )
                     ],
                   ),
                 )

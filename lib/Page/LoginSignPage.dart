@@ -5,6 +5,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
 import '../Dialogs/destroyBackKey.dart';
@@ -113,9 +114,9 @@ class _LoginSignPageState extends State<LoginSignPage>
                                   ..onTap = () async {
                                     final url = Uri.parse(
                                         'https://habittrack.oopy.io/');
-                                    await launchBrowserTab(
-                                      url,
-                                    );
+                                    if (!await launchUrl(url)) {
+                                      throw 'Could not launch $url';
+                                    }
                                   },
                               ),
                               const TextSpan(

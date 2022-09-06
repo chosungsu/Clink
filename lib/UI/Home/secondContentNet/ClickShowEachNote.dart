@@ -163,45 +163,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
           child: UI(),
         ),
       ),
-      bottomNavigationBar: GetBuilder<selectcollection>(
-          builder: (_) => Container(
-              padding: MediaQuery.of(context).viewInsets,
-              decoration: BoxDecoration(
-                  color: BGColor_shadowcolor(),
-                  border: Border(
-                      top: BorderSide(
-                          color: TextColor_shadowcolor(), width: 1))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    height: 40,
-                    child: ListView.builder(
-                        padding: const EdgeInsets.only(left: 20, right: 10),
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: 3,
-                        itemBuilder: ((context, index) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              index == 0
-                                  ? MFHolderfirst(
-                                      checkbottoms, nodes, scollection)
-                                  : (index == 1
-                                      ? MFthird(nodes, _color, widget.doc)
-                                      : MFsecond(
-                                          nodes,
-                                          _color,
-                                        )),
-                            ],
-                          );
-                        })),
-                  ),
-                  MFforth(ischeckedtohideminus)
-                ],
-              ))),
     ));
   }
 
@@ -285,6 +246,17 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                             color: TextColor(),
                                                           ),
                                                         ),
+                                                      ),
+                                                      MFHolder(
+                                                          checkbottoms,
+                                                          nodes,
+                                                          scollection,
+                                                          _color,
+                                                          widget.doc,
+                                                          controll_memo
+                                                              .ischeckedtohideminus),
+                                                      const SizedBox(
+                                                        width: 10,
                                                       ),
                                                       IconBtn(
                                                           child: IconButton(
@@ -662,6 +634,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                       padding: const EdgeInsets.fromLTRB(
                                           20, 0, 20, 0),
                                       child: Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         crossAxisAlignment:
@@ -694,72 +667,59 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   buildSheetTitle() {
     return Column(
       children: [
-        SizedBox(
-            height: 30,
-            child: Row(
-              children: [
-                Text(
-                  '최초 작성시간 : ',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor()),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Text(widget.date.toString(),
-                    style: const TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15)),
-              ],
-            )),
-        SizedBox(
-            height: 30,
-            child: Row(
-              children: [
-                Text(
-                  '마지막 수정시간 : ',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor()),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Text(widget.editdate.toString(),
-                    style: const TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15)),
-              ],
-            )),
+        Row(
+          children: [
+            Text(
+              '최초 작성시간 : ',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize(),
+                  color: TextColor()),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Text(widget.date.toString(),
+                style: TextStyle(
+                    color: TextColor_shadowcolor(),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15)),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              '마지막 수정시간 : ',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize(),
+                  color: TextColor()),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Text(widget.editdate.toString(),
+                style: TextStyle(
+                    color: TextColor_shadowcolor(),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15)),
+          ],
+        ),
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
-            height: 30,
-            child: Row(
-              children: [
-                Text(
-                  '메모제목',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor()),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                const Text('필수항목',
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15)),
-              ],
-            ))
+        Row(
+          children: [
+            Text(
+              '메모제목',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize(),
+                  color: TextColor()),
+            )
+          ],
+        ),
       ],
     );
   }
@@ -775,38 +735,46 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 30,
-              child: TextField(
-                minLines: 1,
-                maxLines: 3,
-                focusNode: searchNode_first_section,
-                textAlign: TextAlign.start,
-                textAlignVertical: TextAlignVertical.center,
-                style:
-                    TextStyle(fontSize: contentTextsize(), color: TextColor()),
-                decoration: InputDecoration(
-                  isCollapsed: true,
-                  border: InputBorder.none,
-                  hintText: '제목 입력',
-                  hintStyle: TextStyle(
-                      fontSize: contentTextsize(), color: TextColor()),
+            TextField(
+              minLines: 1,
+              maxLines: 1,
+              focusNode: searchNode_first_section,
+              textAlign: TextAlign.start,
+              textAlignVertical: TextAlignVertical.center,
+              style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
+              decoration: InputDecoration(
+                isCollapsed: true,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: TextColor(),
+                    width: 2,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                 ),
-                controller: textEditingController1,
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.blue,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                ),
+                contentPadding: const EdgeInsets.only(left: 10),
+                hintText: '제목 입력',
+                hintStyle: TextStyle(
+                    fontSize: contentTextsize(),
+                    color: TextColor_shadowcolor()),
               ),
+              controller: textEditingController1,
             ),
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              height: 30,
-              child: Text(
-                '첨부사진',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize(),
-                    color: TextColor()),
-              ),
+            Text(
+              '첨부사진',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize(),
+                  color: TextColor()),
             ),
             GetBuilder<memosetting>(
               builder: (_) => SizedBox(
@@ -896,41 +864,45 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                         );
                                       })))
                               : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
                                     SizedBox(
-                                      height: 70,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: Text(
-                                              '하단바의 사진아이콘을 클릭하여 추가하세요',
-                                              style: TextStyle(
-                                                  fontSize: contentTextsize(),
-                                                  color: TextColor()),
+                                      height: 100,
+                                      child: Center(
+                                          child: RichText(
+                                        softWrap: true,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.center,
+                                        text: TextSpan(children: [
+                                          TextSpan(
+                                            text: '상단바의 ',
+                                            style: TextStyle(
+                                                fontSize: contentTextsize(),
+                                                color: TextColor_shadowcolor()),
+                                          ),
+                                          WidgetSpan(
+                                            child: Icon(
+                                              Icons.more_vert,
+                                              color: TextColor(),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
+                                          ),
+                                          TextSpan(
+                                            text: '아이콘을 클릭하여 추가하세요',
+                                            style: TextStyle(
+                                                fontSize: contentTextsize(),
+                                                color: TextColor_shadowcolor()),
+                                          ),
+                                        ]),
+                                      )),
                                     )
                                   ],
                                 )
                         ];
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
-                        print('wait');
                         children_imagelist = <Widget>[
                           SizedBox(
-                            height: 70,
+                            height: 100,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -946,29 +918,36 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                       } else {
                         children_imagelist = <Widget>[
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const SizedBox(
-                                height: 5,
-                              ),
                               SizedBox(
-                                height: 70,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        '하단바의 사진아이콘을 클릭하여 추가하세요',
-                                        style: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: TextColor()),
+                                height: 100,
+                                child: Center(
+                                    child: RichText(
+                                  softWrap: true,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: '상단바의 ',
+                                      style: TextStyle(
+                                          fontSize: contentTextsize(),
+                                          color: TextColor_shadowcolor()),
+                                    ),
+                                    WidgetSpan(
+                                      child: Icon(
+                                        Icons.more_vert,
+                                        color: TextColor(),
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
+                                    ),
+                                    TextSpan(
+                                      text: '아이콘을 클릭하여 추가하세요',
+                                      style: TextStyle(
+                                          fontSize: contentTextsize(),
+                                          color: TextColor_shadowcolor()),
+                                    ),
+                                  ]),
+                                )),
                               )
                             ],
                           )
@@ -976,85 +955,60 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                       }
                       return Column(children: children_imagelist);
                     })),
-                /*controll_memo.imagelist.isEmpty
-                    ? Center(
-                        child: Text(
-                          '하단바의 사진아이콘을 클릭하여 추가하세요',
-                          style: TextStyle(
-                              fontSize: contentTextsize(), color: TextColor()),
-                        ),
-                      )
-                    : */
               ),
             ),
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-                height: 30,
-                child: Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Text(
-                        '컬렉션 선택',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: TextColor()),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        for (int i = 0;
-                            i < scollection.memolistcontentin.length;
-                            i++) {
-                          nodes[i].unfocus();
-                          scollection.memolistcontentin[i] =
-                              controllers[i].text;
-                        }
-                        addmemocollector(
-                            context,
-                            username,
-                            textEditingController_add_sheet,
-                            searchNode_add_section,
-                            'inside',
-                            scollection,
-                            isresponsive);
-                      },
-                      child: NeumorphicIcon(
-                        Icons.add,
-                        size: 30,
-                        style: NeumorphicStyle(
-                            shape: NeumorphicShape.convex,
-                            depth: 2,
-                            surfaceIntensity: 0.5,
-                            color: TextColor(),
-                            lightSource: LightSource.topLeft),
-                      ),
-                    )
-                  ],
-                )),
-            const SizedBox(
-              height: 5,
-            ),
-            const SizedBox(
-              height: 30,
-              child: Text(
-                '+아이콘으로 MY컬렉션을 추가 및 지정해주세요',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.blue),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
+            Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '컬렉션 선택',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: TextColor()),
+                  ),
+                ),
+                IconBtn(
+                    child: InkWell(
+                        onTap: () {
+                          for (int i = 0;
+                              i < scollection.memolistcontentin.length;
+                              i++) {
+                            nodes[i].unfocus();
+                            scollection.memolistcontentin[i] =
+                                controllers[i].text;
+                          }
+                          addmemocollector(
+                              context,
+                              username,
+                              textEditingController_add_sheet,
+                              searchNode_add_section,
+                              'inside',
+                              scollection,
+                              isresponsive);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            'Click',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.blue),
+                          ),
+                        )),
+                    color: TextColor())
+              ],
             ),
             GetBuilder<selectcollection>(
-              builder: (_) => SizedBox(
-                  height: 30,
-                  child: Text(
+              builder: (_) => Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
                     Hive.box('user_setting').get('memocollection') == '' ||
                             Hive.box('user_setting').get('memocollection') ==
                                 null
@@ -1064,9 +1018,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                             ? '지정한 컬렉션 이름 : ' +
                                 Hive.box('user_setting').get('memocollection')
                             : '지정한 컬렉션 이름 : ' + widget.doccollection),
+                    maxLines: 2,
                     style: TextStyle(
-                        fontSize: contentTextsize(), color: TextColor()),
-                  )),
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: contentTextsize(),
+                        color: TextColor_shadowcolor()),
+                  )
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -1084,15 +1043,30 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
             const SizedBox(
               height: 5,
             ),
-            const SizedBox(
-              height: 30,
-              child: Text(
-                '하단 아이콘으로 메모내용 작성하시면 됩니다.',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.blue),
-              ),
+            RichText(
+              softWrap: true,
+              textAlign: TextAlign.start,
+              maxLines: 2,
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '상단바의 ',
+                  style: TextStyle(
+                      fontSize: contentTextsize(),
+                      color: TextColor_shadowcolor()),
+                ),
+                WidgetSpan(
+                  child: Icon(
+                    Icons.more_vert,
+                    color: TextColor(),
+                  ),
+                ),
+                TextSpan(
+                  text: '아이콘을 클릭하여 추가하세요',
+                  style: TextStyle(
+                      fontSize: contentTextsize(),
+                      color: TextColor_shadowcolor()),
+                ),
+              ]),
             ),
             GetBuilder<selectcollection>(
                 builder: (_) => scollection.memolistin.isNotEmpty
@@ -1706,6 +1680,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
             await flutterImageProvider(NetworkImage(savepicturelist[i]));
         images.add(provider);
       }
+      if (checklisttexts.isEmpty) {
+        checklisttexts.clear();
+        checklisttexts
+            .add(MemoList(memocontent: '작성된 메모리스트가 없습니다.', contentindex: 0));
+      }
     } catch (e) {
       print("****ERROR: $e****");
       return;
@@ -1731,8 +1710,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                 mainAxisSize: pw.MainAxisSize.min,
                 children: [
                   pw.SizedBox(height: 10),
-                  pw.Text('컬렉션 : ' + collection,
-                      style: pw.TextStyle(fontSize: 15, font: ttf)),
+                  collection == null
+                      ? pw.Text('컬렉션 : 지정된 컬렉션이 없습니다.',
+                          style: pw.TextStyle(fontSize: 15, font: ttf))
+                      : pw.Text('컬렉션 : ' + collection,
+                          style: pw.TextStyle(fontSize: 15, font: ttf)),
                   pw.SizedBox(height: 10),
                   pw.Text('메모내용', style: pw.TextStyle(fontSize: 15, font: ttf)),
                   pw.SizedBox(height: 10),

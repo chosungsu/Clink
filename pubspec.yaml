@@ -94,6 +94,7 @@ dependencies:
   pdf: ^3.8.3
   printing: ^5.9.2
   share_plus: ^4.0.10+1
+  url_launcher: ^6.1.5
   #local db
   hive: ^2.0.6
   hive_flutter: ^1.1.0
@@ -102,6 +103,7 @@ dependencies:
   local_auth_ios: ^1.0.9
   local_auth_android: ^1.0.11
   google_mobile_ads: ^2.0.1
+  store_redirect: ^2.0.1
   
   
   

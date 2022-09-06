@@ -53,6 +53,7 @@ class UserSettings extends StatelessWidget {
                                   transition: Transition.rightToLeft)));
                 },
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(
                       height: 10,
@@ -60,7 +61,6 @@ class UserSettings extends StatelessWidget {
                     ContainerDesign(
                         color: BGColor(),
                         child: SizedBox(
-                          height: 40,
                           width: MediaQuery.of(context).size.width - 60,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,

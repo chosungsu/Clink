@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../main.dart';
 
 ADEvents(BuildContext context) {
-  TargetPlatform os = Theme.of(context).platform;
+  /*TargetPlatform os = Theme.of(context).platform;
 
   BannerAd banner = BannerAd(
     listener: BannerAdListener(
@@ -16,7 +16,8 @@ ADEvents(BuildContext context) {
     request: const AdRequest(),
   )..load();
   return Container(
-    height: 50,
+    height: 0,
     child: AdWidget(ad: banner),
-  );
+  );*/
+  return const SizedBox();
 }

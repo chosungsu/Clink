@@ -19,6 +19,7 @@ import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../Widgets/SortMenuHolder.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
 class DayNoteHome extends StatefulWidget {
@@ -66,7 +67,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     sortmemo_fromsheet = controll_memo.memosort;
     controll_memo.resetimagelist();
     controller = TextEditingController();
-    sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
+    sort = Hive.box('user_setting').get('sort_memo_card') ?? 0;
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -281,56 +282,11 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                     fontWeight: FontWeight.bold,
                                                   )),
                                             ),
-                                            IconBtn(
-                                                child: IconButton(
-                                                    onPressed: () {
-                                                      //리스트 정렬
-                                                      setState(() {
-                                                        sort == 0
-                                                            ? Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'sort_memo_card',
-                                                                    1)
-                                                            : Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'sort_memo_card',
-                                                                    0);
-                                                        Hive.box('user_setting')
-                                                                        .get(
-                                                                            'sort_memo_card') ==
-                                                                    0 ||
-                                                                Hive.box('user_setting')
-                                                                        .get(
-                                                                            'sort_memo_card') ==
-                                                                    null
-                                                            ? sort = 0
-                                                            : sort = 1;
-                                                      });
-                                                    },
-                                                    icon: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: NeumorphicIcon(
-                                                        Icons.filter_list,
-                                                        size: 30,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    )),
-                                                color: TextColor())
+                                            SortMenuHolder(
+                                                Hive.box('user_setting').get(
+                                                        'sort_memo_card') ??
+                                                    0,
+                                                '메모'),
                                           ],
                                         ))),
                               ],
@@ -435,7 +391,12 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
         stream: firestore
             .collection('MemoDataBase')
             .where('OriginalUser', isEqualTo: username)
-            .orderBy('EditDate', descending: sort == 0 ? true : false)
+            .orderBy('EditDate',
+                descending: Hive.box('user_setting').get('sort_memo_card') ==
+                            0 ||
+                        Hive.box('user_setting').get('sort_memo_card') == null
+                    ? true
+                    : false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -603,7 +564,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                           editdate: snapshot.data!.docs[index]
                                               ['EditDate'],
                                           image: snapshot.data!.docs[index]
-                                              ['photoUrl'],
+                                                  ['photoUrl'] ??
+                                              [],
                                           securewith: snapshot.data!.docs[index]
                                                   ['securewith'] ??
                                               999,
@@ -650,7 +612,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                               editdate: snapshot.data!
                                                   .docs[index]['EditDate'],
                                               image: snapshot.data!.docs[index]
-                                                  ['photoUrl'],
+                                                      ['photoUrl'] ??
+                                                  [],
                                               securewith:
                                                   snapshot.data!.docs[index]
                                                           ['securewith'] ??
@@ -696,7 +659,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                               editdate: snapshot.data!
                                                   .docs[index]['EditDate'],
                                               image: snapshot.data!.docs[index]
-                                                  ['photoUrl'],
+                                                      ['photoUrl'] ??
+                                                  [],
                                               securewith:
                                                   snapshot.data!.docs[index]
                                                           ['securewith'] ??
