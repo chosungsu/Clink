@@ -964,6 +964,9 @@ class _DayScriptState extends State<DayScript> {
                           ),
                         ]),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       GetBuilder<selectcollection>(
                           builder: (_) => scollection.memolistin.isNotEmpty
                               ? ListView.builder(

@@ -1078,6 +1078,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                 ),
               ]),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             GetBuilder<selectcollection>(
                 builder: (_) => scollection.memolistin.isNotEmpty
                     ? ListView.builder(
