@@ -202,6 +202,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -243,6 +244,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
     DateTime date = DateTime.now();
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           FutureBuilder(
               future: firestore
@@ -329,7 +331,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return SizedBox(
-                      height: 230,
+                      height: MediaQuery.of(context).size.height - 300,
                       width: MediaQuery.of(context).size.width - 40,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -342,7 +344,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                       ));
                 }
                 return SizedBox(
-                    height: 230,
+                    height: MediaQuery.of(context).size.height - 300,
                     width: MediaQuery.of(context).size.width - 40,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -364,9 +366,9 @@ class _PeopleGroupState extends State<PeopleGroup> {
                     ));
               }),
           SizedBox(
-              height: 50,
               width: (MediaQuery.of(context).size.width - 40),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -622,6 +624,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                       },
                       child: Center(
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [

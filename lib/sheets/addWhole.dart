@@ -158,6 +158,7 @@ content(
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
@@ -181,24 +182,24 @@ content(
             textAlignVertical: TextAlignVertical.center,
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: TextColor(),
+                  color: Colors.black,
                   width: 2,
                 ),
-                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
-              focusedBorder: const OutlineInputBorder(
+              focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.blue,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
-              contentPadding: const EdgeInsets.only(left: 10),
+              contentPadding: EdgeInsets.only(left: 10),
               hintText: '제목 입력...',
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.black45),
@@ -221,16 +222,16 @@ content(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTitleTextsize())),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          const Text('필수항목',
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15)),
                         ],
                       )),
+                  SizedBox(
+                    height: isresponsible == true ? 40 : 30,
+                    child: Text('아래 아이콘 클릭',
+                        style: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15)),
+                  ),
                   SizedBox(
                     height: isresponsible == true ? 40 : 20,
                   ),

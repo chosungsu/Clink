@@ -58,6 +58,7 @@ class _DayScriptState extends State<DayScript> {
     'id',
   );
   bool isresponsible = false;
+  bool iskeyboardup = false;
   final imagePicker = ImagePicker();
   final searchNode_first_section = FocusNode();
   final searchNode_second_section = FocusNode();
@@ -100,7 +101,7 @@ class _DayScriptState extends State<DayScript> {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('typecolorcalendar', null);
-    Hive.box('user_setting').put('coloreachmemo', BGColor().value.toInt());
+    Hive.box('user_setting').put('coloreachmemo', Colors.white.value.toInt());
     controll_memo.setcolor();
     controll_memo.resetimagelist();
     _color = controll_memo.color;
@@ -145,29 +146,29 @@ class _DayScriptState extends State<DayScript> {
     MediaQuery.of(context).size.height > 900
         ? isresponsible = true
         : isresponsible = false;
+
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: BGColor(),
-      resizeToAvoidBottomInset: true,
-      body: WillPopScope(
-        onWillPop: _onBackPressed,
-        child: GestureDetector(
-          onTap: () {
-            searchNode_first_section.unfocus();
-            searchNode_second_section.unfocus();
-            searchNode_third_section.unfocus();
-            searchNode_add_section.unfocus();
-            for (int i = 0; i < scollection.memoindex; i++) {
-              if (nodes.isNotEmpty) {
-                nodes[i].unfocus();
-              }
-              scollection.memolistcontentin[i] = controllers[i].text;
-            }
-          },
-          child: UI(),
-        ),
+      child: Scaffold(
+        backgroundColor: BGColor(),
+        resizeToAvoidBottomInset: true,
+        body: WillPopScope(
+            onWillPop: _onBackPressed,
+            child: GestureDetector(
+                onTap: () {
+                  searchNode_first_section.unfocus();
+                  searchNode_second_section.unfocus();
+                  searchNode_third_section.unfocus();
+                  searchNode_add_section.unfocus();
+                  for (int i = 0; i < scollection.memoindex; i++) {
+                    if (nodes.isNotEmpty) {
+                      nodes[i].unfocus();
+                    }
+                    scollection.memolistcontentin[i] = controllers[i].text;
+                  }
+                },
+                child: UI())),
       ),
-    ));
+    );
   }
 
   UI() {
@@ -673,6 +674,7 @@ class _DayScriptState extends State<DayScript> {
   }
 
   WholeContent() {
+    iskeyboardup = MediaQuery.of(context).viewInsets.bottom != 0;
     return widget.position == 'cal'
         ? TextField(
             minLines: 1,
@@ -758,7 +760,7 @@ class _DayScriptState extends State<DayScript> {
                                       TextSpan(
                                         text: '상단바의 ',
                                         style: TextStyle(
-                                            fontSize: contentTextsize(),
+                                            fontSize: 15,
                                             color: TextColor_shadowcolor()),
                                       ),
                                       WidgetSpan(
@@ -770,7 +772,7 @@ class _DayScriptState extends State<DayScript> {
                                       TextSpan(
                                         text: '아이콘을 클릭하여 추가하세요',
                                         style: TextStyle(
-                                            fontSize: contentTextsize(),
+                                            fontSize: 15,
                                             color: TextColor_shadowcolor()),
                                       ),
                                     ]),
@@ -872,14 +874,14 @@ class _DayScriptState extends State<DayScript> {
                                         scollection,
                                         isresponsible);
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10),
+                                  child: const Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 10, right: 10),
                                     child: Text(
                                       'Click',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize(),
+                                          fontSize: 15,
                                           color: Colors.blue),
                                     ),
                                   )),
@@ -898,8 +900,7 @@ class _DayScriptState extends State<DayScript> {
                                   ? '지정된 컬렉션이 없습니다.'
                                   : '지정한 컬렉션 이름 : ' + scollection.collection,
                               style: TextStyle(
-                                  fontSize: contentTextsize(),
-                                  color: TextColor_shadowcolor()),
+                                  fontSize: 15, color: TextColor_shadowcolor()),
                             )),
                       ),
                       const SizedBox(
@@ -926,8 +927,7 @@ class _DayScriptState extends State<DayScript> {
                           TextSpan(
                             text: '상단바의 ',
                             style: TextStyle(
-                                fontSize: contentTextsize(),
-                                color: TextColor_shadowcolor()),
+                                fontSize: 15, color: TextColor_shadowcolor()),
                           ),
                           WidgetSpan(
                             child: Icon(
@@ -938,8 +938,7 @@ class _DayScriptState extends State<DayScript> {
                           TextSpan(
                             text: '아이콘을 클릭하여 추가하세요',
                             style: TextStyle(
-                                fontSize: contentTextsize(),
-                                color: TextColor_shadowcolor()),
+                                fontSize: 15, color: TextColor_shadowcolor()),
                           ),
                         ]),
                       ),
@@ -955,6 +954,7 @@ class _DayScriptState extends State<DayScript> {
                                     controllers.add(TextEditingController());
                                     controllers[index].text =
                                         scollection.memolistcontentin[index];
+
                                     return Row(
                                       children: [
                                         const SizedBox(
@@ -970,6 +970,15 @@ class _DayScriptState extends State<DayScript> {
                                                   minLines: null,
                                                   maxLines: null,
                                                   focusNode: nodes[index],
+                                                  onChanged: (text) {
+                                                    scollection
+                                                            .memolistcontentin[
+                                                        index] = text;
+                                                  },
+                                                  basicStyle: TextStyle(
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                      color: TextColor()),
                                                   controller: controllers[index]
                                                     ..selection = TextSelection
                                                         .fromPosition(TextPosition(
@@ -1145,6 +1154,11 @@ class _DayScriptState extends State<DayScript> {
                                                     child: TextField(
                                                       minLines: 1,
                                                       maxLines: 1,
+                                                      onChanged: (text) {
+                                                        scollection
+                                                                .memolistcontentin[
+                                                            index] = text;
+                                                      },
                                                       focusNode: nodes[index],
                                                       textAlign:
                                                           TextAlign.start,
@@ -1331,6 +1345,11 @@ class _DayScriptState extends State<DayScript> {
                                                       minLines: 1,
                                                       maxLines: 1,
                                                       focusNode: nodes[index],
+                                                      onChanged: (text) {
+                                                        scollection
+                                                                .memolistcontentin[
+                                                            index] = text;
+                                                      },
                                                       textAlign:
                                                           TextAlign.start,
                                                       textAlignVertical:

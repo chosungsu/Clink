@@ -11,6 +11,7 @@ settingsecurityform(
   bool doc,
   String doc_pin_number,
   int doc_what_secure,
+  bool can_auth,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -38,8 +39,8 @@ settingsecurityform(
                   )),
               child: GestureDetector(
                 onTap: () {},
-                child: SheetSecurity(
-                    context, id, doc, doc_pin_number, doc_what_secure),
+                child: SheetSecurity(context, id, doc, doc_pin_number,
+                    doc_what_secure, can_auth),
               ),
             ));
       }).whenComplete(() {});
@@ -51,6 +52,7 @@ SheetSecurity(
   doc,
   String doc_pin_number,
   int doc_what_secure,
+  bool can_auth,
 ) {
   return SizedBox(
       child: Padding(
@@ -73,7 +75,8 @@ SheetSecurity(
               const SizedBox(
                 height: 20,
               ),
-              content(context, id, doc, doc_pin_number, doc_what_secure)
+              content(
+                  context, id, doc, doc_pin_number, doc_what_secure, can_auth)
             ],
           )));
 }
@@ -84,6 +87,7 @@ content(
   doc,
   String doc_pin_number,
   int doc_what_secure,
+  bool can_auth,
 ) {
   String username = Hive.box('user_info').get(
     'id',
@@ -96,7 +100,7 @@ content(
       children: [
         GetPlatform.isMobile == true
             ? (GetPlatform.isAndroid == true
-                ? (doc_what_secure == 0 || doc_what_secure == 999
+                ? ((doc_what_secure == 0 || doc_what_secure == 999) && can_auth
                     ? ListTile(
                         dense: true,
                         minLeadingWidth: 30,

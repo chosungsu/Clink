@@ -510,6 +510,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                     return GestureDetector(
                         onTap: () {},
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(
                               height: 10,
@@ -517,18 +518,20 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                             ContainerDesign(
                               color: BGColor(),
                               child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   SizedBox(
-                                      height: 100,
                                       width: MediaQuery.of(context).size.width -
                                           60,
                                       child: Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           Flexible(
                                               fit: FlexFit.tight,
                                               child: Column(
+                                                mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
@@ -548,6 +551,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                 ],
                                               )),
                                           Column(
+                                            mainAxisSize: MainAxisSize.min,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.end,
                                             children: [

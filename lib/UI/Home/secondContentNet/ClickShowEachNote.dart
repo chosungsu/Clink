@@ -108,7 +108,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     textEditingController1 = TextEditingController(text: widget.docname);
     textEditingController_add_sheet = TextEditingController();
     Hive.box('user_setting').put('memocollection', widget.doccollection);
-    _color = widget.doccolor != null ? Color(widget.doccolor) : BGColor();
+    _color = widget.doccolor != null ? Color(widget.doccolor) : Colors.white;
     for (int j = 0; j < widget.docindex.length; j++) {
       Hive.box('user_setting').put('optionmemoinput', widget.docindex[j]);
       scollection.addmemolistin(j);

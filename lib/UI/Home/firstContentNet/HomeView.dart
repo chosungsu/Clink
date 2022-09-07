@@ -166,6 +166,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -192,15 +193,15 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   }
 
   BuildTitle() {
-    return Row(
-      children: [
-        Text('이곳에서 홈뷰의 순서를 변경하거나\n숨길수 있어요',
-            style: GoogleFonts.jua(
-              fontSize: secondTitleTextsize(),
-              color: TextColor(),
-              fontWeight: FontWeight.bold,
-            )),
-      ],
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: Text('이곳에서 홈뷰의 순서를 변경하거나 숨길수 있어요',
+          maxLines: 3,
+          style: GoogleFonts.jua(
+            fontSize: secondTitleTextsize(),
+            color: TextColor(),
+            fontWeight: FontWeight.bold,
+          )),
     );
   }
 
@@ -221,8 +222,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                 itemBuilder: (context, index) {
                   return SizedBox(
                     key: ValueKey(index),
-                    height: 70,
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         const SizedBox(
                           height: 10,

@@ -14,6 +14,7 @@ import '../../../Tool/BGColor.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Tool/IconBtn.dart';
+import 'package:local_auth/error_codes.dart' as auth_error;
 
 class SecureAuth extends StatefulWidget {
   const SecureAuth({
@@ -54,9 +55,10 @@ class _SecureAuthState extends State<SecureAuth> {
 
   Future<void> _checkBiometrics() async {
     bool check = false;
+
     try {
       check = await auth.canCheckBiometrics;
-      canAuthenticate = check || await auth.isDeviceSupported();
+      canAuthenticate = check && await auth.isDeviceSupported();
     } on PlatformException catch (e) {}
     if (!mounted) return;
     setState(() {
@@ -69,8 +71,10 @@ class _SecureAuthState extends State<SecureAuth> {
     try {
       avails = await auth.getAvailableBiometrics();
     } on PlatformException catch (e) {}
+    if (!mounted) return;
     setState(() {
       availablebio = avails;
+      print(availablebio);
     });
   }
 
@@ -93,7 +97,10 @@ class _SecureAuthState extends State<SecureAuth> {
               cancelButton: '취소',
             ),
           ]);
-    } on PlatformException catch (e) {}
+    } on PlatformException catch (e) {
+      if (e.code == auth_error.notAvailable) {}
+    }
+    print(_auth);
     setState(() {
       signauth = _auth ? '인증에 성공하였습니다!' : '인증에 실패하였습니다!';
       if (_auth) {
@@ -438,6 +445,7 @@ class _SecureAuthState extends State<SecureAuth> {
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -455,7 +463,9 @@ class _SecureAuthState extends State<SecureAuth> {
 
   BuildContent() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: widget.string == '지문'
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -664,6 +674,9 @@ class _SecureAuthState extends State<SecureAuth> {
                   ],
                 ),
               )),
+        ),
+        const SizedBox(
+          height: 30,
         ),
       ],
     );

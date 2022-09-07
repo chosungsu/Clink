@@ -7,6 +7,7 @@ import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -15,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:local_auth/local_auth.dart';
 import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
@@ -53,6 +55,22 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   ScrollController _scrollController = ScrollController();
   bool _showBackToTopButton = false;
   bool isresponsive = false;
+  bool canAuthenticate = false;
+  LocalAuthentication auth = LocalAuthentication();
+  bool can_auth = false;
+
+  Future<void> _checkBiometrics() async {
+    bool check = false;
+
+    try {
+      check = await auth.canCheckBiometrics;
+      canAuthenticate = check && await auth.isDeviceSupported();
+    } on PlatformException catch (e) {}
+    if (!mounted) return;
+    setState(() {
+      can_auth = canAuthenticate;
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -526,7 +544,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                           snapshot.data!.docs[index]
                                               ['pinnumber'],
                                           snapshot.data!.docs[index]
-                                              ['securewith']);
+                                              ['securewith'],
+                                          can_auth);
                                     });
                                   }),
                             ],
