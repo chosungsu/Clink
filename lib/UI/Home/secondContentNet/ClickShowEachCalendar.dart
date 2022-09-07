@@ -92,8 +92,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     return SizedBox(
       height: height,
       child: Container(
-          decoration: BoxDecoration(
-            color: BGColor(),
+          decoration: const BoxDecoration(
+            color: Colors.white,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -657,7 +657,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             SizedBox(
               height: 80,
               child: ContainerDesign(
-                color: BGColor(),
+                color: Colors.white,
                 child: ListTile(
                   leading: NeumorphicIcon(
                     Icons.schedule,
@@ -704,7 +704,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             SizedBox(
               height: 80,
               child: ContainerDesign(
-                color: BGColor(),
+                color: Colors.white,
                 child: ListTile(
                   leading: NeumorphicIcon(
                     Icons.schedule,
@@ -816,7 +816,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             SizedBox(
               height: 80,
               child: ContainerDesign(
-                color: BGColor(),
+                color: Colors.white,
                 child: ListTile(
                   leading: NeumorphicIcon(
                     Icons.alarm,

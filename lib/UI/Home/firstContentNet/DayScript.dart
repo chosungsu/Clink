@@ -260,6 +260,7 @@ class _DayScriptState extends State<DayScript> {
                                                                   Colors.black),
                                                         ),
                                                       ),
+                                                      widget.position == 'note' ?
                                                       MFHolder(
                                                           checkbottoms,
                                                           nodes,
@@ -267,10 +268,12 @@ class _DayScriptState extends State<DayScript> {
                                                           _color,
                                                           '',
                                                           controll_memo
-                                                              .ischeckedtohideminus),
+                                                              .ischeckedtohideminus) : SizedBox(),
+                                                      widget.position == 'note' ?
                                                       const SizedBox(
                                                         width: 10,
-                                                      ),
+                                                      ) : SizedBox()
+                                                      ,
                                                       IconBtn(
                                                           child: IconButton(
                                                               onPressed:
