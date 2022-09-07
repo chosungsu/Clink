@@ -81,6 +81,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    _checkBiometrics();
     WidgetsBinding.instance.addObserver(this);
     sortmemo_fromsheet = controll_memo.memosort;
     controll_memo.resetimagelist();

@@ -122,16 +122,16 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                           child: NeumorphicIcon(
                                             Icons.keyboard_arrow_left,
                                             size: 30,
-                                            style: NeumorphicStyle(
+                                            style: const NeumorphicStyle(
                                                 shape: NeumorphicShape.convex,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
-                                                color: TextColor(),
+                                                color: Colors.black,
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
                                         )),
-                                    color: TextColor()),
+                                    color: Colors.black),
                                 SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width - 70,
@@ -140,14 +140,14 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             left: 10, right: 10),
                                         child: Row(
                                           children: [
-                                            Flexible(
+                                            const Flexible(
                                               fit: FlexFit.tight,
                                               child: Text(
                                                 '',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 25,
-                                                  color: TextColor(),
+                                                  color: Colors.black,
                                                 ),
                                               ),
                                             ),
@@ -390,20 +390,20 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                       child: NeumorphicIcon(
                                                         Icons.edit,
                                                         size: 30,
-                                                        style: NeumorphicStyle(
+                                                        style: const NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
                                                             depth: 2,
                                                             surfaceIntensity:
                                                                 0.5,
-                                                            color: TextColor(),
+                                                            color: Colors.black,
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
                                                       ),
                                                     )),
-                                                color: TextColor()),
+                                                color: Colors.black),
                                             const SizedBox(
                                               width: 10,
                                             ),
@@ -513,20 +513,20 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                       child: NeumorphicIcon(
                                                         Icons.delete,
                                                         size: 30,
-                                                        style: NeumorphicStyle(
+                                                        style: const NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .convex,
                                                             depth: 2,
                                                             surfaceIntensity:
                                                                 0.5,
-                                                            color: TextColor(),
+                                                            color: Colors.black,
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
                                                       ),
                                                     )),
-                                                color: TextColor()),
+                                                color: Colors.black),
                                           ],
                                         ))),
                               ],
@@ -598,7 +598,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: contentTitleTextsize(),
-            color: TextColor()),
+            color: Colors.black),
       ),
     );
   }
@@ -611,8 +611,23 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
         minLines: 1,
         maxLines: 3,
         focusNode: searchNode,
-        style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
+        style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
         decoration: const InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.black,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.blue,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          contentPadding: EdgeInsets.only(left: 10),
           border: InputBorder.none,
           isCollapsed: true,
         ),
@@ -629,7 +644,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: contentTitleTextsize(),
-            color: TextColor()),
+            color: Colors.black),
       ),
     );
   }
@@ -647,11 +662,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                   leading: NeumorphicIcon(
                     Icons.schedule,
                     size: 30,
-                    style: NeumorphicStyle(
+                    style: const NeumorphicStyle(
                         shape: NeumorphicShape.convex,
                         depth: 2,
                         surfaceIntensity: 0.5,
-                        color: TextColor(),
+                        color: Colors.black,
                         lightSource: LightSource.topLeft),
                   ),
                   title: Text(
@@ -659,12 +674,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: contentTitleTextsize(),
-                        color: TextColor()),
+                        color: Colors.black),
                   ),
                   subtitle: TextFormField(
                     readOnly: true,
                     style: TextStyle(
-                        fontSize: contentTextsize(), color: TextColor()),
+                        fontSize: contentTextsize(), color: Colors.black),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       isCollapsed: true,
@@ -675,9 +690,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     onTap: () {
                       pickDates(context, textEditingController2, widget.date);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_drop_down,
-                      color: TextColor(),
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -694,11 +709,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                   leading: NeumorphicIcon(
                     Icons.schedule,
                     size: 30,
-                    style: NeumorphicStyle(
+                    style: const NeumorphicStyle(
                         shape: NeumorphicShape.convex,
                         depth: 2,
                         surfaceIntensity: 0.5,
-                        color: TextColor(),
+                        color: Colors.black,
                         lightSource: LightSource.topLeft),
                   ),
                   title: Text(
@@ -706,12 +721,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: contentTitleTextsize(),
-                        color: TextColor()),
+                        color: Colors.black),
                   ),
                   subtitle: TextFormField(
                     readOnly: true,
                     style: TextStyle(
-                        fontSize: contentTextsize(), color: TextColor()),
+                        fontSize: contentTextsize(), color: Colors.black),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       isCollapsed: true,
@@ -722,9 +737,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     onTap: () {
                       pickDates(context, textEditingController3, widget.date);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_drop_down,
-                      color: TextColor(),
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -747,7 +762,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: contentTitleTextsize(),
-                    color: TextColor()),
+                    color: Colors.black),
               ),
             ),
             widget.alarm == '설정off'
@@ -755,7 +770,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     scale: 0.7,
                     child: Switch(
                         activeColor: Colors.blue,
-                        inactiveThumbColor: TextColor(),
+                        inactiveThumbColor: Colors.black,
                         inactiveTrackColor: Colors.grey.shade100,
                         value: isChecked_pushalarm,
                         onChanged: (bool val) {
@@ -769,8 +784,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     scale: 0.7,
                     child: Switch(
                         activeColor: Colors.blue,
-                        inactiveThumbColor: TextColor(),
-                        inactiveTrackColor: Colors.grey.shade100,
+                        inactiveThumbColor: Colors.black,
+                        inactiveTrackColor: Colors.grey.shade400,
                         value: !isChecked_pushalarm,
                         onChanged: (bool val) {
                           setState(() {
@@ -806,11 +821,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                   leading: NeumorphicIcon(
                     Icons.alarm,
                     size: 30,
-                    style: NeumorphicStyle(
+                    style: const NeumorphicStyle(
                         shape: NeumorphicShape.convex,
                         depth: 2,
                         surfaceIntensity: 0.5,
-                        color: TextColor(),
+                        color: Colors.black,
                         lightSource: LightSource.topLeft),
                   ),
                   title: Text(
@@ -818,7 +833,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: contentTitleTextsize(),
-                        color: TextColor()),
+                        color: Colors.black),
                   ),
                   trailing: widget.alarm == '설정off'
                       ? (isChecked_pushalarm == true
@@ -829,15 +844,15 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                               icon: NeumorphicIcon(
                                 Icons.arrow_drop_down,
                                 size: 20,
-                                style: NeumorphicStyle(
+                                style: const NeumorphicStyle(
                                     shape: NeumorphicShape.convex,
                                     depth: 2,
                                     surfaceIntensity: 0.5,
-                                    color: TextColor(),
+                                    color: Colors.black,
                                     lightSource: LightSource.topLeft),
                               ),
                               style: TextStyle(
-                                  color: TextColor(),
+                                  color: Colors.black,
                                   fontSize: contentTextsize()),
                               onChanged: isChecked_pushalarm == true
                                   ? (String? value) {
@@ -853,7 +868,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                               '설정off상태입니다.',
                               style: TextStyle(
                                   fontSize: contentTextsize(),
-                                  color: TextColor()),
+                                  color: Colors.black),
                             ))
                       : (!isChecked_pushalarm == true
                           ? DropdownButton(
@@ -863,15 +878,15 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                               icon: NeumorphicIcon(
                                 Icons.arrow_drop_down,
                                 size: 20,
-                                style: NeumorphicStyle(
+                                style: const NeumorphicStyle(
                                     shape: NeumorphicShape.convex,
                                     depth: 2,
                                     surfaceIntensity: 0.5,
-                                    color: TextColor(),
+                                    color: Colors.black,
                                     lightSource: LightSource.topLeft),
                               ),
                               style: TextStyle(
-                                  color: TextColor(),
+                                  color: Colors.black,
                                   fontSize: contentTextsize()),
                               onChanged: !isChecked_pushalarm == true
                                   ? (String? value) {
@@ -887,7 +902,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                               '설정off상태입니다.',
                               style: TextStyle(
                                   fontSize: contentTextsize(),
-                                  color: TextColor()),
+                                  color: Colors.black),
                             )),
                 ),
               ),

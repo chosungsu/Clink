@@ -74,7 +74,6 @@ class _SecureAuthState extends State<SecureAuth> {
     if (!mounted) return;
     setState(() {
       availablebio = avails;
-      print(availablebio);
     });
   }
 

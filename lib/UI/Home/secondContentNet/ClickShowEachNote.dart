@@ -212,18 +212,22 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                     child: NeumorphicIcon(
                                                       Icons.keyboard_arrow_left,
                                                       size: 30,
-                                                      style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .convex,
-                                                          depth: 2,
-                                                          surfaceIntensity: 0.5,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                              LightSource
-                                                                  .topLeft),
+                                                      style:
+                                                          const NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              surfaceIntensity:
+                                                                  0.5,
+                                                              color:
+                                                                  Colors.black,
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
                                                     ),
                                                   )),
-                                              color: TextColor()),
+                                              color: Colors.black),
                                           SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -235,7 +239,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           left: 10, right: 10),
                                                   child: Row(
                                                     children: [
-                                                      Flexible(
+                                                      const Flexible(
                                                         fit: FlexFit.tight,
                                                         child: Text(
                                                           '',
@@ -243,7 +247,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 25,
-                                                            color: TextColor(),
+                                                            color: Colors.black,
                                                           ),
                                                         ),
                                                       ),
@@ -304,20 +308,20 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     NeumorphicIcon(
                                                                   Icons.share,
                                                                   size: 30,
-                                                                  style: NeumorphicStyle(
+                                                                  style: const NeumorphicStyle(
                                                                       shape: NeumorphicShape
                                                                           .convex,
                                                                       depth: 2,
                                                                       surfaceIntensity:
                                                                           0.5,
-                                                                      color:
-                                                                          TextColor(),
+                                                                      color: Colors
+                                                                          .black,
                                                                       lightSource:
                                                                           LightSource
                                                                               .topLeft),
                                                                 ),
                                                               )),
-                                                          color: TextColor()),
+                                                          color: Colors.black),
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
@@ -462,20 +466,20 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     NeumorphicIcon(
                                                                   Icons.edit,
                                                                   size: 30,
-                                                                  style: NeumorphicStyle(
+                                                                  style: const NeumorphicStyle(
                                                                       shape: NeumorphicShape
                                                                           .convex,
                                                                       depth: 2,
                                                                       surfaceIntensity:
                                                                           0.5,
-                                                                      color:
-                                                                          TextColor(),
+                                                                      color: Colors
+                                                                          .black,
                                                                       lightSource:
                                                                           LightSource
                                                                               .topLeft),
                                                                 ),
                                                               )),
-                                                          color: TextColor()),
+                                                          color: Colors.black),
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
@@ -585,20 +589,20 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     NeumorphicIcon(
                                                                   Icons.delete,
                                                                   size: 30,
-                                                                  style: NeumorphicStyle(
+                                                                  style: const NeumorphicStyle(
                                                                       shape: NeumorphicShape
                                                                           .convex,
                                                                       depth: 2,
                                                                       surfaceIntensity:
                                                                           0.5,
-                                                                      color:
-                                                                          TextColor(),
+                                                                      color: Colors
+                                                                          .black,
                                                                       lightSource:
                                                                           LightSource
                                                                               .topLeft),
                                                                 ),
                                                               )),
-                                                          color: TextColor()),
+                                                          color: Colors.black),
                                                     ],
                                                   ))),
                                         ],
@@ -674,14 +678,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTitleTextsize(),
-                  color: TextColor()),
+                  color: Colors.black),
             ),
             const SizedBox(
               width: 20,
             ),
             Text(widget.date.toString(),
                 style: TextStyle(
-                    color: TextColor_shadowcolor(),
+                    color: Colors.grey.shade400,
                     fontWeight: FontWeight.bold,
                     fontSize: 15)),
           ],
@@ -693,14 +697,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTitleTextsize(),
-                  color: TextColor()),
+                  color: Colors.black),
             ),
             const SizedBox(
               width: 20,
             ),
             Text(widget.editdate.toString(),
                 style: TextStyle(
-                    color: TextColor_shadowcolor(),
+                    color: Colors.grey.shade400,
                     fontWeight: FontWeight.bold,
                     fontSize: 15)),
           ],
@@ -716,7 +720,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTitleTextsize(),
-                  color: TextColor()),
+                  color: Colors.black),
             )
           ],
         ),
@@ -741,15 +745,16 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
               focusNode: searchNode_first_section,
               textAlign: TextAlign.start,
               textAlignVertical: TextAlignVertical.center,
-              style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
+              style:
+                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
               decoration: InputDecoration(
                 isCollapsed: true,
-                enabledBorder: OutlineInputBorder(
+                enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: TextColor(),
+                    color: Colors.black,
                     width: 2,
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 ),
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
@@ -761,8 +766,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                 contentPadding: const EdgeInsets.only(left: 10),
                 hintText: '제목 입력',
                 hintStyle: TextStyle(
-                    fontSize: contentTextsize(),
-                    color: TextColor_shadowcolor()),
+                    fontSize: contentTextsize(), color: Colors.grey.shade400),
               ),
               controller: textEditingController1,
             ),
@@ -774,7 +778,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTitleTextsize(),
-                  color: TextColor()),
+                  color: Colors.black),
             ),
             GetBuilder<memosetting>(
               builder: (_) => SizedBox(
@@ -878,19 +882,19 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                             text: '상단바의 ',
                                             style: TextStyle(
                                                 fontSize: contentTextsize(),
-                                                color: TextColor_shadowcolor()),
+                                                color: Colors.grey.shade400),
                                           ),
-                                          WidgetSpan(
+                                          const WidgetSpan(
                                             child: Icon(
                                               Icons.more_vert,
-                                              color: TextColor(),
+                                              color: Colors.black,
                                             ),
                                           ),
                                           TextSpan(
                                             text: '아이콘을 클릭하여 추가하세요',
                                             style: TextStyle(
                                                 fontSize: contentTextsize(),
-                                                color: TextColor_shadowcolor()),
+                                                color: Colors.grey.shade400),
                                           ),
                                         ]),
                                       )),
@@ -909,7 +913,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                               children: [
                                 Center(
                                     child: CircularProgressIndicator(
-                                  color: TextColor_shadowcolor(),
+                                  color: Colors.grey.shade400,
                                 ))
                               ],
                             ),
@@ -932,19 +936,19 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                       text: '상단바의 ',
                                       style: TextStyle(
                                           fontSize: contentTextsize(),
-                                          color: TextColor_shadowcolor()),
+                                          color: Colors.grey.shade400),
                                     ),
-                                    WidgetSpan(
+                                    const WidgetSpan(
                                       child: Icon(
                                         Icons.more_vert,
-                                        color: TextColor(),
+                                        color: Colors.black,
                                       ),
                                     ),
                                     TextSpan(
                                       text: '아이콘을 클릭하여 추가하세요',
                                       style: TextStyle(
                                           fontSize: contentTextsize(),
-                                          color: TextColor_shadowcolor()),
+                                          color: Colors.grey.shade400),
                                     ),
                                   ]),
                                 )),
@@ -969,7 +973,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: contentTitleTextsize(),
-                        color: TextColor()),
+                        color: Colors.black),
                   ),
                 ),
                 IconBtn(
@@ -1001,7 +1005,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                 color: Colors.blue),
                           ),
                         )),
-                    color: TextColor())
+                    color: Colors.black)
               ],
             ),
             GetBuilder<selectcollection>(
@@ -1022,7 +1026,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: contentTextsize(),
-                        color: TextColor_shadowcolor()),
+                        color: Colors.grey.shade400),
                   )
                 ],
               ),
@@ -1037,7 +1041,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: contentTitleTextsize(),
-                    color: TextColor()),
+                    color: Colors.black),
               ),
             ),
             const SizedBox(
@@ -1051,20 +1055,18 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                 TextSpan(
                   text: '상단바의 ',
                   style: TextStyle(
-                      fontSize: contentTextsize(),
-                      color: TextColor_shadowcolor()),
+                      fontSize: contentTextsize(), color: Colors.grey.shade400),
                 ),
-                WidgetSpan(
+                const WidgetSpan(
                   child: Icon(
                     Icons.more_vert,
-                    color: TextColor(),
+                    color: Colors.black,
                   ),
                 ),
                 TextSpan(
                   text: '아이콘을 클릭하여 추가하세요',
                   style: TextStyle(
-                      fontSize: contentTextsize(),
-                      color: TextColor_shadowcolor()),
+                      fontSize: contentTextsize(), color: Colors.grey.shade400),
                 ),
               ]),
             ),
@@ -1105,7 +1107,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                         focusNode: nodes[index]..hasFocus,
                                         basicStyle: TextStyle(
                                           fontSize: contentTextsize(),
-                                          color: TextColor(),
+                                          color: Colors.black,
                                         ),
                                         controller: controllers[index]
                                           ..selection =
@@ -1188,8 +1190,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                     },
                                                     child: Icon(
                                                         Icons.expand_less,
-                                                        color:
-                                                            TextColor_shadowcolor()),
+                                                        color: Colors
+                                                            .grey.shade400),
                                                   ),
                                                   InkWell(
                                                     onTap: () {
@@ -1238,8 +1240,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                     },
                                                     child: Icon(
                                                         Icons.expand_more,
-                                                        color:
-                                                            TextColor_shadowcolor()),
+                                                        color: Colors
+                                                            .grey.shade400),
                                                   ),
                                                 ],
                                               )
@@ -1248,7 +1250,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                           hintText: '내용 입력',
                                           hintStyle: TextStyle(
                                               fontSize: contentTextsize(),
-                                              color: TextColor_shadowcolor()),
+                                              color: Colors.grey.shade400),
                                         ),
                                         textAlign: TextAlign.start,
                                         textAlignVertical:
@@ -1286,7 +1288,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                 TextAlignVertical.center,
                                             style: TextStyle(
                                                 fontSize: contentTextsize(),
-                                                color: TextColor(),
+                                                color: Colors.black,
                                                 decorationThickness: 2.3,
                                                 decoration: scollection
                                                                 .memolistin[
@@ -1311,10 +1313,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                             index] = 999;
                                                   });
                                                 },
-                                                child: Icon(
+                                                child: const Icon(
                                                     Icons
                                                         .check_box_outline_blank,
-                                                    color: TextColor()),
+                                                    color: Colors.black),
                                               ),
                                               suffixIcon: Row(
                                                 mainAxisSize: MainAxisSize.min,
@@ -1393,8 +1395,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                         },
                                                         child: Icon(
                                                             Icons.expand_less,
-                                                            color:
-                                                                TextColor_shadowcolor()),
+                                                            color: Colors
+                                                                .grey.shade400),
                                                       ),
                                                       InkWell(
                                                         onTap: () {
@@ -1445,8 +1447,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                         },
                                                         child: Icon(
                                                             Icons.expand_more,
-                                                            color:
-                                                                TextColor_shadowcolor()),
+                                                            color: Colors
+                                                                .grey.shade400),
                                                       ),
                                                     ],
                                                   )
@@ -1455,8 +1457,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                               hintText: '내용 입력',
                                               hintStyle: TextStyle(
                                                   fontSize: contentTextsize(),
-                                                  color:
-                                                      TextColor_shadowcolor()),
+                                                  color: Colors.grey.shade400),
                                             ),
                                             controller: controllers[index]
                                               ..selection =
@@ -1491,13 +1492,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                 TextAlignVertical.center,
                                             style: TextStyle(
                                                 fontSize: contentTextsize(),
-                                                color: TextColor_shadowcolor()),
+                                                color: Colors.grey.shade400),
                                             decoration: InputDecoration(
                                               isCollapsed: true,
                                               border: InputBorder.none,
-                                              prefixIcon: Icon(Icons.star_rate,
-                                                  color: TextColor()),
-                                              prefixIconColor: TextColor(),
+                                              prefixIcon: const Icon(
+                                                  Icons.star_rate,
+                                                  color: Colors.black),
+                                              prefixIconColor: Colors.black,
                                               suffixIcon: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
@@ -1574,8 +1576,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                         },
                                                         child: Icon(
                                                             Icons.expand_less,
-                                                            color:
-                                                                TextColor_shadowcolor()),
+                                                            color: Colors
+                                                                .grey.shade400),
                                                       ),
                                                       InkWell(
                                                         onTap: () {
@@ -1627,8 +1629,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                         },
                                                         child: Icon(
                                                             Icons.expand_more,
-                                                            color:
-                                                                TextColor_shadowcolor()),
+                                                            color: Colors
+                                                                .grey.shade400),
                                                       ),
                                                     ],
                                                   )
@@ -1637,8 +1639,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                               hintText: '내용 입력',
                                               hintStyle: TextStyle(
                                                   fontSize: contentTextsize(),
-                                                  color:
-                                                      TextColor_shadowcolor()),
+                                                  color: Colors.grey.shade400),
                                             ),
                                             controller: controllers[index]
                                               ..selection =

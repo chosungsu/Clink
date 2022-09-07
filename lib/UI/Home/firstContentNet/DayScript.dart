@@ -219,18 +219,22 @@ class _DayScriptState extends State<DayScript> {
                                                     child: NeumorphicIcon(
                                                       Icons.keyboard_arrow_left,
                                                       size: 30,
-                                                      style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .convex,
-                                                          depth: 2,
-                                                          surfaceIntensity: 0.5,
-                                                          color: TextColor(),
-                                                          lightSource:
-                                                              LightSource
-                                                                  .topLeft),
+                                                      style:
+                                                          const NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              surfaceIntensity:
+                                                                  0.5,
+                                                              color:
+                                                                  Colors.black,
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
                                                     ),
                                                   )),
-                                              color: TextColor()),
+                                              color: Colors.black),
                                           SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -253,7 +257,7 @@ class _DayScriptState extends State<DayScript> {
                                                               fontSize:
                                                                   secondTitleTextsize(),
                                                               color:
-                                                                  TextColor()),
+                                                                  Colors.black),
                                                         ),
                                                       ),
                                                       MFHolder(
@@ -545,20 +549,20 @@ class _DayScriptState extends State<DayScript> {
                                                                   Icons
                                                                       .done_all,
                                                                   size: 30,
-                                                                  style: NeumorphicStyle(
+                                                                  style: const NeumorphicStyle(
                                                                       shape: NeumorphicShape
                                                                           .convex,
                                                                       depth: 2,
                                                                       surfaceIntensity:
                                                                           0.5,
-                                                                      color:
-                                                                          TextColor(),
+                                                                      color: Colors
+                                                                          .black,
                                                                       lightSource:
                                                                           LightSource
                                                                               .topLeft),
                                                                 ),
                                                               )),
-                                                          color: TextColor()),
+                                                          color: Colors.black),
                                                     ],
                                                   ))),
                                         ],
@@ -662,14 +666,14 @@ class _DayScriptState extends State<DayScript> {
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: contentTitleTextsize(),
-                color: TextColor()),
+                color: Colors.black),
           )
         : Text(
             '메모제목',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: contentTitleTextsize(),
-                color: TextColor()),
+                color: Colors.black),
           );
   }
 
@@ -680,15 +684,30 @@ class _DayScriptState extends State<DayScript> {
             minLines: 1,
             maxLines: 3,
             focusNode: searchNode_first_section,
-            style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
+            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
             decoration: InputDecoration(
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.blue,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              contentPadding: const EdgeInsets.only(left: 10),
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
               isCollapsed: true,
               hintText: '일정 제목 추가',
               hintStyle:
-                  TextStyle(fontSize: contentTextsize(), color: TextColor()),
+                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
             ),
             controller: textEditingController1,
           )
@@ -710,16 +729,16 @@ class _DayScriptState extends State<DayScript> {
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(
-                            fontSize: contentTextsize(), color: TextColor()),
+                            fontSize: contentTextsize(), color: Colors.black),
                         decoration: InputDecoration(
                           isCollapsed: true,
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: TextColor(),
+                              color: Colors.black,
                               width: 2,
                             ),
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                           focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
@@ -733,7 +752,7 @@ class _DayScriptState extends State<DayScript> {
                           hintText: '제목 입력...',
                           hintStyle: TextStyle(
                               fontSize: contentTextsize(),
-                              color: TextColor_shadowcolor()),
+                              color: Colors.grey.shade400),
                         ),
                         controller: textEditingController1,
                       ),
@@ -745,7 +764,7 @@ class _DayScriptState extends State<DayScript> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize(),
-                            color: TextColor()),
+                            color: Colors.black),
                       ),
                       GetBuilder<memosetting>(
                         builder: (_) => SizedBox(
@@ -761,19 +780,19 @@ class _DayScriptState extends State<DayScript> {
                                         text: '상단바의 ',
                                         style: TextStyle(
                                             fontSize: 15,
-                                            color: TextColor_shadowcolor()),
+                                            color: Colors.grey.shade400),
                                       ),
-                                      WidgetSpan(
+                                      const WidgetSpan(
                                         child: Icon(
                                           Icons.more_vert,
-                                          color: TextColor(),
+                                          color: Colors.black,
                                         ),
                                       ),
                                       TextSpan(
                                         text: '아이콘을 클릭하여 추가하세요',
                                         style: TextStyle(
                                             fontSize: 15,
-                                            color: TextColor_shadowcolor()),
+                                            color: Colors.grey.shade400),
                                       ),
                                     ]),
                                   ))
@@ -850,7 +869,7 @@ class _DayScriptState extends State<DayScript> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTitleTextsize(),
-                                  color: TextColor()),
+                                  color: Colors.black),
                             ),
                           ),
                           IconBtn(
@@ -885,7 +904,7 @@ class _DayScriptState extends State<DayScript> {
                                           color: Colors.blue),
                                     ),
                                   )),
-                              color: TextColor())
+                              color: Colors.black)
                         ],
                       )),
                       const SizedBox(
@@ -900,7 +919,7 @@ class _DayScriptState extends State<DayScript> {
                                   ? '지정된 컬렉션이 없습니다.'
                                   : '지정한 컬렉션 이름 : ' + scollection.collection,
                               style: TextStyle(
-                                  fontSize: 15, color: TextColor_shadowcolor()),
+                                  fontSize: 15, color: Colors.grey.shade400),
                             )),
                       ),
                       const SizedBox(
@@ -913,7 +932,7 @@ class _DayScriptState extends State<DayScript> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: contentTitleTextsize(),
-                              color: TextColor()),
+                              color: Colors.black),
                         ),
                       ),
                       const SizedBox(
@@ -927,18 +946,18 @@ class _DayScriptState extends State<DayScript> {
                           TextSpan(
                             text: '상단바의 ',
                             style: TextStyle(
-                                fontSize: 15, color: TextColor_shadowcolor()),
+                                fontSize: 15, color: Colors.grey.shade400),
                           ),
-                          WidgetSpan(
+                          const WidgetSpan(
                             child: Icon(
                               Icons.more_vert,
-                              color: TextColor(),
+                              color: Colors.black,
                             ),
                           ),
                           TextSpan(
                             text: '아이콘을 클릭하여 추가하세요',
                             style: TextStyle(
-                                fontSize: 15, color: TextColor_shadowcolor()),
+                                fontSize: 15, color: Colors.grey.shade400),
                           ),
                         ]),
                       ),
@@ -978,7 +997,7 @@ class _DayScriptState extends State<DayScript> {
                                                   basicStyle: TextStyle(
                                                       fontSize:
                                                           contentTextsize(),
-                                                      color: TextColor()),
+                                                      color: Colors.black),
                                                   controller: controllers[index]
                                                     ..selection = TextSelection
                                                         .fromPosition(TextPosition(
@@ -1066,8 +1085,9 @@ class _DayScriptState extends State<DayScript> {
                                                               child: Icon(
                                                                   Icons
                                                                       .expand_less,
-                                                                  color:
-                                                                      TextColor_shadowcolor()),
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade400),
                                                             ),
                                                             InkWell(
                                                               onTap: () {
@@ -1115,8 +1135,9 @@ class _DayScriptState extends State<DayScript> {
                                                               child: Icon(
                                                                   Icons
                                                                       .expand_more,
-                                                                  color:
-                                                                      TextColor_shadowcolor()),
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade400),
                                                             ),
                                                           ],
                                                         )
@@ -1126,19 +1147,14 @@ class _DayScriptState extends State<DayScript> {
                                                     hintStyle: TextStyle(
                                                         fontSize:
                                                             contentTextsize(),
-                                                        color: TextColor()),
+                                                        color: Colors
+                                                            .grey.shade400),
                                                   ),
                                                   textAlign: TextAlign.start,
                                                   textAlignVertical:
                                                       TextAlignVertical.center,
                                                   detectionRegExp:
                                                       detectionRegExp()!,
-                                                  onDetectionTyped: (text) {
-                                                    print(text);
-                                                  },
-                                                  onDetectionFinished: () {
-                                                    print('finished');
-                                                  },
                                                 ))
                                             : (scollection.memolistin[index] ==
                                                         1 ||
@@ -1168,7 +1184,7 @@ class _DayScriptState extends State<DayScript> {
                                                       style: TextStyle(
                                                           fontSize:
                                                               contentTextsize(),
-                                                          color: TextColor(),
+                                                          color: Colors.black,
                                                           decorationThickness:
                                                               2.3,
                                                           decoration: scollection
@@ -1190,11 +1206,11 @@ class _DayScriptState extends State<DayScript> {
                                                                 .addmemocheckboxlist(
                                                                     index);
                                                           },
-                                                          child: Icon(
+                                                          child: const Icon(
                                                               Icons
                                                                   .check_box_outline_blank,
                                                               color:
-                                                                  TextColor()),
+                                                                  Colors.black),
                                                         ),
                                                         suffixIcon: Row(
                                                           mainAxisSize:
@@ -1268,8 +1284,9 @@ class _DayScriptState extends State<DayScript> {
                                                                   child: Icon(
                                                                       Icons
                                                                           .expand_less,
-                                                                      color:
-                                                                          TextColor_shadowcolor()),
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .shade400),
                                                                 ),
                                                                 InkWell(
                                                                   onTap: () {
@@ -1312,8 +1329,9 @@ class _DayScriptState extends State<DayScript> {
                                                                   child: Icon(
                                                                       Icons
                                                                           .expand_more,
-                                                                      color:
-                                                                          TextColor_shadowcolor()),
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .shade400),
                                                                 ),
                                                               ],
                                                             )
@@ -1323,7 +1341,8 @@ class _DayScriptState extends State<DayScript> {
                                                         hintStyle: TextStyle(
                                                             fontSize:
                                                                 contentTextsize(),
-                                                            color: TextColor()),
+                                                            color: Colors
+                                                                .grey.shade400),
                                                       ),
                                                       controller: controllers[
                                                           index]
@@ -1358,17 +1377,18 @@ class _DayScriptState extends State<DayScript> {
                                                       style: TextStyle(
                                                           fontSize:
                                                               contentTextsize(),
-                                                          color: TextColor()),
+                                                          color: Colors.black),
                                                       decoration:
                                                           InputDecoration(
                                                         isCollapsed: true,
                                                         border:
                                                             InputBorder.none,
-                                                        prefixIcon: Icon(
+                                                        prefixIcon: const Icon(
                                                             Icons.star_rate,
-                                                            color: TextColor()),
+                                                            color:
+                                                                Colors.black),
                                                         prefixIconColor:
-                                                            TextColor(),
+                                                            Colors.black,
                                                         suffixIcon: Row(
                                                           mainAxisSize:
                                                               MainAxisSize.min,
@@ -1440,8 +1460,9 @@ class _DayScriptState extends State<DayScript> {
                                                                   child: Icon(
                                                                       Icons
                                                                           .expand_less,
-                                                                      color:
-                                                                          TextColor_shadowcolor()),
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .shade400),
                                                                 ),
                                                                 InkWell(
                                                                   onTap: () {
@@ -1484,8 +1505,9 @@ class _DayScriptState extends State<DayScript> {
                                                                   child: Icon(
                                                                       Icons
                                                                           .expand_more,
-                                                                      color:
-                                                                          TextColor_shadowcolor()),
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .shade400),
                                                                 ),
                                                               ],
                                                             )
@@ -1495,7 +1517,8 @@ class _DayScriptState extends State<DayScript> {
                                                         hintStyle: TextStyle(
                                                             fontSize:
                                                                 contentTextsize(),
-                                                            color: TextColor()),
+                                                            color: Colors
+                                                                .grey.shade400),
                                                       ),
                                                       controller: controllers[
                                                           index]
@@ -1531,13 +1554,14 @@ class _DayScriptState extends State<DayScript> {
                         focusNode: searchNode_first_section,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
-                        style: TextStyle(fontSize: 20, color: TextColor()),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.black),
                         decoration: InputDecoration(
                           isCollapsed: true,
                           border: InputBorder.none,
                           hintText: '제목 입력',
                           hintStyle: TextStyle(
-                              fontSize: contentTextsize(), color: TextColor()),
+                              fontSize: contentTextsize(), color: Colors.black),
                         ),
                         controller: textEditingController1,
                       ),
@@ -1552,7 +1576,7 @@ class _DayScriptState extends State<DayScript> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize(),
-                            color: TextColor()),
+                            color: Colors.black),
                       ),
                     ),
                     const SizedBox(
@@ -1566,13 +1590,14 @@ class _DayScriptState extends State<DayScript> {
                         focusNode: searchNode_first_section,
                         textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
-                        style: TextStyle(fontSize: 20, color: TextColor()),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.black),
                         decoration: InputDecoration(
                           isCollapsed: true,
                           border: InputBorder.none,
                           hintText: '내용 입력',
                           hintStyle: TextStyle(
-                              fontSize: contentTextsize(), color: TextColor()),
+                              fontSize: contentTextsize(), color: Colors.black),
                         ),
                         controller: textEditingController2,
                       ),
@@ -1590,7 +1615,7 @@ class _DayScriptState extends State<DayScript> {
         style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: contentTitleTextsize(),
-            color: TextColor()),
+            color: Colors.black),
       ),
     );
   }
@@ -1610,11 +1635,11 @@ class _DayScriptState extends State<DayScript> {
                             leading: NeumorphicIcon(
                               Icons.today,
                               size: 30,
-                              style: NeumorphicStyle(
+                              style: const NeumorphicStyle(
                                   shape: NeumorphicShape.convex,
                                   depth: 2,
                                   surfaceIntensity: 0.5,
-                                  color: TextColor(),
+                                  color: Colors.black,
                                   lightSource: LightSource.topLeft),
                             ),
                             title: Text(
@@ -1625,7 +1650,7 @@ class _DayScriptState extends State<DayScript> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTitleTextsize(),
-                                  color: TextColor()),
+                                  color: Colors.black),
                             ),
                           ),
                         ),
@@ -1638,11 +1663,11 @@ class _DayScriptState extends State<DayScript> {
                             leading: NeumorphicIcon(
                               Icons.today,
                               size: 30,
-                              style: NeumorphicStyle(
+                              style: const NeumorphicStyle(
                                   shape: NeumorphicShape.convex,
                                   depth: 2,
                                   surfaceIntensity: 0.5,
-                                  color: TextColor(),
+                                  color: Colors.black,
                                   lightSource: LightSource.topLeft),
                             ),
                             title: Text(
@@ -1650,7 +1675,7 @@ class _DayScriptState extends State<DayScript> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTitleTextsize(),
-                                  color: TextColor()),
+                                  color: Colors.black),
                             ),
                           ),
                         ),
@@ -1666,11 +1691,11 @@ class _DayScriptState extends State<DayScript> {
                       leading: NeumorphicIcon(
                         Icons.schedule,
                         size: 30,
-                        style: NeumorphicStyle(
+                        style: const NeumorphicStyle(
                             shape: NeumorphicShape.convex,
                             depth: 2,
                             surfaceIntensity: 0.5,
-                            color: TextColor(),
+                            color: Colors.black,
                             lightSource: LightSource.topLeft),
                       ),
                       title: Text(
@@ -1678,12 +1703,12 @@ class _DayScriptState extends State<DayScript> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize(),
-                            color: TextColor()),
+                            color: Colors.black),
                       ),
                       subtitle: TextFormField(
                         readOnly: true,
                         style: TextStyle(
-                            fontSize: contentTextsize(), color: TextColor()),
+                            fontSize: contentTextsize(), color: Colors.black),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           isCollapsed: true,
@@ -1695,9 +1720,9 @@ class _DayScriptState extends State<DayScript> {
                           pickDates(context, textEditingController2,
                               widget.firstdate);
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.arrow_drop_down,
-                          color: TextColor(),
+                          color: Colors.black,
                         ),
                       ),
                     ),
@@ -1714,11 +1739,11 @@ class _DayScriptState extends State<DayScript> {
                       leading: NeumorphicIcon(
                         Icons.schedule,
                         size: 30,
-                        style: NeumorphicStyle(
+                        style: const NeumorphicStyle(
                             shape: NeumorphicShape.convex,
                             depth: 2,
                             surfaceIntensity: 0.5,
-                            color: TextColor(),
+                            color: Colors.black,
                             lightSource: LightSource.topLeft),
                       ),
                       title: Text(
@@ -1726,12 +1751,12 @@ class _DayScriptState extends State<DayScript> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize(),
-                            color: TextColor()),
+                            color: Colors.black),
                       ),
                       subtitle: TextFormField(
                         readOnly: true,
                         style: TextStyle(
-                            fontSize: contentTextsize(), color: TextColor()),
+                            fontSize: contentTextsize(), color: Colors.black),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           isCollapsed: true,
@@ -1743,9 +1768,9 @@ class _DayScriptState extends State<DayScript> {
                           pickDates(context, textEditingController3,
                               widget.firstdate);
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.arrow_drop_down,
-                          color: TextColor(),
+                          color: Colors.black,
                         ),
                       ),
                     ),
@@ -1766,7 +1791,7 @@ class _DayScriptState extends State<DayScript> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize(),
-                            color: TextColor()),
+                            color: Colors.black),
                       ),
                     ),
                     const SizedBox(
@@ -1967,7 +1992,7 @@ class _DayScriptState extends State<DayScript> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize(),
-                            color: TextColor()),
+                            color: Colors.black),
                       ),
                     ),
                     const SizedBox(
@@ -2171,15 +2196,15 @@ class _DayScriptState extends State<DayScript> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: contentTitleTextsize(),
-                        color: TextColor()),
+                        color: Colors.black),
                   ),
                 ),
                 Transform.scale(
                   scale: 0.7,
                   child: Switch(
                       activeColor: Colors.blue,
-                      inactiveThumbColor: TextColor(),
-                      inactiveTrackColor: Colors.grey.shade100,
+                      inactiveThumbColor: Colors.black,
+                      inactiveTrackColor: Colors.grey.shade400,
                       value: isChecked_pushalarm,
                       onChanged: (bool val) {
                         setState(() {
@@ -2216,11 +2241,11 @@ class _DayScriptState extends State<DayScript> {
                       leading: NeumorphicIcon(
                         Icons.alarm,
                         size: 30,
-                        style: NeumorphicStyle(
+                        style: const NeumorphicStyle(
                             shape: NeumorphicShape.convex,
                             depth: 2,
                             surfaceIntensity: 0.5,
-                            color: TextColor(),
+                            color: Colors.black,
                             lightSource: LightSource.topLeft),
                       ),
                       title: Text(
@@ -2228,7 +2253,7 @@ class _DayScriptState extends State<DayScript> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize(),
-                            color: TextColor()),
+                            color: Colors.black),
                       ),
                       trailing: isChecked_pushalarm == true
                           ? DropdownButton(
@@ -2238,15 +2263,15 @@ class _DayScriptState extends State<DayScript> {
                               icon: NeumorphicIcon(
                                 Icons.arrow_drop_down,
                                 size: 20,
-                                style: NeumorphicStyle(
+                                style: const NeumorphicStyle(
                                     shape: NeumorphicShape.convex,
                                     depth: 2,
                                     surfaceIntensity: 0.5,
-                                    color: TextColor(),
+                                    color: Colors.black,
                                     lightSource: LightSource.topLeft),
                               ),
                               style: TextStyle(
-                                  color: TextColor(),
+                                  color: Colors.black,
                                   fontSize: contentTextsize()),
                               onChanged: isChecked_pushalarm == true
                                   ? (String? value) {
@@ -2262,7 +2287,7 @@ class _DayScriptState extends State<DayScript> {
                               '설정off상태입니다.',
                               style: TextStyle(
                                   fontSize: contentTextsize(),
-                                  color: TextColor()),
+                                  color: Colors.black),
                             ),
                     ),
                   ),
