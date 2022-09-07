@@ -183,7 +183,7 @@ class _DayScriptState extends State<DayScript> {
                           ? (_color == controll_memo.color
                               ? _color
                               : controll_memo.color)
-                          : BGColor(),
+                          : Colors.white,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1630,7 +1630,7 @@ class _DayScriptState extends State<DayScript> {
                     ? SizedBox(
                         height: 100,
                         child: ContainerDesign(
-                          color: BGColor(),
+                          color: Colors.white,
                           child: ListTile(
                             leading: NeumorphicIcon(
                               Icons.today,
@@ -1658,7 +1658,7 @@ class _DayScriptState extends State<DayScript> {
                     : SizedBox(
                         height: 80,
                         child: ContainerDesign(
-                          color: BGColor(),
+                          color: Colors.white,
                           child: ListTile(
                             leading: NeumorphicIcon(
                               Icons.today,
@@ -1686,7 +1686,7 @@ class _DayScriptState extends State<DayScript> {
                 SizedBox(
                   height: 80,
                   child: ContainerDesign(
-                    color: BGColor(),
+                    color: Colors.white,
                     child: ListTile(
                       leading: NeumorphicIcon(
                         Icons.schedule,
@@ -1734,7 +1734,7 @@ class _DayScriptState extends State<DayScript> {
                 SizedBox(
                   height: 80,
                   child: ContainerDesign(
-                    color: BGColor(),
+                    color: Colors.white,
                     child: ListTile(
                       leading: NeumorphicIcon(
                         Icons.schedule,
@@ -2236,7 +2236,7 @@ class _DayScriptState extends State<DayScript> {
                 SizedBox(
                   height: 80,
                   child: ContainerDesign(
-                    color: BGColor(),
+                    color: Colors.white,
                     child: ListTile(
                       leading: NeumorphicIcon(
                         Icons.alarm,
@@ -2258,7 +2258,7 @@ class _DayScriptState extends State<DayScript> {
                       trailing: isChecked_pushalarm == true
                           ? DropdownButton(
                               value: selectedValue,
-                              dropdownColor: BGColor(),
+                              dropdownColor: Colors.black,
                               items: dropdownItems_alarm,
                               icon: NeumorphicIcon(
                                 Icons.arrow_drop_down,

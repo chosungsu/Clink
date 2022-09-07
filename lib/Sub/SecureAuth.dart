@@ -84,7 +84,7 @@ class _SecureAuthState extends State<SecureAuth> {
           localizedReason:
               widget.string == '지문' ? '지문 또는 홍채인식이 필요합니다!' : '얼굴인식이 필요합니다!',
           options: const AuthenticationOptions(
-            useErrorDialogs: false,
+            useErrorDialogs: true,
             stickyAuth: true,
           ),
           authMessages: <AuthMessages>[
@@ -96,9 +96,7 @@ class _SecureAuthState extends State<SecureAuth> {
               cancelButton: '취소',
             ),
           ]);
-    } on PlatformException catch (e) {
-      if (e.code == auth_error.notAvailable) {}
-    }
+    } on PlatformException catch (e) {}
     print(_auth);
     setState(() {
       signauth = _auth ? '인증에 성공하였습니다!' : '인증에 실패하였습니다!';
@@ -351,6 +349,7 @@ class _SecureAuthState extends State<SecureAuth> {
     super.initState();
     _checkBiometrics();
     _getavailableBioList();
+    widget.string != '핀' ? _authenticate() : null;
   }
 
   @override
@@ -462,7 +461,7 @@ class _SecureAuthState extends State<SecureAuth> {
 
   BuildContent() {
     return Column(
-      mainAxisAlignment: widget.string == '지문'
+      mainAxisAlignment: widget.string != '핀'
           ? MainAxisAlignment.center
           : MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
