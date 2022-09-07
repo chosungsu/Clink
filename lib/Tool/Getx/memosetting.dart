@@ -7,20 +7,16 @@ import '../BGColor.dart';
 class memosetting extends GetxController {
   Color color = Hive.box('user_setting').get('coloreachmemo') != null
       ? Color(Hive.box('user_setting').get('coloreachmemo'))
-      : BGColor();
+      : Colors.white;
   int memosort = 0;
   bool ischeckedtohideminus = false;
   List imagelist = [];
   int imageindex = 0;
+  int sort = Hive.box('user_setting').get('sort_memo_card') ?? 0;
 
-  void sort1() {
-    memosort = 0;
-    update();
-    notifyChildrens();
-  }
-
-  void sort2() {
-    memosort = 1;
+  void setsortmemo(int sortnum) {
+    Hive.box('user_setting').put('sort_memo_card', sortnum);
+    sort = Hive.box('user_setting').get('sort_memo_card');
     update();
     notifyChildrens();
   }

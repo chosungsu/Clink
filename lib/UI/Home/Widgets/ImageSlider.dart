@@ -99,6 +99,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
         .refFromURL(controll_memo.imagelist[index])
         .delete();
     controll_memo.deleteimagelist(index);
+    controll_memo.setimageindex(index - 1);
     // 문서 작성
     if (doc != '') {
       await FirebaseFirestore.instance
@@ -108,6 +109,9 @@ class _ImageSliderPageState extends State<ImageSliderPage>
         'photoUrl': controll_memo.imagelist,
       });
     } else {}
+    if (controll_memo.imagelist.isEmpty) {
+      Get.back();
+    }
   }
 
   @override
@@ -160,22 +164,6 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                   ),
                                 )),
                             color: TextColor()),
-                        GetBuilder<memosetting>(
-                          builder: (_) => SizedBox(
-                              width: MediaQuery.of(context).size.width - 120,
-                              child: Center(
-                                child: Text(
-                                  (controll_memo.imageindex + 1).toString() +
-                                      '/' +
-                                      controll_memo.imagelist.length.toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTitleTextsize(),
-                                      color: TextColor()),
-                                ),
-                              )),
-                        ),
-                        const Padding(padding: EdgeInsets.only(right: 10)),
                       ],
                     ),
                   )),
@@ -216,24 +204,33 @@ class _ImageSliderPageState extends State<ImageSliderPage>
             height: MediaQuery.of(context).size.height - 170,
             width: MediaQuery.of(context).size.width - 40,
             child: GetBuilder<memosetting>(
-                builder: (_) => PageView.builder(
-                    onPageChanged: (int pageindex) {
-                      setState(() {
-                        controll_memo.setimageindex(pageindex);
-                      });
-                    },
-                    itemCount: controll_memo.imagelist.length,
-                    controller: pageController,
-                    itemBuilder: (context, index) {
-                      return controll_memo.imagelist.isEmpty
-                          ? Center(
-                              child: Text('불러올 이미지가 없습니다!',
-                                  style: TextStyle(
-                                      color: TextColor(),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize())),
-                            )
-                          : ClipRRect(
+                builder: (_) => controll_memo.imagelist.isEmpty
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width - 60,
+                            child: Text('불러올 이미지가 없습니다.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize())),
+                          )
+                        ],
+                      )
+                    : PageView.builder(
+                        onPageChanged: (int pageindex) {
+                          setState(() {
+                            controll_memo.setimageindex(pageindex);
+                          });
+                        },
+                        itemCount: controll_memo.imagelist.length,
+                        controller: pageController,
+                        itemBuilder: (context, index) {
+                          return ClipRRect(
                               borderRadius: BorderRadius.circular(0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -269,7 +266,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                       ))
                                 ],
                               ));
-                    })),
+                        })),
           ),
         ],
       ),
@@ -466,65 +463,48 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                           ),
                           itemCount: controll_memo.imagelist.length,
                           itemBuilder: ((context, index) {
-                            return controll_memo.imagelist.isEmpty
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: SizedBox(
-                                      height: 100,
-                                      width: MediaQuery.of(context).size.width -
-                                          60,
-                                      child: Text('불러올 이미지가 없습니다.',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize())),
-                                    ))
-                                : Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            print('yes');
-                                            controll_memo.setimageindex(index);
-                                            ImageShow(index, context);
-                                          });
-                                        },
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: SizedBox(
-                                                height: 90,
-                                                width: 90,
-                                                child: Image.network(
-                                                    controll_memo
-                                                        .imagelist[index],
-                                                    fit: BoxFit.fill,
-                                                    loadingBuilder: (BuildContext
-                                                            context,
-                                                        Widget child,
-                                                        ImageChunkEvent?
-                                                            loadingProgress) {
-                                                  if (loadingProgress == null) {
-                                                    return child;
-                                                  }
-                                                  return Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      value: loadingProgress
-                                                                  .expectedTotalBytes !=
-                                                              null
-                                                          ? loadingProgress
-                                                                  .cumulativeBytesLoaded /
-                                                              loadingProgress
-                                                                  .expectedTotalBytes!
-                                                          : null,
-                                                    ),
-                                                  );
-                                                }))),
-                                      ),
-                                      const SizedBox(width: 10)
-                                    ],
-                                  );
+                            return Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      print('yes');
+                                      controll_memo.setimageindex(index);
+                                      ImageShow(index, context);
+                                    });
+                                  },
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: SizedBox(
+                                          height: 90,
+                                          width: 90,
+                                          child: Image.network(
+                                              controll_memo.imagelist[index],
+                                              fit: BoxFit.fill, loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            );
+                                          }))),
+                                ),
+                                const SizedBox(width: 10)
+                              ],
+                            );
                           })),
                     ))
           ],

@@ -83,10 +83,11 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     super.initState();
     _checkBiometrics();
     WidgetsBinding.instance.addObserver(this);
+    controll_memo.setsortmemo(0);
     sortmemo_fromsheet = controll_memo.memosort;
     controll_memo.resetimagelist();
     controller = TextEditingController();
-    sort = Hive.box('user_setting').get('sort_memo_card') ?? 0;
+    sort = controll_memo.sort;
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -302,10 +303,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                   )),
                                             ),
                                             SortMenuHolder(
-                                                Hive.box('user_setting').get(
-                                                        'sort_memo_card') ??
-                                                    0,
-                                                '메모'),
+                                                controll_memo.sort, '메모'),
                                           ],
                                         ))),
                               ],
@@ -406,27 +404,585 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
 
   listy_My() {
     return StatefulBuilder(builder: (_, StateSetter setState) {
-      return StreamBuilder<QuerySnapshot>(
-        stream: firestore
-            .collection('MemoDataBase')
-            .where('OriginalUser', isEqualTo: username)
-            .orderBy('EditDate',
-                descending: Hive.box('user_setting').get('sort_memo_card') ==
-                            0 ||
-                        Hive.box('user_setting').get('sort_memo_card') == null
-                    ? true
-                    : false)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return snapshot.data!.docs.isEmpty
-                ? Column(
+      return GetBuilder<memosetting>(
+          builder: (_) => StreamBuilder<QuerySnapshot>(
+                stream: firestore
+                    .collection('MemoDataBase')
+                    .where('OriginalUser', isEqualTo: username)
+                    .orderBy('EditDate',
+                        descending: controll_memo.sort == 0 ? true : false)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!.docs.isEmpty
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: NeumorphicText(
+                                  '생성된 메모가 없습니다.\n추가 버튼으로 생성해보세요~',
+                                  style: NeumorphicStyle(
+                                    shape: NeumorphicShape.flat,
+                                    depth: 3,
+                                    color: TextColor(),
+                                  ),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize(),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        : GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 3 / 6,
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 10),
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.docs.length,
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            itemBuilder: (context, index) {
+                              tmpsummary = '';
+                              if (snapshot.data!.docs[index]['memolist'] !=
+                                  null) {
+                                for (String textsummarytmp
+                                    in snapshot.data!.docs[index]['memolist']) {
+                                  tmpsummary += textsummarytmp + '\n';
+                                }
+                              } else {
+                                tmpsummary = '홈에서 직접 생성한 메모장입니다.';
+                              }
+
+                              textsummary.insert(index, tmpsummary);
+                              return Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GestureDetector(
+                                      child: FocusedMenuHolder(
+                                    menuItems: [
+                                      FocusedMenuItem(
+                                          trailingIcon: Icon(
+                                            snapshot.data!.docs[index]
+                                                        ['homesave'] ==
+                                                    false
+                                                ? Icons.launch
+                                                : Icons.block,
+                                            color: snapshot.data!.docs[index]
+                                                        ['homesave'] ==
+                                                    false
+                                                ? Colors.blue.shade400
+                                                : Colors.red.shade400,
+                                          ),
+                                          title: Text(
+                                              snapshot.data!.docs[index]
+                                                          ['homesave'] ==
+                                                      false
+                                                  ? '내보내기'
+                                                  : '내보내기 중단',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                          onPressed: () {
+                                            setState(() {
+                                              snapshot.data!.docs[index]
+                                                          ['homesave'] ==
+                                                      false
+                                                  ? firestore
+                                                      .collection(
+                                                          'MemoDataBase')
+                                                      .doc(snapshot
+                                                          .data!.docs[index].id)
+                                                      .update({
+                                                      'homesave': true,
+                                                    })
+                                                  : firestore
+                                                      .collection(
+                                                          'MemoDataBase')
+                                                      .doc(snapshot
+                                                          .data!.docs[index].id)
+                                                      .update({
+                                                      'homesave': false,
+                                                    });
+                                            });
+                                          }),
+                                      FocusedMenuItem(
+                                          trailingIcon: Icon(
+                                            snapshot.data!.docs[index]
+                                                        ['security'] ==
+                                                    false
+                                                ? Icons.lock_open
+                                                : Icons.lock,
+                                            color: snapshot.data!.docs[index]
+                                                        ['security'] ==
+                                                    false
+                                                ? Colors.blue.shade400
+                                                : Colors.red.shade400,
+                                          ),
+                                          title: Text(
+                                              snapshot.data!.docs[index]
+                                                          ['security'] ==
+                                                      false
+                                                  ? '잠금설정'
+                                                  : '잠금해제',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                          onPressed: () {
+                                            setState(() {
+                                              //하단 시트로 지문, 얼굴인식 로직 띄우기
+                                              settingsecurityform(
+                                                  context,
+                                                  snapshot.data!.docs[index].id,
+                                                  snapshot.data!.docs[index]
+                                                      ['security'],
+                                                  snapshot.data!.docs[index]
+                                                      ['pinnumber'],
+                                                  snapshot.data!.docs[index]
+                                                      ['securewith'],
+                                                  can_auth);
+                                            });
+                                          }),
+                                    ],
+                                    duration: const Duration(seconds: 0),
+                                    animateMenuItems: true,
+                                    menuOffset: 20,
+                                    bottomOffsetHeight: 10,
+                                    menuWidth:
+                                        (MediaQuery.of(context).size.width -
+                                                50) /
+                                            2,
+                                    openWithTap: false,
+                                    onPressed: () async {
+                                      //개별 노트로 이동로직
+                                      if (snapshot.data!.docs[index]
+                                                  ['security'] ==
+                                              false ||
+                                          snapshot.data!.docs[index]
+                                                  ['securewith'] ==
+                                              999) {
+                                        Get.to(
+                                            () => ClickShowEachNote(
+                                                  date: snapshot.data!
+                                                      .docs[index]['Date'],
+                                                  doc: snapshot
+                                                      .data!.docs[index].id,
+                                                  doccollection:
+                                                      snapshot.data!.docs[index]
+                                                              ['Collection'] ??
+                                                          '',
+                                                  doccolor: snapshot.data!
+                                                      .docs[index]['color'],
+                                                  docindex:
+                                                      snapshot.data!.docs[index]
+                                                              ['memoindex'] ??
+                                                          [],
+                                                  docname: snapshot.data!
+                                                      .docs[index]['memoTitle'],
+                                                  docsummary:
+                                                      snapshot.data!.docs[index]
+                                                              ['memolist'] ??
+                                                          [],
+                                                  editdate: snapshot.data!
+                                                      .docs[index]['EditDate'],
+                                                  image:
+                                                      snapshot.data!.docs[index]
+                                                              ['photoUrl'] ??
+                                                          [],
+                                                  securewith:
+                                                      snapshot.data!.docs[index]
+                                                              ['securewith'] ??
+                                                          999,
+                                                ),
+                                            transition: Transition.downToUp);
+                                      } else if (snapshot.data!.docs[index]
+                                              ['securewith'] ==
+                                          0) {
+                                        if (GetPlatform.isAndroid) {
+                                          final reloadpage = await Get.to(
+                                              () => SecureAuth(
+                                                  string: '지문',
+                                                  id: snapshot
+                                                      .data!.docs[index].id,
+                                                  doc_secret_bool: snapshot
+                                                      .data!
+                                                      .docs[index]['security'],
+                                                  doc_pin_number: snapshot.data!
+                                                      .docs[index]['pinnumber'],
+                                                  unlock: true),
+                                              transition: Transition.downToUp);
+                                          if (reloadpage != null &&
+                                              reloadpage == true) {
+                                            Get.to(
+                                                () => ClickShowEachNote(
+                                                      date: snapshot.data!
+                                                          .docs[index]['Date'],
+                                                      doc: snapshot
+                                                          .data!.docs[index].id,
+                                                      doccollection: snapshot
+                                                                  .data!
+                                                                  .docs[index]
+                                                              ['Collection'] ??
+                                                          '',
+                                                      doccolor: snapshot.data!
+                                                          .docs[index]['color'],
+                                                      docindex: snapshot.data!
+                                                                  .docs[index]
+                                                              ['memoindex'] ??
+                                                          [],
+                                                      docname: snapshot
+                                                              .data!.docs[index]
+                                                          ['memoTitle'],
+                                                      docsummary: snapshot.data!
+                                                                  .docs[index]
+                                                              ['memolist'] ??
+                                                          [],
+                                                      editdate: snapshot
+                                                              .data!.docs[index]
+                                                          ['EditDate'],
+                                                      image: snapshot.data!
+                                                                  .docs[index]
+                                                              ['photoUrl'] ??
+                                                          [],
+                                                      securewith: snapshot.data!
+                                                                  .docs[index]
+                                                              ['securewith'] ??
+                                                          999,
+                                                    ),
+                                                transition:
+                                                    Transition.downToUp);
+                                          }
+                                        } else {
+                                          final reloadpage = await Get.to(
+                                              () => SecureAuth(
+                                                  string: '얼굴',
+                                                  id: snapshot
+                                                      .data!.docs[index].id,
+                                                  doc_secret_bool: snapshot
+                                                      .data!
+                                                      .docs[index]['security'],
+                                                  doc_pin_number: snapshot.data!
+                                                      .docs[index]['pinnumber'],
+                                                  unlock: true),
+                                              transition: Transition.downToUp);
+                                          if (reloadpage != null &&
+                                              reloadpage == true) {
+                                            Get.to(
+                                                () => ClickShowEachNote(
+                                                      date: snapshot.data!
+                                                          .docs[index]['Date'],
+                                                      doc: snapshot
+                                                          .data!.docs[index].id,
+                                                      doccollection: snapshot
+                                                                  .data!
+                                                                  .docs[index]
+                                                              ['Collection'] ??
+                                                          '',
+                                                      doccolor: snapshot.data!
+                                                          .docs[index]['color'],
+                                                      docindex: snapshot.data!
+                                                                  .docs[index]
+                                                              ['memoindex'] ??
+                                                          [],
+                                                      docname: snapshot
+                                                              .data!.docs[index]
+                                                          ['memoTitle'],
+                                                      docsummary: snapshot.data!
+                                                                  .docs[index]
+                                                              ['memolist'] ??
+                                                          [],
+                                                      editdate: snapshot
+                                                              .data!.docs[index]
+                                                          ['EditDate'],
+                                                      image: snapshot.data!
+                                                                  .docs[index]
+                                                              ['photoUrl'] ??
+                                                          [],
+                                                      securewith: snapshot.data!
+                                                                  .docs[index]
+                                                              ['securewith'] ??
+                                                          999,
+                                                    ),
+                                                transition:
+                                                    Transition.downToUp);
+                                          }
+                                        }
+                                      } else {
+                                        final reloadpage = await Get.to(
+                                            () => SecureAuth(
+                                                string: '핀',
+                                                id: snapshot
+                                                    .data!.docs[index].id,
+                                                doc_secret_bool: snapshot.data!
+                                                    .docs[index]['security'],
+                                                doc_pin_number: snapshot.data!
+                                                    .docs[index]['pinnumber'],
+                                                unlock: true),
+                                            transition: Transition.downToUp);
+                                        if (reloadpage != null &&
+                                            reloadpage == true) {
+                                          Get.to(
+                                              () => ClickShowEachNote(
+                                                    date: snapshot.data!
+                                                        .docs[index]['Date'],
+                                                    doc: snapshot
+                                                        .data!.docs[index].id,
+                                                    doccollection: snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                            ['Collection'] ??
+                                                        '',
+                                                    doccolor: snapshot.data!
+                                                        .docs[index]['color'],
+                                                    docindex: snapshot.data!
+                                                                .docs[index]
+                                                            ['memoindex'] ??
+                                                        [],
+                                                    docname: snapshot
+                                                            .data!.docs[index]
+                                                        ['memoTitle'],
+                                                    docsummary: snapshot.data!
+                                                                .docs[index]
+                                                            ['memolist'] ??
+                                                        [],
+                                                    editdate: snapshot
+                                                            .data!.docs[index]
+                                                        ['EditDate'],
+                                                    image: snapshot
+                                                            .data!.docs[index]
+                                                        ['photoUrl'],
+                                                    securewith: snapshot.data!
+                                                                .docs[index]
+                                                            ['securewith'] ??
+                                                        999,
+                                                  ),
+                                              transition: Transition.downToUp);
+                                        }
+                                      }
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        ContainerDesign(
+                                            child: SizedBox(
+                                                height: 260,
+                                                width: (MediaQuery.of(context)
+                                                            .size
+                                                            .width -
+                                                        80) /
+                                                    2,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10, right: 10),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      SizedBox(
+                                                          height: 60,
+                                                          child:
+                                                              SingleChildScrollView(
+                                                            scrollDirection:
+                                                                Axis.vertical,
+                                                            physics:
+                                                                const BouncingScrollPhysics(),
+                                                            child: Text(
+                                                              snapshot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['memoTitle'],
+                                                              maxLines: 2,
+                                                              softWrap: true,
+                                                              style: TextStyle(
+                                                                color:
+                                                                    TextColor(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize:
+                                                                    contentTitleTextsize(),
+                                                              ),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                )),
+                                            color: BGColor()),
+                                        SizedBox(
+                                          height: 200,
+                                          width: (MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  40) /
+                                              2,
+                                          child: ContainerDesign(
+                                              child: Column(
+                                                children: [
+                                                  Flexible(
+                                                      fit: FlexFit.tight,
+                                                      child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 10,
+                                                                  right: 10),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 110,
+                                                                child: snapshot
+                                                                            .data!
+                                                                            .docs[index]['security'] ==
+                                                                        false
+                                                                    ? Text(
+                                                                        textsummary[
+                                                                            index],
+                                                                        softWrap:
+                                                                            true,
+                                                                        maxLines:
+                                                                            3,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              TextColor(),
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontSize:
+                                                                              contentTextsize(),
+                                                                        ),
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      )
+                                                                    : Container(
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        child:
+                                                                            NeumorphicIcon(
+                                                                          Icons
+                                                                              .lock,
+                                                                          size:
+                                                                              50,
+                                                                          style: NeumorphicStyle(
+                                                                              shape: NeumorphicShape.convex,
+                                                                              depth: 2,
+                                                                              surfaceIntensity: 0.5,
+                                                                              color: TextColor_shadowcolor(),
+                                                                              lightSource: LightSource.topLeft),
+                                                                        ),
+                                                                      ),
+                                                              ),
+                                                            ],
+                                                          ))),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      RotatedBox(
+                                                        quarterTurns: 0,
+                                                        child: TextButton.icon(
+                                                          style: TextButton
+                                                              .styleFrom(
+                                                            textStyle: TextStyle(
+                                                                color:
+                                                                    TextColor_shadowcolor()),
+                                                            backgroundColor: snapshot
+                                                                            .data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'color'] !=
+                                                                    null
+                                                                ? Color(snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    ['color'])
+                                                                : Colors.white,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          24.0),
+                                                            ),
+                                                          ),
+                                                          onPressed: () => {},
+                                                          icon: Icon(
+                                                              Icons.local_offer,
+                                                              color:
+                                                                  TextColor_shadowcolor()),
+                                                          label: Text(
+                                                            snapshot.data!.docs[
+                                                                        index][
+                                                                    'Collection'] ??
+                                                                '지정안됨',
+                                                            softWrap: true,
+                                                            maxLines: 2,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  TextColor_shadowcolor(),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              color: snapshot.data!.docs[index]
+                                                          ['color'] !=
+                                                      null
+                                                  ? Color(snapshot.data!
+                                                      .docs[index]['color'])
+                                                  : Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                                ],
+                              );
+                            });
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Center(child: CircularProgressIndicator())
+                      ],
+                    );
+                  }
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
                         child: NeumorphicText(
-                          '생성된 메모가 없습니다.\n추가 버튼으로 생성해보세요~',
+                          '생성된 메모컬렉션이 없습니다.\n추가 버튼으로 생성해보세요~',
                           style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
@@ -439,511 +995,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                         ),
                       )
                     ],
-                  )
-                : GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 3 / 6,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10),
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
-                    padding: const EdgeInsets.only(left: 5, right: 5),
-                    itemBuilder: (context, index) {
-                      tmpsummary = '';
-                      if (snapshot.data!.docs[index]['memolist'] != null) {
-                        for (String textsummarytmp in snapshot.data!.docs[index]
-                            ['memolist']) {
-                          tmpsummary += textsummarytmp + '\n';
-                        }
-                      } else {
-                        tmpsummary = '홈에서 직접 생성한 메모장입니다.';
-                      }
-
-                      textsummary.insert(index, tmpsummary);
-                      return Column(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                              child: FocusedMenuHolder(
-                            menuItems: [
-                              FocusedMenuItem(
-                                  trailingIcon: Icon(
-                                    snapshot.data!.docs[index]['homesave'] ==
-                                            false
-                                        ? Icons.launch
-                                        : Icons.block,
-                                    color: snapshot.data!.docs[index]
-                                                ['homesave'] ==
-                                            false
-                                        ? Colors.blue.shade400
-                                        : Colors.red.shade400,
-                                  ),
-                                  title: Text(
-                                      snapshot.data!.docs[index]['homesave'] ==
-                                              false
-                                          ? '내보내기'
-                                          : '내보내기 중단',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize())),
-                                  onPressed: () {
-                                    setState(() {
-                                      snapshot.data!.docs[index]['homesave'] ==
-                                              false
-                                          ? firestore
-                                              .collection('MemoDataBase')
-                                              .doc(
-                                                  snapshot.data!.docs[index].id)
-                                              .update({
-                                              'homesave': true,
-                                            })
-                                          : firestore
-                                              .collection('MemoDataBase')
-                                              .doc(
-                                                  snapshot.data!.docs[index].id)
-                                              .update({
-                                              'homesave': false,
-                                            });
-                                    });
-                                  }),
-                              FocusedMenuItem(
-                                  trailingIcon: Icon(
-                                    snapshot.data!.docs[index]['security'] ==
-                                            false
-                                        ? Icons.lock_open
-                                        : Icons.lock,
-                                    color: snapshot.data!.docs[index]
-                                                ['security'] ==
-                                            false
-                                        ? Colors.blue.shade400
-                                        : Colors.red.shade400,
-                                  ),
-                                  title: Text(
-                                      snapshot.data!.docs[index]['security'] ==
-                                              false
-                                          ? '잠금설정'
-                                          : '잠금해제',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize())),
-                                  onPressed: () {
-                                    setState(() {
-                                      //하단 시트로 지문, 얼굴인식 로직 띄우기
-                                      settingsecurityform(
-                                          context,
-                                          snapshot.data!.docs[index].id,
-                                          snapshot.data!.docs[index]
-                                              ['security'],
-                                          snapshot.data!.docs[index]
-                                              ['pinnumber'],
-                                          snapshot.data!.docs[index]
-                                              ['securewith'],
-                                          can_auth);
-                                    });
-                                  }),
-                            ],
-                            duration: const Duration(seconds: 0),
-                            animateMenuItems: true,
-                            menuOffset: 20,
-                            bottomOffsetHeight: 10,
-                            menuWidth:
-                                (MediaQuery.of(context).size.width - 50) / 2,
-                            openWithTap: false,
-                            onPressed: () async {
-                              //개별 노트로 이동로직
-                              if (snapshot.data!.docs[index]['security'] ==
-                                      false ||
-                                  snapshot.data!.docs[index]['securewith'] ==
-                                      999) {
-                                Get.to(
-                                    () => ClickShowEachNote(
-                                          date: snapshot.data!.docs[index]
-                                              ['Date'],
-                                          doc: snapshot.data!.docs[index].id,
-                                          doccollection: snapshot.data!
-                                                  .docs[index]['Collection'] ??
-                                              '',
-                                          doccolor: snapshot.data!.docs[index]
-                                              ['color'],
-                                          docindex: snapshot.data!.docs[index]
-                                                  ['memoindex'] ??
-                                              [],
-                                          docname: snapshot.data!.docs[index]
-                                              ['memoTitle'],
-                                          docsummary: snapshot.data!.docs[index]
-                                                  ['memolist'] ??
-                                              [],
-                                          editdate: snapshot.data!.docs[index]
-                                              ['EditDate'],
-                                          image: snapshot.data!.docs[index]
-                                                  ['photoUrl'] ??
-                                              [],
-                                          securewith: snapshot.data!.docs[index]
-                                                  ['securewith'] ??
-                                              999,
-                                        ),
-                                    transition: Transition.downToUp);
-                              } else if (snapshot.data!.docs[index]
-                                      ['securewith'] ==
-                                  0) {
-                                if (GetPlatform.isAndroid) {
-                                  final reloadpage = await Get.to(
-                                      () => SecureAuth(
-                                          string: '지문',
-                                          id: snapshot.data!.docs[index].id,
-                                          doc_secret_bool: snapshot
-                                              .data!.docs[index]['security'],
-                                          doc_pin_number: snapshot
-                                              .data!.docs[index]['pinnumber'],
-                                          unlock: true),
-                                      transition: Transition.downToUp);
-                                  if (reloadpage != null &&
-                                      reloadpage == true) {
-                                    Get.to(
-                                        () => ClickShowEachNote(
-                                              date: snapshot.data!.docs[index]
-                                                  ['Date'],
-                                              doc:
-                                                  snapshot.data!.docs[index].id,
-                                              doccollection:
-                                                  snapshot.data!.docs[index]
-                                                          ['Collection'] ??
-                                                      '',
-                                              doccolor: snapshot
-                                                  .data!.docs[index]['color'],
-                                              docindex:
-                                                  snapshot.data!.docs[index]
-                                                          ['memoindex'] ??
-                                                      [],
-                                              docname: snapshot.data!
-                                                  .docs[index]['memoTitle'],
-                                              docsummary:
-                                                  snapshot.data!.docs[index]
-                                                          ['memolist'] ??
-                                                      [],
-                                              editdate: snapshot.data!
-                                                  .docs[index]['EditDate'],
-                                              image: snapshot.data!.docs[index]
-                                                      ['photoUrl'] ??
-                                                  [],
-                                              securewith:
-                                                  snapshot.data!.docs[index]
-                                                          ['securewith'] ??
-                                                      999,
-                                            ),
-                                        transition: Transition.downToUp);
-                                  }
-                                } else {
-                                  final reloadpage = await Get.to(
-                                      () => SecureAuth(
-                                          string: '얼굴',
-                                          id: snapshot.data!.docs[index].id,
-                                          doc_secret_bool: snapshot
-                                              .data!.docs[index]['security'],
-                                          doc_pin_number: snapshot
-                                              .data!.docs[index]['pinnumber'],
-                                          unlock: true),
-                                      transition: Transition.downToUp);
-                                  if (reloadpage != null &&
-                                      reloadpage == true) {
-                                    Get.to(
-                                        () => ClickShowEachNote(
-                                              date: snapshot.data!.docs[index]
-                                                  ['Date'],
-                                              doc:
-                                                  snapshot.data!.docs[index].id,
-                                              doccollection:
-                                                  snapshot.data!.docs[index]
-                                                          ['Collection'] ??
-                                                      '',
-                                              doccolor: snapshot
-                                                  .data!.docs[index]['color'],
-                                              docindex:
-                                                  snapshot.data!.docs[index]
-                                                          ['memoindex'] ??
-                                                      [],
-                                              docname: snapshot.data!
-                                                  .docs[index]['memoTitle'],
-                                              docsummary:
-                                                  snapshot.data!.docs[index]
-                                                          ['memolist'] ??
-                                                      [],
-                                              editdate: snapshot.data!
-                                                  .docs[index]['EditDate'],
-                                              image: snapshot.data!.docs[index]
-                                                      ['photoUrl'] ??
-                                                  [],
-                                              securewith:
-                                                  snapshot.data!.docs[index]
-                                                          ['securewith'] ??
-                                                      999,
-                                            ),
-                                        transition: Transition.downToUp);
-                                  }
-                                }
-                              } else {
-                                final reloadpage = await Get.to(
-                                    () => SecureAuth(
-                                        string: '핀',
-                                        id: snapshot.data!.docs[index].id,
-                                        doc_secret_bool: snapshot
-                                            .data!.docs[index]['security'],
-                                        doc_pin_number: snapshot
-                                            .data!.docs[index]['pinnumber'],
-                                        unlock: true),
-                                    transition: Transition.downToUp);
-                                if (reloadpage != null && reloadpage == true) {
-                                  Get.to(
-                                      () => ClickShowEachNote(
-                                            date: snapshot.data!.docs[index]
-                                                ['Date'],
-                                            doc: snapshot.data!.docs[index].id,
-                                            doccollection:
-                                                snapshot.data!.docs[index]
-                                                        ['Collection'] ??
-                                                    '',
-                                            doccolor: snapshot.data!.docs[index]
-                                                ['color'],
-                                            docindex: snapshot.data!.docs[index]
-                                                    ['memoindex'] ??
-                                                [],
-                                            docname: snapshot.data!.docs[index]
-                                                ['memoTitle'],
-                                            docsummary: snapshot.data!
-                                                    .docs[index]['memolist'] ??
-                                                [],
-                                            editdate: snapshot.data!.docs[index]
-                                                ['EditDate'],
-                                            image: snapshot.data!.docs[index]
-                                                ['photoUrl'],
-                                            securewith:
-                                                snapshot.data!.docs[index]
-                                                        ['securewith'] ??
-                                                    999,
-                                          ),
-                                      transition: Transition.downToUp);
-                                }
-                              }
-                            },
-                            child: Stack(
-                              children: [
-                                ContainerDesign(
-                                    child: SizedBox(
-                                        height: 260,
-                                        width:
-                                            (MediaQuery.of(context).size.width -
-                                                    80) /
-                                                2,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, right: 10),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              SizedBox(
-                                                  height: 60,
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.vertical,
-                                                    physics:
-                                                        const BouncingScrollPhysics(),
-                                                    child: Text(
-                                                      snapshot.data!.docs[index]
-                                                          ['memoTitle'],
-                                                      maxLines: 2,
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                        color: TextColor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentTitleTextsize(),
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  )),
-                                            ],
-                                          ),
-                                        )),
-                                    color: BGColor()),
-                                SizedBox(
-                                  height: 200,
-                                  width:
-                                      (MediaQuery.of(context).size.width - 40) /
-                                          2,
-                                  child: ContainerDesign(
-                                      child: Column(
-                                        children: [
-                                          Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10, right: 10),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 110,
-                                                        child: snapshot.data!
-                                                                            .docs[
-                                                                        index][
-                                                                    'security'] ==
-                                                                false
-                                                            ? Text(
-                                                                textsummary[
-                                                                    index],
-                                                                softWrap: true,
-                                                                maxLines: 3,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color:
-                                                                      TextColor(),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      contentTextsize(),
-                                                                ),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              )
-                                                            : Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child:
-                                                                    NeumorphicIcon(
-                                                                  Icons.lock,
-                                                                  size: 50,
-                                                                  style: NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      depth: 2,
-                                                                      surfaceIntensity:
-                                                                          0.5,
-                                                                      color:
-                                                                          TextColor_shadowcolor(),
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
-                                                                ),
-                                                              ),
-                                                      ),
-                                                    ],
-                                                  ))),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              RotatedBox(
-                                                quarterTurns: 0,
-                                                child: TextButton.icon(
-                                                  style: TextButton.styleFrom(
-                                                    textStyle: TextStyle(
-                                                        color:
-                                                            TextColor_shadowcolor()),
-                                                    backgroundColor: snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                ['color'] !=
-                                                            null
-                                                        ? Color(snapshot.data!
-                                                                .docs[index]
-                                                            ['color'])
-                                                        : Colors.white,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              24.0),
-                                                    ),
-                                                  ),
-                                                  onPressed: () => {},
-                                                  icon: Icon(Icons.local_offer,
-                                                      color:
-                                                          TextColor_shadowcolor()),
-                                                  label: Text(
-                                                    snapshot.data!.docs[index]
-                                                            ['Collection'] ??
-                                                        '지정안됨',
-                                                    softWrap: true,
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                      color:
-                                                          TextColor_shadowcolor(),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize(),
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      color: snapshot.data!.docs[index]
-                                                  ['color'] !=
-                                              null
-                                          ? Color(snapshot.data!.docs[index]
-                                              ['color'])
-                                          : Colors.white),
-                                ),
-                              ],
-                            ),
-                          ))
-                        ],
-                      );
-                    });
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [Center(child: CircularProgressIndicator())],
-            );
-          }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: NeumorphicText(
-                  '생성된 메모컬렉션이 없습니다.\n추가 버튼으로 생성해보세요~',
-                  style: NeumorphicStyle(
-                    shape: NeumorphicShape.flat,
-                    depth: 3,
-                    color: TextColor(),
-                  ),
-                  textStyle: NeumorphicTextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize(),
-                  ),
-                ),
-              )
-            ],
-          );
-        },
-      );
+                  );
+                },
+              ));
     });
   }
 }

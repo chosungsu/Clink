@@ -101,26 +101,34 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    scollection.resetmemolist();
-    controll_memo.resetimagelist();
+    scollection.memolistin.clear();
+    scollection.memolistcontentin.clear();
+    scollection.memoindex = 0;
+    controll_memo.imagelist.clear();
     Hive.box('user_setting').put('coloreachmemo', widget.doccolor);
-    controll_memo.setcolor();
     textEditingController1 = TextEditingController(text: widget.docname);
     textEditingController_add_sheet = TextEditingController();
     Hive.box('user_setting').put('memocollection', widget.doccollection);
+    controll_memo.color = Color(Hive.box('user_setting').get('coloreachmemo'));
     _color = widget.doccolor != null ? Color(widget.doccolor) : Colors.white;
     for (int j = 0; j < widget.docindex.length; j++) {
       Hive.box('user_setting').put('optionmemoinput', widget.docindex[j]);
-      scollection.addmemolistin(j);
+      scollection.memolistin
+          .insert(j, Hive.box('user_setting').get('optionmemoinput'));
+      scollection.memoindex++;
     }
     for (int k = 0; k < widget.docindex.length; k++) {
       Hive.box('user_setting')
           .put('optionmemocontentinput', widget.docsummary[k]);
-      scollection.addmemolistcontentin(k);
+      widget.docsummary[k] == null
+          ? scollection.memolistcontentin.insert(k, '')
+          : scollection.memolistcontentin.insert(
+              k, Hive.box('user_setting').get('optionmemocontentinput'));
     }
     for (int i = 0; i < widget.image.length; i++) {
       if (widget.image[i] != null) {
-        controll_memo.setimagelist(widget.image[i]);
+        controll_memo.imagelist.insert(i, widget.image[i]);
+        controll_memo.imageindex++;
       }
     }
   }

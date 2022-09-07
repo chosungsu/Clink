@@ -2,13 +2,19 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../Tool/BGColor.dart';
+import '../../../Tool/Getx/calendarsetting.dart';
+import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/TextSize.dart';
 
 SortMenuHolder(int sort, String s) {
+  final cal_sort = Get.put(calendarsetting());
+  final controll_memo = Get.put(memosetting());
+
   return StatefulBuilder(builder: ((context, setState) {
     return FocusedMenuHolder(
         child: IconBtn(
@@ -48,13 +54,9 @@ SortMenuHolder(int sort, String s) {
               onPressed: () {
                 setState(() {
                   if (s == '캘린더') {
-                    if (sort == 1) {
-                      Hive.box('user_setting').put('sort_cal_card', 0);
-                    }
+                    cal_sort.setsortcal(0);
                   } else {
-                    if (sort == 1) {
-                      Hive.box('user_setting').put('sort_memo_card', 0);
-                    }
+                    controll_memo.setsortmemo(0);
                   }
                 });
               }),
@@ -67,13 +69,9 @@ SortMenuHolder(int sort, String s) {
               onPressed: () {
                 setState(() {
                   if (s == '캘린더') {
-                    if (sort == 0) {
-                      Hive.box('user_setting').put('sort_cal_card', 1);
-                    }
+                    cal_sort.setsortcal(1);
                   } else {
-                    if (sort == 0) {
-                      Hive.box('user_setting').put('sort_memo_card', 1);
-                    }
+                    controll_memo.setsortmemo(1);
                   }
                 });
               }),

@@ -24,7 +24,6 @@ addWhole(
           Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: Container(
-              //height: s == 'home' ? 440 : 340,
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -36,10 +35,13 @@ addWhole(
                     searchNode.unfocus();
                   },
                   child: SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    child: SheetPageAC(
-                        context, searchNode, controller, username, date, s),
-                  )),
+                      physics: ScrollPhysics(),
+                      child: Column(
+                        children: [
+                          SheetPageAC(context, searchNode, controller, username,
+                              date, s),
+                        ],
+                      ))),
             ),
           ),
           backgroundColor: Colors.white,
@@ -56,7 +58,7 @@ addWhole(
       Hive.box('user_setting').get('page_index') == 0
           ? Navigator.of(context).pushReplacement(
               PageTransition(
-                type: PageTransitionType.rightToLeft,
+                type: PageTransitionType.fade,
                 child: const MyHomePage(
                   index: 0,
                 ),
@@ -64,7 +66,7 @@ addWhole(
             )
           : Navigator.of(context).pushReplacement(
               PageTransition(
-                type: PageTransitionType.rightToLeft,
+                type: PageTransitionType.fade,
                 child: const MyHomePage(
                   index: 2,
                 ),

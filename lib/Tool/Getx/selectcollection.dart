@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class selectcollection extends GetxController {
   var collection = Hive.box('user_setting').get('memocollection') ?? '';
-  var memoindex;
+  var memoindex = 0;
   List memolistin = List.empty(growable: true);
   List memolistcontentin = List.empty(growable: true);
 

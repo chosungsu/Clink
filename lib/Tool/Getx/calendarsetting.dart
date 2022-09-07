@@ -8,6 +8,7 @@ class calendarsetting extends GetxController {
   int stylecalendar = Hive.box('user_setting').get('origordday') ?? 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List sharehomeid = [];
+  int sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
 
   void themecals1(String id) {
     themecalendar = 0;
@@ -180,6 +181,13 @@ class calendarsetting extends GetxController {
         });
       }
     });
+    update();
+    notifyChildrens();
+  }
+
+  void setsortcal(int sortnum) {
+    Hive.box('user_setting').put('sort_cal_card', sortnum);
+    sort = Hive.box('user_setting').get('sort_cal_card');
     update();
     notifyChildrens();
   }
