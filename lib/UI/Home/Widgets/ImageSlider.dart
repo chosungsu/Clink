@@ -212,7 +212,8 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                           SizedBox(
                             height: 100,
                             width: MediaQuery.of(context).size.width - 60,
-                            child: Text('불러올 이미지가 없습니다.',
+                            child: Text('불러올 이미지가 없습니다.\n잠시후 메모장으로 넘어갑니다.',
+                                maxLines: 3,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.black,
