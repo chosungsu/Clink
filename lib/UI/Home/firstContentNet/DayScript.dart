@@ -1986,7 +1986,7 @@ class _DayScriptState extends State<DayScript> {
                   trailing: isChecked_pushalarm == true
                       ? DropdownButton(
                           value: selectedValue,
-                          dropdownColor: Colors.black,
+                          dropdownColor: Colors.white,
                           items: dropdownItems_alarm,
                           icon: NeumorphicIcon(
                             Icons.arrow_drop_down,

@@ -840,7 +840,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       ? (isChecked_pushalarm == true
                           ? DropdownButton(
                               value: changevalue,
-                              dropdownColor: BGColor(),
+                              dropdownColor: Colors.white,
                               items: dropdownItems,
                               icon: NeumorphicIcon(
                                 Icons.arrow_drop_down,
@@ -874,7 +874,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       : (!isChecked_pushalarm == true
                           ? DropdownButton(
                               value: changevalue,
-                              dropdownColor: BGColor(),
+                              dropdownColor: Colors.white,
                               items: dropdownItems,
                               icon: NeumorphicIcon(
                                 Icons.arrow_drop_down,
