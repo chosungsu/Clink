@@ -19,11 +19,13 @@ import '../../../Dialogs/checkbackincandm.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
+import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../sheets/addmemocollection.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class DayScript extends StatefulWidget {
   DayScript(
@@ -66,16 +68,19 @@ class _DayScriptState extends State<DayScript> {
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
+  late TextEditingController textEditingController4;
   //캘린더변수
   late Map<DateTime, List<Event>> _events;
   static final cal_share_person = Get.put(PeopleAdd());
   final controll_memo = Get.put(memosetting());
+  final cal = Get.put(calendarsetting());
   List finallist = cal_share_person.people;
   String selectedValue = '선택없음';
   bool isChecked_pushalarm = false;
   int differ_date = 0;
   List differ_list = [];
   //메모변수
+  int _currentValue = 1;
   final scollection = Get.put(selectcollection());
   final searchNode_add_section = FocusNode();
   late TextEditingController textEditingController_add_sheet;
@@ -102,17 +107,20 @@ class _DayScriptState extends State<DayScript> {
     super.initState();
     Hive.box('user_setting').put('typecolorcalendar', null);
     Hive.box('user_setting').put('coloreachmemo', Colors.white.value.toInt());
-    controll_memo.setcolor();
-    controll_memo.resetimagelist();
+    controll_memo.color = Color(Hive.box('user_setting').get('coloreachmemo'));
+    controll_memo.imagelist.clear();
     _color = controll_memo.color;
     checklisttexts.clear();
     controllers.clear();
-    scollection.resetmemolist();
+    scollection.memolistin.clear();
+    scollection.memolistcontentin.clear();
+    scollection.memoindex = 0;
     cal_share_person.peoplecalendarrestart();
     finallist = cal_share_person.people;
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
+    textEditingController4 = TextEditingController();
     textEditingController_add_sheet = TextEditingController();
     _events = {};
     ischeckedtohideminus = controll_memo.ischeckedtohideminus;
@@ -127,6 +135,7 @@ class _DayScriptState extends State<DayScript> {
     textEditingController1.dispose();
     textEditingController2.dispose();
     textEditingController3.dispose();
+    textEditingController4.dispose();
     textEditingController_add_sheet.dispose();
     for (int i = 0; i < controllers.length; i++) {
       controllers[i].dispose();
@@ -260,20 +269,21 @@ class _DayScriptState extends State<DayScript> {
                                                                   Colors.black),
                                                         ),
                                                       ),
-                                                      widget.position == 'note' ?
-                                                      MFHolder(
-                                                          checkbottoms,
-                                                          nodes,
-                                                          scollection,
-                                                          _color,
-                                                          '',
-                                                          controll_memo
-                                                              .ischeckedtohideminus) : SizedBox(),
-                                                      widget.position == 'note' ?
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ) : SizedBox()
-                                                      ,
+                                                      widget.position == 'note'
+                                                          ? MFHolder(
+                                                              checkbottoms,
+                                                              nodes,
+                                                              scollection,
+                                                              _color,
+                                                              '',
+                                                              controll_memo
+                                                                  .ischeckedtohideminus)
+                                                          : SizedBox(),
+                                                      widget.position == 'note'
+                                                          ? const SizedBox(
+                                                              width: 10,
+                                                            )
+                                                          : SizedBox(),
                                                       IconBtn(
                                                           child: IconButton(
                                                               onPressed:
@@ -339,8 +349,9 @@ class _DayScriptState extends State<DayScript> {
                                                                                   .toString()))
                                                                               .inDays
                                                                               .toString())
-                                                                          : differ_date =
-                                                                              0;
+                                                                          : (cal.repeatdate != 1
+                                                                              ? differ_date = cal.repeatdate - 1
+                                                                              : differ_date = 0);
                                                                       for (int i =
                                                                               0;
                                                                           i <=
@@ -349,10 +360,9 @@ class _DayScriptState extends State<DayScript> {
                                                                         if (differ_date ==
                                                                             0) {
                                                                         } else {
-                                                                          differ_list.add(DateTime(
-                                                                              widget.firstdate.year,
-                                                                              widget.firstdate.month,
-                                                                              widget.firstdate.day + i));
+                                                                          widget.lastdate != widget.firstdate
+                                                                              ? differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month, widget.firstdate.day + i))
+                                                                              : differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month, widget.firstdate.day + 7 * i));
                                                                         }
                                                                       }
                                                                       if (differ_list
@@ -768,6 +778,9 @@ class _DayScriptState extends State<DayScript> {
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize(),
                             color: Colors.black),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       GetBuilder<memosetting>(
                         builder: (_) => SizedBox(
@@ -1627,599 +1640,310 @@ class _DayScriptState extends State<DayScript> {
   }
 
   Time() {
-    return widget.position == 'cal'
-        ? SizedBox(
-            height: widget.lastdate != widget.firstdate ? 320 : 300,
-            child: Column(
-              children: [
-                widget.lastdate != widget.firstdate
-                    ? SizedBox(
-                        height: 100,
-                        child: ContainerDesign(
-                          color: Colors.white,
-                          child: ListTile(
-                            leading: NeumorphicIcon(
-                              Icons.today,
-                              size: 30,
-                              style: const NeumorphicStyle(
-                                  shape: NeumorphicShape.convex,
-                                  depth: 2,
-                                  surfaceIntensity: 0.5,
-                                  color: Colors.black,
-                                  lightSource: LightSource.topLeft),
-                            ),
-                            title: Text(
-                              widget.firstdate.toString().split(' ')[0] +
-                                  '부터 ' +
-                                  widget.lastdate.toString().split(' ')[0] +
-                                  '까지',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize(),
-                                  color: Colors.black),
-                            ),
+    return ListView.builder(
+        itemCount: 1,
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: ((context, index) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              widget.lastdate != widget.firstdate
+                  ? SizedBox(
+                      child: ContainerDesign(
+                        color: Colors.white,
+                        child: ListTile(
+                          leading: NeumorphicIcon(
+                            Icons.today,
+                            size: 30,
+                            style: const NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                surfaceIntensity: 0.5,
+                                color: Colors.black,
+                                lightSource: LightSource.topLeft),
                           ),
-                        ),
-                      )
-                    : SizedBox(
-                        height: 80,
-                        child: ContainerDesign(
-                          color: Colors.white,
-                          child: ListTile(
-                            leading: NeumorphicIcon(
-                              Icons.today,
-                              size: 30,
-                              style: const NeumorphicStyle(
-                                  shape: NeumorphicShape.convex,
-                                  depth: 2,
-                                  surfaceIntensity: 0.5,
-                                  color: Colors.black,
-                                  lightSource: LightSource.topLeft),
-                            ),
-                            title: Text(
-                              widget.firstdate.toString().split(' ')[0],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize(),
-                                  color: Colors.black),
-                            ),
+                          title: Text(
+                            widget.firstdate.toString().split(' ')[0] +
+                                '부터 ' +
+                                widget.lastdate.toString().split(' ')[0] +
+                                '까지',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize(),
+                                color: Colors.black),
                           ),
                         ),
                       ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 80,
-                  child: ContainerDesign(
-                    color: Colors.white,
-                    child: ListTile(
-                      leading: NeumorphicIcon(
-                        Icons.schedule,
-                        size: 30,
-                        style: const NeumorphicStyle(
-                            shape: NeumorphicShape.convex,
-                            depth: 2,
-                            surfaceIntensity: 0.5,
-                            color: Colors.black,
-                            lightSource: LightSource.topLeft),
-                      ),
-                      title: Text(
-                        '시작시간',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
-                      ),
-                      subtitle: TextFormField(
-                        readOnly: true,
-                        style: TextStyle(
-                            fontSize: contentTextsize(), color: Colors.black),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          isCollapsed: true,
+                    )
+                  : SizedBox(
+                      child: ContainerDesign(
+                        color: Colors.white,
+                        child: ListTile(
+                          leading: NeumorphicIcon(
+                            Icons.today,
+                            size: 30,
+                            style: const NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                surfaceIntensity: 0.5,
+                                color: Colors.black,
+                                lightSource: LightSource.topLeft),
+                          ),
+                          title: Text(
+                            widget.firstdate.toString().split(' ')[0],
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize(),
+                                color: Colors.black),
+                          ),
                         ),
-                        controller: textEditingController2,
                       ),
-                      trailing: InkWell(
-                        onTap: () {
-                          pickDates(context, textEditingController2,
-                              widget.firstdate);
-                        },
-                        child: const Icon(
-                          Icons.arrow_drop_down,
+                    ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                child: ContainerDesign(
+                  color: Colors.white,
+                  child: ListTile(
+                    leading: NeumorphicIcon(
+                      Icons.schedule,
+                      size: 30,
+                      style: const NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
                           color: Colors.black,
-                        ),
+                          lightSource: LightSource.topLeft),
+                    ),
+                    title: Text(
+                      '시작시간',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize(),
+                          color: Colors.black),
+                    ),
+                    subtitle: TextFormField(
+                      readOnly: true,
+                      style: TextStyle(
+                          fontSize: contentTextsize(), color: Colors.black),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        isCollapsed: true,
+                      ),
+                      controller: textEditingController2,
+                    ),
+                    trailing: InkWell(
+                      onTap: () {
+                        pickDates(
+                            context, textEditingController2, widget.firstdate);
+                      },
+                      child: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.black,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 80,
-                  child: ContainerDesign(
-                    color: Colors.white,
-                    child: ListTile(
-                      leading: NeumorphicIcon(
-                        Icons.schedule,
-                        size: 30,
-                        style: const NeumorphicStyle(
-                            shape: NeumorphicShape.convex,
-                            depth: 2,
-                            surfaceIntensity: 0.5,
-                            color: Colors.black,
-                            lightSource: LightSource.topLeft),
-                      ),
-                      title: Text(
-                        '종료시간',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
-                      ),
-                      subtitle: TextFormField(
-                        readOnly: true,
-                        style: TextStyle(
-                            fontSize: contentTextsize(), color: Colors.black),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          isCollapsed: true,
-                        ),
-                        controller: textEditingController3,
-                      ),
-                      trailing: InkWell(
-                        onTap: () {
-                          pickDates(context, textEditingController3,
-                              widget.firstdate);
-                        },
-                        child: const Icon(
-                          Icons.arrow_drop_down,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                child: ContainerDesign(
+                  color: Colors.white,
+                  child: ListTile(
+                    leading: NeumorphicIcon(
+                      Icons.schedule,
+                      size: 30,
+                      style: const NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
                           color: Colors.black,
-                        ),
+                          lightSource: LightSource.topLeft),
+                    ),
+                    title: Text(
+                      '종료시간',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize(),
+                          color: Colors.black),
+                    ),
+                    subtitle: TextFormField(
+                      readOnly: true,
+                      style: TextStyle(
+                          fontSize: contentTextsize(), color: Colors.black),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        isCollapsed: true,
+                      ),
+                      controller: textEditingController3,
+                    ),
+                    trailing: InkWell(
+                      onTap: () {
+                        pickDates(
+                            context, textEditingController3, widget.firstdate);
+                      },
+                      child: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.black,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ))
-        : (widget.position == 'note'
-            ? SizedBox(
-                height: 90,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      child: Text(
-                        '중요도 선택',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
-                      ),
-                    ),
-                    const SizedBox(
+              ),
+              widget.lastdate == widget.firstdate
+                  ? const SizedBox(
                       height: 20,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      width: MediaQuery.of(context).size.width - 40,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: SizedBox(
-                              height: 30,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Hive.box('user_setting')
-                                                      .get('stars') ==
-                                                  1 ||
-                                              Hive.box('user_setting')
-                                                      .get('stars') ==
-                                                  null
-                                          ? Colors.grey.shade400
-                                          : Colors.white,
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {
-                                    setState(() {
-                                      Hive.box('user_setting').put('stars', 1);
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '+1',
-                                            style: NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Hive.box('user_setting')
-                                                              .get('stars') ==
-                                                          1 ||
-                                                      Hive.box('user_setting')
-                                                              .get('stars') ==
-                                                          null
-                                                  ? Colors.white
-                                                  : Colors.black45,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: SizedBox(
-                              height: 30,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Hive.box('user_setting')
-                                                  .get('stars') ==
-                                              2
-                                          ? Colors.grey.shade400
-                                          : Colors.white,
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {
-                                    setState(() {
-                                      Hive.box('user_setting').put('stars', 2);
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '+2',
-                                            style: NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Hive.box('user_setting')
-                                                          .get('stars') ==
-                                                      2
-                                                  ? Colors.white
-                                                  : Colors.black45,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: SizedBox(
-                              height: 30,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Hive.box('user_setting')
-                                                  .get('stars') ==
-                                              3
-                                          ? Colors.grey.shade400
-                                          : Colors.white,
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {
-                                    setState(() {
-                                      Hive.box('user_setting').put('stars', 3);
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '+3',
-                                            style: NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Hive.box('user_setting')
-                                                          .get('stars') ==
-                                                      3
-                                                  ? Colors.white
-                                                  : Colors.black45,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ),
-                        ],
-                      ),
                     )
-                  ],
-                ),
-              )
-            : SizedBox(
-                height: 90,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      child: Text(
-                        '중요도 선택',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
-                      ),
+                  : const SizedBox(
+                      height: 0,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      width: MediaQuery.of(context).size.width - 40,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: SizedBox(
-                              height: 30,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Hive.box('user_setting')
-                                                      .get('stars') ==
-                                                  1 ||
-                                              Hive.box('user_setting')
-                                                      .get('stars') ==
-                                                  null
-                                          ? Colors.grey.shade400
-                                          : Colors.white,
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {
-                                    setState(() {
-                                      Hive.box('user_setting').put('stars', 1);
-                                    });
+              widget.lastdate == widget.firstdate
+                  ? GetBuilder<calendarsetting>(
+                      builder: (_) => SizedBox(
+                            child: ContainerDesign(
+                              color: Colors.white,
+                              child: ListTile(
+                                leading: NeumorphicIcon(
+                                  Icons.sync,
+                                  size: 30,
+                                  style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.convex,
+                                      depth: 2,
+                                      surfaceIntensity: 0.5,
+                                      color: Colors.black,
+                                      lightSource: LightSource.topLeft),
+                                ),
+                                trailing: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              '원하시는 반복횟수',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:
+                                                      contentTitleTextsize(),
+                                                  color: Colors.black),
+                                            ),
+                                            content: StatefulBuilder(
+                                              builder: ((context, setState) {
+                                                return NumberPicker(
+                                                    minValue: 1,
+                                                    maxValue: 48,
+                                                    value: cal.repeatdate,
+                                                    onChanged: ((value) {
+                                                      setState(() {
+                                                        cal.repeatdate = value;
+                                                      });
+                                                      cal.setrepeatdate(
+                                                          cal.repeatdate);
+                                                    }));
+                                              }),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                child: Text(
+                                                  "OK",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                      color:
+                                                          Colors.blue.shade400),
+                                                ),
+                                                onPressed: () {
+                                                  Get.back();
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        });
                                   },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '+1',
-                                            style: NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Hive.box('user_setting')
-                                                              .get('stars') ==
-                                                          1 ||
-                                                      Hive.box('user_setting')
-                                                              .get('stars') ==
-                                                          null
-                                                  ? Colors.white
-                                                  : Colors.black45,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
+                                  child: NeumorphicIcon(
+                                    Icons.arrow_drop_down,
+                                    size: 30,
+                                    style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.convex,
+                                        depth: 2,
+                                        surfaceIntensity: 0.5,
+                                        color: Colors.black,
+                                        lightSource: LightSource.topLeft),
+                                  ),
+                                ),
+                                subtitle: TextFormField(
+                                  readOnly: true,
+                                  style: TextStyle(
+                                      fontSize: contentTextsize(),
+                                      color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    isCollapsed: true,
+                                  ),
+                                  controller: cal.repeatdate == 1
+                                      ? (textEditingController4
+                                        ..text = cal.repeatdate.toString() +
+                                            '주 반복생성(기본값)')
+                                      : (textEditingController4
+                                        ..text = cal.repeatdate.toString() +
+                                            '주 반복생성'),
+                                ),
+                                title: Text(
+                                  '반복작성설정',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTitleTextsize(),
+                                      color: Colors.black),
+                                ),
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: SizedBox(
-                              height: 30,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Hive.box('user_setting')
-                                                  .get('stars') ==
-                                              2
-                                          ? Colors.grey.shade400
-                                          : Colors.white,
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {
-                                    setState(() {
-                                      Hive.box('user_setting').put('stars', 2);
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '+2',
-                                            style: NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Hive.box('user_setting')
-                                                          .get('stars') ==
-                                                      2
-                                                  ? Colors.white
-                                                  : Colors.black45,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: SizedBox(
-                              height: 30,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Hive.box('user_setting')
-                                                  .get('stars') ==
-                                              3
-                                          ? Colors.grey.shade400
-                                          : Colors.white,
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {
-                                    setState(() {
-                                      Hive.box('user_setting').put('stars', 3);
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '+3',
-                                            style: NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Hive.box('user_setting')
-                                                          .get('stars') ==
-                                                      3
-                                                  ? Colors.white
-                                                  : Colors.black45,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ),
-                        ],
-                      ),
+                          ))
+                  : const SizedBox(
+                      height: 0,
                     )
-                  ],
-                ),
-              ));
+            ],
+          );
+        }));
   }
 
   SetAlarmTitle() {
     return widget.position == 'cal'
         ? SizedBox(
-            height: 30,
             child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Text(
-                    '알람설정',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: Colors.black),
-                  ),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                fit: FlexFit.tight,
+                child: Text(
+                  '알람설정',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: Colors.black),
                 ),
-                Transform.scale(
-                  scale: 0.7,
-                  child: Switch(
-                      activeColor: Colors.blue,
-                      inactiveThumbColor: Colors.black,
-                      inactiveTrackColor: Colors.grey.shade400,
-                      value: isChecked_pushalarm,
-                      onChanged: (bool val) {
-                        setState(() {
-                          isChecked_pushalarm = val;
-                        });
-                      }),
-                )
-              ],
-            ))
+              ),
+              Transform.scale(
+                scale: 0.7,
+                child: Switch(
+                    activeColor: Colors.blue,
+                    inactiveThumbColor: Colors.black,
+                    inactiveTrackColor: Colors.grey.shade400,
+                    value: isChecked_pushalarm,
+                    onChanged: (bool val) {
+                      setState(() {
+                        isChecked_pushalarm = val;
+                      });
+                    }),
+              )
+            ],
+          ))
         : const SizedBox();
   }
 
@@ -2236,70 +1960,65 @@ class _DayScriptState extends State<DayScript> {
   Alarm() {
     return widget.position == 'cal'
         ? SizedBox(
-            height: 200,
             child: Column(
-              children: [
-                SizedBox(
-                  height: 80,
-                  child: ContainerDesign(
-                    color: Colors.white,
-                    child: ListTile(
-                      leading: NeumorphicIcon(
-                        Icons.alarm,
-                        size: 30,
-                        style: const NeumorphicStyle(
-                            shape: NeumorphicShape.convex,
-                            depth: 2,
-                            surfaceIntensity: 0.5,
-                            color: Colors.black,
-                            lightSource: LightSource.topLeft),
-                      ),
-                      title: Text(
-                        '알람',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
-                      ),
-                      trailing: isChecked_pushalarm == true
-                          ? DropdownButton(
-                              value: selectedValue,
-                              dropdownColor: Colors.black,
-                              items: dropdownItems_alarm,
-                              icon: NeumorphicIcon(
-                                Icons.arrow_drop_down,
-                                size: 20,
-                                style: const NeumorphicStyle(
-                                    shape: NeumorphicShape.convex,
-                                    depth: 2,
-                                    surfaceIntensity: 0.5,
-                                    color: Colors.black,
-                                    lightSource: LightSource.topLeft),
-                              ),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: contentTextsize()),
-                              onChanged: isChecked_pushalarm == true
-                                  ? (String? value) {
-                                      setState(() {
-                                        selectedValue = value!;
-                                        Hive.box('user_setting').put(
-                                            'alarming_time', selectedValue);
-                                      });
-                                    }
-                                  : null,
-                            )
-                          : Text(
-                              '설정off상태입니다.',
-                              style: TextStyle(
-                                  fontSize: contentTextsize(),
-                                  color: Colors.black),
-                            ),
-                    ),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ContainerDesign(
+                color: Colors.white,
+                child: ListTile(
+                  leading: NeumorphicIcon(
+                    Icons.alarm,
+                    size: 30,
+                    style: const NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        surfaceIntensity: 0.5,
+                        color: Colors.black,
+                        lightSource: LightSource.topLeft),
                   ),
+                  title: Text(
+                    '알람',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: Colors.black),
+                  ),
+                  trailing: isChecked_pushalarm == true
+                      ? DropdownButton(
+                          value: selectedValue,
+                          dropdownColor: Colors.black,
+                          items: dropdownItems_alarm,
+                          icon: NeumorphicIcon(
+                            Icons.arrow_drop_down,
+                            size: 20,
+                            style: const NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                surfaceIntensity: 0.5,
+                                color: Colors.black,
+                                lightSource: LightSource.topLeft),
+                          ),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: contentTextsize()),
+                          onChanged: isChecked_pushalarm == true
+                              ? (String? value) {
+                                  setState(() {
+                                    selectedValue = value!;
+                                    Hive.box('user_setting')
+                                        .put('alarming_time', selectedValue);
+                                  });
+                                }
+                              : null,
+                        )
+                      : Text(
+                          '설정off상태입니다.',
+                          style: TextStyle(
+                              fontSize: contentTextsize(), color: Colors.black),
+                        ),
                 ),
-              ],
-            ))
+              ),
+            ],
+          ))
         : const SizedBox();
   }
 }

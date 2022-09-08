@@ -788,6 +788,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                   fontSize: contentTitleTextsize(),
                   color: Colors.black),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             GetBuilder<memosetting>(
               builder: (_) => SizedBox(
                 height: 100,

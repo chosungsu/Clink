@@ -56,6 +56,7 @@ class _DayContentHomeState extends State<DayContentHome>
   String username = Hive.box('user_info').get(
     'id',
   );
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   var _rangeStart = null;

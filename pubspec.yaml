@@ -71,6 +71,7 @@ dependencies:
   path_provider: 
   device_info_plus: 
   #UI
+  numberpicker: 
   flutter_neumorphic: 
   flutter_switch: 
   shimmer: 
@@ -96,6 +97,7 @@ dependencies:
   share_plus: 
   url_launcher: 
   #local db
+  encrypt:
   hive: 
   hive_flutter: 
   hive_listener: 

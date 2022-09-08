@@ -7,12 +7,15 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:numberpicker/numberpicker.dart';
 import '../../../LocalNotiPlatform/NotificationApi.dart';
 import '../../../Tool/BGColor.dart';
+import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/CreateCalandmemo.dart';
 import '../firstContentNet/DayScript.dart';
+
 
 class ClickShowEachCalendar extends StatefulWidget {
   const ClickShowEachCalendar(
@@ -548,6 +551,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -591,15 +595,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   }
 
   buildSheetTitle() {
-    return SizedBox(
-      height: 30,
-      child: Text(
-        '일정제목',
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: contentTitleTextsize(),
-            color: Colors.black),
-      ),
+    return Text(
+      '일정제목',
+      style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: contentTitleTextsize(),
+          color: Colors.black),
     );
   }
 
@@ -637,123 +638,124 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   }
 
   buildContentTitle() {
-    return SizedBox(
-      height: 30,
-      child: Text(
-        '일정세부사항',
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: contentTitleTextsize(),
-            color: Colors.black),
-      ),
+    return Text(
+      '일정세부사항',
+      style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: contentTitleTextsize(),
+          color: Colors.black),
     );
   }
 
   Content() {
-    return SizedBox(
-        height: 200,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 80,
-              child: ContainerDesign(
-                color: Colors.white,
-                child: ListTile(
-                  leading: NeumorphicIcon(
-                    Icons.schedule,
-                    size: 30,
-                    style: const NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        surfaceIntensity: 0.5,
-                        color: Colors.black,
-                        lightSource: LightSource.topLeft),
-                  ),
-                  title: Text(
-                    '시작시간',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: Colors.black),
-                  ),
-                  subtitle: TextFormField(
-                    readOnly: true,
-                    style: TextStyle(
-                        fontSize: contentTextsize(), color: Colors.black),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      isCollapsed: true,
+    return ListView.builder(
+        itemCount: 1,
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: ((context, index) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                child: ContainerDesign(
+                  color: Colors.white,
+                  child: ListTile(
+                    leading: NeumorphicIcon(
+                      Icons.schedule,
+                      size: 30,
+                      style: const NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
+                          color: Colors.black,
+                          lightSource: LightSource.topLeft),
                     ),
-                    controller: textEditingController2,
-                  ),
-                  trailing: InkWell(
-                    onTap: () {
-                      pickDates(context, textEditingController2, widget.date);
-                    },
-                    child: const Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.black,
+                    title: Text(
+                      '시작시간',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize(),
+                          color: Colors.black),
+                    ),
+                    subtitle: TextFormField(
+                      readOnly: true,
+                      style: TextStyle(
+                          fontSize: contentTextsize(), color: Colors.black),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        isCollapsed: true,
+                      ),
+                      controller: textEditingController2,
+                    ),
+                    trailing: InkWell(
+                      onTap: () {
+                        pickDates(context, textEditingController2, widget.date);
+                      },
+                      child: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height: 80,
-              child: ContainerDesign(
-                color: Colors.white,
-                child: ListTile(
-                  leading: NeumorphicIcon(
-                    Icons.schedule,
-                    size: 30,
-                    style: const NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        surfaceIntensity: 0.5,
-                        color: Colors.black,
-                        lightSource: LightSource.topLeft),
-                  ),
-                  title: Text(
-                    '종료시간',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: Colors.black),
-                  ),
-                  subtitle: TextFormField(
-                    readOnly: true,
-                    style: TextStyle(
-                        fontSize: contentTextsize(), color: Colors.black),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      isCollapsed: true,
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                child: ContainerDesign(
+                  color: Colors.white,
+                  child: ListTile(
+                    leading: NeumorphicIcon(
+                      Icons.schedule,
+                      size: 30,
+                      style: const NeumorphicStyle(
+                          shape: NeumorphicShape.convex,
+                          depth: 2,
+                          surfaceIntensity: 0.5,
+                          color: Colors.black,
+                          lightSource: LightSource.topLeft),
                     ),
-                    controller: textEditingController3,
-                  ),
-                  trailing: InkWell(
-                    onTap: () {
-                      pickDates(context, textEditingController3, widget.date);
-                    },
-                    child: const Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.black,
+                    title: Text(
+                      '종료시간',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize(),
+                          color: Colors.black),
+                    ),
+                    subtitle: TextFormField(
+                      readOnly: true,
+                      style: TextStyle(
+                          fontSize: contentTextsize(), color: Colors.black),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        isCollapsed: true,
+                      ),
+                      controller: textEditingController3,
+                    ),
+                    trailing: InkWell(
+                      onTap: () {
+                        pickDates(context, textEditingController3, widget.date);
+                      },
+                      child: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          );
+        }));
   }
 
   buildAlarmTitle() {
     print(widget.alarm);
     return SizedBox(
-        height: 30,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Flexible(
               fit: FlexFit.tight,
@@ -810,11 +812,10 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
 
   Alarm() {
     return SizedBox(
-        height: 200,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              height: 80,
               child: ContainerDesign(
                 color: Colors.white,
                 child: ListTile(

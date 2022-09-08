@@ -1,3 +1,4 @@
+import 'package:clickbyme/sheets/userinfo_draggable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,12 +112,8 @@ class _LoginSignPageState extends State<LoginSignPage>
                                     letterSpacing: 2),
                                 text: '앱의 개인정보처리방침',
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    final url = Uri.parse(
-                                        'https://habittrack.oopy.io/');
-                                    if (!await launchUrl(url)) {
-                                      throw 'Could not launch $url';
-                                    }
+                                  ..onTap = () {
+                                    userinfo_draggable(context);
                                   },
                               ),
                               const TextSpan(

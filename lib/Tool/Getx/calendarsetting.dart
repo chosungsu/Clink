@@ -9,6 +9,14 @@ class calendarsetting extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List sharehomeid = [];
   int sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
+  int repeatdate = 1;
+
+  void setrepeatdate(int num) {
+    Hive.box('user_setting').put('repeatdate', num);
+    repeatdate = Hive.box('user_setting').get('repeatdate');
+    update();
+    notifyChildrens();
+  }
 
   void themecals1(String id) {
     themecalendar = 0;
