@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                       ? Stack(
                           children: [
                             Container(
-                              width: 50,
+                              width: 80,
                               child: DrawerScreen(),
                             ),
                             HomeUi(
@@ -234,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                                             child: IconButton(
                                                 onPressed: () {
                                                   setState(() {
-                                                    xoffset = 50;
+                                                    xoffset = 80;
                                                     yoffset = 0;
                                                     scalefactor = 1;
                                                     isdraweropen = true;

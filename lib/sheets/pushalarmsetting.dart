@@ -166,155 +166,161 @@ content(
         ),
         GetBuilder<memosetting>(
             builder: (_) => controll_memo.ischeckedpushmemoalarm == true
-                ? Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: Text(
-                              '시간 설정',
+                ? SizedBox(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: Text(
+                                '시간 설정',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: Colors.black),
+                              ),
+                            ),
+                            Text(
+                              '설정값 : ' +
+                                  Hive.box('user_setting')
+                                      .get('alarm_memo_hour') +
+                                  '시 ' +
+                                  Hive.box('user_setting')
+                                      .get('alarm_memo_minute') +
+                                  '분',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTextsize(),
                                   color: Colors.black),
                             ),
-                          ),
-                          Text(
-                            '설정값 : ' +
-                                Hive.box('user_setting')
-                                    .get('alarm_memo_hour') +
-                                '시 ' +
-                                Hive.box('user_setting')
-                                    .get('alarm_memo_minute') +
-                                '분',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize(),
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                              fit: FlexFit.tight,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        border: Border.all(
-                                            color: Colors.black, width: 1)),
-                                    child: TextField(
-                                      minLines: 1,
-                                      maxLines: 1,
-                                      focusNode: setalarmhourNode,
-                                      keyboardType: TextInputType.number,
-                                      style: TextStyle(
-                                          fontSize: contentTextsize(),
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 10.0, horizontal: 5),
-                                        isCollapsed: true,
-                                        hintText: '00',
-                                        hintStyle: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: Colors.grey.shade400),
-                                      ),
-                                      controller: controller_hour,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                    child: Text(
-                                      ':',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize(),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Container(
-                                    height: 50,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        border: Border.all(
-                                            color: Colors.black, width: 1)),
-                                    child: TextField(
-                                      minLines: 1,
-                                      maxLines: 1,
-                                      focusNode: setalarmminuteNode,
-                                      keyboardType: TextInputType.number,
-                                      style: TextStyle(
-                                          fontSize: contentTextsize(),
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 10.0, horizontal: 5),
-                                        isCollapsed: true,
-                                        hintText: '00',
-                                        hintStyle: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: Colors.grey.shade400),
-                                      ),
-                                      controller: controller_minute,
-                                    ),
-                                  )
-                                ],
-                              )),
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue.shade400,
-                              ),
-                              onPressed: () async {
-                                controll_memo.setalarmmemotimetable(
-                                    controller_hour.text.toString(),
-                                    controller_minute.text.toString());
-                                Navigator.pop(context);
-                              },
-                              child: Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                                fit: FlexFit.tight,
+                                child: Row(
                                   children: [
-                                    Center(
-                                      child: NeumorphicText(
-                                        '확인',
-                                        style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.flat,
-                                          depth: 3,
-                                          color: Colors.white,
+                                    Container(
+                                      height: 50,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          border: Border.all(
+                                              color: Colors.black, width: 1)),
+                                      child: TextField(
+                                        minLines: 1,
+                                        maxLines: 1,
+                                        focusNode: setalarmhourNode,
+                                        keyboardType: TextInputType.number,
+                                        style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10.0,
+                                                  horizontal: 5),
+                                          isCollapsed: true,
+                                          hintText: '00',
+                                          hintStyle: TextStyle(
+                                              fontSize: contentTextsize(),
+                                              color: Colors.grey.shade400),
                                         ),
-                                        textStyle: NeumorphicTextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
+                                        controller: controller_hour,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                      child: Text(
+                                        ':',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize(),
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Container(
+                                      height: 50,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          border: Border.all(
+                                              color: Colors.black, width: 1)),
+                                      child: TextField(
+                                        minLines: 1,
+                                        maxLines: 1,
+                                        focusNode: setalarmminuteNode,
+                                        keyboardType: TextInputType.number,
+                                        style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10.0,
+                                                  horizontal: 5),
+                                          isCollapsed: true,
+                                          hintText: '00',
+                                          hintStyle: TextStyle(
+                                              fontSize: contentTextsize(),
+                                              color: Colors.grey.shade400),
                                         ),
+                                        controller: controller_minute,
                                       ),
                                     )
                                   ],
+                                )),
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue.shade400,
                                 ),
-                              )),
-                        ],
-                      )
-                    ],
+                                onPressed: () async {
+                                  controll_memo.setalarmmemotimetable(
+                                      controller_hour.text.toString(),
+                                      controller_minute.text.toString());
+                                  Navigator.pop(context);
+                                },
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          '확인',
+                                          style: const NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Colors.white,
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          ],
+                        )
+                      ],
+                    ),
                   )
                 : const SizedBox()),
       ],

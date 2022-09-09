@@ -39,7 +39,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 50,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
             border: Border(
@@ -47,6 +46,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
             color: BGColor()),
         child: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: drawerItems.map((element) {
               selected = drawerItems.indexOf(element) == page_index;
