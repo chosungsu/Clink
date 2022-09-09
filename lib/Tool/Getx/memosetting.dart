@@ -32,7 +32,7 @@ class memosetting extends GetxController {
     Hive.box('user_setting').put('alarm_memo_minute', minute);
     NotificationApi.showDailyNotification(
         title: '띵동! 메모 알림이에요',
-        body: '지금 바로 메모를 확인해보세요',
+        body: '지금 바로 메모를 확인해보세요 (메모알림끄기는 [일상메모]->[톱니바퀴]->[해제])',
         scheduledate: DateTime.utc(
             now.year,
             now.month,
