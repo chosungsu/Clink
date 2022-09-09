@@ -96,6 +96,7 @@ dependencies:
   printing: 
   share_plus: 
   url_launcher: 
+  flutter_time_picker_spinner: 
   #local db
   encrypt:
   hive: 

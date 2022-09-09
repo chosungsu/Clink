@@ -92,8 +92,10 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     sortmemo_fromsheet = controll_memo.memosort;
     controll_memo.resetimagelist();
     controller = TextEditingController();
-    controller_hour = TextEditingController();
-    controller_minute = TextEditingController();
+    controller_hour = TextEditingController(
+        text: Hive.box('user_setting').get('alarm_memo_hour'));
+    controller_minute = TextEditingController(
+        text: Hive.box('user_setting').get('alarm_memo_minute'));
     sort = controll_memo.sort;
     _scrollController = ScrollController()
       ..addListener(() {

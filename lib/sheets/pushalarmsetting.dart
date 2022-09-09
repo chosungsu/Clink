@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
 pushalarmsetting(
   BuildContext context,
@@ -120,6 +121,7 @@ content(
   TextEditingController controller_hour,
   TextEditingController controller_minute,
 ) {
+  DateTime now = DateTime.now();
   final controll_memo = Get.put(memosetting());
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -180,6 +182,19 @@ content(
                                   fontSize: contentTextsize(),
                                   color: Colors.black),
                             ),
+                          ),
+                          Text(
+                            '설정값 : ' +
+                                Hive.box('user_setting')
+                                    .get('alarm_memo_hour') +
+                                '시 ' +
+                                Hive.box('user_setting')
+                                    .get('alarm_memo_minute') +
+                                '분',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.black),
                           ),
                         ],
                       ),
@@ -272,8 +287,8 @@ content(
                               ),
                               onPressed: () async {
                                 controll_memo.setalarmmemotimetable(
-                                    controller_hour.text,
-                                    controller_minute.text);
+                                    controller_hour.text.toString(),
+                                    controller_minute.text.toString());
                                 Navigator.pop(context);
                               },
                               child: Center(
