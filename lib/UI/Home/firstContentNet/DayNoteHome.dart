@@ -5,6 +5,7 @@ import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
+import 'package:clickbyme/sheets/pushalarmsetting.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +45,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   final scollection = Get.put(selectcollection());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final searchNode = FocusNode();
+  final setalarmhourNode = FocusNode();
+  final setalarmminuteNode = FocusNode();
   String username = Hive.box('user_info').get(
     'id',
   );
@@ -52,6 +55,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   String tmpsummary = '';
   DateTime Date = DateTime.now();
   TextEditingController controller = TextEditingController();
+  TextEditingController controller_hour = TextEditingController();
+  TextEditingController controller_minute = TextEditingController();
   ScrollController _scrollController = ScrollController();
   bool _showBackToTopButton = false;
   bool isresponsive = false;
@@ -87,6 +92,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     sortmemo_fromsheet = controll_memo.memosort;
     controll_memo.resetimagelist();
     controller = TextEditingController();
+    controller_hour = TextEditingController();
+    controller_minute = TextEditingController();
     sort = controll_memo.sort;
     _scrollController = ScrollController()
       ..addListener(() {
@@ -106,6 +113,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.dispose();
     controller.dispose();
+    controller_hour.dispose();
+    controller_minute.dispose();
   }
 
   void _scrollToTop() {
@@ -304,6 +313,42 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                             ),
                                             SortMenuHolder(
                                                 controll_memo.sort, '메모'),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            IconBtn(
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      //Get.back(result: true);
+                                                      pushalarmsetting(
+                                                          context,
+                                                          setalarmhourNode,
+                                                          setalarmminuteNode,
+                                                          controller_hour,
+                                                          controller_minute);
+                                                    },
+                                                    icon: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons.settings,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    )),
+                                                color: TextColor()),
                                           ],
                                         ))),
                               ],
@@ -331,6 +376,20 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                   const SizedBox(
                                     height: 20,
                                   ),
+                                  GetBuilder<memosetting>(builder: (_) {
+                                    return controll_memo
+                                                .ischeckedpushmemoalarm ==
+                                            false
+                                        ? Column(
+                                            children: [
+                                              SetRoom(),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                            ],
+                                          )
+                                        : const SizedBox();
+                                  }),
                                   listy_My(),
                                 ],
                               ),
@@ -343,52 +402,6 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     );
   }
 
-  /*SearchBox() {
-    return SizedBox(
-      height: 50,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Search()],
-      ),
-    );
-  }
-
-  Search() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-            height: 50,
-            child: ContainerDesign(
-              child: TextField(
-                focusNode: searchNode,
-                textAlign: TextAlign.start,
-                textAlignVertical: TextAlignVertical.center,
-                style: const TextStyle(
-                    color: Colors.black45,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: InputBorder.none,
-                  hintMaxLines: 2,
-                  hintText: '톱니바퀴 -> 조건설정 후 검색',
-                  hintStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black45),
-                  prefixIcon: const Icon(Icons.search),
-                  isCollapsed: true,
-                  prefixIconColor: Colors.black45,
-                ),
-              ),
-              color: Colors.white,
-            ))
-      ],
-    );
-  }*/
-
   ADBox() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -397,6 +410,82 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
         ADEvents(context),
         const SizedBox(
           height: 10,
+        ),
+      ],
+    );
+  }
+
+  SetRoom() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.6,
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: Colors.blue,
+                      letterSpacing: 2),
+                  text: '알림설정',
+                ),
+                TextSpan(
+                  style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: contentTextsize(),
+                      color: Colors.black,
+                      letterSpacing: 2),
+                  text: '을 통해 매일 메모 알림을 받아보세요',
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        ListTile(
+          dense: true,
+          minLeadingWidth: 30,
+          horizontalTitleGap: 10,
+          leading: Icon(
+            Icons.notification_add,
+            color: Colors.yellow.shade400,
+          ),
+          onTap: () {
+            //alarm 설정시트 띄우기
+            pushalarmsetting(context, setalarmhourNode, setalarmminuteNode,
+                controller_hour, controller_minute);
+            /*Get.to(
+                () => SecureAuth(
+                    string: '지문',
+                    id: id,
+                    doc_secret_bool: doc,
+                    doc_pin_number: doc_pin_number,
+                    unlock: false),
+                transition: Transition.downToUp);*/
+          },
+          trailing:
+              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400),
+          title: Text('알람 설정하러가기',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(
+          height: 20,
+          color: Colors.grey,
+          thickness: 0.5,
+          indent: 30.0,
+          endIndent: 0,
         ),
       ],
     );

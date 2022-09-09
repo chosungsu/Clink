@@ -16,7 +16,6 @@ import '../../../Tool/TextSize.dart';
 import '../Widgets/CreateCalandmemo.dart';
 import '../firstContentNet/DayScript.dart';
 
-
 class ClickShowEachCalendar extends StatefulWidget {
   const ClickShowEachCalendar(
       {Key? key,
@@ -310,51 +309,84 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                               () {
                                                             CreateCalandmemoSuccessFlushbarSub(
                                                                 context, '일정');
-                                                            if (isChecked_pushalarm ==
-                                                                true) {
-                                                              NotificationApi
-                                                                  .showScheduledNotification(
-                                                                      title: '알람설정된 일정 : ' +
-                                                                          textEditingController1
-                                                                              .text,
-                                                                      body: textEditingController2.text.split(':')[0].length ==
-                                                                              1
-                                                                          ? (textEditingController3.text.split(':')[0].length == 1
-                                                                              ? '예정된 시각 : ' +
-                                                                                  firsttxt
-                                                                              : '예정된 시각 : ' +
-                                                                                  secondtxt)
-                                                                          : (textEditingController3.text.split(':')[0].length == 1
-                                                                              ? '예정된 시각 : ' +
-                                                                                  thirdtxt
-                                                                              : '예정된 시각 : ' +
-                                                                                  forthtxt),
-                                                                      scheduledate:
-                                                                          DateTime
-                                                                              .utc(
-                                                                        int.parse(widget
-                                                                            .date
-                                                                            .toString()
-                                                                            .split('-')[0]),
-                                                                        int.parse(widget
-                                                                            .date
-                                                                            .toString()
-                                                                            .split('-')[1]),
-                                                                        int.parse(widget
-                                                                            .date
-                                                                            .toString()
-                                                                            .split('-')[2]),
-                                                                        int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
-                                                                            ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) -
+                                                            if (widget.alarm !=
+                                                                '설정off') {
+                                                                  NotificationApi
+                                                                  .showNotification(
+                                                                title: '알람설정된 일정 : ' +
+                                                                    textEditingController1
+                                                                        .text,
+                                                                body: textEditingController2
+                                                                            .text
+                                                                            .split(':')[
+                                                                                0]
+                                                                            .length ==
+                                                                        1
+                                                                    ? (textEditingController3.text.split(':')[0].length ==
+                                                                            1
+                                                                        ? '예정된 시각 : ' +
+                                                                            firsttxt
+                                                                        : '예정된 시각 : ' +
+                                                                            secondtxt)
+                                                                    : (textEditingController3.text.split(':')[0].length ==
+                                                                            1
+                                                                        ? '예정된 시각 : ' +
+                                                                            thirdtxt
+                                                                        : '예정된 시각 : ' +
+                                                                            forthtxt),
+                                                              );
+                                                                  NotificationApi.showScheduledNotification(
+                                                                  id: int.parse(widget.date.toString().split('-')[0]) + int.parse(widget.date.toString().split('-')[1]) + int.parse(widget.date.toString().split('-')[2].toString().split(' ')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                      ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
+                                                                      : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                          ? 60 - (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                          : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)),
+                                                                  title: textEditingController1.text + '일정이 다가옵니다',
+                                                                  body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
+                                                                  scheduledate: DateTime.utc(
+                                                                    int.parse(widget
+                                                                        .date
+                                                                        .toString()
+                                                                        .split(
+                                                                            '-')[0]),
+                                                                    int.parse(widget
+                                                                        .date
+                                                                        .toString()
+                                                                        .split(
+                                                                            '-')[1]),
+                                                                    int.parse(widget
+                                                                        .date
+                                                                        .toString()
+                                                                        .split('-')[
+                                                                            2]
+                                                                        .toString()
+                                                                        .split(
+                                                                            ' ')[0]),
+                                                                    int.parse(textEditingController2.text.split(':')[1]) <
+                                                                            int.parse(changevalue.substring(
+                                                                                0,
+                                                                                changevalue.length -
+                                                                                    3))
+                                                                        ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) -
+                                                                            1
+                                                                        : int.parse(textEditingController2.text.split(':')[0].length ==
                                                                                 1
-                                                                            : int.parse(textEditingController2.text.split(':')[0].length == 1
-                                                                                ? '0' + textEditingController2.text.split(':')[0]
-                                                                                : textEditingController2.text.split(':')[0]),
-                                                                        int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
-                                                                            ? 60 -
-                                                                                (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
-                                                                            : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)),
-                                                                      ));
+                                                                            ? '0' +
+                                                                                textEditingController2.text.split(':')[0]
+                                                                            : textEditingController2.text.split(':')[0]),
+                                                                    int.parse(textEditingController2.text.split(':')[1]) <
+                                                                            int.parse(changevalue.substring(
+                                                                                0,
+                                                                                changevalue.length -
+                                                                                    3))
+                                                                        ? 60 -
+                                                                            (int.parse(changevalue.substring(0, changevalue.length - 3)) -
+                                                                                int.parse(textEditingController2.text.split(':')[
+                                                                                    1]))
+                                                                        : int.parse(textEditingController2.text.split(':')[1]) -
+                                                                            int.parse(changevalue.substring(0,
+                                                                                changevalue.length - 3)),
+                                                                  ));
                                                             } else {
                                                               NotificationApi
                                                                   .showNotification(
@@ -755,49 +787,49 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     print(widget.alarm);
     return SizedBox(
         child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              fit: FlexFit.tight,
-              child: Text(
-                '알람설정',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize(),
-                    color: Colors.black),
-              ),
-            ),
-            widget.alarm == '설정off'
-                ? Transform.scale(
-                    scale: 0.7,
-                    child: Switch(
-                        activeColor: Colors.blue,
-                        inactiveThumbColor: Colors.black,
-                        inactiveTrackColor: Colors.grey.shade100,
-                        value: isChecked_pushalarm,
-                        onChanged: (bool val) {
-                          setState(() {
-                            isChecked_pushalarm = val;
-                            print(isChecked_pushalarm);
-                          });
-                        }),
-                  )
-                : Transform.scale(
-                    scale: 0.7,
-                    child: Switch(
-                        activeColor: Colors.blue,
-                        inactiveThumbColor: Colors.black,
-                        inactiveTrackColor: Colors.grey.shade400,
-                        value: !isChecked_pushalarm,
-                        onChanged: (bool val) {
-                          setState(() {
-                            isChecked_pushalarm = !val;
-                            print(isChecked_pushalarm);
-                          });
-                        }),
-                  )
-          ],
-        ));
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          fit: FlexFit.tight,
+          child: Text(
+            '알람설정',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: contentTitleTextsize(),
+                color: Colors.black),
+          ),
+        ),
+        widget.alarm == '설정off'
+            ? Transform.scale(
+                scale: 0.7,
+                child: Switch(
+                    activeColor: Colors.blue,
+                    inactiveThumbColor: Colors.black,
+                    inactiveTrackColor: Colors.grey.shade100,
+                    value: isChecked_pushalarm,
+                    onChanged: (bool val) {
+                      setState(() {
+                        isChecked_pushalarm = val;
+                        print(isChecked_pushalarm);
+                      });
+                    }),
+              )
+            : Transform.scale(
+                scale: 0.7,
+                child: Switch(
+                    activeColor: Colors.blue,
+                    inactiveThumbColor: Colors.black,
+                    inactiveTrackColor: Colors.grey.shade400,
+                    value: !isChecked_pushalarm,
+                    onChanged: (bool val) {
+                      setState(() {
+                        isChecked_pushalarm = !val;
+                        print(isChecked_pushalarm);
+                      });
+                    }),
+              )
+      ],
+    ));
   }
 
   List<DropdownMenuItem<String>> get dropdownItems {
@@ -813,102 +845,98 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   Alarm() {
     return SizedBox(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              child: ContainerDesign(
-                color: Colors.white,
-                child: ListTile(
-                  leading: NeumorphicIcon(
-                    Icons.alarm,
-                    size: 30,
-                    style: const NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        surfaceIntensity: 0.5,
-                        color: Colors.black,
-                        lightSource: LightSource.topLeft),
-                  ),
-                  title: Text(
-                    '알람',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: Colors.black),
-                  ),
-                  trailing: widget.alarm == '설정off'
-                      ? (isChecked_pushalarm == true
-                          ? DropdownButton(
-                              value: changevalue,
-                              dropdownColor: Colors.white,
-                              items: dropdownItems,
-                              icon: NeumorphicIcon(
-                                Icons.arrow_drop_down,
-                                size: 20,
-                                style: const NeumorphicStyle(
-                                    shape: NeumorphicShape.convex,
-                                    depth: 2,
-                                    surfaceIntensity: 0.5,
-                                    color: Colors.black,
-                                    lightSource: LightSource.topLeft),
-                              ),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: contentTextsize()),
-                              onChanged: isChecked_pushalarm == true
-                                  ? (String? value) {
-                                      setState(() {
-                                        changevalue = value!;
-                                        Hive.box('user_setting')
-                                            .put('alarming_time', changevalue);
-                                      });
-                                    }
-                                  : null,
-                            )
-                          : Text(
-                              '설정off상태입니다.',
-                              style: TextStyle(
-                                  fontSize: contentTextsize(),
-                                  color: Colors.black),
-                            ))
-                      : (!isChecked_pushalarm == true
-                          ? DropdownButton(
-                              value: changevalue,
-                              dropdownColor: Colors.white,
-                              items: dropdownItems,
-                              icon: NeumorphicIcon(
-                                Icons.arrow_drop_down,
-                                size: 20,
-                                style: const NeumorphicStyle(
-                                    shape: NeumorphicShape.convex,
-                                    depth: 2,
-                                    surfaceIntensity: 0.5,
-                                    color: Colors.black,
-                                    lightSource: LightSource.topLeft),
-                              ),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: contentTextsize()),
-                              onChanged: !isChecked_pushalarm == true
-                                  ? (String? value) {
-                                      setState(() {
-                                        changevalue = value!;
-                                        Hive.box('user_setting')
-                                            .put('alarming_time', changevalue);
-                                      });
-                                    }
-                                  : null,
-                            )
-                          : Text(
-                              '설정off상태입니다.',
-                              style: TextStyle(
-                                  fontSize: contentTextsize(),
-                                  color: Colors.black),
-                            )),
-                ),
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          child: ContainerDesign(
+            color: Colors.white,
+            child: ListTile(
+              leading: NeumorphicIcon(
+                Icons.alarm,
+                size: 30,
+                style: const NeumorphicStyle(
+                    shape: NeumorphicShape.convex,
+                    depth: 2,
+                    surfaceIntensity: 0.5,
+                    color: Colors.black,
+                    lightSource: LightSource.topLeft),
               ),
+              title: Text(
+                '알람',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize(),
+                    color: Colors.black),
+              ),
+              trailing: widget.alarm == '설정off'
+                  ? (isChecked_pushalarm == true
+                      ? DropdownButton(
+                          value: changevalue,
+                          dropdownColor: Colors.white,
+                          items: dropdownItems,
+                          icon: NeumorphicIcon(
+                            Icons.arrow_drop_down,
+                            size: 20,
+                            style: const NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                surfaceIntensity: 0.5,
+                                color: Colors.black,
+                                lightSource: LightSource.topLeft),
+                          ),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: contentTextsize()),
+                          onChanged: isChecked_pushalarm == true
+                              ? (String? value) {
+                                  setState(() {
+                                    changevalue = value!;
+                                    Hive.box('user_setting')
+                                        .put('alarming_time', changevalue);
+                                  });
+                                }
+                              : null,
+                        )
+                      : Text(
+                          '설정off상태입니다.',
+                          style: TextStyle(
+                              fontSize: contentTextsize(), color: Colors.black),
+                        ))
+                  : (!isChecked_pushalarm == true
+                      ? DropdownButton(
+                          value: changevalue,
+                          dropdownColor: Colors.white,
+                          items: dropdownItems,
+                          icon: NeumorphicIcon(
+                            Icons.arrow_drop_down,
+                            size: 20,
+                            style: const NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                surfaceIntensity: 0.5,
+                                color: Colors.black,
+                                lightSource: LightSource.topLeft),
+                          ),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: contentTextsize()),
+                          onChanged: !isChecked_pushalarm == true
+                              ? (String? value) {
+                                  setState(() {
+                                    changevalue = value!;
+                                    Hive.box('user_setting')
+                                        .put('alarming_time', changevalue);
+                                  });
+                                }
+                              : null,
+                        )
+                      : Text(
+                          '설정off상태입니다.',
+                          style: TextStyle(
+                              fontSize: contentTextsize(), color: Colors.black),
+                        )),
             ),
-          ],
-        ));
+          ),
+        ),
+      ],
+    ));
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../LocalNotiPlatform/NotificationApi.dart';
 import '../BGColor.dart';
 
 class memosetting extends GetxController {
@@ -10,9 +11,38 @@ class memosetting extends GetxController {
       : Colors.white;
   int memosort = 0;
   bool ischeckedtohideminus = false;
+  bool ischeckedpushmemoalarm =
+      Hive.box('user_setting').get('alarm_memo') ?? false;
   List imagelist = [];
   int imageindex = 0;
   int sort = Hive.box('user_setting').get('sort_memo_card') ?? 0;
+  DateTime now = DateTime.now();
+
+  void setalarmmemo() {
+    ischeckedpushmemoalarm = Hive.box('user_setting').get('alarm_memo');
+    if (ischeckedpushmemoalarm == false) {
+      NotificationApi.cancelNotification(id: 1);
+    }
+    update();
+    notifyChildrens();
+  }
+
+  void setalarmmemotimetable(String hour, String minute) {
+    Hive.box('user_setting').put('alarm_memo_hour', hour);
+    Hive.box('user_setting').put('alarm_memo_minute', minute);
+    NotificationApi.showDailyNotification(
+        title: '작성된 메모를 잊지 않으셨나요?',
+        body: '메모알림설정해제 방법 : \n[일상메모]->[톱니바퀴 클릭]->[알림해제]',
+        scheduledate: DateTime.utc(
+            now.year,
+            now.month,
+            now.day,
+            int.parse(Hive.box('user_setting').get('alarm_memo_hour')),
+            int.parse(Hive.box('user_setting').get('alarm_memo_minute')),
+            0));
+    update();
+    notifyChildrens();
+  }
 
   void setsortmemo(int sortnum) {
     Hive.box('user_setting').put('sort_memo_card', sortnum);

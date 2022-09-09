@@ -5,6 +5,10 @@ import 'package:timezone/timezone.dart' as tz;
 class NotificationApi {
   static final _notifications = FlutterLocalNotificationsPlugin();
 
+  static Future cancelNotification({required int id}) async {
+    await _notifications.cancel(id);
+  }
+
   static Future showNotification({
     int id = 0,
     String? title,
@@ -18,7 +22,30 @@ class NotificationApi {
   }
 
   static void showScheduledNotification(
-      {int id = 0,
+      {int? id,
+      String? title,
+      String? body,
+      required DateTime scheduledate}) async {
+    await _notifications
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.deleteNotificationChannelGroup('id');
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+    _notifications.zonedSchedule(
+      id!,
+      title,
+      body,
+      _nextInstance(scheduledate),
+      await _notificationDetails(),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+  }
+
+  static void showDailyNotification(
+      {int id = 1,
       String? title,
       String? body,
       required DateTime scheduledate}) async {
@@ -32,8 +59,9 @@ class NotificationApi {
       id,
       title,
       body,
-      _nextInstance(scheduledate),
+      _nextInstancedaily(scheduledate),
       await _notificationDetails(),
+      matchDateTimeComponents: DateTimeComponents.time,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
@@ -43,14 +71,20 @@ class NotificationApi {
   // 알림일자
   static tz.TZDateTime _nextInstance(DateTime scheduledate) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime(
-        tz.local,
-        scheduledate.year,
-        scheduledate.month,
-        scheduledate.day,
-        scheduledate.hour,
-        scheduledate.minute,
-        0);
+    tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledate, tz.local);
+    // 알람시간이 현재보다 이전인 경우 5초 뒤에 알람이 울린다.
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = tz.TZDateTime.now(tz.local).add(const Duration(days: 1));
+    } else {
+      scheduledDate =
+          tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
+    }
+    return scheduledDate;
+  }
+
+  static tz.TZDateTime _nextInstancedaily(DateTime scheduledate) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledate, tz.local);
     // 알람시간이 현재보다 이전인 경우 5초 뒤에 알람이 울린다.
     if (scheduledDate.isBefore(now)) {
       scheduledDate =
@@ -63,6 +97,7 @@ class NotificationApi {
     return const NotificationDetails(
         android: AndroidNotificationDetails('channel id', 'channel name',
             channelDescription: 'channel description',
+            setAsGroupSummary: true,
             importance: Importance.max),
         iOS: IOSNotificationDetails());
   }
