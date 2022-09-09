@@ -395,9 +395,11 @@ class _DayScriptState extends State<DayScript> {
                                                                                 DateFormat('yyyy-MM-dd').parse(differ_list[j].toString()).toString().split(' ')[0] + '일',
                                                                           });
                                                                           NotificationApi.showScheduledNotification(
-                                                                              id: int.parse(DateFormat('yyyyMMdd').parse(differ_list[j]).toString()) +
-                                                                              int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1 : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) +
-                                                                              int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
+                                                                              id: int.parse(DateFormat('yyyyMMdd').parse(differ_list[j]).toString()) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
+                                                                                  ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
+                                                                                  : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
+                                                                                      ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                                      : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
                                                                               title: textEditingController1.text + '일정이 다가옵니다',
                                                                               body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
                                                                               scheduledate: DateTime.utc(
@@ -412,13 +414,13 @@ class _DayScriptState extends State<DayScript> {
                                                                             context,
                                                                             '일정');
                                                                         NotificationApi
-                                                                              .showNotification(
-                                                                            title:
-                                                                                '알람설정된 일정 : ' + textEditingController1.text,
-                                                                            body: textEditingController2.text.split(':')[0].length == 1
-                                                                                ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt)
-                                                                                : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                                                                          );
+                                                                            .showNotification(
+                                                                          title:
+                                                                              '알람설정된 일정 : ' + textEditingController1.text,
+                                                                          body: textEditingController2.text.split(':')[0].length == 1
+                                                                              ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt)
+                                                                              : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
+                                                                        );
                                                                       } else {
                                                                         firestore
                                                                             .collection('CalendarDataBase')
@@ -1951,6 +1953,10 @@ class _DayScriptState extends State<DayScript> {
                     onChanged: (bool val) {
                       setState(() {
                         isChecked_pushalarm = val;
+                        if (isChecked_pushalarm) {
+                          Hive.box('user_setting')
+                              .put('alarming_time', selectedValue);
+                        }
                       });
                     }),
               )

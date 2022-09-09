@@ -71,22 +71,40 @@ class NotificationApi {
   // 알림일자
   static tz.TZDateTime _nextInstance(DateTime scheduledate) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledate, tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+      tz.local,
+      scheduledate.year,
+      scheduledate.month,
+      scheduledate.day,
+      scheduledate.hour,
+      scheduledate.minute,
+    );
+    //tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledate, tz.local);
     // 알람시간이 현재보다 이전인 경우 5초 뒤에 알람이 울린다.
-    if (scheduledDate.isBefore(now)) {
+    /*if (scheduledDate.isBefore(now)) {
       scheduledDate =
           tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
-    }
+    }*/
+
     return scheduledDate;
   }
 
   static tz.TZDateTime _nextInstancedaily(DateTime scheduledate) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledate, tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      scheduledate.hour,
+      scheduledate.minute,
+    );
+    //tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledate, tz.local);
     // 알람시간이 현재보다 이전인 경우 5초 뒤에 알람이 울린다.
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = tz.TZDateTime.now(tz.local).add(const Duration(days: 1));
-    }
+    /*if (scheduledDate.isBefore(now)) {
+      scheduledDate =
+          tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
+    }*/
     return scheduledDate;
   }
 

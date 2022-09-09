@@ -167,6 +167,7 @@ content(
         GetBuilder<memosetting>(
             builder: (_) => controll_memo.ischeckedpushmemoalarm == true
                 ? SizedBox(
+                    height: 120,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -185,19 +186,31 @@ content(
                                     color: Colors.black),
                               ),
                             ),
-                            Text(
-                              '설정값 : ' +
-                                  Hive.box('user_setting')
-                                      .get('alarm_memo_hour') +
-                                  '시 ' +
-                                  Hive.box('user_setting')
-                                      .get('alarm_memo_minute') +
-                                  '분',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize(),
-                                  color: Colors.black),
-                            ),
+                            Hive.box('user_setting').get('alarm_memo_hour') ==
+                                        null ||
+                                    Hive.box('user_setting')
+                                            .get('alarm_memo_minute') ==
+                                        null
+                                ? Text(
+                                    '설정시간 : 없음',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                        color: Colors.black),
+                                  )
+                                : Text(
+                                    '설정시간 : ' +
+                                        Hive.box('user_setting')
+                                            .get('alarm_memo_hour') +
+                                        '시 ' +
+                                        Hive.box('user_setting')
+                                            .get('alarm_memo_minute') +
+                                        '분',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                        color: Colors.black),
+                                  ),
                           ],
                         ),
                         Row(
@@ -289,7 +302,7 @@ content(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue.shade400,
                                 ),
-                                onPressed: () async {
+                                onPressed: () {
                                   controll_memo.setalarmmemotimetable(
                                       controller_hour.text.toString(),
                                       controller_minute.text.toString());
