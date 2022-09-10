@@ -311,7 +311,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                 context, '일정');
                                                             if (widget.alarm !=
                                                                 '설정off') {
-                                                                  NotificationApi
+                                                              NotificationApi
                                                                   .showNotification(
                                                                 title: '알람설정된 일정 : ' +
                                                                     textEditingController1
@@ -335,7 +335,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                         : '예정된 시각 : ' +
                                                                             forthtxt),
                                                               );
-                                                                  NotificationApi.showScheduledNotification(
+                                                              NotificationApi.showScheduledNotification(
                                                                   id: int.parse(widget.date.toString().split('-')[0]) + int.parse(widget.date.toString().split('-')[1]) + int.parse(widget.date.toString().split('-')[2].toString().split(' ')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
                                                                       ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
                                                                       : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
@@ -387,32 +387,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                             int.parse(changevalue.substring(0,
                                                                                 changevalue.length - 3)),
                                                                   ));
-                                                            } else {
-                                                              NotificationApi
-                                                                  .showNotification(
-                                                                title: '알람설정된 일정 : ' +
-                                                                    textEditingController1
-                                                                        .text,
-                                                                body: textEditingController2
-                                                                            .text
-                                                                            .split(':')[
-                                                                                0]
-                                                                            .length ==
-                                                                        1
-                                                                    ? (textEditingController3.text.split(':')[0].length ==
-                                                                            1
-                                                                        ? '예정된 시각 : ' +
-                                                                            firsttxt
-                                                                        : '예정된 시각 : ' +
-                                                                            secondtxt)
-                                                                    : (textEditingController3.text.split(':')[0].length ==
-                                                                            1
-                                                                        ? '예정된 시각 : ' +
-                                                                            thirdtxt
-                                                                        : '예정된 시각 : ' +
-                                                                            forthtxt),
-                                                              );
-                                                            }
+                                                            } else {}
                                                           });
                                                         });
                                                       });
@@ -534,6 +509,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                 CreateCalandmemoFlushbardelete(
                                                                     context,
                                                                     '일정');
+                                                                NotificationApi.cancelNotification(
+                                                                    id: int.parse(widget.date.toString().split('-')[0]) + int.parse(widget.date.toString().split('-')[1]) + int.parse(widget.date.toString().split('-')[2].toString().split(' ')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                        ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
+                                                                        : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                            ? 60 - (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                            : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)));
                                                               });
                                                             });
                                                           });
@@ -810,7 +791,27 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     onChanged: (bool val) {
                       setState(() {
                         isChecked_pushalarm = val;
-                        print(isChecked_pushalarm);
+                        if (isChecked_pushalarm == false) {
+                          NotificationApi.cancelNotification(
+                              id: int.parse(widget.date.toString().split('-')[0]) + int.parse(widget.date.toString().split('-')[1]) + int.parse(widget.date.toString().split('-')[2].toString().split(' ')[0]) + int.parse(textEditingController2.text.split(':')[1]) <
+                                      int.parse(changevalue.substring(
+                                          0, changevalue.length - 3))
+                                  ? int.parse(textEditingController2.text
+                                                  .split(':')[0]
+                                                  .length ==
+                                              1
+                                          ? '0' +
+                                              textEditingController2.text
+                                                  .split(':')[0]
+                                          : textEditingController2.text
+                                              .split(':')[0]) -
+                                      1
+                                  : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) +
+                                              int.parse(textEditingController2.text.split(':')[1]) <
+                                          int.parse(changevalue.substring(0, changevalue.length - 3))
+                                      ? 60 - (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                      : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)));
+                        }
                       });
                     }),
               )
@@ -824,7 +825,27 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     onChanged: (bool val) {
                       setState(() {
                         isChecked_pushalarm = !val;
-                        print(isChecked_pushalarm);
+                        if (!isChecked_pushalarm == false) {
+                          NotificationApi.cancelNotification(
+                              id: int.parse(widget.date.toString().split('-')[0]) + int.parse(widget.date.toString().split('-')[1]) + int.parse(widget.date.toString().split('-')[2].toString().split(' ')[0]) + int.parse(textEditingController2.text.split(':')[1]) <
+                                      int.parse(changevalue.substring(
+                                          0, changevalue.length - 3))
+                                  ? int.parse(textEditingController2.text
+                                                  .split(':')[0]
+                                                  .length ==
+                                              1
+                                          ? '0' +
+                                              textEditingController2.text
+                                                  .split(':')[0]
+                                          : textEditingController2.text
+                                              .split(':')[0]) -
+                                      1
+                                  : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) +
+                                              int.parse(textEditingController2.text.split(':')[1]) <
+                                          int.parse(changevalue.substring(0, changevalue.length - 3))
+                                      ? 60 - (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                      : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)));
+                        }
                       });
                     }),
               )

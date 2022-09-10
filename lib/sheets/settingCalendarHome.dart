@@ -96,7 +96,7 @@ content(
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100)),
-                            primary: setcal_fromsheet == 0
+                            primary: controll_cals.showcalendar == 0
                                 ? Colors.grey.shade400
                                 : Colors.white,
                             side: const BorderSide(
@@ -121,7 +121,7 @@ content(
                                   style: NeumorphicStyle(
                                     shape: NeumorphicShape.flat,
                                     depth: 3,
-                                    color: setcal_fromsheet == 0
+                                    color: controll_cals.showcalendar == 0
                                         ? Colors.white
                                         : Colors.black45,
                                   ),
@@ -146,7 +146,7 @@ content(
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100)),
-                          primary: setcal_fromsheet == 1
+                          primary: controll_cals.showcalendar == 1
                               ? Colors.grey.shade400
                               : Colors.white,
                           side: const BorderSide(
@@ -171,7 +171,7 @@ content(
                                 style: NeumorphicStyle(
                                   shape: NeumorphicShape.flat,
                                   depth: 3,
-                                  color: setcal_fromsheet == 1
+                                  color: controll_cals.showcalendar == 1
                                       ? Colors.white
                                       : Colors.black45,
                                 ),
@@ -197,7 +197,7 @@ content(
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100)),
-                          primary: setcal_fromsheet == 2
+                          primary: controll_cals.showcalendar == 2
                               ? Colors.grey.shade400
                               : Colors.white,
                           side: const BorderSide(
@@ -222,7 +222,7 @@ content(
                                 style: NeumorphicStyle(
                                   shape: NeumorphicShape.flat,
                                   depth: 3,
-                                  color: setcal_fromsheet == 2
+                                  color: controll_cals.showcalendar == 2
                                       ? Colors.white
                                       : Colors.black45,
                                 ),
@@ -266,7 +266,7 @@ content(
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100)),
-                            primary: themecal_fromsheet == 0
+                            primary: controll_cals.themecalendar == 0
                                 ? Colors.grey.shade400
                                 : Colors.white,
                             side: const BorderSide(
@@ -291,7 +291,7 @@ content(
                                   style: NeumorphicStyle(
                                     shape: NeumorphicShape.flat,
                                     depth: 3,
-                                    color: themecal_fromsheet == 0
+                                    color: controll_cals.themecalendar == 0
                                         ? Colors.white
                                         : Colors.black45,
                                   ),
@@ -316,7 +316,7 @@ content(
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100)),
-                          primary: themecal_fromsheet == 1
+                          primary: controll_cals.themecalendar == 1
                               ? Colors.grey.shade400
                               : Colors.white,
                           side: const BorderSide(
@@ -341,7 +341,7 @@ content(
                                 style: NeumorphicStyle(
                                   shape: NeumorphicShape.flat,
                                   depth: 3,
-                                  color: themecal_fromsheet == 1
+                                  color: controll_cals.themecalendar == 1
                                       ? Colors.white
                                       : Colors.black45,
                                 ),

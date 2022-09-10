@@ -167,7 +167,6 @@ content(
         GetBuilder<memosetting>(
             builder: (_) => controll_memo.ischeckedpushmemoalarm == true
                 ? SizedBox(
-                    height: 120,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -223,6 +222,29 @@ content(
                                 child: Row(
                                   children: [
                                     Container(
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          border: Border.all(
+                                              color: Colors.black, width: 1)),
+                                      child: TimePickerSpinner(
+                                        is24HourMode: true,
+                                        normalTextStyle: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: Colors.black),
+                                        highlightedTextStyle: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: Colors.blue),
+                                        spacing: 10,
+                                        itemHeight: 60,
+                                        isForce2Digits: true,
+                                        onTimeChange: (time) {
+                                          setState(() {
+                                            now = time;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                    /*Container(
                                       height: 50,
                                       width: 40,
                                       decoration: BoxDecoration(
@@ -295,7 +317,7 @@ content(
                                         ),
                                         controller: controller_minute,
                                       ),
-                                    )
+                                    )*/
                                   ],
                                 )),
                             ElevatedButton(
@@ -303,9 +325,13 @@ content(
                                   backgroundColor: Colors.blue.shade400,
                                 ),
                                 onPressed: () {
+                                  /*
+                                  controller_hour.text.toString(),
+                                      controller_minute.text.toString()
+                                  */
                                   controll_memo.setalarmmemotimetable(
-                                      controller_hour.text.toString(),
-                                      controller_minute.text.toString());
+                                      now.hour.toString(),
+                                      now.minute.toString());
                                   Navigator.pop(context);
                                 },
                                 child: Center(
@@ -315,7 +341,7 @@ content(
                                     children: [
                                       Center(
                                         child: NeumorphicText(
-                                          '확인',
+                                          '변경하기',
                                           style: const NeumorphicStyle(
                                             shape: NeumorphicShape.flat,
                                             depth: 3,

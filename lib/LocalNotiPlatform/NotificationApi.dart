@@ -61,7 +61,6 @@ class NotificationApi {
       body,
       _nextInstancedaily(scheduledate),
       await _notificationDetails(),
-      matchDateTimeComponents: DateTimeComponents.time,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
@@ -101,10 +100,9 @@ class NotificationApi {
     );
     //tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledate, tz.local);
     // 알람시간이 현재보다 이전인 경우 5초 뒤에 알람이 울린다.
-    /*if (scheduledDate.isBefore(now)) {
-      scheduledDate =
-          tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
-    }*/
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = tz.TZDateTime.now(tz.local).add(const Duration(days: 1));
+    }
     return scheduledDate;
   }
 

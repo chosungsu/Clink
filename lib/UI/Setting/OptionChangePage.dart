@@ -295,27 +295,19 @@ class _OptionChangePageState extends State<OptionChangePage>
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {
-                                                if (Hive.box('user_setting').get(
-                                                            'which_color_background') ==
-                                                        1 ||
-                                                    Hive.box('user_setting').get(
-                                                            'which_color_background') ==
-                                                        null) {
-                                                  Hive.box('user_setting').put(
-                                                      'which_color_background',
-                                                      0);
-                                                } else {
-                                                  Hive.box('user_setting').put(
-                                                      'which_color_background',
-                                                      1);
-                                                }
+                                                Hive.box('user_setting').put(
+                                                    'which_color_background',
+                                                    0);
                                               });
                                             },
                                             child: CircleAvatar(
                                               backgroundColor: Colors.white,
                                               child: Hive.box('user_setting').get(
-                                                          'which_color_background') ==
-                                                      0
+                                                              'which_color_background') ==
+                                                          0 ||
+                                                      Hive.box('user_setting').get(
+                                                              'which_color_background') ==
+                                                          null
                                                   ? Container(
                                                       alignment:
                                                           Alignment.center,
@@ -348,17 +340,9 @@ class _OptionChangePageState extends State<OptionChangePage>
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {
-                                                if (Hive.box('user_setting').get(
-                                                        'which_color_background') ==
-                                                    0) {
-                                                  Hive.box('user_setting').put(
-                                                      'which_color_background',
-                                                      1);
-                                                } else {
-                                                  Hive.box('user_setting').put(
-                                                      'which_color_background',
-                                                      0);
-                                                }
+                                                Hive.box('user_setting').put(
+                                                    'which_color_background',
+                                                    1);
                                               });
                                             },
                                             child: CircleAvatar(
@@ -405,24 +389,9 @@ class _OptionChangePageState extends State<OptionChangePage>
                                               child: InkWell(
                                                 onTap: () {
                                                   setState(() {
-                                                    if (Hive.box('user_setting')
-                                                                .get(
-                                                                    'which_text_size') ==
-                                                            1 ||
-                                                        Hive.box('user_setting')
-                                                                .get(
-                                                                    'which_text_size') ==
-                                                            null) {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'which_text_size',
-                                                              0);
-                                                    } else {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'which_text_size',
-                                                              1);
-                                                    }
+                                                    Hive.box('user_setting')
+                                                        .put('which_text_size',
+                                                            0);
                                                   });
                                                 },
                                                 child: CircleAvatar(
@@ -433,10 +402,12 @@ class _OptionChangePageState extends State<OptionChangePage>
                                                         shape: BoxShape.circle,
                                                         border: Border.all(
                                                             width: 2,
-                                                            color: Hive.box('user_setting')
-                                                                        .get(
+                                                            color: Hive.box('user_setting').get(
                                                                             'which_text_size') ==
-                                                                    0
+                                                                        0 ||
+                                                                    Hive.box('user_setting').get(
+                                                                            'which_color_background') ==
+                                                                        null
                                                                 ? Colors.blue
                                                                     .shade400
                                                                 : BGColor_shadowcolor())),
@@ -468,20 +439,9 @@ class _OptionChangePageState extends State<OptionChangePage>
                                               child: InkWell(
                                                 onTap: () {
                                                   setState(() {
-                                                    if (Hive.box('user_setting')
-                                                            .get(
-                                                                'which_text_size') ==
-                                                        0) {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'which_text_size',
-                                                              1);
-                                                    } else {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'which_text_size',
-                                                              0);
-                                                    }
+                                                    Hive.box('user_setting')
+                                                        .put('which_text_size',
+                                                            1);
                                                   });
                                                 },
                                                 child: CircleAvatar(
@@ -533,24 +493,9 @@ class _OptionChangePageState extends State<OptionChangePage>
                                               child: InkWell(
                                                 onTap: () {
                                                   setState(() {
-                                                    if (Hive.box('user_setting')
-                                                                .get(
-                                                                    'which_menu_pick') ==
-                                                            1 ||
-                                                        Hive.box('user_setting')
-                                                                .get(
-                                                                    'which_menu_pick') ==
-                                                            null) {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'which_menu_pick',
-                                                              0);
-                                                    } else {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'which_menu_pick',
-                                                              1);
-                                                    }
+                                                    Hive.box('user_setting')
+                                                        .put('which_menu_pick',
+                                                            0);
                                                   });
                                                 },
                                                 child: CircleAvatar(
@@ -572,7 +517,7 @@ class _OptionChangePageState extends State<OptionChangePage>
                                                     child: NeumorphicIcon(
                                                       Icons
                                                           .align_horizontal_left,
-                                                      size: 15,
+                                                      size: 25,
                                                       style: NeumorphicStyle(
                                                           shape: NeumorphicShape
                                                               .convex,
@@ -597,20 +542,9 @@ class _OptionChangePageState extends State<OptionChangePage>
                                               child: InkWell(
                                                 onTap: () {
                                                   setState(() {
-                                                    if (Hive.box('user_setting')
-                                                            .get(
-                                                                'which_menu_pick') ==
-                                                        0) {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'which_menu_pick',
-                                                              1);
-                                                    } else {
-                                                      Hive.box('user_setting')
-                                                          .put(
-                                                              'which_menu_pick',
-                                                              0);
-                                                    }
+                                                    Hive.box('user_setting')
+                                                        .put('which_menu_pick',
+                                                            1);
                                                   });
                                                 },
                                                 child: CircleAvatar(
@@ -621,10 +555,12 @@ class _OptionChangePageState extends State<OptionChangePage>
                                                         shape: BoxShape.circle,
                                                         border: Border.all(
                                                             width: 2,
-                                                            color: Hive.box('user_setting')
-                                                                        .get(
+                                                            color: Hive.box('user_setting').get(
                                                                             'which_menu_pick') ==
-                                                                    1
+                                                                        1 ||
+                                                                    Hive.box('user_setting').get(
+                                                                            'which_color_background') ==
+                                                                        null
                                                                 ? Colors.blue
                                                                     .shade400
                                                                 : BGColor_shadowcolor())),

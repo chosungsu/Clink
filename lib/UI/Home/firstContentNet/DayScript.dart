@@ -160,22 +160,7 @@ class _DayScriptState extends State<DayScript> {
       child: Scaffold(
         backgroundColor: BGColor(),
         resizeToAvoidBottomInset: true,
-        body: WillPopScope(
-            onWillPop: _onBackPressed,
-            child: GestureDetector(
-                onTap: () {
-                  searchNode_first_section.unfocus();
-                  searchNode_second_section.unfocus();
-                  searchNode_third_section.unfocus();
-                  searchNode_add_section.unfocus();
-                  for (int i = 0; i < scollection.memoindex; i++) {
-                    if (nodes.isNotEmpty) {
-                      nodes[i].unfocus();
-                    }
-                    scollection.memolistcontentin[i] = controllers[i].text;
-                  }
-                },
-                child: UI())),
+        body: WillPopScope(onWillPop: _onBackPressed, child: UI()),
       ),
     );
   }
@@ -474,14 +459,6 @@ class _DayScriptState extends State<DayScript> {
                                                                                 int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
                                                                               ));
                                                                         } else {
-                                                                          NotificationApi
-                                                                              .showNotification(
-                                                                            title:
-                                                                                '알람설정된 일정 : ' + textEditingController1.text,
-                                                                            body: textEditingController2.text.split(':')[0].length == 1
-                                                                                ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt)
-                                                                                : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                                                                          );
                                                                         }
                                                                       }
                                                                     } else {
@@ -605,76 +582,93 @@ class _DayScriptState extends State<DayScript> {
                                 child: SingleChildScrollView(child:
                                     StatefulBuilder(
                                         builder: (_, StateSetter setState) {
-                                  return Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        buildSheetTitle(widget.firstdate),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        WholeContent(),
-                                        widget.position == 'cal'
-                                            ? const SizedBox(
-                                                height: 30,
-                                              )
-                                            : const SizedBox(
-                                                height: 0,
-                                              ),
-                                        widget.position == 'cal'
-                                            ? SetTimeTitle()
-                                            : const SizedBox(
-                                                height: 0,
-                                              ),
-                                        widget.position == 'cal'
-                                            ? const SizedBox(
-                                                height: 20,
-                                              )
-                                            : const SizedBox(
-                                                height: 0,
-                                              ),
-                                        widget.position == 'cal'
-                                            ? Time()
-                                            : const SizedBox(
-                                                height: 0,
-                                              ),
-                                        widget.position == 'cal'
-                                            ? const SizedBox(
-                                                height: 30,
-                                              )
-                                            : const SizedBox(
-                                                height: 0,
-                                              ),
-                                        widget.position == 'cal'
-                                            ? SetAlarmTitle()
-                                            : const SizedBox(
-                                                height: 0,
-                                              ),
-                                        widget.position == 'cal'
-                                            ? const SizedBox(
-                                                height: 20,
-                                              )
-                                            : const SizedBox(
-                                                height: 0,
-                                              ),
-                                        widget.position == 'cal'
-                                            ? Alarm()
-                                            : const SizedBox(
-                                                height: 0,
-                                              ),
-                                        const SizedBox(
-                                          height: 50,
-                                        )
-                                      ],
+                                  return GestureDetector(
+                                    onTap: () {
+                                      searchNode_first_section.unfocus();
+                                      searchNode_second_section.unfocus();
+                                      searchNode_third_section.unfocus();
+                                      searchNode_add_section.unfocus();
+                                      for (int i = 0;
+                                          i < scollection.memoindex;
+                                          i++) {
+                                        if (nodes.isNotEmpty) {
+                                          nodes[i].unfocus();
+                                        }
+                                        /*scollection.memolistcontentin[i] =
+                                            controllers[i].text;*/
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 0, 20, 0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          buildSheetTitle(widget.firstdate),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          WholeContent(),
+                                          widget.position == 'cal'
+                                              ? const SizedBox(
+                                                  height: 30,
+                                                )
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
+                                              ? SetTimeTitle()
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
+                                              ? const SizedBox(
+                                                  height: 20,
+                                                )
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
+                                              ? Time()
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
+                                              ? const SizedBox(
+                                                  height: 30,
+                                                )
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
+                                              ? SetAlarmTitle()
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
+                                              ? const SizedBox(
+                                                  height: 20,
+                                                )
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
+                                              ? Alarm()
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          const SizedBox(
+                                            height: 50,
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   );
                                 })),
@@ -1004,8 +998,6 @@ class _DayScriptState extends State<DayScript> {
                                   itemBuilder: (context, index) {
                                     nodes.add(FocusNode());
                                     controllers.add(TextEditingController());
-                                    controllers[index].text =
-                                        scollection.memolistcontentin[index];
 
                                     return Row(
                                       children: [
@@ -1031,13 +1023,8 @@ class _DayScriptState extends State<DayScript> {
                                                       fontSize:
                                                           contentTextsize(),
                                                       color: Colors.black),
-                                                  controller: controllers[index]
-                                                    ..selection = TextSelection
-                                                        .fromPosition(TextPosition(
-                                                            offset: controllers[
-                                                                    index]
-                                                                .text
-                                                                .length)),
+                                                  controller:
+                                                      controllers[index],
                                                   decoration: InputDecoration(
                                                     isCollapsed: true,
                                                     border: InputBorder.none,
@@ -1379,12 +1366,6 @@ class _DayScriptState extends State<DayScript> {
                                                       ),
                                                       controller: controllers[
                                                           index]
-                                                        ..selection = TextSelection
-                                                            .fromPosition(TextPosition(
-                                                                offset: controllers[
-                                                                        index]
-                                                                    .text
-                                                                    .length)),
                                                     ),
                                                   )
                                                 : SizedBox(
@@ -1555,12 +1536,6 @@ class _DayScriptState extends State<DayScript> {
                                                       ),
                                                       controller: controllers[
                                                           index]
-                                                        ..selection = TextSelection
-                                                            .fromPosition(TextPosition(
-                                                                offset: controllers[
-                                                                        index]
-                                                                    .text
-                                                                    .length)),
                                                     ),
                                                   )),
                                         const SizedBox(

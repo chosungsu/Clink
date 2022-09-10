@@ -197,213 +197,217 @@ class _DayContentHomeState extends State<DayContentHome>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TableCalendar(
-                      locale: 'ko_KR',
-                      focusedDay: _focusedDay,
-                      calendarBuilders:
-                          CalendarBuilders(dowBuilder: (context, day) {
-                        if (day.weekday == DateTime.sunday) {
-                          return Container(
-                            height: 55,
-                            child: Center(
-                              child: Text(DateFormat.E('ko_KR').format(day),
-                                  style: const TextStyle(color: Colors.red)),
-                            ),
-                          );
-                        } else if (day.weekday == DateTime.saturday) {
-                          return Container(
-                            height: 55,
-                            child: Center(
-                              child: Text(DateFormat.E('ko_KR').format(day),
-                                  style: const TextStyle(color: Colors.blue)),
-                            ),
-                          );
-                        } else {
-                          return Container(
-                            height: 55,
-                            child: Center(
-                              child: Text(DateFormat.E('ko_KR').format(day),
-                                  style: TextStyle(color: TextColor())),
-                            ),
-                          );
-                        }
-                      }, markerBuilder: (context, date, events) {
-                        if (events.isNotEmpty) {
-                          return Container(
-                              width: 50,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  color: themecal_fromsheet == 0
-                                      ? (events.length % 4 == 0
-                                          ? MyTheme.colororigred
-                                          : (events.length % 4 == 1
-                                              ? MyTheme.colororigorange
-                                              : (events.length % 4 == 2
-                                                  ? MyTheme.colororigblue
-                                                  : MyTheme.colororiggreen)))
-                                      : (events.length % 4 == 0
-                                          ? MyTheme.colorpastelred
-                                          : (events.length % 4 == 1
-                                              ? MyTheme.colorpastelorange
-                                              : (events.length % 4 == 2
-                                                  ? MyTheme.colorpastelblue
-                                                  : MyTheme
-                                                      .colorpastelgreen)))),
+                    GetBuilder<calendarsetting>(
+                      builder: (_) => TableCalendar(
+                        locale: 'ko_KR',
+                        focusedDay: _focusedDay,
+                        calendarBuilders:
+                            CalendarBuilders(dowBuilder: (context, day) {
+                          if (day.weekday == DateTime.sunday) {
+                            return Container(
+                              height: 55,
                               child: Center(
-                                child: Text('+' + events.length.toString(),
-                                    style: TextStyle(color: TextColor())),
-                              ));
-                        }
-                        return null;
-                      }),
-                      rangeStartDay: _rangeStart,
-                      rangeEndDay: _rangeEnd,
-                      rangeSelectionMode: _rangeSelectionMode,
-                      onRangeSelected: _onRangeSelected,
-                      pageJumpingEnabled: false,
-                      shouldFillViewport: false,
-                      rowHeight: 55,
-                      weekendDays: [DateTime.saturday],
-                      holidayPredicate: (day) {
-                        return day.weekday == DateTime.sunday;
-                      },
-                      firstDay: DateTime.utc(2000, 1, 1),
-                      lastDay: DateTime.utc(2100, 12, 31),
-                      calendarFormat: setcal_fromsheet == 0
-                          ? CalendarFormat.week
-                          : (setcal_fromsheet == 1
-                              ? CalendarFormat.twoWeeks
-                              : CalendarFormat.month),
-                      eventLoader: getList,
-                      selectedDayPredicate: (day) {
-                        return isSameDay(_selectedDay, day);
-                      },
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
-                          _focusedDay = focusedDay;
-                          _rangeStart = null;
-                          _rangeEnd = null;
-                          _rangeSelectionMode = RangeSelectionMode.toggledOff;
-                        });
-                      },
-                      onPageChanged: (focusedDay) {
-                        _focusedDay = focusedDay;
-                      },
-                      startingDayOfWeek: StartingDayOfWeek.sunday,
-                      daysOfWeekVisible: true,
-                      daysOfWeekHeight: 50,
-                      headerStyle: HeaderStyle(
-                          formatButtonVisible: false,
-                          titleTextFormatter: (date, locale) =>
-                              DateFormat.yMMM(locale).format(date),
-                          leftChevronVisible: true,
-                          leftChevronPadding:
-                              const EdgeInsets.only(left: 10, right: 10),
-                          leftChevronMargin: EdgeInsets.zero,
-                          leftChevronIcon: IconBtn(
-                              child: IconButton(
-                                  onPressed: () {
-                                    //Navigator.pop(context);
-                                    Get.back();
-                                  },
-                                  icon: Container(
-                                    alignment: Alignment.center,
-                                    width: 30,
-                                    height: 30,
-                                    child: NeumorphicIcon(
-                                      Icons.keyboard_arrow_left,
-                                      size: 30,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          surfaceIntensity: 0.5,
-                                          color: TextColor(),
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  )),
-                              color: TextColor()),
-                          rightChevronVisible: true,
-                          rightChevronPadding: const EdgeInsets.only(right: 10),
-                          rightChevronMargin: EdgeInsets.zero,
-                          rightChevronIcon: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconBtn(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Get.to(
-                                          () => DayScript(
-                                              firstdate:
-                                                  _rangeStart ?? _selectedDay,
-                                              lastdate:
-                                                  _rangeEnd ?? _selectedDay,
-                                              position: 'cal',
-                                              title: widget.title,
-                                              share: widget.share,
-                                              orig: widget.origin,
-                                              calname: widget.calname),
-                                          transition: Transition.downToUp);
-                                    },
-                                    icon: NeumorphicIcon(
-                                      Icons.add,
-                                      size: 30,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          surfaceIntensity: 0.5,
-                                          color: TextColor(),
-                                          lightSource: LightSource.topLeft),
-                                    ),
-                                  ),
-                                  color: TextColor()),
-                              const SizedBox(
-                                width: 10,
+                                child: Text(DateFormat.E('ko_KR').format(day),
+                                    style: const TextStyle(color: Colors.red)),
                               ),
-                              IconBtn(
-                                  child: IconButton(
+                            );
+                          } else if (day.weekday == DateTime.saturday) {
+                            return Container(
+                              height: 55,
+                              child: Center(
+                                child: Text(DateFormat.E('ko_KR').format(day),
+                                    style: const TextStyle(color: Colors.blue)),
+                              ),
+                            );
+                          } else {
+                            return Container(
+                              height: 55,
+                              child: Center(
+                                child: Text(DateFormat.E('ko_KR').format(day),
+                                    style: TextStyle(color: TextColor())),
+                              ),
+                            );
+                          }
+                        }, markerBuilder: (context, date, events) {
+                          if (events.isNotEmpty) {
+                            return Container(
+                                width: 50,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    color: controll_cals.themecalendar == 0
+                                        ? (events.length % 4 == 0
+                                            ? MyTheme.colororigred
+                                            : (events.length % 4 == 1
+                                                ? MyTheme.colororigorange
+                                                : (events.length % 4 == 2
+                                                    ? MyTheme.colororigblue
+                                                    : MyTheme.colororiggreen)))
+                                        : (events.length % 4 == 0
+                                            ? MyTheme.colorpastelred
+                                            : (events.length % 4 == 1
+                                                ? MyTheme.colorpastelorange
+                                                : (events.length % 4 == 2
+                                                    ? MyTheme.colorpastelblue
+                                                    : MyTheme
+                                                        .colorpastelgreen)))),
+                                child: Center(
+                                  child: Text('+' + events.length.toString(),
+                                      style: TextStyle(color: TextColor())),
+                                ));
+                          }
+                          return null;
+                        }),
+                        rangeStartDay: _rangeStart,
+                        rangeEndDay: _rangeEnd,
+                        rangeSelectionMode: _rangeSelectionMode,
+                        onRangeSelected: _onRangeSelected,
+                        pageJumpingEnabled: false,
+                        shouldFillViewport: false,
+                        rowHeight: 55,
+                        weekendDays: [DateTime.saturday],
+                        holidayPredicate: (day) {
+                          return day.weekday == DateTime.sunday;
+                        },
+                        firstDay: DateTime.utc(2000, 1, 1),
+                        lastDay: DateTime.utc(2100, 12, 31),
+                        calendarFormat: controll_cals.showcalendar == 0
+                            ? CalendarFormat.week
+                            : (controll_cals.showcalendar == 1
+                                ? CalendarFormat.twoWeeks
+                                : CalendarFormat.month),
+                        eventLoader: getList,
+                        selectedDayPredicate: (day) {
+                          return isSameDay(_selectedDay, day);
+                        },
+                        onDaySelected: (selectedDay, focusedDay) {
+                          setState(() {
+                            _selectedDay = selectedDay;
+                            _focusedDay = focusedDay;
+                            _rangeStart = null;
+                            _rangeEnd = null;
+                            _rangeSelectionMode = RangeSelectionMode.toggledOff;
+                          });
+                        },
+                        onPageChanged: (focusedDay) {
+                          _focusedDay = focusedDay;
+                        },
+                        startingDayOfWeek: StartingDayOfWeek.sunday,
+                        daysOfWeekVisible: true,
+                        daysOfWeekHeight: 50,
+                        headerStyle: HeaderStyle(
+                            formatButtonVisible: false,
+                            titleTextFormatter: (date, locale) =>
+                                DateFormat.yMMM(locale).format(date),
+                            leftChevronVisible: true,
+                            leftChevronPadding:
+                                const EdgeInsets.only(left: 10, right: 10),
+                            leftChevronMargin: EdgeInsets.zero,
+                            leftChevronIcon: IconBtn(
+                                child: IconButton(
                                     onPressed: () {
-                                      settingCalendarHome(
-                                          context,
-                                          controll_cals,
-                                          widget.theme,
-                                          widget.view,
-                                          widget.title);
+                                      //Navigator.pop(context);
+                                      Get.back();
                                     },
-                                    icon: NeumorphicIcon(
-                                      Icons.settings,
-                                      size: 30,
-                                      style: NeumorphicStyle(
-                                          shape: NeumorphicShape.convex,
-                                          depth: 2,
-                                          surfaceIntensity: 0.5,
-                                          color: TextColor(),
-                                          lightSource: LightSource.topLeft),
+                                    icon: Container(
+                                      alignment: Alignment.center,
+                                      width: 30,
+                                      height: 30,
+                                      child: NeumorphicIcon(
+                                        Icons.keyboard_arrow_left,
+                                        size: 30,
+                                        style: NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            depth: 2,
+                                            surfaceIntensity: 0.5,
+                                            color: TextColor(),
+                                            lightSource: LightSource.topLeft),
+                                      ),
+                                    )),
+                                color: TextColor()),
+                            rightChevronVisible: true,
+                            rightChevronPadding:
+                                const EdgeInsets.only(right: 10),
+                            rightChevronMargin: EdgeInsets.zero,
+                            rightChevronIcon: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconBtn(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        Get.to(
+                                            () => DayScript(
+                                                firstdate:
+                                                    _rangeStart ?? _selectedDay,
+                                                lastdate:
+                                                    _rangeEnd ?? _selectedDay,
+                                                position: 'cal',
+                                                title: widget.title,
+                                                share: widget.share,
+                                                orig: widget.origin,
+                                                calname: widget.calname),
+                                            transition: Transition.downToUp);
+                                      },
+                                      icon: NeumorphicIcon(
+                                        Icons.add,
+                                        size: 30,
+                                        style: NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            depth: 2,
+                                            surfaceIntensity: 0.5,
+                                            color: TextColor(),
+                                            lightSource: LightSource.topLeft),
+                                      ),
                                     ),
-                                  ),
-                                  color: TextColor())
-                            ],
-                          ),
-                          titleTextStyle: TextStyle(
-                            color: TextColor(),
-                            fontSize: contentTitleTextsize(),
-                            fontWeight: FontWeight.bold,
-                          ),
-                          titleCentered: false,
-                          formatButtonShowsNext: false),
-                      calendarStyle: CalendarStyle(
-                          isTodayHighlighted: true,
-                          selectedDecoration: const BoxDecoration(
-                              color: Colors.orange, shape: BoxShape.circle),
-                          selectedTextStyle: TextStyle(color: TextColor()),
-                          defaultTextStyle: TextStyle(color: TextColor()),
-                          holidayTextStyle: const TextStyle(color: Colors.red),
-                          holidayDecoration: const BoxDecoration(
-                              shape: BoxShape.circle, border: Border()),
-                          weekendTextStyle:
-                              const TextStyle(color: Colors.blue)),
-                    ),
+                                    color: TextColor()),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                IconBtn(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        settingCalendarHome(
+                                            context,
+                                            controll_cals,
+                                            widget.theme,
+                                            widget.view,
+                                            widget.title);
+                                      },
+                                      icon: NeumorphicIcon(
+                                        Icons.settings,
+                                        size: 30,
+                                        style: NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            depth: 2,
+                                            surfaceIntensity: 0.5,
+                                            color: TextColor(),
+                                            lightSource: LightSource.topLeft),
+                                      ),
+                                    ),
+                                    color: TextColor())
+                              ],
+                            ),
+                            titleTextStyle: TextStyle(
+                              color: TextColor(),
+                              fontSize: contentTitleTextsize(),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            titleCentered: false,
+                            formatButtonShowsNext: false),
+                        calendarStyle: CalendarStyle(
+                            isTodayHighlighted: true,
+                            selectedDecoration: const BoxDecoration(
+                                color: Colors.orange, shape: BoxShape.circle),
+                            selectedTextStyle: TextStyle(color: TextColor()),
+                            defaultTextStyle: TextStyle(color: TextColor()),
+                            holidayTextStyle:
+                                const TextStyle(color: Colors.red),
+                            holidayDecoration: const BoxDecoration(
+                                shape: BoxShape.circle, border: Border()),
+                            weekendTextStyle:
+                                const TextStyle(color: Colors.blue)),
+                      ),
+                    )
                   ],
                 ),
               )
@@ -452,12 +456,7 @@ class _DayContentHomeState extends State<DayContentHome>
                       themecal_fromsheet, theme, view, title),
                 )),
           );
-        }).whenComplete(() {
-      setState(() {
-        setcal_fromsheet = controll_cals.showcalendar;
-        themecal_fromsheet = controll_cals.themecalendar;
-      });
-    });
+        }).whenComplete(() {});
   }
 
   ADView() {
