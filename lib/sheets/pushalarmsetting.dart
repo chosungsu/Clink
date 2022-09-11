@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -275,115 +276,46 @@ content(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           doc_title != ''
-                              ? controller_hour == '99' &&
-                                      controller_minute == '99'
-                                  ? (controller_hour !=
-                                              controll_memo.hour1.toString() ||
-                                          controller_minute !=
-                                              controll_memo.minute1.toString()
-                                      ? Text(
-                                          '설정시간 : ' +
-                                              controll_memo.hour1.toString() +
-                                              '시 ' +
-                                              controll_memo.minute1.toString() +
-                                              '분',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                              color: Colors.black),
-                                        )
-                                      : Text(
-                                          '설정시간 : 없음',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                              color: Colors.black),
-                                        ))
-                                  : (controller_hour !=
-                                              controll_memo.hour1.toString() ||
-                                          controller_minute !=
-                                              controll_memo.minute1.toString()
-                                      ? (controll_memo.hour1 == 99 ||
-                                              controll_memo.minute1 == 99
-                                          ? Text(
-                                              '설정시간 : ' +
-                                                  controller_hour +
-                                                  '시 ' +
-                                                  controller_minute +
-                                                  '분',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize(),
-                                                  color: Colors.black),
-                                            )
-                                          : Text(
-                                              '설정시간 : ' +
-                                                  controll_memo.hour1
-                                                      .toString() +
-                                                  '시 ' +
-                                                  controll_memo.minute1
-                                                      .toString() +
-                                                  '분',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize(),
-                                                  color: Colors.black),
-                                            ))
-                                      : Text(
-                                          '설정시간 : ' +
-                                              controller_hour +
-                                              '시 ' +
-                                              controller_minute +
-                                              '분',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                              color: Colors.black),
-                                        ))
-                              : (controller_hour !=
-                                          controll_memo.hour2.toString() ||
-                                      controller_minute !=
-                                          controll_memo.minute2.toString()
-                                  ? (controll_memo.hour2 != '99' ||
-                                          controll_memo.minute2 != '99'
-                                      ? Text(
-                                          '설정시간 : ' +
-                                              controll_memo.hour2.toString() +
-                                              '시 ' +
-                                              controll_memo.minute2.toString() +
-                                              '분',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                              color: Colors.black),
-                                        )
-                                      : Text(
-                                          '설정시간 : 없음',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                              color: Colors.black),
-                                        ))
-                                  : (controll_memo.hour2 != '99' ||
-                                          controll_memo.minute2 != '99'
-                                      ? Text(
-                                          '설정시간 : ' +
-                                              controll_memo.hour2.toString() +
-                                              '시 ' +
-                                              controll_memo.minute2.toString() +
-                                              '분',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                              color: Colors.black),
-                                        )
-                                      : Text(
-                                          '설정시간 : 없음',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                              color: Colors.black),
-                                        ))),
+                              ? controll_memo.hour1.toString() != '99' ||
+                                      controll_memo.minute1.toString() != '99'
+                                  ? Text(
+                                      '설정시간 : ' +
+                                          controll_memo.hour1.toString() +
+                                          '시 ' +
+                                          controll_memo.minute1.toString() +
+                                          '분',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                          color: Colors.black),
+                                    )
+                                  : Text(
+                                      '설정시간 : 없음',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                          color: Colors.black),
+                                    )
+                              : controll_memo.hour2 != '99' ||
+                                      controll_memo.minute2 != '99'
+                                  ? Text(
+                                      '설정시간 : ' +
+                                          controll_memo.hour2.toString() +
+                                          '시 ' +
+                                          controll_memo.minute2.toString() +
+                                          '분',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                          color: Colors.black),
+                                    )
+                                  : Text(
+                                      '설정시간 : 없음',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                          color: Colors.black),
+                                    ),
                           /*Flexible(
                                 fit: FlexFit.tight,
                                 child: Row(
@@ -499,27 +431,59 @@ content(
                                     height: 50,
                                     child: InkWell(
                                       onTap: () {
-                                        Hive.box('user_setting')
-                                            .put('alarm_memo_$doc_title', true);
-                                        doc_title != ''
-                                            ? controll_memo.setalarmmemotimetable(
-                                                Hive.box('user_setting')
-                                                    .get(
-                                                        'alarm_memo_hour_$doc_title')
-                                                    .toString(),
-                                                Hive.box('user_setting')
-                                                    .get(
-                                                        'alarm_memo_minute_$doc_title')
-                                                    .toString(),
-                                                doc_title,
-                                                id)
-                                            : controll_memo
-                                                .setalarmmemotimetable(
-                                                    controll_memo.hour2,
-                                                    controll_memo.minute2,
-                                                    '',
-                                                    '');
-                                        Navigator.pop(context);
+                                        setState(() {
+                                          doc_title != ''
+                                              ? Hive.box('user_setting').put(
+                                                  'alarm_memo_$doc_title', true)
+                                              : Hive.box('user_setting')
+                                                  .put('alarm_memo', true);
+                                          doc_title != ''
+                                              ? controll_memo.setalarmmemotimetable(
+                                                  Hive.box('user_setting')
+                                                      .get(
+                                                          'alarm_memo_hour_$doc_title')
+                                                      .toString(),
+                                                  Hive.box('user_setting')
+                                                      .get(
+                                                          'alarm_memo_minute_$doc_title')
+                                                      .toString(),
+                                                  doc_title,
+                                                  id)
+                                              : controll_memo
+                                                  .setalarmmemotimetable(
+                                                      controll_memo.hour2,
+                                                      controll_memo.minute2,
+                                                      '',
+                                                      '');
+                                          Flushbar(
+                                            backgroundColor:
+                                                Colors.blue.shade400,
+                                            titleText: Text('Notice',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      contentTitleTextsize(),
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            messageText: Text('알람설정 완료',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: contentTextsize(),
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            icon: const Icon(
+                                              Icons.info_outline,
+                                              size: 25.0,
+                                              color: Colors.white,
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 3),
+                                            leftBarIndicatorColor:
+                                                Colors.blue.shade100,
+                                          ).show(context).whenComplete(() {
+                                            Get.back();
+                                          });
+                                        });
                                       },
                                       child: Container(
                                         color: ButtonColor(),
@@ -551,54 +515,82 @@ content(
                                       ),
                                     )),
                               ),
-                              doc_title != ''
-                                  ? Flexible(
-                                      flex: 1,
-                                      child: SizedBox(
-                                          height: 50,
-                                          child: InkWell(
-                                            onTap: () {
-                                              Hive.box('user_setting').put(
+                              Flexible(
+                                  flex: 1,
+                                  child: SizedBox(
+                                      height: 50,
+                                      child: InkWell(
+                                        onTap: () {
+                                          doc_title != ''
+                                              ? Hive.box('user_setting').put(
                                                   'alarm_memo_$doc_title',
-                                                  false);
-                                              controll_memo.setalarmmemo(
-                                                  doc_title, id);
-                                              Navigator.pop(context);
-                                            },
-                                            child: Container(
-                                              color: Colors.red.shade400,
-                                              child: Center(
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Center(
-                                                      child: NeumorphicText(
-                                                        '해제하기',
-                                                        style:
-                                                            const NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
-                                                          color: Colors.white,
-                                                        ),
-                                                        textStyle:
-                                                            NeumorphicTextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                                  false)
+                                              : Hive.box('user_setting')
+                                                  .put('alarm_memo', false);
+                                          controll_memo.setalarmmemo(
+                                              doc_title, id);
+                                          Flushbar(
+                                            backgroundColor:
+                                                Colors.red.shade400,
+                                            titleText: Text('Notice',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      contentTitleTextsize(),
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            messageText: Text('알람해제 완료',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: contentTextsize(),
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            icon: const Icon(
+                                              Icons.info_outline,
+                                              size: 25.0,
+                                              color: Colors.white,
                                             ),
-                                          )))
-                                  : const SizedBox(),
+                                            duration:
+                                                const Duration(seconds: 3),
+                                            leftBarIndicatorColor:
+                                                Colors.red.shade100,
+                                          ).show(context).whenComplete(() {
+                                            Get.back();
+                                          });
+                                        },
+                                        child: Container(
+                                          color: Colors.red.shade400,
+                                          child: Center(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                  child: NeumorphicText(
+                                                    '해제하기',
+                                                    style:
+                                                        const NeumorphicStyle(
+                                                      shape:
+                                                          NeumorphicShape.flat,
+                                                      depth: 3,
+                                                      color: Colors.white,
+                                                    ),
+                                                    textStyle:
+                                                        NeumorphicTextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ))),
                             ],
                           )
                         ],

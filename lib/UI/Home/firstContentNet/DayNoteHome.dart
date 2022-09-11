@@ -106,14 +106,15 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
         .doc(username)
         .get()
         .then((value) => value.data()!.forEach((key, value) {
-              print('$key: $value');
               if (key == 'alarmtime') {
                 controll_memo.settimeminute(
                     int.parse(value.toString().split(':')[0]),
                     int.parse(value.toString().split(':')[1]),
                     '',
                     '');
-              } else {}
+              } else {
+                Hive.box('user_setting').put('alarm_memo', value);
+              }
             }));
   }
 
