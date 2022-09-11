@@ -12,20 +12,26 @@ class memosetting extends GetxController {
       : Colors.white;
   int memosort = 0;
   bool ischeckedtohideminus = false;
+  bool isseveralmemoalarm = false;
   bool ischeckedpushmemoalarm =
       Hive.box('user_setting').get('alarm_memo') ?? false;
   List imagelist = [];
   int imageindex = 0;
+  String username = Hive.box('user_info').get(
+    'id',
+  );
   int sort = Hive.box('user_setting').get('sort_memo_card') ?? 0;
   DateTime now = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  int hour1 = 99;
+  int minute1 = 99;
+  String hour2 = '99';
+  String minute2 = '99';
 
   void setalarmmemo(String title, String id) {
     if (title != '') {
-      ischeckedpushmemoalarm =
-          Hive.box('user_setting').get('alarm_memo_$title');
-      print(ischeckedpushmemoalarm);
-      if (ischeckedpushmemoalarm == false) {
+      isseveralmemoalarm = Hive.box('user_setting').get('alarm_memo_$title');
+      if (isseveralmemoalarm == false) {
         NotificationApi.cancelNotification(
             id: 1 +
                 int.parse(
@@ -41,23 +47,42 @@ class memosetting extends GetxController {
       ischeckedpushmemoalarm = Hive.box('user_setting').get('alarm_memo');
       if (ischeckedpushmemoalarm == false) {
         NotificationApi.cancelNotification(id: 1);
+        firestore
+            .collection('MemoAllAlarm')
+            .doc(username)
+            .update({'ok': false, 'alarmtime': '99:99'});
       }
     }
     update();
     notifyChildrens();
   }
 
-  void setalarmmemotimetable(
-      String hour, String minute, String title, String id) {
+  void settimeminute(int hour, int minute, String title, String id) {
     if (title != '') {
       Hive.box('user_setting').put('alarm_memo_hour_$title', hour);
       Hive.box('user_setting').put('alarm_memo_minute_$title', minute);
+      hour1 = Hive.box('user_setting').get('alarm_memo_hour_$title');
+      minute1 = Hive.box('user_setting').get('alarm_memo_minute_$title');
       firestore.collection('MemoDataBase').doc(id).update({
         'alarmok': true,
-        'alarmtime': Hive.box('user_setting').get('alarm_memo_hour_$title') +
-            ':' +
-            Hive.box('user_setting').get('alarm_memo_minute_$title')
+        'alarmtime': hour1.toString() + ':' + minute1.toString()
       });
+    } else {
+      print(hour.toString() + ' : ' + minute.toString());
+      Hive.box('user_setting').put('alarm_memo_hour', hour.toString());
+      Hive.box('user_setting').put('alarm_memo_minute', minute.toString());
+      hour2 = Hive.box('user_setting').get('alarm_memo_hour');
+      minute2 = Hive.box('user_setting').get('alarm_memo_minute');
+      firestore.collection('MemoAllAlarm').doc(username).set({
+        'ok': true,
+        'alarmtime': hour2.toString() + ':' + minute2.toString()
+      });
+    }
+  }
+
+  void setalarmmemotimetable(
+      String hour, String minute, String title, String id) {
+    if (title != '') {
       NotificationApi.showDailyNotification_severalnotes(
           id: 1 + int.parse(hour) + int.parse(minute),
           title: '띵동! $title 메모알림이에요',
@@ -65,8 +90,6 @@ class memosetting extends GetxController {
           scheduledate: DateTime.utc(now.year, now.month, now.day,
               int.parse(hour), int.parse(minute), 0));
     } else {
-      Hive.box('user_setting').put('alarm_memo_hour', hour);
-      Hive.box('user_setting').put('alarm_memo_minute', minute);
       NotificationApi.showDailyNotification(
           title: '띵동! 메모 알림이에요',
           body: '메모알림끄기는 [일상메모]->[톱니바퀴]->[해제]',

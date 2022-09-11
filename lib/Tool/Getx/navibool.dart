@@ -6,7 +6,7 @@ import '../MyTheme.dart';
 
 class navibool extends GetxController {
   bool drawopen = Hive.box('user_setting').get('page_opened') ?? false;
-  int navi = 0;
+  int navi = 1;
   Color color = Colors.white;
 
   void setopen() {

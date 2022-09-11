@@ -101,6 +101,20 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
           }
         });
       });
+    firestore
+        .collection('MemoAllAlarm')
+        .doc(username)
+        .get()
+        .then((value) => value.data()!.forEach((key, value) {
+              print('$key: $value');
+              if (key == 'alarmtime') {
+                controll_memo.settimeminute(
+                    int.parse(value.toString().split(':')[0]),
+                    int.parse(value.toString().split(':')[1]),
+                    '',
+                    '');
+              } else {}
+            }));
   }
 
   @override
@@ -317,14 +331,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                           context,
                                                           setalarmhourNode,
                                                           setalarmminuteNode,
-                                                          Hive.box(
-                                                                  'user_setting')
-                                                              .get(
-                                                                  'alarm_memo_hour'),
-                                                          Hive.box(
-                                                                  'user_setting')
-                                                              .get(
-                                                                  'alarm_memo_minute'),
+                                                          controll_memo.hour2,
+                                                          controll_memo.minute2,
                                                           '',
                                                           '');
                                                     },
@@ -459,12 +467,20 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
           ),
           onTap: () {
             //alarm 설정시트 띄우기
+            controll_memo.settimeminute(
+                int.parse(
+                    Hive.box('user_setting').get('alarm_memo_hour').toString()),
+                int.parse(Hive.box('user_setting')
+                    .get('alarm_memo_minute')
+                    .toString()),
+                '',
+                '');
             pushalarmsetting(
                 context,
                 setalarmhourNode,
                 setalarmminuteNode,
-                Hive.box('user_setting').get('alarm_memo_hour'),
-                Hive.box('user_setting').get('alarm_memo_minute'),
+                Hive.box('user_setting').get('alarm_memo_hour').toString(),
+                Hive.box('user_setting').get('alarm_memo_minute').toString(),
                 '',
                 '');
             /*Get.to(
@@ -589,6 +605,19 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                   fontSize: contentTextsize())),
                                           onPressed: () {
                                             setState(() {
+                                              controll_memo.settimeminute(
+                                                  int.parse(snapshot.data!
+                                                      .docs[index]['alarmtime']
+                                                      .toString()
+                                                      .split(':')[0]),
+                                                  int.parse(snapshot.data!
+                                                      .docs[index]['alarmtime']
+                                                      .toString()
+                                                      .split(':')[1]),
+                                                  snapshot.data!.docs[index]
+                                                      ['memoTitle'],
+                                                  snapshot
+                                                      .data!.docs[index].id);
                                               pushalarmsetting(
                                                   context,
                                                   setalarmhourNode,

@@ -8,6 +8,9 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
+import '../Tool/BGColor.dart';
+import '../Tool/IconBtn.dart';
+
 pushalarmsetting(
   BuildContext context,
   FocusNode setalarmhourNode,
@@ -129,11 +132,21 @@ title(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize()))
             ]))
-          : Text('알람 설정',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize()))
+          : RichText(
+              text: TextSpan(children: [
+              TextSpan(
+                  text: '모든 메모',
+                  style: TextStyle(
+                      color: Colors.blue.shade400,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize())),
+              TextSpan(
+                  text: ' 의 매일알람 설정',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize()))
+            ]))
     ],
   ));
 }
@@ -149,135 +162,229 @@ content(
 ) {
   DateTime now = DateTime.now();
   final controll_memo = Get.put(memosetting());
+  TimeOfDay? pickednow;
+  if (doc_title != '') {
+    Hive.box('user_setting').put('alarm_memo_hour_$title', controller_hour);
+    Hive.box('user_setting').put('alarm_memo_minute_$title', controller_minute);
+  } else {
+    Hive.box('user_setting').put('alarm_memo_hour', controller_hour);
+    Hive.box('user_setting').put('alarm_memo_minute', controller_minute);
+  }
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String username = Hive.box('user_info').get(
+    'id',
+  );
+
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
         child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        doc_title == ''
-            ? Row(
+        ContainerDesign(
+            child: SizedBox(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Text(
-                      '매일 알람받기',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                          color: Colors.black),
-                    ),
+                  const Icon(
+                    Icons.info_outline,
+                    color: Colors.white,
                   ),
-                  GetBuilder<memosetting>(
-                      builder: (_) => Transform.scale(
-                            scale: 1,
-                            child: Switch(
-                                activeColor: Colors.blue,
-                                inactiveThumbColor: Colors.black,
-                                inactiveTrackColor: Colors.grey.shade400,
-                                value: controll_memo.ischeckedpushmemoalarm,
-                                onChanged: (bool val) {
-                                  setState(() {
-                                    controll_memo.ischeckedpushmemoalarm = val;
-                                    Hive.box('user_setting').put('alarm_memo',
-                                        controll_memo.ischeckedpushmemoalarm);
-                                    controll_memo.setalarmmemo(doc_title, id);
-                                  });
-                                }),
-                          ))
-                ],
-              )
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                      fit: FlexFit.tight,
-                      child: ContainerDesign(
-                          child: Text(
-                            '알람은 매일 설정하신 시각에 울리게 됩니다',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize(),
-                                color: Colors.white),
-                          ),
-                          color: Colors.orange.shade400)),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.65,
+                    child: RichText(
+                      maxLines: 3,
+                      text: TextSpan(
+                        text: '알람은 매일 설정하신 시각에 울리게 됩니다',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize(),
+                            color: Colors.white),
+                      ),
+                    ),
+                  )
                 ],
               ),
+            ),
+            color: Colors.orange.shade400),
         const SizedBox(
           height: 20,
         ),
         GetBuilder<memosetting>(
-            builder: (_) => controll_memo.ischeckedpushmemoalarm == true ||
-                    doc_title != ''
-                ? SizedBox(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                '시간 설정',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                    color: Colors.black),
-                              ),
+            builder: (_) => SizedBox(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Text(
+                              '시간 설정',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize(),
+                                  color: Colors.black),
                             ),
-                            doc_title != ''
-                                ? controller_hour == '99' &&
-                                        controller_minute == '99'
-                                    ? Text(
-                                        '설정시간 : 없음',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                            color: Colors.black),
-                                      )
-                                    : Text(
-                                        '설정시간 : ' +
-                                            controller_hour +
-                                            '시 ' +
-                                            controller_minute +
-                                            '분',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                            color: Colors.black),
-                                      )
-                                : controller_hour == null ||
-                                        controller_minute == null
-                                    ? Text(
-                                        '설정시간 : 없음',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                            color: Colors.black),
-                                      )
-                                    : Text(
-                                        '설정시간 : ' +
-                                            controller_hour +
-                                            '시 ' +
-                                            controller_minute +
-                                            '분',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                            color: Colors.black),
-                                      ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
+                          ),
+                          IconBtn(
+                              child: InkWell(
+                                  onTap: () async {
+                                    pickednow = await showTimePicker(
+                                        context: context,
+                                        initialEntryMode:
+                                            TimePickerEntryMode.inputOnly,
+                                        helpText: '시간을 설정해주세요',
+                                        cancelText: '닫기',
+                                        confirmText: '설정',
+                                        initialTime: controller_hour == '99' &&
+                                                controller_minute == '99'
+                                            ? TimeOfDay.now()
+                                            : TimeOfDay(
+                                                hour:
+                                                    int.parse(controller_hour),
+                                                minute: int.parse(
+                                                    controller_minute)));
+                                    controll_memo.settimeminute(pickednow!.hour,
+                                        pickednow!.minute, doc_title, id);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    child: Text(
+                                      'Click',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                          color: Colors.blue),
+                                    ),
+                                  )),
+                              color: Colors.black)
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          doc_title != ''
+                              ? controller_hour == '99' &&
+                                      controller_minute == '99'
+                                  ? (controller_hour !=
+                                              controll_memo.hour1.toString() ||
+                                          controller_minute !=
+                                              controll_memo.minute1.toString()
+                                      ? Text(
+                                          '설정시간 : ' +
+                                              controll_memo.hour1.toString() +
+                                              '시 ' +
+                                              controll_memo.minute1.toString() +
+                                              '분',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                              color: Colors.black),
+                                        )
+                                      : Text(
+                                          '설정시간 : 없음',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                              color: Colors.black),
+                                        ))
+                                  : (controller_hour !=
+                                              controll_memo.hour1.toString() ||
+                                          controller_minute !=
+                                              controll_memo.minute1.toString()
+                                      ? (controll_memo.hour1 == 99 ||
+                                              controll_memo.minute1 == 99
+                                          ? Text(
+                                              '설정시간 : ' +
+                                                  controller_hour +
+                                                  '시 ' +
+                                                  controller_minute +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            )
+                                          : Text(
+                                              '설정시간 : ' +
+                                                  controll_memo.hour1
+                                                      .toString() +
+                                                  '시 ' +
+                                                  controll_memo.minute1
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            ))
+                                      : Text(
+                                          '설정시간 : ' +
+                                              controller_hour +
+                                              '시 ' +
+                                              controller_minute +
+                                              '분',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                              color: Colors.black),
+                                        ))
+                              : (controller_hour !=
+                                          controll_memo.hour2.toString() ||
+                                      controller_minute !=
+                                          controll_memo.minute2.toString()
+                                  ? (controll_memo.hour2 != '99' ||
+                                          controll_memo.minute2 != '99'
+                                      ? Text(
+                                          '설정시간 : ' +
+                                              controll_memo.hour2.toString() +
+                                              '시 ' +
+                                              controll_memo.minute2.toString() +
+                                              '분',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                              color: Colors.black),
+                                        )
+                                      : Text(
+                                          '설정시간 : 없음',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                              color: Colors.black),
+                                        ))
+                                  : (controll_memo.hour2 != '99' ||
+                                          controll_memo.minute2 != '99'
+                                      ? Text(
+                                          '설정시간 : ' +
+                                              controll_memo.hour2.toString() +
+                                              '시 ' +
+                                              controll_memo.minute2.toString() +
+                                              '분',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                              color: Colors.black),
+                                        )
+                                      : Text(
+                                          '설정시간 : 없음',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                              color: Colors.black),
+                                        ))),
+                          /*Flexible(
                                 fit: FlexFit.tight,
                                 child: Row(
                                   children: [
@@ -379,91 +486,131 @@ content(
                                       ),
                                     )*/
                                   ],
-                                )),
-                            Column(
-                              children: [
-                                ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue.shade400,
-                                    ),
-                                    onPressed: () {
-                                      Hive.box('user_setting')
-                                          .put('alarm_memo_$doc_title', true);
-                                      doc_title != ''
-                                          ? controll_memo.setalarmmemotimetable(
-                                              now.hour.toString(),
-                                              now.minute.toString(),
-                                              doc_title,
-                                              id)
-                                          : controll_memo.setalarmmemotimetable(
-                                              now.hour.toString(),
-                                              now.minute.toString(),
-                                              '',
-                                              '');
-                                      Navigator.pop(context);
-                                    },
-                                    child: Center(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: NeumorphicText(
-                                              '설정하기',
-                                              style: const NeumorphicStyle(
-                                                shape: NeumorphicShape.flat,
-                                                depth: 3,
-                                                color: Colors.white,
+                                )),*/
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                child: SizedBox(
+                                    height: 50,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Hive.box('user_setting')
+                                            .put('alarm_memo_$doc_title', true);
+                                        doc_title != ''
+                                            ? controll_memo.setalarmmemotimetable(
+                                                Hive.box('user_setting')
+                                                    .get(
+                                                        'alarm_memo_hour_$doc_title')
+                                                    .toString(),
+                                                Hive.box('user_setting')
+                                                    .get(
+                                                        'alarm_memo_minute_$doc_title')
+                                                    .toString(),
+                                                doc_title,
+                                                id)
+                                            : controll_memo
+                                                .setalarmmemotimetable(
+                                                    Hive.box('user_setting')
+                                                        .get('alarm_memo_hour')
+                                                        .toString(),
+                                                    Hive.box('user_setting')
+                                                        .get(
+                                                            'alarm_memo_minute')
+                                                        .toString(),
+                                                    '',
+                                                    '');
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        color: ButtonColor(),
+                                        child: Center(
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                child: NeumorphicText(
+                                                  '설정하기',
+                                                  style: const NeumorphicStyle(
+                                                    shape: NeumorphicShape.flat,
+                                                    depth: 3,
+                                                    color: Colors.white,
+                                                  ),
+                                                  textStyle:
+                                                      NeumorphicTextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: contentTextsize(),
+                                                  ),
+                                                ),
                                               ),
-                                              textStyle: NeumorphicTextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                          )
-                                        ],
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     )),
-                                ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red.shade400,
-                                    ),
-                                    onPressed: () {
-                                      Hive.box('user_setting')
-                                          .put('alarm_memo_$doc_title', false);
-                                      controll_memo.setalarmmemo(doc_title, id);
-                                      Navigator.pop(context);
-                                    },
-                                    child: Center(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: NeumorphicText(
-                                              '해제하기',
-                                              style: const NeumorphicStyle(
-                                                shape: NeumorphicShape.flat,
-                                                depth: 3,
-                                                color: Colors.white,
-                                              ),
-                                              textStyle: NeumorphicTextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
+                              ),
+                              doc_title != ''
+                                  ? Flexible(
+                                      flex: 1,
+                                      child: SizedBox(
+                                          height: 50,
+                                          child: InkWell(
+                                            onTap: () {
+                                              Hive.box('user_setting').put(
+                                                  'alarm_memo_$doc_title',
+                                                  false);
+                                              controll_memo.setalarmmemo(
+                                                  doc_title, id);
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              color: Colors.red.shade400,
+                                              child: Center(
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                      child: NeumorphicText(
+                                                        '해제하기',
+                                                        style:
+                                                            const NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .flat,
+                                                          depth: 3,
+                                                          color: Colors.white,
+                                                        ),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    )),
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  )
-                : const SizedBox()),
+                                          )))
+                                  : const SizedBox(),
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                )),
       ],
     ));
   });
