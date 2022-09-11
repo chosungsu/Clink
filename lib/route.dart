@@ -28,18 +28,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   String name = Hive.box('user_info').get('id');
   late DateTime Date = DateTime.now();
   final draw = Get.put(navibool());
-  int navi = 1;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _selectedIndex = widget.index;
-    Hive.box('user_setting').get('which_menu_pick') == null
-        ? navi = 1
-        : (Hive.box('user_setting').get('which_menu_pick') == 0
-            ? navi = 0
-            : navi = 1);
   }
 
   @override
