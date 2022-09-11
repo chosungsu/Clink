@@ -68,6 +68,30 @@ class NotificationApi {
     );
   }
 
+  static void showDailyNotification_severalnotes(
+      {int? id,
+      String? title,
+      String? body,
+      required DateTime scheduledate}) async {
+    await _notifications
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.deleteNotificationChannelGroup('id');
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+    _notifications.zonedSchedule(
+      id!,
+      title,
+      body,
+      _nextInstancedaily(scheduledate),
+      await _notificationDetails(),
+      matchDateTimeComponents: DateTimeComponents.time,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+  }
+
   // 알림일자
   static tz.TZDateTime _nextInstance(DateTime scheduledate) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);

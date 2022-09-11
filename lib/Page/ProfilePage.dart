@@ -805,7 +805,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     backgroundColor: TextColor_shadowcolor(),
                     foregroundColor: TextColor_shadowcolor(),
                     child: Icon(
-                      Icons.help_center,
+                      Icons.groups,
                       color: BGColor_shadowcolor(),
                     ),
                   )),

@@ -506,6 +506,10 @@ class _DayScriptState extends State<DayScript> {
                                                                             .toList(),
                                                                         'OriginalUser':
                                                                             username,
+                                                                        'alarmok':
+                                                                            false,
+                                                                        'alarmtime':
+                                                                            '99:99',
                                                                         'color':
                                                                             Hive.box('user_setting').get('coloreachmemo') ??
                                                                                 _color.value.toInt(),
@@ -1017,6 +1021,7 @@ class _DayScriptState extends State<DayScript> {
                                                   minLines: null,
                                                   maxLines: null,
                                                   focusNode: nodes[index],
+                                                  onTap: () {},
                                                   onChanged: (text) {
                                                     scollection
                                                             .memolistcontentin[
@@ -1026,13 +1031,8 @@ class _DayScriptState extends State<DayScript> {
                                                       fontSize:
                                                           contentTextsize(),
                                                       color: Colors.black),
-                                                  controller: controllers[index]
-                                                    ..selection = TextSelection
-                                                        .fromPosition(TextPosition(
-                                                            offset: controllers[
-                                                                    index]
-                                                                .text
-                                                                .length)),
+                                                  controller:
+                                                      controllers[index],
                                                   decoration: InputDecoration(
                                                     isCollapsed: true,
                                                     border: InputBorder.none,
@@ -1208,6 +1208,7 @@ class _DayScriptState extends State<DayScript> {
                                                     child: TextField(
                                                       minLines: 1,
                                                       maxLines: 1,
+                                                      onTap: () {},
                                                       onChanged: (text) {
                                                         scollection
                                                                 .memolistcontentin[
@@ -1388,14 +1389,8 @@ class _DayScriptState extends State<DayScript> {
                                                             color: Colors
                                                                 .grey.shade400),
                                                       ),
-                                                      controller: controllers[
-                                                          index]
-                                                        ..selection = TextSelection
-                                                            .fromPosition(TextPosition(
-                                                                offset: controllers[
-                                                                        index]
-                                                                    .text
-                                                                    .length)),
+                                                      controller:
+                                                          controllers[index],
                                                     ),
                                                   )
                                                 : SizedBox(
@@ -1408,6 +1403,7 @@ class _DayScriptState extends State<DayScript> {
                                                       minLines: 1,
                                                       maxLines: 1,
                                                       focusNode: nodes[index],
+                                                      onTap: () {},
                                                       onChanged: (text) {
                                                         scollection
                                                                 .memolistcontentin[
@@ -1571,14 +1567,8 @@ class _DayScriptState extends State<DayScript> {
                                                             color: Colors
                                                                 .grey.shade400),
                                                       ),
-                                                      controller: controllers[
-                                                          index]
-                                                        ..selection = TextSelection
-                                                            .fromPosition(TextPosition(
-                                                                offset: controllers[
-                                                                        index]
-                                                                    .text
-                                                                    .length)),
+                                                      controller:
+                                                          controllers[index],
                                                     ))),
                                         const SizedBox(
                                           width: 3,

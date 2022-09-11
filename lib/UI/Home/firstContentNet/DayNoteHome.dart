@@ -55,8 +55,6 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   String tmpsummary = '';
   DateTime Date = DateTime.now();
   TextEditingController controller = TextEditingController();
-  TextEditingController controller_hour = TextEditingController();
-  TextEditingController controller_minute = TextEditingController();
   ScrollController _scrollController = ScrollController();
   bool _showBackToTopButton = false;
   bool isresponsive = false;
@@ -92,10 +90,6 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     sortmemo_fromsheet = controll_memo.memosort;
     controll_memo.resetimagelist();
     controller = TextEditingController();
-    controller_hour = TextEditingController(
-        text: Hive.box('user_setting').get('alarm_memo_hour'));
-    controller_minute = TextEditingController(
-        text: Hive.box('user_setting').get('alarm_memo_minute'));
     sort = controll_memo.sort;
     _scrollController = ScrollController()
       ..addListener(() {
@@ -115,8 +109,6 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.dispose();
     controller.dispose();
-    controller_hour.dispose();
-    controller_minute.dispose();
   }
 
   void _scrollToTop() {
@@ -321,13 +313,20 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                             IconBtn(
                                                 child: IconButton(
                                                     onPressed: () {
-                                                      //Get.back(result: true);
                                                       pushalarmsetting(
                                                           context,
                                                           setalarmhourNode,
                                                           setalarmminuteNode,
-                                                          controller_hour,
-                                                          controller_minute);
+                                                          Hive.box(
+                                                                  'user_setting')
+                                                              .get(
+                                                                  'alarm_memo_hour'),
+                                                          Hive.box(
+                                                                  'user_setting')
+                                                              .get(
+                                                                  'alarm_memo_minute'),
+                                                          '',
+                                                          '');
                                                     },
                                                     icon: Container(
                                                       alignment:
@@ -460,8 +459,14 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
           ),
           onTap: () {
             //alarm 설정시트 띄우기
-            pushalarmsetting(context, setalarmhourNode, setalarmminuteNode,
-                controller_hour, controller_minute);
+            pushalarmsetting(
+                context,
+                setalarmhourNode,
+                setalarmminuteNode,
+                Hive.box('user_setting').get('alarm_memo_hour'),
+                Hive.box('user_setting').get('alarm_memo_minute'),
+                '',
+                '');
             /*Get.to(
                 () => SecureAuth(
                     string: '지문',
@@ -559,6 +564,49 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                   GestureDetector(
                                       child: FocusedMenuHolder(
                                     menuItems: [
+                                      FocusedMenuItem(
+                                          trailingIcon: Icon(
+                                            snapshot.data!.docs[index]
+                                                        ['alarmok'] ==
+                                                    false
+                                                ? Icons.notifications_off
+                                                : Icons.notifications_active,
+                                            color: snapshot.data!.docs[index]
+                                                        ['alarmok'] ==
+                                                    false
+                                                ? Colors.black
+                                                : Colors.yellow.shade400,
+                                          ),
+                                          title: Text(
+                                              snapshot.data!.docs[index]
+                                                          ['alarmok'] ==
+                                                      false
+                                                  ? '알람On'
+                                                  : '알람Off',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                          onPressed: () {
+                                            setState(() {
+                                              pushalarmsetting(
+                                                  context,
+                                                  setalarmhourNode,
+                                                  setalarmminuteNode,
+                                                  snapshot.data!
+                                                      .docs[index]['alarmtime']
+                                                      .toString()
+                                                      .split(':')[0],
+                                                  snapshot.data!
+                                                      .docs[index]['alarmtime']
+                                                      .toString()
+                                                      .split(':')[1],
+                                                  snapshot.data!.docs[index]
+                                                      ['memoTitle'],
+                                                  snapshot
+                                                      .data!.docs[index].id);
+                                            });
+                                          }),
                                       FocusedMenuItem(
                                           trailingIcon: Icon(
                                             snapshot.data!.docs[index]

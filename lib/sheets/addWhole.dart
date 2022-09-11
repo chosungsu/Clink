@@ -624,6 +624,8 @@ content(
                                   '일',
                               'memoTitle': controller.text,
                               'OriginalUser': username,
+                              'alarmok': false,
+                              'alarmtime': '99:99',
                               'color': Hive.box('user_setting')
                                       .get('typecolorcalendar') ??
                                   _color.value.toInt(),

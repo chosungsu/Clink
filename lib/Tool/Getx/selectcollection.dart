@@ -7,6 +7,13 @@ class selectcollection extends GetxController {
   var memoindex = 0;
   List memolistin = List.empty(growable: true);
   List memolistcontentin = List.empty(growable: true);
+  int cursornow = 0;
+
+  void setcursor() {
+    cursornow = Hive.box('user_setting').get('cursorposition');
+    update();
+    notifyChildrens();
+  }
 
   void setcollection() {
     collection = Hive.box('user_setting').get('memocollection');
