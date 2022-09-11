@@ -116,7 +116,7 @@ class UserDetails extends StatelessWidget {
                       children: [
                         ListTile(
                           subtitle: const Text(
-                            'MY 정보 확인하시려면 카드 클릭하세요!',
+                            'MY 정보 변경하시려면 카드 클릭하세요!',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

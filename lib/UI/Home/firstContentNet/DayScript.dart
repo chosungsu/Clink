@@ -458,8 +458,7 @@ class _DayScriptState extends State<DayScript> {
                                                                                 int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1 : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]),
                                                                                 int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
                                                                               ));
-                                                                        } else {
-                                                                        }
+                                                                        } else {}
                                                                       }
                                                                     } else {
                                                                       CreateCalandmemoSuccessFlushbar(
@@ -594,8 +593,8 @@ class _DayScriptState extends State<DayScript> {
                                         if (nodes.isNotEmpty) {
                                           nodes[i].unfocus();
                                         }
-                                        /*scollection.memolistcontentin[i] =
-                                            controllers[i].text;*/
+                                        scollection.memolistcontentin[i] =
+                                            controllers[i].text;
                                       }
                                     },
                                     child: Padding(
@@ -997,7 +996,11 @@ class _DayScriptState extends State<DayScript> {
                                   itemCount: scollection.memolistin.length,
                                   itemBuilder: (context, index) {
                                     nodes.add(FocusNode());
-                                    controllers.add(TextEditingController());
+                                    controllers.insert(
+                                        index,
+                                        TextEditingController(
+                                            text: scollection
+                                                .memolistcontentin[index]));
 
                                     return Row(
                                       children: [
@@ -1023,8 +1026,13 @@ class _DayScriptState extends State<DayScript> {
                                                       fontSize:
                                                           contentTextsize(),
                                                       color: Colors.black),
-                                                  controller:
-                                                      controllers[index],
+                                                  controller: controllers[index]
+                                                    ..selection = TextSelection
+                                                        .fromPosition(TextPosition(
+                                                            offset: controllers[
+                                                                    index]
+                                                                .text
+                                                                .length)),
                                                   decoration: InputDecoration(
                                                     isCollapsed: true,
                                                     border: InputBorder.none,
@@ -1064,41 +1072,46 @@ class _DayScriptState extends State<DayScript> {
                                                             InkWell(
                                                               onTap: () {
                                                                 setState(() {
-                                                                  String
-                                                                      content =
-                                                                      scollection
-                                                                              .memolistcontentin[
-                                                                          index];
-                                                                  int indexcontent =
-                                                                      scollection
-                                                                              .memolistin[
-                                                                          index];
-                                                                  scollection
-                                                                      .removelistitem(
-                                                                          index);
-                                                                  Hive.box('user_setting').put(
-                                                                      'optionmemoinput',
-                                                                      indexcontent);
-                                                                  Hive.box('user_setting').put(
-                                                                      'optionmemocontentinput',
-                                                                      content);
                                                                   if (index ==
                                                                       0) {
-                                                                    scollection
-                                                                        .addmemolistin(
-                                                                            index);
-                                                                    scollection
-                                                                        .addmemolistcontentin(
-                                                                            index);
                                                                   } else {
+                                                                    String
+                                                                        content_prev =
+                                                                        controllers[index -
+                                                                                1]
+                                                                            .text;
+                                                                    int indexcontent_prev = scollection
+                                                                            .memolistin[
+                                                                        index -
+                                                                            1];
+                                                                    scollection
+                                                                        .removelistitem(
+                                                                            index -
+                                                                                1);
+                                                                    Hive.box('user_setting').put(
+                                                                        'optionmemoinput',
+                                                                        indexcontent_prev);
+                                                                    Hive.box('user_setting').put(
+                                                                        'optionmemocontentinput',
+                                                                        content_prev);
                                                                     scollection
                                                                         .addmemolistin(
-                                                                            index -
-                                                                                1);
+                                                                            index);
                                                                     scollection
                                                                         .addmemolistcontentin(
+                                                                            index);
+                                                                    controllers[
                                                                             index -
-                                                                                1);
+                                                                                1]
+                                                                        .text = scollection
+                                                                            .memolistcontentin[
+                                                                        index -
+                                                                            1];
+                                                                    controllers[
+                                                                            index]
+                                                                        .text = scollection
+                                                                            .memolistcontentin[
+                                                                        index];
                                                                   }
                                                                 });
                                                               },
@@ -1112,35 +1125,27 @@ class _DayScriptState extends State<DayScript> {
                                                             InkWell(
                                                               onTap: () {
                                                                 setState(() {
-                                                                  String
-                                                                      content =
-                                                                      scollection
-                                                                              .memolistcontentin[
-                                                                          index];
-                                                                  int indexcontent =
-                                                                      scollection
-                                                                              .memolistin[
-                                                                          index];
-                                                                  scollection
-                                                                      .removelistitem(
-                                                                          index);
-                                                                  Hive.box('user_setting').put(
-                                                                      'optionmemoinput',
-                                                                      indexcontent);
-                                                                  Hive.box('user_setting').put(
-                                                                      'optionmemocontentinput',
-                                                                      content);
                                                                   if (index +
                                                                           1 ==
                                                                       scollection
                                                                           .memoindex) {
-                                                                    scollection
-                                                                        .addmemolistin(
-                                                                            index);
-                                                                    scollection
-                                                                        .addmemolistcontentin(
-                                                                            index);
                                                                   } else {
+                                                                    String
+                                                                        content =
+                                                                        scollection
+                                                                            .memolistcontentin[index];
+                                                                    int indexcontent =
+                                                                        scollection
+                                                                            .memolistin[index];
+                                                                    scollection
+                                                                        .removelistitem(
+                                                                            index);
+                                                                    Hive.box('user_setting').put(
+                                                                        'optionmemoinput',
+                                                                        indexcontent);
+                                                                    Hive.box('user_setting').put(
+                                                                        'optionmemocontentinput',
+                                                                        content);
                                                                     scollection
                                                                         .addmemolistin(
                                                                             index +
@@ -1149,6 +1154,18 @@ class _DayScriptState extends State<DayScript> {
                                                                         .addmemolistcontentin(
                                                                             index +
                                                                                 1);
+                                                                    controllers[
+                                                                            index]
+                                                                        .text = scollection
+                                                                            .memolistcontentin[
+                                                                        index];
+                                                                    controllers[
+                                                                            index +
+                                                                                1]
+                                                                        .text = scollection
+                                                                            .memolistcontentin[
+                                                                        index +
+                                                                            1];
                                                                   }
                                                                 });
                                                               },
@@ -1178,7 +1195,8 @@ class _DayScriptState extends State<DayScript> {
                                                 ))
                                             : (scollection.memolistin[index] ==
                                                         1 ||
-                                                    scollection.memolistin[
+                                                    scollection
+                                                                .memolistin[
                                                             index] ==
                                                         999
                                                 ? SizedBox(
@@ -1269,35 +1287,38 @@ class _DayScriptState extends State<DayScript> {
                                                                   onTap: () {
                                                                     setState(
                                                                         () {
-                                                                      String
-                                                                          content =
-                                                                          scollection
-                                                                              .memolistcontentin[index];
-                                                                      int indexcontent =
-                                                                          scollection
-                                                                              .memolistin[index];
-                                                                      scollection
-                                                                          .removelistitem(
-                                                                              index);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemoinput',
-                                                                          indexcontent);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemocontentinput',
-                                                                          content);
                                                                       if (index ==
                                                                           0) {
+                                                                      } else {
+                                                                        String
+                                                                            content_prev =
+                                                                            controllers[index - 1].text;
+                                                                        int indexcontent_prev =
+                                                                            scollection.memolistin[index -
+                                                                                1];
+                                                                        scollection.removelistitem(
+                                                                            index -
+                                                                                1);
+                                                                        Hive.box('user_setting').put(
+                                                                            'optionmemoinput',
+                                                                            indexcontent_prev);
+                                                                        Hive.box('user_setting').put(
+                                                                            'optionmemocontentinput',
+                                                                            content_prev);
                                                                         scollection
                                                                             .addmemolistin(index);
                                                                         scollection
                                                                             .addmemolistcontentin(index);
-                                                                      } else {
-                                                                        scollection.addmemolistin(
+                                                                        controllers[index -
+                                                                                1]
+                                                                            .text = scollection
+                                                                                .memolistcontentin[
                                                                             index -
-                                                                                1);
-                                                                        scollection.addmemolistcontentin(
-                                                                            index -
-                                                                                1);
+                                                                                1];
+                                                                        controllers[index]
+                                                                            .text = scollection
+                                                                                .memolistcontentin[
+                                                                            index];
                                                                       }
                                                                     });
                                                                   },
@@ -1312,37 +1333,40 @@ class _DayScriptState extends State<DayScript> {
                                                                   onTap: () {
                                                                     setState(
                                                                         () {
-                                                                      String
-                                                                          content =
-                                                                          scollection
-                                                                              .memolistcontentin[index];
-                                                                      int indexcontent =
-                                                                          scollection
-                                                                              .memolistin[index];
-                                                                      scollection
-                                                                          .removelistitem(
-                                                                              index);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemoinput',
-                                                                          indexcontent);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemocontentinput',
-                                                                          content);
                                                                       if (index +
                                                                               1 ==
                                                                           scollection
                                                                               .memoindex) {
-                                                                        scollection
-                                                                            .addmemolistin(index);
-                                                                        scollection
-                                                                            .addmemolistcontentin(index);
                                                                       } else {
+                                                                        String
+                                                                            content =
+                                                                            scollection.memolistcontentin[index];
+                                                                        int indexcontent =
+                                                                            scollection.memolistin[index];
+                                                                        scollection
+                                                                            .removelistitem(index);
+                                                                        Hive.box('user_setting').put(
+                                                                            'optionmemoinput',
+                                                                            indexcontent);
+                                                                        Hive.box('user_setting').put(
+                                                                            'optionmemocontentinput',
+                                                                            content);
                                                                         scollection.addmemolistin(
                                                                             index +
                                                                                 1);
                                                                         scollection.addmemolistcontentin(
                                                                             index +
                                                                                 1);
+                                                                        controllers[index]
+                                                                            .text = scollection
+                                                                                .memolistcontentin[
+                                                                            index];
+                                                                        controllers[index +
+                                                                                1]
+                                                                            .text = scollection
+                                                                                .memolistcontentin[
+                                                                            index +
+                                                                                1];
                                                                       }
                                                                     });
                                                                   },
@@ -1366,6 +1390,12 @@ class _DayScriptState extends State<DayScript> {
                                                       ),
                                                       controller: controllers[
                                                           index]
+                                                        ..selection = TextSelection
+                                                            .fromPosition(TextPosition(
+                                                                offset: controllers[
+                                                                        index]
+                                                                    .text
+                                                                    .length)),
                                                     ),
                                                   )
                                                 : SizedBox(
@@ -1439,35 +1469,38 @@ class _DayScriptState extends State<DayScript> {
                                                                   onTap: () {
                                                                     setState(
                                                                         () {
-                                                                      String
-                                                                          content =
-                                                                          scollection
-                                                                              .memolistcontentin[index];
-                                                                      int indexcontent =
-                                                                          scollection
-                                                                              .memolistin[index];
-                                                                      scollection
-                                                                          .removelistitem(
-                                                                              index);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemoinput',
-                                                                          indexcontent);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemocontentinput',
-                                                                          content);
                                                                       if (index ==
                                                                           0) {
+                                                                      } else {
+                                                                        String
+                                                                            content_prev =
+                                                                            controllers[index - 1].text;
+                                                                        int indexcontent_prev =
+                                                                            scollection.memolistin[index -
+                                                                                1];
+                                                                        scollection.removelistitem(
+                                                                            index -
+                                                                                1);
+                                                                        Hive.box('user_setting').put(
+                                                                            'optionmemoinput',
+                                                                            indexcontent_prev);
+                                                                        Hive.box('user_setting').put(
+                                                                            'optionmemocontentinput',
+                                                                            content_prev);
                                                                         scollection
                                                                             .addmemolistin(index);
                                                                         scollection
                                                                             .addmemolistcontentin(index);
-                                                                      } else {
-                                                                        scollection.addmemolistin(
+                                                                        controllers[index -
+                                                                                1]
+                                                                            .text = scollection
+                                                                                .memolistcontentin[
                                                                             index -
-                                                                                1);
-                                                                        scollection.addmemolistcontentin(
-                                                                            index -
-                                                                                1);
+                                                                                1];
+                                                                        controllers[index]
+                                                                            .text = scollection
+                                                                                .memolistcontentin[
+                                                                            index];
                                                                       }
                                                                     });
                                                                   },
@@ -1482,37 +1515,41 @@ class _DayScriptState extends State<DayScript> {
                                                                   onTap: () {
                                                                     setState(
                                                                         () {
-                                                                      String
-                                                                          content =
-                                                                          scollection
-                                                                              .memolistcontentin[index];
-                                                                      int indexcontent =
-                                                                          scollection
-                                                                              .memolistin[index];
-                                                                      scollection
-                                                                          .removelistitem(
-                                                                              index);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemoinput',
-                                                                          indexcontent);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemocontentinput',
-                                                                          content);
                                                                       if (index +
                                                                               1 ==
                                                                           scollection
                                                                               .memoindex) {
-                                                                        scollection
-                                                                            .addmemolistin(index);
-                                                                        scollection
-                                                                            .addmemolistcontentin(index);
                                                                       } else {
+                                                                        String
+                                                                            content =
+                                                                            scollection.memolistcontentin[index];
+                                                                        int indexcontent =
+                                                                            scollection.memolistin[index];
+                                                                        scollection
+                                                                            .removelistitem(index);
+                                                                        Hive.box('user_setting').put(
+                                                                            'optionmemoinput',
+                                                                            indexcontent);
+                                                                        Hive.box('user_setting').put(
+                                                                            'optionmemocontentinput',
+                                                                            content);
                                                                         scollection.addmemolistin(
                                                                             index +
                                                                                 1);
                                                                         scollection.addmemolistcontentin(
                                                                             index +
                                                                                 1);
+
+                                                                        controllers[index]
+                                                                            .text = scollection
+                                                                                .memolistcontentin[
+                                                                            index];
+                                                                        controllers[index +
+                                                                                1]
+                                                                            .text = scollection
+                                                                                .memolistcontentin[
+                                                                            index +
+                                                                                1];
                                                                       }
                                                                     });
                                                                   },
@@ -1536,8 +1573,13 @@ class _DayScriptState extends State<DayScript> {
                                                       ),
                                                       controller: controllers[
                                                           index]
-                                                    ),
-                                                  )),
+                                                        ..selection = TextSelection
+                                                            .fromPosition(TextPosition(
+                                                                offset: controllers[
+                                                                        index]
+                                                                    .text
+                                                                    .length)),
+                                                    ))),
                                         const SizedBox(
                                           width: 3,
                                         ),
@@ -1919,7 +1961,7 @@ class _DayScriptState extends State<DayScript> {
                 ),
               ),
               Transform.scale(
-                scale: 0.7,
+                scale: 1,
                 child: Switch(
                     activeColor: Colors.blue,
                     inactiveThumbColor: Colors.black,

@@ -144,7 +144,7 @@ content(
             ),
             GetBuilder<memosetting>(
                 builder: (_) => Transform.scale(
-                      scale: 0.7,
+                      scale: 1,
                       child: Switch(
                           activeColor: Colors.blue,
                           inactiveThumbColor: Colors.black,

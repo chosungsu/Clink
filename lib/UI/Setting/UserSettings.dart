@@ -1,9 +1,6 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Setting/ShowLicense.dart';
-import 'package:clickbyme/sheets/DeleteUser.dart';
-import 'package:clickbyme/UI/Setting/OptionChangePage.dart';
-import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:clickbyme/sheets/addgroupmember.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -43,10 +40,9 @@ class UserSettings extends StatelessWidget {
             return GestureDetector(
                 onTap: () {
                   index == 0
-                      ? showreadycontent(context, height)
+                      ? showreadycontent(context)
                       : (index == 1
-                          ? Get.to(() => OptionChangePage(),
-                              transition: Transition.rightToLeft)
+                          ? null
                           : (index == 2
                               ? addgroupmember(context, searchNode, controller)
                               : Get.to(() => ShowLicense(),

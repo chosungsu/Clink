@@ -782,7 +782,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
         ),
         widget.alarm == '설정off'
             ? Transform.scale(
-                scale: 0.7,
+                scale: 1,
                 child: Switch(
                     activeColor: Colors.blue,
                     inactiveThumbColor: Colors.black,
@@ -816,7 +816,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     }),
               )
             : Transform.scale(
-                scale: 0.7,
+                scale: 1,
                 child: Switch(
                     activeColor: Colors.blue,
                     inactiveThumbColor: Colors.black,

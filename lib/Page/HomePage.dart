@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
-import 'package:clickbyme/Tool/NaviWhere.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
@@ -36,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   double scalefactor = 1;
   bool isdraweropen = false;
   bool isresponsive = false;
-  int navi = 0;
   int currentPage = 0;
   int categorynumber = 0;
   List<SpaceContent> sc = [];
@@ -80,7 +78,6 @@ class _HomePageState extends State<HomePage> {
     Hive.box('user_setting').put('page_index', 0);
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
-    navi = NaviWhere();
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
     firestore
@@ -128,7 +125,7 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: BGColor(),
             body: GetBuilder<navibool>(
               init: navibool(),
-              builder: (_) => navi == 0
+              builder: (_) => draw.navi == 0
                   ? (draw.drawopen == true
                       ? Stack(
                           children: [
@@ -196,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                navi == 0
+                                draw.navi == 0
                                     ? draw.drawopen == true
                                         ? IconBtn(
                                             child: IconButton(
@@ -264,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                                             color: TextColor())
                                     : const SizedBox(),
                                 SizedBox(
-                                    width: navi == 0
+                                    width: draw.navi == 0
                                         ? MediaQuery.of(context).size.width - 70
                                         : MediaQuery.of(context).size.width -
                                             20,
@@ -559,7 +556,7 @@ class _HomePageState extends State<HomePage> {
               ),
               InkWell(
                 onTap: () {
-                  showreadycontent(context, height);
+                  showreadycontent(context);
                 },
                 child: Text('문의하기',
                     style: TextStyle(

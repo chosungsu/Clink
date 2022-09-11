@@ -8,7 +8,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 
 showreadycontent(
   BuildContext context,
-  double height,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -40,7 +39,6 @@ showreadycontent(
                 ),
                 child: readycontent(
                   context,
-                  height,
                 ),
               )),
         );
@@ -49,7 +47,6 @@ showreadycontent(
 
 readycontent(
   BuildContext context,
-  double height,
 ) {
   return SizedBox(
       child: Padding(
@@ -79,7 +76,6 @@ readycontent(
               ),
               content(
                 context,
-                height,
               ),
               const SizedBox(
                 height: 20,
@@ -107,7 +103,6 @@ title(
 
 content(
   BuildContext context,
-  double height,
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
