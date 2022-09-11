@@ -7,8 +7,11 @@ import '../MyTheme.dart';
 class navibool extends GetxController {
   bool drawopen = Hive.box('user_setting').get('page_opened') ?? false;
   int navi = Hive.box('user_setting').get('which_menu_pick') ?? 1;
-  Color color =
-      Hive.box('user_setting').get('which_color_background') ?? Colors.white;
+  Color color = Hive.box('user_setting').get('which_color_background') == null
+      ? MyTheme.colorWhite
+      : (Hive.box('user_setting').get('which_color_background') == 0
+          ? MyTheme.colorWhite
+          : MyTheme.colorblack);
 
   void setopen() {
     drawopen = true;
