@@ -515,13 +515,8 @@ content(
                                                 id)
                                             : controll_memo
                                                 .setalarmmemotimetable(
-                                                    Hive.box('user_setting')
-                                                        .get('alarm_memo_hour')
-                                                        .toString(),
-                                                    Hive.box('user_setting')
-                                                        .get(
-                                                            'alarm_memo_minute')
-                                                        .toString(),
+                                                    controll_memo.hour2,
+                                                    controll_memo.minute2,
                                                     '',
                                                     '');
                                         Navigator.pop(context);

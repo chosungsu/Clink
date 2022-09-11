@@ -93,13 +93,8 @@ class memosetting extends GetxController {
       NotificationApi.showDailyNotification(
           title: '띵동! 메모 알림이에요',
           body: '메모알림끄기는 [일상메모]->[톱니바퀴]->[해제]',
-          scheduledate: DateTime.utc(
-              now.year,
-              now.month,
-              now.day,
-              int.parse(Hive.box('user_setting').get('alarm_memo_hour')),
-              int.parse(Hive.box('user_setting').get('alarm_memo_minute')),
-              0));
+          scheduledate: DateTime.utc(now.year, now.month, now.day,
+              int.parse(hour), int.parse(minute), 0));
     }
     update();
     notifyChildrens();
