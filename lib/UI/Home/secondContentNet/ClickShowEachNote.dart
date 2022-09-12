@@ -496,6 +496,12 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                               onPressed:
                                                                   () async {
                                                                 //삭제
+                                                                controll_memo
+                                                                    .setalarmmemo(
+                                                                        widget
+                                                                            .docname,
+                                                                        widget
+                                                                            .doc);
                                                                 for (int i = 0;
                                                                     i <
                                                                         nodes
@@ -683,41 +689,39 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           RichText(
-            text: TextSpan(
-                children: [
-                  const TextSpan(
-                    text: '최초 작성시간 : ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.black),
-                  ),
-                  TextSpan(
-                      text : widget.date.toString(),
-                      style: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15)),
-                ]
-            ),),
+            text: TextSpan(children: [
+              const TextSpan(
+                text: '최초 작성시간 : ',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.black),
+              ),
+              TextSpan(
+                  text: widget.date.toString(),
+                  style: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15)),
+            ]),
+          ),
           RichText(
-            text: TextSpan(
-                children: [
-                  const TextSpan(
-                    text: '마지막 수정시간 : ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.black),
-                  ),
-                  TextSpan(
-                      text : widget.editdate.toString(),
-                      style: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15)),
-                ]
-            ),),
+            text: TextSpan(children: [
+              const TextSpan(
+                text: '마지막 수정시간 : ',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.black),
+              ),
+              TextSpan(
+                  text: widget.editdate.toString(),
+                  style: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15)),
+            ]),
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -1122,7 +1126,13 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                           fontSize: contentTextsize(),
                                           color: Colors.black,
                                         ),
-                                        controller: controllers[index]..selection = TextSelection.fromPosition(TextPosition(offset: controllers[index].text.length)),
+                                        controller: controllers[index]
+                                          ..selection =
+                                              TextSelection.fromPosition(
+                                                  TextPosition(
+                                                      offset: controllers[index]
+                                                          .text
+                                                          .length)),
                                         decoration: InputDecoration(
                                           isCollapsed: true,
                                           border: InputBorder.none,
@@ -1470,7 +1480,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                   fontSize: contentTextsize(),
                                                   color: Colors.grey.shade400),
                                             ),
-                                            controller: controllers[index]..selection = TextSelection.fromPosition(TextPosition(offset: controllers[index].text.length)),
+                                            controller: controllers[index]
+                                              ..selection =
+                                                  TextSelection.fromPosition(
+                                                      TextPosition(
+                                                          offset:
+                                                              controllers[index]
+                                                                  .text
+                                                                  .length)),
                                           ),
                                         )
                                       : SizedBox(
@@ -1647,7 +1664,13 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                     color:
                                                         Colors.grey.shade400),
                                               ),
-                                              controller: controllers[index]..selection = TextSelection.fromPosition(TextPosition(offset: controllers[index].text.length))))),
+                                              controller: controllers[index]
+                                                ..selection = TextSelection
+                                                    .fromPosition(TextPosition(
+                                                        offset:
+                                                            controllers[index]
+                                                                .text
+                                                                .length))))),
                               const SizedBox(
                                 width: 3,
                               ),
