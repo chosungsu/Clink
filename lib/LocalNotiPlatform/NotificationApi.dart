@@ -133,7 +133,10 @@ class NotificationApi {
         android: AndroidNotificationDetails('channel id', 'channel name',
             channelDescription: 'channel description',
             setAsGroupSummary: true,
+            playSound: true,
             fullScreenIntent: true,
+            sound: RawResourceAndroidNotificationSound(
+                'mixkit-fairy-message-notification-861'),
             importance: Importance.max),
         iOS: IOSNotificationDetails());
   }

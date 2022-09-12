@@ -1031,8 +1031,13 @@ class _DayScriptState extends State<DayScript> {
                                                       fontSize:
                                                           contentTextsize(),
                                                       color: Colors.black),
-                                                  controller:
-                                                      controllers[index],
+                                                  controller: controllers[index]
+                                                    ..selection = TextSelection
+                                                        .fromPosition(TextPosition(
+                                                            offset: controllers[
+                                                                    index]
+                                                                .text
+                                                                .length)),
                                                   decoration: InputDecoration(
                                                     isCollapsed: true,
                                                     border: InputBorder.none,
@@ -1389,8 +1394,14 @@ class _DayScriptState extends State<DayScript> {
                                                             color: Colors
                                                                 .grey.shade400),
                                                       ),
-                                                      controller:
-                                                          controllers[index],
+                                                      controller: controllers[
+                                                          index]
+                                                        ..selection = TextSelection
+                                                            .fromPosition(TextPosition(
+                                                                offset: controllers[
+                                                                        index]
+                                                                    .text
+                                                                    .length)),
                                                     ),
                                                   )
                                                 : SizedBox(
@@ -1567,8 +1578,14 @@ class _DayScriptState extends State<DayScript> {
                                                             color: Colors
                                                                 .grey.shade400),
                                                       ),
-                                                      controller:
-                                                          controllers[index],
+                                                      controller: controllers[
+                                                          index]
+                                                        ..selection = TextSelection
+                                                            .fromPosition(TextPosition(
+                                                                offset: controllers[
+                                                                        index]
+                                                                    .text
+                                                                    .length)),
                                                     ))),
                                         const SizedBox(
                                           width: 3,

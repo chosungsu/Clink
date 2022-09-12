@@ -677,62 +677,64 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   }
 
   buildSheetTitle() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              '최초 작성시간 : ',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                  color: Colors.black),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Text(widget.date.toString(),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(
+                children: [
+                  const TextSpan(
+                    text: '최초 작성시간 : ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.black),
+                  ),
+                  TextSpan(
+                      text : widget.date.toString(),
+                      style: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)),
+                ]
+            ),),
+          RichText(
+            text: TextSpan(
+                children: [
+                  const TextSpan(
+                    text: '마지막 수정시간 : ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.black),
+                  ),
+                  TextSpan(
+                      text : widget.editdate.toString(),
+                      style: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)),
+                ]
+            ),),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Text(
+                '메모제목',
+                textAlign: TextAlign.start,
                 style: TextStyle(
-                    color: Colors.grey.shade400,
                     fontWeight: FontWeight.bold,
-                    fontSize: 15)),
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              '마지막 수정시간 : ',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                  color: Colors.black),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Text(widget.editdate.toString(),
-                style: TextStyle(
-                    color: Colors.grey.shade400,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15)),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Text(
-              '메모제목',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                  color: Colors.black),
-            )
-          ],
-        ),
-      ],
+                    fontSize: contentTitleTextsize(),
+                    color: Colors.black),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -1120,7 +1122,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                           fontSize: contentTextsize(),
                                           color: Colors.black,
                                         ),
-                                        controller: controllers[index],
+                                        controller: controllers[index]..selection = TextSelection.fromPosition(TextPosition(offset: controllers[index].text.length)),
                                         decoration: InputDecoration(
                                           isCollapsed: true,
                                           border: InputBorder.none,
@@ -1468,7 +1470,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                   fontSize: contentTextsize(),
                                                   color: Colors.grey.shade400),
                                             ),
-                                            controller: controllers[index],
+                                            controller: controllers[index]..selection = TextSelection.fromPosition(TextPosition(offset: controllers[index].text.length)),
                                           ),
                                         )
                                       : SizedBox(
@@ -1645,7 +1647,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                     color:
                                                         Colors.grey.shade400),
                                               ),
-                                              controller: controllers[index]))),
+                                              controller: controllers[index]..selection = TextSelection.fromPosition(TextPosition(offset: controllers[index].text.length))))),
                               const SizedBox(
                                 width: 3,
                               ),

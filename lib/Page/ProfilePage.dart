@@ -6,6 +6,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:package_info/package_info.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
@@ -43,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
     '개인정보 수집 및 이용 동의',
     '라이선스',
   ];
+  String appuserversion = '';
   final searchNode = FocusNode();
 
   @override
@@ -50,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // TODO: implement initState
     super.initState();
     _controller = TextEditingController();
+    _getAppInfo();
     isdraweropen = draw.drawopen;
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
@@ -322,6 +325,10 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 20,
             ),
             OptView4(),
+            const SizedBox(
+              height: 20,
+            ),
+            OptView5(),
           ],
         ),
       ),
@@ -1019,5 +1026,112 @@ class _ProfilePageState extends State<ProfilePage> {
             );
           }),
     );
+  }
+
+  OptView5() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                  alignment: Alignment.center,
+                  child: CircleAvatar(
+                    backgroundColor: TextColor_shadowcolor(),
+                    foregroundColor: TextColor_shadowcolor(),
+                    child: Icon(
+                      Icons.settings,
+                      color: BGColor_shadowcolor(),
+                    ),
+                  )),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                '앱 정보',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize(),
+                    color: TextColor()),
+              ),
+            ],
+          ),
+          Divider(
+            height: 10,
+            thickness: 2,
+            color: Colors.grey.shade400,
+          ),
+          Opt5_body()
+        ],
+      ),
+    );
+  }
+
+  Opt5_body() {
+    return SizedBox(
+      child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {},
+                  child: index == 0
+                      ? SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '현재 앱 버전',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: TextColor()),
+                              ),
+                              Text(appuserversion.toString(),
+                                  style: TextStyle(
+                                      color: TextColor_shadowcolor(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize())),
+                            ],
+                          ),
+                        )
+                      : SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '스토어 최신 버전',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: TextColor()),
+                              ),
+                              Text(appuserversion.toString(),
+                                  style: TextStyle(
+                                      color: TextColor_shadowcolor(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize())),
+                            ],
+                          ),
+                        ),
+                )
+              ],
+            );
+          }),
+    );
+  }
+
+  Future _getAppInfo() async {
+    PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      appuserversion = info.version;
+    });
   }
 }
