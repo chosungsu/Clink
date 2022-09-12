@@ -729,7 +729,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                     menuWidth:
                                         (MediaQuery.of(context).size.width -
                                                 50) /
-                                            2,
+                                            1.5,
                                     openWithTap: false,
                                     onPressed: () async {
                                       //개별 노트로 이동로직

@@ -114,11 +114,13 @@ title(
   String doc_title,
 ) {
   return SizedBox(
+    width: MediaQuery.of(context).size.width * 0.8,
       child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       doc_title != ''
           ? RichText(
+        maxLines: 2,
               text: TextSpan(children: [
               TextSpan(
                   text: doc_title,
@@ -134,6 +136,7 @@ title(
                       fontSize: contentTextsize()))
             ]))
           : RichText(
+        maxLines: 2,
               text: TextSpan(children: [
               TextSpan(
                   text: '모든 메모',
