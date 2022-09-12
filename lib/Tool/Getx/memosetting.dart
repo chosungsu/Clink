@@ -37,6 +37,7 @@ class memosetting extends GetxController {
   void setalarmmemo(String title, String id) {
     if (title != '') {
       isseveralmemoalarm = Hive.box('user_setting').get('alarm_memo_$title');
+      print('cancel : ' + title.hashCode.toString());
       if (isseveralmemoalarm == false) {
         NotificationApi.cancelNotification(
             id: 1 +
@@ -96,6 +97,7 @@ class memosetting extends GetxController {
       firestore.collection('MemoDataBase').doc(id).update({
         'alarmok': true,
       });
+      print('set : ' + title.hashCode.toString());
       NotificationApi.showDailyNotification_severalnotes(
           id: 1 + int.parse(hour) + int.parse(minute) + title.hashCode,
           title: '띵동! $title 메모알림이에요',
