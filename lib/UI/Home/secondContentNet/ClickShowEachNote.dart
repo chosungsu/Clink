@@ -496,6 +496,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                               onPressed:
                                                                   () async {
                                                                 //삭제
+                                                                Hive.box(
+                                                                        'user_setting')
+                                                                    .put(
+                                                                        'alarm_memo_${widget.docname}',
+                                                                        false);
                                                                 controll_memo
                                                                     .setalarmmemo(
                                                                         widget
