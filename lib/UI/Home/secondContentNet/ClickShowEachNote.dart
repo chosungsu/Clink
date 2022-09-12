@@ -496,17 +496,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                               onPressed:
                                                                   () async {
                                                                 //삭제
-                                                                Hive.box(
-                                                                        'user_setting')
-                                                                    .put(
-                                                                        'alarm_memo_${widget.docname}',
-                                                                        false);
-                                                                controll_memo
-                                                                    .setalarmmemo(
-                                                                        widget
-                                                                            .docname,
-                                                                        widget
-                                                                            .doc);
+
                                                                 for (int i = 0;
                                                                     i <
                                                                         nodes
@@ -523,6 +513,17 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                 if (reloadpage) {
                                                                   CreateCalandmemoSuccessFlushbar(
                                                                       context);
+                                                                  Hive.box(
+                                                                          'user_setting')
+                                                                      .put(
+                                                                          'alarm_memo_${widget.docname}',
+                                                                          false);
+                                                                  controll_memo
+                                                                      .setalarmmemo(
+                                                                          widget
+                                                                              .docname,
+                                                                          widget
+                                                                              .doc);
                                                                   firestore
                                                                       .collection(
                                                                           'AppNoticeByUsers')
