@@ -135,8 +135,7 @@ class NotificationApi {
             setAsGroupSummary: true,
             playSound: true,
             fullScreenIntent: true,
-            sound: RawResourceAndroidNotificationSound(
-                'mixkit-fairy-message-notification-861'),
+            sound: RawResourceAndroidNotificationSound('notification'),
             importance: Importance.max),
         iOS: IOSNotificationDetails());
   }
