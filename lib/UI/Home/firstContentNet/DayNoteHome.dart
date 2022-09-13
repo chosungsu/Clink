@@ -442,7 +442,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                   style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: contentTextsize(),
-                      color: Colors.black,
+                      color: TextColor(),
                       letterSpacing: 2),
                   text: '을 통해 매일 메모 알림을 받아보세요',
                 ),
@@ -489,19 +489,19 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                 transition: Transition.downToUp);*/
           },
           trailing:
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400),
+              Icon(Icons.keyboard_arrow_right, color: BGColor_shadowcolor()),
           title: Text('알람 설정하러가기',
               style: TextStyle(
-                  color: Colors.black,
+                  color: TextColor(),
                   fontWeight: FontWeight.bold,
                   fontSize: contentTitleTextsize())),
         ),
         const SizedBox(
           height: 10,
         ),
-        const Divider(
+        Divider(
           height: 20,
-          color: Colors.grey,
+          color: BGColor_shadowcolor(),
           thickness: 0.5,
           indent: 30.0,
           endIndent: 0,
