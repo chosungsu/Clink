@@ -55,7 +55,7 @@ DeleteUserVerify(BuildContext context, String name) {
                       const SizedBox(height: 20),
                       Text(
                         '회원탈퇴 진행하겠습니까? '
-                        '아래 버튼을 클릭하시면 회원탈퇴처리가 완료됩니다. '
+                        '아래 버튼을 클릭하시면 기존알람들은 모두 초기화되며 회원탈퇴처리가 완료됩니다. '
                         '더 좋은 서비스로 다음 기회에 찾아뵙겠습니다.',
                         style: TextStyle(
                           color: Colors.red,
@@ -69,11 +69,6 @@ DeleteUserVerify(BuildContext context, String name) {
                           height: 40,
                           child: ElevatedButton(
                             onPressed: () async {
-                              /*await NotificationApi.cancelAll();
-                            Provider.of<GoogleSignInController>(context,
-                                    listen: false)
-                                .Deletelogout(context, name);
-                            GoToLogin(context, 'first');*/
                               if (isloading) {
                                 return;
                               }
@@ -85,6 +80,21 @@ DeleteUserVerify(BuildContext context, String name) {
                                       listen: false)
                                   .Deletelogout(context, name);
                               GoToLogin(context, 'first');
+                              await firestore
+                                  .collection('CalendarDataBase')
+                                  .where('OriginalUser', isEqualTo: name)
+                                  .get()
+                                  .then((value) {
+                                for (var element in value.docs) {
+                                  updateid = element.id;
+                                  firestore
+                                      .collection('CalendarDataBase')
+                                      .doc(updateid)
+                                      .update({
+                                    'Alarm': '설정off',
+                                  });
+                                }
+                              });
                               await firestore
                                   .collection('MemoDataBase')
                                   .where('OriginalUser', isEqualTo: name)
