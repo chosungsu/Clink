@@ -489,7 +489,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                 transition: Transition.downToUp);*/
           },
           trailing:
-              Icon(Icons.keyboard_arrow_right, color: BGColor_shadowcolor()),
+              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400),
           title: Text('알람 설정하러가기',
               style: TextStyle(
                   color: TextColor(),
@@ -501,7 +501,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
         ),
         Divider(
           height: 20,
-          color: BGColor_shadowcolor(),
+          color: Colors.grey.shade400,
           thickness: 0.5,
           indent: 30.0,
           endIndent: 0,
