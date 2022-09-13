@@ -101,21 +101,23 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
           }
         });
       });
-    firestore
-        .collection('MemoAllAlarm')
-        .doc(username)
-        .get()
-        .then((value) => value.data()!.forEach((key, value) {
-              if (key == 'alarmtime') {
-                controll_memo.settimeminute(
-                    int.parse(value.toString().split(':')[0]),
-                    int.parse(value.toString().split(':')[1]),
-                    '',
-                    '');
-              } else {
-                Hive.box('user_setting').put('alarm_memo', value);
-              }
-            }));
+    firestore.collection('MemoAllAlarm').doc(username).get().then((value) =>
+        value.data()!.isEmpty
+            ? firestore
+                .collection('MemoAllAlarm')
+                .doc(username)
+                .set({'ok': false, 'alarmtime': '99:99'})
+            : value.data()!.forEach((key, value) {
+                if (key == 'alarmtime') {
+                  controll_memo.settimeminute(
+                      int.parse(value.toString().split(':')[0]),
+                      int.parse(value.toString().split(':')[1]),
+                      '',
+                      '');
+                } else {
+                  Hive.box('user_setting').put('alarm_memo', value);
+                }
+              }));
   }
 
   @override

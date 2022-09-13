@@ -25,7 +25,8 @@ MFHolder(
     selectcollection scollection,
     Color _color,
     String doc,
-    bool ischeckedtohideminus) {
+    bool ischeckedtohideminus,
+    List<TextEditingController> controllers) {
   final controll_memo = Get.put(memosetting());
   List _image = [];
   final imagePicker = ImagePicker();
@@ -68,7 +69,8 @@ MFHolder(
                       fontSize: contentTextsize())),
               onPressed: () {
                 setState(() {
-                  showmemocontent(context, checkbottoms, nodes, scollection);
+                  showmemocontent(
+                      context, checkbottoms, nodes, scollection, controllers);
                 });
               }),
           FocusedMenuItem(

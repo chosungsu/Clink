@@ -124,6 +124,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
           ? scollection.memolistcontentin.insert(k, '')
           : scollection.memolistcontentin.insert(
               k, Hive.box('user_setting').get('optionmemocontentinput'));
+      nodes.add(FocusNode());
+      widget.docsummary[k] == null
+          ? controllers.insert(k, TextEditingController(text: null))
+          : controllers.insert(
+              k,
+              TextEditingController(
+                  text:
+                      Hive.box('user_setting').get('optionmemocontentinput')));
     }
     for (int i = 0; i < widget.image.length; i++) {
       if (widget.image[i] != null) {
@@ -266,7 +274,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           _color,
                                                           widget.doc,
                                                           controll_memo
-                                                              .ischeckedtohideminus),
+                                                              .ischeckedtohideminus,
+                                                          controllers),
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
@@ -1104,12 +1113,12 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                         shrinkWrap: true,
                         itemCount: scollection.memolistin.length,
                         itemBuilder: (context, index) {
-                          nodes.add(FocusNode());
+                          /*nodes.add(FocusNode());
                           controllers.add(TextEditingController());
                           widget.docsummary.length <= index
                               ? null
                               : controllers[index].text =
-                                  scollection.memolistcontentin[index];
+                                  scollection.memolistcontentin[index];*/
                           return Row(
                             children: [
                               const SizedBox(
@@ -1120,7 +1129,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                       width: MediaQuery.of(context).size.width -
                                           50,
                                       child: DetectableTextField(
-                                        onTap: () {},
                                         onChanged: (text) {
                                           scollection.memolistcontentin[index] =
                                               text;
@@ -1132,13 +1140,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                           fontSize: contentTextsize(),
                                           color: Colors.black,
                                         ),
-                                        controller: controllers[index]
-                                          ..selection =
-                                              TextSelection.fromPosition(
-                                                  TextPosition(
-                                                      offset: controllers[index]
-                                                          .text
-                                                          .length)),
+                                        controller: controllers[index],
                                         decoration: InputDecoration(
                                           isCollapsed: true,
                                           border: InputBorder.none,
@@ -1156,11 +1158,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                   : InkWell(
                                                       onTap: () {
                                                         setState(() {
-                                                          controllers[index]
-                                                              .text = '';
                                                           scollection
                                                               .removelistitem(
                                                                   index);
+                                                          controllers
+                                                              .removeAt(index);
+
+                                                          for (int i = 0;
+                                                              i <
+                                                                  scollection
+                                                                      .memolistin
+                                                                      .length;
+                                                              i++) {
+                                                            controllers[i]
+                                                                    .text =
+                                                                scollection
+                                                                    .memolistcontentin[i];
+                                                          }
                                                         });
                                                       },
                                                       child: const Icon(
@@ -1296,15 +1310,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                           child: TextField(
                                             minLines: 1,
                                             maxLines: 1,
-                                            onTap: () {
-                                              Hive.box('user_setting').put(
-                                                  'cursorposition',
-                                                  controllers[index]
-                                                      .selection
-                                                      .base
-                                                      .offset);
-                                              scollection.setcursor();
-                                            },
                                             onChanged: (text) {
                                               scollection.memolistcontentin[
                                                   index] = text;
@@ -1360,11 +1365,24 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                       : InkWell(
                                                           onTap: () {
                                                             setState(() {
-                                                              controllers[index]
-                                                                  .text = '';
                                                               scollection
                                                                   .removelistitem(
                                                                       index);
+                                                              controllers
+                                                                  .removeAt(
+                                                                      index);
+
+                                                              for (int i = 0;
+                                                                  i <
+                                                                      scollection
+                                                                          .memolistin
+                                                                          .length;
+                                                                  i++) {
+                                                                controllers[i]
+                                                                        .text =
+                                                                    scollection
+                                                                        .memolistcontentin[i];
+                                                              }
                                                             });
                                                           },
                                                           child: const Icon(
@@ -1486,14 +1504,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                   fontSize: contentTextsize(),
                                                   color: Colors.grey.shade400),
                                             ),
-                                            controller: controllers[index]
-                                              ..selection =
-                                                  TextSelection.fromPosition(
-                                                      TextPosition(
-                                                          offset:
-                                                              controllers[index]
-                                                                  .text
-                                                                  .length)),
+                                            controller: controllers[index],
                                           ),
                                         )
                                       : SizedBox(
@@ -1502,7 +1513,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                   .width -
                                               50,
                                           child: TextField(
-                                              onTap: () {},
                                               onChanged: (text) {
                                                 scollection.memolistcontentin[
                                                     index] = text;
@@ -1539,12 +1549,24 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                         : InkWell(
                                                             onTap: () {
                                                               setState(() {
-                                                                controllers[
-                                                                        index]
-                                                                    .text = '';
                                                                 scollection
                                                                     .removelistitem(
                                                                         index);
+                                                                controllers
+                                                                    .removeAt(
+                                                                        index);
+
+                                                                for (int i = 0;
+                                                                    i <
+                                                                        scollection
+                                                                            .memolistin
+                                                                            .length;
+                                                                    i++) {
+                                                                  controllers[i]
+                                                                          .text =
+                                                                      scollection
+                                                                          .memolistcontentin[i];
+                                                                }
                                                               });
                                                             },
                                                             child: const Icon(
@@ -1670,13 +1692,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                     color:
                                                         Colors.grey.shade400),
                                               ),
-                                              controller: controllers[index]
-                                                ..selection = TextSelection
-                                                    .fromPosition(TextPosition(
-                                                        offset:
-                                                            controllers[index]
-                                                                .text
-                                                                .length))))),
+                                              controller: controllers[index]))),
                               const SizedBox(
                                 width: 3,
                               ),

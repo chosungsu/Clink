@@ -10,6 +10,7 @@ showmemocontent(
   List<bool> checkbottoms,
   List<FocusNode> nodes,
   selectcollection scollection,
+  List<TextEditingController> controllers,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -39,7 +40,8 @@ showmemocontent(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: readycontent(context, checkbottoms, nodes, scollection),
+                child: readycontent(
+                    context, checkbottoms, nodes, scollection, controllers),
               )),
         );
       }).whenComplete(() {});
@@ -50,6 +52,7 @@ readycontent(
   List<bool> checkbottoms,
   List<FocusNode> nodes,
   selectcollection scollection,
+  List<TextEditingController> controllers,
 ) {
   return SizedBox(
       child: Padding(
@@ -73,7 +76,7 @@ readycontent(
               const SizedBox(
                 height: 30,
               ),
-              content(context, checkbottoms, nodes, scollection),
+              content(context, checkbottoms, nodes, scollection, controllers),
               const SizedBox(
                 height: 20,
               ),
@@ -86,6 +89,7 @@ content(
   List<bool> checkbottoms,
   List<FocusNode> nodes,
   selectcollection scollection,
+  List<TextEditingController> controllers,
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -104,6 +108,10 @@ content(
                 scollection.addmemolistcontentin(scollection.memoindex - 1);
 
                 checkbottoms[0] = false;
+                nodes.add(FocusNode());
+                controllers.add(TextEditingController(
+                    text: scollection
+                        .memolistcontentin[scollection.memoindex - 1]));
               }
               for (int i = 0; i < nodes.length; i++) {
                 nodes[i].unfocus();
@@ -144,6 +152,10 @@ content(
                 scollection.addmemolistcontentin(scollection.memoindex - 1);
 
                 checkbottoms[0] = false;
+                nodes.add(FocusNode());
+                controllers.add(TextEditingController(
+                    text: scollection
+                        .memolistcontentin[scollection.memoindex - 1]));
               }
               for (int i = 0; i < nodes.length; i++) {
                 nodes[i].unfocus();
@@ -183,6 +195,10 @@ content(
                 scollection.addmemolistin(scollection.memoindex);
                 scollection.addmemolistcontentin(scollection.memoindex - 1);
                 checkbottoms[2] = false;
+                nodes.add(FocusNode());
+                controllers.add(TextEditingController(
+                    text: scollection
+                        .memolistcontentin[scollection.memoindex - 1]));
               }
               for (int i = 0; i < nodes.length; i++) {
                 nodes[i].unfocus();

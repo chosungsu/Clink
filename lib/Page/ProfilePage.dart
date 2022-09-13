@@ -682,7 +682,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             'which_menu_pick') ==
                                                                         1 ||
                                                                     Hive.box('user_setting').get(
-                                                                            'which_color_background') ==
+                                                                            'which_menu_pick') ==
                                                                         null
                                                                 ? Colors.blue
                                                                     .shade400

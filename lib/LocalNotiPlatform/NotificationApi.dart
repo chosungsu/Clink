@@ -9,6 +9,10 @@ class NotificationApi {
     await _notifications.cancel(id);
   }
 
+  static Future cancelAll() async {
+    await _notifications.cancelAll();
+  }
+
   static Future showNotification({
     int id = 0,
     String? title,

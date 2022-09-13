@@ -39,15 +39,20 @@ class memosetting extends GetxController {
       isseveralmemoalarm = Hive.box('user_setting').get('alarm_memo_$title');
       print('cancel : ' + title.hashCode.toString());
       if (isseveralmemoalarm == false) {
-        NotificationApi.cancelNotification(
-            id: 1 +
-                int.parse(Hive.box('user_setting')
-                    .get('alarm_memo_hour_$title')
-                    .toString()) +
-                int.parse(Hive.box('user_setting')
-                    .get('alarm_memo_minute_$title')
-                    .toString()) +
-                title.hashCode);
+        firestore.collection('MemoDataBase').doc(id).get().then((value) =>
+            value.exists == false
+                ? null
+                : value.data()!['alarmok'] == false
+                    ? null
+                    : NotificationApi.cancelNotification(
+                        id: 1 +
+                            int.parse(Hive.box('user_setting')
+                                .get('alarm_memo_hour_$title')
+                                .toString()) +
+                            int.parse(Hive.box('user_setting')
+                                .get('alarm_memo_minute_$title')
+                                .toString()) +
+                            title.hashCode));
         firestore
             .collection('MemoDataBase')
             .doc(id)

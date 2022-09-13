@@ -426,7 +426,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                               }
                             }).whenComplete(() {
                               if (widget.share.isNotEmpty) {
-                                print(1);
                                 firestore
                                     .collection('ShareHome')
                                     .where('doc', isEqualTo: widget.doc)
@@ -443,7 +442,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         .delete();
                                   }
                                 }).whenComplete(() {
-                                  print(2);
                                   for (int i = 0;
                                       i < listselected_sp.length;
                                       i++) {
@@ -480,7 +478,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                           'viewsetting': widget.viewsetting
                                         });
                                       } else {
-                                        print(3);
                                         firestore
                                             .collection('ShareHome')
                                             .doc(widget.doc +
@@ -544,7 +541,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                       .get()
                                       .then((value) {
                                     if (value.data() == null) {
-                                      print(11);
                                       firestore
                                           .collection('ShareHome')
                                           .doc(widget.doc +
@@ -568,7 +564,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         'viewsetting': widget.viewsetting
                                       });
                                     } else {
-                                      print(22);
                                       firestore
                                           .collection('ShareHome')
                                           .doc(widget.doc +
