@@ -95,11 +95,11 @@ class _ImageSliderPageState extends State<ImageSliderPage>
   }
 
   Future _deleteFile(String doc, int index) async {
+    print('delete : ' + index.toString());
     await FirebaseStorage.instance
         .refFromURL(controll_memo.imagelist[index])
         .delete();
     controll_memo.deleteimagelist(index);
-    controll_memo.setimageindex(index - 1);
     // 문서 작성
     if (doc != '') {
       await FirebaseFirestore.instance
@@ -120,7 +120,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
         child: Scaffold(
       backgroundColor: Colors.white,
       body: imageSlide(),
-      bottomNavigationBar: SelectionBtn(),
+      bottomNavigationBar: SelectionBtn(widget.index),
     ));
   }
 
@@ -274,7 +274,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
     );
   }
 
-  SelectionBtn() {
+  SelectionBtn(int index) {
     return Row(
       children: [
         Flexible(
@@ -310,8 +310,10 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                             await imagePicker.pickImage(
                                                 source: ImageSource.camera);
                                         setState(() {
-                                          _uploadFile(context,
-                                              File(image!.path), widget.doc);
+                                          if (image != null) {
+                                            _uploadFile(context,
+                                                File(image.path), widget.doc);
+                                          }
                                         });
                                       },
                                       child: ListTile(
@@ -334,8 +336,10 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                             await imagePicker.pickImage(
                                                 source: ImageSource.gallery);
                                         setState(() {
-                                          _uploadFile(context,
-                                              File(image!.path), widget.doc);
+                                          if (image != null) {
+                                            _uploadFile(context,
+                                                File(image.path), widget.doc);
+                                          }
                                         });
                                       },
                                       child: ListTile(
@@ -397,7 +401,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                         await Get.dialog(checkdeleteimagememo(context)) ??
                             false;
                     if (reloadpage) {
-                      _deleteFile(widget.doc, controll_memo.imageindex);
+                      _deleteFile(widget.doc, index);
                     }
                   },
                   child: Container(
@@ -427,88 +431,5 @@ class _ImageSliderPageState extends State<ImageSliderPage>
             ))
       ],
     );
-  }
-
-  ImageSlider(BuildContext context) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width - 40,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 30,
-              child: Text(
-                '전체',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: secondTitleTextsize(),
-                    color: TextColor()),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            GetBuilder<memosetting>(
-                builder: (_) => SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: GridView.builder(
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
-                            childAspectRatio: 1 / 1, //item 의 가로 1, 세로 2 의 비율
-                            mainAxisSpacing: 20, //수평 Padding
-                            crossAxisSpacing: 20, //수직 Padding
-                          ),
-                          itemCount: controll_memo.imagelist.length,
-                          itemBuilder: ((context, index) {
-                            return Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      print('yes');
-                                      controll_memo.setimageindex(index);
-                                      ImageShow(index, context);
-                                    });
-                                  },
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: SizedBox(
-                                          height: 90,
-                                          width: 90,
-                                          child: Image.network(
-                                              controll_memo.imagelist[index],
-                                              fit: BoxFit.fill, loadingBuilder:
-                                                  (BuildContext context,
-                                                      Widget child,
-                                                      ImageChunkEvent?
-                                                          loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            }
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
-                                                    : null,
-                                              ),
-                                            );
-                                          }))),
-                                ),
-                                const SizedBox(width: 10)
-                              ],
-                            );
-                          })),
-                    ))
-          ],
-        ));
   }
 }

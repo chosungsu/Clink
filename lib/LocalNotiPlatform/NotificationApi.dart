@@ -138,7 +138,8 @@ class NotificationApi {
             channelDescription: 'channel description',
             setAsGroupSummary: true,
             //playSound: true,
-            fullScreenIntent: true,
+            fullScreenIntent: false,
+            autoCancel: true,
             sound: RawResourceAndroidNotificationSound('notification'),
             importance: Importance.max),
         iOS: IOSNotificationDetails(sound: 'notification.mp3'));

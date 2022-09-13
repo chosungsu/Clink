@@ -177,10 +177,10 @@ class _LoginSignPageState extends State<LoginSignPage>
               await Provider.of<GoogleSignInController>(context, listen: false)
                   .login(context, ischecked);
               String name = Hive.box('user_info').get('id');
-              /*await firestore
+              await firestore
                   .collection('MemoAllAlarm')
                   .doc(name)
-                  .set({'ok': false, 'alarmtime': '99:99'});*/
+                  .set({'ok': false, 'alarmtime': '99:99'});
               await Navigator.of(context).pushReplacement(
                 PageTransition(
                   type: PageTransitionType.bottomToTop,
@@ -189,7 +189,6 @@ class _LoginSignPageState extends State<LoginSignPage>
                   ),
                 ),
               );
-              await NotificationApi.cancelAll();
             },
             child: SizedBox(
               width: 200 * (MediaQuery.of(context).size.width / 392),
