@@ -137,7 +137,7 @@ class NotificationApi {
         android: AndroidNotificationDetails('channel id', 'channel name',
             channelDescription: 'channel description',
             setAsGroupSummary: true,
-            //playSound: true,
+            playSound: true,
             fullScreenIntent: false,
             autoCancel: true,
             sound: RawResourceAndroidNotificationSound('notification'),
