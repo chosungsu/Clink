@@ -4,8 +4,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../Dialogs/checkdeletecandm.dart';
+import 'package:intl/intl.dart';
+import '../Dialogs/destroyBackKey.dart';
 import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/TextSize.dart';
 
@@ -269,123 +269,6 @@ content(
             ],
           ),
         ),
-        /*const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: 30,
-          child: Text('테마 선택',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize())),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: 30,
-          child: Row(
-            children: [
-              Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: 30,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100)),
-                            primary: doc_type == 0
-                                ? Colors.grey.shade400
-                                : Colors.white,
-                            side: const BorderSide(
-                              width: 1,
-                              color: Colors.black45,
-                            )),
-                        onPressed: () {
-                          setState(() {
-                            controll_cals.stylecalorigin(doc);
-                            doc_type = controll_cals.stylecalendar;
-                          });
-                        },
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: NeumorphicText(
-                                  '기본 캘린더',
-                                  style: NeumorphicStyle(
-                                    shape: NeumorphicShape.flat,
-                                    depth: 3,
-                                    color: doc_type == 0
-                                        ? Colors.white
-                                        : Colors.black45,
-                                  ),
-                                  textStyle: NeumorphicTextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        )),
-                  )),
-              const SizedBox(
-                width: 20,
-              ),
-              Flexible(
-                flex: 1,
-                child: SizedBox(
-                  height: 30,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100)),
-                          primary: doc_type == 1
-                              ? Colors.grey.shade400
-                              : Colors.white,
-                          side: const BorderSide(
-                            width: 1,
-                            color: Colors.black45,
-                          )),
-                      onPressed: () {
-                        setState(() {
-                          controll_cals.stylecaldday(doc);
-                          doc_type = controll_cals.stylecalendar;
-                        });
-                      },
-                      child: Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: NeumorphicText(
-                                '주간반복일상',
-                                style: NeumorphicStyle(
-                                  shape: NeumorphicShape.flat,
-                                  depth: 3,
-                                  color: doc_type == 1
-                                      ? Colors.white
-                                      : Colors.black45,
-                                ),
-                                textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize(),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )),
-                ),
-              ),
-            ],
-          ),
-        ),*/
         const SizedBox(
           height: 20,
         ),
@@ -440,12 +323,25 @@ content(
                         }
                         firestore.collection('AppNoticeByUsers').add({
                           'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
-                          'date': date.toString().split('-')[0] +
-                              '-' +
-                              date.toString().split('-')[1] +
-                              '-' +
-                              date.toString().split('-')[2].substring(0, 2),
-                          'username': doc_share
+                          'date': DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[0] +
+                              ' ' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[0] +
+                              ':' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[1],
+                          'sharename': doc_share,
+                          'username': username,
+                          'read': 'no',
                         });
 
                         Navigator.pop(context);
@@ -502,12 +398,25 @@ content(
                           });
                           firestore.collection('AppNoticeByUsers').add({
                             'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
-                            'date': date.toString().split('-')[0] +
-                                '-' +
-                                date.toString().split('-')[1] +
-                                '-' +
-                                date.toString().split('-')[2].substring(0, 2),
-                            'username': doc_share
+                            'date': DateFormat('yyyy-MM-dd hh:mm')
+                                    .parse(date.toString())
+                                    .toString()
+                                    .split(' ')[0] +
+                                ' ' +
+                                DateFormat('yyyy-MM-dd hh:mm')
+                                    .parse(date.toString())
+                                    .toString()
+                                    .split(' ')[1]
+                                    .split(':')[0] +
+                                ':' +
+                                DateFormat('yyyy-MM-dd hh:mm')
+                                    .parse(date.toString())
+                                    .toString()
+                                    .split(' ')[1]
+                                    .split(':')[1],
+                            'sharename': doc_share,
+                            'username': username,
+                            'read': 'no',
                           });
 
                           Navigator.pop(context);

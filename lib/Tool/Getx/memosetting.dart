@@ -95,14 +95,15 @@ class memosetting extends GetxController {
     }
   }
 
-  void setalarmmemotimetable(
-      String hour, String minute, String title, String id) {
+  Future<void> setalarmmemotimetable(
+      String hour, String minute, String title, String id) async {
     if (title != '') {
       isseveralmemoalarm = Hive.box('user_setting').get('alarm_memo_$title');
       firestore.collection('MemoDataBase').doc(id).update({
         'alarmok': true,
       });
-      print('set : ' + title.hashCode.toString());
+      await NotificationApi.cancelNotification(
+          id: 1 + int.parse(hour) + int.parse(minute) + title.hashCode);
       NotificationApi.showDailyNotification_severalnotes(
           id: 1 + int.parse(hour) + int.parse(minute) + title.hashCode,
           title: '띵동! $title 메모알림이에요',
@@ -114,6 +115,11 @@ class memosetting extends GetxController {
       firestore.collection('MemoAllAlarm').doc(username).update({
         'ok': true,
       });
+      await NotificationApi.cancelNotification(id: 1);
+      firestore
+          .collection('MemoAllAlarm')
+          .doc(username)
+          .update({'ok': false, 'alarmtime': '99:99'});
       NotificationApi.showDailyNotification(
           title: '띵동! 메모 알림이에요',
           body: '메모알림끄기는 [일상메모]->[톱니바퀴]->[해제]',

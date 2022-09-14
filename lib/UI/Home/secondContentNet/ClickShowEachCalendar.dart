@@ -1,4 +1,3 @@
-import 'package:clickbyme/Dialogs/checkdeletecandm.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,10 +6,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:numberpicker/numberpicker.dart';
+import '../../../Dialogs/destroyBackKey.dart';
 import '../../../LocalNotiPlatform/NotificationApi.dart';
-import '../../../Tool/BGColor.dart';
-import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/CreateCalandmemo.dart';
@@ -52,6 +49,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   List updateid = [];
   List deleteid = [];
   bool isChecked_pushalarm = false;
+  String name = Hive.box('user_info').get('id');
   String changevalue = Hive.box('user_setting').get('alarming_time') ?? "10분 전";
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -190,14 +188,20 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                         'title': '[' +
                                                             widget.calname +
                                                             '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 변경되었습니다.',
-                                                        'date': DateFormat(
-                                                                'yyyy-MM-dd')
-                                                            .parse(
-                                                                DateTime.now()
-                                                                    .toString())
-                                                            .toString()
-                                                            .split(' ')[0],
-                                                        'username': widget.share
+                                                        'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
+                                                                        ' ' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
+                                                                            0] +
+                                                                        ':' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm')
+                                                                            .parse(DateTime.now().toString())
+                                                                            .toString()
+                                                                            .split(' ')[1]
+                                                                            .split(':')[1],
+                                                        'username': name,
+                                                        'sharename':
+                                                            widget.share,
+                                                        'read': 'no',
                                                       }).whenComplete(() {
                                                         firestore
                                                             .collection(
@@ -437,15 +441,20 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                             'title': '[' +
                                                                 widget.calname +
                                                                 '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 삭제되었습니다.',
-                                                            'date': DateFormat(
-                                                                    'yyyy-MM-dd')
-                                                                .parse(DateTime
-                                                                        .now()
-                                                                    .toString())
-                                                                .toString()
-                                                                .split(' ')[0],
-                                                            'username':
-                                                                widget.share
+                                                            'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
+                                                                        ' ' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
+                                                                            0] +
+                                                                        ':' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm')
+                                                                            .parse(DateTime.now().toString())
+                                                                            .toString()
+                                                                            .split(' ')[1]
+                                                                            .split(':')[1],
+                                                            'username': name,
+                                                            'sharename':
+                                                                widget.share,
+                                                            'read': 'no',
                                                           }).whenComplete(() {
                                                             firestore
                                                                 .collection(

@@ -1,19 +1,17 @@
-import 'package:clickbyme/DB/Expandable.dart';
 import 'package:clickbyme/DB/PageList.dart';
-import 'package:clickbyme/Dialogs/checkdeletenoti.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:intl/intl.dart';
+import '../../Dialogs/destroyBackKey.dart';
 import '../../Tool/IconBtn.dart';
 import '../../Tool/NoBehavior.dart';
+import 'firstContentNet/ChooseCalendar.dart';
+import 'firstContentNet/DayNoteHome.dart';
 
 class NotiAlarm extends StatefulWidget {
   @override
@@ -37,6 +35,8 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
   var returntitle = [];
   var returndate = [];
   final notilist = Get.put(notishow());
+  final readlist = [];
+  final listid = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -53,12 +53,20 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  Future<bool> _onWillPop() async {
+    Get.back(result: true);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       backgroundColor: BGColor(),
-      body: UI(),
+      body: WillPopScope(
+        onWillPop: _onWillPop,
+        child: UI(),
+      ),
     ));
   }
 
@@ -74,8 +82,9 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 160,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                         height: 80,
@@ -110,7 +119,9 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                               FontWeight.bold,
                                                         )),
                                                   ),
-                                                  whatwantnotice == 1
+                                                  whatwantnotice == 1 &&
+                                                          notilist
+                                                              .listad.isNotEmpty
                                                       ? IconBtn(
                                                           child: IconButton(
                                                               onPressed:
@@ -234,7 +245,10 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                   IconBtn(
                                                       child: IconButton(
                                                           onPressed: () {
-                                                            Get.back();
+                                                            notilist
+                                                                .isreadnoti();
+                                                            Get.back(
+                                                                result: true);
                                                           },
                                                           icon: Container(
                                                             alignment: Alignment
@@ -268,6 +282,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                           ),
                         )),
                     NoticeApps(),
+                    whatwantnotice == 0 ? const SizedBox() : allread(),
                   ],
                 ),
               ),
@@ -299,8 +314,8 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
 
   NoticeApps() {
     return SizedBox(
-      height: 80,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
@@ -313,151 +328,204 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
   }
 
   NotiBox() {
-    return SizedBox(
-        height: 40,
-        width: MediaQuery.of(context).size.width - 40,
-        child: ListView.builder(
-            // the number of items in the list
-            itemCount: notinamelist.length,
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            // display each item of the product list
-            itemBuilder: (context, index) {
-              return index == 1
-                  ? Row(
-                      children: [
-                        SizedBox(
-                            height: 30,
-                            width: (MediaQuery.of(context).size.width - 40) / 2,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('noti_home_click') ==
-                                            null
-                                        ? Colors.white
-                                        : (Hive.box('user_setting')
-                                                    .get('noti_home_click') ==
-                                                index
-                                            ? Colors.grey.shade400
-                                            : Colors.white),
-                                    side: BorderSide(
-                                      width: 1,
-                                      color: TextColor(),
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('noti_home_click', index);
-                                    whatwantnotice = index;
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          notinamelist[index],
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting').get(
-                                                        'noti_home_click') ==
-                                                    null
-                                                ? Colors.black45
-                                                : (Hive.box('user_setting').get(
-                                                            'noti_home_click') ==
-                                                        index
-                                                    ? Colors.white
-                                                    : Colors.black45),
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10),
+      child: SizedBox(
+          height: 40,
+          width: MediaQuery.of(context).size.width - 40,
+          child: ListView.builder(
+              // the number of items in the list
+              itemCount: notinamelist.length,
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              // display each item of the product list
+              itemBuilder: (context, index) {
+                return index == 1
+                    ? Row(
+                        children: [
+                          SizedBox(
+                              height: 30,
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 2,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Hive.box('user_setting')
+                                                  .get('noti_home_click') ==
+                                              null
+                                          ? Colors.white
+                                          : (Hive.box('user_setting')
+                                                      .get('noti_home_click') ==
+                                                  index
+                                              ? Colors.grey.shade400
+                                              : Colors.white),
+                                      side: BorderSide(
+                                        width: 1,
+                                        color: TextColor(),
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Hive.box('user_setting')
+                                          .put('noti_home_click', index);
+                                      whatwantnotice = index;
+                                    });
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            notinamelist[index],
+                                            style: NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Hive.box('user_setting').get(
+                                                          'noti_home_click') ==
+                                                      null
+                                                  ? Colors.black45
+                                                  : (Hive.box('user_setting').get(
+                                                              'noti_home_click') ==
+                                                          index
+                                                      ? Colors.white
+                                                      : Colors.black45),
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                            ),
                                           ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
+                                        )
+                                      ],
+                                    ),
+                                  ))),
+                          const SizedBox(
+                            width: 20,
+                          )
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          SizedBox(
+                              height: 30,
+                              width:
+                                  (MediaQuery.of(context).size.width - 40) / 3,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      primary: Hive.box('user_setting')
+                                                  .get('noti_home_click') ==
+                                              null
+                                          ? Colors.white
+                                          : (Hive.box('user_setting')
+                                                      .get('noti_home_click') ==
+                                                  index
+                                              ? Colors.grey.shade400
+                                              : Colors.white),
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: Colors.black45,
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Hive.box('user_setting')
+                                          .put('noti_home_click', index);
+                                      whatwantnotice = index;
+                                    });
+                                  },
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: NeumorphicText(
+                                            notinamelist[index],
+                                            style: NeumorphicStyle(
+                                              shape: NeumorphicShape.flat,
+                                              depth: 3,
+                                              color: Hive.box('user_setting').get(
+                                                          'noti_home_click') ==
+                                                      null
+                                                  ? Colors.black45
+                                                  : (Hive.box('user_setting').get(
+                                                              'noti_home_click') ==
+                                                          index
+                                                      ? Colors.white
+                                                      : Colors.black45),
+                                            ),
+                                            textStyle: NeumorphicTextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ))),
-                        const SizedBox(
-                          width: 20,
-                        )
-                      ],
-                    )
-                  : Row(
-                      children: [
-                        SizedBox(
-                            height: 30,
-                            width: (MediaQuery.of(context).size.width - 40) / 3,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('noti_home_click') ==
-                                            null
-                                        ? Colors.white
-                                        : (Hive.box('user_setting')
-                                                    .get('noti_home_click') ==
-                                                index
-                                            ? Colors.grey.shade400
-                                            : Colors.white),
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('noti_home_click', index);
-                                    whatwantnotice = index;
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          notinamelist[index],
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting').get(
-                                                        'noti_home_click') ==
-                                                    null
-                                                ? Colors.black45
-                                                : (Hive.box('user_setting').get(
-                                                            'noti_home_click') ==
-                                                        index
-                                                    ? Colors.white
-                                                    : Colors.black45),
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ))),
-                        const SizedBox(
-                          width: 20,
-                        )
-                      ],
-                    );
-            }));
+                                        )
+                                      ],
+                                    ),
+                                  ))),
+                          const SizedBox(
+                            width: 20,
+                          )
+                        ],
+                      );
+              })),
+    );
+  }
+
+  allread() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 5,
+        ),
+        allreadBox()
+      ],
+    );
+  }
+
+  allreadBox() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10),
+      child: SizedBox(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  for (int i = 0; i < listid.length; i++) {
+                    notilist.updatenoti(listid[i]);
+                    readlist[i] = 'yes';
+                  }
+                });
+              },
+              child: Text(
+                '모두 읽음표시',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize(),
+                    decoration: TextDecoration.underline),
+                overflow: TextOverflow.ellipsis,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   NoticeLists(int whatwantnotice) {
@@ -603,10 +671,15 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
             .get()
             .then(((QuerySnapshot querySnapshot) => {
                   notilist.resetnoti(),
+                  listid.clear(),
+                  readlist.clear(),
                   querySnapshot.docs.forEach((doc) {
-                    final messageText = doc.get('title');
-                    final messageDate = doc.get('date');
-                    if (doc.get('username').toString().contains(name)) {
+                    if (doc.get('sharename').toString().contains(name) ||
+                        doc.get('username') == name) {
+                      final messageText = doc.get('title');
+                      final messageDate = doc.get('date');
+                      readlist.add(doc.get('read'));
+                      listid.add(doc.id);
                       notilist.setnoti(messageText, messageDate);
                     }
                   })
@@ -621,14 +694,31 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                     itemCount: notilist.listad.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            notilist.updatenoti(listid[index]);
+                            setState(() {
+                              readlist[index] = 'yes';
+                            });
+                            notilist.listad[index].title
+                                    .toString()
+                                    .contains('메모')
+                                ? Get.to(
+                                    () => const DayNoteHome(
+                                          title: '',
+                                        ),
+                                    transition: Transition.rightToLeft)
+                                : Get.to(() => ChooseCalendar(),
+                                    transition: Transition.rightToLeft);
+                          },
                           child: Column(
                             children: [
                               const SizedBox(
                                 height: 10,
                               ),
                               ContainerDesign(
-                                color: BGColor(),
+                                color: readlist[index] == 'no'
+                                    ? BGColor()
+                                    : BGColor_shadowcolor(),
                                 child: Column(
                                   children: [
                                     SizedBox(

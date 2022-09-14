@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
@@ -15,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:new_version/new_version.dart';
+import 'package:badges/badges.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
 import '../Tool/Getx/navibool.dart';
@@ -25,6 +27,11 @@ import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({
+    Key? key,
+    required this.badge,
+  }) : super(key: key);
+  final String badge;
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -71,6 +78,9 @@ class _HomePageState extends State<HomePage> {
   var newversion;
   var status;
   bool sameversion = true;
+  List updateid = [];
+  bool isread = false;
+  final notilist = Get.put(notishow());
 
   @override
   void initState() {
@@ -105,6 +115,22 @@ class _HomePageState extends State<HomePage> {
         yoffset = 0;
       });
     }
+    /*firestore.collection('AppNoticeByUsers').get().then((value) {
+      for (var element in value.docs) {
+        if (element.data()['username'] == name ||
+            element.data()['sharename'].toString().contains(name)) {
+          updateid.add(element.data()['read']);
+        }
+      }
+      if (updateid.contains('no')) {
+        isread = false;
+        notilist.isread = false;
+      } else {
+        isread = true;
+        notilist.isread = true;
+      }
+    });*/
+    notilist.isreadnoti();
   }
 
   @override
@@ -279,34 +305,101 @@ class _HomePageState extends State<HomePage> {
                                                     fontWeight: FontWeight.bold,
                                                   )),
                                             ),
-                                            IconBtn(
-                                                child: IconButton(
-                                                    onPressed: () {
-                                                      Get.to(NotiAlarm());
-                                                    },
-                                                    icon: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: NeumorphicIcon(
-                                                        Icons
-                                                            .notifications_none,
-                                                        size: 30,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            depth: 2,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    )),
-                                                color: TextColor())
+                                            GetBuilder<notishow>(
+                                                builder: (_) => notilist
+                                                                .isread ==
+                                                            true &&
+                                                        widget.badge == 'true'
+                                                    ? IconBtn(
+                                                        color: TextColor(),
+                                                        child: IconButton(
+                                                            onPressed:
+                                                                () async {
+                                                              final reloadpage =
+                                                                  await Get.to(
+                                                                      () =>
+                                                                          NotiAlarm(),
+                                                                      transition:
+                                                                          Transition
+                                                                              .zoom);
+                                                              if (reloadpage) {
+                                                                setState(() {
+                                                                  notishow()
+                                                                      .isreadnoti();
+                                                                });
+                                                                ViewSet(
+                                                                    height,
+                                                                    docid,
+                                                                    defaulthomeviewlist,
+                                                                    userviewlist,
+                                                                    contentmy,
+                                                                    contentshare,
+                                                                    isresponsive);
+                                                              }
+                                                            },
+                                                            icon: Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                width: 30,
+                                                                height: 30,
+                                                                child:
+                                                                    NeumorphicIcon(
+                                                                  Icons
+                                                                      .notifications_none,
+                                                                  size: 30,
+                                                                  style: NeumorphicStyle(
+                                                                      shape: NeumorphicShape
+                                                                          .convex,
+                                                                      surfaceIntensity:
+                                                                          0.5,
+                                                                      depth: 2,
+                                                                      color:
+                                                                          TextColor(),
+                                                                      lightSource:
+                                                                          LightSource
+                                                                              .topLeft),
+                                                                ))))
+                                                    : IconBtn(
+                                                        color: TextColor(),
+                                                        child: IconButton(
+                                                          onPressed: () async {
+                                                            final reloadpage =
+                                                                await Get.to(
+                                                                    () =>
+                                                                        NotiAlarm(),
+                                                                    transition:
+                                                                        Transition
+                                                                            .zoom);
+                                                            if (reloadpage) {
+                                                              setState(() {
+                                                                notishow()
+                                                                    .isreadnoti();
+                                                              });
+                                                              ViewSet(
+                                                                  height,
+                                                                  docid,
+                                                                  defaulthomeviewlist,
+                                                                  userviewlist,
+                                                                  contentmy,
+                                                                  contentshare,
+                                                                  isresponsive);
+                                                            }
+                                                          },
+                                                          icon: Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              width: 30,
+                                                              height: 30,
+                                                              child: Badge(
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .notifications_none,
+                                                                ),
+                                                              )),
+                                                        )))
                                           ],
                                         ))),
                               ],
@@ -433,6 +526,9 @@ class _HomePageState extends State<HomePage> {
                                       transition: Transition.rightToLeft);
                                   print(reloadpage);
                                   if (reloadpage) {
+                                    setState(() {
+                                      notishow().isreadnoti();
+                                    });
                                     ViewSet(
                                         height,
                                         docid,
@@ -481,6 +577,10 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                       transition: Transition.rightToLeft);
                                   if (reloadpage) {
+                                    setState(() {
+                                      notishow().isreadnoti();
+                                    });
+
                                     ViewSet(
                                         height,
                                         docid,

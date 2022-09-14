@@ -2,6 +2,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 settingCalendarHome(int index, doc_name, doc_shares, doc_change,
     BuildContext context, doc, doc_theme, doc_view) {
@@ -149,12 +150,25 @@ content(BuildContext context, doc_id, doc_change, doc_shares, doc, doc_theme,
                         }
                         firestore.collection('AppNoticeByUsers').add({
                           'title': '[' + doc + '] 캘린더의 공유자 권한설정이 변경되었습니다.',
-                          'date': date.toString().split('-')[0] +
-                              '-' +
-                              date.toString().split('-')[1] +
-                              '-' +
-                              date.toString().split('-')[2].substring(0, 2),
-                          'username': doc_shares
+                          'date': DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[0] +
+                              ' ' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[0] +
+                              ':' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[1],
+                          'sharename': doc_shares,
+                          'username': username,
+                          'read': 'no',
                         });
                       });
                     },
@@ -210,12 +224,25 @@ content(BuildContext context, doc_id, doc_change, doc_shares, doc, doc_theme,
                         } else {}
                         firestore.collection('AppNoticeByUsers').add({
                           'title': '[' + doc + '] 캘린더의 공유자 권한설정이 변경되었습니다.',
-                          'date': date.toString().split('-')[0] +
-                              '-' +
-                              date.toString().split('-')[1] +
-                              '-' +
-                              date.toString().split('-')[2].substring(0, 2),
-                          'username': username
+                          'date': DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[0] +
+                              ' ' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[0] +
+                              ':' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[1],
+                          'sharename': doc_shares,
+                          'username': username,
+                          'read': 'no',
                         });
                       });
                     },
@@ -271,12 +298,25 @@ content(BuildContext context, doc_id, doc_change, doc_shares, doc, doc_theme,
                         } else {}
                         firestore.collection('AppNoticeByUsers').add({
                           'title': '[' + doc + '] 캘린더의 공유자 권한설정이 변경되었습니다.',
-                          'date': date.toString().split('-')[0] +
-                              '-' +
-                              date.toString().split('-')[1] +
-                              '-' +
-                              date.toString().split('-')[2].substring(0, 2),
-                          'username': username
+                          'date': DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[0] +
+                              ' ' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[0] +
+                              ':' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[1],
+                          'sharename': doc_shares,
+                          'username': username,
+                          'read': 'no',
                         });
                       });
                     },

@@ -137,12 +137,16 @@ class NotificationApi {
         android: AndroidNotificationDetails('channel id', 'channel name',
             channelDescription: 'channel description',
             setAsGroupSummary: true,
-            playSound: true,
             fullScreenIntent: false,
             autoCancel: true,
+            enableLights: true,
             sound: RawResourceAndroidNotificationSound('notification'),
             importance: Importance.max),
-        iOS: IOSNotificationDetails(sound: 'notification.mp3'));
+        iOS: IOSNotificationDetails(
+            sound: 'notification.mp3',
+            presentSound: true,
+            presentAlert: true,
+            presentBadge: true));
   }
 
   static Future init({bool initScheduled = false}) async {

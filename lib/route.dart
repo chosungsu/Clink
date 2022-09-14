@@ -10,6 +10,7 @@ import 'Dialogs/destroyBackKey.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
 import 'Tool/Getx/navibool.dart';
+import 'Tool/Getx/notishow.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.index}) : super(key: key);
@@ -28,12 +29,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   String name = Hive.box('user_info').get('id');
   late DateTime Date = DateTime.now();
   final draw = Get.put(navibool());
+  final notilist = Get.put(notishow());
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _selectedIndex = widget.index;
+    notilist.isreadnoti();
   }
 
   @override
@@ -48,8 +51,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
-      HomePage(),
-      HomePage(),
+      HomePage(badge: notilist.isread.toString()),
+      HomePage(badge: notilist.isread.toString()),
       ProfilePage(),
     ];
 

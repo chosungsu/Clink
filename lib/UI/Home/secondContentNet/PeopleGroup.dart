@@ -6,6 +6,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -388,12 +389,25 @@ class _PeopleGroupState extends State<PeopleGroup> {
                           firestore.collection('AppNoticeByUsers').add({
                             'title':
                                 '[' + widget.nameid + '] 캘린더의 공유자명단이 변경되었습니다.',
-                            'date': date.toString().split('-')[0] +
-                                '-' +
-                                date.toString().split('-')[1] +
-                                '-' +
-                                date.toString().split('-')[2].substring(0, 2),
-                            'username': username
+                            'date': DateFormat('yyyy-MM-dd hh:mm')
+                                    .parse(date.toString())
+                                    .toString()
+                                    .split(' ')[0] +
+                                ' ' +
+                                DateFormat('yyyy-MM-dd hh:mm')
+                                    .parse(date.toString())
+                                    .toString()
+                                    .split(' ')[1]
+                                    .split(':')[0] +
+                                ':' +
+                                DateFormat('yyyy-MM-dd hh:mm')
+                                    .parse(date.toString())
+                                    .toString()
+                                    .split(' ')[1]
+                                    .split(':')[1],
+                            'username': username,
+                            'sharename': null,
+                            'read': 'no',
                           });
                           firestore
                               .collection('CalendarSheetHome')

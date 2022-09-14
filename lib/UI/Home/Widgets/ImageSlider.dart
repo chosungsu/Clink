@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../Dialogs/checkdeleteimagememo.dart';
+import '../../../Dialogs/destroyBackKey.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

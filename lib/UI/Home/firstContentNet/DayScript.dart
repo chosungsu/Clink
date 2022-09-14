@@ -15,7 +15,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../DB/Event.dart';
 import '../../../DB/MemoList.dart';
-import '../../../Dialogs/checkbackincandm.dart';
+import '../../../Dialogs/destroyBackKey.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
@@ -319,12 +319,14 @@ class _DayScriptState extends State<DayScript> {
                                                                         'title': '[' +
                                                                             widget.calname +
                                                                             '] 캘린더의 일정 ${textEditingController1.text}이(가) 추가되었습니다.',
-                                                                        'date': DateFormat('yyyy-MM-dd')
+                                                                        'date': DateFormat('yyyy-MM-dd hh:mm')
                                                                             .parse(widget.firstdate.toString())
                                                                             .toString()
                                                                             .split(' ')[0],
                                                                         'username':
-                                                                            widget.share
+                                                                            widget.share,
+                                                                        'read':
+                                                                            'no',
                                                                       });
                                                                       widget.lastdate !=
                                                                               widget
@@ -470,12 +472,14 @@ class _DayScriptState extends State<DayScript> {
                                                                           .add({
                                                                         'title':
                                                                             '메모 ${textEditingController1.text}가 추가되었습니다.',
-                                                                        'date': DateFormat('yyyy-MM-dd')
+                                                                        'date': DateFormat('yyyy-MM-dd hh:mm')
                                                                             .parse(widget.firstdate.toString())
                                                                             .toString()
                                                                             .split(' ')[0],
                                                                         'username':
-                                                                            widget.share
+                                                                            widget.share,
+                                                                        'read':
+                                                                            'no',
                                                                       });
                                                                       for (int i =
                                                                               0;
@@ -1211,7 +1215,7 @@ class _DayScriptState extends State<DayScript> {
                                                       50,
                                                   child: TextField(
                                                     minLines: 1,
-                                                    maxLines: 1,
+                                                    maxLines: 3,
                                                     onTap: () {},
                                                     onChanged: (text) {
                                                       scollection
@@ -1419,7 +1423,7 @@ class _DayScriptState extends State<DayScript> {
                                                       50,
                                                   child: TextField(
                                                     minLines: 1,
-                                                    maxLines: 1,
+                                                    maxLines: 3,
                                                     focusNode: nodes[index],
                                                     onTap: () {},
                                                     onChanged: (text) {

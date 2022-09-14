@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../DB/PageList.dart';
 
 class notishow extends GetxController {
   List listad = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  bool isread = false;
+  List updateid = [];
+  String name = Hive.box('user_info').get('id');
 
   void setnoti(String a, String b) async {
     listad.add(PageList(title: a, sub: b));
@@ -15,6 +19,35 @@ class notishow extends GetxController {
 
   void resetnoti() async {
     listad.clear();
+    update();
+    notifyChildrens();
+  }
+
+  void isreadnoti() async {
+    firestore
+        .collection('AppNoticeByUsers')
+        .orderBy('date', descending: true)
+        .get()
+        .then((value) {
+      updateid.clear();
+      for (var element in value.docs) {
+        if (element.data()['username'] == name ||
+            element.data()['sharename'].toString().contains(name)) {
+          updateid.add(element.data()['read']);
+        }
+      }
+      if (updateid.contains('no')) {
+        isread = false;
+      } else {
+        isread = true;
+      }
+    });
+    update();
+    notifyChildrens();
+  }
+
+  void updatenoti(String id) async {
+    firestore.collection('AppNoticeByUsers').doc(id).update({'read': 'yes'});
     update();
     notifyChildrens();
   }

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:clickbyme/Dialogs/checkbackincandm.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
@@ -17,7 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../DB/MemoList.dart';
-import '../../../Dialogs/checkdeletecandm.dart';
+import '../../../Dialogs/destroyBackKey.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
@@ -368,15 +367,22 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                         widget
                                                                             .docname +
                                                                         '] 메모가 변경되었습니다.',
-                                                                    'date': DateFormat(
-                                                                            'yyyy-MM-dd')
-                                                                        .parse(DateTime.now()
-                                                                            .toString())
-                                                                        .toString()
-                                                                        .split(
-                                                                            ' ')[0],
+                                                                    'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
+                                                                        ' ' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
+                                                                            0] +
+                                                                        ':' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm')
+                                                                            .parse(DateTime.now().toString())
+                                                                            .toString()
+                                                                            .split(' ')[1]
+                                                                            .split(':')[1],
                                                                     'username':
-                                                                        username
+                                                                        username,
+                                                                    'sharename':
+                                                                        null,
+                                                                    'read':
+                                                                        'no',
                                                                   });
                                                                   for (int i =
                                                                           0;
@@ -541,15 +547,22 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                         widget
                                                                             .docname +
                                                                         '] 메모가 삭제되었습니다.',
-                                                                    'date': DateFormat(
-                                                                            'yyyy-MM-dd')
-                                                                        .parse(DateTime.now()
-                                                                            .toString())
-                                                                        .toString()
-                                                                        .split(
-                                                                            ' ')[0],
+                                                                    'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
+                                                                        ' ' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
+                                                                            0] +
+                                                                        ':' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm')
+                                                                            .parse(DateTime.now().toString())
+                                                                            .toString()
+                                                                            .split(' ')[1]
+                                                                            .split(':')[1],
                                                                     'username':
-                                                                        username
+                                                                        username,
+                                                                    'sharename':
+                                                                        null,
+                                                                    'read':
+                                                                        'no',
                                                                   });
                                                                   firestore
                                                                       .collection(
@@ -1309,7 +1322,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                               50,
                                           child: TextField(
                                             minLines: 1,
-                                            maxLines: 1,
+                                            maxLines: 3,
                                             onChanged: (text) {
                                               scollection.memolistcontentin[
                                                   index] = text;
@@ -1518,7 +1531,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                     index] = text;
                                               },
                                               minLines: 1,
-                                              maxLines: 1,
+                                              maxLines: 3,
                                               focusNode: nodes[index],
                                               textAlign: TextAlign.start,
                                               textAlignVertical:
