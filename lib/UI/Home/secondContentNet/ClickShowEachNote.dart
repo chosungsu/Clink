@@ -364,8 +364,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                           'AppNoticeByUsers')
                                                                       .add({
                                                                     'title': '[' +
-                                                                        widget
-                                                                            .docname +
+                                                                        textEditingController1
+                                                                            .text +
                                                                         '] 메모가 변경되었습니다.',
                                                                     'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
                                                                         ' ' +
@@ -544,8 +544,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                           'AppNoticeByUsers')
                                                                       .add({
                                                                     'title': '[' +
-                                                                        widget
-                                                                            .docname +
+                                                                        textEditingController1
+                                                                            .text +
                                                                         '] 메모가 삭제되었습니다.',
                                                                     'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
                                                                         ' ' +
