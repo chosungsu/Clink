@@ -83,7 +83,7 @@ class memosetting extends GetxController {
           .doc(id)
           .update({'alarmtime': hour1.toString() + ':' + minute1.toString()});
     } else {
-      print(hour.toString() + ' : ' + minute.toString());
+      print('third (memosetting) ' + hour.toString() + ':' + minute.toString());
       Hive.box('user_setting').put('alarm_memo_hour', hour.toString());
       Hive.box('user_setting').put('alarm_memo_minute', minute.toString());
       hour2 = Hive.box('user_setting').get('alarm_memo_hour');
@@ -103,7 +103,10 @@ class memosetting extends GetxController {
         'alarmok': true,
       });
       await NotificationApi.cancelNotification(
-          id: 1 + int.parse(hour) + int.parse(minute) + title.hashCode);
+          id: 1 +
+              int.parse(hour1.toString()) +
+              int.parse(minute1.toString()) +
+              title.hashCode);
       NotificationApi.showDailyNotification_severalnotes(
           id: 1 + int.parse(hour) + int.parse(minute) + title.hashCode,
           title: '띵동! $title 메모알림이에요',
@@ -115,16 +118,15 @@ class memosetting extends GetxController {
       firestore.collection('MemoAllAlarm').doc(username).update({
         'ok': true,
       });
-      await NotificationApi.cancelNotification(id: 1);
-      firestore
-          .collection('MemoAllAlarm')
-          .doc(username)
-          .update({'ok': false, 'alarmtime': '99:99'});
+      await firestore.collection('MemoAllAlarm').doc(username).update({
+        'ok': false,
+      });
       NotificationApi.showDailyNotification(
           title: '띵동! 메모 알림이에요',
           body: '메모알림끄기는 [일상메모]->[톱니바퀴]->[해제]',
           scheduledate: DateTime.utc(now.year, now.month, now.day,
               int.parse(hour), int.parse(minute), 0));
+      firestore.collection('MemoAllAlarm').doc(username).update({'ok': true});
     }
     update();
     notifyChildrens();

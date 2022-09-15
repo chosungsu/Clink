@@ -174,6 +174,10 @@ content(
   } else {
     Hive.box('user_setting').put('alarm_memo_hour', controller_hour);
     Hive.box('user_setting').put('alarm_memo_minute', controller_minute);
+    print('second(push) : ' +
+        Hive.box('user_setting').get('alarm_memo_hour') +
+        ':' +
+        Hive.box('user_setting').get('alarm_memo_minute'));
   }
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String username = Hive.box('user_info').get(
@@ -257,8 +261,13 @@ content(
                                                     int.parse(controller_hour),
                                                 minute: int.parse(
                                                     controller_minute)));
-                                    controll_memo.settimeminute(pickednow!.hour,
-                                        pickednow!.minute, doc_title, id);
+                                    if (pickednow != null) {
+                                      controll_memo.settimeminute(
+                                          pickednow!.hour,
+                                          pickednow!.minute,
+                                          doc_title,
+                                          id);
+                                    }
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(
@@ -320,109 +329,6 @@ content(
                                           fontSize: contentTextsize(),
                                           color: Colors.black),
                                     ),
-                          /*Flexible(
-                                fit: FlexFit.tight,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          border: Border.all(
-                                              color: Colors.black, width: 1)),
-                                      child: TimePickerSpinner(
-                                        is24HourMode: true,
-                                        normalTextStyle: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: Colors.black),
-                                        highlightedTextStyle: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: Colors.blue),
-                                        spacing: 10,
-                                        itemHeight: 60,
-                                        isForce2Digits: true,
-                                        onTimeChange: (time) {
-                                          setState(() {
-                                            now = time;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                    /*Container(
-                                      height: 50,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          border: Border.all(
-                                              color: Colors.black, width: 1)),
-                                      child: TextField(
-                                        minLines: 1,
-                                        maxLines: 1,
-                                        focusNode: setalarmhourNode,
-                                        keyboardType: TextInputType.number,
-                                        style: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: Colors.black),
-                                        decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  vertical: 10.0,
-                                                  horizontal: 5),
-                                          isCollapsed: true,
-                                          hintText: '00',
-                                          hintStyle: TextStyle(
-                                              fontSize: contentTextsize(),
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        controller: controller_hour,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                      child: Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      height: 50,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          border: Border.all(
-                                              color: Colors.black, width: 1)),
-                                      child: TextField(
-                                        minLines: 1,
-                                        maxLines: 1,
-                                        focusNode: setalarmminuteNode,
-                                        keyboardType: TextInputType.number,
-                                        style: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: Colors.black),
-                                        decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  vertical: 10.0,
-                                                  horizontal: 5),
-                                          isCollapsed: true,
-                                          hintText: '00',
-                                          hintStyle: TextStyle(
-                                              fontSize: contentTextsize(),
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        controller: controller_minute,
-                                      ),
-                                    )*/
-                                  ],
-                                )),*/
                           const SizedBox(
                             height: 30,
                           ),

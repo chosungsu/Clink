@@ -61,6 +61,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   bool canAuthenticate = false;
   LocalAuthentication auth = LocalAuthentication();
   bool can_auth = false;
+  String hour = '';
+  String minute = '';
 
   Future<void> _checkBiometrics() async {
     bool check = false;
@@ -322,13 +324,40 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                             ),
                                             IconBtn(
                                                 child: IconButton(
-                                                    onPressed: () {
+                                                    onPressed: () async {
+                                                      await firestore
+                                                          .collection(
+                                                              'MemoAllAlarm')
+                                                          .doc(username)
+                                                          .get()
+                                                          .then(
+                                                        (value) {
+                                                          hour = value
+                                                              .data()![
+                                                                  'alarmtime']
+                                                              .toString()
+                                                              .split(':')[0]
+                                                              .toString();
+                                                          minute = value
+                                                              .data()![
+                                                                  'alarmtime']
+                                                              .toString()
+                                                              .split(':')[1]
+                                                              .toString();
+                                                        },
+                                                      );
+                                                      controll_memo
+                                                          .settimeminute(
+                                                              int.parse(hour),
+                                                              int.parse(minute),
+                                                              '',
+                                                              '');
                                                       pushalarmsetting(
                                                           context,
                                                           setalarmhourNode,
                                                           setalarmminuteNode,
-                                                          controll_memo.hour2,
-                                                          controll_memo.minute2,
+                                                          hour,
+                                                          minute,
                                                           '',
                                                           '');
                                                     },
@@ -461,24 +490,28 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
             Icons.notification_add,
             color: Colors.yellow.shade400,
           ),
-          onTap: () {
+          onTap: () async {
             //alarm 설정시트 띄우기
+            await firestore.collection('MemoAllAlarm').doc(username).get().then(
+              (value) {
+                hour = value
+                    .data()!['alarmtime']
+                    .toString()
+                    .split(':')[0]
+                    .toString();
+                minute = value
+                    .data()!['alarmtime']
+                    .toString()
+                    .split(':')[1]
+                    .toString();
+                print(hour + ':' + minute);
+              },
+            );
             controll_memo.settimeminute(
-                int.parse(
-                    Hive.box('user_setting').get('alarm_memo_hour').toString()),
-                int.parse(Hive.box('user_setting')
-                    .get('alarm_memo_minute')
-                    .toString()),
-                '',
-                '');
-            pushalarmsetting(
-                context,
-                setalarmhourNode,
-                setalarmminuteNode,
-                Hive.box('user_setting').get('alarm_memo_hour').toString(),
-                Hive.box('user_setting').get('alarm_memo_minute').toString(),
-                '',
-                '');
+                int.parse(hour), int.parse(minute), '', '');
+            pushalarmsetting(context, setalarmhourNode, setalarmminuteNode,
+                hour, minute, '', '');
+
             /*Get.to(
                 () => SecureAuth(
                     string: '지문',
