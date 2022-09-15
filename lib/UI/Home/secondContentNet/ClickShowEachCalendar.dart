@@ -154,7 +154,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             ),
                                             IconBtn(
                                                 child: IconButton(
-                                                    onPressed: () {
+                                                    onPressed: () async {
                                                       //수정
                                                       var firsttxt = '0' +
                                                           textEditingController2
@@ -180,239 +180,247 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                               ' - ' +
                                                               textEditingController3
                                                                   .text;
-                                                      CreateCalandmemoSuccessFlushbar(
-                                                          context);
-                                                      firestore
-                                                          .collection(
-                                                              'AppNoticeByUsers')
-                                                          .add({
-                                                        'title': '[' +
-                                                            widget.calname +
-                                                            '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 변경되었습니다.',
-                                                        'date': DateFormat(
-                                                                    'yyyy-MM-dd hh:mm')
-                                                                .parse(DateTime
-                                                                        .now()
-                                                                    .toString())
-                                                                .toString()
-                                                                .split(' ')[0] +
-                                                            ' ' +
-                                                            DateFormat(
-                                                                    'yyyy-MM-dd hh:mm')
-                                                                .parse(DateTime
-                                                                        .now()
-                                                                    .toString())
-                                                                .toString()
-                                                                .split(' ')[1]
-                                                                .split(':')[0] +
-                                                            ':' +
-                                                            DateFormat(
-                                                                    'yyyy-MM-dd hh:mm')
-                                                                .parse(DateTime
-                                                                        .now()
-                                                                    .toString())
-                                                                .toString()
-                                                                .split(' ')[1]
-                                                                .split(':')[1],
-                                                        'username': name,
-                                                        'sharename':
-                                                            widget.share,
-                                                        'read': 'no',
-                                                      }).whenComplete(() {
+                                                      final reloadpage =
+                                                          await Get.dialog(
+                                                                  OSDialog(
+                                                                      context,
+                                                                      '알림',
+                                                                      Builder(
+                                                                builder:
+                                                                    (context) {
+                                                                  return SizedBox(
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.85,
+                                                                    child:
+                                                                        SingleChildScrollView(
+                                                                      child: Text(
+                                                                          '저장하시겠습니까?',
+                                                                          style: TextStyle(
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontSize: contentTextsize(),
+                                                                              color: Colors.blueGrey)),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ), pressed2)) ??
+                                                              false;
+                                                      if (reloadpage) {
                                                         Get.back();
+                                                        CreateCalandmemoSuccessFlushbar(
+                                                            context);
                                                         firestore
                                                             .collection(
-                                                                'CalendarDataBase')
-                                                            .where('calname',
-                                                                isEqualTo:
-                                                                    widget.code)
-                                                            .where('Daytodo',
-                                                                isEqualTo: widget
-                                                                    .calinfo)
-                                                            .where('Date',
-                                                                isEqualTo: widget
-                                                                            .date
-                                                                            .toString()
-                                                                            .split('-')[
-                                                                        0] +
-                                                                    '-' +
-                                                                    widget.date
-                                                                            .toString()
-                                                                            .split('-')[
-                                                                        1] +
-                                                                    '-' +
-                                                                    widget
-                                                                        .date
-                                                                        .toString()
-                                                                        .split('-')[
-                                                                            2]
-                                                                        .substring(
-                                                                            0,
-                                                                            2) +
-                                                                    '일')
-                                                            .where('Timestart',
-                                                                isEqualTo:
-                                                                    widget.start)
-                                                            .get()
-                                                            .then((value) {
-                                                          updateid.clear();
-                                                          for (var element
-                                                              in value.docs) {
-                                                            updateid.add(
-                                                                element.id);
-                                                          }
-                                                          for (int i = 0;
-                                                              i <
-                                                                  updateid
-                                                                      .length;
-                                                              i++) {
-                                                            firestore
-                                                                .collection(
-                                                                    'CalendarDataBase')
-                                                                .doc(
-                                                                    updateid[i])
-                                                                .update({
-                                                              'Daytodo': textEditingController1
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? widget
-                                                                      .calinfo
-                                                                  : textEditingController1
-                                                                      .text,
-                                                              'Alarm': widget
-                                                                          .alarm ==
-                                                                      '설정off'
-                                                                  ? (isChecked_pushalarm ==
-                                                                          true
-                                                                      ? changevalue
-                                                                      : '설정off')
-                                                                  : (!isChecked_pushalarm ==
-                                                                          true
-                                                                      ? changevalue
-                                                                      : '설정off'),
-                                                              'Timestart': textEditingController2
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? widget.start
-                                                                  : (textEditingController2
-                                                                              .text
-                                                                              .split(':')[
-                                                                                  0]
-                                                                              .length ==
-                                                                          1
-                                                                      ? '0' +
-                                                                          textEditingController2
-                                                                              .text
-                                                                      : textEditingController2
-                                                                          .text),
-                                                              'Timefinish': textEditingController3
-                                                                      .text
-                                                                      .isEmpty
-                                                                  ? widget
-                                                                      .finish
-                                                                  : (textEditingController3
-                                                                              .text
-                                                                              .split(':')[
-                                                                                  0]
-                                                                              .length ==
-                                                                          1
-                                                                      ? '0' +
-                                                                          textEditingController3
-                                                                              .text
-                                                                      : textEditingController3
-                                                                          .text),
-                                                            });
-                                                          }
+                                                                'AppNoticeByUsers')
+                                                            .add({
+                                                          'title': '[' +
+                                                              widget.calname +
+                                                              '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 변경되었습니다.',
+                                                          'date': DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime.now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(
+                                                                      ' ')[0] +
+                                                              ' ' +
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime.now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(' ')[1]
+                                                                  .split(
+                                                                      ':')[0] +
+                                                              ':' +
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime
+                                                                          .now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(' ')[1]
+                                                                  .split(':')[1],
+                                                          'username': name,
+                                                          'sharename':
+                                                              widget.share,
+                                                          'read': 'no',
                                                         }).whenComplete(() {
-                                                          Future.delayed(
-                                                              const Duration(
-                                                                  seconds: 2),
-                                                              () {
-                                                            
-                                                            CreateCalandmemoSuccessFlushbarSub(
-                                                                context, '일정');
-                                                            if (widget.alarm !=
-                                                                '설정off') {
-                                                              NotificationApi
-                                                                  .showNotification(
-                                                                title: '알람설정된 일정 : ' +
-                                                                    textEditingController1
+                                                          Get.back();
+                                                          firestore
+                                                              .collection(
+                                                                  'CalendarDataBase')
+                                                              .where('calname',
+                                                                  isEqualTo: widget
+                                                                      .code)
+                                                              .where('Daytodo',
+                                                                  isEqualTo: widget
+                                                                      .calinfo)
+                                                              .where('Date',
+                                                                  isEqualTo: widget
+                                                                              .date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          0] +
+                                                                      '-' +
+                                                                      widget.date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          1] +
+                                                                      '-' +
+                                                                      widget.date
+                                                                          .toString()
+                                                                          .split('-')[
+                                                                              2]
+                                                                          .substring(
+                                                                              0,
+                                                                              2) +
+                                                                      '일')
+                                                              .where('Timestart',
+                                                                  isEqualTo:
+                                                                      widget.start)
+                                                              .get()
+                                                              .then((value) {
+                                                            updateid.clear();
+                                                            for (var element
+                                                                in value.docs) {
+                                                              updateid.add(
+                                                                  element.id);
+                                                            }
+                                                            for (int i = 0;
+                                                                i <
+                                                                    updateid
+                                                                        .length;
+                                                                i++) {
+                                                              firestore
+                                                                  .collection(
+                                                                      'CalendarDataBase')
+                                                                  .doc(updateid[
+                                                                      i])
+                                                                  .update({
+                                                                'Daytodo': textEditingController1
+                                                                        .text
+                                                                        .isEmpty
+                                                                    ? widget
+                                                                        .calinfo
+                                                                    : textEditingController1
                                                                         .text,
-                                                                body: textEditingController2
-                                                                            .text
-                                                                            .split(':')[
-                                                                                0]
-                                                                            .length ==
-                                                                        1
-                                                                    ? (textEditingController3.text.split(':')[0].length ==
+                                                                'Alarm': widget
+                                                                            .alarm ==
+                                                                        '설정off'
+                                                                    ? (isChecked_pushalarm ==
+                                                                            true
+                                                                        ? changevalue
+                                                                        : '설정off')
+                                                                    : (!isChecked_pushalarm ==
+                                                                            true
+                                                                        ? changevalue
+                                                                        : '설정off'),
+                                                                'Timestart': textEditingController2
+                                                                        .text
+                                                                        .isEmpty
+                                                                    ? widget
+                                                                        .start
+                                                                    : (textEditingController2.text.split(':')[0].length ==
                                                                             1
-                                                                        ? '예정된 시각 : ' +
-                                                                            firsttxt
-                                                                        : '예정된 시각 : ' +
-                                                                            secondtxt)
+                                                                        ? '0' +
+                                                                            textEditingController2
+                                                                                .text
+                                                                        : textEditingController2
+                                                                            .text),
+                                                                'Timefinish': textEditingController3
+                                                                        .text
+                                                                        .isEmpty
+                                                                    ? widget
+                                                                        .finish
                                                                     : (textEditingController3.text.split(':')[0].length ==
                                                                             1
-                                                                        ? '예정된 시각 : ' +
-                                                                            thirdtxt
-                                                                        : '예정된 시각 : ' +
-                                                                            forthtxt),
-                                                              );
-                                                              NotificationApi.showScheduledNotification(
-                                                                  id: int.parse(widget.date.toString().split('-')[0]) + int.parse(widget.date.toString().split('-')[1]) + int.parse(widget.date.toString().split('-')[2].toString().split(' ')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
-                                                                      ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
-                                                                      : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
-                                                                          ? 60 - (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                        ? '0' +
+                                                                            textEditingController3
+                                                                                .text
+                                                                        : textEditingController3
+                                                                            .text),
+                                                              });
+                                                            }
+                                                          }).whenComplete(() {
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    seconds: 2),
+                                                                () {
+                                                              CreateCalandmemoSuccessFlushbarSub(
+                                                                  context,
+                                                                  '일정');
+                                                              if (widget
+                                                                      .alarm !=
+                                                                  '설정off') {
+                                                                NotificationApi
+                                                                    .showNotification(
+                                                                  title: '알람설정된 일정 : ' +
+                                                                      textEditingController1
+                                                                          .text,
+                                                                  body: textEditingController2
+                                                                              .text
+                                                                              .split(':')[
+                                                                                  0]
+                                                                              .length ==
+                                                                          1
+                                                                      ? (textEditingController3.text.split(':')[0].length ==
+                                                                              1
+                                                                          ? '예정된 시각 : ' +
+                                                                              firsttxt
+                                                                          : '예정된 시각 : ' +
+                                                                              secondtxt)
+                                                                      : (textEditingController3.text.split(':')[0].length ==
+                                                                              1
+                                                                          ? '예정된 시각 : ' +
+                                                                              thirdtxt
+                                                                          : '예정된 시각 : ' +
+                                                                              forthtxt),
+                                                                );
+                                                                NotificationApi.showScheduledNotification(
+                                                                    id: int.parse(widget.date.toString().split('-')[0]) + int.parse(widget.date.toString().split('-')[1]) + int.parse(widget.date.toString().split('-')[2].toString().split(' ')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                        ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
+                                                                        : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                            ? 60 - (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                            : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)),
+                                                                    title: textEditingController1.text + '일정이 다가옵니다',
+                                                                    body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
+                                                                    scheduledate: DateTime.utc(
+                                                                      int.parse(widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[0]),
+                                                                      int.parse(widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[1]),
+                                                                      int.parse(widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split('-')[
+                                                                              2]
+                                                                          .toString()
+                                                                          .split(
+                                                                              ' ')[0]),
+                                                                      int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                          ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) -
+                                                                              1
+                                                                          : int.parse(textEditingController2.text.split(':')[0].length == 1
+                                                                              ? '0' + textEditingController2.text.split(':')[0]
+                                                                              : textEditingController2.text.split(':')[0]),
+                                                                      int.parse(textEditingController2.text.split(':')[1]) < int.parse(changevalue.substring(0, changevalue.length - 3))
+                                                                          ? 60 -
+                                                                              (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
                                                                           : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)),
-                                                                  title: textEditingController1.text + '일정이 다가옵니다',
-                                                                  body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                                                                  scheduledate: DateTime.utc(
-                                                                    int.parse(widget
-                                                                        .date
-                                                                        .toString()
-                                                                        .split(
-                                                                            '-')[0]),
-                                                                    int.parse(widget
-                                                                        .date
-                                                                        .toString()
-                                                                        .split(
-                                                                            '-')[1]),
-                                                                    int.parse(widget
-                                                                        .date
-                                                                        .toString()
-                                                                        .split('-')[
-                                                                            2]
-                                                                        .toString()
-                                                                        .split(
-                                                                            ' ')[0]),
-                                                                    int.parse(textEditingController2.text.split(':')[1]) <
-                                                                            int.parse(changevalue.substring(
-                                                                                0,
-                                                                                changevalue.length -
-                                                                                    3))
-                                                                        ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) -
-                                                                            1
-                                                                        : int.parse(textEditingController2.text.split(':')[0].length ==
-                                                                                1
-                                                                            ? '0' +
-                                                                                textEditingController2.text.split(':')[0]
-                                                                            : textEditingController2.text.split(':')[0]),
-                                                                    int.parse(textEditingController2.text.split(':')[1]) <
-                                                                            int.parse(changevalue.substring(
-                                                                                0,
-                                                                                changevalue.length -
-                                                                                    3))
-                                                                        ? 60 -
-                                                                            (int.parse(changevalue.substring(0, changevalue.length - 3)) -
-                                                                                int.parse(textEditingController2.text.split(':')[
-                                                                                    1]))
-                                                                        : int.parse(textEditingController2.text.split(':')[1]) -
-                                                                            int.parse(changevalue.substring(0,
-                                                                                changevalue.length - 3)),
-                                                                  ));
-                                                            } else {}
+                                                                    ));
+                                                              } else {}
+                                                            });
                                                           });
                                                         });
-                                                      });
+                                                      }
                                                     },
                                                     icon: Container(
                                                       alignment:
