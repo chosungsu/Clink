@@ -8,6 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../Dialogs/destroyBackKey.dart';
+import '../../Tool/AndroidIOS.dart';
 import '../../Tool/IconBtn.dart';
 import '../../Tool/NoBehavior.dart';
 import 'firstContentNet/ChooseCalendar.dart';
@@ -126,10 +127,17 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                           child: IconButton(
                                                               onPressed:
                                                                   () async {
-                                                                final reloadpage =
-                                                                    await Get.dialog(
-                                                                            checkdeletenoti(context)) ??
-                                                                        false;
+                                                                final reloadpage = await Get.dialog(OSDialog(
+                                                                        context,
+                                                                        '경고',
+                                                                        Text(
+                                                                            '알림들을 삭제하시겠습니까?',
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontSize: contentTextsize(),
+                                                                                color: Colors.blueGrey)),
+                                                                        pressed2)) ??
+                                                                    false;
                                                                 if (reloadpage) {
                                                                   firestore
                                                                       .collection(

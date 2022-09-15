@@ -527,7 +527,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             'which_text_size') ==
                                                                         0 ||
                                                                     Hive.box('user_setting').get(
-                                                                            'which_color_background') ==
+                                                                            'which_text_size') ==
                                                                         null
                                                                 ? Colors.blue
                                                                     .shade400

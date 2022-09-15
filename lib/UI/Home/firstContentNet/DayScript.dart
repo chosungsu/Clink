@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import '../../../DB/Event.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/destroyBackKey.dart';
+import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
@@ -143,7 +144,16 @@ class _DayScriptState extends State<DayScript> {
   }
 
   Future<bool> _onBackPressed() async {
-    final reloadpage = await Get.dialog(checkbackincandm(context)) ?? false;
+    final reloadpage = await Get.dialog(OSDialog(
+                            context,
+                            '경고',
+                            Text('뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: Colors.blueGrey)),
+                            pressed2)) ??
+                        false;
     if (reloadpage) {
       Get.back();
     }
@@ -198,10 +208,16 @@ class _DayScriptState extends State<DayScript> {
                                               child: IconButton(
                                                   onPressed: () async {
                                                     final reloadpage =
-                                                        await Get.dialog(
-                                                                checkbackincandm(
-                                                                    context)) ??
-                                                            false;
+                                                        await Get.dialog(OSDialog(
+                            context,
+                            '경고',
+                            Text('뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: Colors.blueGrey)),
+                            pressed2)) ??
+                        false;
                                                     if (reloadpage) {
                                                       Get.back();
                                                     }
@@ -355,6 +371,7 @@ class _DayScriptState extends State<DayScript> {
                                                                       }
                                                                       if (differ_list
                                                                           .isNotEmpty) {
+                                                                            Get.back();
                                                                         for (int j =
                                                                                 0;
                                                                             j < differ_list.length;
@@ -398,6 +415,7 @@ class _DayScriptState extends State<DayScript> {
                                                                                 int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
                                                                               ));
                                                                         }
+                                                                        
                                                                         CreateCalandmemoSuccessFlushbarSub(
                                                                             context,
                                                                             '일정');
@@ -410,6 +428,7 @@ class _DayScriptState extends State<DayScript> {
                                                                               : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
                                                                         );
                                                                       } else {
+                                                                        Get.back();
                                                                         firestore
                                                                             .collection('CalendarDataBase')
                                                                             .add({
@@ -464,6 +483,7 @@ class _DayScriptState extends State<DayScript> {
                                                                         } else {}
                                                                       }
                                                                     } else {
+                                                                        Get.back();
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
                                                                       firestore

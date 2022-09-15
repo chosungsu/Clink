@@ -394,10 +394,22 @@ class _HomePageState extends State<HomePage> {
                                                               height: 30,
                                                               child: Badge(
                                                                 child:
-                                                                    const Icon(
+                                                                    NeumorphicIcon(
                                                                   Icons
                                                                       .notifications_none,
-                                                                ),
+                                                                  size: 30,
+                                                                  style: NeumorphicStyle(
+                                                                      shape: NeumorphicShape
+                                                                          .convex,
+                                                                      surfaceIntensity:
+                                                                          0.5,
+                                                                      depth: 2,
+                                                                      color:
+                                                                          TextColor(),
+                                                                      lightSource:
+                                                                          LightSource
+                                                                              .topLeft),
+                                                                )
                                                               )),
                                                         )))
                                           ],

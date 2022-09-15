@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
 import '../Tool/BGColor.dart';
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/IconBtn.dart';
 
 pushalarmsetting(
@@ -114,45 +115,45 @@ title(
   String doc_title,
 ) {
   return SizedBox(
-    width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * 0.8,
       child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      doc_title != ''
-          ? RichText(
-        maxLines: 2,
-              text: TextSpan(children: [
-              TextSpan(
-                  text: doc_title,
-                  style: TextStyle(
-                      color: Colors.blue.shade400,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize())),
-              TextSpan(
-                  text: ' 메모의 알람 설정',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize()))
-            ]))
-          : RichText(
-        maxLines: 2,
-              text: TextSpan(children: [
-              TextSpan(
-                  text: '모든 메모',
-                  style: TextStyle(
-                      color: Colors.blue.shade400,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize())),
-              TextSpan(
-                  text: ' 의 매일알람 설정',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize()))
-            ]))
-    ],
-  ));
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          doc_title != ''
+              ? RichText(
+                  maxLines: 2,
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: doc_title,
+                        style: TextStyle(
+                            color: Colors.blue.shade400,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize())),
+                    TextSpan(
+                        text: ' 메모의 알람 설정',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize()))
+                  ]))
+              : RichText(
+                  maxLines: 2,
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: '모든 메모',
+                        style: TextStyle(
+                            color: Colors.blue.shade400,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize())),
+                    TextSpan(
+                        text: ' 의 매일알람 설정',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize()))
+                  ]))
+        ],
+      ));
 }
 
 content(
@@ -458,34 +459,14 @@ content(
                                                       controll_memo.minute2,
                                                       '',
                                                       '');
-                                          Flushbar(
-                                            backgroundColor:
-                                                Colors.blue.shade400,
-                                            titleText: Text('Notice',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize:
-                                                      contentTitleTextsize(),
-                                                  fontWeight: FontWeight.bold,
-                                                )),
-                                            messageText: Text('알람설정 완료',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: contentTextsize(),
-                                                  fontWeight: FontWeight.bold,
-                                                )),
-                                            icon: const Icon(
-                                              Icons.info_outline,
-                                              size: 25.0,
-                                              color: Colors.white,
-                                            ),
-                                            duration:
-                                                const Duration(seconds: 3),
-                                            leftBarIndicatorColor:
-                                                Colors.blue.shade100,
-                                          ).show(context).whenComplete(() {
-                                            Get.back();
-                                          });
+                                          Get.back();
+                                          Snack.show(
+                                              context: context,
+                                              title: '알림',
+                                              content: '알람설정 완료',
+                                              snackType: SnackType.info,
+                                              behavior:
+                                                  SnackBarBehavior.floating);
                                         });
                                       },
                                       child: Container(
@@ -532,34 +513,14 @@ content(
                                                   .put('alarm_memo', false);
                                           controll_memo.setalarmmemo(
                                               doc_title, id);
-                                          Flushbar(
-                                            backgroundColor:
-                                                Colors.red.shade400,
-                                            titleText: Text('Notice',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize:
-                                                      contentTitleTextsize(),
-                                                  fontWeight: FontWeight.bold,
-                                                )),
-                                            messageText: Text('알람해제 완료',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: contentTextsize(),
-                                                  fontWeight: FontWeight.bold,
-                                                )),
-                                            icon: const Icon(
-                                              Icons.info_outline,
-                                              size: 25.0,
-                                              color: Colors.white,
-                                            ),
-                                            duration:
-                                                const Duration(seconds: 3),
-                                            leftBarIndicatorColor:
-                                                Colors.red.shade100,
-                                          ).show(context).whenComplete(() {
-                                            Get.back();
-                                          });
+                                          Get.back();
+                                          Snack.show(
+                                              context: context,
+                                              title: '알림',
+                                              content: '알람해제 완료!',
+                                              snackType: SnackType.info,
+                                              behavior:
+                                                  SnackBarBehavior.floating);
                                         },
                                         child: Container(
                                           color: Colors.red.shade400,

@@ -1,5 +1,6 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -342,54 +343,19 @@ Search(
                                                             list_sp.add(
                                                                 list_user[
                                                                     index]);
-                                                            Flushbar(
-                                                              backgroundColor:
-                                                                  Colors.blue
-                                                                      .shade400,
-                                                              titleText: Text(
-                                                                  'Notice',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        contentTitleTextsize(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  )),
-                                                              messageText: Text(
-                                                                  '정상적으로 추가되었습니다.',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        contentTextsize(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  )),
-                                                              icon: const Icon(
-                                                                Icons
-                                                                    .info_outline,
-                                                                size: 25.0,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              duration:
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          3),
-                                                              leftBarIndicatorColor:
-                                                                  Colors.blue
-                                                                      .shade100,
-                                                            )
-                                                                .show(context)
-                                                                .whenComplete(
-                                                                    () {
-                                                              Get.back();
-                                                            });
+                                                            Get.back();
+                                                            Snack.show(
+                                                                context:
+                                                                    context,
+                                                                title: '알림',
+                                                                content:
+                                                                    '정상적으로 추가되었습니다.',
+                                                                snackType:
+                                                                    SnackType
+                                                                        .info,
+                                                                behavior:
+                                                                    SnackBarBehavior
+                                                                        .floating);
                                                           } else {
                                                             list_sp.remove(
                                                                 list_user[
@@ -399,53 +365,19 @@ Search(
                                                                     'PeopleList')
                                                                 .doc(username)
                                                                 .delete();
-                                                            Flushbar(
-                                                              backgroundColor:
-                                                                  Colors.red
-                                                                      .shade400,
-                                                              titleText: Text(
-                                                                  'Notice',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        contentTitleTextsize(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  )),
-                                                              messageText: Text(
-                                                                  '삭제하였습니다.',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        contentTextsize(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  )),
-                                                              icon: const Icon(
-                                                                Icons.warning,
-                                                                size: 25.0,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              duration:
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          3),
-                                                              leftBarIndicatorColor:
-                                                                  Colors.red
-                                                                      .shade100,
-                                                            )
-                                                                .show(context)
-                                                                .whenComplete(
-                                                                    () {
-                                                              Get.back();
-                                                            });
+                                                            Get.back();
+                                                            Snack.show(
+                                                                context:
+                                                                    context,
+                                                                title: '알림',
+                                                                content:
+                                                                    '삭제하였습니다.',
+                                                                snackType:
+                                                                    SnackType
+                                                                        .warning,
+                                                                behavior:
+                                                                    SnackBarBehavior
+                                                                        .floating);
                                                           }
                                                           for (int i = 0;
                                                               i <

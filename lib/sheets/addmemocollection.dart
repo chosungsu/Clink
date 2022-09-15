@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/selectcollection.dart';
 
 SheetPagememoCollection(
@@ -143,63 +144,38 @@ content(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        primary: Colors.blue,
+                        backgroundColor: Colors.grey,
                       ),
                       onPressed: () {
                         if (textEditingController_add_sheet.text.isEmpty) {
-                          Flushbar(
-                            backgroundColor: Colors.red.shade400,
-                            titleText: Text('Notice',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: contentTitleTextsize(),
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            messageText: Text('태그 제목은 필수사항입니다.',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: contentTextsize(),
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            icon: const Icon(
-                              Icons.info_outline,
-                              size: 25.0,
-                              color: Colors.white,
-                            ),
-                            duration: const Duration(seconds: 2),
-                            leftBarIndicatorColor: Colors.red.shade100,
-                          ).show(context);
+                          /*openSnackbar(
+                              'Notice', '태그 제목은 필수사항입니다.', Colors.red.shade100);*/
+                          Snack.show(
+                              context: context,
+                              title: '경고',
+                              content: '태그 제목은 필수사항입니다.',
+                              snackType: SnackType.warning,
+                              behavior: SnackBarBehavior.floating);
                         } else {
                           setState(() {
-                            CreateCalandmemoSuccessFlushbar(context);
+                            Snack.show(
+                                context: context,
+                                title: '로딩중',
+                                content: '잠시만 기다려주세요~',
+                                snackType: SnackType.waiting,
+                                behavior: SnackBarBehavior.floating);
                             firestore.collection('MemoCollections').add({
                               'madeUser': username,
                               'title': textEditingController_add_sheet.text,
                             }).whenComplete(() {
                               setState(() {
                                 textEditingController_add_sheet.clear();
-                                Flushbar(
-                                  backgroundColor: Colors.blue.shade400,
-                                  titleText: Text('Notice',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: contentTitleTextsize(),
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  messageText: Text('정상적으로 추가되었습니다.',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: contentTextsize(),
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  icon: const Icon(
-                                    Icons.info_outline,
-                                    size: 25.0,
-                                    color: Colors.white,
-                                  ),
-                                  duration: const Duration(seconds: 2),
-                                  leftBarIndicatorColor: Colors.blue.shade100,
-                                ).show(context);
+                                Snack.show(
+                                    context: context,
+                                    title: '알림',
+                                    content: '정상적으로 추가되었습니다.',
+                                    snackType: SnackType.info,
+                                    behavior: SnackBarBehavior.floating);
                               });
                             });
                           });
@@ -392,108 +368,45 @@ content(
                                                             )),
                                                         InkWell(
                                                           onTap: () {
-                                                            Flushbar(
-                                                              backgroundColor:
-                                                                  Colors.green
-                                                                      .shade400,
-                                                              titleText: Text(
-                                                                  'Notice',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        contentTitleTextsize(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  )),
-                                                              messageText: Text(
-                                                                  '잠시만 기다려주세요~',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        contentTextsize(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  )),
-                                                              icon: const Icon(
-                                                                Icons
-                                                                    .info_outline,
-                                                                size: 25.0,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              duration:
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          2),
-                                                              leftBarIndicatorColor:
-                                                                  Colors.green
-                                                                      .shade100,
-                                                            )
-                                                                .show(context)
+                                                            /*openSnackbar(
+                                                                'Notice',
+                                                                '잠시만 기다려주세요~',
+                                                                Colors.green
+                                                                    .shade100);*/
+                                                            Snack.show(
+                                                                context:
+                                                                    context,
+                                                                title: '로딩중',
+                                                                content:
+                                                                    '잠시만 기다려주세요~',
+                                                                snackType:
+                                                                    SnackType
+                                                                        .waiting,
+                                                                behavior:
+                                                                    SnackBarBehavior
+                                                                        .floating);
+                                                            firestore
+                                                                .collection(
+                                                                    'MemoCollections')
+                                                                .doc(snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                    .id)
+                                                                .delete()
                                                                 .whenComplete(
                                                                     () {
-                                                              firestore
-                                                                  .collection(
-                                                                      'MemoCollections')
-                                                                  .doc(snapshot
-                                                                      .data!
-                                                                      .docs[
-                                                                          index]
-                                                                      .id)
-                                                                  .delete()
-                                                                  .whenComplete(
-                                                                      () {
-                                                                Flushbar(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .blue
-                                                                          .shade400,
-                                                                  titleText: Text(
-                                                                      'Notice',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            contentTitleTextsize(),
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      )),
-                                                                  messageText: Text(
+                                                              Snack.show(
+                                                                  context:
+                                                                      context,
+                                                                  title: '알림',
+                                                                  content:
                                                                       '정상적으로 삭제가 되었습니다.',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            contentTextsize(),
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      )),
-                                                                  icon:
-                                                                      const Icon(
-                                                                    Icons
-                                                                        .info_outline,
-                                                                    size: 25.0,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                                  duration:
-                                                                      const Duration(
-                                                                          seconds:
-                                                                              2),
-                                                                  leftBarIndicatorColor:
-                                                                      Colors
-                                                                          .blue
-                                                                          .shade100,
-                                                                ).show(context);
-                                                              });
+                                                                  snackType:
+                                                                      SnackType
+                                                                          .info,
+                                                                  behavior:
+                                                                      SnackBarBehavior
+                                                                          .floating);
                                                             });
                                                           },
                                                           child: const Icon(
@@ -555,31 +468,15 @@ content(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)),
-                              primary: Colors.grey,
+                              backgroundColor: Colors.grey,
                             ),
                             onPressed: () {
-                              Flushbar(
-                                backgroundColor: Colors.red.shade400,
-                                titleText: Text('Notice',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: contentTitleTextsize(),
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                messageText: Text('현재 페이지에서는 사용할 수 없는 기능입니다!',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: contentTextsize(),
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                icon: const Icon(
-                                  Icons.warning,
-                                  size: 25.0,
-                                  color: Colors.white,
-                                ),
-                                duration: const Duration(seconds: 2),
-                                leftBarIndicatorColor: Colors.red.shade100,
-                              ).show(context);
+                              Snack.show(
+                                  context: context,
+                                  title: '경고',
+                                  content: '현재 페이지에서는 사용할 수 없는 기능입니다.',
+                                  snackType: SnackType.warning,
+                                  behavior: SnackBarBehavior.floating);
                             },
                             child: Center(
                               child: Row(
@@ -614,29 +511,12 @@ content(
                             ),
                             onPressed: () {
                               if (selectvalue == '' || selectvalue == null) {
-                                Get.back();
-                                Flushbar(
-                                  backgroundColor: Colors.red.shade400,
-                                  titleText: Text('Notice',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: contentTitleTextsize(),
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  messageText: Text('태그가 지정되지 않았습니다.',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: contentTextsize(),
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  icon: const Icon(
-                                    Icons.info_outline,
-                                    size: 25.0,
-                                    color: Colors.white,
-                                  ),
-                                  duration: const Duration(seconds: 2),
-                                  leftBarIndicatorColor: Colors.red.shade100,
-                                ).show(context);
+                                Snack.show(
+                                    context: context,
+                                    title: '경고',
+                                    content: '태그가 지정되지 않았습니다.',
+                                    snackType: SnackType.warning,
+                                    behavior: SnackBarBehavior.floating);
                               } else {
                                 Hive.box('user_setting')
                                     .put('memocollection', selectvalue);

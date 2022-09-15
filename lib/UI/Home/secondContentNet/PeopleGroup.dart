@@ -8,6 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../Tool/BGColor.dart';
+import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
@@ -516,30 +517,13 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                       }
                                     });
                                   }
-                                  Flushbar(
-                                    backgroundColor: Colors.blue.shade400,
-                                    titleText: Text('Notice',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: contentTitleTextsize(),
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    messageText: Text('변경사항이 정상적으로 저장되었습니다.',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: contentTextsize(),
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    icon: const Icon(
-                                      Icons.info_outline,
-                                      size: 25.0,
-                                      color: Colors.white,
-                                    ),
-                                    duration: const Duration(seconds: 1),
-                                    leftBarIndicatorColor: Colors.blue.shade100,
-                                  )
-                                      .show(context)
-                                      .whenComplete(() => Get.back());
+                                  Get.back();
+                                  Snack.show(
+                                      context: context,
+                                      title: '알림',
+                                      content: '변경사항이 정상적으로 저장되었습니다.',
+                                      snackType: SnackType.info,
+                                      behavior: SnackBarBehavior.floating);
                                 });
                               } else {
                                 for (int i = 0;
@@ -602,30 +586,13 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                     }
                                   });
                                 }
-                                Flushbar(
-                                  backgroundColor: Colors.blue.shade400,
-                                  titleText: Text('Notice',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: contentTitleTextsize(),
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  messageText: Text('변경사항이 정상적으로 저장되었습니다.',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: contentTextsize(),
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  icon: const Icon(
-                                    Icons.info_outline,
-                                    size: 25.0,
-                                    color: Colors.white,
-                                  ),
-                                  duration: const Duration(seconds: 1),
-                                  leftBarIndicatorColor: Colors.blue.shade100,
-                                ).show(context).whenComplete(() {
-                                  Get.back();
-                                });
+                                Get.back();
+                                Snack.show(
+                                    context: context,
+                                    title: '알림',
+                                    content: '변경사항이 정상적으로 저장되었습니다.',
+                                    snackType: SnackType.info,
+                                    behavior: SnackBarBehavior.floating);
                               }
                             });
                           });

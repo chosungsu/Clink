@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:page_transition/page_transition.dart';
@@ -12,6 +13,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
 import '../Dialogs/destroyBackKey.dart';
+import '../Tool/AndroidIOS.dart';
+import '../Tool/TextSize.dart';
 import '../route.dart';
 
 class LoginSignPage extends StatefulWidget {
@@ -227,6 +230,15 @@ class _LoginSignPageState extends State<LoginSignPage>
   }
 
   Future<bool> _onWillPop() async {
-    return (await destroyBackKey(context)) ?? false;
+    return await Get.dialog(OSDialog(
+            context,
+            '종료',
+            Text('앱을 종료하시겠습니까?',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize())),
+            pressed1)) ??
+        false;
   }
 }

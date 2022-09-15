@@ -13,6 +13,7 @@ import 'package:local_auth_ios/types/auth_messages_ios.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/IconBtn.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
 
@@ -102,93 +103,41 @@ class _SecureAuthState extends State<SecureAuth> {
       signauth = _auth ? '인증에 성공하였습니다!' : '인증에 실패하였습니다!';
       if (_auth) {
         if (!widget.unlock) {
+          Get.back();
           widget.doc_secret_bool == true
               ? firestore.collection('MemoDataBase').doc(widget.id).update({
                   'security': false,
                   'pinnumber': '0000',
                   'securewith': 999,
                 }).whenComplete(() {
-                  Flushbar(
-                    backgroundColor: Colors.blue.shade400,
-                    titleText: Text('Notice',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTitleTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    messageText: Text('정상적으로 잠금이 해제되었습니다.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    icon: const Icon(
-                      Icons.info_outline,
-                      size: 25.0,
-                      color: Colors.white,
-                    ),
-                    duration: const Duration(seconds: 2),
-                    leftBarIndicatorColor: Colors.blue.shade100,
-                  ).show(context).whenComplete(() {
-                    Get.back();
-                  });
+                  Snack.show(
+                      context: context,
+                      title: '알림',
+                      content: '정상적으로 잠금이 해제되었습니다.',
+                      snackType: SnackType.info,
+                      behavior: SnackBarBehavior.floating);
                 })
               : firestore.collection('MemoDataBase').doc(widget.id).update({
                   'security': true,
                   'pinnumber': '0000',
                   'securewith': 0,
                 }).whenComplete(() {
-                  Flushbar(
-                    backgroundColor: Colors.blue.shade400,
-                    titleText: Text('Notice',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTitleTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    messageText: Text('정상적으로 잠금이 설정되었습니다.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    icon: const Icon(
-                      Icons.info_outline,
-                      size: 25.0,
-                      color: Colors.white,
-                    ),
-                    duration: const Duration(seconds: 2),
-                    leftBarIndicatorColor: Colors.blue.shade100,
-                  ).show(context).whenComplete(() {
-                    Get.back();
-                  });
+                  Snack.show(
+                      context: context,
+                      title: '알림',
+                      content: '정상적으로 잠금이 설정되었습니다.',
+                      snackType: SnackType.info,
+                      behavior: SnackBarBehavior.floating);
                 });
         } else {
           //잠금해제하지 않고 내용보는 로직
-          Flushbar(
-            backgroundColor: Colors.blue.shade400,
-            titleText: Text('Notice',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: contentTitleTextsize(),
-                  fontWeight: FontWeight.bold,
-                )),
-            messageText: Text('인증되었습니다.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: contentTextsize(),
-                  fontWeight: FontWeight.bold,
-                )),
-            icon: const Icon(
-              Icons.info_outline,
-              size: 25.0,
-              color: Colors.white,
-            ),
-            duration: const Duration(seconds: 2),
-            leftBarIndicatorColor: Colors.blue.shade100,
-          ).show(context).whenComplete(() {
-            Get.back(result: true);
-          });
+          Get.back();
+          Snack.show(
+              context: context,
+              title: '알림',
+              content: '인증되었습니다.',
+              snackType: SnackType.info,
+              behavior: SnackBarBehavior.floating);
         }
       }
     });
@@ -197,143 +146,59 @@ class _SecureAuthState extends State<SecureAuth> {
   Future<void> pinauthenticate() async {
     if (pinindex < 4) {
       //거절
-      Flushbar(
-        backgroundColor: Colors.red.shade400,
-        titleText: Text('Notice',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: contentTitleTextsize(),
-              fontWeight: FontWeight.bold,
-            )),
-        messageText: Text('핀번호 4자리가 필요합니다!',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: contentTextsize(),
-              fontWeight: FontWeight.bold,
-            )),
-        icon: const Icon(
-          Icons.info_outline,
-          size: 25.0,
-          color: Colors.white,
-        ),
-        duration: const Duration(seconds: 2),
-        leftBarIndicatorColor: Colors.red.shade100,
-      ).show(context).whenComplete(() {});
+      Snack.show(
+          context: context,
+          title: '경고',
+          content: '핀번호 4자리가 필요합니다!',
+          snackType: SnackType.warning,
+          behavior: SnackBarBehavior.floating);
     } else {
       //승인
       if (widget.doc_pin_number == strpin || widget.doc_pin_number == '0000') {
         if (!widget.unlock) {
+          Get.back();
           widget.doc_secret_bool == true
               ? firestore.collection('MemoDataBase').doc(widget.id).update({
                   'security': false,
                   'pinnumber': '0000',
                   'securewith': 999,
                 }).whenComplete(() {
-                  Flushbar(
-                    backgroundColor: Colors.blue.shade400,
-                    titleText: Text('Notice',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTitleTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    messageText: Text('정상적으로 잠금이 해제되었습니다.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    icon: const Icon(
-                      Icons.info_outline,
-                      size: 25.0,
-                      color: Colors.white,
-                    ),
-                    duration: const Duration(seconds: 2),
-                    leftBarIndicatorColor: Colors.blue.shade100,
-                  ).show(context).whenComplete(() {
-                    Get.back();
-                  });
+                  Snack.show(
+                      context: context,
+                      title: '알림',
+                      content: '정상적으로 잠금이 해제되었습니다.',
+                      snackType: SnackType.info,
+                      behavior: SnackBarBehavior.floating);
                 })
               : firestore.collection('MemoDataBase').doc(widget.id).update({
                   'security': true,
                   'pinnumber': strpin,
                   'securewith': 1,
                 }).whenComplete(() {
-                  Flushbar(
-                    backgroundColor: Colors.blue.shade400,
-                    titleText: Text('Notice',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTitleTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    messageText: Text('정상적으로 잠금이 설정되었습니다.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: contentTextsize(),
-                          fontWeight: FontWeight.bold,
-                        )),
-                    icon: const Icon(
-                      Icons.info_outline,
-                      size: 25.0,
-                      color: Colors.white,
-                    ),
-                    duration: const Duration(seconds: 2),
-                    leftBarIndicatorColor: Colors.blue.shade100,
-                  ).show(context).whenComplete(() {
-                    Get.back();
-                  });
+                  Snack.show(
+                      context: context,
+                      title: '알림',
+                      content: '정상적으로 잠금이 설정되었습니다.',
+                      snackType: SnackType.info,
+                      behavior: SnackBarBehavior.floating);
                 });
         } else {
           //잠금해제하지 않고 내용보는 로직
-          Flushbar(
-            backgroundColor: Colors.blue.shade400,
-            titleText: Text('Notice',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: contentTitleTextsize(),
-                  fontWeight: FontWeight.bold,
-                )),
-            messageText: Text('인증되었습니다.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: contentTextsize(),
-                  fontWeight: FontWeight.bold,
-                )),
-            icon: const Icon(
-              Icons.info_outline,
-              size: 25.0,
-              color: Colors.white,
-            ),
-            duration: const Duration(seconds: 2),
-            leftBarIndicatorColor: Colors.blue.shade100,
-          ).show(context).whenComplete(() {
-            Get.back(result: true);
-          });
+          Get.back(result: true);
+          Snack.show(
+              context: context,
+              title: '알림',
+              content: '인증되었습니다.',
+              snackType: SnackType.info,
+              behavior: SnackBarBehavior.floating);
         }
       } else {
-        Flushbar(
-          backgroundColor: Colors.red.shade400,
-          titleText: Text('Notice',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: contentTitleTextsize(),
-                fontWeight: FontWeight.bold,
-              )),
-          messageText: Text('핀번호가 일치하지 않습니다!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: contentTextsize(),
-                fontWeight: FontWeight.bold,
-              )),
-          icon: const Icon(
-            Icons.info_outline,
-            size: 25.0,
-            color: Colors.white,
-          ),
-          duration: const Duration(seconds: 2),
-          leftBarIndicatorColor: Colors.red.shade100,
-        ).show(context).whenComplete(() {});
+        Snack.show(
+            context: context,
+            title: '경고',
+            content: '핀번호가 일치하지 않습니다!',
+            snackType: SnackType.warning,
+            behavior: SnackBarBehavior.floating);
       }
     }
   }

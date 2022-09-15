@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import '../Dialogs/destroyBackKey.dart';
+import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/TextSize.dart';
 
@@ -284,7 +285,22 @@ content(
                     ),
                     onPressed: () async {
                       final reloadpage =
-                          await Get.dialog(checkdeletecandm(context, '일정표'));
+                          await Get.dialog(OSDialog(context, '경고', Builder(
+                                builder: (context) {
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.85,
+                                    child: SingleChildScrollView(
+                                      child: Text('정말 이 일정표를 삭제하시겠습니까?',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize(),
+                                              color: Colors.blueGrey)),
+                                    ),
+                                  );
+                                },
+                              ), pressed2)) ??
+                              false;
                       if (reloadpage) {
                         if (Hive.box('user_setting')
                                     .get('noti_calendar_click') ==

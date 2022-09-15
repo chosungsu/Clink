@@ -580,6 +580,7 @@ content(
                 } else {
                   setState(() {
                     CreateCalandmemoSuccessFlushbar(context);
+                    Get.back();
                     if (s == 'home') {
                       choicelist[0] == 1
                           ? firestore.collection('CalendarSheetHome').add({

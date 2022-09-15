@@ -9,6 +9,7 @@ import 'package:new_version/new_version.dart';
 import 'Dialogs/destroyBackKey.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
+import 'Tool/AndroidIOS.dart';
 import 'Tool/Getx/navibool.dart';
 import 'Tool/Getx/notishow.dart';
 
@@ -112,6 +113,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop() async {
-    return (await destroyBackKey(context)) ?? false;
+    return await Get.dialog(OSDialog(
+            context,
+            '종료',
+            Text('앱을 종료하시겠습니까?',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize())),
+            pressed1)) ??
+        false;
   }
 }

@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../Tool/ContainerDesign.dart';
+import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -1114,50 +1115,16 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                         );
                                                       });
                                                     } else {
-                                                      Flushbar(
-                                                        margin: const EdgeInsets
-                                                                .only(
-                                                            left: 10,
-                                                            right: 10,
-                                                            bottom: 10),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        backgroundColor:
-                                                            Colors.red.shade400,
-                                                        titleText: Text(
-                                                            'Notice',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTitleTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        messageText: Text(
-                                                            '원작성자에게 권한을 요청하세요!',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        icon: const Icon(
-                                                          Icons.info_outline,
-                                                          size: 25.0,
-                                                          color: Colors.white,
-                                                        ),
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 1),
-                                                        leftBarIndicatorColor:
-                                                            Colors.red.shade100,
-                                                      ).show(context);
+                                                      Snack.show(
+                                                          context: context,
+                                                          title: '경고',
+                                                          content:
+                                                              '원작성자에게 권한을 요청하세요!',
+                                                          snackType:
+                                                              SnackType.warning,
+                                                          behavior:
+                                                              SnackBarBehavior
+                                                                  .floating);
                                                     }
                                                   }),
                                               FocusedMenuItem(
@@ -1219,50 +1186,16 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                   .docs[index]
                                                               ['share']);
                                                     } else {
-                                                      Flushbar(
-                                                        margin: const EdgeInsets
-                                                                .only(
-                                                            left: 10,
-                                                            right: 10,
-                                                            bottom: 10),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        backgroundColor:
-                                                            Colors.red.shade400,
-                                                        titleText: Text(
-                                                            'Notice',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTitleTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        messageText: Text(
-                                                            '원작성자에게 권한을 요청하세요!',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            )),
-                                                        icon: const Icon(
-                                                          Icons.info_outline,
-                                                          size: 25.0,
-                                                          color: Colors.white,
-                                                        ),
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 1),
-                                                        leftBarIndicatorColor:
-                                                            Colors.red.shade100,
-                                                      ).show(context);
+                                                      Snack.show(
+                                                          context: context,
+                                                          title: '경고',
+                                                          content:
+                                                              '원작성자에게 권한을 요청하세요!',
+                                                          snackType:
+                                                              SnackType.warning,
+                                                          behavior:
+                                                              SnackBarBehavior
+                                                                  .floating);
                                                     }
                                                   }),
                                             ],

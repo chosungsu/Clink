@@ -17,6 +17,7 @@ import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../DB/MemoList.dart';
 import '../../../Dialogs/destroyBackKey.dart';
+import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
@@ -149,7 +150,16 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   }
 
   Future<bool> _onBackPressed() async {
-    final reloadpage = await Get.dialog(checkbackincandm(context)) ?? false;
+    final reloadpage = await Get.dialog(OSDialog(
+            context,
+            '경고',
+            Text('뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize(),
+                    color: Colors.blueGrey)),
+            pressed2)) ??
+        false;
     if (reloadpage) {
       Get.back();
     }
@@ -211,11 +221,21 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                           IconBtn(
                                               child: IconButton(
                                                   onPressed: () async {
-                                                    final reloadpage =
-                                                        await Get.dialog(
-                                                                checkbackincandm(
-                                                                    context)) ??
-                                                            false;
+                                                    final reloadpage = await Get.dialog(OSDialog(
+                                                            context,
+                                                            '경고',
+                                                            Text(
+                                                                '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                    color: Colors
+                                                                        .blueGrey)),
+                                                            pressed2)) ??
+                                                        false;
                                                     if (reloadpage) {
                                                       Get.back();
                                                     }
@@ -357,6 +377,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                 if (textEditingController1
                                                                     .text
                                                                     .isNotEmpty) {
+                                                                  Get.back();
                                                                   CreateCalandmemoSuccessFlushbar(
                                                                       context);
                                                                   firestore
@@ -521,11 +542,23 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                       .unfocus();
                                                                 }
                                                                 final reloadpage =
-                                                                    await Get.dialog(
-                                                                        checkdeletecandm(
+                                                                    await Get.dialog(OSDialog(
                                                                             context,
-                                                                            '메모'));
+                                                                            '경고',
+                                                                            Builder(
+                                                                          builder:
+                                                                              (context) {
+                                                                            return SizedBox(
+                                                                              width: MediaQuery.of(context).size.width * 0.85,
+                                                                              child: SingleChildScrollView(
+                                                                                child: Text('정말 이 일정을 삭제하시겠습니까?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: Colors.blueGrey)),
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                        ), pressed2)) ??
+                                                                        false;
                                                                 if (reloadpage) {
+                                                                  Get.back();
                                                                   CreateCalandmemoSuccessFlushbar(
                                                                       context);
                                                                   Hive.box(

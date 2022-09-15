@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../Dialogs/destroyBackKey.dart';
+import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,6 +40,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
   List _image = [];
   final imagePicker = ImagePicker();
   late final PageController pageController;
+  int realpageindex = 0;
 
   @override
   void initState() {
@@ -120,7 +122,6 @@ class _ImageSliderPageState extends State<ImageSliderPage>
         child: Scaffold(
       backgroundColor: Colors.white,
       body: imageSlide(),
-      bottomNavigationBar: SelectionBtn(widget.index),
     ));
   }
 
@@ -201,7 +202,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height - 170,
+            height: MediaQuery.of(context).size.height - 120,
             width: MediaQuery.of(context).size.width - 40,
             child: GetBuilder<memosetting>(
                 builder: (_) => controll_memo.imagelist.isEmpty
@@ -231,42 +232,62 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                         itemCount: controll_memo.imagelist.length,
                         controller: pageController,
                         itemBuilder: (context, index) {
-                          return ClipRRect(
-                              borderRadius: BorderRadius.circular(0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height -
-                                              170,
-                                      child: PhotoView(
-                                        enableRotation: true,
-                                        backgroundDecoration:
-                                            const BoxDecoration(
-                                                color: Colors.transparent),
-                                        loadingBuilder: (BuildContext context,
-                                            ImageChunkEvent? loadingProgress) {
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              value: loadingProgress!
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          );
-                                        },
-                                        imageProvider: NetworkImage(
-                                            controll_memo.imagelist[index],
-                                            scale: 1),
-                                      ))
-                                ],
-                              ));
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height -
+                                                190,
+                                            child: PhotoView(
+                                              enableRotation: true,
+                                              backgroundDecoration:
+                                                  const BoxDecoration(
+                                                      color:
+                                                          Colors.transparent),
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: loadingProgress!
+                                                                .expectedTotalBytes !=
+                                                            null
+                                                        ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                            loadingProgress
+                                                                .expectedTotalBytes!
+                                                        : null,
+                                                  ),
+                                                );
+                                              },
+                                              imageProvider: NetworkImage(
+                                                  controll_memo
+                                                      .imagelist[index],
+                                                  scale: 1),
+                                            ))
+                                      ],
+                                    )),
+                              ),
+                              SelectionBtn(index),
+                              const SizedBox(
+                                height: 20,
+                              )
+                            ],
+                          );
                         })),
           ),
         ],
@@ -397,9 +418,16 @@ class _ImageSliderPageState extends State<ImageSliderPage>
               child: InkWell(
                   onTap: () async {
                     //삭제기능
-                    final reloadpage =
-                        await Get.dialog(checkdeleteimagememo(context)) ??
-                            false;
+                    final reloadpage = await Get.dialog(OSDialog(
+                            context,
+                            '경고',
+                            Text('정말 이 이미지를 삭제하시겠습니까?',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: Colors.blueGrey)),
+                            pressed2)) ??
+                        false;
                     if (reloadpage) {
                       _deleteFile(widget.doc, index);
                     }

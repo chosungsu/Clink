@@ -8,6 +8,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../Dialogs/destroyBackKey.dart';
 import '../../../LocalNotiPlatform/NotificationApi.dart';
+import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/CreateCalandmemo.dart';
@@ -188,21 +189,37 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                         'title': '[' +
                                                             widget.calname +
                                                             '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 변경되었습니다.',
-                                                        'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
-                                                                        ' ' +
-                                                                        DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
-                                                                            0] +
-                                                                        ':' +
-                                                                        DateFormat('yyyy-MM-dd hh:mm')
-                                                                            .parse(DateTime.now().toString())
-                                                                            .toString()
-                                                                            .split(' ')[1]
-                                                                            .split(':')[1],
+                                                        'date': DateFormat(
+                                                                    'yyyy-MM-dd hh:mm')
+                                                                .parse(DateTime
+                                                                        .now()
+                                                                    .toString())
+                                                                .toString()
+                                                                .split(' ')[0] +
+                                                            ' ' +
+                                                            DateFormat(
+                                                                    'yyyy-MM-dd hh:mm')
+                                                                .parse(DateTime
+                                                                        .now()
+                                                                    .toString())
+                                                                .toString()
+                                                                .split(' ')[1]
+                                                                .split(':')[0] +
+                                                            ':' +
+                                                            DateFormat(
+                                                                    'yyyy-MM-dd hh:mm')
+                                                                .parse(DateTime
+                                                                        .now()
+                                                                    .toString())
+                                                                .toString()
+                                                                .split(' ')[1]
+                                                                .split(':')[1],
                                                         'username': name,
                                                         'sharename':
                                                             widget.share,
                                                         'read': 'no',
                                                       }).whenComplete(() {
+                                                        Get.back();
                                                         firestore
                                                             .collection(
                                                                 'CalendarDataBase')
@@ -311,6 +328,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                               const Duration(
                                                                   seconds: 2),
                                                               () {
+                                                            
                                                             CreateCalandmemoSuccessFlushbarSub(
                                                                 context, '일정');
                                                             if (widget.alarm !=
@@ -427,9 +445,30 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                       //삭제
                                                       final reloadpage =
                                                           await Get.dialog(
-                                                              checkdeletecandm(
-                                                                  context,
-                                                                  '일정'));
+                                                                  OSDialog(
+                                                                      context,
+                                                                      '경고',
+                                                                      Builder(
+                                                                builder:
+                                                                    (context) {
+                                                                  return SizedBox(
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.85,
+                                                                    child:
+                                                                        SingleChildScrollView(
+                                                                      child: Text(
+                                                                          '정말 이 일정을 삭제하시겠습니까?',
+                                                                          style: TextStyle(
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontSize: contentTextsize(),
+                                                                              color: Colors.blueGrey)),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ), pressed2)) ??
+                                                              false;
                                                       if (reloadpage) {
                                                         CreateCalandmemoSuccessFlushbar(
                                                                 context)
@@ -441,21 +480,38 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                             'title': '[' +
                                                                 widget.calname +
                                                                 '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 삭제되었습니다.',
-                                                            'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
-                                                                        ' ' +
-                                                                        DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
-                                                                            0] +
-                                                                        ':' +
-                                                                        DateFormat('yyyy-MM-dd hh:mm')
-                                                                            .parse(DateTime.now().toString())
-                                                                            .toString()
-                                                                            .split(' ')[1]
-                                                                            .split(':')[1],
+                                                            'date': DateFormat('yyyy-MM-dd hh:mm')
+                                                                        .parse(DateTime.now()
+                                                                            .toString())
+                                                                        .toString()
+                                                                        .split(
+                                                                            ' ')[
+                                                                    0] +
+                                                                ' ' +
+                                                                DateFormat('yyyy-MM-dd hh:mm')
+                                                                        .parse(DateTime.now()
+                                                                            .toString())
+                                                                        .toString()
+                                                                        .split(
+                                                                            ' ')[1]
+                                                                        .split(
+                                                                            ':')[
+                                                                    0] +
+                                                                ':' +
+                                                                DateFormat('yyyy-MM-dd hh:mm')
+                                                                    .parse(DateTime.now()
+                                                                        .toString())
+                                                                    .toString()
+                                                                    .split(
+                                                                        ' ')[1]
+                                                                    .split(
+                                                                        ':')[1],
                                                             'username': name,
                                                             'sharename':
                                                                 widget.share,
                                                             'read': 'no',
                                                           }).whenComplete(() {
+                                                            Get.back();
                                                             firestore
                                                                 .collection(
                                                                     'CalendarDataBase')
