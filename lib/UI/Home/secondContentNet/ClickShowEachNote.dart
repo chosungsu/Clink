@@ -508,7 +508,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                 height: 30,
                                                                 child:
                                                                     NeumorphicIcon(
-                                                                  Icons.edit,
+                                                                  Icons
+                                                                      .save_alt,
                                                                   size: 30,
                                                                   style: const NeumorphicStyle(
                                                                       shape: NeumorphicShape
