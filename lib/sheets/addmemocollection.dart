@@ -144,7 +144,7 @@ content(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        backgroundColor: Colors.grey,
+                        primary: ButtonColor(),
                       ),
                       onPressed: () {
                         if (textEditingController_add_sheet.text.isEmpty) {
