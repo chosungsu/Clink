@@ -407,7 +407,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                     .split(' ')[1]
                                     .split(':')[1],
                             'username': username,
-                            'sharename': null,
+                            'sharename': [],
                             'read': 'no',
                           });
                           firestore

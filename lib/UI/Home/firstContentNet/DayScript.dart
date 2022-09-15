@@ -340,6 +340,8 @@ class _DayScriptState extends State<DayScript> {
                                                                             .toString()
                                                                             .split(' ')[0],
                                                                         'username':
+                                                                            username,
+                                                                        'sharename':
                                                                             widget.share,
                                                                         'read':
                                                                             'no',
@@ -497,6 +499,8 @@ class _DayScriptState extends State<DayScript> {
                                                                             .toString()
                                                                             .split(' ')[0],
                                                                         'username':
+                                                                            username,
+                                                                        'sharename':
                                                                             widget.share,
                                                                         'read':
                                                                             'no',

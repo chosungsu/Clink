@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/AndroidIOS.dart';
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/TextSize.dart';
 
@@ -337,6 +338,13 @@ content(
                               .doc(doc + '-' + doc_made_user + '-' + username)
                               .delete();
                         }
+                        Navigator.pop(context);
+                        Snack.show(
+                            context: context,
+                            title: '알림',
+                            content: '캘린더의 카드가 삭제되었습니다.',
+                            snackType: SnackType.warning,
+                            behavior: SnackBarBehavior.floating);
                         firestore.collection('AppNoticeByUsers').add({
                           'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
                           'date': DateFormat('yyyy-MM-dd hh:mm')
@@ -359,8 +367,6 @@ content(
                           'username': username,
                           'read': 'no',
                         });
-
-                        Navigator.pop(context);
                       }
                     },
                     child: Center(
@@ -436,6 +442,12 @@ content(
                           });
 
                           Navigator.pop(context);
+                          Snack.show(
+                              context: context,
+                              title: '알림',
+                              content: '캘린더의 카드가 변경되었습니다.',
+                              snackType: SnackType.info,
+                              behavior: SnackBarBehavior.floating);
                         });
                       },
                       child: Center(

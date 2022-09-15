@@ -401,7 +401,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     'username':
                                                                         username,
                                                                     'sharename':
-                                                                        null,
+                                                                        [],
                                                                     'read':
                                                                         'no',
                                                                   });
@@ -593,7 +593,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     'username':
                                                                         username,
                                                                     'sharename':
-                                                                        null,
+                                                                        [],
                                                                     'read':
                                                                         'no',
                                                                   });

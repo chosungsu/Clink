@@ -675,9 +675,9 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
         future: firestore
             .collection('AppNoticeByUsers')
             //.where('username', arrayContainsAny: [name])
-            .orderBy('date', descending: true)
             .get()
             .then(((QuerySnapshot querySnapshot) => {
+                  //print('here'),
                   notilist.resetnoti(),
                   listid.clear(),
                   readlist.clear(),
