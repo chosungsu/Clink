@@ -489,12 +489,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                                 2) +
                                                                             '일',
                                                                       },
-                                                                    ).whenComplete(
-                                                                            () {
-                                                                      Get.back();
+                                                                    ).then(
+                                                                            (value) {
                                                                       CreateCalandmemoSuccessFlushbarSub(
                                                                           context,
                                                                           '메모');
+                                                                    }).whenComplete(
+                                                                            () {
+                                                                      Get.back();
                                                                     });
                                                                   } else {
                                                                     CreateCalandmemoFailSaveTitle(
@@ -650,7 +652,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     }
                                                                   }).whenComplete(
                                                                           () {
-                                                                            Get.back();
+                                                                    Get.back();
                                                                     CreateCalandmemoFlushbardelete(
                                                                         context,
                                                                         '메모');
