@@ -489,14 +489,19 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                                 2) +
                                                                             '일',
                                                                       },
-                                                                    ).then(
-                                                                            (value) {
-                                                                      CreateCalandmemoSuccessFlushbarSub(
-                                                                          context,
-                                                                          '메모');
-                                                                    }).whenComplete(
+                                                                    ).whenComplete(
                                                                             () {
-                                                                      Get.back();
+                                                                      Future.delayed(
+                                                                          const Duration(
+                                                                              seconds: 0),
+                                                                          () {
+                                                                        Get.back();
+                                                                      }).whenComplete(
+                                                                          () {
+                                                                        CreateCalandmemoSuccessFlushbarSub(
+                                                                            context,
+                                                                            '메모');
+                                                                      });
                                                                     });
                                                                   } else {
                                                                     CreateCalandmemoFailSaveTitle(
