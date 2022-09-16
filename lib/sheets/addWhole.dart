@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -579,8 +580,8 @@ content(
                   CreateCalandmemoFailSaveCategory(context);
                 } else {
                   setState(() {
-                    Get.back();
                     CreateCalandmemoSuccessFlushbar(context);
+                    Snack.closesnackbars();
                     if (s == 'home') {
                       choicelist[0] == 1
                           ? firestore.collection('CalendarSheetHome').add({
@@ -605,7 +606,10 @@ content(
                                       .substring(0, 2) +
                                   '일'
                             }).whenComplete(() {
-                              CreateCalandmemoSuccessFlushbarSub(context, '일정');
+                              Future.delayed(const Duration(seconds: 2), () {
+                                CreateCalandmemoSuccessFlushbarSub(
+                                    context, '일정');
+                              });
                             })
                           : firestore.collection('MemoDataBase').doc().set({
                               'Collection': null,
@@ -630,6 +634,7 @@ content(
                               'color': Hive.box('user_setting')
                                       .get('typecolorcalendar') ??
                                   _color.value.toInt(),
+                              'colorfont': Colors.black.value.toInt(),
                               'Date': date.toString().split('-')[0] +
                                   '-' +
                                   date.toString().split('-')[1] +
@@ -642,7 +647,10 @@ content(
                               'photoUrl': [],
                               'securewith': 999,
                             }).whenComplete(() {
-                              CreateCalandmemoSuccessFlushbarSub(context, '메모');
+                              Future.delayed(const Duration(seconds: 2), () {
+                                CreateCalandmemoSuccessFlushbarSub(
+                                    context, '메모');
+                              });
                             });
                     } else {
                       firestore.collection('CalendarSheetHome').add({
@@ -664,7 +672,9 @@ content(
                             date.toString().split('-')[2].substring(0, 2) +
                             '일'
                       }).whenComplete(() {
-                        CreateCalandmemoSuccessFlushbarSub(context, '일정');
+                        Future.delayed(const Duration(seconds: 2), () {
+                          CreateCalandmemoSuccessFlushbarSub(context, '일정');
+                        });
                       });
                     }
                   });
