@@ -1178,7 +1178,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                     .size
                                                     .width -
                                                 70,
-                                            child: DetectableTextField(
+                                            child: TextField(
                                               onChanged: (text) {
                                                 scollection.memolistcontentin[
                                                     index] = text;
@@ -1186,7 +1186,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                               minLines: null,
                                               maxLines: null,
                                               focusNode: nodes[index],
-                                              basicStyle: TextStyle(
+                                              style: TextStyle(
                                                 fontSize: contentTextsize(),
                                                 color: controll_memo.colorfont,
                                               ),
@@ -1247,8 +1247,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                               textAlign: TextAlign.start,
                                               textAlignVertical:
                                                   TextAlignVertical.center,
-                                              detectionRegExp:
-                                                  detectionRegExp()!,
                                             ))
                                         : (scollection.memolistin[index] == 1 ||
                                                 scollection.memolistin[index] ==
@@ -1465,7 +1463,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                             if (oldIndex < newIndex) {
                               newIndex -= 1;
                             }
-                            String content_prev = controllers[oldIndex].text;
+                            String content_prev =
+                                scollection.memolistcontentin[oldIndex];
                             int indexcontent_prev =
                                 scollection.memolistin[oldIndex];
                             scollection.removelistitem(oldIndex);

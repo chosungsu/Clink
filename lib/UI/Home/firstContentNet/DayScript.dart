@@ -1045,7 +1045,7 @@ class _DayScriptState extends State<DayScript> {
                                                           .size
                                                           .width -
                                                       70,
-                                                  child: DetectableTextField(
+                                                  child: TextField(
                                                     onChanged: (text) {
                                                       scollection
                                                               .memolistcontentin[
@@ -1054,7 +1054,7 @@ class _DayScriptState extends State<DayScript> {
                                                     minLines: null,
                                                     maxLines: null,
                                                     focusNode: nodes[index],
-                                                    basicStyle: TextStyle(
+                                                    style: TextStyle(
                                                       fontSize:
                                                           contentTextsize(),
                                                       color: controll_memo
@@ -1120,8 +1120,6 @@ class _DayScriptState extends State<DayScript> {
                                                     textAlignVertical:
                                                         TextAlignVertical
                                                             .center,
-                                                    detectionRegExp:
-                                                        detectionRegExp()!,
                                                   ))
                                               : (scollection.memolistin[index] ==
                                                           1 ||
@@ -1347,7 +1345,7 @@ class _DayScriptState extends State<DayScript> {
                                     newIndex -= 1;
                                   }
                                   String content_prev =
-                                      controllers[oldIndex].text;
+                                      scollection.memolistcontentin[oldIndex];
                                   int indexcontent_prev =
                                       scollection.memolistin[oldIndex];
                                   scollection.removelistitem(oldIndex);
