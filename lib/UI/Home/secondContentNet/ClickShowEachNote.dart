@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
@@ -404,6 +405,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                       .isNotEmpty) {
                                                                     CreateCalandmemoSuccessFlushbar(
                                                                         context);
+                                                                    Snack
+                                                                        .closesnackbars();
                                                                     firestore
                                                                         .collection(
                                                                             'AppNoticeByUsers')
@@ -493,10 +496,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                             () {
                                                                       Future.delayed(
                                                                           const Duration(
-                                                                              seconds: 0),
-                                                                          () {
-                                                                        Get.back();
-                                                                      }).whenComplete(
+                                                                              seconds: 2),
                                                                           () {
                                                                         CreateCalandmemoSuccessFlushbarSub(
                                                                             context,
@@ -551,7 +551,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                   nodes[i]
                                                                       .unfocus();
                                                                 }
-                                                                final reloadpage =
+                                                                var reloadpage =
                                                                     await Get.dialog(OSDialog(
                                                                             context,
                                                                             '경고',
@@ -570,6 +570,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                 if (reloadpage) {
                                                                   CreateCalandmemoSuccessFlushbar(
                                                                       context);
+                                                                  Snack
+                                                                      .closesnackbars();
                                                                   Hive.box(
                                                                           'user_setting')
                                                                       .put(
@@ -657,10 +659,20 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     }
                                                                   }).whenComplete(
                                                                           () {
-                                                                    Get.back();
-                                                                    CreateCalandmemoFlushbardelete(
-                                                                        context,
-                                                                        '메모');
+                                                                    reloadpage =
+                                                                        true;
+                                                                    Future.delayed(
+                                                                        const Duration(
+                                                                            seconds:
+                                                                                2),
+                                                                        () async {
+                                                                      CreateCalandmemoFlushbardelete(
+                                                                          context,
+                                                                          '메모');
+                                                                    });
+                                                                    if (reloadpage) {
+                                                                      Get.back();
+                                                                    }
                                                                   });
                                                                 }
                                                               },

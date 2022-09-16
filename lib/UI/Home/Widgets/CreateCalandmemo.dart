@@ -15,24 +15,26 @@ CreateCalandmemoSuccessFlushbar(BuildContext context) {
 }
 
 CreateCalandmemoSuccessFlushbarSub(BuildContext context, String s) {
-  Future.delayed(const Duration(seconds: 2), () {
-    Snack.show(
+  Future.delayed(const Duration(seconds: 0), () async {
+    await Snack.show(
         context: context,
         title: '알림',
         content: s == '메모' ? '메모가 정상적으로 입력되었습니다.' : s + '이 정상적으로 입력되었습니다.',
         snackType: SnackType.info,
         behavior: SnackBarBehavior.floating);
+    Snack.closesnackbars();
   });
 }
 
 CreateCalandmemoFlushbardelete(BuildContext context, String s) {
-  return Future.delayed(const Duration(seconds: 2), () {
-    Snack.show(
+  Future.delayed(const Duration(seconds: 0), () async {
+    await Snack.show(
         context: context,
         title: '알림',
         content: s == '메모' ? s + '가 정상적으로 삭제되었습니다.' : s + '이 정상적으로 삭제되었습니다.',
         snackType: SnackType.info,
         behavior: SnackBarBehavior.floating);
+    Snack.closesnackbars();
   });
 }
 

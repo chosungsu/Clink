@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../../../Dialogs/destroyBackKey.dart';
 import '../../../LocalNotiPlatform/NotificationApi.dart';
 import '../../../Tool/AndroidIOS.dart';
+import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/CreateCalandmemo.dart';
@@ -209,6 +210,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                       if (reloadpage) {
                                                         CreateCalandmemoSuccessFlushbar(
                                                             context);
+                                                        Snack.closesnackbars();
                                                         firestore
                                                             .collection(
                                                                 'AppNoticeByUsers')
@@ -344,18 +346,15 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                           }).whenComplete(() {
                                                             Future.delayed(
                                                                 const Duration(
-                                                                    seconds: 0),
-                                                                () {
-                                                              Get.back();
-                                                            }).whenComplete(() {
+                                                                    seconds: 2),
+                                                                () async {
                                                               CreateCalandmemoSuccessFlushbarSub(
                                                                   context,
                                                                   '일정');
-
                                                               if (widget
                                                                       .alarm !=
                                                                   '설정off') {
-                                                                NotificationApi
+                                                                await NotificationApi
                                                                     .showNotification(
                                                                   title: '알람설정된 일정 : ' +
                                                                       textEditingController1
@@ -386,10 +385,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                                 1]) +
                                                                             int.parse(widget.date.toString().split('-')[2].toString().split(' ')[
                                                                                 0]) +
-                                                                            int.parse(widget
-                                                                                .code) +
-                                                                            int.parse(widget
-                                                                                .calinfo),
+                                                                            int.parse(widget.code
+                                                                                .toString()
+                                                                                .numericOnly()),
                                                                         title: textEditingController1.text +
                                                                             '일정이 다가옵니다',
                                                                         body: textEditingController2.text.split(':')[0].length ==
@@ -420,7 +418,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                               ? 60 - (int.parse(changevalue.substring(0, changevalue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
                                                                               : int.parse(textEditingController2.text.split(':')[1]) - int.parse(changevalue.substring(0, changevalue.length - 3)),
                                                                         ));
-                                                              } else {}
+                                                              }
                                                             });
                                                           });
                                                         });
@@ -483,122 +481,121 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                               false;
                                                       if (reloadpage) {
                                                         CreateCalandmemoSuccessFlushbar(
-                                                                context)
-                                                            .whenComplete(() {
+                                                            context);
+                                                        Snack.closesnackbars();
+                                                        firestore
+                                                            .collection(
+                                                                'AppNoticeByUsers')
+                                                            .add({
+                                                          'title': '[' +
+                                                              widget.calname +
+                                                              '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 삭제되었습니다.',
+                                                          'date': DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime.now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(
+                                                                      ' ')[0] +
+                                                              ' ' +
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime.now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(' ')[1]
+                                                                  .split(
+                                                                      ':')[0] +
+                                                              ':' +
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime
+                                                                          .now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(' ')[1]
+                                                                  .split(':')[1],
+                                                          'username': name,
+                                                          'sharename':
+                                                              widget.share,
+                                                          'read': 'no',
+                                                        }).whenComplete(() {
                                                           firestore
                                                               .collection(
-                                                                  'AppNoticeByUsers')
-                                                              .add({
-                                                            'title': '[' +
-                                                                widget.calname +
-                                                                '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 삭제되었습니다.',
-                                                            'date': DateFormat('yyyy-MM-dd hh:mm')
-                                                                        .parse(DateTime.now()
-                                                                            .toString())
-                                                                        .toString()
-                                                                        .split(
-                                                                            ' ')[
-                                                                    0] +
-                                                                ' ' +
-                                                                DateFormat('yyyy-MM-dd hh:mm')
-                                                                        .parse(DateTime.now()
-                                                                            .toString())
-                                                                        .toString()
-                                                                        .split(
-                                                                            ' ')[1]
-                                                                        .split(
-                                                                            ':')[
-                                                                    0] +
-                                                                ':' +
-                                                                DateFormat('yyyy-MM-dd hh:mm')
-                                                                    .parse(DateTime.now()
-                                                                        .toString())
-                                                                    .toString()
-                                                                    .split(
-                                                                        ' ')[1]
-                                                                    .split(
-                                                                        ':')[1],
-                                                            'username': name,
-                                                            'sharename':
-                                                                widget.share,
-                                                            'read': 'no',
+                                                                  'CalendarDataBase')
+                                                              .where('calname',
+                                                                  isEqualTo: widget
+                                                                      .code)
+                                                              .where('Daytodo',
+                                                                  isEqualTo: widget
+                                                                      .calinfo)
+                                                              .where('Date',
+                                                                  isEqualTo: widget
+                                                                              .date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          0] +
+                                                                      '-' +
+                                                                      widget.date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          1] +
+                                                                      '-' +
+                                                                      widget.date
+                                                                          .toString()
+                                                                          .split('-')[
+                                                                              2]
+                                                                          .substring(
+                                                                              0,
+                                                                              2) +
+                                                                      '일')
+                                                              .where('Timestart',
+                                                                  isEqualTo:
+                                                                      widget.start)
+                                                              .get()
+                                                              .then((value) {
+                                                            deleteid.clear();
+                                                            for (var element
+                                                                in value.docs) {
+                                                              deleteid.add(
+                                                                  element.id);
+                                                            }
+                                                            for (int i = 0;
+                                                                i <
+                                                                    deleteid
+                                                                        .length;
+                                                                i++) {
+                                                              firestore
+                                                                  .collection(
+                                                                      'CalendarDataBase')
+                                                                  .doc(deleteid[
+                                                                      i])
+                                                                  .delete();
+                                                            }
                                                           }).whenComplete(() {
-                                                            Get.back();
-                                                            firestore
-                                                                .collection(
-                                                                    'CalendarDataBase')
-                                                                .where('calname',
-                                                                    isEqualTo: widget
-                                                                        .code)
-                                                                .where(
-                                                                    'Daytodo',
-                                                                    isEqualTo:
-                                                                        widget
-                                                                            .calinfo)
-                                                                .where(
-                                                                    'Date',
-                                                                    isEqualTo: widget.date.toString().split('-')[0] +
-                                                                        '-' +
-                                                                        widget.date.toString().split('-')[
-                                                                            1] +
-                                                                        '-' +
-                                                                        widget
-                                                                            .date
-                                                                            .toString()
-                                                                            .split('-')[
-                                                                                2]
-                                                                            .substring(0,
-                                                                                2) +
-                                                                        '일')
-                                                                .where(
-                                                                    'Timestart',
-                                                                    isEqualTo:
-                                                                        widget
-                                                                            .start)
-                                                                .get()
-                                                                .then((value) {
-                                                              deleteid.clear();
-                                                              for (var element
-                                                                  in value
-                                                                      .docs) {
-                                                                deleteid.add(
-                                                                    element.id);
-                                                              }
-                                                              for (int i = 0;
-                                                                  i <
-                                                                      deleteid
-                                                                          .length;
-                                                                  i++) {
-                                                                firestore
-                                                                    .collection(
-                                                                        'CalendarDataBase')
-                                                                    .doc(
-                                                                        deleteid[
-                                                                            i])
-                                                                    .delete();
-                                                              }
-                                                            }).whenComplete(() {
-                                                              Future.delayed(
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          2),
-                                                                  () {
-                                                                CreateCalandmemoFlushbardelete(
-                                                                    context,
-                                                                    '일정');
-                                                                NotificationApi.cancelNotification(
-                                                                    id: int.parse(widget.date.toString().split('-')[0]) +
-                                                                        int.parse(widget.date.toString().split('-')[
-                                                                            1]) +
-                                                                        int.parse(widget
-                                                                            .date
-                                                                            .toString()
-                                                                            .split('-')[2]
-                                                                            .toString()
-                                                                            .split(' ')[0]) +
-                                                                        int.parse(widget.code) +
-                                                                        int.parse(widget.calinfo));
-                                                              });
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    seconds: 2),
+                                                                () async {
+                                                              CreateCalandmemoFlushbardelete(
+                                                                  context,
+                                                                  '일정');
+                                                              NotificationApi.cancelNotification(
+                                                                  id: int.parse(widget.date.toString().split('-')[0]) +
+                                                                      int.parse(widget
+                                                                              .date
+                                                                              .toString()
+                                                                              .split('-')[
+                                                                          1]) +
+                                                                      int.parse(widget
+                                                                          .date
+                                                                          .toString()
+                                                                          .split('-')[
+                                                                              2]
+                                                                          .toString()
+                                                                          .split(
+                                                                              ' ')[0]) +
+                                                                      int.parse(widget.code.toString().numericOnly()));
                                                             });
                                                           });
                                                         });
@@ -885,8 +882,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                       .split('-')[2]
                                       .toString()
                                       .split(' ')[0]) +
-                                  int.parse(widget.code) +
-                                  int.parse(widget.calinfo));
+                                  int.parse(
+                                      widget.code.toString().numericOnly()));
                         }
                       });
                     }),
@@ -912,8 +909,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                       .split('-')[2]
                                       .toString()
                                       .split(' ')[0]) +
-                                  int.parse(widget.code) +
-                                  int.parse(widget.calinfo));
+                                  int.parse(
+                                      widget.code.toString().numericOnly()));
                         }
                       });
                     }),

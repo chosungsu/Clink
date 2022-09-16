@@ -19,6 +19,7 @@ import '../../../Dialogs/destroyBackKey.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
+import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/Getx/memosetting.dart';
@@ -94,6 +95,7 @@ class _DayScriptState extends State<DayScript> {
     false,
   ];
   bool ischeckedtohideminus = false;
+  bool reloadpage = false;
   List<MemoList> checklisttexts = [];
   Color _color = Colors.white;
   Color _colorfont = Colors.black;
@@ -209,7 +211,7 @@ class _DayScriptState extends State<DayScript> {
                                           IconBtn(
                                               child: IconButton(
                                                   onPressed: () async {
-                                                    final reloadpage = await Get.dialog(OSDialog(
+                                                    reloadpage = await Get.dialog(OSDialog(
                                                             context,
                                                             '경고',
                                                             Text(
@@ -335,6 +337,8 @@ class _DayScriptState extends State<DayScript> {
                                                                         'cal') {
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
+                                                                      Snack
+                                                                          .closesnackbars();
                                                                       firestore
                                                                           .collection(
                                                                               'AppNoticeByUsers')
@@ -342,49 +346,85 @@ class _DayScriptState extends State<DayScript> {
                                                                         'title': '[' +
                                                                             widget.calname +
                                                                             '] 캘린더의 일정 ${textEditingController1.text}이(가) 추가되었습니다.',
-                                                                        'date': DateFormat('yyyy-MM-dd hh:mm')
-                                                                            .parse(widget.firstdate.toString())
-                                                                            .toString()
-                                                                            .split(' ')[0],
+                                                                        'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
+                                                                            ' ' +
+                                                                            DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[0] +
+                                                                            ':' +
+                                                                            DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[1],
                                                                         'username':
                                                                             username,
                                                                         'sharename':
                                                                             widget.share,
                                                                         'read':
                                                                             'no',
-                                                                      });
-                                                                      widget.lastdate !=
-                                                                              widget
-                                                                                  .firstdate
-                                                                          ? differ_date = int.parse(widget
-                                                                              .lastdate
-                                                                              .difference(DateTime.parse(widget.firstdate
-                                                                                  .toString()))
-                                                                              .inDays
-                                                                              .toString())
-                                                                          : (cal.repeatdate != 1
-                                                                              ? differ_date = cal.repeatdate - 1
-                                                                              : differ_date = 0);
-                                                                      for (int i =
-                                                                              0;
-                                                                          i <=
-                                                                              differ_date;
-                                                                          i++) {
-                                                                        if (differ_date ==
-                                                                            0) {
-                                                                        } else {
-                                                                          widget.lastdate != widget.firstdate
-                                                                              ? differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month, widget.firstdate.day + i))
-                                                                              : differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month, widget.firstdate.day + 7 * i));
-                                                                        }
-                                                                      }
-                                                                      if (differ_list
-                                                                          .isNotEmpty) {
-                                                                        Get.back();
-                                                                        for (int j =
+                                                                      }).whenComplete(
+                                                                              () {
+                                                                        widget.lastdate != widget.firstdate
+                                                                            ? differ_date =
+                                                                                int.parse(widget.lastdate.difference(DateTime.parse(widget.firstdate.toString())).inDays.toString())
+                                                                            : (cal.repeatdate != 1 ? differ_date = cal.repeatdate - 1 : differ_date = 0);
+                                                                        for (int i =
                                                                                 0;
-                                                                            j < differ_list.length;
-                                                                            j++) {
+                                                                            i <=
+                                                                                differ_date;
+                                                                            i++) {
+                                                                          if (differ_date ==
+                                                                              0) {
+                                                                          } else {
+                                                                            widget.lastdate != widget.firstdate
+                                                                                ? differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month, widget.firstdate.day + i))
+                                                                                : differ_list.add(DateTime(widget.firstdate.year, widget.firstdate.month, widget.firstdate.day + 7 * i));
+                                                                          }
+                                                                        }
+                                                                        if (differ_list
+                                                                            .isNotEmpty) {
+                                                                          for (int j = 0;
+                                                                              j < differ_list.length;
+                                                                              j++) {
+                                                                            firestore.collection('CalendarDataBase').add({
+                                                                              'Daytodo': textEditingController1.text,
+                                                                              'Alarm': isChecked_pushalarm == true ? Hive.box('user_setting').get('alarming_time') : '설정off',
+                                                                              'Timestart': textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text : textEditingController2.text,
+                                                                              'Timefinish': textEditingController3.text.split(':')[0].length == 1 ? '0' + textEditingController3.text : textEditingController3.text,
+                                                                              'Shares': widget.share,
+                                                                              'OriginalUser': widget.orig,
+                                                                              'calname': widget.title,
+                                                                              'Date': DateFormat('yyyy-MM-dd').parse(differ_list[j].toString()).toString().split(' ')[0] + '일',
+                                                                            }).whenComplete(() {
+                                                                              reloadpage = true;
+                                                                              Future.delayed(const Duration(seconds: 2), () {
+                                                                                CreateCalandmemoSuccessFlushbarSub(context, '일정');
+                                                                              });
+                                                                              if (reloadpage) {
+                                                                                Get.back();
+                                                                              }
+                                                                            });
+                                                                            NotificationApi.showScheduledNotification(
+                                                                                id: int.parse(DateFormat('yyyyMMdd').parse(differ_list[j]).toString()) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
+                                                                                    ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
+                                                                                    : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
+                                                                                        ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                                        : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
+                                                                                title: textEditingController1.text + '일정이 다가옵니다',
+                                                                                body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
+                                                                                scheduledate: DateTime.utc(
+                                                                                  int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)),
+                                                                                  int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(5, 7)),
+                                                                                  int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(8, 10)),
+                                                                                  int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1 : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]),
+                                                                                  int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
+                                                                                ));
+                                                                          }
+
+                                                                          NotificationApi
+                                                                              .showNotification(
+                                                                            title:
+                                                                                '알람설정된 일정 : ' + textEditingController1.text,
+                                                                            body: textEditingController2.text.split(':')[0].length == 1
+                                                                                ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt)
+                                                                                : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
+                                                                          );
+                                                                        } else {
                                                                           firestore
                                                                               .collection('CalendarDataBase')
                                                                               .add({
@@ -406,95 +446,48 @@ class _DayScriptState extends State<DayScript> {
                                                                             'calname':
                                                                                 widget.title,
                                                                             'Date':
-                                                                                DateFormat('yyyy-MM-dd').parse(differ_list[j].toString()).toString().split(' ')[0] + '일',
+                                                                                DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] + '일',
+                                                                          }).whenComplete(() {
+                                                                            reloadpage =
+                                                                                true;
+                                                                            Future.delayed(const Duration(seconds: 2),
+                                                                                () {
+                                                                              CreateCalandmemoSuccessFlushbarSub(context, '일정');
+                                                                            });
+                                                                            if (reloadpage) {
+                                                                              Get.back();
+                                                                            }
                                                                           });
-                                                                          NotificationApi.showScheduledNotification(
-                                                                              id: int.parse(DateFormat('yyyyMMdd').parse(differ_list[j]).toString()) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
-                                                                                  ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
-                                                                                  : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
-                                                                                      ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
-                                                                                      : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
-                                                                              title: textEditingController1.text + '일정이 다가옵니다',
-                                                                              body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                                                                              scheduledate: DateTime.utc(
-                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)),
-                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(5, 7)),
-                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(8, 10)),
-                                                                                int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1 : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]),
-                                                                                int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
-                                                                              ));
-                                                                        }
 
-                                                                        CreateCalandmemoSuccessFlushbarSub(
-                                                                            context,
-                                                                            '일정');
-                                                                        NotificationApi
-                                                                            .showNotification(
-                                                                          title:
-                                                                              '알람설정된 일정 : ' + textEditingController1.text,
-                                                                          body: textEditingController2.text.split(':')[0].length == 1
-                                                                              ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt)
-                                                                              : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                                                                        );
-                                                                      } else {
-                                                                        Get.back();
-                                                                        firestore
-                                                                            .collection('CalendarDataBase')
-                                                                            .add({
-                                                                          'Daytodo':
-                                                                              textEditingController1.text,
-                                                                          'Alarm': isChecked_pushalarm == true
-                                                                              ? Hive.box('user_setting').get('alarming_time')
-                                                                              : '설정off',
-                                                                          'Timestart': textEditingController2.text.split(':')[0].length == 1
-                                                                              ? '0' + textEditingController2.text
-                                                                              : textEditingController2.text,
-                                                                          'Timefinish': textEditingController3.text.split(':')[0].length == 1
-                                                                              ? '0' + textEditingController3.text
-                                                                              : textEditingController3.text,
-                                                                          'Shares':
-                                                                              widget.share,
-                                                                          'OriginalUser':
-                                                                              widget.orig,
-                                                                          'calname':
-                                                                              widget.title,
-                                                                          'Date':
-                                                                              DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] + '일',
-                                                                        });
-                                                                        CreateCalandmemoSuccessFlushbarSub(
-                                                                            context,
-                                                                            '일정');
-                                                                        if (isChecked_pushalarm ==
-                                                                            true) {
-                                                                          NotificationApi
-                                                                              .showNotification(
-                                                                            title:
-                                                                                '알람설정된 일정 : ' + textEditingController1.text,
-                                                                            body: textEditingController2.text.split(':')[0].length == 1
-                                                                                ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt)
-                                                                                : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                                                                          );
-                                                                          NotificationApi.showScheduledNotification(
-                                                                              id: int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)) + int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(5, 7)) + int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(8, 10)) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
-                                                                                  ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
-                                                                                  : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
-                                                                                      ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
-                                                                                      : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
-                                                                              title: textEditingController1.text + '일정이 다가옵니다',
+                                                                          if (isChecked_pushalarm ==
+                                                                              true) {
+                                                                            NotificationApi.showNotification(
+                                                                              title: '알람설정된 일정 : ' + textEditingController1.text,
                                                                               body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                                                                              scheduledate: DateTime.utc(
-                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)),
-                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(5, 7)),
-                                                                                int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(8, 10)),
-                                                                                int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1 : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]),
-                                                                                int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
-                                                                              ));
-                                                                        } else {}
-                                                                      }
+                                                                            );
+                                                                            NotificationApi.showScheduledNotification(
+                                                                                id: int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)) + int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(5, 7)) + int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(8, 10)) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
+                                                                                    ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1
+                                                                                    : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3))
+                                                                                        ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
+                                                                                        : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
+                                                                                title: textEditingController1.text + '일정이 다가옵니다',
+                                                                                body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
+                                                                                scheduledate: DateTime.utc(
+                                                                                  int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)),
+                                                                                  int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(5, 7)),
+                                                                                  int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(8, 10)),
+                                                                                  int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) - 1 : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]),
+                                                                                  int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
+                                                                                ));
+                                                                          } else {}
+                                                                        }
+                                                                      });
                                                                     } else {
-                                                                      Get.back();
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
+                                                                      Snack
+                                                                          .closesnackbars();
                                                                       firestore
                                                                           .collection(
                                                                               'AppNoticeByUsers')
@@ -511,68 +504,64 @@ class _DayScriptState extends State<DayScript> {
                                                                             widget.share,
                                                                         'read':
                                                                             'no',
-                                                                      });
-                                                                      for (int i =
-                                                                              0;
-                                                                          i < scollection.memolistin.length;
-                                                                          i++) {
-                                                                        checklisttexts.add(MemoList(
-                                                                            memocontent:
-                                                                                scollection.memolistcontentin[i],
-                                                                            contentindex: scollection.memolistin[i]));
-                                                                      }
-                                                                      firestore
-                                                                          .collection(
-                                                                              'MemoDataBase')
-                                                                          .doc()
-                                                                          .set({
-                                                                        'memoTitle':
-                                                                            textEditingController1.text,
-                                                                        'Collection': scollection.collection == '' ||
-                                                                                scollection.collection == null
-                                                                            ? null
-                                                                            : scollection.collection,
-                                                                        'memolist': checklisttexts
-                                                                            .map((e) =>
-                                                                                e.memocontent)
-                                                                            .toList(),
-                                                                        'memoindex': checklisttexts
-                                                                            .map((e) =>
-                                                                                e.contentindex)
-                                                                            .toList(),
-                                                                        'OriginalUser':
-                                                                            username,
-                                                                        'alarmok':
-                                                                            false,
-                                                                        'alarmtime':
-                                                                            '99:99',
-                                                                        'color':
-                                                                            Hive.box('user_setting').get('coloreachmemo') ??
-                                                                                _color.value.toInt(),
-                                                                        'colorfont':
-                                                                            Hive.box('user_setting').get('coloreachmemofont') ??
-                                                                                _colorfont.value.toInt(),
-                                                                        'Date': DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] +
-                                                                            '일',
-                                                                        'homesave':
-                                                                            false,
-                                                                        'security':
-                                                                            false,
-                                                                        'photoUrl': controll_memo.imagelist.isEmpty
-                                                                            ? []
-                                                                            : controll_memo.imagelist,
-                                                                        'pinnumber':
-                                                                            '0000',
-                                                                        'securewith':
-                                                                            999,
-                                                                        'EditDate':
-                                                                            DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] +
-                                                                                '일',
-                                                                      }, SetOptions(merge: true)).whenComplete(
+                                                                      }).whenComplete(
                                                                               () {
-                                                                        CreateCalandmemoSuccessFlushbarSub(
-                                                                            context,
-                                                                            '메모');
+                                                                        Future.delayed(
+                                                                            const Duration(seconds: 2),
+                                                                            () {
+                                                                          CreateCalandmemoSuccessFlushbarSub(
+                                                                              context,
+                                                                              '메모');
+                                                                        });
+                                                                        for (int i =
+                                                                                0;
+                                                                            i < scollection.memolistin.length;
+                                                                            i++) {
+                                                                          checklisttexts.add(MemoList(
+                                                                              memocontent: scollection.memolistcontentin[i],
+                                                                              contentindex: scollection.memolistin[i]));
+                                                                        }
+                                                                        firestore
+                                                                            .collection('MemoDataBase')
+                                                                            .doc()
+                                                                            .set({
+                                                                          'memoTitle':
+                                                                              textEditingController1.text,
+                                                                          'Collection': scollection.collection == '' || scollection.collection == null
+                                                                              ? null
+                                                                              : scollection.collection,
+                                                                          'memolist': checklisttexts
+                                                                              .map((e) => e.memocontent)
+                                                                              .toList(),
+                                                                          'memoindex': checklisttexts
+                                                                              .map((e) => e.contentindex)
+                                                                              .toList(),
+                                                                          'OriginalUser':
+                                                                              username,
+                                                                          'alarmok':
+                                                                              false,
+                                                                          'alarmtime':
+                                                                              '99:99',
+                                                                          'color':
+                                                                              Hive.box('user_setting').get('coloreachmemo') ?? _color.value.toInt(),
+                                                                          'colorfont':
+                                                                              Hive.box('user_setting').get('coloreachmemofont') ?? _colorfont.value.toInt(),
+                                                                          'Date':
+                                                                              DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] + '일',
+                                                                          'homesave':
+                                                                              false,
+                                                                          'security':
+                                                                              false,
+                                                                          'photoUrl': controll_memo.imagelist.isEmpty
+                                                                              ? []
+                                                                              : controll_memo.imagelist,
+                                                                          'pinnumber':
+                                                                              '0000',
+                                                                          'securewith':
+                                                                              999,
+                                                                          'EditDate':
+                                                                              DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] + '일',
+                                                                        }, SetOptions(merge: true));
                                                                       });
                                                                     }
                                                                   } else {
@@ -747,7 +736,7 @@ class _DayScriptState extends State<DayScript> {
             minLines: 1,
             maxLines: 3,
             focusNode: searchNode_first_section,
-            style: TextStyle(fontSize: contentTextsize(), color: _colorfont),
+            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
             decoration: InputDecoration(
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(

@@ -19,6 +19,7 @@ class Snack {
           title,
           style: TextStyle(fontSize: contentTextsize(), color: Colors.white),
         ),
+        duration: const Duration(seconds: 1),
         messageText: Text(
           content,
           style: TextStyle(fontSize: contentTextsize(), color: Colors.white),
@@ -33,6 +34,15 @@ class Snack {
         forwardAnimationCurve: Curves.easeOutBack,
         margin: const EdgeInsets.all(15),
         snackPosition: SnackPosition.BOTTOM);
+  }
+
+  static closesnackbars() {
+    Future.delayed(Duration(seconds: 2), () {
+      Get.closeCurrentSnackbar();
+      Future.delayed(const Duration(seconds: 2), () async {
+        Get.back();
+      });
+    });
   }
 
   static Color _getSnackbarColor(SnackType type) {
