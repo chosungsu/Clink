@@ -20,13 +20,15 @@ import '../../../Tool/TextSize.dart';
 import '../../../sheets/showmemocontent.dart';
 
 MFHolder(
-    List<bool> checkbottoms,
-    List<FocusNode> nodes,
-    selectcollection scollection,
-    Color _color,
-    String doc,
-    bool ischeckedtohideminus,
-    List<TextEditingController> controllers) {
+  List<bool> checkbottoms,
+  List<FocusNode> nodes,
+  selectcollection scollection,
+  Color _color,
+  String doc,
+  bool ischeckedtohideminus,
+  List<TextEditingController> controllers,
+  Color _colorfont,
+) {
   final controll_memo = Get.put(memosetting());
   List _image = [];
   final imagePicker = ImagePicker();
@@ -202,6 +204,65 @@ MFHolder(
                                               color.value.toInt());
                                           controll_memo.setcolor();
                                           _color = controll_memo.color;
+                                        });
+                                      },
+                                    ),
+                                  ));
+                            },
+                          ),
+                          actions: <Widget>[
+                            ElevatedButton(
+                              child: const Text('반영하기'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  });
+                });
+              }),
+          FocusedMenuItem(
+              title: Text('글자색변경',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+              onPressed: () {
+                setState(() {
+                  for (int i = 0; i < nodes.length; i++) {
+                    nodes[i].unfocus();
+                  }
+                  setState(() {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          title: Text('선택',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize())),
+                          content: Builder(
+                            builder: (context) {
+                              return SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.85,
+                                  child: SingleChildScrollView(
+                                    child: ColorPicker(
+                                      pickerColor: _colorfont,
+                                      onColorChanged: (Color color) {
+                                        setState(() {
+                                          Hive.box('user_setting').put(
+                                              'coloreachmemofont',
+                                              color.value.toInt());
+                                          controll_memo.setcolorfont();
+                                          _colorfont = controll_memo.colorfont;
                                         });
                                       },
                                     ),

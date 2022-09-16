@@ -45,7 +45,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('noti_home_click', 0);
-    whatwantnotice = 0;
+    whatwantnotice = notilist.whatnoticepagenum;
   }
 
   @override
@@ -55,6 +55,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop() async {
+    notilist.noticepageset(0);
     Get.back(result: true);
     return true;
   }
@@ -120,141 +121,118 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                               FontWeight.bold,
                                                         )),
                                                   ),
-                                                  whatwantnotice == 1 &&
-                                                          notilist
-                                                              .listad.isNotEmpty
-                                                      ? IconBtn(
-                                                          child: IconButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                final reloadpage = await Get.dialog(OSDialog(
-                                                                        context,
-                                                                        '경고',
-                                                                        Text(
-                                                                            '알림들을 삭제하시겠습니까?',
-                                                                            style: TextStyle(
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontSize: contentTextsize(),
-                                                                                color: Colors.blueGrey)),
-                                                                        pressed2)) ??
-                                                                    false;
-                                                                if (reloadpage) {
-                                                                  firestore
-                                                                      .collection(
-                                                                          'AppNoticeByUsers')
-                                                                      .orderBy(
-                                                                          'date')
-                                                                      /*.where(
+                                                  GetBuilder<notishow>(
+                                                      builder: (_) => notilist
+                                                                  .whatnoticepagenum ==
+                                                              1
+                                                          ? IconBtn(
+                                                              child: IconButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    final reloadpage = await Get.dialog(OSDialog(
+                                                                            context,
+                                                                            '경고',
+                                                                            Text('알림들을 삭제하시겠습니까?',
+                                                                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: Colors.blueGrey)),
+                                                                            pressed2)) ??
+                                                                        false;
+                                                                    if (reloadpage) {
+                                                                      firestore
+                                                                          .collection(
+                                                                              'AppNoticeByUsers')
+                                                                          .orderBy(
+                                                                              'date')
+                                                                          /*.where(
                                                                         'date',
                                                                         isEqualTo: DateFormat('yyyy-MM-dd')
                                                                             .parse(DateTime.now().toString())
                                                                             .toString()
                                                                             .split(' ')[0])*/
-                                                                      .get()
-                                                                      .then(
-                                                                          (value) {
-                                                                    returntitle
-                                                                        .clear();
-                                                                    returndate
-                                                                        .clear();
-                                                                    value.docs
-                                                                        .forEach(
-                                                                            (element) {
-                                                                      if (element
-                                                                              .get('username')
-                                                                              .toString()
-                                                                              .contains(name) ==
-                                                                          true) {
-                                                                        updateid =
-                                                                            element.id;
-                                                                        updateusername = element
-                                                                            .get('username')
-                                                                            .toString()
-                                                                            .split(',')
-                                                                            .toList();
+                                                                          .get()
+                                                                          .then(
+                                                                              (value) {
                                                                         returntitle
-                                                                            .add(element.get('title'));
+                                                                            .clear();
                                                                         returndate
-                                                                            .add(element.get('date'));
-                                                                        if (updateusername.length ==
-                                                                            1) {
-                                                                          firestore
-                                                                              .collection('AppNoticeByUsers')
-                                                                              .doc(updateid)
-                                                                              .delete();
-                                                                        } else {
-                                                                          updateusername.removeWhere((element) => element
-                                                                              .toString()
-                                                                              .contains(name));
-                                                                          firestore
-                                                                              .collection(
-                                                                                  'AppNoticeByUsers')
-                                                                              .doc(
-                                                                                  updateid)
-                                                                              .update({
-                                                                            'username':
-                                                                                updateusername
-                                                                          });
-                                                                        }
-                                                                      }
-                                                                    });
-                                                                  }).whenComplete(
-                                                                          () {
-                                                                    setState(
-                                                                        () {
-                                                                      Hive.box(
-                                                                              'user_setting')
-                                                                          .put(
+                                                                            .clear();
+                                                                        value
+                                                                            .docs
+                                                                            .forEach((element) {
+                                                                          if (element.get('username').toString().contains(name) ==
+                                                                              true) {
+                                                                            updateid =
+                                                                                element.id;
+                                                                            updateusername =
+                                                                                element.get('username').toString().split(',').toList();
+                                                                            returntitle.add(element.get('title'));
+                                                                            returndate.add(element.get('date'));
+                                                                            if (updateusername.length ==
+                                                                                1) {
+                                                                              firestore.collection('AppNoticeByUsers').doc(updateid).delete();
+                                                                            } else {
+                                                                              updateusername.removeWhere((element) => element.toString().contains(name));
+                                                                              firestore.collection('AppNoticeByUsers').doc(updateid).update({
+                                                                                'username': updateusername
+                                                                              });
+                                                                            }
+                                                                          }
+                                                                        });
+                                                                      }).whenComplete(
+                                                                              () {
+                                                                        setState(
+                                                                            () {
+                                                                          Hive.box('user_setting').put(
                                                                               'noti_home_click',
                                                                               0);
-                                                                      whatwantnotice =
-                                                                          0;
-                                                                    });
-                                                                  });
-                                                                }
-                                                              },
-                                                              icon: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                width: 30,
-                                                                height: 30,
-                                                                child:
-                                                                    NeumorphicIcon(
-                                                                  Icons.delete,
-                                                                  size: 30,
-                                                                  style: NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      depth: 2,
-                                                                      surfaceIntensity:
-                                                                          0.5,
-                                                                      color:
-                                                                          TextColor(),
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
-                                                                ),
-                                                              )),
-                                                          color: TextColor())
-                                                      : const SizedBox(
-                                                          width: 0,
-                                                          height: 0,
-                                                        ),
-                                                  whatwantnotice == 1
-                                                      ? const SizedBox(
-                                                          width: 10,
-                                                          height: 0,
-                                                        )
-                                                      : const SizedBox(
-                                                          width: 0,
-                                                          height: 0,
-                                                        ),
+                                                                          whatwantnotice =
+                                                                              0;
+                                                                        });
+                                                                      });
+                                                                    }
+                                                                  },
+                                                                  icon:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    width: 30,
+                                                                    height: 30,
+                                                                    child:
+                                                                        NeumorphicIcon(
+                                                                      Icons
+                                                                          .delete,
+                                                                      size: 30,
+                                                                      style: NeumorphicStyle(
+                                                                          shape: NeumorphicShape
+                                                                              .convex,
+                                                                          depth:
+                                                                              2,
+                                                                          surfaceIntensity:
+                                                                              0.5,
+                                                                          color:
+                                                                              TextColor(),
+                                                                          lightSource:
+                                                                              LightSource.topLeft),
+                                                                    ),
+                                                                  )),
+                                                              color:
+                                                                  TextColor())
+                                                          : const SizedBox(
+                                                              width: 0,
+                                                              height: 0,
+                                                            )),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                    height: 0,
+                                                  ),
                                                   IconBtn(
                                                       child: IconButton(
                                                           onPressed: () {
                                                             notilist
                                                                 .isreadnoti();
+                                                            notilist
+                                                                .noticepageset(
+                                                                    0);
                                                             Get.back(
                                                                 result: true);
                                                           },
@@ -378,7 +356,9 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                     setState(() {
                                       Hive.box('user_setting')
                                           .put('noti_home_click', index);
-                                      whatwantnotice = index;
+                                      notilist.noticepageset(index);
+                                      whatwantnotice =
+                                          notilist.whatnoticepagenum;
                                     });
                                   },
                                   child: Center(
@@ -446,7 +426,9 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                     setState(() {
                                       Hive.box('user_setting')
                                           .put('noti_home_click', index);
-                                      whatwantnotice = index;
+                                      notilist.noticepageset(index);
+                                      whatwantnotice =
+                                          notilist.whatnoticepagenum;
                                     });
                                   },
                                   child: Center(
@@ -675,6 +657,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
         future: firestore
             .collection('AppNoticeByUsers')
             //.where('username', arrayContainsAny: [name])
+            .orderBy('date', descending: true)
             .get()
             .then(((QuerySnapshot querySnapshot) => {
                   //print('here'),

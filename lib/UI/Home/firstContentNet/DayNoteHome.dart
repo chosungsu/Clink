@@ -779,6 +779,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                           '',
                                                   doccolor: snapshot.data!
                                                       .docs[index]['color'],
+                                                  doccolorfont: snapshot.data!
+                                                      .docs[index]['colorfont'],
                                                   docindex:
                                                       snapshot.data!.docs[index]
                                                               ['memoindex'] ??
@@ -832,6 +834,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                           '',
                                                       doccolor: snapshot.data!
                                                           .docs[index]['color'],
+                                                      doccolorfont: snapshot
+                                                              .data!.docs[index]
+                                                          ['colorfont'],
                                                       docindex: snapshot.data!
                                                                   .docs[index]
                                                               ['memoindex'] ??
@@ -886,6 +891,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                           '',
                                                       doccolor: snapshot.data!
                                                           .docs[index]['color'],
+                                                      doccolorfont: snapshot
+                                                              .data!.docs[index]
+                                                          ['colorfont'],
                                                       docindex: snapshot.data!
                                                                   .docs[index]
                                                               ['memoindex'] ??
@@ -940,6 +948,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                         '',
                                                     doccolor: snapshot.data!
                                                         .docs[index]['color'],
+                                                    doccolorfont: snapshot
+                                                            .data!.docs[index]
+                                                        ['colorfont'],
                                                     docindex: snapshot.data!
                                                                 .docs[index]
                                                             ['memoindex'] ??

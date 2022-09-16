@@ -96,6 +96,7 @@ class _DayScriptState extends State<DayScript> {
   bool ischeckedtohideminus = false;
   List<MemoList> checklisttexts = [];
   Color _color = Colors.white;
+  Color _colorfont = Colors.black;
 
   @override
   void didChangeDependencies() {
@@ -111,6 +112,7 @@ class _DayScriptState extends State<DayScript> {
     controll_memo.color = Color(Hive.box('user_setting').get('coloreachmemo'));
     controll_memo.imagelist.clear();
     _color = controll_memo.color;
+    _colorfont = controll_memo.colorfont;
     checklisttexts.clear();
     controllers.clear();
     scollection.memolistin.clear();
@@ -145,15 +147,15 @@ class _DayScriptState extends State<DayScript> {
 
   Future<bool> _onBackPressed() async {
     final reloadpage = await Get.dialog(OSDialog(
-                            context,
-                            '경고',
-                            Text('뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                    color: Colors.blueGrey)),
-                            pressed2)) ??
-                        false;
+            context,
+            '경고',
+            Text('뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize(),
+                    color: Colors.blueGrey)),
+            pressed2)) ??
+        false;
     if (reloadpage) {
       Get.back();
     }
@@ -207,17 +209,21 @@ class _DayScriptState extends State<DayScript> {
                                           IconBtn(
                                               child: IconButton(
                                                   onPressed: () async {
-                                                    final reloadpage =
-                                                        await Get.dialog(OSDialog(
-                            context,
-                            '경고',
-                            Text('뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                    color: Colors.blueGrey)),
-                            pressed2)) ??
-                        false;
+                                                    final reloadpage = await Get.dialog(OSDialog(
+                                                            context,
+                                                            '경고',
+                                                            Text(
+                                                                '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                    color: Colors
+                                                                        .blueGrey)),
+                                                            pressed2)) ??
+                                                        false;
                                                     if (reloadpage) {
                                                       Get.back();
                                                     }
@@ -279,7 +285,8 @@ class _DayScriptState extends State<DayScript> {
                                                               '',
                                                               controll_memo
                                                                   .ischeckedtohideminus,
-                                                              controllers)
+                                                              controllers,
+                                                              _colorfont)
                                                           : SizedBox(),
                                                       widget.position == 'note'
                                                           ? const SizedBox(
@@ -373,7 +380,7 @@ class _DayScriptState extends State<DayScript> {
                                                                       }
                                                                       if (differ_list
                                                                           .isNotEmpty) {
-                                                                            Get.back();
+                                                                        Get.back();
                                                                         for (int j =
                                                                                 0;
                                                                             j < differ_list.length;
@@ -417,7 +424,7 @@ class _DayScriptState extends State<DayScript> {
                                                                                 int.parse(textEditingController2.text.split(':')[1]) < int.parse(selectedValue.substring(0, selectedValue.length - 3)) ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1])) : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
                                                                               ));
                                                                         }
-                                                                        
+
                                                                         CreateCalandmemoSuccessFlushbarSub(
                                                                             context,
                                                                             '일정');
@@ -485,7 +492,7 @@ class _DayScriptState extends State<DayScript> {
                                                                         } else {}
                                                                       }
                                                                     } else {
-                                                                        Get.back();
+                                                                      Get.back();
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
                                                                       firestore
@@ -542,6 +549,9 @@ class _DayScriptState extends State<DayScript> {
                                                                         'color':
                                                                             Hive.box('user_setting').get('coloreachmemo') ??
                                                                                 _color.value.toInt(),
+                                                                        'colorfont':
+                                                                            Hive.box('user_setting').get('coloreachmemofont') ??
+                                                                                _colorfont.value.toInt(),
                                                                         'Date': DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] +
                                                                             '일',
                                                                         'homesave':
@@ -737,7 +747,7 @@ class _DayScriptState extends State<DayScript> {
             minLines: 1,
             maxLines: 3,
             focusNode: searchNode_first_section,
-            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
+            style: TextStyle(fontSize: contentTextsize(), color: _colorfont),
             decoration: InputDecoration(
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
@@ -759,718 +769,302 @@ class _DayScriptState extends State<DayScript> {
               ),
               isCollapsed: true,
               hintText: '일정 제목 추가',
-              hintStyle:
-                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
+              hintStyle: TextStyle(
+                  fontSize: contentTextsize(), color: Colors.grey.shade400),
             ),
             controller: textEditingController1,
           )
-        : (widget.position == 'note'
-            ? ListView.builder(
-                itemCount: 1,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextField(
-                        minLines: 1,
-                        maxLines: 1,
-                        focusNode: searchNode_first_section,
-                        textAlign: TextAlign.start,
-                        textAlignVertical: TextAlignVertical.center,
-                        style: TextStyle(
-                            fontSize: contentTextsize(), color: Colors.black),
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 2,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.blue,
-                              width: 2,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
-                          contentPadding: const EdgeInsets.only(left: 10),
-                          hintText: '제목 입력...',
-                          hintStyle: TextStyle(
-                              fontSize: contentTextsize(),
-                              color: Colors.grey.shade400),
+        : ListView.builder(
+            itemCount: 1,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    minLines: 1,
+                    maxLines: 1,
+                    focusNode: searchNode_first_section,
+                    textAlign: TextAlign.start,
+                    textAlignVertical: TextAlignVertical.center,
+                    style: TextStyle(
+                        fontSize: contentTextsize(), color: _colorfont),
+                    decoration: InputDecoration(
+                      isCollapsed: true,
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                          width: 2,
                         ),
-                        controller: textEditingController1,
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
-                      Text(
-                        '첨부사진',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      GetBuilder<memosetting>(
-                        builder: (_) => SizedBox(
-                            height: 100,
-                            child: controll_memo.imagelist.isEmpty
-                                ? Center(
-                                    child: RichText(
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(children: [
-                                      TextSpan(
-                                        text: '상단바의 ',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey.shade400),
-                                      ),
-                                      const WidgetSpan(
-                                        child: Icon(
-                                          Icons.more_vert,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '아이콘을 클릭하여 추가하세요',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey.shade400),
-                                      ),
-                                    ]),
-                                  ))
-                                : ListView.builder(
-                                    physics: const BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemCount: controll_memo.imagelist.length,
-                                    itemBuilder: ((context, index) {
-                                      return Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              controll_memo
-                                                  .setimageindex(index);
-                                              Get.to(
-                                                  () => ImageSliderPage(
-                                                      index: index, doc: ''),
-                                                  transition:
-                                                      Transition.rightToLeft);
-                                            },
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                child: SizedBox(
-                                                    height: 90,
-                                                    width: 90,
-                                                    child: Image.network(
-                                                        controll_memo
-                                                            .imagelist[index],
-                                                        fit: BoxFit.fill,
-                                                        loadingBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                Widget child,
-                                                                ImageChunkEvent?
-                                                                    loadingProgress) {
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      }
-                                                      return Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          value: loadingProgress
-                                                                      .expectedTotalBytes !=
-                                                                  null
-                                                              ? loadingProgress
-                                                                      .cumulativeBytesLoaded /
-                                                                  loadingProgress
-                                                                      .expectedTotalBytes!
-                                                              : null,
-                                                        ),
-                                                      );
-                                                    }))),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          )
-                                        ],
-                                      );
-                                    }))),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                          child: Row(
-                        children: [
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: Text(
-                              '컬렉션 선택',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize(),
-                                  color: Colors.black),
-                            ),
-                          ),
-                          IconBtn(
-                              child: InkWell(
-                                  onTap: () {
-                                    for (int i = 0;
-                                        i <
-                                            scollection
-                                                .memolistcontentin.length;
-                                        i++) {
-                                      nodes[i].unfocus();
-                                      scollection.memolistcontentin[i] =
-                                          controllers[i].text;
-                                    }
-                                    addmemocollector(
-                                        context,
-                                        username,
-                                        textEditingController_add_sheet,
-                                        searchNode_add_section,
-                                        'inside',
-                                        scollection,
-                                        isresponsible);
-                                  },
-                                  child: const Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 10, right: 10),
-                                    child: Text(
-                                      'Click',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                          color: Colors.blue),
+                      contentPadding: const EdgeInsets.only(left: 10),
+                      hintText: '제목 입력...',
+                      hintStyle: TextStyle(
+                          fontSize: contentTextsize(),
+                          color: Colors.grey.shade400),
+                    ),
+                    controller: textEditingController1,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    '첨부사진',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GetBuilder<memosetting>(
+                    builder: (_) => SizedBox(
+                        height: 100,
+                        child: controll_memo.imagelist.isEmpty
+                            ? Center(
+                                child: RichText(
+                                softWrap: true,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text: '상단바의 ',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey.shade400),
+                                  ),
+                                  const WidgetSpan(
+                                    child: Icon(
+                                      Icons.more_vert,
+                                      color: Colors.black,
                                     ),
-                                  )),
-                              color: Colors.black)
-                        ],
-                      )),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GetBuilder<selectcollection>(
-                        builder: (_) => SizedBox(
-                            height: 30,
-                            child: Text(
-                              scollection.collection == '' ||
-                                      scollection.collection == null
-                                  ? '지정된 컬렉션이 없습니다.'
-                                  : '지정한 컬렉션 이름 : ' + scollection.collection,
-                              style: TextStyle(
-                                  fontSize: 15, color: Colors.grey.shade400),
-                            )),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        height: 30,
+                                  ),
+                                  TextSpan(
+                                    text: '아이콘을 클릭하여 추가하세요',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey.shade400),
+                                  ),
+                                ]),
+                              ))
+                            : ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: controll_memo.imagelist.length,
+                                itemBuilder: ((context, index) {
+                                  return Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          controll_memo.setimageindex(index);
+                                          Get.to(
+                                              () => ImageSliderPage(
+                                                  index: index, doc: ''),
+                                              transition:
+                                                  Transition.rightToLeft);
+                                        },
+                                        child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: SizedBox(
+                                                height: 90,
+                                                width: 90,
+                                                child: Image.network(
+                                                    controll_memo
+                                                        .imagelist[index],
+                                                    fit: BoxFit.fill,
+                                                    loadingBuilder: (BuildContext
+                                                            context,
+                                                        Widget child,
+                                                        ImageChunkEvent?
+                                                            loadingProgress) {
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  }
+                                                  return Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      value: loadingProgress
+                                                                  .expectedTotalBytes !=
+                                                              null
+                                                          ? loadingProgress
+                                                                  .cumulativeBytesLoaded /
+                                                              loadingProgress
+                                                                  .expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  );
+                                                }))),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      )
+                                    ],
+                                  );
+                                }))),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                      child: Row(
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
                         child: Text(
-                          '메모내용',
+                          '컬렉션 선택',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: contentTitleTextsize(),
                               color: Colors.black),
                         ),
                       ),
-                      const SizedBox(
-                        height: 5,
+                      IconBtn(
+                          child: InkWell(
+                              onTap: () {
+                                for (int i = 0;
+                                    i < scollection.memolistcontentin.length;
+                                    i++) {
+                                  nodes[i].unfocus();
+                                  scollection.memolistcontentin[i] =
+                                      controllers[i].text;
+                                }
+                                addmemocollector(
+                                    context,
+                                    username,
+                                    textEditingController_add_sheet,
+                                    searchNode_add_section,
+                                    'inside',
+                                    scollection,
+                                    isresponsible);
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                child: Text(
+                                  'Click',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: Colors.blue),
+                                ),
+                              )),
+                          color: Colors.black)
+                    ],
+                  )),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GetBuilder<selectcollection>(
+                    builder: (_) => SizedBox(
+                        height: 30,
+                        child: Text(
+                          scollection.collection == '' ||
+                                  scollection.collection == null
+                              ? '지정된 컬렉션이 없습니다.'
+                              : '지정한 컬렉션 이름 : ' + scollection.collection,
+                          style: TextStyle(
+                              fontSize: 15, color: Colors.grey.shade400),
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 30,
+                    child: Text(
+                      '메모내용',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize(),
+                          color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  RichText(
+                    softWrap: true,
+                    textAlign: TextAlign.start,
+                    maxLines: 2,
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: '상단바의 ',
+                        style: TextStyle(
+                            fontSize: 15, color: Colors.grey.shade400),
                       ),
-                      RichText(
-                        softWrap: true,
-                        textAlign: TextAlign.start,
-                        maxLines: 2,
-                        text: TextSpan(children: [
-                          TextSpan(
-                            text: '상단바의 ',
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey.shade400),
-                          ),
-                          const WidgetSpan(
-                            child: Icon(
-                              Icons.more_vert,
-                              color: Colors.black,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '아이콘을 클릭하여 추가하세요',
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey.shade400),
-                          ),
-                        ]),
+                      const WidgetSpan(
+                        child: Icon(
+                          Icons.more_vert,
+                          color: Colors.black,
+                        ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      TextSpan(
+                        text: '아이콘을 클릭하여 추가하세요',
+                        style: TextStyle(
+                            fontSize: 15, color: Colors.grey.shade400),
                       ),
-                      GetBuilder<selectcollection>(builder: (_) {
-                        return scollection.memolistin.isNotEmpty
-                            ? ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: scollection.memolistin.length,
-                                itemBuilder: (context, index) {
-                                  return Row(
+                    ]),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GetBuilder<selectcollection>(
+                      builder: (_) => scollection.memolistin.isNotEmpty
+                          ? ReorderableListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: scollection.memolistin.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return SizedBox(
+                                  width: MediaQuery.of(context).size.width - 40,
+                                  key: ValueKey(index),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       const SizedBox(
-                                        width: 3,
+                                        height: 10,
                                       ),
-                                      scollection.memolistin[index] == 0
-                                          ? SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  50,
-                                              child: DetectableTextField(
-                                                minLines: null,
-                                                maxLines: null,
-                                                focusNode: nodes[index],
-                                                onTap: () {},
-                                                onChanged: (text) {
-                                                  scollection.memolistcontentin[
-                                                      index] = text;
-                                                },
-                                                basicStyle: TextStyle(
-                                                    fontSize: contentTextsize(),
-                                                    color: Colors.black),
-                                                controller: controllers[index],
-                                                decoration: InputDecoration(
-                                                  isCollapsed: true,
-                                                  border: InputBorder.none,
-                                                  suffixIcon: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      controll_memo
-                                                                  .ischeckedtohideminus ==
-                                                              true
-                                                          ? InkWell(
-                                                              onTap: () {},
-                                                              child:
-                                                                  const SizedBox(
-                                                                      width:
-                                                                          30),
-                                                            )
-                                                          : InkWell(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  scollection
-                                                                      .removelistitem(
-                                                                          index);
-                                                                  controllers
-                                                                      .removeAt(
-                                                                          index);
-
-                                                                  for (int i =
-                                                                          0;
-                                                                      i <
-                                                                          scollection
-                                                                              .memolistin
-                                                                              .length;
-                                                                      i++) {
-                                                                    controllers[i]
-                                                                            .text =
-                                                                        scollection
-                                                                            .memolistcontentin[i];
-                                                                  }
-                                                                });
-                                                              },
-                                                              child: const Icon(
-                                                                  Icons
-                                                                      .remove_circle_outline,
-                                                                  color: Colors
-                                                                      .red),
-                                                            ),
-                                                      Column(
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                if (index ==
-                                                                    0) {
-                                                                } else {
-                                                                  String
-                                                                      content_prev =
-                                                                      controllers[index -
-                                                                              1]
-                                                                          .text;
-                                                                  int indexcontent_prev =
-                                                                      scollection
-                                                                              .memolistin[
-                                                                          index -
-                                                                              1];
-                                                                  scollection
-                                                                      .removelistitem(
-                                                                          index -
-                                                                              1);
-                                                                  Hive.box('user_setting').put(
-                                                                      'optionmemoinput',
-                                                                      indexcontent_prev);
-                                                                  Hive.box('user_setting').put(
-                                                                      'optionmemocontentinput',
-                                                                      content_prev);
-                                                                  scollection
-                                                                      .addmemolistin(
-                                                                          index);
-                                                                  scollection
-                                                                      .addmemolistcontentin(
-                                                                          index);
-                                                                  controllers[
-                                                                          index -
-                                                                              1]
-                                                                      .text = scollection
-                                                                          .memolistcontentin[
-                                                                      index -
-                                                                          1];
-                                                                  controllers[
-                                                                          index]
-                                                                      .text = scollection
-                                                                          .memolistcontentin[
-                                                                      index];
-                                                                }
-                                                              });
-                                                            },
-                                                            child: Icon(
-                                                                Icons
-                                                                    .expand_less,
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade400),
-                                                          ),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                if (index + 1 ==
-                                                                    scollection
-                                                                        .memoindex) {
-                                                                } else {
-                                                                  String
-                                                                      content =
-                                                                      scollection
-                                                                              .memolistcontentin[
-                                                                          index];
-                                                                  int indexcontent =
-                                                                      scollection
-                                                                              .memolistin[
-                                                                          index];
-                                                                  scollection
-                                                                      .removelistitem(
-                                                                          index);
-                                                                  Hive.box('user_setting').put(
-                                                                      'optionmemoinput',
-                                                                      indexcontent);
-                                                                  Hive.box('user_setting').put(
-                                                                      'optionmemocontentinput',
-                                                                      content);
-                                                                  scollection
-                                                                      .addmemolistin(
-                                                                          index +
-                                                                              1);
-                                                                  scollection
-                                                                      .addmemolistcontentin(
-                                                                          index +
-                                                                              1);
-                                                                  controllers[
-                                                                          index]
-                                                                      .text = scollection
-                                                                          .memolistcontentin[
-                                                                      index];
-                                                                  controllers[
-                                                                          index +
-                                                                              1]
-                                                                      .text = scollection
-                                                                          .memolistcontentin[
-                                                                      index +
-                                                                          1];
-                                                                }
-                                                              });
-                                                            },
-                                                            child: Icon(
-                                                                Icons
-                                                                    .expand_more,
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade400),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                  hintText: '내용 입력',
-                                                  hintStyle: TextStyle(
-                                                      fontSize:
-                                                          contentTextsize(),
-                                                      color:
-                                                          Colors.grey.shade400),
-                                                ),
-                                                textAlign: TextAlign.start,
-                                                textAlignVertical:
-                                                    TextAlignVertical.center,
-                                                detectionRegExp:
-                                                    detectionRegExp()!,
-                                              ))
-                                          : (scollection.memolistin[index] ==
-                                                      1 ||
-                                                  scollection
-                                                          .memolistin[index] ==
-                                                      999
+                                      Row(
+                                        children: [
+                                          scollection.memolistin[index] == 0
                                               ? SizedBox(
                                                   width: MediaQuery.of(context)
                                                           .size
                                                           .width -
-                                                      50,
-                                                  child: TextField(
-                                                    minLines: 1,
-                                                    maxLines: 3,
-                                                    onTap: () {},
+                                                      70,
+                                                  child: DetectableTextField(
                                                     onChanged: (text) {
                                                       scollection
                                                               .memolistcontentin[
                                                           index] = text;
                                                     },
+                                                    minLines: null,
+                                                    maxLines: null,
                                                     focusNode: nodes[index],
-                                                    textAlign: TextAlign.start,
-                                                    textAlignVertical:
-                                                        TextAlignVertical
-                                                            .center,
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        color: Colors.black,
-                                                        decorationThickness:
-                                                            2.3,
-                                                        decoration:
-                                                            scollection.memolistin[
-                                                                        index] ==
-                                                                    999
-                                                                ? TextDecoration
-                                                                    .lineThrough
-                                                                : null),
-                                                    decoration: InputDecoration(
-                                                      isCollapsed: true,
-                                                      border: InputBorder.none,
-                                                      prefixIcon: InkWell(
-                                                        onTap: () {
-                                                          print('tapped');
-                                                          scollection
-                                                              .addmemocheckboxlist(
-                                                                  index);
-                                                        },
-                                                        child: const Icon(
-                                                            Icons
-                                                                .check_box_outline_blank,
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                      suffixIcon: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          controll_memo
-                                                                      .ischeckedtohideminus ==
-                                                                  true
-                                                              ? InkWell(
-                                                                  onTap: () {},
-                                                                  child:
-                                                                      const SizedBox(
-                                                                    width: 30,
-                                                                  ),
-                                                                )
-                                                              : InkWell(
-                                                                  onTap: () {
-                                                                    setState(
-                                                                        () {
-                                                                      scollection
-                                                                          .removelistitem(
-                                                                              index);
-                                                                      controllers
-                                                                          .removeAt(
-                                                                              index);
-
-                                                                      for (int i =
-                                                                              0;
-                                                                          i < scollection.memolistin.length;
-                                                                          i++) {
-                                                                        controllers[i]
-                                                                            .text = scollection
-                                                                                .memolistcontentin[
-                                                                            i];
-                                                                      }
-                                                                    });
-                                                                  },
-                                                                  child: const Icon(
-                                                                      Icons
-                                                                          .remove_circle_outline,
-                                                                      color: Colors
-                                                                          .red),
-                                                                ),
-                                                          Column(
-                                                            children: [
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    if (index ==
-                                                                        0) {
-                                                                    } else {
-                                                                      String
-                                                                          content_prev =
-                                                                          controllers[index - 1]
-                                                                              .text;
-                                                                      int indexcontent_prev = scollection
-                                                                              .memolistin[
-                                                                          index -
-                                                                              1];
-                                                                      scollection.removelistitem(
-                                                                          index -
-                                                                              1);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemoinput',
-                                                                          indexcontent_prev);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemocontentinput',
-                                                                          content_prev);
-                                                                      scollection
-                                                                          .addmemolistin(
-                                                                              index);
-                                                                      scollection
-                                                                          .addmemolistcontentin(
-                                                                              index);
-                                                                      controllers[index -
-                                                                              1]
-                                                                          .text = scollection
-                                                                              .memolistcontentin[
-                                                                          index -
-                                                                              1];
-                                                                      controllers[
-                                                                              index]
-                                                                          .text = scollection
-                                                                              .memolistcontentin[
-                                                                          index];
-                                                                    }
-                                                                  });
-                                                                },
-                                                                child: Icon(
-                                                                    Icons
-                                                                        .expand_less,
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .shade400),
-                                                              ),
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    if (index +
-                                                                            1 ==
-                                                                        scollection
-                                                                            .memoindex) {
-                                                                    } else {
-                                                                      String
-                                                                          content =
-                                                                          scollection
-                                                                              .memolistcontentin[index];
-                                                                      int indexcontent =
-                                                                          scollection
-                                                                              .memolistin[index];
-                                                                      scollection
-                                                                          .removelistitem(
-                                                                              index);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemoinput',
-                                                                          indexcontent);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemocontentinput',
-                                                                          content);
-                                                                      scollection.addmemolistin(
-                                                                          index +
-                                                                              1);
-                                                                      scollection.addmemolistcontentin(
-                                                                          index +
-                                                                              1);
-                                                                      controllers[
-                                                                              index]
-                                                                          .text = scollection
-                                                                              .memolistcontentin[
-                                                                          index];
-                                                                      controllers[index +
-                                                                              1]
-                                                                          .text = scollection
-                                                                              .memolistcontentin[
-                                                                          index +
-                                                                              1];
-                                                                    }
-                                                                  });
-                                                                },
-                                                                child: Icon(
-                                                                    Icons
-                                                                        .expand_more,
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .shade400),
-                                                              ),
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                      hintText: '내용 입력',
-                                                      hintStyle: TextStyle(
-                                                          fontSize:
-                                                              contentTextsize(),
-                                                          color: Colors
-                                                              .grey.shade400),
+                                                    basicStyle: TextStyle(
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                      color: controll_memo
+                                                          .colorfont,
                                                     ),
                                                     controller:
                                                         controllers[index],
-                                                  ),
-                                                )
-                                              : SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      50,
-                                                  child: TextField(
-                                                    minLines: 1,
-                                                    maxLines: 3,
-                                                    focusNode: nodes[index],
-                                                    onTap: () {},
-                                                    onChanged: (text) {
-                                                      scollection
-                                                              .memolistcontentin[
-                                                          index] = text;
-                                                    },
-                                                    textAlign: TextAlign.start,
-                                                    textAlignVertical:
-                                                        TextAlignVertical
-                                                            .center,
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        color: Colors.black),
                                                     decoration: InputDecoration(
                                                       isCollapsed: true,
                                                       border: InputBorder.none,
-                                                      prefixIcon: const Icon(
-                                                          Icons.star_rate,
-                                                          color: Colors.black),
-                                                      prefixIconColor:
-                                                          Colors.black,
                                                       suffixIcon: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
@@ -1513,112 +1107,6 @@ class _DayScriptState extends State<DayScript> {
                                                                       color: Colors
                                                                           .red),
                                                                 ),
-                                                          Column(
-                                                            children: [
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    if (index ==
-                                                                        0) {
-                                                                    } else {
-                                                                      String
-                                                                          content_prev =
-                                                                          controllers[index - 1]
-                                                                              .text;
-                                                                      int indexcontent_prev = scollection
-                                                                              .memolistin[
-                                                                          index -
-                                                                              1];
-                                                                      scollection.removelistitem(
-                                                                          index -
-                                                                              1);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemoinput',
-                                                                          indexcontent_prev);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemocontentinput',
-                                                                          content_prev);
-                                                                      scollection
-                                                                          .addmemolistin(
-                                                                              index);
-                                                                      scollection
-                                                                          .addmemolistcontentin(
-                                                                              index);
-                                                                      controllers[index -
-                                                                              1]
-                                                                          .text = scollection
-                                                                              .memolistcontentin[
-                                                                          index -
-                                                                              1];
-                                                                      controllers[
-                                                                              index]
-                                                                          .text = scollection
-                                                                              .memolistcontentin[
-                                                                          index];
-                                                                    }
-                                                                  });
-                                                                },
-                                                                child: Icon(
-                                                                    Icons
-                                                                        .expand_less,
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .shade400),
-                                                              ),
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    if (index +
-                                                                            1 ==
-                                                                        scollection
-                                                                            .memoindex) {
-                                                                    } else {
-                                                                      String
-                                                                          content =
-                                                                          scollection
-                                                                              .memolistcontentin[index];
-                                                                      int indexcontent =
-                                                                          scollection
-                                                                              .memolistin[index];
-                                                                      scollection
-                                                                          .removelistitem(
-                                                                              index);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemoinput',
-                                                                          indexcontent);
-                                                                      Hive.box('user_setting').put(
-                                                                          'optionmemocontentinput',
-                                                                          content);
-                                                                      scollection.addmemolistin(
-                                                                          index +
-                                                                              1);
-                                                                      scollection.addmemolistcontentin(
-                                                                          index +
-                                                                              1);
-
-                                                                      controllers[
-                                                                              index]
-                                                                          .text = scollection
-                                                                              .memolistcontentin[
-                                                                          index];
-                                                                      controllers[index +
-                                                                              1]
-                                                                          .text = scollection
-                                                                              .memolistcontentin[
-                                                                          index +
-                                                                              1];
-                                                                    }
-                                                                  });
-                                                                },
-                                                                child: Icon(
-                                                                    Icons
-                                                                        .expand_more,
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .shade400),
-                                                              ),
-                                                            ],
-                                                          )
                                                         ],
                                                       ),
                                                       hintText: '내용 입력',
@@ -1628,85 +1116,273 @@ class _DayScriptState extends State<DayScript> {
                                                           color: Colors
                                                               .grey.shade400),
                                                     ),
-                                                    controller:
-                                                        controllers[index],
-                                                  ))),
+                                                    textAlign: TextAlign.start,
+                                                    textAlignVertical:
+                                                        TextAlignVertical
+                                                            .center,
+                                                    detectionRegExp:
+                                                        detectionRegExp()!,
+                                                  ))
+                                              : (scollection.memolistin[index] ==
+                                                          1 ||
+                                                      scollection.memolistin[index] ==
+                                                          999
+                                                  ? SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width -
+                                                              70,
+                                                      child: TextField(
+                                                        minLines: 1,
+                                                        maxLines: 3,
+                                                        onChanged: (text) {
+                                                          scollection
+                                                                  .memolistcontentin[
+                                                              index] = text;
+                                                        },
+                                                        focusNode: nodes[index],
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        textAlignVertical:
+                                                            TextAlignVertical
+                                                                .center,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                            color: controll_memo
+                                                                .colorfont,
+                                                            decorationThickness:
+                                                                2.3,
+                                                            decoration: scollection
+                                                                            .memolistin[
+                                                                        index] ==
+                                                                    999
+                                                                ? TextDecoration
+                                                                    .lineThrough
+                                                                : null),
+                                                        decoration:
+                                                            InputDecoration(
+                                                          isCollapsed: true,
+                                                          border:
+                                                              InputBorder.none,
+                                                          prefixIcon: InkWell(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                scollection.memolistin[
+                                                                            index] ==
+                                                                        999
+                                                                    ? scollection
+                                                                            .memolistin[index] =
+                                                                        1
+                                                                    : scollection
+                                                                            .memolistin[
+                                                                        index] = 999;
+                                                              });
+                                                            },
+                                                            child: const Icon(
+                                                                Icons
+                                                                    .check_box_outline_blank,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          suffixIcon: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              controll_memo
+                                                                          .ischeckedtohideminus ==
+                                                                      true
+                                                                  ? InkWell(
+                                                                      onTap:
+                                                                          () {},
+                                                                      child:
+                                                                          const SizedBox(
+                                                                        width:
+                                                                            30,
+                                                                      ),
+                                                                    )
+                                                                  : InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          scollection
+                                                                              .removelistitem(index);
+                                                                          controllers
+                                                                              .removeAt(index);
+
+                                                                          for (int i = 0;
+                                                                              i < scollection.memolistin.length;
+                                                                              i++) {
+                                                                            controllers[i].text =
+                                                                                scollection.memolistcontentin[i];
+                                                                          }
+                                                                        });
+                                                                      },
+                                                                      child: const Icon(
+                                                                          Icons
+                                                                              .remove_circle_outline,
+                                                                          color:
+                                                                              Colors.red),
+                                                                    ),
+                                                            ],
+                                                          ),
+                                                          hintText: '내용 입력',
+                                                          hintStyle: TextStyle(
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                              color: Colors.grey
+                                                                  .shade400),
+                                                        ),
+                                                        controller:
+                                                            controllers[index],
+                                                      ),
+                                                    )
+                                                  : SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width -
+                                                              70,
+                                                      child: TextField(
+                                                          onChanged: (text) {
+                                                            scollection
+                                                                    .memolistcontentin[
+                                                                index] = text;
+                                                          },
+                                                          minLines: 1,
+                                                          maxLines: 3,
+                                                          focusNode:
+                                                              nodes[index],
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          textAlignVertical:
+                                                              TextAlignVertical
+                                                                  .center,
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                              color: controll_memo
+                                                                  .colorfont),
+                                                          decoration:
+                                                              InputDecoration(
+                                                            isCollapsed: true,
+                                                            border: InputBorder
+                                                                .none,
+                                                            prefixIcon: const Icon(
+                                                                Icons.star_rate,
+                                                                color: Colors
+                                                                    .black),
+                                                            prefixIconColor:
+                                                                Colors.black,
+                                                            suffixIcon: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                controll_memo
+                                                                            .ischeckedtohideminus ==
+                                                                        true
+                                                                    ? InkWell(
+                                                                        onTap:
+                                                                            () {},
+                                                                        child: const SizedBox(
+                                                                            width:
+                                                                                30),
+                                                                      )
+                                                                    : InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            scollection.removelistitem(index);
+                                                                            controllers.removeAt(index);
+
+                                                                            for (int i = 0;
+                                                                                i < scollection.memolistin.length;
+                                                                                i++) {
+                                                                              controllers[i].text = scollection.memolistcontentin[i];
+                                                                            }
+                                                                          });
+                                                                        },
+                                                                        child: const Icon(
+                                                                            Icons
+                                                                                .remove_circle_outline,
+                                                                            color:
+                                                                                Colors.red),
+                                                                      ),
+                                                              ],
+                                                            ),
+                                                            hintText: '내용 입력',
+                                                            hintStyle: TextStyle(
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                                color: Colors
+                                                                    .grey
+                                                                    .shade400),
+                                                          ),
+                                                          controller:
+                                                              controllers[index]))),
+                                          ReorderableDragStartListener(
+                                            index: index,
+                                            child: Icon(
+                                              Icons.drag_indicator_outlined,
+                                              color: _colorfont,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                       const SizedBox(
-                                        width: 3,
+                                        height: 10,
                                       ),
                                     ],
-                                  );
-                                })
-                            : const SizedBox();
-                      })
-                    ],
-                  );
-                },
-              )
-            : SizedBox(
-                height: 210,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      child: TextField(
-                        minLines: 1,
-                        maxLines: 3,
-                        focusNode: searchNode_first_section,
-                        textAlign: TextAlign.start,
-                        textAlignVertical: TextAlignVertical.center,
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.black),
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          border: InputBorder.none,
-                          hintText: '제목 입력',
-                          hintStyle: TextStyle(
-                              fontSize: contentTextsize(), color: Colors.black),
-                        ),
-                        controller: textEditingController1,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: Text(
-                        '메모내용',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 100,
-                      child: TextField(
-                        minLines: 1,
-                        maxLines: 3,
-                        focusNode: searchNode_first_section,
-                        textAlign: TextAlign.start,
-                        textAlignVertical: TextAlignVertical.center,
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.black),
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          border: InputBorder.none,
-                          hintText: '내용 입력',
-                          hintStyle: TextStyle(
-                              fontSize: contentTextsize(), color: Colors.black),
-                        ),
-                        controller: textEditingController2,
-                      ),
-                    )
-                  ],
-                ),
-              ));
+                                  ),
+                                );
+                              },
+                              onReorder: (int oldIndex, int newIndex) {
+                                setState(() {
+                                  if (oldIndex < newIndex) {
+                                    newIndex -= 1;
+                                  }
+                                  String content_prev =
+                                      controllers[oldIndex].text;
+                                  int indexcontent_prev =
+                                      scollection.memolistin[oldIndex];
+                                  scollection.removelistitem(oldIndex);
+                                  Hive.box('user_setting').put(
+                                      'optionmemoinput', indexcontent_prev);
+                                  Hive.box('user_setting').put(
+                                      'optionmemocontentinput', content_prev);
+                                  scollection.addmemolistin(newIndex);
+                                  scollection.addmemolistcontentin(newIndex);
+                                  for (int i = 0;
+                                      i < scollection.memolistcontentin.length;
+                                      i++) {
+                                    controllers[i].text =
+                                        scollection.memolistcontentin[i];
+                                  }
+                                });
+                              },
+                              /*proxyDecorator: (Widget child, int index,
+                            Animation<double> animation) {
+                          return Material(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: TextColor_shadowcolor(),
+                                      width: 1)),
+                              child: child,
+                            ),
+                          );
+                        },*/
+                            )
+                          : const SizedBox())
+                ],
+              );
+            },
+          );
   }
 
   SetTimeTitle() {

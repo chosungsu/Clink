@@ -58,9 +58,10 @@ class selectcollection extends GetxController {
   }
 
   void removelistitem(int index) {
+    print(index);
+    print(memolistin[index]);
+    print(memolistcontentin[index]);
     memolistin.remove(memolistin[index]);
-    //memolistin.removeAt(index);
-    //memolistcontentin.removeAt(index);
     memolistcontentin.remove(memolistcontentin[index]);
     memoindex--;
     update();

@@ -10,6 +10,9 @@ class memosetting extends GetxController {
   Color color = Hive.box('user_setting').get('coloreachmemo') != null
       ? Color(Hive.box('user_setting').get('coloreachmemo'))
       : Colors.white;
+  Color colorfont = Hive.box('user_setting').get('coloreachmemofont') != null
+      ? Color(Hive.box('user_setting').get('coloreachmemofont'))
+      : Colors.black;
   int memosort = 0;
   bool ischeckedtohideminus = false;
   bool isseveralmemoalarm = false;
@@ -102,13 +105,9 @@ class memosetting extends GetxController {
       firestore.collection('MemoDataBase').doc(id).update({
         'alarmok': true,
       });
-      await NotificationApi.cancelNotification(
-          id: 1 +
-              int.parse(hour1.toString()) +
-              int.parse(minute1.toString()) +
-              title.hashCode);
+      await NotificationApi.cancelNotification(id: 1 + title.hashCode);
       NotificationApi.showDailyNotification_severalnotes(
-          id: 1 + int.parse(hour) + int.parse(minute) + title.hashCode,
+          id: 1 + title.hashCode,
           title: '띵동! $title 메모알림이에요',
           body: '메모알림끄기는 [메모 길게클릭]->[알람Off]',
           scheduledate: DateTime.utc(now.year, now.month, now.day,
@@ -141,6 +140,12 @@ class memosetting extends GetxController {
 
   void setcolor() {
     color = Color(Hive.box('user_setting').get('coloreachmemo'));
+    update();
+    notifyChildrens();
+  }
+
+  void setcolorfont() {
+    colorfont = Color(Hive.box('user_setting').get('coloreachmemofont'));
     update();
     notifyChildrens();
   }

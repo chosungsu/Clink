@@ -151,7 +151,7 @@ content(
                 scollection.addmemolistin(scollection.memoindex);
                 scollection.addmemolistcontentin(scollection.memoindex - 1);
 
-                checkbottoms[0] = false;
+                checkbottoms[1] = false;
                 nodes.add(FocusNode());
                 controllers.add(TextEditingController(
                     text: scollection

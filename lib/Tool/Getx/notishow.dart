@@ -10,6 +10,7 @@ class notishow extends GetxController {
   bool isread = false;
   List updateid = [];
   String name = Hive.box('user_info').get('id');
+  int whatnoticepagenum = 0;
 
   void setnoti(String a, String b) async {
     listad.add(PageList(title: a, sub: b));
@@ -19,6 +20,12 @@ class notishow extends GetxController {
 
   void resetnoti() async {
     listad.clear();
+    update();
+    notifyChildrens();
+  }
+
+  void noticepageset(int num) async {
+    whatnoticepagenum = num;
     update();
     notifyChildrens();
   }
