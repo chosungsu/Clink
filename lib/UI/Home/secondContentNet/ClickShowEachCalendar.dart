@@ -207,7 +207,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                               ), pressed2)) ??
                                                               false;
                                                       if (reloadpage) {
-                                                        Get.back();
+                                                        
                                                         CreateCalandmemoSuccessFlushbar(
                                                             context);
                                                         firestore
@@ -247,7 +247,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                               widget.share,
                                                           'read': 'no',
                                                         }).whenComplete(() {
-                                                          Get.back();
                                                           firestore
                                                               .collection(
                                                                   'CalendarDataBase')
@@ -351,6 +350,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                               CreateCalandmemoSuccessFlushbarSub(
                                                                   context,
                                                                   '일정');
+                                                              Get.back();
                                                               if (widget
                                                                       .alarm !=
                                                                   '설정off') {

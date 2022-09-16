@@ -402,7 +402,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                   if (textEditingController1
                                                                       .text
                                                                       .isNotEmpty) {
-                                                                    Get.back();
                                                                     CreateCalandmemoSuccessFlushbar(
                                                                         context);
                                                                     firestore
@@ -492,6 +491,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                       },
                                                                     ).whenComplete(
                                                                             () {
+                                                                      Get.back();
                                                                       CreateCalandmemoSuccessFlushbarSub(
                                                                           context,
                                                                           '메모');
@@ -561,7 +561,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                         ), pressed2)) ??
                                                                         false;
                                                                 if (reloadpage) {
-                                                                  Get.back();
                                                                   CreateCalandmemoSuccessFlushbar(
                                                                       context);
                                                                   Hive.box(
@@ -651,6 +650,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     }
                                                                   }).whenComplete(
                                                                           () {
+                                                                            Get.back();
                                                                     CreateCalandmemoFlushbardelete(
                                                                         context,
                                                                         '메모');
