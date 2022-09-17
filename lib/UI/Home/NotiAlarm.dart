@@ -6,6 +6,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../Dialogs/destroyBackKey.dart';
 import '../../Tool/AndroidIOS.dart';
@@ -19,7 +20,8 @@ class NotiAlarm extends StatefulWidget {
   State<StatefulWidget> createState() => _NotiAlarmState();
 }
 
-class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
+class _NotiAlarmState extends State<NotiAlarm>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -37,6 +39,8 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
   final readlist = [];
   final listid = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late TabController tabController;
+  int pageindex = 0;
 
   @override
   void initState() {
@@ -44,6 +48,11 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('noti_home_click', 0);
     whatwantnotice = notilist.whatnoticepagenum;
+    tabController = TabController(
+      initialIndex: 0,
+      length: 2,
+      vsync: this,
+    );
   }
 
   @override
@@ -120,8 +129,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                         )),
                                                   ),
                                                   GetBuilder<notishow>(
-                                                      builder: (_) => notilist
-                                                                  .whatnoticepagenum ==
+                                                      builder: (_) => pageindex ==
                                                               1
                                                           ? IconBtn(
                                                               child: IconButton(
@@ -256,11 +264,12 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                             ],
                           ),
                         )),
-                    NoticeApps(),
-                    whatwantnotice == 0 ? const SizedBox() : allread(),
+                    //NoticeApps(),
+                    //whatwantnotice == 0 ? const SizedBox() : allread(),
                   ],
                 ),
               ),
+              TabViewScreen(),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -287,177 +296,46 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
     );
   }
 
-  NoticeApps() {
-    return SizedBox(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 5,
-          ),
-          NotiBox()
-        ],
-      ),
-    );
-  }
-
-  NotiBox() {
+  TabViewScreen() {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 10),
-      child: SizedBox(
-          height: 40,
-          width: MediaQuery.of(context).size.width - 40,
-          child: ListView.builder(
-              // the number of items in the list
-              itemCount: notinamelist.length,
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              // display each item of the product list
-              itemBuilder: (context, index) {
-                return index == 1
-                    ? Row(
-                        children: [
-                          SizedBox(
-                              height: 30,
-                              width:
-                                  (MediaQuery.of(context).size.width - 40) / 2,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Hive.box('user_setting')
-                                                  .get('noti_home_click') ==
-                                              null
-                                          ? Colors.white
-                                          : (Hive.box('user_setting')
-                                                      .get('noti_home_click') ==
-                                                  index
-                                              ? Colors.grey.shade400
-                                              : Colors.white),
-                                      side: BorderSide(
-                                        width: 1,
-                                        color: TextColor(),
-                                      )),
-                                  onPressed: () {
-                                    setState(() {
-                                      Hive.box('user_setting')
-                                          .put('noti_home_click', index);
-                                      notilist.noticepageset(index);
-                                      whatwantnotice =
-                                          notilist.whatnoticepagenum;
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            notinamelist[index],
-                                            style: NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Hive.box('user_setting').get(
-                                                          'noti_home_click') ==
-                                                      null
-                                                  ? Colors.black45
-                                                  : (Hive.box('user_setting').get(
-                                                              'noti_home_click') ==
-                                                          index
-                                                      ? Colors.white
-                                                      : Colors.black45),
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ))),
-                          const SizedBox(
-                            width: 20,
-                          )
-                        ],
-                      )
-                    : Row(
-                        children: [
-                          SizedBox(
-                              height: 30,
-                              width:
-                                  (MediaQuery.of(context).size.width - 40) / 3,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      primary: Hive.box('user_setting')
-                                                  .get('noti_home_click') ==
-                                              null
-                                          ? Colors.white
-                                          : (Hive.box('user_setting')
-                                                      .get('noti_home_click') ==
-                                                  index
-                                              ? Colors.grey.shade400
-                                              : Colors.white),
-                                      side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.black45,
-                                      )),
-                                  onPressed: () {
-                                    setState(() {
-                                      Hive.box('user_setting')
-                                          .put('noti_home_click', index);
-                                      notilist.noticepageset(index);
-                                      whatwantnotice =
-                                          notilist.whatnoticepagenum;
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            notinamelist[index],
-                                            style: NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Hive.box('user_setting').get(
-                                                          'noti_home_click') ==
-                                                      null
-                                                  ? Colors.black45
-                                                  : (Hive.box('user_setting').get(
-                                                              'noti_home_click') ==
-                                                          index
-                                                      ? Colors.white
-                                                      : Colors.black45),
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ))),
-                          const SizedBox(
-                            width: 20,
-                          )
-                        ],
-                      );
-              })),
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+              color: TextColor_shadowcolor(),
+              borderRadius: BorderRadius.circular(30)),
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: TabBar(
+                onTap: (index) {
+                  setState(() {
+                    pageindex = index;
+                  });
+                },
+                controller: tabController,
+                labelColor: TextColor(),
+                unselectedLabelColor: BGColor(),
+                indicator: BoxDecoration(
+                    color: BGColor(), borderRadius: BorderRadius.circular(30)),
+                tabs: [
+                  Text(
+                    '공지사항',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize(),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '인앱알림',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize(),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ]),
+          )),
     );
   }
 
@@ -475,43 +353,61 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
   }
 
   allreadBox() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 10),
-      child: SizedBox(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  for (int i = 0; i < listid.length; i++) {
-                    notilist.updatenoti(listid[i]);
-                    readlist[i] = 'yes';
-                  }
-                });
-              },
-              child: Text(
-                '모두 읽음표시',
-                style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize(),
-                    decoration: TextDecoration.underline),
-                overflow: TextOverflow.ellipsis,
-              ),
-            )
-          ],
-        ),
+    return SizedBox(
+      height: 50,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                for (int i = 0; i < listid.length; i++) {
+                  notilist.updatenoti(listid[i]);
+                  readlist[i] = 'yes';
+                }
+              });
+            },
+            child: Text(
+              '모두 읽음표시',
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize(),
+                  decoration: TextDecoration.underline),
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
       ),
     );
   }
 
   NoticeLists(int whatwantnotice) {
     return SizedBox(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [whatwantnotice == 0 ? CompanyNotice() : UserNotice()],
+      height: tabController.index == 0
+          ? MediaQuery.of(context).size.height - 150
+          : MediaQuery.of(context).size.height - 100,
+      child: TabBarView(
+        controller: tabController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          CompanyNotice(),
+          SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                allread(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: UserNotice(),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -537,6 +433,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
 
           return _list_ad.isEmpty
               ? SizedBox(
+                  width: MediaQuery.of(context).size.width - 60,
                   height: MediaQuery.of(context).size.height - 180,
                   child: Center(
                     child: Text(
@@ -550,27 +447,29 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                   ))
               : SizedBox(
                   height: MediaQuery.of(context).size.height - 180,
-                  child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: _list_ad.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ContainerDesign(
-                              color: BGColor(),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
+                  width: MediaQuery.of(context).size.width - 60,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemCount: _list_ad.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                ContainerDesign(
+                                  color: BGColor(),
+                                  child: SizedBox(
                                       width: MediaQuery.of(context).size.width -
-                                          60,
-                                      height: 150,
+                                          80,
+                                      height: 100,
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment:
@@ -616,18 +515,18 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                           )
                                         ],
                                       )),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            )
-                          ],
-                        );
-                      }),
-                );
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                )
+                              ],
+                            );
+                          }),
+                    ],
+                  ));
         }
         return SizedBox(
+            width: MediaQuery.of(context).size.width - 60,
             height: MediaQuery.of(context).size.height - 180,
             child: Center(
               child: Text(
@@ -676,7 +575,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                   width: MediaQuery.of(context).size.width - 60,
                   height: MediaQuery.of(context).size.height - 180,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
@@ -697,96 +596,119 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                     ],
                   ),
                 )
-              : ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: notilist.listad.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () {
-                          notilist.updatenoti(listid[index]);
-                          setState(() {
-                            readlist[index] = 'yes';
-                          });
-                          notilist.listad[index].title.toString().contains('메모')
-                              ? Get.to(
-                                  () => const DayNoteHome(
-                                        title: '',
-                                      ),
-                                  transition: Transition.rightToLeft)
-                              : Get.to(() => ChooseCalendar(),
-                                  transition: Transition.rightToLeft);
-                        },
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ContainerDesign(
-                              color: readlist[index] == 'no'
-                                  ? BGColor()
-                                  : BGColor_shadowcolor(),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      height: 100,
-                                      width: MediaQuery.of(context).size.width -
-                                          60,
+              : SizedBox(
+                  width: MediaQuery.of(context).size.width - 60,
+                  height: MediaQuery.of(context).size.height - 180,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: notilist.listad.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                                onTap: () {
+                                  notilist.updatenoti(listid[index]);
+                                  setState(() {
+                                    readlist[index] = 'yes';
+                                  });
+                                  notilist.listad[index].title
+                                          .toString()
+                                          .contains('메모')
+                                      ? Get.to(
+                                          () => const DayNoteHome(
+                                                title: '',
+                                              ),
+                                          transition: Transition.rightToLeft)
+                                      : Get.to(() => ChooseCalendar(),
+                                          transition: Transition.rightToLeft);
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    ContainerDesign(
+                                      color: readlist[index] == 'no'
+                                          ? BGColor()
+                                          : BGColor_shadowcolor(),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
                                         children: [
-                                          Flexible(
-                                              fit: FlexFit.tight,
+                                          SizedBox(
+                                              height: 100,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  40,
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
-                                                  Text(
-                                                    notilist
-                                                        .listad[index].title,
-                                                    softWrap: true,
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: TextColor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentTextsize()),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                  Flexible(
+                                                      fit: FlexFit.tight,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            notilist
+                                                                .listad[index]
+                                                                .title,
+                                                            softWrap: true,
+                                                            maxLines: 2,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color:
+                                                                    TextColor(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize:
+                                                                    contentTextsize()),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          )
+                                                        ],
+                                                      )),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        notilist
+                                                            .listad[index].sub
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            color: TextColor(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize()),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ],
                                                   )
                                                 ],
                                               )),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                notilist.listad[index].sub
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        contentTextsize()),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          )
                                         ],
-                                      )),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            )
-                          ],
-                        ));
-                  });
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                ));
+                          })
+                    ],
+                  ));
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
               width: MediaQuery.of(context).size.width - 60,
@@ -824,256 +746,5 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
         );
       },
     );
-    /*FutureBuilder(
-        future: firestore
-            .collection('AppNoticeByUsers')
-            .get()
-            .then(((QuerySnapshot querySnapshot) {
-          {
-            for (int i = 0; i < querySnapshot.docs.length; i++) {
-              if (querySnapshot.docs[i]
-                      .get('sharename')
-                      .toString()
-                      .contains(name) ||
-                  querySnapshot.docs[i].get('username') == name) {
-                final messageText = querySnapshot.docs[i].get('title');
-                final messageDate = querySnapshot.docs[i].get('date');
-                readlist.add(querySnapshot.docs[i].get('read'));
-                listid.add(querySnapshot.docs[i].id);
-                notilist.setnoti(messageText, messageDate);
-              }
-            }
-          }
-        })).whenComplete(() {
-          notilist.listad.sort(
-            (a, b) {
-              return b.sub.toString().compareTo(a.sub);
-            },
-          );
-        }),
-        builder: ((context, snapshot) {
-          if (notilist.listad.isNotEmpty) {
-            return ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: notilist.listad.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                      onTap: () {
-                        notilist.updatenoti(listid[index]);
-                        setState(() {
-                          readlist[index] = 'yes';
-                        });
-                        notilist.listad[index].title.toString().contains('메모')
-                            ? Get.to(
-                                () => const DayNoteHome(
-                                      title: '',
-                                    ),
-                                transition: Transition.rightToLeft)
-                            : Get.to(() => ChooseCalendar(),
-                                transition: Transition.rightToLeft);
-                      },
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ContainerDesign(
-                            color: readlist[index] == 'no'
-                                ? BGColor()
-                                : BGColor_shadowcolor(),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                    height: 100,
-                                    width:
-                                        MediaQuery.of(context).size.width - 60,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                            fit: FlexFit.tight,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  notilist.listad[index].title,
-                                                  softWrap: true,
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: TextColor(),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize()),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                )
-                                              ],
-                                            )),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              notilist.listad[index].sub
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  color: TextColor(),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize()),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    )),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          )
-                        ],
-                      ));
-                });
-          }
-          return SizedBox(
-              height: MediaQuery.of(context).size.height - 160,
-              child: Center(
-                child: Text(
-                  '알림사항이 없습니다;;;',
-                  style: TextStyle(
-                      color: TextColor(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: secondTitleTextsize()),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ));
-        }));*/
-    /*return StreamBuilder<QuerySnapshot>(
-      stream: firestore
-          .collection('AppNoticeByUsers')
-          .where('username', arrayContainsAny: [name])
-          .orderBy('date')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _list_ad.clear();
-          var valuespacesecond;
-          valuespacesecond = snapshot.data!.docs;
-          if (valuespacesecond.isNotEmpty) {
-            for (var sp in valuespacesecond) {
-              final messageText = sp.get('title');
-              final messageDate = sp.get('date');
-              _list_ad.add(PageList(title: messageText, sub: messageDate));
-              /*if (sp.get('username').toString().contains(name)) {
-                _list_ad.add(PageList(title: messageText, sub: messageDate));
-              }*/
-            }
-          }
-          return _list_ad.isNotEmpty
-              ? ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: _list_ad.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () {},
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ContainerDesign(
-                              color: BGColor(),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      height: 100,
-                                      width: MediaQuery.of(context).size.width -
-                                          40,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    _list_ad[index].title,
-                                                    softWrap: true,
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                        color: TextColor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentTextsize()),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  )
-                                                ],
-                                              )),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                _list_ad[index].sub.toString(),
-                                                style: TextStyle(
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        contentTextsize()),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      )),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            )
-                          ],
-                        ));
-                  })
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height - 160,
-                  child: Center(
-                    child: Text(
-                      '알림사항이 없습니다;;;',
-                      style: TextStyle(
-                          color: TextColor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: secondTitleTextsize()),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ));
-        }
-        return SizedBox(
-            height: MediaQuery.of(context).size.height - 160,
-            child: Center(
-              child: Text(
-                '알림사항이 없습니다;;;',
-                style: TextStyle(
-                    color: TextColor(),
-                    fontWeight: FontWeight.bold,
-                    fontSize: secondTitleTextsize()),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ));
-      },
-    );*/
   }
 }
