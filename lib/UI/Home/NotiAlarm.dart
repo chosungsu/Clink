@@ -33,8 +33,6 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
   var userlist = [Hive.box('user_info').get('id')];
   var updateid = '';
   var updateusername = [];
-  var returntitle = [];
-  var returndate = [];
   final notilist = Get.put(notishow());
   final readlist = [];
   final listid = [];
@@ -140,43 +138,34 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                                       firestore
                                                                           .collection(
                                                                               'AppNoticeByUsers')
-                                                                          .orderBy(
-                                                                              'date')
-                                                                          /*.where(
-                                                                        'date',
-                                                                        isEqualTo: DateFormat('yyyy-MM-dd')
-                                                                            .parse(DateTime.now().toString())
-                                                                            .toString()
-                                                                            .split(' ')[0])*/
                                                                           .get()
                                                                           .then(
                                                                               (value) {
-                                                                        returntitle
-                                                                            .clear();
-                                                                        returndate
-                                                                            .clear();
-                                                                        value
-                                                                            .docs
-                                                                            .forEach((element) {
-                                                                          if (element.get('username').toString().contains(name) ==
+                                                                        for (var element
+                                                                            in value.docs) {
+                                                                          if (element.get('sharename').toString().contains(name) ==
                                                                               true) {
                                                                             updateid =
                                                                                 element.id;
                                                                             updateusername =
-                                                                                element.get('username').toString().split(',').toList();
-                                                                            returntitle.add(element.get('title'));
-                                                                            returndate.add(element.get('date'));
+                                                                                element.get('sharename').toString().split(',').toList();
                                                                             if (updateusername.length ==
                                                                                 1) {
                                                                               firestore.collection('AppNoticeByUsers').doc(updateid).delete();
                                                                             } else {
                                                                               updateusername.removeWhere((element) => element.toString().contains(name));
                                                                               firestore.collection('AppNoticeByUsers').doc(updateid).update({
-                                                                                'username': updateusername
+                                                                                'sharename': updateusername
                                                                               });
                                                                             }
+                                                                          } else {
+                                                                            if (element.get('username').toString() ==
+                                                                                name) {
+                                                                              updateid = element.id;
+                                                                              firestore.collection('AppNoticeByUsers').doc(updateid).delete();
+                                                                            } else {}
                                                                           }
-                                                                        });
+                                                                        }
                                                                       }).whenComplete(
                                                                               () {
                                                                         setState(
@@ -551,9 +540,9 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                   height: MediaQuery.of(context).size.height - 180,
                   child: Center(
                     child: Text(
-                      '공지사항이 없습니다;;;',
+                      '공지사항이 없습니다.',
                       style: TextStyle(
-                          color: TextColor(),
+                          color: TextColor_shadowcolor(),
                           fontWeight: FontWeight.bold,
                           fontSize: secondTitleTextsize()),
                       overflow: TextOverflow.ellipsis,
@@ -642,9 +631,9 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
             height: MediaQuery.of(context).size.height - 180,
             child: Center(
               child: Text(
-                '공지사항이 없습니다;;;',
+                '공지사항이 없습니다.',
                 style: TextStyle(
-                    color: TextColor(),
+                    color: TextColor_shadowcolor(),
                     fontWeight: FontWeight.bold,
                     fontSize: secondTitleTextsize()),
                 overflow: TextOverflow.ellipsis,
@@ -682,9 +671,10 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                   .add(PageList(title: messageText, sub: messageDate));
             }
           }
-          return snapshot.data!.docs.isEmpty
+          return notilist.listad.isEmpty
               ? SizedBox(
                   width: MediaQuery.of(context).size.width - 60,
+                  height: MediaQuery.of(context).size.height - 180,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -692,10 +682,10 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                       Center(
                         child: NeumorphicText(
                           '생성된 푸시알림이 아직 없습니다.',
-                          style: const NeumorphicStyle(
+                          style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
-                            color: Colors.black45,
+                            color: TextColor_shadowcolor(),
                           ),
                           textStyle: NeumorphicTextStyle(
                             fontWeight: FontWeight.bold,
@@ -798,31 +788,39 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                         ));
                   });
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Column(
+          return SizedBox(
+              width: MediaQuery.of(context).size.width - 60,
+              height: MediaQuery.of(context).size.height - 180,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [Center(child: CircularProgressIndicator())],
+              ));
+        }
+        return SizedBox(
+          width: MediaQuery.of(context).size.width - 60,
+          height: MediaQuery.of(context).size.height - 180,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [Center(child: CircularProgressIndicator())],
-          );
-        }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: NeumorphicText(
-                '생성된 푸시알림이 아직 없습니다.',
-                style: NeumorphicStyle(
-                  shape: NeumorphicShape.flat,
-                  depth: 3,
-                  color: TextColor(),
+            children: [
+              Center(
+                child: NeumorphicText(
+                  '생성된 푸시알림이 아직 없습니다.',
+                  style: NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    depth: 3,
+                    color: TextColor_shadowcolor(),
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize(),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textStyle: NeumorphicTextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         );
       },
     );

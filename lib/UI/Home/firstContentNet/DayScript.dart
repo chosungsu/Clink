@@ -494,10 +494,11 @@ class _DayScriptState extends State<DayScript> {
                                                                           .add({
                                                                         'title':
                                                                             '메모 ${textEditingController1.text}가 추가되었습니다.',
-                                                                        'date': DateFormat('yyyy-MM-dd hh:mm')
-                                                                            .parse(widget.firstdate.toString())
-                                                                            .toString()
-                                                                            .split(' ')[0],
+                                                                        'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
+                                                                            ' ' +
+                                                                            DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[0] +
+                                                                            ':' +
+                                                                            DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[1],
                                                                         'username':
                                                                             username,
                                                                         'sharename':

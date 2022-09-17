@@ -111,11 +111,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     controll_memo.imagelist.clear();
     Hive.box('user_setting').put('coloreachmemo', widget.doccolor);
     Hive.box('user_setting').put('coloreachmemofont', widget.doccolorfont);
+    print(widget.doccolorfont);
     textEditingController1 = TextEditingController(text: widget.docname);
     textEditingController_add_sheet = TextEditingController();
     Hive.box('user_setting').put('memocollection', widget.doccollection);
     controll_memo.color = Color(Hive.box('user_setting').get('coloreachmemo'));
     _color = widget.doccolor != null ? Color(widget.doccolor) : Colors.white;
+    controll_memo.colorfont =
+        Color(Hive.box('user_setting').get('coloreachmemofont'));
     _colorfont =
         widget.doccolorfont != null ? Color(widget.doccolorfont) : Colors.black;
     for (int j = 0; j < widget.docindex.length; j++) {
@@ -302,8 +305,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           controll_memo
                                                               .ischeckedtohideminus,
                                                           controllers,
-                                                          controll_memo
-                                                              .colorfont),
+                                                          Color(widget
+                                                              .doccolorfont)),
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
@@ -480,9 +483,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                         'color':
                                                                             Hive.box('user_setting').get('coloreachmemo') ??
                                                                                 _color.value.toInt(),
-                                                                        'colorfont':
-                                                                            Hive.box('user_setting').get('coloreachmemofont') ??
-                                                                                _colorfont.value.toInt(),
+                                                                        'colorfont': controll_memo
+                                                                            .colorfont
+                                                                            .value
+                                                                            .toInt(),
                                                                         'EditDate': editDateTo.toString().split('-')[0] +
                                                                             '-' +
                                                                             editDateTo.toString().split('-')[
@@ -836,37 +840,40 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              minLines: 1,
-              maxLines: 1,
-              focusNode: searchNode_first_section,
-              textAlign: TextAlign.start,
-              textAlignVertical: TextAlignVertical.center,
-              style: TextStyle(
-                  fontSize: contentTextsize(), color: controll_memo.colorfont),
-              decoration: InputDecoration(
-                isCollapsed: true,
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                ),
-                contentPadding: const EdgeInsets.only(left: 10),
-                hintText: '제목 입력',
-                hintStyle: TextStyle(
-                    fontSize: contentTextsize(), color: Colors.grey.shade400),
-              ),
-              controller: textEditingController1,
-            ),
+            GetBuilder<memosetting>(
+                builder: (_) => TextField(
+                      minLines: 1,
+                      maxLines: 1,
+                      focusNode: searchNode_first_section,
+                      textAlign: TextAlign.start,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: TextStyle(
+                          fontSize: contentTextsize(),
+                          color: controll_memo.colorfont),
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        ),
+                        contentPadding: const EdgeInsets.only(left: 10),
+                        hintText: '제목 입력',
+                        hintStyle: TextStyle(
+                            fontSize: contentTextsize(),
+                            color: Colors.grey.shade400),
+                      ),
+                      controller: textEditingController1,
+                    )),
             const SizedBox(
               height: 20,
             ),

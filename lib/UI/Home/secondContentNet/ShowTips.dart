@@ -8,6 +8,9 @@ import 'package:new_version/new_version.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:store_redirect/store_redirect.dart';
 
+import '../../../Tool/BGColor.dart';
+import '../../../Tool/TextSize.dart';
+
 class ShowTips extends StatelessWidget {
   ShowTips({
     Key? key,
@@ -56,8 +59,38 @@ class ShowTips extends StatelessWidget {
                     })),
             builder: (context, future) => future.connectionState ==
                     ConnectionState.waiting
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ContainerDesign(
+                          color: Colors.orange.shade400,
+                          child: SizedBox(
+                            height: 120,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: NeumorphicText(
+                                    '사용법 페이지 불러오는중...',
+                                    style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: Colors.white,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTitleTextsize(),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                    ],
                   )
                 : ContainerDesign(
                     color: Colors.orange.shade400,
@@ -226,14 +259,44 @@ class EventApps extends StatelessWidget {
                 })),
         builder: (context, future) => future.connectionState ==
                 ConnectionState.waiting
-            ? const SizedBox(
+            ? SizedBox(
                 height: 110,
-                child: Center(
-                  child: CircularProgressIndicator(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ContainerDesign(
+                        color: Colors.grey.shade400,
+                        child: SizedBox(
+                          height: 70,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: NeumorphicText(
+                                  '업데이트 사항 확인중...',
+                                  style: const NeumorphicStyle(
+                                    shape: NeumorphicShape.flat,
+                                    depth: 3,
+                                    color: Colors.white,
+                                  ),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize(),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                  ],
                 ),
               )
             : (eventcontent.isEmpty
-                ? SizedBox()
+                ? const SizedBox()
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
