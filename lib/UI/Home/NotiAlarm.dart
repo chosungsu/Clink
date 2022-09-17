@@ -385,25 +385,20 @@ class _NotiAlarmState extends State<NotiAlarm>
 
   NoticeLists(int whatwantnotice) {
     return SizedBox(
-      height: tabController.index == 0
-          ? MediaQuery.of(context).size.height - 150
-          : MediaQuery.of(context).size.height - 100,
+      height: MediaQuery.of(context).size.height - 180,
       child: TabBarView(
         controller: tabController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
           CompanyNotice(),
           SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 allread(),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: UserNotice(),
-                )
+                UserNotice(),
               ],
             ),
           )
@@ -596,119 +591,97 @@ class _NotiAlarmState extends State<NotiAlarm>
                     ],
                   ),
                 )
-              : SizedBox(
-                  width: MediaQuery.of(context).size.width - 60,
-                  height: MediaQuery.of(context).size.height - 180,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: notilist.listad.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                                onTap: () {
-                                  notilist.updatenoti(listid[index]);
-                                  setState(() {
-                                    readlist[index] = 'yes';
-                                  });
-                                  notilist.listad[index].title
-                                          .toString()
-                                          .contains('메모')
-                                      ? Get.to(
-                                          () => const DayNoteHome(
-                                                title: '',
-                                              ),
-                                          transition: Transition.rightToLeft)
-                                      : Get.to(() => ChooseCalendar(),
-                                          transition: Transition.rightToLeft);
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    ContainerDesign(
-                                      color: readlist[index] == 'no'
-                                          ? BGColor()
-                                          : BGColor_shadowcolor(),
+              : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: notilist.listad.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () {
+                          notilist.updatenoti(listid[index]);
+                          setState(() {
+                            readlist[index] = 'yes';
+                          });
+                          notilist.listad[index].title.toString().contains('메모')
+                              ? Get.to(
+                                  () => const DayNoteHome(
+                                        title: '',
+                                      ),
+                                  transition: Transition.rightToLeft)
+                              : Get.to(() => ChooseCalendar(),
+                                  transition: Transition.rightToLeft);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ContainerDesign(
+                              color: readlist[index] == 'no'
+                                  ? BGColor()
+                                  : BGColor_shadowcolor(),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                      height: 100,
+                                      width: MediaQuery.of(context).size.width -
+                                          80,
                                       child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          SizedBox(
-                                              height: 100,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  40,
+                                          Flexible(
+                                              fit: FlexFit.tight,
                                               child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Flexible(
-                                                      fit: FlexFit.tight,
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            notilist
-                                                                .listad[index]
-                                                                .title,
-                                                            softWrap: true,
-                                                            maxLines: 2,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color:
-                                                                    TextColor(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    contentTextsize()),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          )
-                                                        ],
-                                                      )),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        notilist
-                                                            .listad[index].sub
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            color: TextColor(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize()),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ],
+                                                  Text(
+                                                    notilist
+                                                        .listad[index].title,
+                                                    softWrap: true,
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            contentTextsize()),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   )
                                                 ],
                                               )),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                notilist.listad[index].sub
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    color: TextColor(),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        contentTextsize()),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          )
                                         ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ));
-                          })
-                    ],
-                  ));
+                                      )),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        ));
+                  });
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
               width: MediaQuery.of(context).size.width - 60,
