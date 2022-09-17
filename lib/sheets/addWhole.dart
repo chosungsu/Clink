@@ -87,7 +87,7 @@ SheetPageAC(
 ) {
   List choicelist = List.filled(2, 0, growable: true);
   Color _color = Hive.box('user_setting').get('typecolorcalendar') == null
-      ? Colors.blue
+      ? Colors.yellow
       : Color(Hive.box('user_setting').get('typecolorcalendar'));
   bool isresponsible = false;
   MediaQuery.of(context).size.height > 900

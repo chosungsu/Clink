@@ -31,11 +31,7 @@ class notishow extends GetxController {
   }
 
   void isreadnoti() async {
-    firestore
-        .collection('AppNoticeByUsers')
-        .orderBy('date', descending: true)
-        .get()
-        .then((value) {
+    firestore.collection('AppNoticeByUsers').get().then((value) {
       updateid.clear();
       for (var element in value.docs) {
         if (element.data()['username'] == name ||

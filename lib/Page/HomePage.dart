@@ -308,7 +308,7 @@ class _HomePageState extends State<HomePage> {
                                             GetBuilder<notishow>(
                                                 builder: (_) => notilist
                                                                 .isread ==
-                                                            true &&
+                                                            true ||
                                                         widget.badge == 'true'
                                                     ? IconBtn(
                                                         color: TextColor(),
@@ -393,24 +393,23 @@ class _HomePageState extends State<HomePage> {
                                                               width: 30,
                                                               height: 30,
                                                               child: Badge(
-                                                                child:
-                                                                    NeumorphicIcon(
-                                                                  Icons
-                                                                      .notifications_none,
-                                                                  size: 30,
-                                                                  style: NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      surfaceIntensity:
-                                                                          0.5,
-                                                                      depth: 2,
-                                                                      color:
-                                                                          TextColor(),
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
-                                                                )
-                                                              )),
+                                                                  child:
+                                                                      NeumorphicIcon(
+                                                                Icons
+                                                                    .notifications_none,
+                                                                size: 30,
+                                                                style: NeumorphicStyle(
+                                                                    shape: NeumorphicShape
+                                                                        .convex,
+                                                                    surfaceIntensity:
+                                                                        0.5,
+                                                                    depth: 2,
+                                                                    color:
+                                                                        TextColor(),
+                                                                    lightSource:
+                                                                        LightSource
+                                                                            .topLeft),
+                                                              ))),
                                                         )))
                                           ],
                                         ))),

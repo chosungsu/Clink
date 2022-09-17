@@ -239,7 +239,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                               children: [
                                 Icon(
                                   Icons.drag_indicator,
-                                  color: Colors.blue.shade400,
+                                  color: TextColor(),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -290,7 +290,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                               '일정'
                                           ? Icons.calendar_month
                                           : Icons.description,
-                                      color: Colors.blue.shade400,
+                                      color: Colors.white,
                                     ),
                                   )),
                             ),
@@ -434,7 +434,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                             '일정'
                                         ? Icons.calendar_month
                                         : Icons.description,
-                                    color: Colors.blue.shade400,
+                                    color: Colors.white,
                                   ),
                                 )),
                           ),

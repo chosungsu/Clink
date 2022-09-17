@@ -531,7 +531,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
     return StreamBuilder<QuerySnapshot>(
       stream: firestore
           .collection('AppNoticeByCompany')
-          .orderBy('date')
+          .orderBy('date', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -548,7 +548,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
 
           return _list_ad.isEmpty
               ? SizedBox(
-                  height: MediaQuery.of(context).size.height - 160,
+                  height: MediaQuery.of(context).size.height - 180,
                   child: Center(
                     child: Text(
                       '공지사항이 없습니다;;;',
@@ -559,15 +559,15 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ))
-              : ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: _list_ad.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () {},
-                        child: Column(
+              : SizedBox(
+                  height: MediaQuery.of(context).size.height - 180,
+                  child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount: _list_ad.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(
@@ -581,6 +581,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                   SizedBox(
                                       width: MediaQuery.of(context).size.width -
                                           60,
+                                      height: 150,
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment:
@@ -633,11 +634,12 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                               height: 10,
                             )
                           ],
-                        ));
-                  });
+                        );
+                      }),
+                );
         }
         return SizedBox(
-            height: MediaQuery.of(context).size.height - 160,
+            height: MediaQuery.of(context).size.height - 180,
             child: Center(
               child: Text(
                 '공지사항이 없습니다;;;',
@@ -653,105 +655,257 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
   }
 
   UserNotice() {
-    return FutureBuilder(
+    return StreamBuilder<QuerySnapshot>(
+      stream: firestore
+          .collection('AppNoticeByUsers')
+          .orderBy('date', descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        /*notilist.listad.sort(
+          (a, b) {
+            return b.sub.toString().compareTo(a.sub);
+          },
+        );*/
+        if (snapshot.hasData) {
+          notilist.listad.clear();
+          listid.clear();
+          readlist.clear();
+          final valuespace = snapshot.data!.docs;
+          for (var sp in valuespace) {
+            final messageText = sp.get('title');
+            final messageDate = sp.get('date');
+            if (sp.get('sharename').toString().contains(name) ||
+                sp.get('username') == name) {
+              readlist.add(sp.get('read'));
+              listid.add(sp.id);
+              notilist.listad
+                  .add(PageList(title: messageText, sub: messageDate));
+            }
+          }
+          return snapshot.data!.docs.isEmpty
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width - 60,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: NeumorphicText(
+                          '생성된 푸시알림이 아직 없습니다.',
+                          style: const NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: Colors.black45,
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: notilist.listad.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () {
+                          notilist.updatenoti(listid[index]);
+                          setState(() {
+                            readlist[index] = 'yes';
+                          });
+                          notilist.listad[index].title.toString().contains('메모')
+                              ? Get.to(
+                                  () => const DayNoteHome(
+                                        title: '',
+                                      ),
+                                  transition: Transition.rightToLeft)
+                              : Get.to(() => ChooseCalendar(),
+                                  transition: Transition.rightToLeft);
+                        },
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ContainerDesign(
+                              color: readlist[index] == 'no'
+                                  ? BGColor()
+                                  : BGColor_shadowcolor(),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                      height: 100,
+                                      width: MediaQuery.of(context).size.width -
+                                          60,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    notilist
+                                                        .listad[index].title,
+                                                    softWrap: true,
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            contentTextsize()),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  )
+                                                ],
+                                              )),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                notilist.listad[index].sub
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    color: TextColor(),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        contentTextsize()),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      )),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        ));
+                  });
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [Center(child: CircularProgressIndicator())],
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: NeumorphicText(
+                '생성된 푸시알림이 아직 없습니다.',
+                style: NeumorphicStyle(
+                  shape: NeumorphicShape.flat,
+                  depth: 3,
+                  color: TextColor(),
+                ),
+                textStyle: NeumorphicTextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize(),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+    /*FutureBuilder(
         future: firestore
             .collection('AppNoticeByUsers')
-            //.where('username', arrayContainsAny: [name])
-            .orderBy('date', descending: true)
             .get()
-            .then(((QuerySnapshot querySnapshot) => {
-                  //print('here'),
-                  notilist.resetnoti(),
-                  listid.clear(),
-                  readlist.clear(),
-                  querySnapshot.docs.forEach((doc) {
-                    if (doc.get('sharename').toString().contains(name) ||
-                        doc.get('username') == name) {
-                      final messageText = doc.get('title');
-                      final messageDate = doc.get('date');
-                      readlist.add(doc.get('read'));
-                      listid.add(doc.id);
-                      notilist.setnoti(messageText, messageDate);
-                    }
-                  })
-                })),
+            .then(((QuerySnapshot querySnapshot) {
+          {
+            for (int i = 0; i < querySnapshot.docs.length; i++) {
+              if (querySnapshot.docs[i]
+                      .get('sharename')
+                      .toString()
+                      .contains(name) ||
+                  querySnapshot.docs[i].get('username') == name) {
+                final messageText = querySnapshot.docs[i].get('title');
+                final messageDate = querySnapshot.docs[i].get('date');
+                readlist.add(querySnapshot.docs[i].get('read'));
+                listid.add(querySnapshot.docs[i].id);
+                notilist.setnoti(messageText, messageDate);
+              }
+            }
+          }
+        })).whenComplete(() {
+          notilist.listad.sort(
+            (a, b) {
+              return b.sub.toString().compareTo(a.sub);
+            },
+          );
+        }),
         builder: ((context, snapshot) {
-          if (snapshot.hasData) {
-            return notilist.listad.isNotEmpty
-                ? ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: notilist.listad.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                          onTap: () {
-                            notilist.updatenoti(listid[index]);
-                            setState(() {
-                              readlist[index] = 'yes';
-                            });
-                            notilist.listad[index].title
-                                    .toString()
-                                    .contains('메모')
-                                ? Get.to(
-                                    () => const DayNoteHome(
-                                          title: '',
-                                        ),
-                                    transition: Transition.rightToLeft)
-                                : Get.to(() => ChooseCalendar(),
-                                    transition: Transition.rightToLeft);
-                          },
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              ContainerDesign(
-                                color: readlist[index] == 'no'
-                                    ? BGColor()
-                                    : BGColor_shadowcolor(),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                        height: 100,
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                60,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      notilist
-                                                          .listad[index].title,
-                                                      softWrap: true,
-                                                      maxLines: 2,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: TextColor(),
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize()),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    )
-                                                  ],
-                                                )),
-                                            Column(
+          if (notilist.listad.isNotEmpty) {
+            return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: notilist.listad.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                      onTap: () {
+                        notilist.updatenoti(listid[index]);
+                        setState(() {
+                          readlist[index] = 'yes';
+                        });
+                        notilist.listad[index].title.toString().contains('메모')
+                            ? Get.to(
+                                () => const DayNoteHome(
+                                      title: '',
+                                    ),
+                                transition: Transition.rightToLeft)
+                            : Get.to(() => ChooseCalendar(),
+                                transition: Transition.rightToLeft);
+                      },
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ContainerDesign(
+                            color: readlist[index] == 'no'
+                                ? BGColor()
+                                : BGColor_shadowcolor(),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                    height: 100,
+                                    width:
+                                        MediaQuery.of(context).size.width - 60,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  notilist.listad[index].sub
-                                                      .toString(),
+                                                  notilist.listad[index].title,
+                                                  softWrap: true,
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       color: TextColor(),
                                                       fontWeight:
@@ -760,32 +914,35 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                                                           contentTextsize()),
                                                   overflow:
                                                       TextOverflow.ellipsis,
-                                                ),
+                                                )
                                               ],
-                                            )
+                                            )),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              notilist.listad[index].sub
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize()),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ],
-                                        )),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          ));
-                    })
-                : SizedBox(
-                    height: MediaQuery.of(context).size.height - 160,
-                    child: Center(
-                      child: Text(
-                        '알림사항이 없습니다;;;',
-                        style: TextStyle(
-                            color: TextColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: secondTitleTextsize()),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ));
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          )
+                        ],
+                      ));
+                });
           }
           return SizedBox(
               height: MediaQuery.of(context).size.height - 160,
@@ -799,7 +956,7 @@ class _NotiAlarmState extends State<NotiAlarm> with WidgetsBindingObserver {
                   overflow: TextOverflow.ellipsis,
                 ),
               ));
-        }));
+        }));*/
     /*return StreamBuilder<QuerySnapshot>(
       stream: firestore
           .collection('AppNoticeByUsers')

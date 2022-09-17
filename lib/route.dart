@@ -1,6 +1,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/addWhole.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -31,13 +32,33 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   late DateTime Date = DateTime.now();
   final draw = Get.put(navibool());
   final notilist = Get.put(notishow());
+  List updateid = [];
+  bool isread = false;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _selectedIndex = widget.index;
-    notilist.isreadnoti();
+    firestore
+        .collection('AppNoticeByUsers')
+        .orderBy('date', descending: true)
+        .get()
+        .then((value) {
+      updateid.clear();
+      for (var element in value.docs) {
+        if (element.data()['username'] == name ||
+            element.data()['sharename'].toString().contains(name)) {
+          updateid.add(element.data()['read']);
+        }
+      }
+      if (updateid.contains('no')) {
+        isread = false;
+      } else {
+        isread = true;
+      }
+    });
   }
 
   @override
