@@ -978,7 +978,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
           builder: (_) => StreamBuilder<QuerySnapshot>(
                 stream: firestore
                     .collection('ShareHome')
-                    .where('showingUser', isEqualTo: username)
+                    .where('showingUser',
+                        isEqualTo: cal_share_person.secondname)
                     .orderBy('date',
                         descending: cal_sort.sort == 0 ? true : false)
                     .snapshots(),

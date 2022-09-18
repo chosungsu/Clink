@@ -74,7 +74,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    cal_share_person.peoplecalendar();
+    cal_share_person.people = Hive.box('user_setting').get('share_cal_person');
     listselected_sp = cal_share_person.people;
     //ContactsPermissionIsGranted();
   }
