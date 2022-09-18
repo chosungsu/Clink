@@ -379,24 +379,18 @@ Search(
                                                                     SnackBarBehavior
                                                                         .floating);
                                                           }
-                                                          for (int i = 0;
-                                                              i <
-                                                                  list_sp
-                                                                      .length;
-                                                              i++) {
-                                                            firestore
-                                                                .collection(
-                                                                    'PeopleList')
-                                                                .doc(username)
-                                                                .set(
-                                                                    {
-                                                                  '$i':
-                                                                      list_sp[i]
-                                                                },
-                                                                    SetOptions(
-                                                                        merge:
-                                                                            true));
-                                                          }
+                                                          firestore
+                                                              .collection(
+                                                                  'PeopleList')
+                                                              .doc(username)
+                                                              .set(
+                                                                  {
+                                                                'friends':
+                                                                    list_sp
+                                                              },
+                                                                  SetOptions(
+                                                                      merge:
+                                                                          true));
                                                         },
                                                         child: list_sp.contains(
                                                                 list_user[
@@ -462,9 +456,9 @@ usersearch(
   List<String> list_sp = [];
   var list_share_people =
       firestore.collection('PeopleList').doc(username).get().then((value) {
-    value.data()!.forEach((key, value) {
-      list_sp.add(value);
-    });
+    for (int i = 0; i < value.get('friends').length; i++) {
+      list_sp.add(value.get('friends')[i]);
+    }
   });
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return FutureBuilder(

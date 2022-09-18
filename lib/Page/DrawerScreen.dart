@@ -12,13 +12,17 @@ import '../sheets/addWhole.dart';
 import 'HomePage.dart';
 
 class DrawerScreen extends StatefulWidget {
+  const DrawerScreen({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
+  final int index;
   @override
   State<StatefulWidget> createState() => _DrawerScreenState();
 }
 
 class _DrawerScreenState extends State<DrawerScreen> {
-  int page_index = Hive.box('user_setting').get('page_index') ?? 0;
-  late bool selected;
+  bool selected = false;
   Color colorselection = Colors.white;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
@@ -49,7 +53,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: drawerItems.map((element) {
-              selected = drawerItems.indexOf(element) == page_index;
+              selected = drawerItems.indexOf(element) == widget.index;
               return Padding(
                   padding: const EdgeInsets.only(top: 30, bottom: 30),
                   child: InkWell(
@@ -60,54 +64,50 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
                             child: const MyHomePage(
-                              index: 0,
+                              index: 1,
                             ),
                           ),
                         );
 
-                        Hive.box('user_setting').put('page_index', 0);
+                        Hive.box('user_setting').put('page_index', 1);
                       } else if (element.containsValue(Icons.add_outlined)) {
                         //draw.setclose();
                         addWhole(context, searchNode, controller, name, Date,
                             'home');
+                      } else if (element.containsValue(Icons.group)) {
+                        //draw.setclose();
+                        draw.setclose();
+                        Navigator.of(context).pushReplacement(
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: const MyHomePage(
+                              index: 0,
+                            ),
+                          ),
+                        );
+                        Hive.box('user_setting').put('page_index', 0);
                       } else {
                         draw.setclose();
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
                             child: const MyHomePage(
-                              index: 2,
+                              index: 3,
                             ),
                           ),
                         );
-                        Hive.box('user_setting').put('page_index', 2);
+                        Hive.box('user_setting').put('page_index', 3);
                       }
                     },
                     child: Column(
                       children: [
-                        selected
-                            ? Icon(
-                                element['icon'],
-                                color: NaviColor(selected),
-                              )
-                            : Icon(
-                                element['icon'],
-                                color: NaviColor(selected),
-                              ),
+                        Icon(
+                          element['icon'],
+                          color: NaviColor(selected),
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
-                        selected
-                            ? Text(element['title'],
-                                style: TextStyle(
-                                    color: NaviColor(selected),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTitleTextsize()))
-                            : Text(element['title'],
-                                style: TextStyle(
-                                    color: NaviColor(selected),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTitleTextsize())),
                       ],
                     ),
                   ));

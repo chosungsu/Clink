@@ -255,9 +255,9 @@ class _PeopleGroupState extends State<PeopleGroup> {
                   .get()
                   .then((value) {
                 list_sp.clear();
-                value.data()!.forEach((key, value) {
-                  list_sp.add(value);
-                });
+                for (int i = 0; i < value.get('friends').length; i++) {
+                  list_sp.add(value.get('friends')[i]);
+                }
               }),
               builder: (context, snapshot) {
                 if (snapshot.hasData || list_sp.isNotEmpty) {

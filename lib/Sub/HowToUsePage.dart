@@ -166,7 +166,7 @@ class _HowToUsePageState extends State<HowToUsePage>
             child: RichText(
               text: TextSpan(
                   text: widget.stringsend + '를 다음과 같이\n사용해보세요~',
-                  style: GoogleFonts.jua(
+                  style: TextStyle(
                     fontSize: secondTitleTextsize(),
                     color: TextColor(),
                     fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:clickbyme/Page/GroupPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/addWhole.dart';
@@ -24,7 +25,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   //curved navi index
   int _selectedIndex = 0;
-  int page_index = Hive.box('user_setting').get('page_index') ?? 0;
   late DateTime backbuttonpressedTime;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
@@ -41,24 +41,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _selectedIndex = widget.index;
-    firestore
-        .collection('AppNoticeByUsers')
-        .orderBy('date', descending: true)
-        .get()
-        .then((value) {
-      updateid.clear();
-      for (var element in value.docs) {
-        if (element.data()['username'] == name ||
-            element.data()['sharename'].toString().contains(name)) {
-          updateid.add(element.data()['read']);
-        }
-      }
-      if (updateid.contains('no')) {
-        isread = false;
-      } else {
-        isread = true;
-      }
-    });
+    Hive.box('user_setting').put('page_index', 1);
   }
 
   @override
@@ -69,12 +52,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
-      HomePage(badge: notilist.isread.toString()),
-      HomePage(badge: notilist.isread.toString()),
+      GroupPage(),
+      const HomePage(),
+      const HomePage(),
       ProfilePage(),
     ];
 
@@ -89,39 +71,51 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         border: Border(
                             top: BorderSide(color: draw.color, width: 1))),
                     child: BottomNavigationBar(
+                      type: BottomNavigationBarType.fixed,
                       onTap: (_index) {
                         //Handle button tap
                         setState(() {
-                          if (_index == 1) {
+                          if (_index == 2) {
+                            print(Hive.box('user_setting').get('page_index'));
                             Hive.box('user_setting').put('page_index',
                                 Hive.box('user_setting').get('page_index'));
+                            _selectedIndex =
+                                Hive.box('user_setting').get('page_index');
                             addWhole(context, searchNode, controller, name,
                                 Date, 'home');
                           } else {
                             Hive.box('user_setting').put('page_index', _index);
+                            _selectedIndex =
+                                Hive.box('user_setting').get('page_index');
                           }
-                          _selectedIndex =
-                              Hive.box('user_setting').get('page_index');
                         });
                       },
-                      backgroundColor: draw.color,
+                      backgroundColor: BGColor(),
                       selectedFontSize: contentTitleTextsize(),
                       unselectedFontSize: contentTitleTextsize(),
                       selectedItemColor: NaviColor(true),
                       unselectedItemColor: NaviColor(false),
                       showSelectedLabels: true,
-                      showUnselectedLabels: true,
+                      showUnselectedLabels: false,
                       currentIndex: _selectedIndex,
-                      items: const <BottomNavigationBarItem>[
+                      items: <BottomNavigationBarItem>[
                         BottomNavigationBarItem(
+                          backgroundColor: BGColor(),
+                          icon: Icon(Icons.group, size: 25),
+                          label: '피플',
+                        ),
+                        BottomNavigationBarItem(
+                          backgroundColor: BGColor(),
                           icon: Icon(Icons.home, size: 25),
                           label: '홈',
                         ),
                         BottomNavigationBarItem(
+                          backgroundColor: BGColor(),
                           icon: Icon(Icons.add_outlined, size: 25),
                           label: '추가',
                         ),
                         BottomNavigationBarItem(
+                          backgroundColor: BGColor(),
                           icon: Icon(Icons.account_circle_outlined, size: 25),
                           label: '설정',
                         ),

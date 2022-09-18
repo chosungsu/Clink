@@ -197,7 +197,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
       width: MediaQuery.of(context).size.width * 0.7,
       child: Text('이곳에서 홈뷰의 순서를 변경하거나 숨길수 있어요',
           maxLines: 3,
-          style: GoogleFonts.jua(
+          style: TextStyle(
             fontSize: secondTitleTextsize(),
             color: TextColor(),
             fontWeight: FontWeight.bold,

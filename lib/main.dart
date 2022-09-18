@@ -50,8 +50,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

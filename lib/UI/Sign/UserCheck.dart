@@ -17,10 +17,10 @@ GoToMain(BuildContext context) {
     );*/
     Get.to(
       () => const MyHomePage(
-        index: 0,
+        index: 1,
       ),
     );
-    Hive.box('user_setting').put('page_index', 0);
+    Hive.box('user_setting').put('page_index', 1);
   });
   return _time;
 }

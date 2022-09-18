@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 List<Map> drawerItems = const [
+  {'icon': Icons.group, 'title': '피플'},
   {'icon': Icons.home, 'title': '홈'},
   {
     'icon': Icons.add_outlined,

@@ -29,9 +29,7 @@ import 'DrawerScreen.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
-    required this.badge,
   }) : super(key: key);
-  final String badge;
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -81,11 +79,12 @@ class _HomePageState extends State<HomePage> {
   List updateid = [];
   bool isread = false;
   final notilist = Get.put(notishow());
+  List updatefriends = [];
 
   @override
   void initState() {
     super.initState();
-    Hive.box('user_setting').put('page_index', 0);
+    Hive.box('user_setting').put('page_index', 1);
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     isdraweropen = draw.drawopen;
@@ -104,6 +103,19 @@ class _HomePageState extends State<HomePage> {
         }, SetOptions(merge: true));
       }
     });
+    firestore.collection('PeopleList').doc(name).get().then((value) {
+      if (value.data()!.isEmpty) {
+        firestore.collection('PeopleList').doc(name).set({'friends': []});
+      } else {
+        for (int i = 0; i < value.get('friends').length; i++) {
+          updatefriends.add(value.get('friends')[i]);
+        }
+        firestore
+            .collection('PeopleList')
+            .doc(name)
+            .set({'friends': updatefriends}, SetOptions(merge: true));
+      }
+    });
     if (draw.drawopen == true) {
       setState(() {
         xoffset = 50;
@@ -115,7 +127,7 @@ class _HomePageState extends State<HomePage> {
         yoffset = 0;
       });
     }
-    /*firestore.collection('AppNoticeByUsers').get().then((value) {
+    firestore.collection('AppNoticeByUsers').get().then((value) {
       for (var element in value.docs) {
         if (element.data()['username'] == name ||
             element.data()['sharename'].toString().contains(name)) {
@@ -129,8 +141,7 @@ class _HomePageState extends State<HomePage> {
         isread = true;
         notilist.isread = true;
       }
-    });*/
-    notilist.isreadnoti();
+    });
   }
 
   @override
@@ -141,8 +152,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
     MediaQuery.of(context).size.height > 900
         ? isresponsive = true
         : isresponsive = false;
@@ -157,7 +166,9 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Container(
                               width: 80,
-                              child: DrawerScreen(),
+                              child: DrawerScreen(
+                                  index: Hive.box('user_setting')
+                                      .get('page_index')),
                             ),
                             HomeUi(
                               _pController,
@@ -307,9 +318,8 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             GetBuilder<notishow>(
                                                 builder: (_) => notilist
-                                                                .isread ==
-                                                            true ||
-                                                        widget.badge == 'true'
+                                                            .isread ==
+                                                        true
                                                     ? IconBtn(
                                                         color: TextColor(),
                                                         child: IconButton(

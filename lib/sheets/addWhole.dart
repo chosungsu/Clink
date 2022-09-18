@@ -65,14 +65,23 @@ addWhole(
                 ),
               ),
             )
-          : Navigator.of(context).pushReplacement(
-              PageTransition(
-                type: PageTransitionType.fade,
-                child: const MyHomePage(
-                  index: 2,
-                ),
-              ),
-            );
+          : (Hive.box('user_setting').get('page_index') == 1
+              ? Navigator.of(context).pushReplacement(
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    child: const MyHomePage(
+                      index: 1,
+                    ),
+                  ),
+                )
+              : Navigator.of(context).pushReplacement(
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    child: const MyHomePage(
+                      index: 3,
+                    ),
+                  ),
+                ));
     }
   });
 }

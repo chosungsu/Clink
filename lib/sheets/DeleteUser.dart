@@ -13,6 +13,7 @@ DeleteUserVerify(BuildContext context, String name) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   showModalBottomSheet(
       context: context,
+      isDismissible: false,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: ((context, setState) {
           return Container(
@@ -139,7 +140,7 @@ DeleteUserVerify(BuildContext context, String name) {
                                         width: 10,
                                       ),
                                       Text(
-                                        '처리중입니다...',
+                                        '잠시 기다려주세요...',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: contentTextsize(),

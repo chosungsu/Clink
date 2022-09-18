@@ -188,10 +188,11 @@ class _LoginSignPageState extends State<LoginSignPage>
                 PageTransition(
                   type: PageTransitionType.bottomToTop,
                   child: const MyHomePage(
-                    index: 0,
+                    index: 1,
                   ),
                 ),
               );
+              Hive.box('user_setting').put('page_index', 1);
             },
             child: SizedBox(
               width: 200 * (MediaQuery.of(context).size.width / 392),
