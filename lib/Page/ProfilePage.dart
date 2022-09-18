@@ -1,6 +1,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_version/new_version.dart';
 import 'package:package_info/package_info.dart';
 import '../Tool/ContainerDesign.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
@@ -27,7 +29,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool login_state = false;
-  String name = "null", email = "null", cnt = "null";
+  String secondname = '';
   double xoffset = 0;
   double yoffset = 0;
   double scalefactor = 1;
@@ -36,6 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
   var _controller = TextEditingController();
   late final PageController _pController;
   int currentPage = 0;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   final List<String> list_app_setting = <String>[
     '배경색',
     '글자크기',
@@ -48,6 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
   String appuserversion = '';
   String appstoreversion = '';
   final searchNode = FocusNode();
+  //String name = Hive.box('user_info').get('id');
+  //final peopleadd = Get.put(PeopleAdd());
 
   @override
   void initState() {
@@ -57,6 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
     isdraweropen = draw.drawopen;
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
+    //peopleadd.secondnameset(name);
   }
 
   @override
@@ -287,7 +293,11 @@ class _ProfilePageState extends State<ProfilePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            child: UserDetails(height: height),
+            child: UserDetails(
+              height: height,
+              controller: _controller,
+              node: searchNode,
+            ),
           )
         ],
       ),

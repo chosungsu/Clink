@@ -439,11 +439,11 @@ class _HomePageState extends State<HomePage> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: Column(
                                     children: [
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
                                       H_Container_0_eventcompany(
                                           height, _pController),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
                                       H_Container_0(height, _pController),
                                       const SizedBox(
                                         height: 20,

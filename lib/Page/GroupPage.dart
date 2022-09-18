@@ -1,25 +1,19 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:new_version/new_version.dart';
-import 'package:package_info/package_info.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/Setting/ShowLicense.dart';
-import '../UI/Setting/UserDetails.dart';
-import '../UI/Setting/UserSettings.dart';
-import '../sheets/addgroupmember.dart';
-import '../sheets/readycontent.dart';
-import '../sheets/userinfo_draggable.dart';
+import '../UI/Home/firstContentNet/DayContentHome.dart';
+import '../UI/Home/secondContentNet/PeopleGroup.dart';
 import 'DrawerScreen.dart';
 
 class GroupPage extends StatefulWidget {
@@ -40,6 +34,7 @@ class _GroupPageState extends State<GroupPage> {
   final colorlist = [];
   final calnamelist = [];
   final friendnamelist = [];
+  bool showsharegroups = false;
   late final PageController _pController;
 
   @override
@@ -227,6 +222,9 @@ class _GroupPageState extends State<GroupPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
                                       G_Container0(height),
                                       const SizedBox(
                                         height: 20,
@@ -254,13 +252,74 @@ class _GroupPageState extends State<GroupPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('공유 그룹',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize(),
-                color: TextColor(),
-              )),
-          G_Container0_body()
+          Row(
+            children: [
+              Flexible(
+                fit: FlexFit.tight,
+                child: Text('공유그룹',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: TextColor(),
+                    )),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    if (showsharegroups) {
+                      showsharegroups = false;
+                    } else {
+                      showsharegroups = true;
+                    }
+                  });
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 30,
+                  height: 30,
+                  child: NeumorphicIcon(
+                    showsharegroups ? Icons.expand_less : Icons.expand_more,
+                    size: 30,
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        surfaceIntensity: 0.5,
+                        depth: 2,
+                        color: TextColor(),
+                        lightSource: LightSource.topLeft),
+                  ),
+                ),
+              )
+            ],
+          ),
+          !showsharegroups
+              ? Text(
+                  '우측아이콘을 클릭하여 공유그룹 보기',
+                  maxLines: 2,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15,
+                    color: TextColor(),
+                  ),
+                )
+              : Text(
+                  '카드를 길게클릭하여 정보확인',
+                  maxLines: 2,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15,
+                    color: TextColor(),
+                  ),
+                ),
+          showsharegroups ? G_Container0_body() : const SizedBox(),
+          const Divider(
+            height: 10,
+            color: Colors.grey,
+            thickness: 1,
+            indent: 10.0,
+            endIndent: 10.0,
+          ),
         ],
       ),
     );
@@ -342,150 +401,255 @@ class _GroupPageState extends State<GroupPage> {
                                         const SizedBox(
                                           height: 10,
                                         ),
-                                        ContainerDesign(
-                                          color: Color(colorlist[index]),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      80,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Flexible(
-                                                          fit: FlexFit.loose,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                calnamelist[
-                                                                    index],
-                                                                softWrap: true,
-                                                                maxLines: 2,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        contentTextsize()),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
-                                                              Text(
-                                                                '캘린더 공유그룹',
-                                                                softWrap: true,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        contentTextsize()),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              )
-                                                            ],
-                                                          )),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      ContainerDesign(
-                                                          child: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              ListView.builder(
-                                                                  physics:
-                                                                      const NeverScrollableScrollPhysics(),
-                                                                  scrollDirection:
-                                                                      Axis
-                                                                          .vertical,
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  itemCount: 1,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index2) {
-                                                                    return Column(
-                                                                      children: [
-                                                                        GestureDetector(
-                                                                            onTap:
-                                                                                () {},
-                                                                            child:
-                                                                                Container(
-                                                                              child: Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                                children: [
-                                                                                  Container(
-                                                                                    alignment: Alignment.center,
-                                                                                    height: 25,
-                                                                                    width: 25,
-                                                                                    child: Text(sharelist[index][index2].toString().substring(0, 1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
-                                                                                    decoration: BoxDecoration(
-                                                                                      color: Colors.white,
-                                                                                      borderRadius: BorderRadius.circular(100),
-                                                                                    ),
-                                                                                  ),
-                                                                                  const SizedBox(
-                                                                                    width: 10,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    sharelist[index][index2],
-                                                                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: TextColor()),
-                                                                                  ),
-                                                                                  const SizedBox(
-                                                                                    width: 10,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    ' 외 ' + sharelist[index].length.toString() + '명',
-                                                                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: TextColor()),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            )),
-                                                                      ],
-                                                                    );
-                                                                  })
-                                                            ],
+                                        FocusedMenuHolder(
+                                            child: ContainerDesign(
+                                              color: Color(colorlist[index]),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width -
+                                                              80,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Flexible(
+                                                              fit:
+                                                                  FlexFit.loose,
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    calnamelist[
+                                                                        index],
+                                                                    softWrap:
+                                                                        true,
+                                                                    maxLines: 2,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                            TextColor(),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            contentTextsize()),
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                  Text(
+                                                                    '캘린더 공유그룹',
+                                                                    softWrap:
+                                                                        true,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                            TextColor(),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            contentTextsize()),
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  )
+                                                                ],
+                                                              )),
+                                                          const SizedBox(
+                                                            height: 20,
                                                           ),
-                                                          color:
-                                                              BGColor_shadowcolor()),
-                                                      const SizedBox(
-                                                        height: 20,
+                                                          ContainerDesign(
+                                                              child:
+                                                                  GestureDetector(
+                                                                      onTap:
+                                                                          () {},
+                                                                      child:
+                                                                          Container(
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            Container(
+                                                                              alignment: Alignment.center,
+                                                                              height: 25,
+                                                                              width: 25,
+                                                                              child: Text(sharelist[index][0].toString().substring(0, 1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.white,
+                                                                                borderRadius: BorderRadius.circular(100),
+                                                                              ),
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Text(
+                                                                              sharelist[index][0],
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: TextColor()),
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Text(
+                                                                              ' 외 ' + sharelist[index].length.toString() + '명',
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: TextColor()),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      )),
+                                                              color:
+                                                                  BGColor_shadowcolor()),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                        ],
+                                                      )),
+                                                ],
+                                              ),
+                                            ),
+                                            onPressed: () {},
+                                            duration:
+                                                const Duration(seconds: 0),
+                                            animateMenuItems: true,
+                                            menuOffset: 20,
+                                            menuBoxDecoration: BoxDecoration(
+                                                color: BGColor(),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.zero)),
+                                            bottomOffsetHeight: 10,
+                                            menuWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                1.5,
+                                            openWithTap: false,
+                                            menuItems: [
+                                              FocusedMenuItem(
+                                                  trailingIcon: const Icon(
+                                                    Icons.chevron_right,
+                                                    size: 30,
+                                                  ),
+                                                  title: Text('바로확인',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize())),
+                                                  onPressed: () {
+                                                    Get.to(
+                                                      () => DayContentHome(
+                                                        title: snapshot.data!
+                                                            .docs[index].id,
+                                                        share: snapshot.data!
+                                                                .docs[index]
+                                                            ['share'],
+                                                        origin: snapshot.data!
+                                                                .docs[index]
+                                                            ['madeUser'],
+                                                        theme: snapshot.data!
+                                                                .docs[index]
+                                                            ['themesetting'],
+                                                        view: snapshot.data!
+                                                                .docs[index]
+                                                            ['viewsetting'],
+                                                        calname: snapshot.data!
+                                                                .docs[index]
+                                                            ['calname'],
                                                       ),
-                                                    ],
-                                                  )),
-                                            ],
-                                          ),
-                                        ),
+                                                      transition: Transition
+                                                          .rightToLeft,
+                                                    );
+                                                  }),
+                                              FocusedMenuItem(
+                                                  trailingIcon: const Icon(
+                                                    Icons.share,
+                                                    size: 30,
+                                                  ),
+                                                  title: Text('공유자 검색',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize())),
+                                                  onPressed: () {
+                                                    //공유자 검색
+                                                    Hive.box('user_setting')
+                                                        .put(
+                                                            'share_cal_person',
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['share']);
+
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 1), () {
+                                                      Get.to(
+                                                        () => PeopleGroup(
+                                                          doc: snapshot.data!
+                                                              .docs[index].id
+                                                              .toString(),
+                                                          when: snapshot.data!
+                                                                  .docs[index]
+                                                              ['date'],
+                                                          type: snapshot.data!
+                                                                  .docs[index]
+                                                              ['type'],
+                                                          color: snapshot.data!
+                                                                  .docs[index]
+                                                              ['color'],
+                                                          nameid: snapshot.data!
+                                                                  .docs[index]
+                                                              ['calname'],
+                                                          share: snapshot.data!
+                                                                  .docs[index]
+                                                              ['share'],
+                                                          made: snapshot.data!
+                                                                  .docs[index]
+                                                              ['madeUser'],
+                                                          allow_share: snapshot
+                                                                  .data!
+                                                                  .docs[index][
+                                                              'allowance_share'],
+                                                          allow_change_set: snapshot
+                                                                  .data!
+                                                                  .docs[index][
+                                                              'allowance_change_set'],
+                                                          themesetting: snapshot
+                                                                  .data!
+                                                                  .docs[index]
+                                                              ['themesetting'],
+                                                          viewsetting: snapshot
+                                                                  .data!
+                                                                  .docs[index]
+                                                              ['viewsetting'],
+                                                        ),
+                                                        transition:
+                                                            Transition.downToUp,
+                                                      );
+                                                    });
+                                                  }),
+                                            ]),
                                         const SizedBox(
                                           height: 10,
                                         )
@@ -566,7 +730,7 @@ class _GroupPageState extends State<GroupPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('전체인원',
+          Text('전체',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: contentTitleTextsize(),

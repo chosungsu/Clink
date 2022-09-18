@@ -259,41 +259,9 @@ class EventApps extends StatelessWidget {
                 })),
         builder: (context, future) => future.connectionState ==
                 ConnectionState.waiting
-            ? SizedBox(
-                height: 110,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ContainerDesign(
-                        color: Colors.grey.shade400,
-                        child: SizedBox(
-                          height: 70,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: NeumorphicText(
-                                  '업데이트 사항 확인중...',
-                                  style: const NeumorphicStyle(
-                                    shape: NeumorphicShape.flat,
-                                    depth: 3,
-                                    color: Colors.white,
-                                  ),
-                                  textStyle: NeumorphicTextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTitleTextsize(),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              )
-                            ],
-                          ),
-                        )),
-                  ],
-                ),
+            ? LinearProgressIndicator(
+                backgroundColor: BGColor(),
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
               )
             : (eventcontent.isEmpty
                 ? const SizedBox()

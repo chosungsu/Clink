@@ -471,8 +471,8 @@ usersearch(
                   setState(() {
                     list_user.clear();
                     querySnapshot.docs.forEach((doc) {
-                      doc.get('name') != null
-                          ? list_user.add(doc.get('name'))
+                      doc.get('subname') != null
+                          ? list_user.add(doc.get('subname'))
                           : list_user.clear();
                     });
                     controller.text.isEmpty

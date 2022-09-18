@@ -860,6 +860,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
                                                       children: [
                                                         Container(
                                                           decoration: BoxDecoration(
