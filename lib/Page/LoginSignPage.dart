@@ -14,6 +14,7 @@ import '../Auth/GoogleSignInController.dart';
 import '../Auth/KakaoSignInController.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/AndroidIOS.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/TextSize.dart';
 import '../route.dart';
 
@@ -28,6 +29,7 @@ class _LoginSignPageState extends State<LoginSignPage>
     with WidgetsBindingObserver {
   bool _ischecked = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static final cal_share_person = Get.put(PeopleAdd());
 
   @override
   void initState() {
@@ -180,6 +182,16 @@ class _LoginSignPageState extends State<LoginSignPage>
               await Provider.of<GoogleSignInController>(context, listen: false)
                   .login(context, ischecked);
               String name = Hive.box('user_info').get('id');
+              String subname = '';
+              await firestore.collection('User').doc(name).get().then((value) {
+                if (value.exists) {
+                  subname = value.data()!['subname'];
+                  cal_share_person.secondnameset(subname);
+                } else {
+                  subname = name;
+                  cal_share_person.secondnameset(subname);
+                }
+              });
               await firestore
                   .collection('MemoAllAlarm')
                   .doc(name)

@@ -12,8 +12,6 @@ class GoogleSignInController with ChangeNotifier {
   GoogleSignInAccount? googleSignInAccount;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late int count;
-  String subname = '';
-  final cal_share_person = Get.put(PeopleAdd());
 
   login(BuildContext context, bool ischecked) async {
     count = 1;
@@ -43,7 +41,8 @@ class GoogleSignInController with ChangeNotifier {
             Hive.box('user_info').get('id').toString().substring(0, 2);
     //firestore 저장
     firestore.collection('User').doc(nick).get().then((value) async {
-      if (value.data()!.isNotEmpty) {
+      if (value.exists) {
+        print('here1');
         await firestore.collection('User').doc(nick).update({
           'name': nick,
           'email': email,
@@ -51,11 +50,8 @@ class GoogleSignInController with ChangeNotifier {
           'autologin': ischecked,
           'code': codes
         });
-        firestore.collection('User').doc(nick).get().then((value) {
-          subname = value.data()!['subname'];
-          cal_share_person.secondnameset(subname);
-        });
       } else {
+        print('here2');
         await firestore.collection('User').doc(nick).set({
           'name': nick,
           'subname': nick,
@@ -65,7 +61,6 @@ class GoogleSignInController with ChangeNotifier {
           'autologin': ischecked,
           'code': codes
         }, SetOptions(merge: true));
-        cal_share_person.secondnameset(nick);
       }
     });
 
