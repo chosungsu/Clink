@@ -134,6 +134,7 @@ content(
   bool isloading = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
+  List changepeople = [];
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -226,12 +227,59 @@ content(
                 });
                 if (controller.text.isEmpty) {
                   if (_ischecked) {
+                    await firestore
+                        .collection('CalendarSheetHome')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        for (int j = 0;
+                            j < value.docs[i].get('share').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('share')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(Hive.box('user_info').get('id'));
+                          firestore
+                              .collection('CalendarSheetHome')
+                              .doc(value.docs[i].id)
+                              .update({'share': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
+                    await firestore
+                        .collection('PeopleList')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        for (int j = 0;
+                            j < value.docs[i].get('friends').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('friends')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(Hive.box('user_info').get('id'));
+                          firestore
+                              .collection('PeopleList')
+                              .doc(value.docs[i].id)
+                              .update({'friends': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
                     await firestore.collection('User').get().then((value) {
                       if (value.docs.isEmpty) {
                       } else {
                         cal_share_person.secondnameset(value.docs[0]['name']);
                       }
                     });
+
                     setState(() {
                       isloading = false;
                     });
@@ -248,6 +296,52 @@ content(
                   }
                 } else {
                   if (_ischecked) {
+                    await firestore
+                        .collection('CalendarSheetHome')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        for (int j = 0;
+                            j < value.docs[i].get('share').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('share')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(Hive.box('user_info').get('id'));
+                          firestore
+                              .collection('CalendarSheetHome')
+                              .doc(value.docs[i].id)
+                              .update({'share': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
+                    await firestore
+                        .collection('PeopleList')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        for (int j = 0;
+                            j < value.docs[i].get('friends').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('friends')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(Hive.box('user_info').get('id'));
+                          firestore
+                              .collection('PeopleList')
+                              .doc(value.docs[i].id)
+                              .update({'friends': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
                     await firestore.collection('User').get().then((value) {
                       if (value.docs.isEmpty) {
                       } else {
@@ -255,6 +349,52 @@ content(
                       }
                     });
                   } else {
+                    await firestore
+                        .collection('CalendarSheetHome')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        for (int j = 0;
+                            j < value.docs[i].get('share').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('share')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(controller.text);
+                          firestore
+                              .collection('CalendarSheetHome')
+                              .doc(value.docs[i].id)
+                              .update({'share': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
+                    await firestore
+                        .collection('PeopleList')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        for (int j = 0;
+                            j < value.docs[i].get('friends').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('friends')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(controller.text);
+                          firestore
+                              .collection('PeopleList')
+                              .doc(value.docs[i].id)
+                              .update({'friends': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
                     await firestore.collection('User').get().then((value) {
                       if (value.docs.isEmpty) {
                       } else {

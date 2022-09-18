@@ -25,6 +25,7 @@ class PeopleAdd extends GetxController {
         .collection('User')
         .doc(Hive.box('user_info').get('id'))
         .update({'subname': name});
+
     secondname = name;
     update();
     notifyChildrens();
