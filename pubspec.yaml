@@ -98,6 +98,7 @@ dependencies:
   share_plus: 
   url_launcher: 
   flutter_time_picker_spinner: 
+  flutter_slidable: 
   #local db
   encrypt:
   hive: 

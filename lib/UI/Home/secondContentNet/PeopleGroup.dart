@@ -568,7 +568,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                               '-' +
                                               widget.made +
                                               '-' +
-                                              widget.share[i])
+                                              listselected_sp[i])
                                           .update({
                                         'calname': widget.nameid,
                                         'madeUser': widget.made,

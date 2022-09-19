@@ -1,5 +1,6 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/sheets/userinfotalk.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -14,7 +15,9 @@ import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/secondContentNet/PeopleGroup.dart';
+import '../sheets/addgroupmember.dart';
 import 'DrawerScreen.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class GroupPage extends StatefulWidget {
   @override
@@ -36,6 +39,8 @@ class _GroupPageState extends State<GroupPage> {
   final friendnamelist = [];
   bool showsharegroups = false;
   late final PageController _pController;
+  final searchNode = FocusNode();
+  var _controller = TextEditingController();
 
   @override
   void initState() {
@@ -43,11 +48,13 @@ class _GroupPageState extends State<GroupPage> {
     Hive.box('user_setting').put('page_index', 0);
     isdraweropen = draw.drawopen;
     _pController = PageController(initialPage: 0, viewportFraction: 1);
+    _controller = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -202,6 +209,36 @@ class _GroupPageState extends State<GroupPage> {
                                                     fontWeight: FontWeight.bold,
                                                   )),
                                             ),
+                                            IconBtn(
+                                                color: TextColor(),
+                                                child: IconButton(
+                                                    onPressed: () async {
+                                                      addgroupmember(
+                                                          context,
+                                                          searchNode,
+                                                          _controller);
+                                                    },
+                                                    icon: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: 30,
+                                                        height: 30,
+                                                        child: NeumorphicIcon(
+                                                          Icons.add,
+                                                          size: 30,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              surfaceIntensity:
+                                                                  0.5,
+                                                              depth: 2,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ))))
                                           ],
                                         ))),
                               ],
@@ -338,7 +375,7 @@ class _GroupPageState extends State<GroupPage> {
           calnamelist.clear();
           final valuespace = snapshot.data!.docs;
           for (var sp in valuespace) {
-            if (sp.get('share') == null || sp.get('share') == []) {
+            if (sp.get('share') == null || sp.get('share').toString() == '[]') {
             } else {
               sharelist.add(sp.get('share'));
               colorlist.add(sp.get('color'));
@@ -493,7 +530,7 @@ class _GroupPageState extends State<GroupPage> {
                                                                               alignment: Alignment.center,
                                                                               height: 25,
                                                                               width: 25,
-                                                                              child: Text(sharelist[index][0].toString().substring(0, 1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
+                                                                              child: Text(sharelist.isNotEmpty ? sharelist[index][0].toString().substring(0, 1) : '', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
                                                                               decoration: BoxDecoration(
                                                                                 color: Colors.white,
                                                                                 borderRadius: BorderRadius.circular(100),
@@ -503,14 +540,14 @@ class _GroupPageState extends State<GroupPage> {
                                                                               width: 10,
                                                                             ),
                                                                             Text(
-                                                                              sharelist[index][0],
+                                                                              sharelist.isNotEmpty ? sharelist[index][0] : '',
                                                                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: TextColor()),
                                                                             ),
                                                                             const SizedBox(
                                                                               width: 10,
                                                                             ),
                                                                             Text(
-                                                                              ' 외 ' + sharelist[index].length.toString() + '명',
+                                                                              sharelist.isNotEmpty ? ' 외 ' + (sharelist[index].length - 1).toString() + '명' : '공유인원 없음',
                                                                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: TextColor()),
                                                                             ),
                                                                           ],
@@ -739,6 +776,16 @@ class _GroupPageState extends State<GroupPage> {
           const SizedBox(
             height: 10,
           ),
+          Text(
+            '유저이름을 클릭하여 프로필 확인',
+            maxLines: 2,
+            softWrap: true,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 15,
+              color: TextColor(),
+            ),
+          ),
           G_Container1_body()
         ],
       ),
@@ -796,55 +843,82 @@ class _GroupPageState extends State<GroupPage> {
                         shrinkWrap: true,
                         itemCount: friendnamelist.length,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {},
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width - 40,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        height: 25,
-                                        width: 25,
-                                        child: Text(
-                                            friendnamelist[index]
-                                                .toString()
-                                                .substring(0, 1),
-                                            style: TextStyle(
-                                                color: BGColor_shadowcolor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18)),
-                                        decoration: BoxDecoration(
-                                          color: TextColor_shadowcolor(),
-                                          borderRadius:
-                                              BorderRadius.circular(100),
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  userinfotalk(context, index, friendnamelist);
+                                },
+                                child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 40,
+                                    decoration: BoxDecoration(
+                                        color: BGColor(),
+                                        borderRadius: BorderRadius.circular(0),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: Colors.blue.shade200)),
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 10,
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        friendnamelist[index],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                            color: TextColor()),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                )
-                              ],
-                            ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              height: 25,
+                                              width: 25,
+                                              child: Text(
+                                                  friendnamelist[index]
+                                                      .toString()
+                                                      .substring(0, 1),
+                                                  style: TextStyle(
+                                                      color:
+                                                          BGColor_shadowcolor(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18)),
+                                              decoration: BoxDecoration(
+                                                color: TextColor_shadowcolor(),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                friendnamelist[index],
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: contentTextsize(),
+                                                    color: TextColor()),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        )
+                                      ],
+                                    )),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ],
                           );
                         }),
                   ],

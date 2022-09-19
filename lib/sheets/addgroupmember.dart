@@ -216,6 +216,7 @@ Search(
     'id',
   );
   int cnt = 0;
+  List changepeople = [];
 
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -391,6 +392,55 @@ Search(
                                                                   SetOptions(
                                                                       merge:
                                                                           true));
+                                                          firestore
+                                                              .collection(
+                                                                  'CalendarSheetHome')
+                                                              .get()
+                                                              .then((value) {
+                                                            for (int i = 0;
+                                                                i <
+                                                                    value.docs
+                                                                        .length;
+                                                                i++) {
+                                                              for (int j = 0;
+                                                                  j <
+                                                                      value
+                                                                          .docs[
+                                                                              i]
+                                                                          .get(
+                                                                              'share')
+                                                                          .length;
+                                                                  j++) {
+                                                                changepeople
+                                                                    .add(value
+                                                                        .docs[i]
+                                                                        .get(
+                                                                            'share')[j]);
+                                                              }
+                                                              if (changepeople
+                                                                  .contains(
+                                                                      list_user[
+                                                                          index])) {
+                                                                changepeople.removeWhere(
+                                                                    (element) =>
+                                                                        element ==
+                                                                        list_user[
+                                                                            index]);
+                                                                firestore
+                                                                    .collection(
+                                                                        'CalendarSheetHome')
+                                                                    .doc(value
+                                                                        .docs[i]
+                                                                        .id)
+                                                                    .update({
+                                                                  'share':
+                                                                      changepeople
+                                                                });
+                                                              }
+                                                              changepeople
+                                                                  .clear();
+                                                            }
+                                                          });
                                                         },
                                                         child: list_sp.contains(
                                                                 list_user[
@@ -454,8 +504,7 @@ usersearch(
     'id',
   );
   List<String> list_sp = [];
-  var list_share_people =
-      firestore.collection('PeopleList').doc(username).get().then((value) {
+  firestore.collection('PeopleList').doc(username).get().then((value) {
     for (int i = 0; i < value.get('friends').length; i++) {
       list_sp.add(value.get('friends')[i]);
     }
