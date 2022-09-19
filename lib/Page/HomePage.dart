@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -79,6 +80,7 @@ class _HomePageState extends State<HomePage> {
   List updateid = [];
   bool isread = false;
   final notilist = Get.put(notishow());
+  final peopleadd = Get.put(PeopleAdd());
   List updatefriends = [];
 
   @override
@@ -89,6 +91,11 @@ class _HomePageState extends State<HomePage> {
         PageController(initialPage: currentPage, viewportFraction: 1);
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
+    firestore.collection('User').doc(name).get().then((value) {
+      if (value.exists) {
+        peopleadd.secondname = value.data()!['subname'];
+      }
+    });
     firestore
         .collection('HomeViewCategories')
         .where('usercode', isEqualTo: docid)

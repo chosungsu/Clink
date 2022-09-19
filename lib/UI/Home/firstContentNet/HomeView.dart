@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -222,6 +223,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                 itemBuilder: (context, index) {
                   return SizedBox(
                     key: ValueKey(index),
+                    height: 70,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -247,21 +249,31 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                 InkWell(
                                   onTap: () {
                                     setState(() {
-                                      userviewlist
-                                          .add(defaulthomeviewlist[index]);
-                                      defaulthomeviewlist.removeAt(index);
-                                      firestore
-                                          .collection('HomeViewCategories')
-                                          .doc(docid)
-                                          .set({
-                                        'viewcategory': defaulthomeviewlist,
-                                        'hidecategory': userviewlist
-                                      }, SetOptions(merge: true));
+                                      if (defaulthomeviewlist.length > 2) {
+                                        userviewlist
+                                            .add(defaulthomeviewlist[index]);
+                                        defaulthomeviewlist.removeAt(index);
+                                        firestore
+                                            .collection('HomeViewCategories')
+                                            .doc(docid)
+                                            .set({
+                                          'viewcategory': defaulthomeviewlist,
+                                          'hidecategory': userviewlist
+                                        }, SetOptions(merge: true));
+                                      } else {
+                                        Snack.show(
+                                            title: '알림',
+                                            content: '홈뷰는 2개 미만으로 설정 불가합니다.',
+                                            snackType: SnackType.warning,
+                                            context: context);
+                                      }
                                     });
                                   },
                                   child: Text('숨김',
                                       style: TextStyle(
-                                          color: TextColor(),
+                                          color: defaulthomeviewlist.length > 2
+                                              ? TextColor()
+                                              : TextColor_shadowcolor(),
                                           fontWeight: FontWeight.bold,
                                           fontSize: contentTextsize())),
                                 ),

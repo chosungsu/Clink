@@ -16,7 +16,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
     List userviewlist, List contentmy, List contentshare, bool isresponsive) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
-  late DateTime Date = DateTime.now();
+  DateTime Date = DateTime.now();
 
   firestore
       .collection('HomeViewCategories')
@@ -67,8 +67,8 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                             const SizedBox(
                               height: 20,
                             ),
-                            StreamBuilder<QuerySnapshot>(
-                              stream: firestore
+                            FutureBuilder<QuerySnapshot>(
+                              future: firestore
                                   .collection('CalendarDataBase')
                                   .where('OriginalUser', isEqualTo: name)
                                   .where('Date',
@@ -81,7 +81,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                               .substring(0, 2) +
                                           '일')
                                   .orderBy('Timestart')
-                                  .snapshots(),
+                                  .get(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   contentmy.clear();
@@ -313,8 +313,8 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                StreamBuilder<QuerySnapshot>(
-                                  stream: firestore
+                                FutureBuilder<QuerySnapshot>(
+                                  future: firestore
                                       .collection('CalendarDataBase')
                                       .where('Date',
                                           isEqualTo: Date.toString()
@@ -327,7 +327,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                                                   .substring(0, 2) +
                                               '일')
                                       .orderBy('Timestart')
-                                      .snapshots(),
+                                      .get(),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       List nameList = [];
