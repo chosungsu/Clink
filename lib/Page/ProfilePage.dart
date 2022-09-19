@@ -51,8 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
   String appuserversion = '';
   String appstoreversion = '';
   final searchNode = FocusNode();
-  //String name = Hive.box('user_info').get('id');
-  //final peopleadd = Get.put(PeopleAdd());
+  String name = Hive.box('user_info').get('id');
+  final peopleadd = Get.put(PeopleAdd());
 
   @override
   void initState() {
@@ -60,6 +60,11 @@ class _ProfilePageState extends State<ProfilePage> {
     Hive.box('user_setting').put('page_index', 3);
     _controller = TextEditingController();
     isdraweropen = draw.drawopen;
+    firestore.collection('User').doc(name).get().then((value) {
+      if (value.exists) {
+        peopleadd.secondname = value.data()!['subname'];
+      }
+    });
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     //peopleadd.secondnameset(name);

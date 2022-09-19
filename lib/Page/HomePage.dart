@@ -91,11 +91,7 @@ class _HomePageState extends State<HomePage> {
         PageController(initialPage: currentPage, viewportFraction: 1);
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
-    firestore.collection('User').doc(name).get().then((value) {
-      if (value.exists) {
-        peopleadd.secondname = value.data()!['subname'];
-      }
-    });
+
     firestore
         .collection('HomeViewCategories')
         .where('usercode', isEqualTo: docid)
