@@ -262,62 +262,84 @@ class _PeopleGroupState extends State<PeopleGroup> {
               builder: (context, snapshot) {
                 if (snapshot.hasData || list_sp.isNotEmpty) {
                   return SizedBox(
-                    height: MediaQuery.of(context).size.height - 300,
-                    child: AlphabetScrollView(
+                      height: MediaQuery.of(context).size.height - 300,
+                      child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: list_sp.length,
+                          itemBuilder: ((context, index) {
+                            return Column(
+                              children: [
+                                ListTile(
+                                    title: Text(
+                                      list_sp[index],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                          color: TextColor()),
+                                    ),
+                                    leading: Icon(
+                                      Icons.person,
+                                      color: TextColor(),
+                                    ),
+                                    trailing: Theme(
+                                        data: Theme.of(context).copyWith(
+                                          unselectedWidgetColor: TextColor(),
+                                        ),
+                                        child: Checkbox(
+                                          activeColor: BGColor(),
+                                          checkColor: Colors.blue,
+                                          side: BorderSide(
+                                            // POINT
+                                            color: TextColor(),
+                                            width: 2.0,
+                                          ),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              isselected[index] = value!;
+                                              if (!listselected_sp
+                                                  .contains(list_sp[index])) {
+                                                if (isselected[index] == true) {
+                                                  listselected_sp
+                                                      .add(list_sp[index]);
+                                                } else {
+                                                  listselected_sp.removeWhere(
+                                                      (element) =>
+                                                          element ==
+                                                          list_sp[index]);
+                                                }
+                                              } else {
+                                                if (isselected[index] ==
+                                                    false) {
+                                                  listselected_sp.removeWhere(
+                                                      (element) =>
+                                                          element ==
+                                                          list_sp[index]);
+                                                } else {
+                                                  listselected_sp
+                                                      .add(list_sp[index]);
+                                                }
+                                              }
+                                            });
+                                          },
+                                          value: listselected_sp
+                                                  .contains(list_sp[index])
+                                              ? isselected[list_sp.indexOf(
+                                                  list_sp[index])] = true
+                                              : isselected[list_sp.indexOf(
+                                                  list_sp[index])] = false,
+                                        ))),
+                              ],
+                            );
+                          }))
+                      /*AlphabetScrollView(
                       list: list_sp.map((e) => AlphaModel(e)).toList(),
                       itemExtent: 50,
                       itemBuilder: (_, k, id) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 20),
-                          child: ListTile(
-                              title: Text(
-                                '$id',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                    color: TextColor()),
-                              ),
-                              leading: Icon(
-                                Icons.person,
-                                color: TextColor(),
-                              ),
-                              trailing: Theme(
-                                  data: Theme.of(context).copyWith(
-                                    unselectedWidgetColor: TextColor(),
-                                  ),
-                                  child: Checkbox(
-                                    activeColor: BGColor(),
-                                    checkColor: Colors.blue,
-                                    side: BorderSide(
-                                      // POINT
-                                      color: TextColor(),
-                                      width: 2.0,
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isselected[k] = value!;
-                                        if (!listselected_sp.contains(id)) {
-                                          if (isselected[k] == true) {
-                                            listselected_sp.add(id);
-                                          } else {
-                                            listselected_sp.removeWhere(
-                                                (element) => element == id);
-                                          }
-                                        } else {
-                                          if (isselected[k] == false) {
-                                            listselected_sp.removeWhere(
-                                                (element) => element == id);
-                                          } else {
-                                            listselected_sp.add(id);
-                                          }
-                                        }
-                                      });
-                                    },
-                                    value: listselected_sp.contains(id)
-                                        ? isselected[list_sp.indexOf(id)] = true
-                                        : isselected[list_sp.indexOf(id)] =
-                                            false,
-                                  ))),
+                          child: 
                         );
                       },
                       selectedTextStyle: TextStyle(
@@ -328,8 +350,8 @@ class _PeopleGroupState extends State<PeopleGroup> {
                           fontWeight: FontWeight.bold,
                           fontSize: contentTitleTextsize(),
                           color: TextColor()),
-                    ),
-                  );
+                    ),*/
+                      );
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return SizedBox(
