@@ -335,6 +335,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                 IconBtn(
                                     child: IconButton(
                                       onPressed: () {
+                                        controll_cals.setrepeatdate(1);
                                         Get.to(
                                             () => DayScript(
                                                 firstdate:

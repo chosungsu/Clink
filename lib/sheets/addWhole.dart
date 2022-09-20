@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
@@ -185,39 +186,29 @@ content(
           height: isresponsible == true ? 40 : 20,
         ),
         SizedBox(
-          height: isresponsible == true ? 80 : 40,
-          child: TextField(
-            controller: controller,
-            maxLines: 1,
-            focusNode: searchNode,
-            textAlign: TextAlign.start,
-            textAlignVertical: TextAlignVertical.center,
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-            decoration: const InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.black,
-                  width: 2,
+            height: isresponsible == true ? 80 : 50,
+            child: ContainerDesign(
+              color: Colors.white,
+              child: TextField(
+                controller: controller,
+                focusNode: searchNode,
+                textAlign: TextAlign.start,
+                textAlignVertical: TextAlignVertical.bottom,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                decoration: const InputDecoration(
+                  isCollapsed: true,
+                  border: InputBorder.none,
+                  hintText: '제목 입력...',
+                  hintStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black45),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.blue,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-              contentPadding: EdgeInsets.only(left: 10),
-              hintText: '제목 입력...',
-              hintStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black45),
-            ),
-          ),
-        ),
+            )),
         s == 'home'
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -64,7 +64,7 @@ content(
   String selectvalue = '';
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
-      height: isresponsive == true ? 290 * 2 - 50 : 290,
+      height: isresponsive == true ? 290 * 2 - 50 : 300,
       child: PageView(
         controller: pageController,
         scrollDirection: Axis.vertical,
@@ -110,31 +110,34 @@ content(
                   height: isresponsive == true ? 40 : 20,
                 ),
                 SizedBox(
-                  height: isresponsive == true ? 80 : 40,
-                  child: TextField(
-                    controller: textEditingController_add_sheet,
-                    maxLines: 2,
-                    focusNode: searchNode_add_section,
-                    textAlign: TextAlign.start,
-                    textAlignVertical: TextAlignVertical.center,
-                    style: const TextStyle(
-                        color: Colors.black45,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: InputBorder.none,
-                      hintMaxLines: 2,
-                      hintText: '추가하실 태그제목을 입력하세요',
-                      hintStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black45),
-                      isCollapsed: true,
-                    ),
-                  ),
-                ),
+                    height: isresponsive == true ? 80 : 50,
+                    width: MediaQuery.of(context).size.width - 50,
+                    child: ContainerDesign(
+                      color: Colors.white,
+                      child: TextField(
+                        controller: textEditingController_add_sheet,
+                        maxLines: 2,
+                        focusNode: searchNode_add_section,
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: const TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: InputBorder.none,
+                          hintMaxLines: 2,
+                          hintText: '추가하실 태그제목을 입력하세요',
+                          hintStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.black45),
+                          isCollapsed: true,
+                        ),
+                      ),
+                    )),
                 SizedBox(
                   height: isresponsive == true ? 40 : 20,
                 ),

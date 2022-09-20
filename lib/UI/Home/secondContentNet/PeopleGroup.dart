@@ -258,6 +258,9 @@ class _PeopleGroupState extends State<PeopleGroup> {
                 for (int i = 0; i < value.get('friends').length; i++) {
                   list_sp.add(value.get('friends')[i]);
                 }
+                list_sp.sort(((a, b) {
+                  return a.toString().compareTo(b.toString());
+                }));
               }),
               builder: (context, snapshot) {
                 if (snapshot.hasData || list_sp.isNotEmpty) {

@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -170,30 +171,34 @@ content(
           height: 20,
         ),
         SizedBox(
-          height: 40,
-          child: TextField(
-            minLines: 1,
-            maxLines: 5,
-            controller: controller,
-            focusNode: searchNode,
-            textAlign: TextAlign.start,
-            textAlignVertical: TextAlignVertical.center,
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              border: InputBorder.none,
-              hintMaxLines: 2,
-              hintText: '카드 제목을 입력하세요',
-              hintStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.black45),
-              isCollapsed: true,
-            ),
-          ),
-        ),
+            height: 50,
+            child: ContainerDesign(
+              color: Colors.white,
+              child: TextField(
+                minLines: 1,
+                maxLines: 2,
+                controller: controller,
+                focusNode: searchNode,
+                textAlign: TextAlign.start,
+                textAlignVertical: TextAlignVertical.center,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: InputBorder.none,
+                  hintMaxLines: 2,
+                  hintText: '카드 제목을 입력하세요',
+                  hintStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black45),
+                  isCollapsed: true,
+                ),
+              ),
+            )),
         const SizedBox(
           height: 10,
         ),

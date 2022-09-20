@@ -1069,8 +1069,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                                             3,
                                                                         style:
                                                                             TextStyle(
-                                                                          color:
-                                                                              TextColor(),
+                                                                          color: Color(snapshot
+                                                                              .data!
+                                                                              .docs[index]['colorfont']),
                                                                           fontWeight:
                                                                               FontWeight.bold,
                                                                           fontSize:
@@ -1092,7 +1093,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                                               shape: NeumorphicShape.convex,
                                                                               depth: 2,
                                                                               surfaceIntensity: 0.5,
-                                                                              color: TextColor_shadowcolor(),
+                                                                              color: Color(snapshot.data!.docs[index]['colorfont']),
                                                                               lightSource: LightSource.topLeft),
                                                                         ),
                                                                       ),
@@ -1109,8 +1110,11 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                           style: TextButton
                                                               .styleFrom(
                                                             textStyle: TextStyle(
-                                                                color:
-                                                                    TextColor_shadowcolor()),
+                                                                color: Color(snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    [
+                                                                    'colorfont'])),
                                                             backgroundColor: snapshot
                                                                             .data!
                                                                             .docs[index]
@@ -1133,8 +1137,11 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                           onPressed: () => {},
                                                           icon: Icon(
                                                               Icons.local_offer,
-                                                              color:
-                                                                  TextColor_shadowcolor()),
+                                                              color: Color(snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index][
+                                                                  'colorfont'])),
                                                           label: Text(
                                                             snapshot.data!.docs[
                                                                         index][
@@ -1143,8 +1150,11 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                             softWrap: true,
                                                             maxLines: 2,
                                                             style: TextStyle(
-                                                              color:
-                                                                  TextColor_shadowcolor(),
+                                                              color: Color(snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                      index][
+                                                                  'colorfont']),
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,

@@ -648,6 +648,7 @@ class PinNum extends StatelessWidget {
           obscureText: true,
           textAlign: TextAlign.center,
           decoration: const InputDecoration(
+            border: InputBorder.none,
             contentPadding: EdgeInsets.all(15),
           ),
           style: TextStyle(

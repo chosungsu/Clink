@@ -806,6 +806,9 @@ class _GroupPageState extends State<GroupPage> {
               }
             }
           }
+          friendnamelist.sort(((a, b) {
+            return a.toString().compareTo(b.toString());
+          }));
           return friendnamelist.isEmpty
               ? SizedBox(
                   width: MediaQuery.of(context).size.width - 40,

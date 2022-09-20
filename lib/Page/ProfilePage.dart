@@ -62,7 +62,8 @@ class _ProfilePageState extends State<ProfilePage> {
     isdraweropen = draw.drawopen;
     firestore.collection('User').doc(name).get().then((value) {
       if (value.exists) {
-        peopleadd.secondname = value.data()!['subname'];
+        //peopleadd.secondname = value.data()!['subname'];
+        peopleadd.secondnameset(value.data()!['subname']);
       }
     });
     _pController =
