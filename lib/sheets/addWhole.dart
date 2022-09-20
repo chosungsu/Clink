@@ -57,13 +57,17 @@ addWhole(
     controller.clear();
     final cntget = Get.put(onequeform());
     cntget.setcnt();
+    final cal_share_person = Get.put(PeopleAdd());
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    String name = Hive.box('user_info').get('id');
     if (s == 'home') {
       Hive.box('user_setting').get('page_index') == 0
           ? Navigator.of(context).pushReplacement(
               PageTransition(
                 type: PageTransitionType.fade,
-                child: const MyHomePage(
+                child: MyHomePage(
                   index: 0,
+                  secondname: cal_share_person.secondname,
                 ),
               ),
             )
@@ -71,17 +75,15 @@ addWhole(
               ? Navigator.of(context).pushReplacement(
                   PageTransition(
                     type: PageTransitionType.fade,
-                    child: const MyHomePage(
-                      index: 1,
-                    ),
+                    child: MyHomePage(
+                        index: 1, secondname: cal_share_person.secondname),
                   ),
                 )
               : Navigator.of(context).pushReplacement(
                   PageTransition(
                     type: PageTransitionType.fade,
-                    child: const MyHomePage(
-                      index: 3,
-                    ),
+                    child: MyHomePage(
+                        index: 3, secondname: cal_share_person.secondname),
                   ),
                 ));
     }

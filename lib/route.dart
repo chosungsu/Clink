@@ -12,12 +12,15 @@ import 'Dialogs/destroyBackKey.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
 import 'Tool/AndroidIOS.dart';
+import 'Tool/Getx/PeopleAdd.dart';
 import 'Tool/Getx/navibool.dart';
 import 'Tool/Getx/notishow.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.index}) : super(key: key);
+  const MyHomePage({Key? key, required this.index, required this.secondname})
+      : super(key: key);
   final int index;
+  final String secondname;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -55,8 +58,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
       GroupPage(),
-      const HomePage(),
-      const HomePage(),
+      HomePage(secondname: widget.secondname),
+      HomePage(secondname: widget.secondname),
       ProfilePage(),
     ];
 

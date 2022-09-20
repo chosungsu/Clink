@@ -2,10 +2,12 @@ import 'package:clickbyme/Enums/Drawer_item.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../route.dart';
 import '../sheets/addWhole.dart';
@@ -29,6 +31,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
   String name = Hive.box('user_info').get('id');
   late DateTime Date = DateTime.now();
   final draw = Get.put(navibool());
+  final cal_share_person = Get.put(PeopleAdd());
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -63,8 +67,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: const MyHomePage(
+                            child: MyHomePage(
                               index: 1,
+                              secondname: cal_share_person.secondname,
                             ),
                           ),
                         );
@@ -80,9 +85,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: const MyHomePage(
-                              index: 0,
-                            ),
+                            child: MyHomePage(
+                                index: 0,
+                                secondname: cal_share_person.secondname),
                           ),
                         );
                         Hive.box('user_setting').put('page_index', 0);
@@ -91,9 +96,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: const MyHomePage(
-                              index: 3,
-                            ),
+                            child: MyHomePage(
+                                index: 3,
+                                secondname: cal_share_person.secondname),
                           ),
                         );
                         Hive.box('user_setting').put('page_index', 3);

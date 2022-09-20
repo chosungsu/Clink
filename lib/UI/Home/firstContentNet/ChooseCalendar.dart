@@ -70,16 +70,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     sortsection = cal_sort.sort;
     controller = TextEditingController();
     cal_share_person.peoplecalendarrestart();
-    firestore.collection('User').doc(username).get().then((value) {
-      String subname = '';
-      if (value.exists) {
-        subname = value.data()!['subname'];
-        cal_share_person.secondnameset(subname);
-      } else {
-        subname = username;
-        cal_share_person.secondnameset(subname);
-      }
-    });
+
     finallist = cal_share_person.people;
     _scrollController = ScrollController()
       ..addListener(() {
@@ -705,7 +696,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                         finallist,
                                                         snapshot.data!
                                                                 .docs[index]
-                                                            ['share']);
+                                                            ['share'],
+                                                        cal_share_person
+                                                            .secondname);
                                                   })
                                             ],
                                             duration:
@@ -1198,7 +1191,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                           finallist,
                                                           snapshot.data!
                                                                   .docs[index]
-                                                              ['share']);
+                                                              ['share'],
+                                                          cal_share_person
+                                                              .secondname);
                                                     } else {
                                                       Snack.show(
                                                           context: context,

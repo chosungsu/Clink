@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
+import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +22,7 @@ import 'LocalNotiPlatform/NotificationApi.dart';
 import 'Page/LoginSignPage.dart';
 import 'package:flutter/foundation.dart';
 import 'Tool/BGColor.dart';
+import 'Tool/Getx/PeopleAdd.dart';
 
 const Map<String, String> UNIT_ID = kReleaseMode
     ? {
@@ -50,41 +53,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => GoogleSignInController(),
-          child: const LoginSignPage(
-            first: 'first',
-          ),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => KakaoSignInController(),
-          child: const LoginSignPage(
-            first: 'first',
-          ),
-        ),
-        /*ChangeNotifierProvider(
-          create: (context) => GoogleSignInController(),
-          child: const ProfilePage(colorbackground: null, coloritems: null,),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => KakaoSignInController(),
-          child: const ProfilePage(colorbackground: null, coloritems: null,),
-        ),*/
-      ],
-      child: GetMaterialApp(
-        title: 'Flutter',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: MyTheme.kPrimaryColor,
-          canvasColor: Colors.transparent,
-          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey)
-              .copyWith(secondary: const Color(0xFF012980)),
-        ),
-        home: SplashPage(),
+    return GetMaterialApp(
+      title: 'Flutter',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: MyTheme.kPrimaryColor,
+        canvasColor: Colors.transparent,
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey)
+            .copyWith(secondary: const Color(0xFF012980)),
       ),
+      home: SplashPage(),
     );
   }
 }
@@ -98,10 +77,23 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
   bool islogined = false;
+  final cal_share_person = Get.put(PeopleAdd());
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String name = Hive.box('user_info').get('id');
 
   @override
   void initState() {
     super.initState();
+    firestore.collection('User').doc(name).get().then((value) {
+      String subname = '';
+      if (value.exists) {
+        subname = value.data()!['subname'];
+        cal_share_person.secondnameset(subname);
+      } else {
+        subname = name;
+        cal_share_person.secondnameset(subname);
+      }
+    });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notifications = PushNotification(
@@ -121,7 +113,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             Hive.box('user_info').get('id') == null ||
                     Hive.box('user_info').get('autologin') == false
                 ? null
-                : GoToMain(context);
+                : GoToMain(context, cal_share_person.secondname);
             Timer(
               const Duration(milliseconds: 1000),
               () {
@@ -207,7 +199,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                                     primary: Colors.grey.shade400,
                                   ),
                                   onPressed: () {
-                                    GoToLogin(context, 'first');
+                                    GoToLogin(context, 'first',
+                                        cal_share_person.secondname);
                                   },
                                   child: Center(
                                     child: Column(

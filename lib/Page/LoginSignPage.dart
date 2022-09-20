@@ -19,8 +19,10 @@ import '../Tool/TextSize.dart';
 import '../route.dart';
 
 class LoginSignPage extends StatefulWidget {
-  const LoginSignPage({Key? key, required this.first}) : super(key: key);
+  const LoginSignPage({Key? key, required this.first, required this.secondname})
+      : super(key: key);
   final String first;
+  final String secondname;
   @override
   State<StatefulWidget> createState() => _LoginSignPageState();
 }
@@ -179,24 +181,17 @@ class _LoginSignPageState extends State<LoginSignPage>
         ),
         InkWell(
             onTap: () async {
-              await Provider.of<GoogleSignInController>(context, listen: false)
-                  .login(context, ischecked);
+              /*await Provider.of<GoogleSignInController>(context, listen: false)
+                  .login(context, ischecked);*/
+              GoogleSignInController().login(context, ischecked);
               String name = Hive.box('user_info').get('id');
               String subname = '';
-              await firestore.collection('User').doc(name).get().then((value) {
-                if (value.exists) {
-                  subname = value.data()!['subname'];
-                  cal_share_person.secondnameset(subname);
-                } else {
-                  subname = name;
-                  cal_share_person.secondnameset(subname);
-                }
-              });
               await Navigator.of(context).pushReplacement(
                 PageTransition(
                   type: PageTransitionType.bottomToTop,
-                  child: const MyHomePage(
+                  child: MyHomePage(
                     index: 1,
+                    secondname: widget.secondname,
                   ),
                 ),
               );

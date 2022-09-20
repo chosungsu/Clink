@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 
 import '../Tool/Getx/PeopleAdd.dart';
 
-class GoogleSignInController with ChangeNotifier {
+class GoogleSignInController extends GetxController {
   final _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? googleSignInAccount;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -64,14 +64,16 @@ class GoogleSignInController with ChangeNotifier {
       }
     });
 
-    notifyListeners();
+    update();
+    notifyChildrens();
   }
 
   logout(BuildContext context, String name) async {
     count = -1;
     googleSignInAccount = await _googleSignIn.signOut();
     Hive.box('user_info').delete('id');
-    notifyListeners();
+    update();
+    notifyChildrens();
   }
 
   Deletelogout(BuildContext context, String name) async {
@@ -80,6 +82,7 @@ class GoogleSignInController with ChangeNotifier {
     Hive.box('user_info').delete('id');
     //firestore 삭제
     await firestore.collection('User').doc(name).delete();
-    notifyListeners();
+    update();
+    notifyChildrens();
   }
 }

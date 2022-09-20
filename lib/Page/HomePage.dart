@@ -28,9 +28,8 @@ import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    Key? key,
-  }) : super(key: key);
+  const HomePage({Key? key, required this.secondname}) : super(key: key);
+  final String secondname;
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
@@ -80,7 +79,6 @@ class _HomePageState extends State<HomePage> {
   List updateid = [];
   bool isread = false;
   final notilist = Get.put(notishow());
-  final peopleadd = Get.put(PeopleAdd());
   List updatefriends = [];
 
   @override
@@ -104,19 +102,6 @@ class _HomePageState extends State<HomePage> {
           'viewcategory': defaulthomeviewlist,
           'hidecategory': userviewlist
         }, SetOptions(merge: true));
-      }
-    });
-    firestore.collection('PeopleList').doc(name).get().then((value) {
-      if (value.data()!.isEmpty) {
-        firestore.collection('PeopleList').doc(name).set({'friends': []});
-      } else {
-        for (int i = 0; i < value.get('friends').length; i++) {
-          updatefriends.add(value.get('friends')[i]);
-        }
-        firestore
-            .collection('PeopleList')
-            .doc(name)
-            .set({'friends': updatefriends}, SetOptions(merge: true));
       }
     });
     if (draw.drawopen == true) {
@@ -347,7 +332,9 @@ class _HomePageState extends State<HomePage> {
                                                                     userviewlist,
                                                                     contentmy,
                                                                     contentshare,
-                                                                    isresponsive);
+                                                                    isresponsive,
+                                                                    widget
+                                                                        .secondname);
                                                               }
                                                             },
                                                             icon: Container(
@@ -396,7 +383,9 @@ class _HomePageState extends State<HomePage> {
                                                                   userviewlist,
                                                                   contentmy,
                                                                   contentshare,
-                                                                  isresponsive);
+                                                                  isresponsive,
+                                                                  widget
+                                                                      .secondname);
                                                             }
                                                           },
                                                           icon: Container(
@@ -466,7 +455,8 @@ class _HomePageState extends State<HomePage> {
                                           userviewlist,
                                           contentmy,
                                           contentshare,
-                                          isresponsive),
+                                          isresponsive,
+                                          widget.secondname),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -560,7 +550,8 @@ class _HomePageState extends State<HomePage> {
                                         userviewlist,
                                         contentmy,
                                         contentshare,
-                                        isresponsive);
+                                        isresponsive,
+                                        widget.secondname);
                                   }
                                 },
                                 child: SizedBox(
@@ -612,7 +603,8 @@ class _HomePageState extends State<HomePage> {
                                         userviewlist,
                                         contentmy,
                                         contentshare,
-                                        isresponsive);
+                                        isresponsive,
+                                        widget.secondname);
                                   }
                                 },
                                 child: SizedBox(

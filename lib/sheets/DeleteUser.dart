@@ -83,10 +83,8 @@ DeleteUserVerify(BuildContext context, String name) {
                                 isloading = true;
                               });
                               await NotificationApi.cancelAll();
-                              await Provider.of<GoogleSignInController>(context,
-                                      listen: false)
+                              GoogleSignInController()
                                   .Deletelogout(context, name);
-
                               await firestore
                                   .collection('CalendarDataBase')
                                   .where('OriginalUser', isEqualTo: name)
@@ -171,7 +169,8 @@ DeleteUserVerify(BuildContext context, String name) {
                               setState(() {
                                 isloading = false;
                               });
-                              GoToLogin(context, 'first');
+                              GoToLogin(context, 'first',
+                                  cal_share_person.secondname);
                             },
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.amberAccent,

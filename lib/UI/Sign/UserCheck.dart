@@ -5,7 +5,7 @@ import 'package:hive_flutter/adapters.dart';
 import '../../Page/LoginSignPage.dart';
 import '../../route.dart';
 
-GoToMain(BuildContext context) {
+GoToMain(BuildContext context, String secondname) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
     /*Navigator.of(context).pushReplacement(
       PageTransition(
@@ -16,18 +16,16 @@ GoToMain(BuildContext context) {
       ),
     );*/
     Get.to(
-      () => const MyHomePage(
-        index: 1,
-      ),
+      () => MyHomePage(index: 1, secondname: secondname),
     );
     Hive.box('user_setting').put('page_index', 1);
   });
   return _time;
 }
 
-GoToLogin(BuildContext context, String s) {
+GoToLogin(BuildContext context, String s, String secondname) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
-    Get.to(() => LoginSignPage(first: s));
+    Get.to(() => LoginSignPage(first: s, secondname: secondname));
     /*Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const LoginSignPage()));*/
   });

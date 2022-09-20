@@ -8,12 +8,20 @@ import '../../../DB/SpaceContent.dart';
 import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
+import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/TextSize.dart';
 import '../secondContentNet/ClickShowEachCalendar.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
-ViewSet(double height, String docid, List defaulthomeviewlist,
-    List userviewlist, List contentmy, List contentshare, bool isresponsive) {
+ViewSet(
+    double height,
+    String docid,
+    List defaulthomeviewlist,
+    List userviewlist,
+    List contentmy,
+    List contentshare,
+    bool isresponsive,
+    String secondname) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
   DateTime Date = DateTime.now();
@@ -70,7 +78,7 @@ ViewSet(double height, String docid, List defaulthomeviewlist,
                             FutureBuilder<QuerySnapshot>(
                               future: firestore
                                   .collection('CalendarDataBase')
-                                  .where('OriginalUser', isEqualTo: name)
+                                  .where('OriginalUser', isEqualTo: secondname)
                                   .where('Date',
                                       isEqualTo: Date.toString().split('-')[0] +
                                           '-' +

@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/FlushbarStyle.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/TextSize.dart';
 
@@ -23,6 +24,7 @@ settingChoiceCal(
   FocusNode searchNode,
   List finallist,
   doc_share,
+  String secondname,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -63,7 +65,8 @@ settingChoiceCal(
                         doc_name,
                         doc_made_user,
                         finallist,
-                        doc_share),
+                        doc_share,
+                        secondname),
                   )),
             ));
       }).whenComplete(() {
@@ -81,7 +84,8 @@ SheetPageC(
     doc_name,
     doc_made_user,
     List finallist,
-    doc_share) {
+    doc_share,
+    String secondname) {
   return SizedBox(
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
@@ -108,7 +112,7 @@ SheetPageC(
                 height: 20,
               ),
               content(context, searchNode, controller, doc, doc_type, doc_color,
-                  doc_name, doc_made_user, finallist, doc_share),
+                  doc_name, doc_made_user, finallist, doc_share, secondname),
               const SizedBox(
                 height: 20,
               ),
@@ -143,7 +147,8 @@ content(
     doc_name,
     doc_made_user,
     List finallist,
-    doc_share) {
+    doc_share,
+    String secondname) {
   String username = Hive.box('user_info').get(
     'id',
   );
@@ -151,6 +156,7 @@ content(
   Color _color = doc_color == null ? Colors.blue : Color(doc_color);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var controll_cals = Get.put(calendarsetting());
+  final cal_share_person = Get.put(PeopleAdd());
 
   List deleteid = [];
   return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -335,9 +341,14 @@ content(
                           });
                           firestore
                               .collection('ShareHome')
-                              .doc(doc + '-' + username)
+                              .doc(doc + '-' + secondname)
                               .delete();
-                        } else {}
+                        } else {
+                          firestore
+                              .collection('ShareHome')
+                              .doc(doc + '-' + secondname)
+                              .delete();
+                        }
                         Navigator.pop(context);
                         Snack.show(
                             context: context,
@@ -413,7 +424,7 @@ content(
                           });
                           firestore
                               .collection('ShareHome')
-                              .doc(doc + '-' + username)
+                              .doc(doc + '-' + secondname)
                               .update({
                             'calname': controller.text,
                             'color': _color.value.toInt(),
