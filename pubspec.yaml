@@ -61,6 +61,7 @@ dependencies:
   get_it: 
   provider: 
   get: 
+  async:
   #image picker
   image_picker: 
   multi_image_picker2: 

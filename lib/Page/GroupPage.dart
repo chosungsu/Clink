@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/userinfotalk.dart';
@@ -10,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Tool/ContainerDesign.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
@@ -32,6 +34,7 @@ class _GroupPageState extends State<GroupPage> {
   double scalefactor = 1;
   bool isdraweropen = false;
   final draw = Get.put(navibool());
+  final cal_share_person = Get.put(PeopleAdd());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final sharelist = [];
   final colorlist = [];
@@ -362,26 +365,46 @@ class _GroupPageState extends State<GroupPage> {
     );
   }
 
+  Stream<List<QuerySnapshot>> combineStream() {
+    Stream<QuerySnapshot> stream1 = firestore
+        .collection('CalendarSheetHome')
+        .where('madeUser', isEqualTo: cal_share_person.secondname)
+        .snapshots();
+    Stream<QuerySnapshot> stream2 = firestore
+        .collection('ShareHome')
+        .where('showingUser', isEqualTo: cal_share_person.secondname)
+        .snapshots();
+
+    return StreamZip([stream1, stream2]);
+  }
+
   G_Container0_body() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: firestore
-          .collection('CalendarSheetHome')
-          .where('madeUser', isEqualTo: name)
-          .snapshots(),
+    return StreamBuilder<List<QuerySnapshot>>(
+      stream: combineStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           sharelist.clear();
           colorlist.clear();
           calnamelist.clear();
-          final valuespace = snapshot.data!.docs;
+          List<DocumentSnapshot> documentSnapshot = [];
+          final valuespace = snapshot.data!.toList();
           for (var sp in valuespace) {
-            if (sp.get('share') == null || sp.get('share').toString() == '[]') {
+            documentSnapshot.addAll(sp.docs);
+            print(sp.docs.toList());
+          }
+          for (var sp2 in documentSnapshot) {
+            if (sp2.get('share') == null ||
+                sp2.get('share').toString() == '[]') {
             } else {
-              sharelist.add(sp.get('share'));
-              colorlist.add(sp.get('color'));
-              calnamelist.add(sp.get('calname'));
-              if (sp.get('share').toString().contains(name)) {
-                sharelist.removeWhere((element) => element == name);
+              sharelist.add(sp2.get('share'));
+              colorlist.add(sp2.get('color'));
+              calnamelist.add(sp2.get('calname'));
+              if (sp2
+                  .get('share')
+                  .toString()
+                  .contains(cal_share_person.secondname)) {
+                sharelist.removeWhere(
+                    (element) => element == cal_share_person.secondname);
               }
             }
           }
@@ -595,23 +618,25 @@ class _GroupPageState extends State<GroupPage> {
                                                   onPressed: () {
                                                     Get.to(
                                                       () => DayContentHome(
-                                                        title: snapshot.data!
-                                                            .docs[index].id,
-                                                        share: snapshot.data!
-                                                                .docs[index]
-                                                            ['share'],
-                                                        origin: snapshot.data!
-                                                                .docs[index]
-                                                            ['madeUser'],
-                                                        theme: snapshot.data!
-                                                                .docs[index]
+                                                        title: documentSnapshot[
+                                                                index]
+                                                            .id,
+                                                        share: documentSnapshot[
+                                                            index]['share'],
+                                                        origin:
+                                                            documentSnapshot[
+                                                                    index]
+                                                                ['madeUser'],
+                                                        theme: documentSnapshot[
+                                                                index]
                                                             ['themesetting'],
-                                                        view: snapshot.data!
-                                                                .docs[index]
+                                                        view: documentSnapshot[
+                                                                index]
                                                             ['viewsetting'],
-                                                        calname: snapshot.data!
-                                                                .docs[index]
-                                                            ['calname'],
+                                                        calname:
+                                                            documentSnapshot[
+                                                                    index]
+                                                                ['calname'],
                                                       ),
                                                       transition: Transition
                                                           .rightToLeft,
@@ -634,8 +659,8 @@ class _GroupPageState extends State<GroupPage> {
                                                     Hive.box('user_setting')
                                                         .put(
                                                             'share_cal_person',
-                                                            snapshot.data!
-                                                                    .docs[index]
+                                                            documentSnapshot[
+                                                                    index]
                                                                 ['share']);
 
                                                     Future.delayed(
@@ -643,43 +668,50 @@ class _GroupPageState extends State<GroupPage> {
                                                             seconds: 1), () {
                                                       Get.to(
                                                         () => PeopleGroup(
-                                                          doc: snapshot.data!
-                                                              .docs[index].id
+                                                          doc: documentSnapshot[
+                                                                  index]
+                                                              .id
                                                               .toString(),
-                                                          when: snapshot.data!
-                                                                  .docs[index]
-                                                              ['date'],
-                                                          type: snapshot.data!
-                                                                  .docs[index]
-                                                              ['type'],
-                                                          color: snapshot.data!
-                                                                  .docs[index]
-                                                              ['color'],
-                                                          nameid: snapshot.data!
-                                                                  .docs[index]
-                                                              ['calname'],
-                                                          share: snapshot.data!
-                                                                  .docs[index]
-                                                              ['share'],
-                                                          made: snapshot.data!
-                                                                  .docs[index]
-                                                              ['madeUser'],
-                                                          allow_share: snapshot
-                                                                  .data!
-                                                                  .docs[index][
-                                                              'allowance_share'],
-                                                          allow_change_set: snapshot
-                                                                  .data!
-                                                                  .docs[index][
-                                                              'allowance_change_set'],
-                                                          themesetting: snapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                              ['themesetting'],
-                                                          viewsetting: snapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                              ['viewsetting'],
+                                                          when:
+                                                              documentSnapshot[
+                                                                      index]
+                                                                  ['date'],
+                                                          type:
+                                                              documentSnapshot[
+                                                                      index]
+                                                                  ['type'],
+                                                          color:
+                                                              documentSnapshot[
+                                                                      index]
+                                                                  ['color'],
+                                                          nameid:
+                                                              documentSnapshot[
+                                                                      index]
+                                                                  ['calname'],
+                                                          share:
+                                                              documentSnapshot[
+                                                                      index]
+                                                                  ['share'],
+                                                          made:
+                                                              documentSnapshot[
+                                                                      index]
+                                                                  ['madeUser'],
+                                                          allow_share:
+                                                              documentSnapshot[
+                                                                      index][
+                                                                  'allowance_share'],
+                                                          allow_change_set:
+                                                              documentSnapshot[
+                                                                      index][
+                                                                  'allowance_change_set'],
+                                                          themesetting:
+                                                              documentSnapshot[
+                                                                      index][
+                                                                  'themesetting'],
+                                                          viewsetting:
+                                                              documentSnapshot[
+                                                                      index][
+                                                                  'viewsetting'],
                                                         ),
                                                         transition:
                                                             Transition.downToUp,

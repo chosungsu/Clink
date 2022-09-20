@@ -70,6 +70,16 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     sortsection = cal_sort.sort;
     controller = TextEditingController();
     cal_share_person.peoplecalendarrestart();
+    firestore.collection('User').doc(username).get().then((value) {
+      String subname = '';
+      if (value.exists) {
+        subname = value.data()!['subname'];
+        cal_share_person.secondnameset(subname);
+      } else {
+        subname = username;
+        cal_share_person.secondnameset(subname);
+      }
+    });
     finallist = cal_share_person.people;
     _scrollController = ScrollController()
       ..addListener(() {
@@ -504,7 +514,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
           builder: (_) => StreamBuilder<QuerySnapshot>(
                 stream: firestore
                     .collection('CalendarSheetHome')
-                    .where('madeUser', isEqualTo: username)
+                    .where('madeUser', isEqualTo: cal_share_person.secondname)
                     .orderBy('date',
                         descending: cal_sort.sort == 0 ? true : false)
                     .snapshots(),

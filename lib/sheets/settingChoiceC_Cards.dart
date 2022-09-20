@@ -350,11 +350,7 @@ content(BuildContext context, doc_id, doc_change, doc_shares, doc, doc_theme,
                       value.docs.forEach((element) {
                         firestore
                             .collection('ShareHome')
-                            .doc(doc_id +
-                                '-' +
-                                element['madeUser'] +
-                                '-' +
-                                element['showingUser'])
+                            .doc(doc_id + '-' + element['showingUser'])
                             .update({
                           'allowance_share': isselected_share,
                           'allowance_change_set': isselected_change_set,

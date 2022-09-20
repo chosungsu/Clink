@@ -489,8 +489,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         .collection('ShareHome')
                                         .doc(widget.doc +
                                             '-' +
-                                            widget.made +
-                                            '-' +
                                             listselected_sp[i])
                                         .get()
                                         .then((value) {
@@ -498,8 +496,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         firestore
                                             .collection('ShareHome')
                                             .doc(widget.doc +
-                                                '-' +
-                                                widget.made +
                                                 '-' +
                                                 listselected_sp[i])
                                             .set({
@@ -521,8 +517,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         firestore
                                             .collection('ShareHome')
                                             .doc(widget.doc +
-                                                '-' +
-                                                widget.made +
                                                 '-' +
                                                 widget.share[i])
                                             .update({
@@ -556,19 +550,14 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                     i++) {
                                   firestore
                                       .collection('ShareHome')
-                                      .doc(widget.doc +
-                                          '-' +
-                                          widget.made +
-                                          '-' +
-                                          listselected_sp[i])
+                                      .doc(
+                                          widget.doc + '-' + listselected_sp[i])
                                       .get()
                                       .then((value) {
                                     if (value.data() == null) {
                                       firestore
                                           .collection('ShareHome')
                                           .doc(widget.doc +
-                                              '-' +
-                                              widget.made +
                                               '-' +
                                               listselected_sp[i])
                                           .set({
@@ -590,8 +579,6 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                       firestore
                                           .collection('ShareHome')
                                           .doc(widget.doc +
-                                              '-' +
-                                              widget.made +
                                               '-' +
                                               listselected_sp[i])
                                           .update({

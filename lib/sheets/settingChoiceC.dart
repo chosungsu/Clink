@@ -335,14 +335,9 @@ content(
                           });
                           firestore
                               .collection('ShareHome')
-                              .doc(doc + '-' + doc_made_user + '-' + username)
+                              .doc(doc + '-' + username)
                               .delete();
-                        } else {
-                          firestore
-                              .collection('ShareHome')
-                              .doc(doc + '-' + doc_made_user + '-' + username)
-                              .delete();
-                        }
+                        } else {}
                         Navigator.pop(context);
                         Snack.show(
                             context: context,
@@ -418,7 +413,7 @@ content(
                           });
                           firestore
                               .collection('ShareHome')
-                              .doc(doc + '-' + doc_made_user + '-' + username)
+                              .doc(doc + '-' + username)
                               .update({
                             'calname': controller.text,
                             'color': _color.value.toInt(),

@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:page_transition/page_transition.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/onequeform.dart';
 import '../route.dart';
@@ -168,6 +169,7 @@ content(
   bool isresponsible,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final cal_share_person = Get.put(PeopleAdd());
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -585,7 +587,7 @@ content(
                       choicelist[0] == 1
                           ? firestore.collection('CalendarSheetHome').add({
                               'calname': controller.text,
-                              'madeUser': username,
+                              'madeUser': cal_share_person.secondname,
                               'type': 0,
                               'share': [],
                               'viewsetting': 0,
@@ -654,7 +656,7 @@ content(
                     } else {
                       firestore.collection('CalendarSheetHome').add({
                         'calname': controller.text,
-                        'madeUser': username,
+                        'madeUser': cal_share_person.secondname,
                         'type': 0,
                         'share': [],
                         'viewsetting': 0,

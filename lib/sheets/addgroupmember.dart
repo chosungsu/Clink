@@ -9,6 +9,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
+import '../Tool/Getx/PeopleAdd.dart';
+
 addgroupmember(
   BuildContext context,
   FocusNode searchNode,
@@ -217,6 +219,7 @@ Search(
   );
   int cnt = 0;
   List changepeople = [];
+  final cal_share_person = Get.put(PeopleAdd());
 
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -434,7 +437,7 @@ Search(
                                                                         .id)
                                                                     .update({
                                                                   'share':
-                                                                      changepeople
+                                                                      changepeople,
                                                                 });
                                                               }
                                                               changepeople

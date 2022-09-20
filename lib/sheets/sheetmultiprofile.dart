@@ -232,6 +232,15 @@ content(
                         .get()
                         .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('madeUser') ==
+                            cal_share_person.secondname) {
+                          firestore
+                              .collection('CalendarSheetHome')
+                              .doc(value.docs[i].id)
+                              .update({
+                            'madeUser': Hive.box('user_info').get('id')
+                          });
+                        }
                         for (int j = 0;
                             j < value.docs[i].get('share').length;
                             j++) {
@@ -244,6 +253,58 @@ content(
                           changepeople.add(Hive.box('user_info').get('id'));
                           firestore
                               .collection('CalendarSheetHome')
+                              .doc(value.docs[i].id)
+                              .update({'share': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
+                    await firestore.collection('ShareHome').get().then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('madeUser') ==
+                            cal_share_person.secondname) {
+                          firestore
+                              .collection('ShareHome')
+                              .doc(value.docs[i].id)
+                              .update({
+                            'madeUser': Hive.box('user_info').get('id')
+                          });
+                        }
+                        for (int j = 0;
+                            j < value.docs[i].get('share').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('share')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(Hive.box('user_info').get('id'));
+                          for (int k = 0; k < changepeople.length; k++) {
+                            firestore
+                                .collection('ShareHome')
+                                .doc(value.docs[i].id.split('-')[0] +
+                                    changepeople[k])
+                                .set({
+                              'share': changepeople,
+                              'allowance_change_set':
+                                  value.docs[i].get('allowance_change_set'),
+                              'allowance_share':
+                                  value.docs[i].get('allowance_share'),
+                              'calname': value.docs[i].get('calname'),
+                              'color': value.docs[i].get('color'),
+                              'date': value.docs[i].get('date'),
+                              'doc': value.docs[i].get('doc'),
+                              'madeUser': Hive.box('user_info').get('id'),
+                              'showingUser': changepeople[k],
+                              'themesetting': value.docs[i].get('themesetting'),
+                              'type': value.docs[i].get('type'),
+                              'viewsetting': value.docs[i].get('viewsetting'),
+                            });
+                          }
+
+                          firestore
+                              .collection('ShareHome')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }
@@ -301,6 +362,15 @@ content(
                         .get()
                         .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('madeUser') ==
+                            cal_share_person.secondname) {
+                          firestore
+                              .collection('CalendarSheetHome')
+                              .doc(value.docs[i].id)
+                              .update({
+                            'madeUser': Hive.box('user_info').get('id')
+                          });
+                        }
                         for (int j = 0;
                             j < value.docs[i].get('share').length;
                             j++) {
@@ -311,8 +381,60 @@ content(
                           changepeople.removeWhere((element) =>
                               element == cal_share_person.secondname);
                           changepeople.add(Hive.box('user_info').get('id'));
+
                           firestore
                               .collection('CalendarSheetHome')
+                              .doc(value.docs[i].id)
+                              .update({'share': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
+                    await firestore.collection('ShareHome').get().then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('madeUser') ==
+                            cal_share_person.secondname) {
+                          firestore
+                              .collection('ShareHome')
+                              .doc(value.docs[i].id)
+                              .update({
+                            'madeUser': Hive.box('user_info').get('id')
+                          });
+                        }
+                        for (int j = 0;
+                            j < value.docs[i].get('share').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('share')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(Hive.box('user_info').get('id'));
+                          for (int k = 0; k < changepeople.length; k++) {
+                            firestore
+                                .collection('ShareHome')
+                                .doc(value.docs[i].id.split('-')[0] +
+                                    changepeople[k])
+                                .set({
+                              'share': changepeople,
+                              'allowance_change_set':
+                                  value.docs[i].get('allowance_change_set'),
+                              'allowance_share':
+                                  value.docs[i].get('allowance_share'),
+                              'calname': value.docs[i].get('calname'),
+                              'color': value.docs[i].get('color'),
+                              'date': value.docs[i].get('date'),
+                              'doc': value.docs[i].get('doc'),
+                              'madeUser': Hive.box('user_info').get('id'),
+                              'showingUser': changepeople[k],
+                              'themesetting': value.docs[i].get('themesetting'),
+                              'type': value.docs[i].get('type'),
+                              'viewsetting': value.docs[i].get('viewsetting'),
+                            });
+                          }
+                          firestore
+                              .collection('ShareHome')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }
@@ -366,6 +488,35 @@ content(
                           changepeople.add(controller.text);
                           firestore
                               .collection('CalendarSheetHome')
+                              .doc(value.docs[i].id)
+                              .update({'share': changepeople});
+                        }
+                        changepeople.clear();
+                      }
+                    });
+                    await firestore.collection('ShareHome').get().then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('madeUser') ==
+                            cal_share_person.secondname) {
+                          firestore
+                              .collection('ShareHome')
+                              .doc(value.docs[i].id)
+                              .update({
+                            'madeUser': Hive.box('user_info').get('id')
+                          });
+                        }
+                        for (int j = 0;
+                            j < value.docs[i].get('share').length;
+                            j++) {
+                          changepeople.add(value.docs[i].get('share')[j]);
+                        }
+                        if (changepeople
+                            .contains(cal_share_person.secondname)) {
+                          changepeople.removeWhere((element) =>
+                              element == cal_share_person.secondname);
+                          changepeople.add(Hive.box('user_info').get('id'));
+                          firestore
+                              .collection('ShareHome')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }

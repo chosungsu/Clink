@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/AndroidIOS.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/TextSize.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -147,6 +148,7 @@ content(BuildContext context, List friendnamelist, int index) {
   String username = Hive.box('user_info').get(
     'id',
   );
+  final cal_share_person = Get.put(PeopleAdd());
   List updatenamelist = [];
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -220,7 +222,8 @@ content(BuildContext context, List friendnamelist, int index) {
                         });
                         await firestore
                             .collection('CalendarSheetHome')
-                            .where('madeUser', isEqualTo: username)
+                            .where('madeUser',
+                                isEqualTo: cal_share_person.secondname)
                             .get()
                             .then((value) {
                           for (int i = 0; i < value.docs.length; i++) {
