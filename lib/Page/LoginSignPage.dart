@@ -192,10 +192,6 @@ class _LoginSignPageState extends State<LoginSignPage>
                   cal_share_person.secondnameset(subname);
                 }
               });
-              await firestore
-                  .collection('MemoAllAlarm')
-                  .doc(name)
-                  .set({'ok': false, 'alarmtime': '99:99'});
               await Navigator.of(context).pushReplacement(
                 PageTransition(
                   type: PageTransitionType.bottomToTop,

@@ -1,16 +1,21 @@
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../Auth/GoogleSignInController.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../UI/Sign/UserCheck.dart';
 
 DeleteUserVerify(BuildContext context, String name) {
   bool isloading = false;
   String updateid = '';
+  List changepeople = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final cal_share_person = Get.put(PeopleAdd());
+
   showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -57,7 +62,8 @@ DeleteUserVerify(BuildContext context, String name) {
                       Text(
                         '회원탈퇴 진행하겠습니까? '
                         '아래 버튼을 클릭하시면 기존알람들은 모두 초기화되며 회원탈퇴처리가 완료됩니다. '
-                        '더 좋은 서비스로 다음 기회에 찾아뵙겠습니다.',
+                        '더 좋은 서비스로 다음 기회에 찾아뵙겠습니다. '
+                        '탈퇴처리가 완료되기 전까지 뒤로 가기 버튼을 누르지 말아주세요!',
                         style: TextStyle(
                           color: Colors.red,
                           fontSize: contentTextsize(),
@@ -97,6 +103,52 @@ DeleteUserVerify(BuildContext context, String name) {
                                 }
                               });
                               await firestore
+                                  .collection('CalendarSheetHome')
+                                  .get()
+                                  .then((value) {
+                                for (int i = 0; i < value.docs.length; i++) {
+                                  for (int j = 0;
+                                      j < value.docs[i].get('share').length;
+                                      j++) {
+                                    changepeople
+                                        .add(value.docs[i].get('share')[j]);
+                                  }
+                                  if (changepeople
+                                      .contains(cal_share_person.secondname)) {
+                                    changepeople.removeWhere((element) =>
+                                        element == cal_share_person.secondname);
+                                    firestore
+                                        .collection('CalendarSheetHome')
+                                        .doc(value.docs[i].id)
+                                        .update({'share': changepeople});
+                                  }
+                                  changepeople.clear();
+                                }
+                              });
+                              await firestore
+                                  .collection('PeopleList')
+                                  .get()
+                                  .then((value) {
+                                for (int i = 0; i < value.docs.length; i++) {
+                                  for (int j = 0;
+                                      j < value.docs[i].get('friends').length;
+                                      j++) {
+                                    changepeople
+                                        .add(value.docs[i].get('friends')[j]);
+                                  }
+                                  if (changepeople
+                                      .contains(cal_share_person.secondname)) {
+                                    changepeople.removeWhere((element) =>
+                                        element == cal_share_person.secondname);
+                                    firestore
+                                        .collection('PeopleList')
+                                        .doc(value.docs[i].id)
+                                        .update({'friends': changepeople});
+                                  }
+                                  changepeople.clear();
+                                }
+                              });
+                              await firestore
                                   .collection('MemoDataBase')
                                   .where('OriginalUser', isEqualTo: name)
                                   .get()
@@ -133,10 +185,10 @@ DeleteUserVerify(BuildContext context, String name) {
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      CircularProgressIndicator(
+                                      const CircularProgressIndicator(
                                         color: Colors.white,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       Text(

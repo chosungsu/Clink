@@ -71,6 +71,7 @@ class _DayScriptState extends State<DayScript> {
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
   late TextEditingController textEditingController4;
+  late TextEditingController textEditingController5;
   //캘린더변수
   late Map<DateTime, List<Event>> _events;
   static final cal_share_person = Get.put(PeopleAdd());
@@ -126,6 +127,7 @@ class _DayScriptState extends State<DayScript> {
     textEditingController2 = TextEditingController();
     textEditingController3 = TextEditingController();
     textEditingController4 = TextEditingController();
+    textEditingController5 = TextEditingController();
     textEditingController_add_sheet = TextEditingController();
     _events = {};
     ischeckedtohideminus = controll_memo.ischeckedtohideminus;
@@ -141,6 +143,7 @@ class _DayScriptState extends State<DayScript> {
     textEditingController2.dispose();
     textEditingController3.dispose();
     textEditingController4.dispose();
+    textEditingController5.dispose();
     textEditingController_add_sheet.dispose();
     for (int i = 0; i < controllers.length; i++) {
       controllers[i].dispose();
@@ -289,12 +292,12 @@ class _DayScriptState extends State<DayScript> {
                                                                   .ischeckedtohideminus,
                                                               controllers,
                                                               _colorfont)
-                                                          : SizedBox(),
+                                                          : const SizedBox(),
                                                       widget.position == 'note'
                                                           ? const SizedBox(
                                                               width: 10,
                                                             )
-                                                          : SizedBox(),
+                                                          : const SizedBox(),
                                                       IconBtn(
                                                           child: IconButton(
                                                               onPressed:
@@ -337,8 +340,6 @@ class _DayScriptState extends State<DayScript> {
                                                                         'cal') {
                                                                       CreateCalandmemoSuccessFlushbar(
                                                                           context);
-                                                                      Snack
-                                                                          .closesnackbars();
                                                                       firestore
                                                                           .collection(
                                                                               'AppNoticeByUsers')
@@ -389,6 +390,7 @@ class _DayScriptState extends State<DayScript> {
                                                                               'Shares': widget.share,
                                                                               'OriginalUser': widget.orig,
                                                                               'calname': widget.title,
+                                                                              'summary': textEditingController5.text,
                                                                               'Date': DateFormat('yyyy-MM-dd').parse(differ_list[j].toString()).toString().split(' ')[0] + '일',
                                                                             }).whenComplete(() {
                                                                               reloadpage = true;
@@ -445,6 +447,8 @@ class _DayScriptState extends State<DayScript> {
                                                                                 widget.orig,
                                                                             'calname':
                                                                                 widget.title,
+                                                                            'summary':
+                                                                                textEditingController5.text,
                                                                             'Date':
                                                                                 DateFormat('yyyy-MM-dd').parse(widget.firstdate.toString()).toString().split(' ')[0] + '일',
                                                                           }).whenComplete(() {
@@ -680,6 +684,18 @@ class _DayScriptState extends State<DayScript> {
                                                   height: 0,
                                                 ),
                                           widget.position == 'cal'
+                                              ? SetCalSummary()
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
+                                              ? const SizedBox(
+                                                  height: 30,
+                                                )
+                                              : const SizedBox(
+                                                  height: 0,
+                                                ),
+                                          widget.position == 'cal'
                                               ? SetAlarmTitle()
                                               : const SizedBox(
                                                   height: 0,
@@ -733,37 +749,24 @@ class _DayScriptState extends State<DayScript> {
   WholeContent() {
     iskeyboardup = MediaQuery.of(context).viewInsets.bottom != 0;
     return widget.position == 'cal'
-        ? TextField(
-            minLines: 1,
-            maxLines: 3,
-            focusNode: searchNode_first_section,
-            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
-            decoration: InputDecoration(
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.black,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ? ContainerDesign(
+            child: TextField(
+              minLines: 1,
+              maxLines: 3,
+              focusNode: searchNode_first_section,
+              style:
+                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(left: 10),
+                border: InputBorder.none,
+                isCollapsed: true,
+                hintText: '일정 제목 추가',
+                hintStyle: TextStyle(
+                    fontSize: contentTextsize(), color: Colors.grey.shade400),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.blue,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-              contentPadding: const EdgeInsets.only(left: 10),
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-              isCollapsed: true,
-              hintText: '일정 제목 추가',
-              hintStyle: TextStyle(
-                  fontSize: contentTextsize(), color: Colors.grey.shade400),
+              controller: textEditingController1,
             ),
-            controller: textEditingController1,
-          )
+            color: Colors.white)
         : ListView.builder(
             itemCount: 1,
             shrinkWrap: true,
@@ -774,38 +777,25 @@ class _DayScriptState extends State<DayScript> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextField(
-                    minLines: 1,
-                    maxLines: 1,
-                    focusNode: searchNode_first_section,
-                    textAlign: TextAlign.start,
-                    textAlignVertical: TextAlignVertical.center,
-                    style: TextStyle(
-                        fontSize: contentTextsize(), color: _colorfont),
-                    decoration: InputDecoration(
-                      isCollapsed: true,
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          width: 2,
+                  ContainerDesign(
+                      child: TextField(
+                        minLines: 1,
+                        maxLines: 1,
+                        focusNode: searchNode_first_section,
+                        style: TextStyle(
+                            fontSize: contentTextsize(), color: Colors.black),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 10),
+                          border: InputBorder.none,
+                          isCollapsed: true,
+                          hintText: '메모 제목 추가',
+                          hintStyle: TextStyle(
+                              fontSize: contentTextsize(),
+                              color: Colors.grey.shade400),
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        controller: textEditingController1,
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.blue,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      contentPadding: const EdgeInsets.only(left: 10),
-                      hintText: '제목 입력...',
-                      hintStyle: TextStyle(
-                          fontSize: contentTextsize(),
-                          color: Colors.grey.shade400),
-                    ),
-                    controller: textEditingController1,
-                  ),
+                      color: controll_memo.color),
                   const SizedBox(
                     height: 20,
                   ),
@@ -948,7 +938,7 @@ class _DayScriptState extends State<DayScript> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
-                                      color: Colors.blue),
+                                      color: Colors.black),
                                 ),
                               )),
                           color: Colors.black)
@@ -1035,145 +1025,39 @@ class _DayScriptState extends State<DayScript> {
                                                           .size
                                                           .width -
                                                       70,
-                                                  child: TextField(
-                                                    onChanged: (text) {
-                                                      scollection
-                                                              .memolistcontentin[
-                                                          index] = text;
-                                                    },
-                                                    minLines: null,
-                                                    maxLines: null,
-                                                    focusNode: nodes[index],
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          contentTextsize(),
-                                                      color: controll_memo
-                                                          .colorfont,
-                                                    ),
-                                                    controller:
-                                                        controllers[index],
-                                                    decoration: InputDecoration(
-                                                      isCollapsed: true,
-                                                      border: InputBorder.none,
-                                                      suffixIcon: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          controll_memo
-                                                                      .ischeckedtohideminus ==
-                                                                  true
-                                                              ? InkWell(
-                                                                  onTap: () {},
-                                                                  child:
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              30),
-                                                                )
-                                                              : InkWell(
-                                                                  onTap: () {
-                                                                    setState(
-                                                                        () {
-                                                                      scollection
-                                                                          .removelistitem(
-                                                                              index);
-                                                                      controllers
-                                                                          .removeAt(
-                                                                              index);
-
-                                                                      for (int i =
-                                                                              0;
-                                                                          i < scollection.memolistin.length;
-                                                                          i++) {
-                                                                        controllers[i]
-                                                                            .text = scollection
-                                                                                .memolistcontentin[
-                                                                            i];
-                                                                      }
-                                                                    });
-                                                                  },
-                                                                  child: const Icon(
-                                                                      Icons
-                                                                          .remove_circle_outline,
-                                                                      color: Colors
-                                                                          .red),
-                                                                ),
-                                                        ],
-                                                      ),
-                                                      hintText: '내용 입력',
-                                                      hintStyle: TextStyle(
-                                                          fontSize:
-                                                              contentTextsize(),
-                                                          color: Colors
-                                                              .grey.shade400),
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                    textAlignVertical:
-                                                        TextAlignVertical
-                                                            .center,
-                                                  ))
-                                              : (scollection.memolistin[index] ==
-                                                          1 ||
-                                                      scollection.memolistin[index] ==
-                                                          999
-                                                  ? SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width -
-                                                              70,
+                                                  child: ContainerDesign(
+                                                      color:
+                                                          controll_memo.color,
                                                       child: TextField(
-                                                        minLines: 1,
-                                                        maxLines: 3,
                                                         onChanged: (text) {
                                                           scollection
                                                                   .memolistcontentin[
                                                               index] = text;
                                                         },
+                                                        minLines: null,
+                                                        maxLines: null,
                                                         focusNode: nodes[index],
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        textAlignVertical:
-                                                            TextAlignVertical
-                                                                .center,
                                                         style: TextStyle(
-                                                            fontSize:
-                                                                contentTextsize(),
-                                                            color: controll_memo
-                                                                .colorfont,
-                                                            decorationThickness:
-                                                                2.3,
-                                                            decoration: scollection
-                                                                            .memolistin[
-                                                                        index] ==
-                                                                    999
-                                                                ? TextDecoration
-                                                                    .lineThrough
-                                                                : null),
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                          color: controll_memo
+                                                              .colorfont,
+                                                        ),
+                                                        controller:
+                                                            controllers[index],
                                                         decoration:
                                                             InputDecoration(
                                                           isCollapsed: true,
+                                                          isDense: true,
+                                                          contentPadding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 10),
                                                           border:
                                                               InputBorder.none,
-                                                          prefixIcon: InkWell(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                scollection.memolistin[
-                                                                            index] ==
-                                                                        999
-                                                                    ? scollection
-                                                                            .memolistin[index] =
-                                                                        1
-                                                                    : scollection
-                                                                            .memolistin[
-                                                                        index] = 999;
-                                                              });
-                                                            },
-                                                            child: const Icon(
-                                                                Icons
-                                                                    .check_box_outline_blank,
-                                                                color: Colors
-                                                                    .black),
-                                                          ),
+                                                          suffixIconConstraints:
+                                                              const BoxConstraints(
+                                                                  maxWidth: 30),
                                                           suffixIcon: Row(
                                                             mainAxisSize:
                                                                 MainAxisSize
@@ -1185,11 +1069,9 @@ class _DayScriptState extends State<DayScript> {
                                                                   ? InkWell(
                                                                       onTap:
                                                                           () {},
-                                                                      child:
-                                                                          const SizedBox(
-                                                                        width:
-                                                                            30,
-                                                                      ),
+                                                                      child: const SizedBox(
+                                                                          width:
+                                                                              30),
                                                                     )
                                                                   : InkWell(
                                                                       onTap:
@@ -1224,24 +1106,36 @@ class _DayScriptState extends State<DayScript> {
                                                               color: Colors.grey
                                                                   .shade400),
                                                         ),
-                                                        controller:
-                                                            controllers[index],
-                                                      ),
-                                                    )
-                                                  : SizedBox(
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        textAlignVertical:
+                                                            TextAlignVertical
+                                                                .center,
+                                                      )),
+                                                )
+                                              : (scollection.memolistin[
+                                                              index] ==
+                                                          1 ||
+                                                      scollection.memolistin[
+                                                              index] ==
+                                                          999
+                                                  ? SizedBox(
                                                       width:
                                                           MediaQuery.of(context)
                                                                   .size
                                                                   .width -
                                                               70,
-                                                      child: TextField(
+                                                      child: ContainerDesign(
+                                                        color:
+                                                            controll_memo.color,
+                                                        child: TextField(
+                                                          minLines: 1,
+                                                          maxLines: 3,
                                                           onChanged: (text) {
                                                             scollection
                                                                     .memolistcontentin[
                                                                 index] = text;
                                                           },
-                                                          minLines: 1,
-                                                          maxLines: 3,
                                                           focusNode:
                                                               nodes[index],
                                                           textAlign:
@@ -1252,19 +1146,52 @@ class _DayScriptState extends State<DayScript> {
                                                           style: TextStyle(
                                                               fontSize:
                                                                   contentTextsize(),
-                                                              color: controll_memo
-                                                                  .colorfont),
+                                                              color:
+                                                                  controll_memo
+                                                                      .colorfont,
+                                                              decorationThickness:
+                                                                  2.3,
+                                                              decoration: scollection
+                                                                              .memolistin[
+                                                                          index] ==
+                                                                      999
+                                                                  ? TextDecoration
+                                                                      .lineThrough
+                                                                  : null),
                                                           decoration:
                                                               InputDecoration(
                                                             isCollapsed: true,
+                                                            isDense: true,
+                                                            contentPadding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 10),
                                                             border: InputBorder
                                                                 .none,
-                                                            prefixIcon: const Icon(
-                                                                Icons.star_rate,
-                                                                color: Colors
-                                                                    .black),
-                                                            prefixIconColor:
-                                                                Colors.black,
+                                                            prefixIcon: InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  scollection.memolistin[
+                                                                              index] ==
+                                                                          999
+                                                                      ? scollection
+                                                                              .memolistin[index] =
+                                                                          1
+                                                                      : scollection
+                                                                              .memolistin[
+                                                                          index] = 999;
+                                                                });
+                                                              },
+                                                              child: const Icon(
+                                                                  Icons
+                                                                      .check_box_outline_blank,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                            suffixIconConstraints:
+                                                                const BoxConstraints(
+                                                                    maxWidth:
+                                                                        30),
                                                             suffixIcon: Row(
                                                               mainAxisSize:
                                                                   MainAxisSize
@@ -1276,9 +1203,11 @@ class _DayScriptState extends State<DayScript> {
                                                                     ? InkWell(
                                                                         onTap:
                                                                             () {},
-                                                                        child: const SizedBox(
-                                                                            width:
-                                                                                30),
+                                                                        child:
+                                                                            const SizedBox(
+                                                                          width:
+                                                                              30,
+                                                                        ),
                                                                       )
                                                                     : InkWell(
                                                                         onTap:
@@ -1312,7 +1241,105 @@ class _DayScriptState extends State<DayScript> {
                                                                     .shade400),
                                                           ),
                                                           controller:
-                                                              controllers[index]))),
+                                                              controllers[
+                                                                  index],
+                                                        ),
+                                                      ))
+                                                  : SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width -
+                                                              70,
+                                                      child: ContainerDesign(
+                                                        color:
+                                                            controll_memo.color,
+                                                        child: TextField(
+                                                            onChanged: (text) {
+                                                              scollection
+                                                                      .memolistcontentin[
+                                                                  index] = text;
+                                                            },
+                                                            minLines: 1,
+                                                            maxLines: 3,
+                                                            focusNode:
+                                                                nodes[index],
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            textAlignVertical:
+                                                                TextAlignVertical
+                                                                    .center,
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    contentTextsize(),
+                                                                color: controll_memo
+                                                                    .colorfont),
+                                                            decoration:
+                                                                InputDecoration(
+                                                              isCollapsed: true,
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 10),
+                                                              border:
+                                                                  InputBorder
+                                                                      .none,
+                                                              prefixIcon: const Icon(
+                                                                  Icons
+                                                                      .star_rate,
+                                                                  color: Colors
+                                                                      .black),
+                                                              prefixIconColor:
+                                                                  Colors.black,
+                                                              suffixIconConstraints:
+                                                                  const BoxConstraints(
+                                                                      maxWidth:
+                                                                          30),
+                                                              suffixIcon: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  controll_memo
+                                                                              .ischeckedtohideminus ==
+                                                                          true
+                                                                      ? InkWell(
+                                                                          onTap:
+                                                                              () {},
+                                                                          child:
+                                                                              const SizedBox(width: 30),
+                                                                        )
+                                                                      : InkWell(
+                                                                          onTap:
+                                                                              () {
+                                                                            setState(() {
+                                                                              scollection.removelistitem(index);
+                                                                              controllers.removeAt(index);
+
+                                                                              for (int i = 0; i < scollection.memolistin.length; i++) {
+                                                                                controllers[i].text = scollection.memolistcontentin[i];
+                                                                              }
+                                                                            });
+                                                                          },
+                                                                          child: const Icon(
+                                                                              Icons.remove_circle_outline,
+                                                                              color: Colors.red),
+                                                                        ),
+                                                                ],
+                                                              ),
+                                                              hintText: '내용 입력',
+                                                              hintStyle: TextStyle(
+                                                                  fontSize:
+                                                                      contentTextsize(),
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade400),
+                                                            ),
+                                                            controller:
+                                                                controllers[
+                                                                    index]),
+                                                      ))),
                                           ReorderableDragStartListener(
                                             index: index,
                                             child: Icon(
@@ -1654,10 +1681,48 @@ class _DayScriptState extends State<DayScript> {
                           ))
                   : const SizedBox(
                       height: 0,
-                    )
+                    ),
             ],
           );
         }));
+  }
+
+  SetCalSummary() {
+    return SizedBox(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '세부설명 작성',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: contentTitleTextsize(),
+              color: Colors.black),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ContainerDesign(
+            child: TextField(
+              minLines: 5,
+              maxLines: null,
+              focusNode: searchNode_second_section,
+              style:
+                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(left: 10),
+                border: InputBorder.none,
+                isCollapsed: true,
+                hintText: '일정에 대한 세부사항 작성',
+                hintStyle: TextStyle(
+                    fontSize: contentTextsize(), color: Colors.grey.shade400),
+              ),
+              controller: textEditingController5,
+            ),
+            color: Colors.white)
+      ],
+    ));
   }
 
   SetAlarmTitle() {

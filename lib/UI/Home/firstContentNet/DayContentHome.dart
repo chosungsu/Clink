@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -495,120 +496,62 @@ class _DayContentHomeState extends State<DayContentHome>
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                              constraints: BoxConstraints(
-                                  minWidth:
-                                      MediaQuery.of(context).size.width - 40,
-                                  maxHeight:
-                                      MediaQuery.of(context).size.height * 0.4,
-                                  minHeight:
-                                      MediaQuery.of(context).size.height *
-                                          0.25),
-                              child: SizedBox.shrink(
+                          ContainerDesign(
+                              child: SizedBox(
+                                height: 80,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
                                         flex: 1,
-                                        child: index < snapshot.data!.docs.length - 1 &&
-                                                    snapshot.data!.docs[index]['Timestart']
-                                                            .toString()
-                                                            .split(':')[0] ==
-                                                        snapshot
-                                                            .data!
-                                                            .docs[index + 1]
-                                                                ['Timestart']
-                                                            .toString()
-                                                            .split(':')[0] ||
-                                                index == 0
-                                            ? Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  NeumorphicText(
-                                                    snapshot
-                                                            .data!
-                                                            .docs[index]
-                                                                ['Timestart']
-                                                            .toString()
-                                                            .split(':')[0] +
-                                                        ':00',
-                                                    style: NeumorphicStyle(
-                                                      shape:
-                                                          NeumorphicShape.flat,
-                                                      depth: 3,
-                                                      color: TextColor(),
-                                                    ),
-                                                    textStyle:
-                                                        NeumorphicTextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                  Divider(
-                                                    thickness: 2,
-                                                    height: 15,
-                                                    endIndent: 20,
-                                                    color: TextColor(),
-                                                  ),
-                                                ],
-                                              )
-                                            : (index < snapshot.data!.docs.length - 1 &&
-                                                        snapshot.data!.docs[index]['Timestart']
-                                                                .toString()
-                                                                .split(
-                                                                    ':')[0] ==
-                                                            snapshot.data!
-                                                                .docs[index - 1]['Timestart']
-                                                                .toString()
-                                                                .split(':')[0] ||
-                                                    (index == snapshot.data!.docs.length - 1 && snapshot.data!.docs[index]['Timestart'].toString().split(':')[0] == snapshot.data!.docs[index - 1]['Timestart'].toString().split(':')[0])
-                                                ? Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: const [],
-                                                  )
-                                                : Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      NeumorphicText(
-                                                        snapshot
-                                                                .data!
-                                                                .docs[index][
-                                                                    'Timestart']
-                                                                .toString()
-                                                                .split(':')[0] +
-                                                            ':00',
-                                                        style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
-                                                          color: TextColor(),
-                                                        ),
-                                                        textStyle:
-                                                            NeumorphicTextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20,
-                                                        ),
-                                                      ),
-                                                      Divider(
-                                                        thickness: 2,
-                                                        height: 15,
-                                                        endIndent: 20,
-                                                        color: TextColor(),
-                                                      ),
-                                                    ],
-                                                  ))),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            NeumorphicText(
+                                              snapshot
+                                                          .data!
+                                                          .docs[index]
+                                                              ['Timestart']
+                                                          .toString()
+                                                          .split(':')[1]
+                                                          .length ==
+                                                      1
+                                                  ? snapshot
+                                                          .data!
+                                                          .docs[index]
+                                                              ['Timestart']
+                                                          .toString()
+                                                          .split(':')[0] +
+                                                      ':0' +
+                                                      snapshot
+                                                          .data!
+                                                          .docs[index]
+                                                              ['Timestart']
+                                                          .toString()
+                                                          .split(':')[1]
+                                                  : snapshot.data!.docs[index]
+                                                      ['Timestart'],
+                                              style: NeumorphicStyle(
+                                                shape: NeumorphicShape.flat,
+                                                depth: 3,
+                                                color: TextColor(),
+                                              ),
+                                              textStyle: NeumorphicTextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                            VerticalDivider(
+                                              width: 30,
+                                              thickness: 2,
+                                              indent: 15,
+                                              endIndent: 15,
+                                              color: TextColor(),
+                                            ),
+                                          ],
+                                        )),
                                     Expanded(
                                         flex: 3,
                                         child: InkWell(
@@ -616,248 +559,95 @@ class _DayContentHomeState extends State<DayContentHome>
                                             //수정 및 삭제 시트 띄우기
                                             Get.to(
                                                 () => ClickShowEachCalendar(
-                                                    start: snapshot.data!.docs[index]
-                                                        ['Timestart'],
-                                                    finish:
-                                                        snapshot.data!.docs[index]
-                                                            ['Timefinish'],
-                                                    calinfo: snapshot.data!
-                                                        .docs[index]['Daytodo'],
-                                                    date: _selectedDay,
-                                                    alarm: snapshot.data!
-                                                        .docs[index]['Alarm'],
-                                                    share: snapshot.data!
-                                                        .docs[index]['Shares'],
-                                                    calname: widget.calname,
-                                                    code: snapshot.data!
-                                                        .docs[index]['calname']),
-                                                transition: Transition.downToUp);
+                                                      start: snapshot
+                                                              .data!.docs[index]
+                                                          ['Timestart'],
+                                                      finish: snapshot
+                                                              .data!.docs[index]
+                                                          ['Timefinish'],
+                                                      calinfo: snapshot
+                                                              .data!.docs[index]
+                                                          ['Daytodo'],
+                                                      date: _selectedDay,
+                                                      alarm: snapshot.data!
+                                                          .docs[index]['Alarm'],
+                                                      share: snapshot
+                                                              .data!.docs[index]
+                                                          ['Shares'],
+                                                      calname: widget.calname,
+                                                      code: snapshot
+                                                              .data!.docs[index]
+                                                          ['calname'],
+                                                      summary: snapshot
+                                                              .data!.docs[index]
+                                                          ['summary'],
+                                                    ),
+                                                transition:
+                                                    Transition.downToUp);
                                           },
                                           child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10,
-                                                  bottom: 10,
-                                                  left: 10,
-                                                  right: 10),
-                                              decoration: BoxDecoration(
-                                                  color: themecal_fromsheet == 0
-                                                      ? (index % 4 == 0
-                                                          ? MyTheme.colororigred
-                                                          : (index % 4 == 1
-                                                              ? MyTheme
-                                                                  .colororigorange
-                                                              : (index % 4 == 2
-                                                                  ? MyTheme
-                                                                      .colororigblue
-                                                                  : MyTheme
-                                                                      .colororiggreen)))
-                                                      : (index % 4 == 0
-                                                          ? MyTheme
-                                                              .colorpastelred
-                                                          : (index % 4 == 1
-                                                              ? MyTheme
-                                                                  .colorpastelorange
-                                                              : (index % 4 == 2
-                                                                  ? MyTheme
-                                                                      .colorpastelblue
-                                                                  : MyTheme
-                                                                      .colorpastelgreen))),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  border: Border.all(
-                                                      color: TextColor(),
-                                                      width: 1)),
-                                              child: SizedBox(
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 2,
-                                                      child: Text(
-                                                        snapshot
-                                                            .data!
-                                                            .docs[index]
-                                                                ['Daytodo']
-                                                            .toString(),
-                                                        maxLines: 3,
-                                                        style: TextStyle(
-                                                            color: TextColor(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                        flex: 1,
-                                                        child: snapshot
-                                                                .data!
-                                                                .docs[index][
-                                                                    'Timefinish']
-                                                                .isEmpty
-                                                            ? Text(
-                                                                snapshot.data!.docs[index]['Timestart'].toString().split(':')[
-                                                                            1] ==
-                                                                        '0'
-                                                                    ? snapshot
-                                                                            .data!
-                                                                            .docs[index][
-                                                                                'Timestart']
-                                                                            .toString() +
-                                                                        '0' +
-                                                                        '-' +
-                                                                        ''
-                                                                    : snapshot
-                                                                            .data!
-                                                                            .docs[index]['Timestart']
-                                                                            .toString() +
-                                                                        '-' +
-                                                                        '',
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        20),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              )
-                                                            : (snapshot
-                                                                        .data!
-                                                                        .docs[
-                                                                            index]
-                                                                            [
-                                                                            'Timefinish']
-                                                                        .toString()
-                                                                        .split(
-                                                                            ':')[1] ==
-                                                                    '0'
-                                                                ? Text(
-                                                                    snapshot.data!.docs[index]['Timestart'].toString().split(':')[1] ==
-                                                                            '0'
-                                                                        ? snapshot.data!.docs[index]['Timestart'].toString() +
-                                                                            '0' +
-                                                                            '-' +
-                                                                            snapshot.data!.docs[index]['Timefinish']
-                                                                                .toString() +
-                                                                            '0'
-                                                                        : snapshot.data!.docs[index]['Timestart'].toString() +
-                                                                            '-' +
-                                                                            snapshot.data!.docs[index]['Timefinish'].toString() +
-                                                                            '0',
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                            TextColor(),
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            20),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  )
-                                                                : Text(
-                                                                    snapshot.data!.docs[index]['Timestart'].toString().split(':')[1] ==
-                                                                            '0'
-                                                                        ? snapshot.data!.docs[index]['Timestart'].toString() +
-                                                                            '0' +
-                                                                            '-' +
-                                                                            snapshot.data!.docs[index]['Timefinish']
-                                                                                .toString()
-                                                                        : snapshot.data!.docs[index]['Timestart'].toString() +
-                                                                            '-' +
-                                                                            snapshot.data!.docs[index]['Timefinish'].toString(),
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                            TextColor(),
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            20),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ))),
-                                                    Expanded(
-                                                        flex: 1,
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              'with',
-                                                              softWrap: true,
-                                                              style: GoogleFonts
-                                                                  .lobster(
-                                                                color:
-                                                                    TextColor(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                              ),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            SizedBox(
-                                                              height: 30,
-                                                              child: ListView
-                                                                  .builder(
-                                                                      shrinkWrap:
-                                                                          true,
-                                                                      scrollDirection:
-                                                                          Axis
-                                                                              .horizontal,
-                                                                      itemCount: snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                              index]
-                                                                              [
-                                                                              'Shares']
-                                                                          .length,
-                                                                      itemBuilder:
-                                                                          (context,
-                                                                              index2) {
-                                                                        return Row(
-                                                                          children: [
-                                                                            Container(
-                                                                              alignment: Alignment.center,
-                                                                              height: 25,
-                                                                              width: 25,
-                                                                              child: Text(snapshot.data!.docs[index]['Shares'][index2].toString().substring(0, 1), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
-                                                                              decoration: BoxDecoration(
-                                                                                color: Colors.white,
-                                                                                borderRadius: BorderRadius.circular(100),
-                                                                              ),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              width: 5,
-                                                                            ),
-                                                                          ],
-                                                                        );
-                                                                      }),
-                                                            )
-                                                          ],
-                                                        )),
-                                                  ],
+                                            padding: const EdgeInsets.only(
+                                                top: 10, bottom: 10, right: 10),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Text(
+                                                    snapshot.data!
+                                                        .docs[index]['Daytodo']
+                                                        .toString(),
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
                                                 ),
-                                              )),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    snapshot.data!
+                                                        .docs[index]['summary']
+                                                        .toString(),
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                        color:
+                                                            TextColor_shadowcolor(),
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 18),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         )),
                                   ],
                                 ),
-                              )),
+                              ),
+                              color: themecal_fromsheet == 0
+                                  ? (index % 4 == 0
+                                      ? MyTheme.colororigred
+                                      : (index % 4 == 1
+                                          ? MyTheme.colororigorange
+                                          : (index % 4 == 2
+                                              ? MyTheme.colororigblue
+                                              : MyTheme.colororiggreen)))
+                                  : (index % 4 == 0
+                                      ? MyTheme.colorpastelred
+                                      : (index % 4 == 1
+                                          ? MyTheme.colorpastelorange
+                                          : (index % 4 == 2
+                                              ? MyTheme.colorpastelblue
+                                              : MyTheme.colorpastelgreen)))),
                           const SizedBox(
                             height: 20,
                           )

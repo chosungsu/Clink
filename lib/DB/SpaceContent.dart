@@ -7,6 +7,7 @@ class SpaceContent {
   final String alarm;
   final List share;
   final String code;
+  final String summary;
 
   SpaceContent(
       {required this.title,
@@ -16,5 +17,6 @@ class SpaceContent {
       required this.cname,
       required this.alarm,
       required this.share,
-      required this.code});
+      required this.code,
+      required this.summary});
 }

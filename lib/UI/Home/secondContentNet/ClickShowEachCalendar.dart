@@ -25,7 +25,8 @@ class ClickShowEachCalendar extends StatefulWidget {
       required this.alarm,
       required this.share,
       required this.calname,
-      required this.code})
+      required this.code,
+      required this.summary})
       : super(key: key);
   final String start;
   final String finish;
@@ -35,6 +36,7 @@ class ClickShowEachCalendar extends StatefulWidget {
   final List share;
   final String calname;
   final String code;
+  final String summary;
   @override
   State<StatefulWidget> createState() => _ClickShowEachCalendarState();
 }
@@ -47,7 +49,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
+  late TextEditingController textEditingController4;
   final searchNode = FocusNode();
+  final searchsecondNode = FocusNode();
   List updateid = [];
   List deleteid = [];
   bool isChecked_pushalarm = false;
@@ -68,6 +72,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     textEditingController1 = TextEditingController(text: widget.calinfo);
     textEditingController2 = TextEditingController(text: widget.start);
     textEditingController3 = TextEditingController(text: widget.finish);
+    textEditingController4 = TextEditingController(text: widget.summary);
   }
 
   @override
@@ -210,7 +215,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                       if (reloadpage) {
                                                         CreateCalandmemoSuccessFlushbar(
                                                             context);
-                                                        Snack.closesnackbars();
                                                         firestore
                                                             .collection(
                                                                 'AppNoticeByUsers')
@@ -317,6 +321,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                                             true
                                                                         ? changevalue
                                                                         : '설정off'),
+                                                                'summary':
+                                                                    textEditingController4
+                                                                        .text,
                                                                 'Timestart': textEditingController2
                                                                         .text
                                                                         .isEmpty
@@ -482,7 +489,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                                       if (reloadpage) {
                                                         CreateCalandmemoSuccessFlushbar(
                                                             context);
-                                                        Snack.closesnackbars();
                                                         firestore
                                                             .collection(
                                                                 'AppNoticeByUsers')
@@ -638,47 +644,55 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       child: SingleChildScrollView(child:
                           StatefulBuilder(builder: (_, StateSetter setState) {
                         return GestureDetector(
-                          onTap: () {
-                            searchNode.unfocus();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 20,
+                            onTap: () {
+                              searchNode.unfocus();
+                              searchsecondNode.unfocus();
+                            },
+                            child: Padding(
+                              padding: MediaQuery.of(context).viewInsets,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    buildSheetTitle(),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Title(),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    buildContentTitle(),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Content(),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    SetCalSummary(),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    buildAlarmTitle(),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Alarm(),
+                                    const SizedBox(
+                                      height: 50,
+                                    )
+                                  ],
                                 ),
-                                buildSheetTitle(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Title(),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                buildContentTitle(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Content(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                buildAlarmTitle(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Alarm(),
-                                const SizedBox(
-                                  height: 50,
-                                )
-                              ],
-                            ),
-                          ),
-                        );
+                              ),
+                            ));
                       })),
                     ),
                   )),
@@ -699,35 +713,22 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
 
   Title() {
     return SizedBox(
-      height: widget.calinfo.length < 20 ? 30 : 80,
-      child: TextFormField(
+        child: ContainerDesign(
+      color: Colors.white,
+      child: TextField(
         readOnly: false,
         minLines: 1,
         maxLines: 3,
         focusNode: searchNode,
         style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
         decoration: const InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.black,
-              width: 2,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.blue,
-              width: 2,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          ),
           contentPadding: EdgeInsets.only(left: 10),
           border: InputBorder.none,
           isCollapsed: true,
         ),
         controller: textEditingController1,
       ),
-    );
+    ));
   }
 
   buildContentTitle() {
@@ -842,6 +843,44 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             ],
           );
         }));
+  }
+
+  SetCalSummary() {
+    return SizedBox(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '세부설명 작성',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: contentTitleTextsize(),
+              color: Colors.black),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ContainerDesign(
+            child: TextField(
+              minLines: 5,
+              maxLines: null,
+              focusNode: searchsecondNode,
+              style:
+                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(left: 10),
+                border: InputBorder.none,
+                isCollapsed: true,
+                hintText: '일정에 대한 세부사항 작성',
+                hintStyle: TextStyle(
+                    fontSize: contentTextsize(), color: Colors.grey.shade400),
+              ),
+              controller: textEditingController4,
+            ),
+            color: Colors.white)
+      ],
+    ));
   }
 
   buildAlarmTitle() {
