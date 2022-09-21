@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../Auth/GoogleSignInController.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../UI/Sign/UserCheck.dart';
 
@@ -82,6 +83,11 @@ DeleteUserVerify(BuildContext context, String name) {
                               setState(() {
                                 isloading = true;
                               });
+                              Snack.show(
+                                  title: '로딩중',
+                                  snackType: SnackType.waiting,
+                                  content: '회원탈퇴 중입니다.잠시만 기다려주세요',
+                                  context: context);
                               await NotificationApi.cancelAll();
                               GoogleSignInController()
                                   .Deletelogout(context, name);

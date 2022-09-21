@@ -1,3 +1,4 @@
+import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,11 @@ class GoogleSignInController extends GetxController {
             Hive.box('user_info').get('id').toString().substring(0, 2);
     //firestore 저장
     firestore.collection('User').doc(nick).get().then((value) {
+      Snack.show(
+          title: '로딩중',
+          snackType: SnackType.waiting,
+          content: '로그인중입니다.잠시만 기다려주세요',
+          context: context);
       if (value.exists) {
         firestore.collection('User').doc(nick).update({
           'name': nick,
