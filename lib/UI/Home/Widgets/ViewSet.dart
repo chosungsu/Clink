@@ -75,8 +75,8 @@ ViewSet(
                             const SizedBox(
                               height: 20,
                             ),
-                            FutureBuilder<QuerySnapshot>(
-                              future: firestore
+                            StreamBuilder<QuerySnapshot>(
+                              stream: firestore
                                   .collection('CalendarDataBase')
                                   .where('OriginalUser', isEqualTo: secondname)
                                   .where('Date',
@@ -89,7 +89,7 @@ ViewSet(
                                               .substring(0, 2) +
                                           '일')
                                   .orderBy('Timestart')
-                                  .get(),
+                                  .snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   contentmy.clear();
@@ -228,14 +228,21 @@ ViewSet(
                                                                 .calendar_month,
                                                             color: TextColor(),
                                                           ),
-                                                          trailing: int.parse(contentmy[
-                                                                          index]
-                                                                      .startdate
-                                                                      .toString()
-                                                                      .substring(
-                                                                          0,
-                                                                          2)) >
-                                                                  Date.hour
+                                                          trailing: int.parse(contentmy[index]
+                                                                          .startdate
+                                                                          .toString()
+                                                                          .substring(
+                                                                              0,
+                                                                              2)) >=
+                                                                      Date
+                                                                          .hour &&
+                                                                  int.parse(contentmy[index]
+                                                                              .startdate
+                                                                              .toString()
+                                                                              .split(':')[
+                                                                          1]) >=
+                                                                      Date
+                                                                          .minute
                                                               ? (contentmy[index]
                                                                           .alarm !=
                                                                       '설정off'
@@ -333,8 +340,8 @@ ViewSet(
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                FutureBuilder<QuerySnapshot>(
-                                  future: firestore
+                                StreamBuilder<QuerySnapshot>(
+                                  stream: firestore
                                       .collection('CalendarDataBase')
                                       .where('Date',
                                           isEqualTo: Date.toString()
@@ -347,7 +354,7 @@ ViewSet(
                                                   .substring(0, 2) +
                                               '일')
                                       .orderBy('Timestart')
-                                      .get(),
+                                      .snapshots(),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       List nameList = [];
@@ -498,14 +505,15 @@ ViewSet(
                                                                 color:
                                                                     TextColor(),
                                                               ),
-                                                              trailing: int.parse(contentshare[
-                                                                              index]
-                                                                          .startdate
-                                                                          .toString()
-                                                                          .substring(
+                                                              trailing: int.parse(contentshare[index].startdate.toString().substring(
                                                                               0,
-                                                                              2)) >
-                                                                      Date.hour
+                                                                              2)) >=
+                                                                          Date
+                                                                              .hour &&
+                                                                      int.parse(contentshare[index].startdate.toString().split(':')[
+                                                                              1]) >=
+                                                                          Date
+                                                                              .minute
                                                                   ? (contentshare[index]
                                                                               .alarm !=
                                                                           '설정off'

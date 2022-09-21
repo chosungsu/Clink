@@ -121,7 +121,8 @@ class _DayScriptState extends State<DayScript> {
     scollection.memolistin.clear();
     scollection.memolistcontentin.clear();
     scollection.memoindex = 0;
-    cal_share_person.peoplecalendarrestart();
+    Hive.box('user_setting').put('share_cal_person', '');
+    cal_share_person.people = [];
     finallist = cal_share_person.people;
     textEditingController1 = TextEditingController();
     textEditingController2 = TextEditingController();

@@ -53,6 +53,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   ];
   int code = 0;
   int sortsection = 0;
+  late TabController tabController;
+  int pageindex = 0;
 
   @override
   void didChangeDependencies() {
@@ -71,6 +73,11 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     controller = TextEditingController();
     Hive.box('user_setting').put('share_cal_person', '');
     cal_share_person.people = [];
+    tabController = TabController(
+      initialIndex: 0,
+      length: 2,
+      vsync: this,
+    );
 
     finallist = cal_share_person.people;
     _scrollController = ScrollController()
@@ -248,7 +255,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                         ],
                       ),
                     )),
-                Selectisshare(),
+                TabViewScreen(),
+                //Selectisshare(),
                 Flexible(
                     fit: FlexFit.tight,
                     child: SizedBox(
@@ -271,10 +279,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                         height: 20,
                                       ),
                                       SearchBox(),*/
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      code == 0 ? listy_My() : listy_Shared(),
+                                      CalList(),
+                                      //code == 0 ? listy_My() : listy_Shared(),
                                       const SizedBox(
                                         height: 50,
                                       ),
@@ -289,169 +295,58 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     );
   }
 
-  Selectisshare() {
-    return SizedBox(
-      height: 40,
-      width: MediaQuery.of(context).size.width - 40,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [ShareBox()],
-      ),
+  TabViewScreen() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+              color: TextColor_shadowcolor(),
+              borderRadius: BorderRadius.circular(30)),
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: TabBar(
+                onTap: (index) {
+                  setState(() {
+                    pageindex = index;
+                  });
+                },
+                controller: tabController,
+                labelColor: TextColor(),
+                unselectedLabelColor: BGColor(),
+                indicator: BoxDecoration(
+                    color: BGColor(), borderRadius: BorderRadius.circular(30)),
+                tabs: [
+                  Text(
+                    'My',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize(),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    'Shared',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize(),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ]),
+          )),
     );
   }
 
-  ShareBox() {
+  CalList() {
     return SizedBox(
-        height: 40,
-        width: MediaQuery.of(context).size.width - 60,
-        child: ListView.builder(
-            // the number of items in the list
-            itemCount: noticalendarlist.length,
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            // display each item of the product list
-            itemBuilder: (context, index) {
-              return index == 1
-                  ? Row(
-                      children: [
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                            height: 30,
-                            width: (MediaQuery.of(context).size.width - 40) / 2,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('noti_calendar_click') ==
-                                            null
-                                        ? Colors.white
-                                        : (Hive.box('user_setting').get(
-                                                    'noti_calendar_click') ==
-                                                index
-                                            ? Colors.grey.shade400
-                                            : Colors.white),
-                                    side: BorderSide(
-                                      width: 1,
-                                      color: TextColor(),
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('noti_calendar_click', index);
-                                    code = index;
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          noticalendarlist[index],
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting').get(
-                                                        'noti_calendar_click') ==
-                                                    null
-                                                ? Colors.black45
-                                                : (Hive.box('user_setting').get(
-                                                            'noti_calendar_click') ==
-                                                        index
-                                                    ? Colors.white
-                                                    : Colors.black45),
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ))),
-                        const SizedBox(
-                          width: 10,
-                        )
-                      ],
-                    )
-                  : Row(
-                      children: [
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                            height: 30,
-                            width: (MediaQuery.of(context).size.width - 40) / 4,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    primary: Hive.box('user_setting')
-                                                .get('noti_calendar_click') ==
-                                            null
-                                        ? Colors.grey.shade400
-                                        : (Hive.box('user_setting').get(
-                                                    'noti_calendar_click') ==
-                                                index
-                                            ? Colors.grey.shade400
-                                            : Colors.white),
-                                    side: const BorderSide(
-                                      width: 1,
-                                      color: Colors.black45,
-                                    )),
-                                onPressed: () {
-                                  setState(() {
-                                    Hive.box('user_setting')
-                                        .put('noti_calendar_click', index);
-                                    code = index;
-                                  });
-                                },
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: NeumorphicText(
-                                          noticalendarlist[index],
-                                          style: NeumorphicStyle(
-                                            shape: NeumorphicShape.flat,
-                                            depth: 3,
-                                            color: Hive.box('user_setting').get(
-                                                        'noti_calendar_click') ==
-                                                    null
-                                                ? Colors.white
-                                                : (Hive.box('user_setting').get(
-                                                            'noti_calendar_click') ==
-                                                        index
-                                                    ? Colors.white
-                                                    : Colors.black45),
-                                          ),
-                                          textStyle: NeumorphicTextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize(),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ))),
-                        const SizedBox(
-                          width: 10,
-                        )
-                      ],
-                    );
-            }));
+      height: MediaQuery.of(context).size.height - 210,
+      child: TabBarView(
+        controller: tabController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [listy_My(), listy_Shared()],
+      ),
+    );
   }
 
   /*SearchBox() {
