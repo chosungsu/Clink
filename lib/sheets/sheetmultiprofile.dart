@@ -344,6 +344,22 @@ content(
                       }
                     });
                     await firestore
+                        .collection('MemoCollections')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('madeUser') ==
+                            cal_share_person.secondname) {
+                          firestore
+                              .collection('MemoCollections')
+                              .doc(value.docs[i].id)
+                              .update({
+                            'madeUser': Hive.box('user_info').get('id')
+                          });
+                        }
+                      }
+                    });
+                    await firestore
                         .collection('PeopleList')
                         .get()
                         .then((value) {
@@ -506,6 +522,22 @@ content(
                       }
                     });
                     await firestore
+                        .collection('MemoCollections')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('madeUser') ==
+                            cal_share_person.secondname) {
+                          firestore
+                              .collection('MemoCollections')
+                              .doc(value.docs[i].id)
+                              .update({
+                            'madeUser': Hive.box('user_info').get('id')
+                          });
+                        }
+                      }
+                    });
+                    await firestore
                         .collection('PeopleList')
                         .get()
                         .then((value) {
@@ -593,6 +625,20 @@ content(
                               .update({'Shares': changepeople});
                         }
                         changepeople.clear();
+                      }
+                    });
+                    await firestore
+                        .collection('MemoCollections')
+                        .get()
+                        .then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('madeUser') ==
+                            cal_share_person.secondname) {
+                          firestore
+                              .collection('MemoCollections')
+                              .doc(value.docs[i].id)
+                              .update({'madeUser': controller.text});
+                        }
                       }
                     });
                     await firestore.collection('ShareHome').get().then((value) {
