@@ -181,9 +181,7 @@ class _LoginSignPageState extends State<LoginSignPage>
               /*await Provider.of<GoogleSignInController>(context, listen: false)
                   .login(context, ischecked);*/
               GoogleSignInController().login(context, ischecked);
-              String name = Hive.box('user_info').get('id');
-              String subname = '';
-              await Navigator.of(context).pushReplacement(
+              /*await Navigator.of(context).pushReplacement(
                 PageTransition(
                   type: PageTransitionType.bottomToTop,
                   child: const MyHomePage(
@@ -191,7 +189,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                   ),
                 ),
               );
-              Hive.box('user_setting').put('page_index', 1);
+              Hive.box('user_setting').put('page_index', 1);*/
             },
             child: SizedBox(
               width: 200 * (MediaQuery.of(context).size.width / 392),
