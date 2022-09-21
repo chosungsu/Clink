@@ -17,10 +17,8 @@ import 'Tool/Getx/navibool.dart';
 import 'Tool/Getx/notishow.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.index, required this.secondname})
-      : super(key: key);
+  const MyHomePage({Key? key, required this.index}) : super(key: key);
   final int index;
-  final String secondname;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -38,12 +36,23 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   List updateid = [];
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final cal_share_person = Get.put(PeopleAdd());
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _selectedIndex = widget.index;
+    firestore.collection('User').doc(name).get().then((value) {
+      String subname = '';
+      if (value.exists) {
+        subname = value.data()!['subname'];
+        cal_share_person.secondnameset(subname);
+      } else {
+        subname = name;
+        cal_share_person.secondnameset(subname);
+      }
+    });
     Hive.box('user_setting').put('page_index', 1);
   }
 
@@ -58,8 +67,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
       GroupPage(),
-      HomePage(secondname: widget.secondname),
-      HomePage(secondname: widget.secondname),
+      HomePage(secondname: cal_share_person.secondname),
+      HomePage(secondname: cal_share_person.secondname),
       ProfilePage(),
     ];
 

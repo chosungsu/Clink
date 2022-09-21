@@ -69,7 +69,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             type: PageTransitionType.rightToLeft,
                             child: MyHomePage(
                               index: 1,
-                              secondname: cal_share_person.secondname,
                             ),
                           ),
                         );
@@ -86,8 +85,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
                             child: MyHomePage(
-                                index: 0,
-                                secondname: cal_share_person.secondname),
+                              index: 0,
+                            ),
                           ),
                         );
                         Hive.box('user_setting').put('page_index', 0);
@@ -97,8 +96,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
                             child: MyHomePage(
-                                index: 3,
-                                secondname: cal_share_person.secondname),
+                              index: 3,
+                            ),
                           ),
                         );
                         Hive.box('user_setting').put('page_index', 3);

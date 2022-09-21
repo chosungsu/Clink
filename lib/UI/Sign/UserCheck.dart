@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../Page/LoginSignPage.dart';
+import '../../Tool/Getx/PeopleAdd.dart';
 import '../../route.dart';
 
-GoToMain(BuildContext context, String secondname) {
+GoToMain(BuildContext context) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
     /*Navigator.of(context).pushReplacement(
       PageTransition(
@@ -16,16 +18,16 @@ GoToMain(BuildContext context, String secondname) {
       ),
     );*/
     Get.to(
-      () => MyHomePage(index: 1, secondname: secondname),
+      () => MyHomePage(index: 1),
     );
     Hive.box('user_setting').put('page_index', 1);
   });
   return _time;
 }
 
-GoToLogin(BuildContext context, String s, String secondname) {
+GoToLogin(BuildContext context, String s) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
-    Get.to(() => LoginSignPage(first: s, secondname: secondname));
+    Get.to(() => LoginSignPage(first: s));
     /*Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const LoginSignPage()));*/
   });

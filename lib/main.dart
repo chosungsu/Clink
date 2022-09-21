@@ -77,23 +77,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
   bool islogined = false;
-  final cal_share_person = Get.put(PeopleAdd());
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String name = Hive.box('user_info').get('id');
 
   @override
   void initState() {
     super.initState();
-    firestore.collection('User').doc(name).get().then((value) {
-      String subname = '';
-      if (value.exists) {
-        subname = value.data()!['subname'];
-        cal_share_person.secondnameset(subname);
-      } else {
-        subname = name;
-        cal_share_person.secondnameset(subname);
-      }
-    });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notifications = PushNotification(
@@ -113,7 +100,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             Hive.box('user_info').get('id') == null ||
                     Hive.box('user_info').get('autologin') == false
                 ? null
-                : GoToMain(context, cal_share_person.secondname);
+                : GoToMain(context);
             Timer(
               const Duration(milliseconds: 1000),
               () {
@@ -199,8 +186,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                                     primary: Colors.grey.shade400,
                                   ),
                                   onPressed: () {
-                                    GoToLogin(context, 'first',
-                                        cal_share_person.secondname);
+                                    GoToLogin(context, 'first');
                                   },
                                   child: Center(
                                     child: Column(

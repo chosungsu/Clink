@@ -45,8 +45,7 @@ class UserDetails extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize())),
                         onPressed: () {
-                          GoToLogin(
-                              context, 'isnotfirst', peopleadd.secondname);
+                          GoToLogin(context, 'isnotfirst');
                         })
                   ],
                 duration: const Duration(seconds: 0),
@@ -108,8 +107,7 @@ class UserDetails extends StatelessWidget {
                         onPressed: () {
                           GoogleSignInController()
                               .logout(context, Hive.box('user_info').get('id'));
-                          GoToLogin(
-                              context, 'isnotfirst', peopleadd.secondname);
+                          GoToLogin(context, 'isnotfirst');
                         }),
                     FocusedMenuItem(
                         trailingIcon: const Icon(

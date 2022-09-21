@@ -544,7 +544,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                               ),
                                             ),
                                             VerticalDivider(
-                                              width: 30,
+                                              width: 20,
                                               thickness: 2,
                                               indent: 15,
                                               endIndent: 15,

@@ -67,7 +67,6 @@ addWhole(
                 type: PageTransitionType.fade,
                 child: MyHomePage(
                   index: 0,
-                  secondname: cal_share_person.secondname,
                 ),
               ),
             )
@@ -76,14 +75,16 @@ addWhole(
                   PageTransition(
                     type: PageTransitionType.fade,
                     child: MyHomePage(
-                        index: 1, secondname: cal_share_person.secondname),
+                      index: 1,
+                    ),
                   ),
                 )
               : Navigator.of(context).pushReplacement(
                   PageTransition(
                     type: PageTransitionType.fade,
                     child: MyHomePage(
-                        index: 3, secondname: cal_share_person.secondname),
+                      index: 3,
+                    ),
                   ),
                 ));
     }

@@ -19,10 +19,8 @@ import '../Tool/TextSize.dart';
 import '../route.dart';
 
 class LoginSignPage extends StatefulWidget {
-  const LoginSignPage({Key? key, required this.first, required this.secondname})
-      : super(key: key);
+  const LoginSignPage({Key? key, required this.first}) : super(key: key);
   final String first;
-  final String secondname;
   @override
   State<StatefulWidget> createState() => _LoginSignPageState();
 }
@@ -31,7 +29,6 @@ class _LoginSignPageState extends State<LoginSignPage>
     with WidgetsBindingObserver {
   bool _ischecked = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static final cal_share_person = Get.put(PeopleAdd());
 
   @override
   void initState() {
@@ -189,9 +186,8 @@ class _LoginSignPageState extends State<LoginSignPage>
               await Navigator.of(context).pushReplacement(
                 PageTransition(
                   type: PageTransitionType.bottomToTop,
-                  child: MyHomePage(
+                  child: const MyHomePage(
                     index: 1,
-                    secondname: widget.secondname,
                   ),
                 ),
               );

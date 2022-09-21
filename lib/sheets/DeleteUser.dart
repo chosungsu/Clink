@@ -169,8 +169,10 @@ DeleteUserVerify(BuildContext context, String name) {
                               setState(() {
                                 isloading = false;
                               });
-                              GoToLogin(context, 'first',
-                                  cal_share_person.secondname);
+                              GoToLogin(
+                                context,
+                                'first',
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.amberAccent,

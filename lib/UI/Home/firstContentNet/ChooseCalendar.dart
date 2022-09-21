@@ -445,7 +445,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width -
-                                              40,
+                                              60,
                                           child: FocusedMenuHolder(
                                             menuItems: [
                                               FocusedMenuItem(
@@ -927,7 +927,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width -
-                                              40,
+                                              60,
                                           child: FocusedMenuHolder(
                                             menuItems: [
                                               FocusedMenuItem(
