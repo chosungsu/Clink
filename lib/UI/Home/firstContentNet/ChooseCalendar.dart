@@ -69,7 +69,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     cal_sort.setsortcal(0);
     sortsection = cal_sort.sort;
     controller = TextEditingController();
-    cal_share_person.peoplecalendarrestart();
+    Hive.box('user_setting').put('share_cal_person', '');
+    cal_share_person.people = [];
 
     finallist = cal_share_person.people;
     _scrollController = ScrollController()

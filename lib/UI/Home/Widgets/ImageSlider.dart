@@ -97,10 +97,13 @@ class _ImageSliderPageState extends State<ImageSliderPage>
   }
 
   Future _deleteFile(String doc, int index) async {
-    print('delete : ' + index.toString());
-    await FirebaseStorage.instance
-        .refFromURL(controll_memo.imagelist[index])
-        .delete();
+    String filePath = controll_memo.imagelist[index]
+        .replaceAll(
+            RegExp(
+                r'https://firebasestorage.googleapis.com/v0/b/habit-tracker-8dad1.appspot.com/o/${doc}%2F'),
+            '')
+        .split('?')[0];
+    await FirebaseStorage.instance.refFromURL(filePath).delete();
     controll_memo.deleteimagelist(index);
     // 문서 작성
     if (doc != '') {

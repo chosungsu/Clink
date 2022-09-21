@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
   bool isread = false;
   final notilist = Get.put(notishow());
   List updatefriends = [];
+  final cal_share_person = Get.put(PeopleAdd());
 
   @override
   void initState() {
@@ -89,6 +90,16 @@ class _HomePageState extends State<HomePage> {
         PageController(initialPage: currentPage, viewportFraction: 1);
     isdraweropen = draw.drawopen;
     docid = email_first + email_second + name_second;
+    firestore.collection('User').doc(name).get().then((value) {
+      String subname = '';
+      if (value.exists) {
+        subname = value.data()!['subname'];
+        cal_share_person.secondnameset(subname);
+      } else {
+        subname = name;
+        cal_share_person.secondnameset(subname);
+      }
+    });
 
     firestore
         .collection('HomeViewCategories')
@@ -325,16 +336,22 @@ class _HomePageState extends State<HomePage> {
                                                                   notishow()
                                                                       .isreadnoti();
                                                                 });
-                                                                ViewSet(
-                                                                    height,
-                                                                    docid,
-                                                                    defaulthomeviewlist,
-                                                                    userviewlist,
-                                                                    contentmy,
-                                                                    contentshare,
-                                                                    isresponsive,
-                                                                    widget
-                                                                        .secondname);
+                                                                GetBuilder<
+                                                                    PeopleAdd>(
+                                                                  builder:
+                                                                      ((controller) {
+                                                                    return ViewSet(
+                                                                        height,
+                                                                        docid,
+                                                                        defaulthomeviewlist,
+                                                                        userviewlist,
+                                                                        contentmy,
+                                                                        contentshare,
+                                                                        isresponsive,
+                                                                        cal_share_person
+                                                                            .secondname);
+                                                                  }),
+                                                                );
                                                               }
                                                             },
                                                             icon: Container(
@@ -376,16 +393,22 @@ class _HomePageState extends State<HomePage> {
                                                                 notishow()
                                                                     .isreadnoti();
                                                               });
-                                                              ViewSet(
-                                                                  height,
-                                                                  docid,
-                                                                  defaulthomeviewlist,
-                                                                  userviewlist,
-                                                                  contentmy,
-                                                                  contentshare,
-                                                                  isresponsive,
-                                                                  widget
-                                                                      .secondname);
+                                                              GetBuilder<
+                                                                  PeopleAdd>(
+                                                                builder:
+                                                                    ((controller) {
+                                                                  return ViewSet(
+                                                                      height,
+                                                                      docid,
+                                                                      defaulthomeviewlist,
+                                                                      userviewlist,
+                                                                      contentmy,
+                                                                      contentshare,
+                                                                      isresponsive,
+                                                                      cal_share_person
+                                                                          .secondname);
+                                                                }),
+                                                              );
                                                             }
                                                           },
                                                           icon: Container(
@@ -448,15 +471,19 @@ class _HomePageState extends State<HomePage> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      ViewSet(
-                                          height,
-                                          docid,
-                                          defaulthomeviewlist,
-                                          userviewlist,
-                                          contentmy,
-                                          contentshare,
-                                          isresponsive,
-                                          widget.secondname),
+                                      GetBuilder<PeopleAdd>(
+                                        builder: ((controller) {
+                                          return ViewSet(
+                                              height,
+                                              docid,
+                                              defaulthomeviewlist,
+                                              userviewlist,
+                                              contentmy,
+                                              contentshare,
+                                              isresponsive,
+                                              cal_share_person.secondname);
+                                        }),
+                                      ),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -543,15 +570,19 @@ class _HomePageState extends State<HomePage> {
                                     setState(() {
                                       notishow().isreadnoti();
                                     });
-                                    ViewSet(
-                                        height,
-                                        docid,
-                                        defaulthomeviewlist,
-                                        userviewlist,
-                                        contentmy,
-                                        contentshare,
-                                        isresponsive,
-                                        widget.secondname);
+                                    GetBuilder<PeopleAdd>(
+                                      builder: ((controller) {
+                                        return ViewSet(
+                                            height,
+                                            docid,
+                                            defaulthomeviewlist,
+                                            userviewlist,
+                                            contentmy,
+                                            contentshare,
+                                            isresponsive,
+                                            cal_share_person.secondname);
+                                      }),
+                                    );
                                   }
                                 },
                                 child: SizedBox(
@@ -596,15 +627,19 @@ class _HomePageState extends State<HomePage> {
                                       notishow().isreadnoti();
                                     });
 
-                                    ViewSet(
-                                        height,
-                                        docid,
-                                        defaulthomeviewlist,
-                                        userviewlist,
-                                        contentmy,
-                                        contentshare,
-                                        isresponsive,
-                                        widget.secondname);
+                                    GetBuilder<PeopleAdd>(
+                                      builder: ((controller) {
+                                        return ViewSet(
+                                            height,
+                                            docid,
+                                            defaulthomeviewlist,
+                                            userviewlist,
+                                            contentmy,
+                                            contentshare,
+                                            isresponsive,
+                                            cal_share_person.secondname);
+                                      }),
+                                    );
                                   }
                                 },
                                 child: SizedBox(

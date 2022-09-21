@@ -7,6 +7,7 @@ import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -158,6 +159,36 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     WidgetsBinding.instance.removeObserver(this);
     textEditingController1.dispose();
     textEditingController_add_sheet.dispose();
+  }
+
+  Future _deleteFile(String doc) async {
+    await FirebaseFirestore.instance
+        .collection('MemoDataBase')
+        .doc(doc)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        for (int i = 0; i < value.data()!['photoUrl'].length; i++) {
+          String deleteimagepath = value.data()!['photoUrl'][i];
+          String filePath = deleteimagepath
+              .replaceAll(
+                  RegExp(
+                      r'https://firebasestorage.googleapis.com/v0/b/habit-tracker-8dad1.appspot.com/o/${doc}%2F'),
+                  '')
+              .split('?')[0];
+          FirebaseStorage.instance.refFromURL(filePath).delete();
+        }
+      }
+    });
+    // 문서 작성
+    if (doc != '') {
+      await FirebaseFirestore.instance
+          .collection('MemoDataBase')
+          .doc(doc)
+          .update({
+        'photoUrl': '',
+      });
+    } else {}
   }
 
   Future<bool> _onBackPressed() async {
@@ -584,6 +615,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                               .docname,
                                                                           widget
                                                                               .doc);
+                                                                  _deleteFile(
+                                                                      widget
+                                                                          .doc);
                                                                   firestore
                                                                       .collection(
                                                                           'AppNoticeByUsers')

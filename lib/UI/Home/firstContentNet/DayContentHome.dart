@@ -594,7 +594,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Expanded(
-                                                  flex: 2,
+                                                  flex: 1,
                                                   child: Text(
                                                     snapshot.data!
                                                         .docs[index]['Daytodo']
