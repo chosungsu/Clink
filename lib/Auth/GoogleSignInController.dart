@@ -13,7 +13,7 @@ class GoogleSignInController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late int count;
 
-  login(BuildContext context, bool ischecked) async {
+  void login(BuildContext context, bool ischecked) async {
     count = 1;
     googleSignInAccount = await _googleSignIn.signIn();
     String nick = googleSignInAccount!.displayName.toString();
@@ -40,10 +40,9 @@ class GoogleSignInController extends GetxController {
                 .substring(0, 2) +
             Hive.box('user_info').get('id').toString().substring(0, 2);
     //firestore 저장
-    firestore.collection('User').doc(nick).get().then((value) async {
+    firestore.collection('User').doc(nick).get().then((value) {
       if (value.exists) {
-        print('here1');
-        await firestore.collection('User').doc(nick).update({
+        firestore.collection('User').doc(nick).update({
           'name': nick,
           'email': email,
           'login_where': 'google_user',
@@ -51,8 +50,7 @@ class GoogleSignInController extends GetxController {
           'code': codes
         });
       } else {
-        print('here2');
-        await firestore.collection('User').doc(nick).set({
+        firestore.collection('User').doc(nick).set({
           'name': nick,
           'subname': nick,
           'email': email,
@@ -68,7 +66,7 @@ class GoogleSignInController extends GetxController {
     notifyChildrens();
   }
 
-  logout(BuildContext context, String name) async {
+  void logout(BuildContext context, String name) async {
     count = -1;
     googleSignInAccount = await _googleSignIn.signOut();
     Hive.box('user_info').delete('id');
@@ -76,7 +74,7 @@ class GoogleSignInController extends GetxController {
     notifyChildrens();
   }
 
-  Deletelogout(BuildContext context, String name) async {
+  void Deletelogout(BuildContext context, String name) async {
     count = -1;
     googleSignInAccount = await _googleSignIn.signOut();
     Hive.box('user_info').delete('id');
