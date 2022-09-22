@@ -186,12 +186,6 @@ class _HowToUsePageState extends State<HowToUsePage>
         future: firestore
             .collection("EventNoticeDataBase")
             .where('eventpage', isEqualTo: 'home')
-            .where('eventname',
-                isEqualTo: widget.stringsend == '캘린더'
-                    ? '일정관리는 이렇게!'
-                    : (widget.stringsend == '메모'
-                        ? '메모에 숨겨진 다양한 기능'
-                        : 'PDF 형식 지원'))
             .get()
             .then(((QuerySnapshot querySnapshot) => {
                   eventsmalltitle.clear(),

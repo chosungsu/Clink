@@ -128,38 +128,45 @@ class ShowTips extends StatelessWidget {
                                             fit: FlexFit.tight,
                                             child: Column(
                                               children: [
-                                                SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      80,
-                                                  height: 30,
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 30,
-                                                        width: 30,
-                                                        child: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: CircleAvatar(
-                                                              backgroundColor:
-                                                                  Colors.orange
-                                                                      .shade500,
-                                                              child: const Icon(
-                                                                Icons
-                                                                    .card_giftcard,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            )),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width -
+                                                            80,
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 30,
+                                                          width: 30,
+                                                          child: Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .orange
+                                                                        .shade500,
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .card_giftcard,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              )),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
                                                           eventtitle[index]
                                                               .toString(),
+                                                          maxLines: 2,
                                                           style:
                                                               const TextStyle(
                                                                   color: Colors
@@ -167,28 +174,38 @@ class ShowTips extends StatelessWidget {
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
-                                                                  fontSize:
-                                                                      18)),
-                                                    ],
+                                                                  fontSize: 18),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                                 const SizedBox(
                                                   height: 10,
                                                 ),
-                                                SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      80,
-                                                  height: 60,
-                                                  child: Text(
+                                                Expanded(
+                                                  flex: 3,
+                                                  child: SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width -
+                                                            80,
+                                                    child: Text(
                                                       eventcontent[index]
                                                           .toString(),
+                                                      maxLines: 3,
                                                       style: const TextStyle(
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: 15)),
+                                                          fontSize: 15),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             )),

@@ -231,18 +231,10 @@ ViewSet(
                                                           trailing: int.parse(contentmy[index]
                                                                           .startdate
                                                                           .toString()
-                                                                          .substring(
-                                                                              0,
-                                                                              2)) >=
-                                                                      Date
-                                                                          .hour &&
-                                                                  int.parse(contentmy[index]
-                                                                              .startdate
-                                                                              .toString()
-                                                                              .split(':')[
-                                                                          1]) >=
-                                                                      Date
-                                                                          .minute
+                                                                          .split(
+                                                                              ':')[
+                                                                      0]) >
+                                                                  Date.hour
                                                               ? (contentmy[index]
                                                                           .alarm !=
                                                                       '설정off'
@@ -258,11 +250,32 @@ ViewSet(
                                                                       color:
                                                                           TextColor(),
                                                                     ))
-                                                              : Icon(
-                                                                  Icons.done,
-                                                                  color:
-                                                                      TextColor(),
-                                                                ),
+                                                              : (int.parse(contentmy[
+                                                                              index]
+                                                                          .startdate
+                                                                          .toString()
+                                                                          .split(
+                                                                              ':')[1]) >
+                                                                      Date.minute
+                                                                  ? (contentmy[index].alarm != '설정off'
+                                                                      ? Icon(
+                                                                          Icons
+                                                                              .alarm,
+                                                                          color:
+                                                                              TextColor(),
+                                                                        )
+                                                                      : Icon(
+                                                                          Icons
+                                                                              .not_started,
+                                                                          color:
+                                                                              TextColor(),
+                                                                        ))
+                                                                  : Icon(
+                                                                      Icons
+                                                                          .done,
+                                                                      color:
+                                                                          TextColor(),
+                                                                    )),
                                                           subtitle: Text(
                                                               contentmy[index]
                                                                   .title,
@@ -505,15 +518,12 @@ ViewSet(
                                                                 color:
                                                                     TextColor(),
                                                               ),
-                                                              trailing: int.parse(contentshare[index].startdate.toString().substring(
-                                                                              0,
-                                                                              2)) >=
-                                                                          Date
-                                                                              .hour &&
-                                                                      int.parse(contentshare[index].startdate.toString().split(':')[
-                                                                              1]) >=
-                                                                          Date
-                                                                              .minute
+                                                              trailing: int.parse(contentshare[index]
+                                                                              .startdate
+                                                                              .toString()
+                                                                              .split(':')[
+                                                                          0]) >
+                                                                      Date.hour
                                                                   ? (contentshare[index]
                                                                               .alarm !=
                                                                           '설정off'
@@ -529,12 +539,26 @@ ViewSet(
                                                                           color:
                                                                               TextColor(),
                                                                         ))
-                                                                  : Icon(
-                                                                      Icons
-                                                                          .done,
-                                                                      color:
-                                                                          TextColor(),
-                                                                    ),
+                                                                  : (int.parse(contentshare[index]
+                                                                              .startdate
+                                                                              .toString()
+                                                                              .split(':')[1]) >
+                                                                          Date.minute
+                                                                      ? (contentshare[index].alarm != '설정off'
+                                                                          ? Icon(
+                                                                              Icons.alarm,
+                                                                              color: TextColor(),
+                                                                            )
+                                                                          : Icon(
+                                                                              Icons.not_started,
+                                                                              color: TextColor(),
+                                                                            ))
+                                                                      : Icon(
+                                                                          Icons
+                                                                              .done,
+                                                                          color:
+                                                                              TextColor(),
+                                                                        )),
                                                               subtitle: Text(
                                                                   contentshare[
                                                                           index]

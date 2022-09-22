@@ -778,7 +778,7 @@ class _DayScriptState extends State<DayScript> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ContainerDesign(
+                  GetBuilder<memosetting>(builder: (_) => ContainerDesign(
                       child: TextField(
                         minLines: 1,
                         maxLines: 1,
@@ -796,7 +796,7 @@ class _DayScriptState extends State<DayScript> {
                         ),
                         controller: textEditingController1,
                       ),
-                      color: controll_memo.color),
+                      color: controll_memo.color),),
                   const SizedBox(
                     height: 20,
                   ),
@@ -1026,7 +1026,8 @@ class _DayScriptState extends State<DayScript> {
                                                           .size
                                                           .width -
                                                       70,
-                                                  child: ContainerDesign(
+                                                  child: GetBuilder<memosetting>(
+                                                    builder: (_) => ContainerDesign(
                                                       color:
                                                           controll_memo.color,
                                                       child: TextField(
@@ -1112,7 +1113,7 @@ class _DayScriptState extends State<DayScript> {
                                                         textAlignVertical:
                                                             TextAlignVertical
                                                                 .center,
-                                                      )),
+                                                      ))),
                                                 )
                                               : (scollection.memolistin[
                                                               index] ==
@@ -1126,7 +1127,8 @@ class _DayScriptState extends State<DayScript> {
                                                                   .size
                                                                   .width -
                                                               70,
-                                                      child: ContainerDesign(
+                                                      child: GetBuilder<memosetting>(
+                                                        builder: (_) => ContainerDesign(
                                                         color:
                                                             controll_memo.color,
                                                         child: TextField(
@@ -1245,14 +1247,15 @@ class _DayScriptState extends State<DayScript> {
                                                               controllers[
                                                                   index],
                                                         ),
-                                                      ))
+                                                      )))
                                                   : SizedBox(
                                                       width:
                                                           MediaQuery.of(context)
                                                                   .size
                                                                   .width -
                                                               70,
-                                                      child: ContainerDesign(
+                                                      child: GetBuilder<memosetting>(
+                                                        builder: (_) => ContainerDesign(
                                                         color:
                                                             controll_memo.color,
                                                         child: TextField(
@@ -1340,7 +1343,7 @@ class _DayScriptState extends State<DayScript> {
                                                             controller:
                                                                 controllers[
                                                                     index]),
-                                                      ))),
+                                                      )))),
                                           ReorderableDragStartListener(
                                             index: index,
                                             child: Icon(
