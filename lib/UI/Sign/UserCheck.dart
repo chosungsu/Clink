@@ -9,14 +9,6 @@ import '../../route.dart';
 
 GoToMain(BuildContext context) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
-    /*Navigator.of(context).pushReplacement(
-      PageTransition(
-        type: PageTransitionType.bottomToTop,
-        child: const MyHomePage(
-          index: 0,
-        ),
-      ),
-    );*/
     Get.to(
       () => MyHomePage(index: 1),
     );

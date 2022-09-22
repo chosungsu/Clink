@@ -103,13 +103,13 @@ class _SecureAuthState extends State<SecureAuth> {
       signauth = _auth ? '인증에 성공하였습니다!' : '인증에 실패하였습니다!';
       if (_auth) {
         if (!widget.unlock) {
-          Get.back(result: true);
           widget.doc_secret_bool == true
               ? firestore.collection('MemoDataBase').doc(widget.id).update({
                   'security': false,
                   'pinnumber': '0000',
                   'securewith': 999,
                 }).whenComplete(() {
+                  Get.back(result: true);
                   Snack.show(
                       context: context,
                       title: '알림',
@@ -122,6 +122,7 @@ class _SecureAuthState extends State<SecureAuth> {
                   'pinnumber': '0000',
                   'securewith': 0,
                 }).whenComplete(() {
+                  Get.back(result: true);
                   Snack.show(
                       context: context,
                       title: '알림',
@@ -156,13 +157,13 @@ class _SecureAuthState extends State<SecureAuth> {
       //승인
       if (widget.doc_pin_number == strpin || widget.doc_pin_number == '0000') {
         if (!widget.unlock) {
-          Get.back(result: true);
           widget.doc_secret_bool == true
               ? firestore.collection('MemoDataBase').doc(widget.id).update({
                   'security': false,
                   'pinnumber': '0000',
                   'securewith': 999,
                 }).whenComplete(() {
+                  Get.back(result: true);
                   Snack.show(
                       context: context,
                       title: '알림',
@@ -175,6 +176,7 @@ class _SecureAuthState extends State<SecureAuth> {
                   'pinnumber': strpin,
                   'securewith': 1,
                 }).whenComplete(() {
+                  Get.back(result: true);
                   Snack.show(
                       context: context,
                       title: '알림',

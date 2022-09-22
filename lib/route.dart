@@ -43,16 +43,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _selectedIndex = widget.index;
-    firestore.collection('User').doc(name).get().then((value) {
-      String subname = '';
-      if (value.exists) {
-        subname = value.data()!['subname'];
-        cal_share_person.secondnameset(subname);
-      } else {
-        subname = name;
-        cal_share_person.secondnameset(subname);
-      }
-    });
+
     Hive.box('user_setting').put('page_index', 1);
   }
 

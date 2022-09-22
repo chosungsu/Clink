@@ -25,42 +25,28 @@ ViewSet(
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
   DateTime Date = DateTime.now();
+  final peopleadd = Get.put(PeopleAdd());
 
-  firestore
-      .collection('HomeViewCategories')
-      .where('usercode', isEqualTo: docid)
-      .get()
-      .then((value) {
-    if (value.docs.isNotEmpty) {
-    } else {
-      firestore.collection('HomeViewCategories').doc(docid).set({
-        'usercode': value.docs.isEmpty ? docid : value.docs[0].id,
-        'viewcategory': defaulthomeviewlist,
-        'hidecategory': userviewlist
-      }, SetOptions(merge: true));
-    }
-  });
   List<Widget> list_all = [];
   List<Widget> children_cal1 = [];
   List<Widget> children_cal2 = [];
   List<Widget> children_memo1 = [];
   List<Widget> children_memo2 = [];
-  //프로버전 구매시 보이지 않게 함
-  return StreamBuilder<QuerySnapshot>(
+  return StreamBuilder<DocumentSnapshot>(
       stream: firestore
           .collection('HomeViewCategories')
-          .where('usercode', isEqualTo: docid)
+          .doc(Hive.box('user_setting').get('usercode'))
           .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
+      builder: (context, snapshottotal) {
+        if (snapshottotal.hasData) {
           list_all = <Widget>[
             ListView.builder(
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: snapshot.data!.docs[0]['viewcategory'].length,
+                itemCount: snapshottotal.data!['viewcategory'].length,
                 itemBuilder: (context, index) {
-                  return snapshot.data!.docs[0]['viewcategory'][index]
+                  return snapshottotal.data!['viewcategory'][index]
                               .toString() ==
                           '오늘의 일정'
                       ? Column(
@@ -75,270 +61,13 @@ ViewSet(
                             const SizedBox(
                               height: 20,
                             ),
-                            StreamBuilder<QuerySnapshot>(
-                              stream: firestore
-                                  .collection('CalendarDataBase')
-                                  .where('OriginalUser', isEqualTo: secondname)
-                                  .where('Date',
-                                      isEqualTo: Date.toString().split('-')[0] +
-                                          '-' +
-                                          Date.toString().split('-')[1] +
-                                          '-' +
-                                          Date.toString()
-                                              .split('-')[2]
-                                              .substring(0, 2) +
-                                          '일')
-                                  .orderBy('Timestart')
-                                  .snapshots(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  contentmy.clear();
-                                  var timsestart,
-                                      timefinish,
-                                      codes,
-                                      todo,
-                                      alarm,
-                                      share,
-                                      summary;
-                                  List cname = [];
-                                  final valuespace = snapshot.data!.docs;
-                                  for (var sp in valuespace) {
-                                    todo = sp.get('Daytodo');
-                                    timsestart = sp.get('Timestart');
-                                    timefinish = sp.get('Timefinish');
-                                    alarm = sp.get('Alarm');
-                                    codes = sp.get('calname');
-                                    share = sp.get('Shares');
-                                    summary = sp.get('summary');
-                                    firestore
-                                        .collection('CalendarSheetHome')
-                                        .doc(codes)
-                                        .get()
-                                        .then((value) {
-                                      value.data()!.forEach((key, value) {
-                                        //print(key + '-' + value);
-                                        if (key == 'calname') {
-                                          cname.add(value);
-                                        }
-                                      });
-                                    });
-                                    contentmy.add(SpaceContent(
-                                        title: todo,
-                                        date: timsestart + '-' + timefinish,
-                                        cname: cname,
-                                        alarm: alarm,
-                                        finishdate: timefinish,
-                                        startdate: timsestart,
-                                        share: share,
-                                        code: codes,
-                                        summary: summary));
-                                  }
-                                  children_cal1 = <Widget>[
-                                    ContainerDesign(
-                                        child: contentmy.isEmpty
-                                            ? Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    height: isresponsive == true
-                                                        ? 300
-                                                        : 50,
-                                                    child: Center(
-                                                      child: NeumorphicText(
-                                                        '보여드릴 오늘의 일정이 없습니다.',
-                                                        style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
-                                                          color: TextColor(),
-                                                        ),
-                                                        textStyle:
-                                                            NeumorphicTextStyle(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontSize:
-                                                              contentTextsize(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            : ListView.builder(
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                scrollDirection: Axis.vertical,
-                                                shrinkWrap: true,
-                                                itemCount: contentmy.length,
-                                                itemBuilder: (context, index) {
-                                                  return Column(
-                                                    children: [
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {},
-                                                        child: ListTile(
-                                                          onTap: () {
-                                                            Get.to(
-                                                                () =>
-                                                                    ClickShowEachCalendar(
-                                                                      start: contentmy[
-                                                                              index]
-                                                                          .startdate,
-                                                                      finish: contentmy[
-                                                                              index]
-                                                                          .finishdate,
-                                                                      calinfo: contentmy[
-                                                                              index]
-                                                                          .title,
-                                                                      date: DateTime
-                                                                          .now(),
-                                                                      alarm: contentmy[
-                                                                              index]
-                                                                          .alarm,
-                                                                      share: contentmy[
-                                                                              index]
-                                                                          .share,
-                                                                      calname: contentmy[
-                                                                              index]
-                                                                          .cname[
-                                                                              index]
-                                                                          .toString(),
-                                                                      code: contentmy[
-                                                                              index]
-                                                                          .code,
-                                                                      summary: contentmy[
-                                                                              index]
-                                                                          .summary,
-                                                                    ),
-                                                                transition:
-                                                                    Transition
-                                                                        .downToUp);
-                                                          },
-                                                          horizontalTitleGap:
-                                                              10,
-                                                          dense: true,
-                                                          leading: Icon(
-                                                            Icons
-                                                                .calendar_month,
-                                                            color: TextColor(),
-                                                          ),
-                                                          trailing: int.parse(contentmy[index]
-                                                                          .startdate
-                                                                          .toString()
-                                                                          .split(
-                                                                              ':')[
-                                                                      0]) >
-                                                                  Date.hour
-                                                              ? (contentmy[index]
-                                                                          .alarm !=
-                                                                      '설정off'
-                                                                  ? Icon(
-                                                                      Icons
-                                                                          .alarm,
-                                                                      color:
-                                                                          TextColor(),
-                                                                    )
-                                                                  : Icon(
-                                                                      Icons
-                                                                          .not_started,
-                                                                      color:
-                                                                          TextColor(),
-                                                                    ))
-                                                              : (int.parse(contentmy[
-                                                                              index]
-                                                                          .startdate
-                                                                          .toString()
-                                                                          .split(
-                                                                              ':')[1]) >
-                                                                      Date.minute
-                                                                  ? (contentmy[index].alarm != '설정off'
-                                                                      ? Icon(
-                                                                          Icons
-                                                                              .alarm,
-                                                                          color:
-                                                                              TextColor(),
-                                                                        )
-                                                                      : Icon(
-                                                                          Icons
-                                                                              .not_started,
-                                                                          color:
-                                                                              TextColor(),
-                                                                        ))
-                                                                  : Icon(
-                                                                      Icons
-                                                                          .done,
-                                                                      color:
-                                                                          TextColor(),
-                                                                    )),
-                                                          subtitle: Text(
-                                                              contentmy[index]
-                                                                  .title,
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      TextColor(),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      contentTextsize())),
-                                                          title: Text(
-                                                              contentmy[index]
-                                                                  .date,
-                                                              style: TextStyle(
-                                                                color:
-                                                                    TextColor(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              )),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                    ],
-                                                  );
-                                                }),
-                                        color: BGColor())
-                                  ];
-                                } else if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  children_cal1 = <Widget>[
-                                    ContainerDesign(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                                height: isresponsive == true
-                                                    ? 300
-                                                    : 50,
-                                                child: const Center(
-                                                    child:
-                                                        CircularProgressIndicator()))
-                                          ],
-                                        ),
-                                        color: BGColor())
-                                  ];
-                                }
-                                return Column(children: children_cal1);
-                              },
-                            ),
+                            stream1(secondname, contentmy, isresponsive),
                             const SizedBox(
                               height: 20,
                             ),
                           ],
                         )
-                      : (snapshot.data!.docs[0]['viewcategory'][index]
+                      : (snapshottotal.data!['viewcategory'][index]
                                   .toString() ==
                               '공유된 오늘의 일정'
                           ? Column(
@@ -522,8 +251,9 @@ ViewSet(
                                                                               .startdate
                                                                               .toString()
                                                                               .split(':')[
-                                                                          0]) >
-                                                                      Date.hour
+                                                                          0])
+                                                                      .isGreaterThan(Date
+                                                                          .hour)
                                                                   ? (contentshare[index]
                                                                               .alarm !=
                                                                           '설정off'
@@ -542,8 +272,8 @@ ViewSet(
                                                                   : (int.parse(contentshare[index]
                                                                               .startdate
                                                                               .toString()
-                                                                              .split(':')[1]) >
-                                                                          Date.minute
+                                                                              .split(':')[1])
+                                                                          .isGreaterThan(Date.minute)
                                                                       ? (contentshare[index].alarm != '설정off'
                                                                           ? Icon(
                                                                               Icons.alarm,
@@ -626,7 +356,7 @@ ViewSet(
                                 ),
                               ],
                             )
-                          : (snapshot.data!.docs[0]['viewcategory'][index]
+                          : (snapshottotal.data!['viewcategory'][index]
                                       .toString() ==
                                   '홈뷰에 저장된 메모'
                               ? Column(
@@ -842,10 +572,10 @@ ViewSet(
                                                                     color:
                                                                         TextColor(),
                                                                   ),
-                                                                  trailing: snapshot
-                                                                              .data!
-                                                                              .docs[index]['security'] ==
-                                                                          true
+                                                                  trailing: snapshot.data!.docs[index]['security'] ==
+                                                                              true ||
+                                                                          snapshot.data!.docs[index]['security'] ==
+                                                                              null
                                                                       ? Icon(
                                                                           Icons
                                                                               .lock,
@@ -1199,7 +929,7 @@ ViewSet(
                                 )));
                 })
           ];
-        } else if (snapshot.hasError) {
+        } else if (snapshottotal.hasError) {
           list_all = <Widget>[
             ContainerDesign(
                 child: Column(
@@ -1234,4 +964,209 @@ ViewSet(
         }
         return Column(children: list_all);
       });
+}
+
+StreamBuilder<QuerySnapshot<Object?>> stream1(
+  String secondname,
+  List contentmy,
+  bool isresponsive,
+) {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String name = Hive.box('user_info').get('id');
+  DateTime Date = DateTime.now();
+  final peopleadd = Get.put(PeopleAdd());
+
+  List<Widget> list_all = [];
+  List<Widget> children_cal1 = [];
+  List<Widget> children_cal2 = [];
+  List<Widget> children_memo1 = [];
+  List<Widget> children_memo2 = [];
+  return StreamBuilder<QuerySnapshot>(
+    stream: firestore
+        .collection('CalendarDataBase')
+        .where('OriginalUser', isEqualTo: secondname)
+        .where('Date',
+            isEqualTo: Date.toString().split('-')[0] +
+                '-' +
+                Date.toString().split('-')[1] +
+                '-' +
+                Date.toString().split('-')[2].substring(0, 2) +
+                '일')
+        .orderBy('Timestart')
+        .snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        contentmy.clear();
+        var timsestart, timefinish, codes, todo, alarm, share, summary;
+        List cname = [];
+        if (snapshot.data!.docs.isNotEmpty) {
+          final valuespace = snapshot.data!.docs;
+          for (var sp in valuespace) {
+            todo = sp.get('Daytodo');
+            timsestart = sp.get('Timestart');
+            timefinish = sp.get('Timefinish');
+            alarm = sp.get('Alarm');
+            codes = sp.get('calname');
+            share = sp.get('Shares');
+            summary = sp.get('summary');
+            firestore
+                .collection('CalendarSheetHome')
+                .doc(codes)
+                .get()
+                .then((value) {
+              value.data()!.forEach((key, value) {
+                //print(key + '-' + value);
+                if (key == 'calname') {
+                  cname.add(value);
+                }
+              });
+            });
+            contentmy.add(SpaceContent(
+                title: todo,
+                date: timsestart + '-' + timefinish,
+                cname: cname,
+                alarm: alarm,
+                finishdate: timefinish,
+                startdate: timsestart,
+                share: share,
+                code: codes,
+                summary: summary));
+          }
+        }
+
+        children_cal1 = <Widget>[
+          ContainerDesign(
+              child: contentmy.isEmpty
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: isresponsive == true ? 300 : 50,
+                          child: Center(
+                            child: NeumorphicText(
+                              '보여드릴 오늘의 일정이 없습니다.',
+                              style: NeumorphicStyle(
+                                shape: NeumorphicShape.flat,
+                                depth: 3,
+                                color: TextColor(),
+                              ),
+                              textStyle: NeumorphicTextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: contentTextsize(),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  : ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: contentmy.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            GestureDetector(
+                              onTap: () {},
+                              child: ListTile(
+                                onTap: () {
+                                  Get.to(
+                                      () => ClickShowEachCalendar(
+                                            start: contentmy[index].startdate,
+                                            finish: contentmy[index].finishdate,
+                                            calinfo: contentmy[index].title,
+                                            date: DateTime.now(),
+                                            alarm: contentmy[index].alarm,
+                                            share: contentmy[index].share,
+                                            calname: contentmy[index]
+                                                .cname[index]
+                                                .toString(),
+                                            code: contentmy[index].code,
+                                            summary: contentmy[index].summary,
+                                          ),
+                                      transition: Transition.downToUp);
+                                },
+                                horizontalTitleGap: 10,
+                                dense: true,
+                                leading: Icon(
+                                  Icons.calendar_month,
+                                  color: TextColor(),
+                                ),
+                                trailing: int.parse(contentmy[index]
+                                            .startdate
+                                            .toString()
+                                            .split(':')[0])
+                                        .isGreaterThan(Date.hour)
+                                    ? (contentmy[index].alarm != '설정off'
+                                        ? Icon(
+                                            Icons.alarm,
+                                            color: TextColor(),
+                                          )
+                                        : Icon(
+                                            Icons.not_started,
+                                            color: TextColor(),
+                                          ))
+                                    : (int.parse(contentmy[index]
+                                                .startdate
+                                                .toString()
+                                                .split(':')[1])
+                                            .isGreaterThan(Date.minute)
+                                        ? (contentmy[index].alarm != '설정off'
+                                            ? Icon(
+                                                Icons.alarm,
+                                                color: TextColor(),
+                                              )
+                                            : Icon(
+                                                Icons.not_started,
+                                                color: TextColor(),
+                                              ))
+                                        : Icon(
+                                            Icons.done,
+                                            color: TextColor(),
+                                          )),
+                                subtitle: Text(contentmy[index].title,
+                                    style: TextStyle(
+                                        color: TextColor(),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize())),
+                                title: Text(contentmy[index].date,
+                                    style: TextStyle(
+                                      color: TextColor(),
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        );
+                      }),
+              color: BGColor())
+        ];
+      } else if (snapshot.connectionState == ConnectionState.waiting) {
+        children_cal1 = <Widget>[
+          ContainerDesign(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      height: isresponsive == true ? 300 : 50,
+                      child: const Center(child: CircularProgressIndicator()))
+                ],
+              ),
+              color: BGColor())
+        ];
+      }
+      return Column(children: children_cal1);
+    },
+  );
 }

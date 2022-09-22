@@ -1185,7 +1185,13 @@ class _DayScriptState extends State<DayScript> {
                                                                           index] = 999;
                                                                 });
                                                               },
-                                                              child: const Icon(
+                                                              child: scollection.memolistin[
+                                                                              index] ==
+                                                                          999 ? const Icon(
+                                                                  Icons
+                                                                      .check_box,
+                                                                  color: Colors
+                                                                      .black) : const Icon(
                                                                   Icons
                                                                       .check_box_outline_blank,
                                                                   color: Colors

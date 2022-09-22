@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
@@ -59,7 +60,6 @@ class _HomePageState extends State<HomePage> {
       .toString()
       .split('@')[1]
       .substring(0, 2);
-  String docid = '';
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',
@@ -80,41 +80,60 @@ class _HomePageState extends State<HomePage> {
   bool isread = false;
   final notilist = Get.put(notishow());
   List updatefriends = [];
-  final cal_share_person = Get.put(PeopleAdd());
+  String docid = '';
+  final peopleadd = Get.put(PeopleAdd());
 
   @override
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 1);
-    _pController =
-        PageController(initialPage: currentPage, viewportFraction: 1);
-    isdraweropen = draw.drawopen;
-    docid = email_first + email_second + name_second;
-    firestore.collection('User').doc(name).get().then((value) {
-      String subname = '';
-      if (value.exists) {
-        subname = value.data()!['subname'];
-        cal_share_person.secondnameset(subname);
-      } else {
-        subname = name;
-        cal_share_person.secondnameset(subname);
-      }
-    });
-
     firestore
         .collection('HomeViewCategories')
-        .where('usercode', isEqualTo: docid)
+        .doc(Hive.box('user_setting').get('usercode'))
         .get()
         .then((value) {
-      if (value.docs.isNotEmpty) {
+      if (value.exists) {
+        setState(() {
+          defaulthomeviewlist.clear();
+          userviewlist.clear();
+          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+            defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+          }
+          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+            userviewlist.add(value.data()!['hidecategory'][j]);
+          }
+        });
       } else {
-        firestore.collection('HomeViewCategories').doc(docid).set({
-          'usercode': value.docs.isEmpty ? docid : value.docs[0].id,
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': peopleadd.code,
           'viewcategory': defaulthomeviewlist,
           'hidecategory': userviewlist
         }, SetOptions(merge: true));
       }
     });
+    firestore.collection('User').doc(name).get().then((value) {
+      if (value.exists) {
+        peopleadd.secondnameset(value.data()!['subname']);
+      }
+    });
+    firestore
+        .collection('User')
+        .doc(Hive.box('user_info').get('id'))
+        .get()
+        .then((value) {
+      if (value.exists) {
+        docid = value.data()!['code'];
+        Hive.box('user_setting').put('usercode', docid);
+      } else {}
+    });
+    docid = Hive.box('user_setting').get('usercode');
+    _pController =
+        PageController(initialPage: currentPage, viewportFraction: 1);
+    isdraweropen = draw.drawopen;
+
     if (draw.drawopen == true) {
       setState(() {
         xoffset = 50;
@@ -336,22 +355,6 @@ class _HomePageState extends State<HomePage> {
                                                                   notishow()
                                                                       .isreadnoti();
                                                                 });
-                                                                GetBuilder<
-                                                                    PeopleAdd>(
-                                                                  builder:
-                                                                      ((controller) {
-                                                                    return ViewSet(
-                                                                        height,
-                                                                        docid,
-                                                                        defaulthomeviewlist,
-                                                                        userviewlist,
-                                                                        contentmy,
-                                                                        contentshare,
-                                                                        isresponsive,
-                                                                        cal_share_person
-                                                                            .secondname);
-                                                                  }),
-                                                                );
                                                               }
                                                             },
                                                             icon: Container(
@@ -393,22 +396,6 @@ class _HomePageState extends State<HomePage> {
                                                                 notishow()
                                                                     .isreadnoti();
                                                               });
-                                                              GetBuilder<
-                                                                  PeopleAdd>(
-                                                                builder:
-                                                                    ((controller) {
-                                                                  return ViewSet(
-                                                                      height,
-                                                                      docid,
-                                                                      defaulthomeviewlist,
-                                                                      userviewlist,
-                                                                      contentmy,
-                                                                      contentshare,
-                                                                      isresponsive,
-                                                                      cal_share_person
-                                                                          .secondname);
-                                                                }),
-                                                              );
                                                             }
                                                           },
                                                           icon: Container(
@@ -472,8 +459,7 @@ class _HomePageState extends State<HomePage> {
                                         height: 20,
                                       ),
                                       GetBuilder<PeopleAdd>(
-                                        builder: ((controller) {
-                                          return ViewSet(
+                                          builder: (_) => ViewSet(
                                               height,
                                               docid,
                                               defaulthomeviewlist,
@@ -481,9 +467,7 @@ class _HomePageState extends State<HomePage> {
                                               contentmy,
                                               contentshare,
                                               isresponsive,
-                                              cal_share_person.secondname);
-                                        }),
-                                      ),
+                                              peopleadd.secondname)),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -570,19 +554,6 @@ class _HomePageState extends State<HomePage> {
                                     setState(() {
                                       notishow().isreadnoti();
                                     });
-                                    GetBuilder<PeopleAdd>(
-                                      builder: ((controller) {
-                                        return ViewSet(
-                                            height,
-                                            docid,
-                                            defaulthomeviewlist,
-                                            userviewlist,
-                                            contentmy,
-                                            contentshare,
-                                            isresponsive,
-                                            cal_share_person.secondname);
-                                      }),
-                                    );
                                   }
                                 },
                                 child: SizedBox(
@@ -626,20 +597,6 @@ class _HomePageState extends State<HomePage> {
                                     setState(() {
                                       notishow().isreadnoti();
                                     });
-
-                                    GetBuilder<PeopleAdd>(
-                                      builder: ((controller) {
-                                        return ViewSet(
-                                            height,
-                                            docid,
-                                            defaulthomeviewlist,
-                                            userviewlist,
-                                            contentmy,
-                                            contentshare,
-                                            isresponsive,
-                                            cal_share_person.secondname);
-                                      }),
-                                    );
                                   }
                                 },
                                 child: SizedBox(
@@ -692,8 +649,14 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             children: [
               InkWell(
-                onTap: () {
-                  Get.to(() => HomeView(), transition: Transition.zoom);
+                onTap: () async {
+                  final reloadpage = await Get.to(() => HomeView(),
+                      transition: Transition.zoom);
+                  if (reloadpage) {
+                    setState(() {
+                      notishow().isreadnoti();
+                    });
+                  }
                 },
                 child: Text('홈뷰설정',
                     style: TextStyle(

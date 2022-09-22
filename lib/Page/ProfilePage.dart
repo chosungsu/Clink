@@ -57,6 +57,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    firestore
+        .collection('User')
+        .where('name', isEqualTo: Hive.box('user_info').get('id'))
+        .get()
+        .then(
+      (value) {
+        peopleadd.code = value.docs[0]['code'];
+      },
+    );
     Hive.box('user_setting').put('page_index', 3);
     _controller = TextEditingController();
     isdraweropen = draw.drawopen;
@@ -852,7 +861,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Opt3_body() {
-    String name = Hive.box('user_info').get('id').toString().length > 5
+    /*String name = Hive.box('user_info').get('id').toString().length > 5
         ? Hive.box('user_info').get('id').toString().substring(0, 4)
         : Hive.box('user_info').get('id').toString().substring(0, 2);
     String email_first =
@@ -861,7 +870,8 @@ class _ProfilePageState extends State<ProfilePage> {
         .get('email')
         .toString()
         .split('@')[1]
-        .substring(0, 2);
+        .substring(0, 2);*/
+
     return SizedBox(
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -874,59 +884,59 @@ class _ProfilePageState extends State<ProfilePage> {
                 index == 0
                     ? GestureDetector(
                         onTap: () async {},
-                        child: SizedBox(
-                          height: 50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                  text: '개인코드',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
-                                      color: TextColor()),
-                                ),
-                                const WidgetSpan(
-                                    child: SizedBox(
-                                  width: 10,
-                                )),
-                                WidgetSpan(
-                                    child: GestureDetector(
-                                  onTap: () {
-                                    Clipboard.setData(ClipboardData(
-                                        text:
-                                            email_first + email_second + name));
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.content_copy,
-                                        color: TextColor_shadowcolor(),
-                                      ),
-                                      Text(
-                                        '복사',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: contentTextsize(),
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: TextColor_shadowcolor()),
-                                      ),
-                                    ],
+                        child: GetBuilder<PeopleAdd>(
+                          builder: (_) => SizedBox(
+                            height: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                    text: '개인코드',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                        color: TextColor()),
                                   ),
-                                )),
-                              ])),
-                              Text(email_first + email_second + name,
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize())),
-                            ],
+                                  const WidgetSpan(
+                                      child: SizedBox(
+                                    width: 10,
+                                  )),
+                                  WidgetSpan(
+                                      child: GestureDetector(
+                                    onTap: () {
+                                      Clipboard.setData(
+                                          ClipboardData(text: peopleadd.code));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.content_copy,
+                                          color: TextColor_shadowcolor(),
+                                        ),
+                                        Text(
+                                          '복사',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: contentTextsize(),
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: TextColor_shadowcolor()),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                                ])),
+                                Text(peopleadd.code,
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize())),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
+                        ))
                     : GestureDetector(
                         onTap: () async {
                           addgroupmember(context, searchNode, _controller);

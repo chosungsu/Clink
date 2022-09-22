@@ -406,6 +406,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                         descending: cal_sort.sort == 0 ? true : false)
                     .snapshots(),
                 builder: (context, snapshot) {
+                  print(cal_share_person.secondname);
                   if (snapshot.hasData) {
                     return snapshot.data!.docs.isEmpty
                         ? Column(

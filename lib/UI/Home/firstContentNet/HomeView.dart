@@ -1,5 +1,6 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
+import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,17 +27,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   double myWidth = 0.0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
-  String name_second = Hive.box('user_info').get('id').toString().length > 5
-      ? Hive.box('user_info').get('id').toString().substring(0, 4)
-      : Hive.box('user_info').get('id').toString().substring(0, 2);
-  String email_first =
-      Hive.box('user_info').get('email').toString().substring(0, 3);
-  String email_second = Hive.box('user_info')
-      .get('email')
-      .toString()
-      .split('@')[1]
-      .substring(0, 2);
-  String docid = '';
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',
@@ -44,6 +34,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     '홈뷰에 저장된 메모',
   ];
   List userviewlist = [];
+  final peopleadd = Get.put(PeopleAdd());
+  String code = '';
 
   @override
   void didChangeDependencies() {
@@ -55,26 +47,38 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    docid = email_first + email_second + name_second;
     firestore
-        .collection('HomeViewCategories')
-        .where('usercode', isEqualTo: docid)
+        .collection('User')
+        .doc(Hive.box('user_info').get('id'))
         .get()
         .then((value) {
-      if (value.docs.isNotEmpty) {
+      if (value.exists) {
+        code = value.data()!['code'];
+        Hive.box('user_setting').put('usercode', code);
+      } else {}
+    });
+    firestore
+        .collection('HomeViewCategories')
+        .doc(Hive.box('user_setting').get('usercode'))
+        .get()
+        .then((value) {
+      if (value.exists) {
         setState(() {
           defaulthomeviewlist.clear();
           userviewlist.clear();
-          for (int i = 0; i < value.docs[0]['viewcategory'].length; i++) {
-            defaulthomeviewlist.add(value.docs[0]['viewcategory'][i]);
+          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+            defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
           }
-          for (int j = 0; j < value.docs[0]['hidecategory'].length; j++) {
-            userviewlist.add(value.docs[0]['hidecategory'][j]);
+          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+            userviewlist.add(value.data()!['hidecategory'][j]);
           }
         });
       } else {
-        firestore.collection('HomeViewCategories').doc(docid).set({
-          'usercode': value.docs.isEmpty ? docid : value.docs[0].id,
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': Hive.box('user_setting').get('usercode'),
           'viewcategory': defaulthomeviewlist,
           'hidecategory': userviewlist
         }, SetOptions(merge: true));
@@ -88,12 +92,20 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  Future<bool> _onWillPop() async {
+    Get.back(result: true);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       resizeToAvoidBottomInset: false,
-      body: UI(),
+      body: WillPopScope(
+        onWillPop: _onWillPop,
+        child: UI(),
+      ),
     ));
   }
 
@@ -133,7 +145,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                 IconBtn(
                                     child: IconButton(
                                         onPressed: () {
-                                          Get.back();
+                                          Get.back(result: true);
                                         },
                                         icon: Container(
                                           alignment: Alignment.center,
@@ -255,11 +267,12 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                         defaulthomeviewlist.removeAt(index);
                                         firestore
                                             .collection('HomeViewCategories')
-                                            .doc(docid)
-                                            .set({
+                                            .doc(Hive.box('user_setting')
+                                                .get('usercode'))
+                                            .update({
                                           'viewcategory': defaulthomeviewlist,
                                           'hidecategory': userviewlist
-                                        }, SetOptions(merge: true));
+                                        });
                                       } else {
                                         Snack.show(
                                             title: '알림',
@@ -327,10 +340,15 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                     }
                     final element = defaulthomeviewlist.removeAt(oldIndex);
                     defaulthomeviewlist.insert(newIndex, element);
-                    firestore.collection('HomeViewCategories').doc(docid).set({
-                      'viewcategory': defaulthomeviewlist,
-                    }, SetOptions(merge: true));
                   });
+                  firestore
+                      .collection('HomeViewCategories')
+                      .doc(Hive.box('user_setting').get('usercode'))
+                      .update(
+                    {
+                      'viewcategory': defaulthomeviewlist,
+                    },
+                  );
                 },
                 proxyDecorator:
                     (Widget child, int index, Animation<double> animation) {
@@ -410,11 +428,12 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                     userviewlist.removeAt(index);
                                     firestore
                                         .collection('HomeViewCategories')
-                                        .doc(docid)
-                                        .set({
+                                        .doc(Hive.box('user_setting')
+                                            .get('usercode'))
+                                        .update({
                                       'viewcategory': defaulthomeviewlist,
                                       'hidecategory': userviewlist
-                                    }, SetOptions(merge: true));
+                                    });
                                   });
                                 },
                                 child: Text('보기',

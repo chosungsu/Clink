@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,27 +24,25 @@ class GoogleSignInController extends GetxController {
     googleSignInAccount = await _googleSignIn.signIn();
     String nick = googleSignInAccount!.displayName.toString();
     String email = googleSignInAccount!.email.toString();
+    var _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    String code = '';
 
     //내부 저장으로 로그인 정보 저장
     await Hive.box('user_info').put('id', nick);
     await Hive.box('user_info').put('email', email);
     await Hive.box('user_info').put('count', count);
     await Hive.box('user_info').put('autologin', ischecked);
-    String codes = Hive.box('user_info').get('id').toString().length > 5
-        ? Hive.box('user_info').get('email').toString().substring(0, 3) +
-            Hive.box('user_info')
-                .get('email')
-                .toString()
-                .split('@')[1]
-                .substring(0, 2) +
-            Hive.box('user_info').get('id').toString().substring(0, 4)
-        : Hive.box('user_info').get('email').toString().substring(0, 3) +
-            Hive.box('user_info')
-                .get('email')
-                .toString()
-                .split('@')[1]
-                .substring(0, 2) +
-            Hive.box('user_info').get('id').toString().substring(0, 2);
+    code = Hive.box('user_info').get('email').toString().substring(0, 3) +
+        Hive.box('user_info')
+            .get('email')
+            .toString()
+            .split('@')[1]
+            .substring(0, 2) +
+        String.fromCharCodes(Iterable.generate(
+            5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
     //firestore 저장
     firestore.collection('User').doc(nick).get().then((value) async {
       Snack.show(
@@ -56,7 +56,6 @@ class GoogleSignInController extends GetxController {
           'email': email,
           'login_where': 'google_user',
           'autologin': ischecked,
-          'code': codes
         }).whenComplete(() {
           GoToMain(context);
         });
@@ -68,8 +67,9 @@ class GoogleSignInController extends GetxController {
           'login_where': 'google_user',
           'time': DateTime.now(),
           'autologin': ischecked,
-          'code': codes
+          'code': code
         }, SetOptions(merge: true)).whenComplete(() {
+          Hive.box('user_setting').put('usercode', code);
           GoToMain(context);
         });
       }
