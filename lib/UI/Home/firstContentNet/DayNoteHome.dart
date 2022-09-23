@@ -237,7 +237,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop() async {
-    widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+    widget.isfromwhere == 'home' ? Get.back(result: true) : Get.back();
     return true;
   }
 

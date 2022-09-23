@@ -11,6 +11,7 @@ import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/ShowTips.dart';
+import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -526,10 +527,14 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         index == 0
                             ? GestureDetector(
-                                onTap: () {
-                                  Get.to(
-                                      () => ChooseCalendar(isfromwhere: 'home'),
+                                onTap: () async {
+                                  final reloadpage = await Get.to(
+                                      () => const ChooseCalendar(
+                                          isfromwhere: 'home'),
                                       transition: Transition.rightToLeft);
+                                  if (reloadpage) {
+                                    GoToMain(context);
+                                  }
                                 },
                                 child: SizedBox(
                                   height: isresponsive == true ? 110 : 60,
@@ -562,13 +567,16 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               )
                             : GestureDetector(
-                                onTap: () {
-                                  Get.to(
+                                onTap: () async {
+                                  final reloadpage = await Get.to(
                                       () => const DayNoteHome(
                                             title: '',
                                             isfromwhere: 'home',
                                           ),
                                       transition: Transition.rightToLeft);
+                                  if (reloadpage) {
+                                    GoToMain(context);
+                                  }
                                 },
                                 child: SizedBox(
                                   height: isresponsive == true ? 110 : 60,

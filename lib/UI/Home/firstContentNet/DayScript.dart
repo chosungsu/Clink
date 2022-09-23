@@ -119,7 +119,7 @@ class _DayScriptState extends State<DayScript> {
     controll_memo.color = Color(Hive.box('user_setting').get('coloreachmemo'));
     Hive.box('user_setting')
         .put('coloreachmemofont', Colors.black.value.toInt());
-    controll_memo.color =
+    controll_memo.colorfont =
         Color(Hive.box('user_setting').get('coloreachmemofont'));
     controll_memo.imagelist.clear();
     _color = controll_memo.color;
