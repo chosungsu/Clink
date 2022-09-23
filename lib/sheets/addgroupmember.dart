@@ -15,6 +15,7 @@ addgroupmember(
   BuildContext context,
   FocusNode searchNode,
   TextEditingController controller,
+  String code,
 ) {
   Get.bottomSheet(
           Padding(
@@ -32,7 +33,7 @@ addgroupmember(
                   },
                   child: SingleChildScrollView(
                     physics: const NeverScrollableScrollPhysics(),
-                    child: SheetPage(context, searchNode, controller),
+                    child: SheetPage(context, searchNode, controller, code),
                   )),
             ),
           ),
@@ -47,7 +48,7 @@ addgroupmember(
 }
 
 SheetPage(BuildContext context, FocusNode searchNode,
-    TextEditingController controller) {
+    TextEditingController controller, String code) {
   final List<String> list_user = <String>[];
   return SizedBox(
       child: Padding(
@@ -74,12 +75,7 @@ SheetPage(BuildContext context, FocusNode searchNode,
               const SizedBox(
                 height: 20,
               ),
-              content(
-                context,
-                searchNode,
-                list_user,
-                controller,
-              )
+              content(context, searchNode, list_user, controller, code)
             ],
           )));
 }
@@ -110,6 +106,7 @@ content(
   FocusNode searchNode,
   List<String> list_user,
   TextEditingController controller,
+  String code,
 ) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -132,7 +129,7 @@ content(
                     const SizedBox(
                       width: 10,
                     ),
-                    SelectableText(PeopleAdd().code,
+                    SelectableText(code,
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,

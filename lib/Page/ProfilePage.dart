@@ -935,7 +935,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ))
                     : GestureDetector(
                         onTap: () async {
-                          addgroupmember(context, searchNode, _controller);
+                          addgroupmember(
+                              context, searchNode, _controller, peopleadd.code);
                         },
                         child: SizedBox(
                           height: 50,

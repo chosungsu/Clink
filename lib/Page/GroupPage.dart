@@ -219,7 +219,9 @@ class _GroupPageState extends State<GroupPage> {
                                                       addgroupmember(
                                                           context,
                                                           searchNode,
-                                                          _controller);
+                                                          _controller,
+                                                          cal_share_person
+                                                              .code);
                                                     },
                                                     icon: Container(
                                                         alignment:

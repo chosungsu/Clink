@@ -163,7 +163,9 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                                       addgroupmember(
                                                           context,
                                                           searchNode,
-                                                          _controller);
+                                                          _controller,
+                                                          cal_share_person
+                                                              .code);
                                                     },
                                                     icon: Container(
                                                       alignment:
