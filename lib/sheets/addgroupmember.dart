@@ -111,16 +111,6 @@ content(
   List<String> list_user,
   TextEditingController controller,
 ) {
-  String name = Hive.box('user_info').get('id').toString().length > 5
-      ? Hive.box('user_info').get('id').toString().substring(0, 4)
-      : Hive.box('user_info').get('id').toString().substring(0, 2);
-  String email_first =
-      Hive.box('user_info').get('email').toString().substring(0, 3);
-  String email_second = Hive.box('user_info')
-      .get('email')
-      .toString()
-      .split('@')[1]
-      .substring(0, 2);
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
         height: 270,
@@ -142,7 +132,7 @@ content(
                     const SizedBox(
                       width: 10,
                     ),
-                    SelectableText(email_first + email_second + name,
+                    SelectableText(PeopleAdd().code,
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
