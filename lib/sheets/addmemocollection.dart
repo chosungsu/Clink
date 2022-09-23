@@ -163,12 +163,6 @@ content(
                               behavior: SnackBarBehavior.floating);
                         } else {
                           setState(() {
-                            Snack.show(
-                                context: context,
-                                title: '로딩중',
-                                content: '잠시만 기다려주세요~',
-                                snackType: SnackType.waiting,
-                                behavior: SnackBarBehavior.floating);
                             firestore.collection('MemoCollections').add({
                               'madeUser': cal_share_person.secondname,
                               'title': textEditingController_add_sheet.text,
@@ -372,55 +366,50 @@ content(
                                                                             contentTextsize())),
                                                               ],
                                                             )),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            /*openSnackbar(
+                                                        s == 'outside'
+                                                            ? SizedBox(
+                                                                width: 25,
+                                                              )
+                                                            : InkWell(
+                                                                onTap: () {
+                                                                  /*openSnackbar(
                                                                 'Notice',
                                                                 '잠시만 기다려주세요~',
                                                                 Colors.green
                                                                     .shade100);*/
-                                                            Snack.show(
-                                                                context:
-                                                                    context,
-                                                                title: '로딩중',
-                                                                content:
-                                                                    '잠시만 기다려주세요~',
-                                                                snackType:
-                                                                    SnackType
-                                                                        .waiting,
-                                                                behavior:
-                                                                    SnackBarBehavior
-                                                                        .floating);
-                                                            firestore
-                                                                .collection(
-                                                                    'MemoCollections')
-                                                                .doc(snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                    .id)
-                                                                .delete()
-                                                                .whenComplete(
-                                                                    () {
-                                                              Snack.show(
-                                                                  context:
-                                                                      context,
-                                                                  title: '알림',
-                                                                  content:
-                                                                      '정상적으로 삭제가 되었습니다.',
-                                                                  snackType:
-                                                                      SnackType
-                                                                          .info,
-                                                                  behavior:
-                                                                      SnackBarBehavior
-                                                                          .floating);
-                                                            });
-                                                          },
-                                                          child: const Icon(
-                                                            Icons.delete,
-                                                            size: 25,
-                                                            color: Colors.red,
-                                                          ),
-                                                        )
+                                                                  firestore
+                                                                      .collection(
+                                                                          'MemoCollections')
+                                                                      .doc(snapshot
+                                                                          .data!
+                                                                          .docs[
+                                                                              index]
+                                                                          .id)
+                                                                      .delete()
+                                                                      .whenComplete(
+                                                                          () {
+                                                                    Snack.show(
+                                                                        context:
+                                                                            context,
+                                                                        title:
+                                                                            '알림',
+                                                                        content:
+                                                                            '정상적으로 삭제가 되었습니다.',
+                                                                        snackType:
+                                                                            SnackType
+                                                                                .info,
+                                                                        behavior:
+                                                                            SnackBarBehavior.floating);
+                                                                  });
+                                                                },
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.delete,
+                                                                  size: 25,
+                                                                  color: Colors
+                                                                      .red,
+                                                                ),
+                                                              )
                                                       ],
                                                     ),
                                                     color: Colors.white),

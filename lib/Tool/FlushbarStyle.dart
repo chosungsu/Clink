@@ -40,7 +40,7 @@ class Snack {
     Future.delayed(Duration(seconds: 2), () {
       Get.closeCurrentSnackbar();
       Future.delayed(const Duration(seconds: 2), () async {
-        Get.back();
+        Get.back(result: true);
       });
     });
   }

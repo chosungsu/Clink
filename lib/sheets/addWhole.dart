@@ -585,7 +585,6 @@ content(
                   CreateCalandmemoFailSaveCategory(context);
                 } else {
                   setState(() {
-                    CreateCalandmemoSuccessFlushbar(context);
                     if (s == 'home') {
                       choicelist[0] == 1
                           ? firestore.collection('CalendarSheetHome').add({

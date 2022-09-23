@@ -57,6 +57,15 @@ class GoogleSignInController extends GetxController {
           'login_where': 'google_user',
           'autologin': ischecked,
         }).whenComplete(() {
+          firestore
+              .collection('User')
+              .doc(Hive.box('user_info').get('id'))
+              .get()
+              .then((value) {
+            if (value.exists) {
+              Hive.box('user_setting').put('usercode', value.data()!['code']);
+            } else {}
+          });
           GoToMain(context);
         });
       } else {

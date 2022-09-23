@@ -4,6 +4,7 @@ import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
+import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
@@ -22,31 +23,34 @@ import '../../../DB/MemoList.dart';
 import '../../../Dialogs/destroyBackKey.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
+import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/ImageSlider.dart';
+import '../Widgets/ViewSet.dart';
 import '../firstContentNet/DayScript.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:http/http.dart' show get;
 
 class ClickShowEachNote extends StatefulWidget {
-  const ClickShowEachNote({
-    Key? key,
-    required this.date,
-    required this.doc,
-    required this.docname,
-    required this.doccollection,
-    required this.docsummary,
-    required this.doccolor,
-    required this.doccolorfont,
-    required this.docindex,
-    required this.editdate,
-    required this.image,
-    required this.securewith,
-  }) : super(key: key);
+  const ClickShowEachNote(
+      {Key? key,
+      required this.date,
+      required this.doc,
+      required this.docname,
+      required this.doccollection,
+      required this.docsummary,
+      required this.doccolor,
+      required this.doccolorfont,
+      required this.docindex,
+      required this.editdate,
+      required this.image,
+      required this.securewith,
+      required this.isfromwhere})
+      : super(key: key);
   final String date;
   final String editdate;
   final String doc;
@@ -58,6 +62,7 @@ class ClickShowEachNote extends StatefulWidget {
   final int doccolorfont;
   final List docindex;
   final int securewith;
+  final String isfromwhere;
   @override
   State<StatefulWidget> createState() => _ClickShowEachNoteState();
 }
@@ -113,7 +118,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     controll_memo.imagelist.clear();
     Hive.box('user_setting').put('coloreachmemo', widget.doccolor);
     Hive.box('user_setting').put('coloreachmemofont', widget.doccolorfont);
-    print(widget.doccolorfont);
     textEditingController1 = TextEditingController(text: widget.docname);
     textEditingController_add_sheet = TextEditingController();
     Hive.box('user_setting').put('memocollection', widget.doccollection);
@@ -203,7 +207,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
             pressed2)) ??
         false;
     if (reloadpage) {
-      Get.back();
+      widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
     }
     return reloadpage;
   }
@@ -279,7 +283,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                             pressed2)) ??
                                                         false;
                                                     if (reloadpage) {
-                                                      Get.back();
+                                                      widget.isfromwhere ==
+                                                              'home'
+                                                          ? GoToMain(context)
+                                                          : Get.back();
                                                     }
                                                   },
                                                   icon: Container(
@@ -418,129 +425,129 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                   nodes[i]
                                                                       .unfocus();
                                                                 }
-                                                                final reloadpage =
-                                                                    await Get.dialog(OSDialog(
-                                                                            context,
-                                                                            '알림',
-                                                                            Builder(
-                                                                          builder:
-                                                                              (context) {
-                                                                            return SizedBox(
-                                                                              width: MediaQuery.of(context).size.width * 0.85,
-                                                                              child: SingleChildScrollView(
-                                                                                child: Text('저장하시겠습니까?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: Colors.blueGrey)),
-                                                                              ),
-                                                                            );
-                                                                          },
-                                                                        ), pressed2)) ??
-                                                                        false;
-                                                                if (reloadpage) {
-                                                                  if (textEditingController1
-                                                                      .text
-                                                                      .isNotEmpty) {
-                                                                    CreateCalandmemoSuccessFlushbar(
-                                                                        context);
-                                                                    firestore
-                                                                        .collection(
-                                                                            'AppNoticeByUsers')
-                                                                        .add({
-                                                                      'title': '[' +
-                                                                          textEditingController1
-                                                                              .text +
-                                                                          '] 메모가 변경되었습니다.',
-                                                                      'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
-                                                                          ' ' +
-                                                                          DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
-                                                                              0] +
-                                                                          ':' +
-                                                                          DateFormat('yyyy-MM-dd hh:mm')
-                                                                              .parse(DateTime.now().toString())
-                                                                              .toString()
-                                                                              .split(' ')[1]
-                                                                              .split(':')[1],
-                                                                      'username':
-                                                                          username,
-                                                                      'sharename':
-                                                                          [],
-                                                                      'read':
-                                                                          'no',
-                                                                    });
-                                                                    for (int i =
-                                                                            0;
-                                                                        i < scollection.memolistin.length;
-                                                                        i++) {
-                                                                      checklisttexts.add(MemoList(
-                                                                          memocontent: scollection.memolistcontentin[
-                                                                              i],
-                                                                          contentindex:
-                                                                              scollection.memolistin[i]));
-                                                                    }
-                                                                    for (int j =
-                                                                            0;
-                                                                        j < controll_memo.imagelist.length;
-                                                                        j++) {
-                                                                      savepicturelist.add(
-                                                                          controll_memo
-                                                                              .imagelist[j]);
-                                                                    }
-
-                                                                    firestore
-                                                                        .collection(
-                                                                            'MemoDataBase')
-                                                                        .doc(widget
-                                                                            .doc)
-                                                                        .update(
-                                                                      {
-                                                                        'memoTitle':
-                                                                            textEditingController1.text,
-                                                                        'photoUrl':
-                                                                            savepicturelist,
-                                                                        'Collection': Hive.box('user_setting').get('memocollection') == '' || Hive.box('user_setting').get('memocollection') == null
-                                                                            ? null
-                                                                            : (widget.doccollection != Hive.box('user_setting').get('memocollection')
-                                                                                ? Hive.box('user_setting').get('memocollection')
-                                                                                : widget.doccollection),
-                                                                        'memolist': checklisttexts.map((e) => e.memocontent).toList().isEmpty
-                                                                            ? null
-                                                                            : checklisttexts.map((e) => e.memocontent).toList(),
-                                                                        'memoindex': checklisttexts.map((e) => e.contentindex).toList().isEmpty
-                                                                            ? null
-                                                                            : checklisttexts.map((e) => e.contentindex).toList(),
-                                                                        'OriginalUser':
-                                                                            username,
-                                                                        'securewith':
-                                                                            widget.securewith,
-                                                                        'color':
-                                                                            Hive.box('user_setting').get('coloreachmemo') ??
-                                                                                _color.value.toInt(),
-                                                                        'colorfont': controll_memo
-                                                                            .colorfont
-                                                                            .value
-                                                                            .toInt(),
-                                                                        'EditDate': editDateTo.toString().split('-')[0] +
-                                                                            '-' +
-                                                                            editDateTo.toString().split('-')[
-                                                                                1] +
-                                                                            '-' +
-                                                                            editDateTo.toString().split('-')[2].substring(0,
-                                                                                2) +
-                                                                            '일',
-                                                                      },
-                                                                    ).whenComplete(
-                                                                            () {
-                                                                      Future.delayed(
-                                                                          const Duration(
-                                                                              seconds: 2),
-                                                                          () {
-                                                                        CreateCalandmemoSuccessFlushbarSub(
-                                                                            context,
-                                                                            '메모');
-                                                                      });
-                                                                    });
-                                                                  } else {
-                                                                    CreateCalandmemoFailSaveTitle(
-                                                                        context);
+                                                                if (textEditingController1
+                                                                    .text
+                                                                    .isNotEmpty) {
+                                                                  CreateCalandmemoSuccessFlushbarSub(
+                                                                      context,
+                                                                      '메모');
+                                                                  firestore
+                                                                      .collection(
+                                                                          'AppNoticeByUsers')
+                                                                      .add({
+                                                                    'title': '[' +
+                                                                        textEditingController1
+                                                                            .text +
+                                                                        '] 메모가 변경되었습니다.',
+                                                                    'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
+                                                                        ' ' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
+                                                                            0] +
+                                                                        ':' +
+                                                                        DateFormat('yyyy-MM-dd hh:mm')
+                                                                            .parse(DateTime.now().toString())
+                                                                            .toString()
+                                                                            .split(' ')[1]
+                                                                            .split(':')[1],
+                                                                    'username':
+                                                                        username,
+                                                                    'sharename':
+                                                                        [],
+                                                                    'read':
+                                                                        'no',
+                                                                  });
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          scollection
+                                                                              .memolistin
+                                                                              .length;
+                                                                      i++) {
+                                                                    checklisttexts.add(MemoList(
+                                                                        memocontent:
+                                                                            scollection.memolistcontentin[
+                                                                                i],
+                                                                        contentindex:
+                                                                            scollection.memolistin[i]));
                                                                   }
+                                                                  for (int j =
+                                                                          0;
+                                                                      j <
+                                                                          controll_memo
+                                                                              .imagelist
+                                                                              .length;
+                                                                      j++) {
+                                                                    savepicturelist.add(
+                                                                        controll_memo
+                                                                            .imagelist[j]);
+                                                                  }
+
+                                                                  firestore
+                                                                      .collection(
+                                                                          'MemoDataBase')
+                                                                      .doc(widget
+                                                                          .doc)
+                                                                      .update(
+                                                                    {
+                                                                      'memoTitle':
+                                                                          textEditingController1
+                                                                              .text,
+                                                                      'photoUrl':
+                                                                          savepicturelist,
+                                                                      'Collection': Hive.box('user_setting').get('memocollection') == '' ||
+                                                                              Hive.box('user_setting').get('memocollection') ==
+                                                                                  null
+                                                                          ? null
+                                                                          : (widget.doccollection != Hive.box('user_setting').get('memocollection')
+                                                                              ? Hive.box('user_setting').get('memocollection')
+                                                                              : widget.doccollection),
+                                                                      'memolist': checklisttexts
+                                                                              .map((e) => e
+                                                                                  .memocontent)
+                                                                              .toList()
+                                                                              .isEmpty
+                                                                          ? null
+                                                                          : checklisttexts
+                                                                              .map((e) => e.memocontent)
+                                                                              .toList(),
+                                                                      'memoindex': checklisttexts
+                                                                              .map((e) => e
+                                                                                  .contentindex)
+                                                                              .toList()
+                                                                              .isEmpty
+                                                                          ? null
+                                                                          : checklisttexts
+                                                                              .map((e) => e.contentindex)
+                                                                              .toList(),
+                                                                      'OriginalUser':
+                                                                          username,
+                                                                      'securewith':
+                                                                          widget
+                                                                              .securewith,
+                                                                      'color': Hive.box('user_setting').get(
+                                                                              'coloreachmemo') ??
+                                                                          _color
+                                                                              .value
+                                                                              .toInt(),
+                                                                      'colorfont': controll_memo
+                                                                          .colorfont
+                                                                          .value
+                                                                          .toInt(),
+                                                                      'EditDate': editDateTo.toString().split('-')[0] +
+                                                                          '-' +
+                                                                          editDateTo.toString().split('-')[
+                                                                              1] +
+                                                                          '-' +
+                                                                          editDateTo
+                                                                              .toString()
+                                                                              .split('-')[2]
+                                                                              .substring(0, 2) +
+                                                                          '일',
+                                                                    },
+                                                                  );
+                                                                } else {
+                                                                  CreateCalandmemoFailSaveTitle(
+                                                                      context);
                                                                 }
                                                               },
                                                               icon: Container(
@@ -602,8 +609,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                         ), pressed2)) ??
                                                                         false;
                                                                 if (reloadpage) {
-                                                                  CreateCalandmemoSuccessFlushbar(
-                                                                      context);
                                                                   Hive.box(
                                                                           'user_setting')
                                                                       .put(
@@ -694,20 +699,16 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     }
                                                                   }).whenComplete(
                                                                           () {
-                                                                    reloadpage =
-                                                                        true;
-                                                                    Future.delayed(
-                                                                        const Duration(
-                                                                            seconds:
-                                                                                2),
-                                                                        () async {
-                                                                      CreateCalandmemoFlushbardelete(
-                                                                          context,
-                                                                          '메모');
-                                                                    });
-                                                                    if (reloadpage) {
-                                                                      Get.back();
-                                                                    }
+                                                                    CreateCalandmemoFlushbardelete(
+                                                                        context,
+                                                                        '메모');
+                                                                    widget.isfromwhere ==
+                                                                            'home'
+                                                                        ? GoToMain(
+                                                                            context)
+                                                                        : Get
+                                                                            .back();
+                                                                    
                                                                   });
                                                                 }
                                                               },

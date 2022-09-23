@@ -339,15 +339,17 @@ class _DayContentHomeState extends State<DayContentHome>
                                         controll_cals.setrepeatdate(1);
                                         Get.to(
                                             () => DayScript(
-                                                firstdate:
-                                                    _rangeStart ?? _selectedDay,
-                                                lastdate:
-                                                    _rangeEnd ?? _selectedDay,
-                                                position: 'cal',
-                                                title: widget.title,
-                                                share: widget.share,
-                                                orig: widget.origin,
-                                                calname: widget.calname),
+                                                  firstdate: _rangeStart ??
+                                                      _selectedDay,
+                                                  lastdate:
+                                                      _rangeEnd ?? _selectedDay,
+                                                  position: 'cal',
+                                                  title: widget.title,
+                                                  share: widget.share,
+                                                  orig: widget.origin,
+                                                  calname: widget.calname,
+                                                  isfromwhere: 'dayhome',
+                                                ),
                                             transition: Transition.downToUp);
                                       },
                                       icon: NeumorphicIcon(
@@ -581,6 +583,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                                       summary: snapshot
                                                               .data!.docs[index]
                                                           ['summary'],
+                                                      isfromwhere: 'dayhome',
                                                     ),
                                                 transition:
                                                     Transition.downToUp);

@@ -3,6 +3,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -62,8 +63,7 @@ class _NotiAlarmState extends State<NotiAlarm>
   }
 
   Future<bool> _onWillPop() async {
-    notilist.noticepageset(0);
-    Get.back(result: true);
+    GoToMain(context);
     return true;
   }
 
@@ -225,13 +225,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                   IconBtn(
                                                       child: IconButton(
                                                           onPressed: () {
-                                                            notilist
-                                                                .isreadnoti();
-                                                            notilist
-                                                                .noticepageset(
-                                                                    0);
-                                                            Get.back(
-                                                                result: true);
+                                                            GoToMain(context);
                                                           },
                                                           icon: Container(
                                                             alignment: Alignment

@@ -12,6 +12,13 @@ class PeopleAdd extends GetxController {
   String codes = '';
   var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   Random _rnd = Random();
+  List defaulthomeviewlist = [
+    '오늘의 일정',
+    '공유된 오늘의 일정',
+    '최근에 수정된 메모',
+    '홈뷰에 저장된 메모',
+  ];
+  List userviewlist = [];
 
   void setcode() {
     firestore
@@ -37,6 +44,36 @@ class PeopleAdd extends GetxController {
   void peoplecalendarrestart() {
     Hive.box('user_setting').put('share_cal_person', '');
     people = [];
+    update();
+    notifyChildrens();
+  }
+
+  void setcategory() {
+    firestore
+        .collection('HomeViewCategories')
+        .doc(Hive.box('user_setting').get('usercode'))
+        .get()
+        .then((value) {
+      if (value.exists) {
+        defaulthomeviewlist.clear();
+        userviewlist.clear();
+        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+          defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+        }
+        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+          userviewlist.add(value.data()!['hidecategory'][j]);
+        }
+      } else {
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': code,
+          'viewcategory': defaulthomeviewlist,
+          'hidecategory': userviewlist
+        }, SetOptions(merge: true));
+      }
+    });
     update();
     notifyChildrens();
   }

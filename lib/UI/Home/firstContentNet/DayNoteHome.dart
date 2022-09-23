@@ -39,7 +39,6 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  int sortmemo_fromsheet = 0;
   int searchmemo_fromsheet = 0;
   final controll_memo = Get.put(memosetting());
   final scollection = Get.put(selectcollection());
@@ -50,7 +49,6 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   String username = Hive.box('user_info').get(
     'id',
   );
-  int sort = 0;
   List<String> textsummary = [];
   String tmpsummary = '';
   DateTime Date = DateTime.now();
@@ -88,11 +86,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     super.initState();
     _checkBiometrics();
     WidgetsBinding.instance.addObserver(this);
-    controll_memo.setsortmemo(0);
-    sortmemo_fromsheet = controll_memo.memosort;
-    controll_memo.resetimagelist();
+    Hive.box('user_setting').put('sort_memo_card', 0);
+    controll_memo.sort = Hive.box('user_setting').get('sort_memo_card');
     controller = TextEditingController();
-    sort = controll_memo.sort;
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -104,14 +100,24 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
         });
       });
     firestore.collection('MemoAllAlarm').doc(username).get().then((value) {
-      value.data()!.forEach((key, value) {
-        if (key == 'alarmtime') {
-          controll_memo.settimeminute(int.parse(value.toString().split(':')[0]),
-              int.parse(value.toString().split(':')[1]), '', '');
-        } else {
-          Hive.box('user_setting').put('alarm_memo', value);
-        }
-      });
+      if (value.exists) {
+        value.data()!.forEach((key, value) {
+          if (key == 'alarmtime') {
+            controll_memo.settimeminute(
+                int.parse(value.toString().split(':')[0]),
+                int.parse(value.toString().split(':')[1]),
+                '',
+                '');
+          } else {
+            Hive.box('user_setting').put('alarm_memo', value);
+          }
+        });
+      } else {
+        firestore
+            .collection('MemoAllAlarm')
+            .doc(username)
+            .set({'ok': false, 'alarmtime': '99:99'});
+      }
     });
   }
 
@@ -208,14 +214,14 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                 onTap: () {
                   Get.to(
                       () => DayScript(
-                            firstdate: DateTime.now(),
-                            lastdate: DateTime.now(),
-                            position: 'note',
-                            title: '',
-                            share: const [],
-                            orig: '',
-                            calname: '',
-                          ),
+                          firstdate: DateTime.now(),
+                          lastdate: DateTime.now(),
+                          position: 'note',
+                          title: '',
+                          share: const [],
+                          orig: '',
+                          calname: '',
+                          isfromwhere: 'memohome'),
                       transition: Transition.downToUp);
                 },
                 label: '메모 추가',
@@ -332,18 +338,23 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                           .get()
                                                           .then(
                                                         (value) {
-                                                          hour = value
-                                                              .data()![
-                                                                  'alarmtime']
-                                                              .toString()
-                                                              .split(':')[0]
-                                                              .toString();
-                                                          minute = value
-                                                              .data()![
-                                                                  'alarmtime']
-                                                              .toString()
-                                                              .split(':')[1]
-                                                              .toString();
+                                                          if (value.exists) {
+                                                            hour = value
+                                                                .data()![
+                                                                    'alarmtime']
+                                                                .toString()
+                                                                .split(':')[0]
+                                                                .toString();
+                                                            minute = value
+                                                                .data()![
+                                                                    'alarmtime']
+                                                                .toString()
+                                                                .split(':')[1]
+                                                                .toString();
+                                                            print(hour +
+                                                                ' : ' +
+                                                                minute);
+                                                          }
                                                         },
                                                       );
                                                       controll_memo
@@ -801,6 +812,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                       snapshot.data!.docs[index]
                                                               ['securewith'] ??
                                                           999,
+                                                  isfromwhere: 'memohome',
                                                 ),
                                             transition: Transition.downToUp);
                                       } else if (snapshot.data!.docs[index]
@@ -859,6 +871,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                                   .docs[index]
                                                               ['securewith'] ??
                                                           999,
+                                                      isfromwhere: 'memohome',
                                                     ),
                                                 transition:
                                                     Transition.downToUp);
@@ -916,6 +929,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                                   .docs[index]
                                                               ['securewith'] ??
                                                           999,
+                                                      isfromwhere: 'memohome',
                                                     ),
                                                 transition:
                                                     Transition.downToUp);
@@ -972,6 +986,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                                 .docs[index]
                                                             ['securewith'] ??
                                                         999,
+                                                    isfromwhere: 'memohome',
                                                   ),
                                               transition: Transition.downToUp);
                                         }

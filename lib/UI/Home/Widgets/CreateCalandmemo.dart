@@ -22,7 +22,7 @@ CreateCalandmemoSuccessFlushbarSub(BuildContext context, String s) {
         content: s == '메모' ? '메모가 정상적으로 입력되었습니다.' : s + '이 정상적으로 입력되었습니다.',
         snackType: SnackType.info,
         behavior: SnackBarBehavior.floating);
-    Snack.closesnackbars();
+    //Snack.closesnackbars();
   });
 }
 
@@ -34,7 +34,7 @@ CreateCalandmemoFlushbardelete(BuildContext context, String s) {
         content: s == '메모' ? s + '가 정상적으로 삭제되었습니다.' : s + '이 정상적으로 삭제되었습니다.',
         snackType: SnackType.info,
         behavior: SnackBarBehavior.floating);
-    Snack.closesnackbars();
+    //Snack.closesnackbars();
   });
 }
 

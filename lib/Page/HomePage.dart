@@ -94,13 +94,13 @@ class _HomePageState extends State<HomePage> {
         .then((value) {
       if (value.exists) {
         setState(() {
-          defaulthomeviewlist.clear();
-          userviewlist.clear();
+          peopleadd.defaulthomeviewlist.clear();
+          peopleadd.userviewlist.clear();
           for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-            defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+            peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
           }
           for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-            userviewlist.add(value.data()!['hidecategory'][j]);
+            peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
           }
         });
       } else {
@@ -109,8 +109,8 @@ class _HomePageState extends State<HomePage> {
             .doc(Hive.box('user_setting').get('usercode'))
             .set({
           'usercode': peopleadd.code,
-          'viewcategory': defaulthomeviewlist,
-          'hidecategory': userviewlist
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
         }, SetOptions(merge: true));
       }
     });
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
         peopleadd.secondnameset(value.data()!['subname']);
       }
     });
-    firestore
+    /*firestore
         .collection('User')
         .doc(Hive.box('user_info').get('id'))
         .get()
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
         docid = value.data()!['code'];
         Hive.box('user_setting').put('usercode', docid);
       } else {}
-    });
+    });*/
     docid = Hive.box('user_setting').get('usercode');
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
@@ -341,21 +341,13 @@ class _HomePageState extends State<HomePage> {
                                                     ? IconBtn(
                                                         color: TextColor(),
                                                         child: IconButton(
-                                                            onPressed:
-                                                                () async {
-                                                              final reloadpage =
-                                                                  await Get.to(
-                                                                      () =>
-                                                                          NotiAlarm(),
-                                                                      transition:
-                                                                          Transition
-                                                                              .zoom);
-                                                              if (reloadpage) {
-                                                                setState(() {
-                                                                  notishow()
-                                                                      .isreadnoti();
-                                                                });
-                                                              }
+                                                            onPressed: () {
+                                                              Get.to(
+                                                                  () =>
+                                                                      NotiAlarm(),
+                                                                  transition:
+                                                                      Transition
+                                                                          .zoom);
                                                             },
                                                             icon: Container(
                                                                 alignment:
@@ -383,20 +375,13 @@ class _HomePageState extends State<HomePage> {
                                                     : IconBtn(
                                                         color: TextColor(),
                                                         child: IconButton(
-                                                          onPressed: () async {
-                                                            final reloadpage =
-                                                                await Get.to(
-                                                                    () =>
-                                                                        NotiAlarm(),
-                                                                    transition:
-                                                                        Transition
-                                                                            .zoom);
-                                                            if (reloadpage) {
-                                                              setState(() {
-                                                                notishow()
-                                                                    .isreadnoti();
-                                                              });
-                                                            }
+                                                          onPressed: () {
+                                                            Get.to(
+                                                                () =>
+                                                                    NotiAlarm(),
+                                                                transition:
+                                                                    Transition
+                                                                        .zoom);
                                                           },
                                                           icon: Container(
                                                               alignment:
@@ -460,12 +445,8 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       GetBuilder<PeopleAdd>(
                                           builder: (_) => ViewSet(
-                                              height,
-                                              docid,
-                                              defaulthomeviewlist,
-                                              userviewlist,
-                                              contentmy,
-                                              contentshare,
+                                              peopleadd.defaulthomeviewlist,
+                                              peopleadd.userviewlist,
                                               isresponsive,
                                               peopleadd.secondname)),
                                       const SizedBox(
@@ -545,16 +526,9 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         index == 0
                             ? GestureDetector(
-                                onTap: () async {
-                                  final reloadpage = await Get.to(
-                                      () => ChooseCalendar(),
+                                onTap: () {
+                                  Get.to(() => ChooseCalendar(),
                                       transition: Transition.rightToLeft);
-                                  print(reloadpage);
-                                  if (reloadpage) {
-                                    setState(() {
-                                      notishow().isreadnoti();
-                                    });
-                                  }
                                 },
                                 child: SizedBox(
                                   height: isresponsive == true ? 110 : 60,
@@ -587,17 +561,12 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               )
                             : GestureDetector(
-                                onTap: () async {
-                                  final reloadpage = await Get.to(
+                                onTap: () {
+                                  Get.to(
                                       () => const DayNoteHome(
                                             title: '',
                                           ),
                                       transition: Transition.rightToLeft);
-                                  if (reloadpage) {
-                                    setState(() {
-                                      notishow().isreadnoti();
-                                    });
-                                  }
                                 },
                                 child: SizedBox(
                                   height: isresponsive == true ? 110 : 60,
@@ -649,14 +618,8 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             children: [
               InkWell(
-                onTap: () async {
-                  final reloadpage = await Get.to(() => HomeView(),
-                      transition: Transition.zoom);
-                  if (reloadpage) {
-                    setState(() {
-                      notishow().isreadnoti();
-                    });
-                  }
+                onTap: () {
+                  Get.to(() => HomeView(), transition: Transition.zoom);
                 },
                 child: Text('홈뷰설정',
                     style: TextStyle(

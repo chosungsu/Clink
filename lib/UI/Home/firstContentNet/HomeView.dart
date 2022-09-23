@@ -64,13 +64,13 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
         .then((value) {
       if (value.exists) {
         setState(() {
-          defaulthomeviewlist.clear();
-          userviewlist.clear();
+          peopleadd.defaulthomeviewlist.clear();
+          peopleadd.userviewlist.clear();
           for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-            defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+            peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
           }
           for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-            userviewlist.add(value.data()!['hidecategory'][j]);
+            peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
           }
         });
       } else {
@@ -79,8 +79,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
             .doc(Hive.box('user_setting').get('usercode'))
             .set({
           'usercode': Hive.box('user_setting').get('usercode'),
-          'viewcategory': defaulthomeviewlist,
-          'hidecategory': userviewlist
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
         }, SetOptions(merge: true));
       }
     });
@@ -219,299 +219,335 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   }
 
   BuildContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('현재 홈뷰',
-            style: TextStyle(
-                color: TextColor(),
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize())),
-        defaulthomeviewlist.isNotEmpty
-            ? ReorderableListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: defaulthomeviewlist.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    key: ValueKey(index),
-                    height: 70,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: ListTile(
-                            onTap: () {},
-                            horizontalTitleGap: 10,
-                            dense: true,
-                            trailing: Row(
+    return GetBuilder<PeopleAdd>(
+        builder: (_) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('현재 홈뷰',
+                    style: TextStyle(
+                        color: TextColor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize())),
+                peopleadd.defaulthomeviewlist.isNotEmpty
+                    ? ReorderableListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: peopleadd.defaulthomeviewlist.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            key: ValueKey(index),
+                            height: 70,
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(
-                                  Icons.drag_indicator,
-                                  color: TextColor(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: ListTile(
+                                    onTap: () {},
+                                    horizontalTitleGap: 10,
+                                    dense: true,
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.drag_indicator,
+                                          color: TextColor(),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              if (peopleadd.defaulthomeviewlist
+                                                      .length >
+                                                  2) {
+                                                peopleadd.userviewlist.add(
+                                                    peopleadd
+                                                            .defaulthomeviewlist[
+                                                        index]);
+                                                peopleadd.defaulthomeviewlist
+                                                    .removeAt(index);
+                                                firestore
+                                                    .collection(
+                                                        'HomeViewCategories')
+                                                    .doc(
+                                                        Hive.box('user_setting')
+                                                            .get('usercode'))
+                                                    .update({
+                                                  'viewcategory': peopleadd
+                                                      .defaulthomeviewlist,
+                                                  'hidecategory':
+                                                      peopleadd.userviewlist
+                                                });
+                                              } else {
+                                                Snack.show(
+                                                    title: '알림',
+                                                    content:
+                                                        '홈뷰는 2개 미만으로 설정 불가합니다.',
+                                                    snackType:
+                                                        SnackType.warning,
+                                                    context: context);
+                                              }
+                                            });
+                                          },
+                                          child: Text('숨김',
+                                              style: TextStyle(
+                                                  color: peopleadd
+                                                              .defaulthomeviewlist
+                                                              .length >
+                                                          2
+                                                      ? TextColor()
+                                                      : TextColor_shadowcolor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                        ),
+                                      ],
+                                    ),
+                                    leading: SizedBox(
+                                      height: 45,
+                                      width: 45,
+                                      child: Container(
+                                          alignment: Alignment.center,
+                                          height: 30,
+                                          width: 30,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                Colors.blue.shade200,
+                                            child: Icon(
+                                              peopleadd.defaulthomeviewlist[
+                                                              index]
+                                                          .toString()
+                                                          .substring(
+                                                              peopleadd
+                                                                      .defaulthomeviewlist[
+                                                                          index]
+                                                                      .toString()
+                                                                      .length -
+                                                                  2,
+                                                              peopleadd
+                                                                  .defaulthomeviewlist[
+                                                                      index]
+                                                                  .toString()
+                                                                  .length) ==
+                                                      '일정'
+                                                  ? Icons.calendar_month
+                                                  : Icons.description,
+                                              color: Colors.white,
+                                            ),
+                                          )),
+                                    ),
+                                    title: Text(
+                                        peopleadd.defaulthomeviewlist[index],
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize())),
+                                  ),
                                 ),
                                 const SizedBox(
-                                  width: 10,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (defaulthomeviewlist.length > 2) {
-                                        userviewlist
-                                            .add(defaulthomeviewlist[index]);
-                                        defaulthomeviewlist.removeAt(index);
-                                        firestore
-                                            .collection('HomeViewCategories')
-                                            .doc(Hive.box('user_setting')
-                                                .get('usercode'))
-                                            .update({
-                                          'viewcategory': defaulthomeviewlist,
-                                          'hidecategory': userviewlist
-                                        });
-                                      } else {
-                                        Snack.show(
-                                            title: '알림',
-                                            content: '홈뷰는 2개 미만으로 설정 불가합니다.',
-                                            snackType: SnackType.warning,
-                                            context: context);
-                                      }
-                                    });
-                                  },
-                                  child: Text('숨김',
-                                      style: TextStyle(
-                                          color: defaulthomeviewlist.length > 2
-                                              ? TextColor()
-                                              : TextColor_shadowcolor(),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize())),
+                                  height: 10,
                                 ),
                               ],
                             ),
-                            leading: SizedBox(
-                              height: 45,
-                              width: 45,
-                              child: Container(
-                                  alignment: Alignment.center,
-                                  height: 30,
-                                  width: 30,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.blue.shade200,
-                                    child: Icon(
-                                      defaulthomeviewlist[index]
-                                                  .toString()
-                                                  .substring(
-                                                      defaulthomeviewlist[index]
-                                                              .toString()
-                                                              .length -
-                                                          2,
-                                                      defaulthomeviewlist[index]
-                                                          .toString()
-                                                          .length) ==
-                                              '일정'
-                                          ? Icons.calendar_month
-                                          : Icons.description,
-                                      color: Colors.white,
-                                    ),
-                                  )),
+                          );
+                        },
+                        onReorder: (int oldIndex, int newIndex) {
+                          setState(() {
+                            if (oldIndex < newIndex) {
+                              newIndex -= 1;
+                            }
+                            final element = peopleadd.defaulthomeviewlist
+                                .removeAt(oldIndex);
+                            peopleadd.defaulthomeviewlist
+                                .insert(newIndex, element);
+                          });
+                          firestore
+                              .collection('HomeViewCategories')
+                              .doc(Hive.box('user_setting').get('usercode'))
+                              .update(
+                            {
+                              'viewcategory': peopleadd.defaulthomeviewlist,
+                            },
+                          );
+                          peopleadd.setcategory();
+                        },
+                        proxyDecorator: (Widget child, int index,
+                            Animation<double> animation) {
+                          return Material(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: TextColor_shadowcolor(),
+                                      width: 1)),
+                              child: child,
                             ),
-                            title: Text(defaulthomeviewlist[index],
-                                style: TextStyle(
-                                    color: TextColor(),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize())),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                onReorder: (int oldIndex, int newIndex) {
-                  setState(() {
-                    if (oldIndex < newIndex) {
-                      newIndex -= 1;
-                    }
-                    final element = defaulthomeviewlist.removeAt(oldIndex);
-                    defaulthomeviewlist.insert(newIndex, element);
-                  });
-                  firestore
-                      .collection('HomeViewCategories')
-                      .doc(Hive.box('user_setting').get('usercode'))
-                      .update(
-                    {
-                      'viewcategory': defaulthomeviewlist,
-                    },
-                  );
-                },
-                proxyDecorator:
-                    (Widget child, int index, Animation<double> animation) {
-                  return Material(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: TextColor_shadowcolor(), width: 1)),
-                      child: child,
-                    ),
-                  );
-                },
-              )
-            : ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ContainerDesign(
-                          child: ListTile(
-                            onTap: () {},
-                            horizontalTitleGap: 10,
-                            dense: true,
-                            title: Text('보기를 클릭시 홈뷰에 나타나게 할 수 있습니다.',
-                                style: TextStyle(
-                                    color: TextColor(),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize())),
-                          ),
-                          color: BGColor_shadowcolor()),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  );
-                }),
-        const SizedBox(
-          height: 20,
-        ),
-        Text('숨긴 뷰',
-            style: TextStyle(
-                color: TextColor(),
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize())),
-        userviewlist.isNotEmpty
-            ? ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: userviewlist.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: ListTile(
-                          onTap: () {},
-                          horizontalTitleGap: 10,
-                          dense: true,
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
+                          );
+                        },
+                      )
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return Column(
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    defaulthomeviewlist
-                                        .add(userviewlist[index]);
-                                    userviewlist.removeAt(index);
-                                    firestore
-                                        .collection('HomeViewCategories')
-                                        .doc(Hive.box('user_setting')
-                                            .get('usercode'))
-                                        .update({
-                                      'viewcategory': defaulthomeviewlist,
-                                      'hidecategory': userviewlist
-                                    });
-                                  });
-                                },
-                                child: Text('보기',
-                                    style: TextStyle(
-                                        color: TextColor(),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize())),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ContainerDesign(
+                                  child: ListTile(
+                                    onTap: () {},
+                                    horizontalTitleGap: 10,
+                                    dense: true,
+                                    title: Text('보기를 클릭시 홈뷰에 나타나게 할 수 있습니다.',
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize())),
+                                  ),
+                                  color: BGColor_shadowcolor()),
+                              const SizedBox(
+                                height: 10,
                               ),
                             ],
-                          ),
-                          leading: SizedBox(
-                            height: 45,
-                            width: 45,
-                            child: Container(
-                                alignment: Alignment.center,
-                                height: 30,
-                                width: 30,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.blue.shade200,
-                                  child: Icon(
-                                    userviewlist[index].toString().substring(
-                                                userviewlist[index]
-                                                        .toString()
-                                                        .length -
-                                                    2,
-                                                userviewlist[index]
-                                                    .toString()
-                                                    .length) ==
-                                            '일정'
-                                        ? Icons.calendar_month
-                                        : Icons.description,
-                                    color: Colors.white,
+                          );
+                        }),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text('숨긴 뷰',
+                    style: TextStyle(
+                        color: TextColor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize())),
+                peopleadd.userviewlist.isNotEmpty
+                    ? ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: peopleadd.userviewlist.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: ListTile(
+                                  onTap: () {},
+                                  horizontalTitleGap: 10,
+                                  dense: true,
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            peopleadd.defaulthomeviewlist.add(
+                                                peopleadd.userviewlist[index]);
+                                            peopleadd.userviewlist
+                                                .removeAt(index);
+                                            firestore
+                                                .collection(
+                                                    'HomeViewCategories')
+                                                .doc(Hive.box('user_setting')
+                                                    .get('usercode'))
+                                                .update({
+                                              'viewcategory':
+                                                  peopleadd.defaulthomeviewlist,
+                                              'hidecategory':
+                                                  peopleadd.userviewlist
+                                            });
+                                          });
+                                        },
+                                        child: Text('보기',
+                                            style: TextStyle(
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize())),
+                                      ),
+                                    ],
                                   ),
-                                )),
-                          ),
-                          title: Text(userviewlist[index],
-                              style: TextStyle(
-                                  color: TextColor(),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  );
-                })
-            : ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ContainerDesign(
-                          child: ListTile(
-                            onTap: () {},
-                            horizontalTitleGap: 10,
-                            dense: true,
-                            title: Text('숨김을 클릭시 이곳에 뷰를 숨길 수 있습니다.',
-                                style: TextStyle(
-                                    color: TextColor(),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize())),
-                          ),
-                          color: BGColor_shadowcolor()),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  );
-                })
-      ],
-    );
+                                  leading: SizedBox(
+                                    height: 45,
+                                    width: 45,
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        height: 30,
+                                        width: 30,
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.blue.shade200,
+                                          child: Icon(
+                                            peopleadd.userviewlist[index]
+                                                        .toString()
+                                                        .substring(
+                                                            peopleadd
+                                                                    .userviewlist[
+                                                                        index]
+                                                                    .toString()
+                                                                    .length -
+                                                                2,
+                                                            peopleadd
+                                                                .userviewlist[
+                                                                    index]
+                                                                .toString()
+                                                                .length) ==
+                                                    '일정'
+                                                ? Icons.calendar_month
+                                                : Icons.description,
+                                            color: Colors.white,
+                                          ),
+                                        )),
+                                  ),
+                                  title: Text(peopleadd.userviewlist[index],
+                                      style: TextStyle(
+                                          color: TextColor(),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize())),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          );
+                        })
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ContainerDesign(
+                                  child: ListTile(
+                                    onTap: () {},
+                                    horizontalTitleGap: 10,
+                                    dense: true,
+                                    title: Text('숨김을 클릭시 이곳에 뷰를 숨길 수 있습니다.',
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize())),
+                                  ),
+                                  color: BGColor_shadowcolor()),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          );
+                        })
+              ],
+            ));
   }
 }
