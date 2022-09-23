@@ -601,9 +601,11 @@ class _NotiAlarmState extends State<NotiAlarm>
                               ? Get.to(
                                   () => const DayNoteHome(
                                         title: '',
+                                        isfromwhere: 'notihome',
                                       ),
                                   transition: Transition.rightToLeft)
-                              : Get.to(() => ChooseCalendar(),
+                              : Get.to(
+                                  () => ChooseCalendar(isfromwhere: 'notihome'),
                                   transition: Transition.rightToLeft);
                         },
                         child: Column(

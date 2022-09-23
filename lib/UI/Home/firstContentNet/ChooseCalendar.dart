@@ -20,9 +20,15 @@ import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import 'package:focused_menu/focused_menu.dart';
 import '../../../sheets/settingChoiceC_Cards.dart';
+import '../../Sign/UserCheck.dart';
 import '../secondContentNet/PeopleGroup.dart';
 
 class ChooseCalendar extends StatefulWidget {
+  const ChooseCalendar({
+    Key? key,
+    required this.isfromwhere,
+  }) : super(key: key);
+  final String isfromwhere;
   @override
   State<StatefulWidget> createState() => _ChooseCalendarState();
 }
@@ -108,7 +114,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   }
 
   Future<bool> _onWillPop() async {
-    Get.back(result: true);
+    widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
     return true;
   }
 
@@ -165,9 +171,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                   IconBtn(
                                       child: IconButton(
                                           onPressed: () {
-                                            setState(() {
-                                              Get.back(result: true);
-                                            });
+                                            widget.isfromwhere == 'home'
+                                                ? GoToMain(context)
+                                                : Get.back();
                                           },
                                           icon: Container(
                                             alignment: Alignment.center,

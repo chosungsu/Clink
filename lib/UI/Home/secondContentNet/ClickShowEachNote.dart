@@ -283,10 +283,173 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                             pressed2)) ??
                                                         false;
                                                     if (reloadpage) {
-                                                      widget.isfromwhere ==
-                                                              'home'
-                                                          ? GoToMain(context)
-                                                          : Get.back();
+                                                      //수정
+                                                      for (int i = 0;
+                                                          i < nodes.length;
+                                                          i++) {
+                                                        nodes[i].unfocus();
+                                                      }
+                                                      if (textEditingController1
+                                                          .text.isNotEmpty) {
+                                                        firestore
+                                                            .collection(
+                                                                'AppNoticeByUsers')
+                                                            .add({
+                                                          'title': '[' +
+                                                              textEditingController1
+                                                                  .text +
+                                                              '] 메모가 변경되었습니다.',
+                                                          'date': DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime.now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(
+                                                                      ' ')[0] +
+                                                              ' ' +
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime.now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(' ')[1]
+                                                                  .split(
+                                                                      ':')[0] +
+                                                              ':' +
+                                                              DateFormat(
+                                                                      'yyyy-MM-dd hh:mm')
+                                                                  .parse(DateTime
+                                                                          .now()
+                                                                      .toString())
+                                                                  .toString()
+                                                                  .split(' ')[1]
+                                                                  .split(':')[1],
+                                                          'username': username,
+                                                          'sharename': [],
+                                                          'read': 'no',
+                                                        });
+                                                        for (int i = 0;
+                                                            i <
+                                                                scollection
+                                                                    .memolistin
+                                                                    .length;
+                                                            i++) {
+                                                          checklisttexts.add(MemoList(
+                                                              memocontent:
+                                                                  scollection
+                                                                          .memolistcontentin[
+                                                                      i],
+                                                              contentindex:
+                                                                  scollection
+                                                                          .memolistin[
+                                                                      i]));
+                                                        }
+                                                        for (int j = 0;
+                                                            j <
+                                                                controll_memo
+                                                                    .imagelist
+                                                                    .length;
+                                                            j++) {
+                                                          savepicturelist.add(
+                                                              controll_memo
+                                                                  .imagelist[j]);
+                                                        }
+
+                                                        firestore
+                                                            .collection(
+                                                                'MemoDataBase')
+                                                            .doc(widget.doc)
+                                                            .update(
+                                                          {
+                                                            'memoTitle':
+                                                                textEditingController1
+                                                                    .text,
+                                                            'photoUrl':
+                                                                savepicturelist,
+                                                            'Collection': Hive.box('user_setting').get(
+                                                                            'memocollection') ==
+                                                                        '' ||
+                                                                    Hive.box('user_setting').get(
+                                                                            'memocollection') ==
+                                                                        null
+                                                                ? null
+                                                                : (widget.doccollection !=
+                                                                        Hive.box('user_setting').get(
+                                                                            'memocollection')
+                                                                    ? Hive.box(
+                                                                            'user_setting')
+                                                                        .get(
+                                                                            'memocollection')
+                                                                    : widget
+                                                                        .doccollection),
+                                                            'memolist': checklisttexts
+                                                                    .map((e) => e
+                                                                        .memocontent)
+                                                                    .toList()
+                                                                    .isEmpty
+                                                                ? null
+                                                                : checklisttexts
+                                                                    .map((e) =>
+                                                                        e.memocontent)
+                                                                    .toList(),
+                                                            'memoindex': checklisttexts
+                                                                    .map((e) => e
+                                                                        .contentindex)
+                                                                    .toList()
+                                                                    .isEmpty
+                                                                ? null
+                                                                : checklisttexts
+                                                                    .map((e) =>
+                                                                        e.contentindex)
+                                                                    .toList(),
+                                                            'OriginalUser':
+                                                                username,
+                                                            'securewith': widget
+                                                                .securewith,
+                                                            'color': Hive.box(
+                                                                        'user_setting')
+                                                                    .get(
+                                                                        'coloreachmemo') ??
+                                                                _color.value
+                                                                    .toInt(),
+                                                            'colorfont':
+                                                                controll_memo
+                                                                    .colorfont
+                                                                    .value
+                                                                    .toInt(),
+                                                            'EditDate': editDateTo
+                                                                        .toString()
+                                                                        .split(
+                                                                            '-')[
+                                                                    0] +
+                                                                '-' +
+                                                                editDateTo
+                                                                        .toString()
+                                                                        .split(
+                                                                            '-')[
+                                                                    1] +
+                                                                '-' +
+                                                                editDateTo
+                                                                    .toString()
+                                                                    .split(
+                                                                        '-')[2]
+                                                                    .substring(
+                                                                        0, 2) +
+                                                                '일',
+                                                          },
+                                                        ).whenComplete(() {
+                                                          CreateCalandmemoSuccessFlushbarSub(
+                                                              context, '메모');
+                                                          widget.isfromwhere ==
+                                                                  'home'
+                                                              ? GoToMain(
+                                                                  context)
+                                                              : Get.back();
+                                                        });
+                                                      } else {
+                                                        CreateCalandmemoFailSaveTitle(
+                                                            context);
+                                                      }
                                                     }
                                                   },
                                                   icon: Container(
@@ -708,7 +871,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                             context)
                                                                         : Get
                                                                             .back();
-                                                                    
                                                                   });
                                                                 }
                                                               },

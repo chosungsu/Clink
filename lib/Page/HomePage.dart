@@ -527,7 +527,8 @@ class _HomePageState extends State<HomePage> {
                         index == 0
                             ? GestureDetector(
                                 onTap: () {
-                                  Get.to(() => ChooseCalendar(),
+                                  Get.to(
+                                      () => ChooseCalendar(isfromwhere: 'home'),
                                       transition: Transition.rightToLeft);
                                 },
                                 child: SizedBox(
@@ -565,6 +566,7 @@ class _HomePageState extends State<HomePage> {
                                   Get.to(
                                       () => const DayNoteHome(
                                             title: '',
+                                            isfromwhere: 'home',
                                           ),
                                       transition: Transition.rightToLeft);
                                 },

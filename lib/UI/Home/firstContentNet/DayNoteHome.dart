@@ -22,15 +22,15 @@ import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../Sign/UserCheck.dart';
 import '../Widgets/SortMenuHolder.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
 class DayNoteHome extends StatefulWidget {
-  const DayNoteHome({
-    Key? key,
-    required this.title,
-  }) : super(key: key);
+  const DayNoteHome({Key? key, required this.title, required this.isfromwhere})
+      : super(key: key);
   final String title;
+  final String isfromwhere;
   @override
   State<StatefulWidget> createState() => _DayNoteHomeState();
 }
@@ -117,6 +117,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
             .collection('MemoAllAlarm')
             .doc(username)
             .set({'ok': false, 'alarmtime': '99:99'});
+        Hive.box('user_setting').put('alarm_memo', false);
       }
     });
   }
@@ -236,7 +237,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop() async {
-    Get.back(result: true);
+    widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
     return true;
   }
 
@@ -287,7 +288,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                 IconBtn(
                                     child: IconButton(
                                         onPressed: () {
-                                          Get.back(result: true);
+                                          widget.isfromwhere == 'home'
+                                              ? GoToMain(context)
+                                              : Get.back();
                                         },
                                         icon: Container(
                                           alignment: Alignment.center,

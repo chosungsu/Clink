@@ -117,6 +117,10 @@ class _DayScriptState extends State<DayScript> {
     Hive.box('user_setting').put('typecolorcalendar', null);
     Hive.box('user_setting').put('coloreachmemo', Colors.white.value.toInt());
     controll_memo.color = Color(Hive.box('user_setting').get('coloreachmemo'));
+    Hive.box('user_setting')
+        .put('coloreachmemofont', Colors.black.value.toInt());
+    controll_memo.color =
+        Color(Hive.box('user_setting').get('coloreachmemofont'));
     controll_memo.imagelist.clear();
     _color = controll_memo.color;
     _colorfont = controll_memo.colorfont;
