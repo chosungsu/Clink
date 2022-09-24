@@ -26,6 +26,7 @@ import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/IconBtn.dart';
+import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../sheets/addmemocollection.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -61,6 +62,7 @@ class _DayScriptState extends State<DayScript> {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
+  bool loading = false;
   final DateTime _selectedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String username = Hive.box('user_info').get(
@@ -149,6 +151,9 @@ class _DayScriptState extends State<DayScript> {
   }
 
   void autosavelogic() {
+    setState(() {
+      controll_memo.setloading(true);
+    });
     var firsttxt = '0' +
         textEditingController2.text +
         ' - 0' +
@@ -424,6 +429,9 @@ class _DayScriptState extends State<DayScript> {
                     ));
               } else {}
             }
+            setState(() {
+              controll_memo.setloading(false);
+            });
             CreateCalandmemoSuccessFlushbar('저장완료', fToast);
             Future.delayed(const Duration(seconds: 1), () {
               Get.back();
@@ -490,6 +498,9 @@ class _DayScriptState extends State<DayScript> {
                       .split(' ')[0] +
                   '일',
             }, SetOptions(merge: true)).whenComplete(() {
+              setState(() {
+                controll_memo.setloading(false);
+              });
               CreateCalandmemoSuccessFlushbar('저장완료', fToast);
               Future.delayed(const Duration(seconds: 1), () {
                 Get.back();
@@ -498,9 +509,15 @@ class _DayScriptState extends State<DayScript> {
           });
         }
       } else {
+        setState(() {
+          controll_memo.setloading(false);
+        });
         CreateCalandmemoFailSaveTimeCal(context);
       }
     } else {
+      setState(() {
+        controll_memo.setloading(false);
+      });
       CreateCalandmemoFailSaveTitle(context);
     }
   }
@@ -547,7 +564,14 @@ class _DayScriptState extends State<DayScript> {
       child: Scaffold(
         backgroundColor: BGColor(),
         resizeToAvoidBottomInset: true,
-        body: WillPopScope(onWillPop: _onBackPressed, child: UI()),
+        body: WillPopScope(
+            onWillPop: _onBackPressed,
+            child: Stack(
+              children: [
+                UI(),
+                controll_memo.loading == true ? const Loader() : Container()
+              ],
+            )),
       ),
     );
   }
@@ -673,7 +697,8 @@ class _DayScriptState extends State<DayScript> {
                                                               controll_memo
                                                                   .ischeckedtohideminus,
                                                               controllers,
-                                                              _colorfont)
+                                                              _colorfont,
+                                                            )
                                                           : const SizedBox(),
                                                       widget.position == 'note'
                                                           ? const SizedBox(

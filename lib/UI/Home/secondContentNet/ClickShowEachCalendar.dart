@@ -12,6 +12,7 @@ import '../../../Dialogs/destroyBackKey.dart';
 import '../../../LocalNotiPlatform/NotificationApi.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/FlushbarStyle.dart';
+import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../../Sign/UserCheck.dart';
@@ -66,6 +67,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   String changevalue = Hive.box('user_setting').get('alarming_time') ?? "10분 전";
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late FToast fToast;
+  bool loading = false;
 
   @override
   void didChangeDependencies() {
@@ -85,8 +87,100 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     textEditingController4 = TextEditingController(text: widget.summary);
   }
 
+  void deletelogic() async {
+    //삭제
+    final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
+          builder: (context) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width * 0.85,
+              child: SingleChildScrollView(
+                child: Text('정말 이 일정을 삭제하시겠습니까?',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize(),
+                        color: Colors.blueGrey)),
+              ),
+            );
+          },
+        ), pressed2)) ??
+        false;
+    if (reloadpage) {
+      setState(() {
+        loading = true;
+      });
+      firestore.collection('AppNoticeByUsers').add({
+        'title': '[' +
+            widget.calname +
+            '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 삭제되었습니다.',
+        'date': DateFormat('yyyy-MM-dd hh:mm')
+                .parse(DateTime.now().toString())
+                .toString()
+                .split(' ')[0] +
+            ' ' +
+            DateFormat('yyyy-MM-dd hh:mm')
+                .parse(DateTime.now().toString())
+                .toString()
+                .split(' ')[1]
+                .split(':')[0] +
+            ':' +
+            DateFormat('yyyy-MM-dd hh:mm')
+                .parse(DateTime.now().toString())
+                .toString()
+                .split(' ')[1]
+                .split(':')[1],
+        'username': name,
+        'sharename': widget.share,
+        'read': 'no',
+      }).whenComplete(() {
+        firestore
+            .collection('CalendarDataBase')
+            .where('calname', isEqualTo: widget.code)
+            .where('Daytodo', isEqualTo: widget.calinfo)
+            .where('Date',
+                isEqualTo: widget.date.toString().split('-')[0] +
+                    '-' +
+                    widget.date.toString().split('-')[1] +
+                    '-' +
+                    widget.date.toString().split('-')[2].substring(0, 2) +
+                    '일')
+            .where('Timestart', isEqualTo: widget.start)
+            .get()
+            .then((value) {
+          deleteid.clear();
+          for (var element in value.docs) {
+            deleteid.add(element.id);
+          }
+          for (int i = 0; i < deleteid.length; i++) {
+            firestore.collection('CalendarDataBase').doc(deleteid[i]).delete();
+          }
+        }).whenComplete(() {
+          Future.delayed(const Duration(seconds: 0), () async {
+            setState(() {
+              loading = false;
+            });
+            CreateCalandmemoFlushbardelete(context, '일정');
+            widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+
+            NotificationApi.cancelNotification(
+                id: int.parse(widget.date.toString().split('-')[0]) +
+                    int.parse(widget.date.toString().split('-')[1]) +
+                    int.parse(widget.date
+                        .toString()
+                        .split('-')[2]
+                        .toString()
+                        .split(' ')[0]) +
+                    int.parse(widget.code.toString().numericOnly()));
+          });
+        });
+      });
+    }
+  }
+
   void savelogic() {
     //수정
+    setState(() {
+      loading = true;
+    });
     var firsttxt = '0' +
         textEditingController2.text +
         ' - 0' +
@@ -161,6 +255,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
           });
         }
       }).whenComplete(() {
+        setState(() {
+          loading = false;
+        });
         CreateCalandmemoSuccessFlushbar('저장완료', fToast);
         Future.delayed(const Duration(seconds: 1), () {
           if (widget.isfromwhere == 'home') {
@@ -261,7 +358,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: UI(),
+        child: Stack(
+          children: [UI(), loading == true ? const Loader() : Container()],
+        ),
       ),
     ));
   }
@@ -368,157 +467,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             IconBtn(
                                                 child: IconButton(
                                                     onPressed: () async {
-                                                      //삭제
-                                                      final reloadpage =
-                                                          await Get.dialog(
-                                                                  OSDialog(
-                                                                      context,
-                                                                      '경고',
-                                                                      Builder(
-                                                                builder:
-                                                                    (context) {
-                                                                  return SizedBox(
-                                                                    width: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.85,
-                                                                    child:
-                                                                        SingleChildScrollView(
-                                                                      child: Text(
-                                                                          '정말 이 일정을 삭제하시겠습니까?',
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: contentTextsize(),
-                                                                              color: Colors.blueGrey)),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              ), pressed2)) ??
-                                                              false;
-                                                      if (reloadpage) {
-                                                        firestore
-                                                            .collection(
-                                                                'AppNoticeByUsers')
-                                                            .add({
-                                                          'title': '[' +
-                                                              widget.calname +
-                                                              '] 캘린더의 일정 중 ${textEditingController1.text}이(가) 삭제되었습니다.',
-                                                          'date': DateFormat(
-                                                                      'yyyy-MM-dd hh:mm')
-                                                                  .parse(DateTime.now()
-                                                                      .toString())
-                                                                  .toString()
-                                                                  .split(
-                                                                      ' ')[0] +
-                                                              ' ' +
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd hh:mm')
-                                                                  .parse(DateTime.now()
-                                                                      .toString())
-                                                                  .toString()
-                                                                  .split(' ')[1]
-                                                                  .split(
-                                                                      ':')[0] +
-                                                              ':' +
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd hh:mm')
-                                                                  .parse(DateTime
-                                                                          .now()
-                                                                      .toString())
-                                                                  .toString()
-                                                                  .split(' ')[1]
-                                                                  .split(':')[1],
-                                                          'username': name,
-                                                          'sharename':
-                                                              widget.share,
-                                                          'read': 'no',
-                                                        }).whenComplete(() {
-                                                          firestore
-                                                              .collection(
-                                                                  'CalendarDataBase')
-                                                              .where('calname',
-                                                                  isEqualTo: widget
-                                                                      .code)
-                                                              .where('Daytodo',
-                                                                  isEqualTo: widget
-                                                                      .calinfo)
-                                                              .where('Date',
-                                                                  isEqualTo: widget
-                                                                              .date
-                                                                              .toString()
-                                                                              .split('-')[
-                                                                          0] +
-                                                                      '-' +
-                                                                      widget.date
-                                                                              .toString()
-                                                                              .split('-')[
-                                                                          1] +
-                                                                      '-' +
-                                                                      widget.date
-                                                                          .toString()
-                                                                          .split('-')[
-                                                                              2]
-                                                                          .substring(
-                                                                              0,
-                                                                              2) +
-                                                                      '일')
-                                                              .where('Timestart',
-                                                                  isEqualTo:
-                                                                      widget.start)
-                                                              .get()
-                                                              .then((value) {
-                                                            deleteid.clear();
-                                                            for (var element
-                                                                in value.docs) {
-                                                              deleteid.add(
-                                                                  element.id);
-                                                            }
-                                                            for (int i = 0;
-                                                                i <
-                                                                    deleteid
-                                                                        .length;
-                                                                i++) {
-                                                              firestore
-                                                                  .collection(
-                                                                      'CalendarDataBase')
-                                                                  .doc(deleteid[
-                                                                      i])
-                                                                  .delete();
-                                                            }
-                                                          }).whenComplete(() {
-                                                            Future.delayed(
-                                                                const Duration(
-                                                                    seconds: 0),
-                                                                () async {
-                                                              CreateCalandmemoFlushbardelete(
-                                                                  context,
-                                                                  '일정');
-                                                              widget.isfromwhere ==
-                                                                      'home'
-                                                                  ? GoToMain(
-                                                                      context)
-                                                                  : Get.back();
-
-                                                              NotificationApi.cancelNotification(
-                                                                  id: int.parse(widget.date.toString().split('-')[0]) +
-                                                                      int.parse(widget
-                                                                              .date
-                                                                              .toString()
-                                                                              .split('-')[
-                                                                          1]) +
-                                                                      int.parse(widget
-                                                                          .date
-                                                                          .toString()
-                                                                          .split('-')[
-                                                                              2]
-                                                                          .toString()
-                                                                          .split(
-                                                                              ' ')[0]) +
-                                                                      int.parse(widget.code.toString().numericOnly()));
-                                                            });
-                                                          });
-                                                        });
-                                                      }
+                                                      deletelogic();
                                                     },
                                                     icon: Container(
                                                       alignment:

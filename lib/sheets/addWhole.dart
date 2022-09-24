@@ -706,6 +706,9 @@ content(
                 ),
               )),
         ),
+        SizedBox(
+          height: isresponsible == true ? 60 : 30,
+        ),
       ],
     );
   });

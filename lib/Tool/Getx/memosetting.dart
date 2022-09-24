@@ -30,9 +30,16 @@ class memosetting extends GetxController {
   int minute1 = 99;
   String hour2 = '99';
   String minute2 = '99';
+  bool loading = false;
 
   void setpagetext() {
     ischeckedpushmemoalarm = Hive.box('user_setting').get('alarm_memo');
+    update();
+    notifyChildrens();
+  }
+
+  void setloading(bool what) {
+    loading = what;
     update();
     notifyChildrens();
   }

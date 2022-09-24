@@ -114,8 +114,13 @@ MFHolder(
                                               await imagePicker.pickImage(
                                                   source: ImageSource.camera);
                                           setState(() {
-                                            _uploadFile(context,
-                                                File(image!.path), doc);
+                                            controll_memo.setloading(true);
+                                            _uploadFile(
+                                              context,
+                                              File(image!.path),
+                                              doc,
+                                            );
+                                            controll_memo.setloading(false);
                                           });
                                         },
                                         child: ListTile(
@@ -138,8 +143,10 @@ MFHolder(
                                               await imagePicker.pickImage(
                                                   source: ImageSource.gallery);
                                           setState(() {
+                                            controll_memo.setloading(true);
                                             _uploadFile(context,
                                                 File(image!.path), doc);
+                                            controll_memo.setloading(false);
                                           });
                                         },
                                         child: ListTile(

@@ -27,6 +27,7 @@ import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
+import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/ImageSlider.dart';
@@ -103,6 +104,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   List<MemoList> checklisttexts = [];
   DateTime editDateTo = DateTime.now();
   late FToast fToast;
+  bool loading = false;
 
   @override
   void didChangeDependencies() {
@@ -199,8 +201,91 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     } else {}
   }
 
+  void autodeletelogic() async {
+    //삭제
+    for (int i = 0; i < nodes.length; i++) {
+      nodes[i].unfocus();
+    }
+    var reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
+          builder: (context) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width * 0.85,
+              child: SingleChildScrollView(
+                child: Text('정말 이 메모를 삭제하시겠습니까?',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize(),
+                        color: Colors.blueGrey)),
+              ),
+            );
+          },
+        ), pressed2)) ??
+        false;
+    if (reloadpage) {
+      setState(() {
+        loading = true;
+      });
+      Hive.box('user_setting').put('alarm_memo_${widget.docname}', false);
+      controll_memo.setalarmmemo(widget.docname, widget.doc);
+      _deleteFile(widget.doc);
+      firestore.collection('AppNoticeByUsers').add({
+        'title': '[' + textEditingController1.text + '] 메모가 삭제되었습니다.',
+        'date': DateFormat('yyyy-MM-dd hh:mm')
+                .parse(DateTime.now().toString())
+                .toString()
+                .split(' ')[0] +
+            ' ' +
+            DateFormat('yyyy-MM-dd hh:mm')
+                .parse(DateTime.now().toString())
+                .toString()
+                .split(' ')[1]
+                .split(':')[0] +
+            ':' +
+            DateFormat('yyyy-MM-dd hh:mm')
+                .parse(DateTime.now().toString())
+                .toString()
+                .split(' ')[1]
+                .split(':')[1],
+        'username': username,
+        'sharename': [],
+        'read': 'no',
+      });
+      firestore
+          .collection('MemoDataBase')
+          .where('memoTitle', isEqualTo: textEditingController1.text)
+          .where('OriginalUser', isEqualTo: username)
+          .where('color', isEqualTo: widget.doccolor.toInt())
+          .where('Date',
+              isEqualTo: widget.date.toString().split('-')[0] +
+                  '-' +
+                  widget.date.toString().split('-')[1] +
+                  '-' +
+                  widget.date.toString().split('-')[2].substring(0, 2) +
+                  '일')
+          .get()
+          .then((value) {
+        deleteid.clear();
+        value.docs.forEach((element) {
+          deleteid.add(element.id);
+        });
+        for (int i = 0; i < deleteid.length; i++) {
+          firestore.collection('MemoDataBase').doc(deleteid[i]).delete();
+        }
+      }).whenComplete(() {
+        setState(() {
+          loading = false;
+        });
+        CreateCalandmemoFlushbardelete(context, '메모');
+        widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+      });
+    }
+  }
+
   void autosavelogic() {
     //수정
+    setState(() {
+      loading = true;
+    });
     searchNode_first_section.unfocus();
     searchNode_add_section.unfocus();
     for (int i = 0; i < nodes.length; i++) {
@@ -269,6 +354,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
               '일',
         },
       ).whenComplete(() {
+        setState(() {
+          loading = false;
+        });
+
         CreateCalandmemoSuccessFlushbar('저장완료', fToast);
         Future.delayed(const Duration(seconds: 1), () {
           if (widget.isfromwhere == 'home') {
@@ -301,15 +390,16 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
       body: WillPopScope(
         onWillPop: _onBackPressed,
         child: GestureDetector(
-          onTap: () {
-            searchNode_first_section.unfocus();
-            searchNode_add_section.unfocus();
-            for (int i = 0; i < nodes.length; i++) {
-              nodes[i].unfocus();
-            }
-          },
-          child: UI(),
-        ),
+            onTap: () {
+              searchNode_first_section.unfocus();
+              searchNode_add_section.unfocus();
+              for (int i = 0; i < nodes.length; i++) {
+                nodes[i].unfocus();
+              }
+            },
+            child: Stack(
+              children: [UI(), loading == true ? const Loader() : Container()],
+            )),
       ),
     ));
   }
@@ -402,16 +492,17 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                         ),
                                                       ),
                                                       MFHolder(
-                                                          checkbottoms,
-                                                          nodes,
-                                                          scollection,
-                                                          _color,
-                                                          widget.doc,
-                                                          controll_memo
-                                                              .ischeckedtohideminus,
-                                                          controllers,
-                                                          Color(widget
-                                                              .doccolorfont)),
+                                                        checkbottoms,
+                                                        nodes,
+                                                        scollection,
+                                                        _color,
+                                                        widget.doc,
+                                                        controll_memo
+                                                            .ischeckedtohideminus,
+                                                        controllers,
+                                                        Color(widget
+                                                            .doccolorfont),
+                                                      ),
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
@@ -516,134 +607,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           child: IconButton(
                                                               onPressed:
                                                                   () async {
-                                                                //삭제
-
-                                                                for (int i = 0;
-                                                                    i <
-                                                                        nodes
-                                                                            .length;
-                                                                    i++) {
-                                                                  nodes[i]
-                                                                      .unfocus();
-                                                                }
-                                                                var reloadpage =
-                                                                    await Get.dialog(OSDialog(
-                                                                            context,
-                                                                            '경고',
-                                                                            Builder(
-                                                                          builder:
-                                                                              (context) {
-                                                                            return SizedBox(
-                                                                              width: MediaQuery.of(context).size.width * 0.85,
-                                                                              child: SingleChildScrollView(
-                                                                                child: Text('정말 이 메모를 삭제하시겠습니까?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: Colors.blueGrey)),
-                                                                              ),
-                                                                            );
-                                                                          },
-                                                                        ), pressed2)) ??
-                                                                        false;
-                                                                if (reloadpage) {
-                                                                  Hive.box(
-                                                                          'user_setting')
-                                                                      .put(
-                                                                          'alarm_memo_${widget.docname}',
-                                                                          false);
-                                                                  controll_memo
-                                                                      .setalarmmemo(
-                                                                          widget
-                                                                              .docname,
-                                                                          widget
-                                                                              .doc);
-                                                                  _deleteFile(
-                                                                      widget
-                                                                          .doc);
-                                                                  firestore
-                                                                      .collection(
-                                                                          'AppNoticeByUsers')
-                                                                      .add({
-                                                                    'title': '[' +
-                                                                        textEditingController1
-                                                                            .text +
-                                                                        '] 메모가 삭제되었습니다.',
-                                                                    'date': DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[0] +
-                                                                        ' ' +
-                                                                        DateFormat('yyyy-MM-dd hh:mm').parse(DateTime.now().toString()).toString().split(' ')[1].split(':')[
-                                                                            0] +
-                                                                        ':' +
-                                                                        DateFormat('yyyy-MM-dd hh:mm')
-                                                                            .parse(DateTime.now().toString())
-                                                                            .toString()
-                                                                            .split(' ')[1]
-                                                                            .split(':')[1],
-                                                                    'username':
-                                                                        username,
-                                                                    'sharename':
-                                                                        [],
-                                                                    'read':
-                                                                        'no',
-                                                                  });
-                                                                  firestore
-                                                                      .collection(
-                                                                          'MemoDataBase')
-                                                                      .where(
-                                                                          'memoTitle',
-                                                                          isEqualTo: textEditingController1
-                                                                              .text)
-                                                                      .where(
-                                                                          'OriginalUser',
-                                                                          isEqualTo:
-                                                                              username)
-                                                                      .where(
-                                                                          'color',
-                                                                          isEqualTo: widget
-                                                                              .doccolor
-                                                                              .toInt())
-                                                                      .where(
-                                                                          'Date',
-                                                                          isEqualTo: widget.date.toString().split('-')[0] +
-                                                                              '-' +
-                                                                              widget.date.toString().split('-')[
-                                                                                  1] +
-                                                                              '-' +
-                                                                              widget.date.toString().split('-')[2].substring(0,
-                                                                                  2) +
-                                                                              '일')
-                                                                      .get()
-                                                                      .then(
-                                                                          (value) {
-                                                                    deleteid
-                                                                        .clear();
-                                                                    value.docs
-                                                                        .forEach(
-                                                                            (element) {
-                                                                      deleteid.add(
-                                                                          element
-                                                                              .id);
-                                                                    });
-                                                                    for (int i =
-                                                                            0;
-                                                                        i < deleteid.length;
-                                                                        i++) {
-                                                                      firestore
-                                                                          .collection(
-                                                                              'MemoDataBase')
-                                                                          .doc(deleteid[
-                                                                              i])
-                                                                          .delete();
-                                                                    }
-                                                                  }).whenComplete(
-                                                                          () {
-                                                                    CreateCalandmemoFlushbardelete(
-                                                                        context,
-                                                                        '메모');
-                                                                    widget.isfromwhere ==
-                                                                            'home'
-                                                                        ? GoToMain(
-                                                                            context)
-                                                                        : Get
-                                                                            .back();
-                                                                  });
-                                                                }
+                                                                autodeletelogic();
                                                               },
                                                               icon: Container(
                                                                 alignment:
