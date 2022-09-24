@@ -9,6 +9,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
+import '../UI/Home/NotiAlarm.dart';
 import '../route.dart';
 import '../sheets/addWhole.dart';
 import 'HomePage.dart';
@@ -90,7 +91,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           ),
                         );
                         Hive.box('user_setting').put('page_index', 0);
-                      } else {
+                      } else if (element
+                          .containsValue(Icons.account_circle_outlined)) {
                         draw.setclose();
                         Navigator.of(context).pushReplacement(
                           PageTransition(
@@ -101,6 +103,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           ),
                         );
                         Hive.box('user_setting').put('page_index', 3);
+                      } else {
+                        draw.setclose();
+                        Get.to(() => NotiAlarm(), transition: Transition.zoom);
+                        Hive.box('user_setting').put('page_index', 1);
                       }
                     },
                     child: Column(

@@ -15,6 +15,7 @@ import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/TextSize.dart';
 import '../secondContentNet/ClickShowEachCalendar.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
+import 'CreateCalandmemo.dart';
 
 ViewSet(List defaulthomeviewlist, List userviewlist, bool isresponsive,
     String secondname) {

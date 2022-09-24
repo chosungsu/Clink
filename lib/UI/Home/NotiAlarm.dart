@@ -63,8 +63,10 @@ class _NotiAlarmState extends State<NotiAlarm>
   }
 
   Future<bool> _onWillPop() async {
-    GoToMain(context);
-    return true;
+    Future.delayed(const Duration(seconds: 0), () {
+      GoToMain(context);
+    });
+    return false;
   }
 
   @override
@@ -225,7 +227,12 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                   IconBtn(
                                                       child: IconButton(
                                                           onPressed: () {
-                                                            GoToMain(context);
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    seconds: 0),
+                                                                () {
+                                                              GoToMain(context);
+                                                            });
                                                           },
                                                           icon: Container(
                                                             alignment: Alignment

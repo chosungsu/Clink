@@ -19,7 +19,6 @@ import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/secondContentNet/PeopleGroup.dart';
 import '../sheets/addgroupmember.dart';
 import 'DrawerScreen.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class GroupPage extends StatefulWidget {
   @override

@@ -237,8 +237,14 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop() async {
-    widget.isfromwhere == 'home' ? Get.back(result: true) : Get.back();
-    return true;
+    Future.delayed(const Duration(seconds: 0), () {
+      if (widget.isfromwhere == 'home') {
+        GoToMain(context);
+      } else {
+        Get.back();
+      }
+    });
+    return false;
   }
 
   @override
@@ -288,9 +294,14 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                 IconBtn(
                                     child: IconButton(
                                         onPressed: () {
-                                          widget.isfromwhere == 'home'
-                                              ? GoToMain(context)
-                                              : Get.back();
+                                          Future.delayed(
+                                              const Duration(seconds: 0), () {
+                                            if (widget.isfromwhere == 'home') {
+                                              GoToMain(context);
+                                            } else {
+                                              Get.back();
+                                            }
+                                          });
                                         },
                                         icon: Container(
                                           alignment: Alignment.center,

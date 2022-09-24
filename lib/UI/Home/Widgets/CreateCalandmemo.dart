@@ -1,17 +1,18 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/TextSize.dart';
 
-CreateCalandmemoSuccessFlushbar(BuildContext context) {
-  return Snack.show(
-      context: context,
-      title: '로딩중',
-      content: '잠시만 기다려주세요~',
-      snackType: SnackType.waiting,
-      behavior: SnackBarBehavior.floating);
+CreateCalandmemoSuccessFlushbar(String s, FToast fToast) {
+  return Snack.toast(
+      title: s,
+      color: Colors.white,
+      backgroundcolor: Colors.greenAccent,
+      fToast: fToast);
 }
 
 CreateCalandmemoSuccessFlushbarSub(BuildContext context, String s) {

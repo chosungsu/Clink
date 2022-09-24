@@ -74,7 +74,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('noti_calendar_click', 0);
     code = Hive.box('user_setting').get('noti_calendar_click') ?? 0;
-    cal_sort.setsortcal(0);
+    Hive.box('user_setting').put('sort_cal_card', 0);
+    cal_sort.sort = Hive.box('user_setting').get('sort_cal_card');
     sortsection = cal_sort.sort;
     controller = TextEditingController();
     Hive.box('user_setting').put('share_cal_person', '');
@@ -114,8 +115,14 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   }
 
   Future<bool> _onWillPop() async {
-    widget.isfromwhere == 'home' ? Get.back(result: true) : Get.back();
-    return true;
+    Future.delayed(const Duration(seconds: 0), () {
+      if (widget.isfromwhere == 'home') {
+        GoToMain(context);
+      } else {
+        Get.back();
+      }
+    });
+    return false;
   }
 
   @override
@@ -171,9 +178,15 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                   IconBtn(
                                       child: IconButton(
                                           onPressed: () {
-                                            widget.isfromwhere == 'home'
-                                                ? GoToMain(context)
-                                                : Get.back();
+                                            Future.delayed(
+                                                const Duration(seconds: 0), () {
+                                              if (widget.isfromwhere ==
+                                                  'home') {
+                                                GoToMain(context);
+                                              } else {
+                                                Get.back();
+                                              }
+                                            });
                                           },
                                           icon: Container(
                                             alignment: Alignment.center,

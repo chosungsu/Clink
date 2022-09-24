@@ -335,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                                                     fontWeight: FontWeight.bold,
                                                   )),
                                             ),
-                                            GetBuilder<notishow>(
+                                            /*GetBuilder<notishow>(
                                                 builder: (_) => notilist
                                                             .isread ==
                                                         true
@@ -408,7 +408,7 @@ class _HomePageState extends State<HomePage> {
                                                                         LightSource
                                                                             .topLeft),
                                                               ))),
-                                                        )))
+                                                        )))*/
                                           ],
                                         ))),
                               ],

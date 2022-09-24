@@ -1,5 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'TextSize.dart';
@@ -7,6 +8,41 @@ import 'TextSize.dart';
 const kPadding = 8.0; // up to you
 
 class Snack {
+  static toast(
+      {required String title,
+      required Color color,
+      required Color backgroundcolor,
+      required FToast fToast}) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: backgroundcolor,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.check,
+            color: color,
+          ),
+          const SizedBox(
+            width: 10.0,
+          ),
+          Text(
+            title,
+            style: TextStyle(color: color, fontSize: 18),
+          ),
+        ],
+      ),
+    );
+    fToast.showToast(
+      child: toast,
+      toastDuration: const Duration(seconds: 1),
+      gravity: ToastGravity.BOTTOM,
+    );
+  }
+
   static show(
       {required String title,
       required String content,
@@ -37,7 +73,7 @@ class Snack {
   }
 
   static closesnackbars() {
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       Get.closeCurrentSnackbar();
       Future.delayed(const Duration(seconds: 2), () async {
         Get.back(result: true);

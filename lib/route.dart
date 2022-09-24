@@ -1,10 +1,13 @@
+import 'package:badges/badges.dart';
 import 'package:clickbyme/Page/GroupPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/Home/NotiAlarm.dart';
 import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_version/new_version.dart';
@@ -15,6 +18,7 @@ import 'Tool/AndroidIOS.dart';
 import 'Tool/Getx/PeopleAdd.dart';
 import 'Tool/Getx/navibool.dart';
 import 'Tool/Getx/notishow.dart';
+import 'Tool/IconBtn.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.index}) : super(key: key);
@@ -61,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       HomePage(secondname: cal_share_person.secondname),
       HomePage(secondname: cal_share_person.secondname),
       ProfilePage(),
+      NotiAlarm(),
     ];
 
     return GetBuilder<navibool>(
@@ -104,23 +109,71 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                       items: <BottomNavigationBarItem>[
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),
-                          icon: Icon(Icons.group, size: 25),
+                          icon: const Icon(
+                            Icons.group,
+                            size: 25,
+                          ),
                           label: '피플',
                         ),
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),
-                          icon: Icon(Icons.home, size: 25),
+                          icon: const Icon(
+                            Icons.home,
+                            size: 25,
+                          ),
                           label: '홈',
                         ),
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),
-                          icon: Icon(Icons.add_outlined, size: 25),
+                          icon: const Icon(
+                            Icons.add_outlined,
+                            size: 25,
+                          ),
                           label: '추가',
                         ),
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),
-                          icon: Icon(Icons.account_circle_outlined, size: 25),
+                          icon: const Icon(
+                            Icons.account_circle_outlined,
+                            size: 25,
+                          ),
                           label: '설정',
+                        ),
+                        BottomNavigationBarItem(
+                          backgroundColor: BGColor(),
+                          icon: GetBuilder<notishow>(
+                              builder: (_) => notilist.isread == true
+                                  ? IconButton(
+                                      onPressed: () {
+                                        Get.to(() => NotiAlarm(),
+                                            transition: Transition.zoom);
+                                      },
+                                      icon: Container(
+                                        alignment: Alignment.center,
+                                        width: 25,
+                                        height: 25,
+                                        child: const Icon(
+                                          Icons.notifications_none,
+                                          size: 25,
+                                        ),
+                                      ))
+                                  : IconButton(
+                                      onPressed: () {
+                                        Get.to(() => NotiAlarm(),
+                                            transition: Transition.zoom);
+                                      },
+                                      icon: Container(
+                                          alignment: Alignment.center,
+                                          width: 25,
+                                          height: 25,
+                                          child: Badge(
+                                            child: const Icon(
+                                              Icons.notifications_none,
+                                              size: 25,
+                                            ),
+                                          )),
+                                    )),
+                          label: '알림',
                         ),
                       ],
                     ),
