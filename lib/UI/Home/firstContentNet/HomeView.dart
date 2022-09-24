@@ -15,6 +15,7 @@ import '../../../Tool/BGColor.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
+import '../../Sign/UserCheck.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -93,8 +94,10 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop() async {
-    Get.back(result: true);
-    return true;
+    Future.delayed(const Duration(seconds: 0), () {
+      GoToMain(context);
+    });
+    return false;
   }
 
   @override
@@ -145,7 +148,10 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                 IconBtn(
                                     child: IconButton(
                                         onPressed: () {
-                                          Get.back(result: true);
+                                          Future.delayed(
+                                              const Duration(seconds: 0), () {
+                                            GoToMain(context);
+                                          });
                                         },
                                         icon: Container(
                                           alignment: Alignment.center,
