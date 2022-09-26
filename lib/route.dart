@@ -84,7 +84,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         //Handle button tap
                         setState(() {
                           if (_index == 2) {
-                            print(Hive.box('user_setting').get('page_index'));
                             Hive.box('user_setting').put('page_index',
                                 Hive.box('user_setting').get('page_index'));
                             _selectedIndex =

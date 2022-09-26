@@ -1116,6 +1116,13 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                 ),
                                 Row(
                                   children: [
+                                    ReorderableDragStartListener(
+                                      index: index,
+                                      child: Icon(
+                                        Icons.drag_indicator_outlined,
+                                        color: _colorfont,
+                                      ),
+                                    ),
                                     scollection.memolistin[index] == 0
                                         ? SizedBox(
                                             width: MediaQuery.of(context)
@@ -1440,13 +1447,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                       controllers[
                                                                           index]),
                                                             )))),
-                                    ReorderableDragStartListener(
-                                      index: index,
-                                      child: Icon(
-                                        Icons.drag_indicator_outlined,
-                                        color: _colorfont,
-                                      ),
-                                    ),
                                   ],
                                 ),
                                 const SizedBox(

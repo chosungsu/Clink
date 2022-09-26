@@ -5,7 +5,7 @@ import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
-import 'package:clickbyme/sheets/pushalarmsetting.dart';
+import 'package:clickbyme/sheets/pushalarmsettingmemo.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -377,7 +377,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                               int.parse(minute),
                                                               '',
                                                               '');
-                                                      pushalarmsetting(
+                                                      pushalarmsettingmemo(
                                                           context,
                                                           setalarmhourNode,
                                                           setalarmminuteNode,
@@ -534,7 +534,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
             );
             controll_memo.settimeminute(
                 int.parse(hour), int.parse(minute), '', '');
-            pushalarmsetting(context, setalarmhourNode, setalarmminuteNode,
+            pushalarmsettingmemo(context, setalarmhourNode, setalarmminuteNode,
                 hour, minute, '', '');
 
             /*Get.to(
@@ -672,7 +672,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                       ['memoTitle'],
                                                   snapshot
                                                       .data!.docs[index].id);
-                                              pushalarmsetting(
+                                              pushalarmsettingmemo(
                                                   context,
                                                   setalarmhourNode,
                                                   setalarmminuteNode,

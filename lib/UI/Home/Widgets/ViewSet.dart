@@ -12,6 +12,7 @@ import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
+import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../secondContentNet/ClickShowEachCalendar.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
@@ -142,14 +143,13 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
       .get()
       .then((value) {
     contentmy.clear();
-    var timsestart, timefinish, codes, todo, alarm, share, summary;
+    var timsestart, timefinish, codes, todo, share, summary;
     List cname = [];
     final valuespace = value.docs;
     for (var sp in valuespace) {
       todo = sp.get('Daytodo');
       timsestart = sp.get('Timestart');
       timefinish = sp.get('Timefinish');
-      alarm = sp.get('Alarm');
       codes = sp.get('calname');
       share = sp.get('Shares');
       summary = sp.get('summary');
@@ -165,7 +165,6 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
           title: todo,
           date: timsestart + '-' + timefinish,
           cname: cname,
-          alarm: alarm,
           finishdate: timefinish,
           startdate: timsestart,
           share: share,
@@ -221,6 +220,51 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
                       shrinkWrap: true,
                       itemCount: contentmy.length,
                       itemBuilder: (context, index) {
+                        var updateidalarm = '';
+                        List<bool> alarmtypes = [];
+                        bool isChecked_pushalarm = false;
+                        firestore
+                            .collectionGroup('AlarmTable')
+                            .get()
+                            .then((value) {
+                          if (value.docs.isNotEmpty) {
+                            for (int i = 0; i < value.docs.length; i++) {
+                              if (value.docs[i].id == peopleadd.secondname) {
+                                if (value.docs[i].data()['calcode'] ==
+                                    snapshot.data!.docs[index].id) {
+                                  updateidalarm = value.docs[i].id;
+                                  for (int j = 0;
+                                      j <
+                                          value.docs[i]
+                                              .data()['alarmtype']
+                                              .length;
+                                      j++) {
+                                    alarmtypes.add(
+                                        value.docs[i].data()['alarmtype'][j]);
+                                  }
+                                  Hive.box('user_setting').put(
+                                      'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                      value.docs[i]
+                                          .data()['alarmhour']
+                                          .toString());
+                                  Hive.box('user_setting').put(
+                                      'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                      value.docs[i]
+                                          .data()['alarmminute']
+                                          .toString());
+                                  calendarsetting().hour1 =
+                                      Hive.box('user_setting').get(
+                                          'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                                  calendarsetting().minute1 =
+                                      Hive.box('user_setting').get(
+                                          'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                                  isChecked_pushalarm =
+                                      value.docs[i].data()['alarmmake'];
+                                }
+                              }
+                            }
+                          }
+                        });
                         return Column(
                           children: [
                             const SizedBox(
@@ -232,6 +276,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
                                     builder: ((context, setState) {
                                   return ListTile(
                                     onTap: () {
+                                      //수정 및 삭제 시트 띄우기
+
                                       Get.to(
                                           () => ClickShowEachCalendar(
                                                 start:
@@ -240,7 +286,6 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
                                                     contentmy[index].finishdate,
                                                 calinfo: contentmy[index].title,
                                                 date: Date,
-                                                alarm: contentmy[index].alarm,
                                                 share: contentmy[index].share,
                                                 calname: contentmy[index]
                                                     .cname[index]
@@ -249,6 +294,10 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
                                                 summary:
                                                     contentmy[index].summary,
                                                 isfromwhere: 'home',
+                                                id: snapshot
+                                                    .data!.docs[index].id,
+                                                alarmtypes: alarmtypes,
+                                                alarmmake: isChecked_pushalarm,
                                               ),
                                           transition: Transition.downToUp);
                                     },
@@ -263,7 +312,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
                                                 .toString()
                                                 .split(':')[0])
                                             .isGreaterThan(Date.hour)
-                                        ? (contentmy[index].alarm != '설정off'
+                                        ? (isChecked_pushalarm
                                             ? Icon(
                                                 Icons.alarm,
                                                 color: TextColor(),
@@ -277,7 +326,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
                                                     .toString()
                                                     .split(':')[1])
                                                 .isGreaterThan(Date.minute)
-                                            ? (contentmy[index].alarm != '설정off'
+                                            ? (isChecked_pushalarm
                                                 ? Icon(
                                                     Icons.alarm,
                                                     color: TextColor(),
@@ -325,6 +374,35 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
               ),
               color: BGColor())
         ];
+      } else {
+        children_cal1 = <Widget>[
+          ContainerDesign(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: isresponsive == true ? 300 : 50,
+                    child: Center(
+                      child: NeumorphicText(
+                        '보여드릴 오늘의 일정이 없습니다.',
+                        style: NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: TextColor(),
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: contentTextsize(),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              color: BGColor())
+        ];
       }
       return Column(children: children_cal1);
     },
@@ -356,7 +434,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
       .then(((value) {
     List nameList = [];
     contentshare.clear();
-    var timsestart, timefinish, codes, todo, alarm, summary;
+    var timsestart, timefinish, codes, todo, summary;
     List cname = [];
     final valuespace = value.docs;
     for (var sp in valuespace) {
@@ -365,7 +443,6 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
       timsestart = sp.get('Timestart');
       timefinish = sp.get('Timefinish');
       codes = sp.get('calname');
-      alarm = sp.get('Alarm');
       summary = sp.get('summary');
       firestore.collection('CalendarSheetHome').doc(codes).get().then((value) {
         value.data()!.forEach((key, value) {
@@ -376,12 +453,11 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
         });
       });
       for (int i = 0; i < nameList.length; i++) {
-        if (nameList[i].contains(name)) {
+        if (nameList[i].contains(secondname)) {
           contentshare.add(SpaceContent(
               title: todo,
               date: timsestart + '-' + timefinish,
               cname: cname,
-              alarm: alarm,
               finishdate: timefinish,
               startdate: timsestart,
               share: nameList,
@@ -437,6 +513,51 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                       shrinkWrap: true,
                       itemCount: contentshare.length,
                       itemBuilder: (context, index) {
+                        var updateidalarm = '';
+                        List<bool> alarmtypes = [];
+                        bool isChecked_pushalarm = false;
+                        firestore
+                            .collectionGroup('AlarmTable')
+                            .get()
+                            .then((value) {
+                          if (value.docs.isNotEmpty) {
+                            for (int i = 0; i < value.docs.length; i++) {
+                              if (value.docs[i].id == peopleadd.secondname) {
+                                if (value.docs[i].data()['calcode'] ==
+                                    snapshot.data!.docs[index].id) {
+                                  updateidalarm = value.docs[i].id;
+                                  for (int j = 0;
+                                      j <
+                                          value.docs[i]
+                                              .data()['alarmtype']
+                                              .length;
+                                      j++) {
+                                    alarmtypes.add(
+                                        value.docs[i].data()['alarmtype'][j]);
+                                  }
+                                  Hive.box('user_setting').put(
+                                      'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                      value.docs[i]
+                                          .data()['alarmhour']
+                                          .toString());
+                                  Hive.box('user_setting').put(
+                                      'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                      value.docs[i]
+                                          .data()['alarmminute']
+                                          .toString());
+                                  calendarsetting().hour1 =
+                                      Hive.box('user_setting').get(
+                                          'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                                  calendarsetting().minute1 =
+                                      Hive.box('user_setting').get(
+                                          'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                                  isChecked_pushalarm =
+                                      value.docs[i].data()['alarmmake'];
+                                }
+                              }
+                            }
+                          }
+                        });
                         return Column(
                           children: [
                             const SizedBox(
@@ -448,6 +569,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                                     builder: ((context, setState) {
                                   return ListTile(
                                     onTap: () async {
+                                      //수정 및 삭제 시트 띄우기
+
                                       Get.to(
                                           () => ClickShowEachCalendar(
                                                 start: contentshare[index]
@@ -457,8 +580,6 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                                                 calinfo:
                                                     contentshare[index].title,
                                                 date: Date,
-                                                alarm:
-                                                    contentshare[index].alarm,
                                                 share:
                                                     contentshare[index].share,
                                                 calname: contentshare[index]
@@ -468,6 +589,10 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                                                 summary:
                                                     contentshare[index].summary,
                                                 isfromwhere: 'home',
+                                                id: snapshot
+                                                    .data!.docs[index].id,
+                                                alarmtypes: alarmtypes,
+                                                alarmmake: isChecked_pushalarm,
                                               ),
                                           transition: Transition.downToUp);
                                     },
@@ -482,7 +607,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                                                 .toString()
                                                 .split(':')[0])
                                             .isGreaterThan(Date.hour)
-                                        ? (contentshare[index].alarm != '설정off'
+                                        ? (isChecked_pushalarm
                                             ? Icon(
                                                 Icons.alarm,
                                                 color: TextColor(),
@@ -496,8 +621,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                                                     .toString()
                                                     .split(':')[1])
                                                 .isGreaterThan(Date.minute)
-                                            ? (contentshare[index].alarm !=
-                                                    '설정off'
+                                            ? (isChecked_pushalarm
                                                 ? Icon(
                                                     Icons.alarm,
                                                     color: TextColor(),
@@ -541,6 +665,35 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                   SizedBox(
                       height: isresponsive == true ? 300 : 50,
                       child: const Center(child: CircularProgressIndicator()))
+                ],
+              ),
+              color: BGColor())
+        ];
+      } else {
+        children_cal2 = <Widget>[
+          ContainerDesign(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: isresponsive == true ? 300 : 50,
+                    child: Center(
+                      child: NeumorphicText(
+                        '보여드릴 공유된 일정이 없습니다.',
+                        style: NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: TextColor(),
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: contentTextsize(),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
               color: BGColor())
@@ -896,6 +1049,34 @@ FutureBuilder<QuerySnapshot<Object?>> stream3(
               ),
               color: BGColor())
         ];
+      } else {
+        children_memo1 = <Widget>[
+          ContainerDesign(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      height: isresponsive == true ? 300 : 50,
+                      child: Center(
+                        child: NeumorphicText(
+                          '홈 내보내기 설정된 메모는 없습니다.',
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: TextColor(),
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: contentTextsize(),
+                          ),
+                        ),
+                      ))
+                ],
+              ),
+              color: BGColor())
+        ];
       }
       return Column(children: children_memo1);
     },
@@ -986,7 +1167,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream4(
                             height: isresponsive == true ? 300 : 50,
                             child: Center(
                               child: NeumorphicText(
-                                '홈 내보내기 설정된 메모는 없습니다.',
+                                '오늘 변경사항이 없습니다.',
                                 style: NeumorphicStyle(
                                   shape: NeumorphicShape.flat,
                                   depth: 3,
@@ -1218,6 +1399,34 @@ FutureBuilder<QuerySnapshot<Object?>> stream4(
                   SizedBox(
                       height: isresponsive == true ? 300 : 50,
                       child: const Center(child: CircularProgressIndicator()))
+                ],
+              ),
+              color: BGColor())
+        ];
+      } else {
+        children_memo2 = <Widget>[
+          ContainerDesign(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      height: isresponsive == true ? 300 : 50,
+                      child: Center(
+                        child: NeumorphicText(
+                          '오늘 변경사항이 없습니다.',
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: TextColor(),
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: contentTextsize(),
+                          ),
+                        ),
+                      ))
                 ],
               ),
               color: BGColor())

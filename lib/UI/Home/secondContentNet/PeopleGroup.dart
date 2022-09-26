@@ -466,6 +466,49 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                   'Shares': listselected_sp,
                                 });
                               }
+                              firestore
+                                  .collection('CalendarDataBase')
+                                  .where('calname', isEqualTo: widget.doc)
+                                  .get()
+                                  .then((value) {
+                                List valueid = [];
+                                final List<bool> _ischecked_alarmslist = [
+                                  false,
+                                  false
+                                ];
+                                for (int i = 0; i < value.docs.length; i++) {
+                                  valueid.add(value.docs[i].id);
+                                }
+                                for (int j = 0; j < valueid.length; j++) {
+                                  for (int k = 0;
+                                      k < listselected_sp.length;
+                                      k++) {
+                                    firestore
+                                        .collection('CalendarDataBase')
+                                        .doc(valueid[j])
+                                        .collection('AlarmTable')
+                                        .doc(listselected_sp[k])
+                                        .get()
+                                        .then((value) {
+                                      if (value.exists) {
+                                      } else {
+                                        firestore
+                                            .collection('CalendarDataBase')
+                                            .doc(valueid[j])
+                                            .collection('AlarmTable')
+                                            .doc(listselected_sp[k])
+                                            .set({
+                                          'alarmtype': _ischecked_alarmslist,
+                                          'alarmhour': '99',
+                                          'alarmminute': '99',
+                                          'alarmmake': false,
+                                          'calcode': valueid[j]
+                                        }, SetOptions(merge: true));
+                                      }
+                                    });
+                                  }
+                                }
+                              });
                             }).whenComplete(() {
                               if (widget.share.isNotEmpty) {
                                 firestore

@@ -15,6 +15,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../DB/Event.dart';
+import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../secondContentNet/ClickShowEachCalendar.dart';
@@ -44,6 +45,7 @@ class _DayContentHomeState extends State<DayContentHome>
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
+  final cal_share_person = Get.put(PeopleAdd());
   var controll_cals = Get.put(calendarsetting());
   int setcal_fromsheet = 0;
   int themecal_fromsheet = 0;
@@ -62,6 +64,9 @@ class _DayContentHomeState extends State<DayContentHome>
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   var _rangeStart = null;
   var _rangeEnd = null;
+  var updateidalarm = '';
+  List<bool> alarmtypes = [];
+  bool isChecked_pushalarm = false;
   List<Event> getList(DateTime date) {
     return _events[date] ?? [];
   }
@@ -81,6 +86,7 @@ class _DayContentHomeState extends State<DayContentHome>
     fromDate = DateTime.now();
     toDate = DateTime.now().add(const Duration(hours: 2));
     _events = {};
+    alarmtypes.clear();
   }
 
   @override
@@ -495,6 +501,51 @@ class _DayContentHomeState extends State<DayContentHome>
                     shrinkWrap: true,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
+                      //수정 및 삭제 시트 띄우기
+                      firestore
+                          .collectionGroup('AlarmTable')
+                          .get()
+                          .then((value) {
+                        if (value.docs.isNotEmpty) {
+                          for (int i = 0; i < value.docs.length; i++) {
+                            if (value.docs[i].id ==
+                                cal_share_person.secondname) {
+                              if (value.docs[i].data()['calcode'] ==
+                                  snapshot.data!.docs[index].id) {
+                                updateidalarm = value.docs[i].id;
+                                alarmtypes.clear();
+                                for (int j = 0;
+                                    j <
+                                        value.docs[i]
+                                            .data()['alarmtype']
+                                            .length;
+                                    j++) {
+                                  alarmtypes.add(
+                                      value.docs[i].data()['alarmtype'][j]);
+                                }
+                                Hive.box('user_setting').put(
+                                    'alarm_cal_hour_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}',
+                                    value.docs[i]
+                                        .data()['alarmhour']
+                                        .toString());
+                                Hive.box('user_setting').put(
+                                    'alarm_cal_minute_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}',
+                                    value.docs[i]
+                                        .data()['alarmminute']
+                                        .toString());
+                                calendarsetting().hour1 =
+                                    Hive.box('user_setting').get(
+                                        'alarm_cal_hour_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}');
+                                calendarsetting().minute1 =
+                                    Hive.box('user_setting').get(
+                                        'alarm_cal_minute_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}');
+                                isChecked_pushalarm =
+                                    value.docs[i].data()['alarmmake'];
+                              }
+                            }
+                          }
+                        }
+                      });
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -558,7 +609,66 @@ class _DayContentHomeState extends State<DayContentHome>
                                         flex: 3,
                                         child: InkWell(
                                           onTap: () {
-                                            //수정 및 삭제 시트 띄우기
+                                            firestore
+                                                .collectionGroup('AlarmTable')
+                                                .get()
+                                                .then((value) {
+                                              if (value.docs.isNotEmpty) {
+                                                for (int i = 0;
+                                                    i < value.docs.length;
+                                                    i++) {
+                                                  if (value.docs[i].id ==
+                                                      cal_share_person
+                                                          .secondname) {
+                                                    if (value.docs[i].data()[
+                                                            'calcode'] ==
+                                                        snapshot.data!
+                                                            .docs[index].id) {
+                                                      updateidalarm =
+                                                          value.docs[i].id;
+                                                      alarmtypes.clear();
+                                                      for (int j = 0;
+                                                          j <
+                                                              value.docs[i]
+                                                                  .data()[
+                                                                      'alarmtype']
+                                                                  .length;
+                                                          j++) {
+                                                        alarmtypes.add(value
+                                                                .docs[i]
+                                                                .data()[
+                                                            'alarmtype'][j]);
+                                                      }
+                                                      Hive.box('user_setting').put(
+                                                          'alarm_cal_hour_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}',
+                                                          value.docs[i]
+                                                              .data()[
+                                                                  'alarmhour']
+                                                              .toString());
+                                                      Hive.box('user_setting').put(
+                                                          'alarm_cal_minute_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}',
+                                                          value.docs[i]
+                                                              .data()[
+                                                                  'alarmminute']
+                                                              .toString());
+                                                      calendarsetting()
+                                                          .hour1 = Hive.box(
+                                                              'user_setting')
+                                                          .get(
+                                                              'alarm_cal_hour_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}');
+                                                      calendarsetting()
+                                                          .minute1 = Hive.box(
+                                                              'user_setting')
+                                                          .get(
+                                                              'alarm_cal_minute_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}');
+                                                      isChecked_pushalarm =
+                                                          value.docs[i].data()[
+                                                              'alarmmake'];
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            });
                                             Get.to(
                                                 () => ClickShowEachCalendar(
                                                       start: snapshot
@@ -571,8 +681,6 @@ class _DayContentHomeState extends State<DayContentHome>
                                                               .data!.docs[index]
                                                           ['Daytodo'],
                                                       date: _selectedDay,
-                                                      alarm: snapshot.data!
-                                                          .docs[index]['Alarm'],
                                                       share: snapshot
                                                               .data!.docs[index]
                                                           ['Shares'],
@@ -584,6 +692,11 @@ class _DayContentHomeState extends State<DayContentHome>
                                                               .data!.docs[index]
                                                           ['summary'],
                                                       isfromwhere: 'dayhome',
+                                                      id: snapshot
+                                                          .data!.docs[index].id,
+                                                      alarmtypes: alarmtypes,
+                                                      alarmmake:
+                                                          isChecked_pushalarm,
                                                     ),
                                                 transition:
                                                     Transition.downToUp);

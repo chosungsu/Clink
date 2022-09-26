@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
 import 'package:clickbyme/Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,16 +12,19 @@ import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
 import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
+import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/IconBtn.dart';
 
-pushalarmsetting(
+pushalarmsettingcal(
   BuildContext context,
   FocusNode setalarmhourNode,
   FocusNode setalarmminuteNode,
-  String controller_hour,
-  String controller_minute,
+  String hour,
+  String minute,
   String doc_title,
   String id,
+  int isChecked_pushalarmwhat,
+  DateTime date,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -58,10 +62,12 @@ pushalarmsetting(
                             context,
                             setalarmhourNode,
                             setalarmminuteNode,
-                            controller_hour,
-                            controller_minute,
+                            hour,
+                            minute,
                             doc_title,
-                            id))),
+                            id,
+                            isChecked_pushalarmwhat,
+                            date))),
               )),
         );
       });
@@ -71,10 +77,12 @@ SheetPage(
   BuildContext context,
   FocusNode setalarmhourNode,
   FocusNode setalarmminuteNode,
-  String controller_hour,
-  String controller_minute,
+  String hour,
+  String minute,
   String doc_title,
   String id,
+  int isChecked_pushalarmwhat,
+  DateTime date,
 ) {
   return SizedBox(
       child: Padding(
@@ -101,8 +109,8 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              content(context, setalarmhourNode, setalarmminuteNode,
-                  controller_hour, controller_minute, doc_title, id),
+              content(context, setalarmhourNode, setalarmminuteNode, hour,
+                  minute, doc_title, id, isChecked_pushalarmwhat, date),
               const SizedBox(
                 height: 20,
               ),
@@ -130,7 +138,7 @@ title(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize())),
                     TextSpan(
-                        text: ' 메모의 알람 설정',
+                        text: ' 일정의 알람 설정',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -140,13 +148,7 @@ title(
                   maxLines: 2,
                   text: TextSpan(children: [
                     TextSpan(
-                        text: '모든 메모',
-                        style: TextStyle(
-                            color: Colors.blue.shade400,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize())),
-                    TextSpan(
-                        text: ' 의 매일알람 설정',
+                        text: '알람 설정',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -160,29 +162,21 @@ content(
   BuildContext context,
   FocusNode setalarmhourNode,
   FocusNode setalarmminuteNode,
-  String controller_hour,
-  String controller_minute,
+  String hour,
+  String minute,
   String doc_title,
   String id,
+  int isChecked_pushalarmwhat,
+  DateTime date,
 ) {
   DateTime now = DateTime.now();
-  final controll_memo = Get.put(memosetting());
+  final controll_cal = Get.put(calendarsetting());
   TimeOfDay? pickednow;
-  if (doc_title != '') {
-    Hive.box('user_setting').put('alarm_memo_hour_$title', controller_hour);
-    Hive.box('user_setting').put('alarm_memo_minute_$title', controller_minute);
-  } else {
-    Hive.box('user_setting').put('alarm_memo_hour', controller_hour);
-    Hive.box('user_setting').put('alarm_memo_minute', controller_minute);
-    print('second(push) : ' +
-        Hive.box('user_setting').get('alarm_memo_hour') +
-        ':' +
-        Hive.box('user_setting').get('alarm_memo_minute'));
-  }
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String username = Hive.box('user_info').get(
     'id',
   );
+  final cal_share_person = Get.put(PeopleAdd());
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -208,7 +202,7 @@ content(
                     child: RichText(
                       maxLines: 3,
                       text: TextSpan(
-                        text: '알람은 매일 설정하신 시각에 울리게 됩니다',
+                        text: '알람은 설정하신 시각에 울리게 됩니다',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: contentTextsize(),
@@ -223,7 +217,7 @@ content(
         const SizedBox(
           height: 20,
         ),
-        GetBuilder<memosetting>(
+        GetBuilder<calendarsetting>(
             builder: (_) => SizedBox(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -253,20 +247,26 @@ content(
                                         helpText: '시간을 설정해주세요',
                                         cancelText: '닫기',
                                         confirmText: '설정',
-                                        initialTime: controller_hour == '99' &&
-                                                controller_minute == '99'
-                                            ? TimeOfDay.now()
-                                            : TimeOfDay(
-                                                hour:
-                                                    int.parse(controller_hour),
-                                                minute: int.parse(
-                                                    controller_minute)));
+                                        initialTime:
+                                            hour == '99' && minute == '99'
+                                                ? TimeOfDay.now()
+                                                : TimeOfDay(
+                                                    hour: int.parse(hour),
+                                                    minute: int.parse(minute)));
                                     if (pickednow != null) {
-                                      controll_memo.settimeminute(
-                                          pickednow!.hour,
-                                          pickednow!.minute,
-                                          doc_title,
-                                          id);
+                                      if (doc_title != '') {
+                                        controll_cal.settimeminute(
+                                            pickednow!.hour,
+                                            pickednow!.minute,
+                                            doc_title,
+                                            id);
+                                      } else {
+                                        controll_cal.settimeminute(
+                                            pickednow!.hour,
+                                            pickednow!.minute,
+                                            '',
+                                            '');
+                                      }
                                     }
                                   },
                                   child: Padding(
@@ -289,13 +289,19 @@ content(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           doc_title != ''
-                              ? controll_memo.hour1.toString() != '99' ||
-                                      controll_memo.minute1.toString() != '99'
+                              ? (Hive.box('user_setting')
+                                              .get('alarm_cal_hour_$id') !=
+                                          '99' ||
+                                      Hive.box('user_setting')
+                                              .get('alarm_cal_minute_$id') !=
+                                          '99'
                                   ? Text(
                                       '설정시간 : ' +
-                                          controll_memo.hour1.toString() +
+                                          Hive.box('user_setting')
+                                              .get('alarm_cal_hour_$id') +
                                           '시 ' +
-                                          controll_memo.minute1.toString() +
+                                          Hive.box('user_setting')
+                                              .get('alarm_cal_minute_$id') +
                                           '분',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -308,14 +314,20 @@ content(
                                           fontWeight: FontWeight.bold,
                                           fontSize: contentTextsize(),
                                           color: Colors.black),
-                                    )
-                              : controll_memo.hour2 != '99' ||
-                                      controll_memo.minute2 != '99'
+                                    ))
+                              : (Hive.box('user_setting').get(
+                                              'alarm_cal_hour_${cal_share_person.secondname}') !=
+                                          '99' ||
+                                      Hive.box('user_setting').get(
+                                              'alarm_cal_minute_${cal_share_person.secondname}') !=
+                                          '99'
                                   ? Text(
                                       '설정시간 : ' +
-                                          controll_memo.hour2.toString() +
+                                          Hive.box('user_setting').get(
+                                              'alarm_cal_hour_${cal_share_person.secondname}') +
                                           '시 ' +
-                                          controll_memo.minute2.toString() +
+                                          Hive.box('user_setting').get(
+                                              'alarm_cal_minute_${cal_share_person.secondname}') +
                                           '분',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -328,7 +340,7 @@ content(
                                           fontWeight: FontWeight.bold,
                                           fontSize: contentTextsize(),
                                           color: Colors.black),
-                                    ),
+                                    )),
                           const SizedBox(
                             height: 30,
                           ),
@@ -342,29 +354,6 @@ content(
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          doc_title != ''
-                                              ? Hive.box('user_setting').put(
-                                                  'alarm_memo_$doc_title', true)
-                                              : Hive.box('user_setting')
-                                                  .put('alarm_memo', true);
-                                          doc_title != ''
-                                              ? controll_memo.setalarmmemotimetable(
-                                                  Hive.box('user_setting')
-                                                      .get(
-                                                          'alarm_memo_hour_$doc_title')
-                                                      .toString(),
-                                                  Hive.box('user_setting')
-                                                      .get(
-                                                          'alarm_memo_minute_$doc_title')
-                                                      .toString(),
-                                                  doc_title,
-                                                  id)
-                                              : controll_memo
-                                                  .setalarmmemotimetable(
-                                                      controll_memo.hour2,
-                                                      controll_memo.minute2,
-                                                      '',
-                                                      '');
                                           Get.back();
                                           Snack.show(
                                               context: context,
@@ -411,13 +400,7 @@ content(
                                       height: 50,
                                       child: InkWell(
                                         onTap: () {
-                                          doc_title != ''
-                                              ? Hive.box('user_setting').put(
-                                                  'alarm_memo_$doc_title',
-                                                  false)
-                                              : Hive.box('user_setting')
-                                                  .put('alarm_memo', false);
-                                          controll_memo.setalarmmemo(
+                                          controll_cal.setalarmcal(
                                               doc_title, id);
                                           Get.back();
                                           Snack.show(

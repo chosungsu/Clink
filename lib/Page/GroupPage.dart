@@ -391,7 +391,6 @@ class _GroupPageState extends State<GroupPage> {
           final valuespace = snapshot.data!.toList();
           for (var sp in valuespace) {
             documentSnapshot.addAll(sp.docs);
-            print(sp.docs.toList());
           }
           for (var sp2 in documentSnapshot) {
             if (sp2.get('share') == null ||

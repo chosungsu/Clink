@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../LocalNotiPlatform/NotificationApi.dart';
+import 'PeopleAdd.dart';
+
 class calendarsetting extends GetxController {
   int showcalendar = Hive.box('user_setting').get('viewcalsettings') ?? 0;
   int themecalendar = Hive.box('user_setting').get('origorpastel') ?? 0;
@@ -10,6 +13,9 @@ class calendarsetting extends GetxController {
   List sharehomeid = [];
   int sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
   int repeatdate = 1;
+  DateTime now = DateTime.now();
+  String hour1 = '99';
+  String minute1 = '99';
 
   void setrepeatdate(int num) {
     Hive.box('user_setting').put('repeatdate', num);
@@ -196,6 +202,48 @@ class calendarsetting extends GetxController {
   void setsortcal(int sortnum) {
     Hive.box('user_setting').put('sort_cal_card', sortnum);
     sort = Hive.box('user_setting').get('sort_cal_card');
+    update();
+    notifyChildrens();
+  }
+
+  void setalarmcal(String title, String id) {
+    NotificationApi.cancelNotification(id: 1 + id.hashCode);
+    firestore
+        .collection('CalendarDataBase')
+        .doc(id)
+        .update({'alarmhour': '99', 'alarmminute': '99'});
+
+    update();
+    notifyChildrens();
+  }
+
+  void setalarmtype(String id, List list) {
+    firestore.collection('CalendarDataBase').doc(id).update({
+      'alarmtype': list,
+    });
+    update();
+    notifyChildrens();
+  }
+
+  void settimeminute(int hour, int minute, String title, String id) {
+    final cal_share_person = Get.put(PeopleAdd());
+    if (title != '') {
+      Hive.box('user_setting').put('alarm_cal_hour_$id', hour.toString());
+      Hive.box('user_setting').put('alarm_cal_minute_$id', minute.toString());
+      hour1 = Hive.box('user_setting').get('alarm_cal_hour_$id');
+      minute1 = Hive.box('user_setting').get('alarm_cal_minute_$id');
+      firestore.collection('CalendarDataBase').doc(id).update(
+          {'alarmhour': hour1.toString(), 'alarmminute': minute1.toString()});
+    } else {
+      Hive.box('user_setting').put(
+          'alarm_cal_hour_${cal_share_person.secondname}', hour.toString());
+      Hive.box('user_setting').put(
+          'alarm_cal_minute_${cal_share_person.secondname}', minute.toString());
+      hour1 = Hive.box('user_setting')
+          .get('alarm_cal_hour_${cal_share_person.secondname}');
+      minute1 = Hive.box('user_setting')
+          .get('alarm_cal_minute_${cal_share_person.secondname}');
+    }
     update();
     notifyChildrens();
   }

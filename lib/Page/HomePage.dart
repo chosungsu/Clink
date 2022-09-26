@@ -120,15 +120,50 @@ class _HomePageState extends State<HomePage> {
         peopleadd.secondnameset(value.data()!['subname']);
       }
     });
-    /*firestore
-        .collection('User')
-        .doc(Hive.box('user_info').get('id'))
-        .get()
-        .then((value) {
-      if (value.exists) {
-        docid = value.data()!['code'];
-        Hive.box('user_setting').put('usercode', docid);
-      } else {}
+    /*firestore.collection('CalendarDataBase').get().then((value) {
+      List valueid = [];
+      final List<bool> _ischecked_alarmslist = [false, false];
+      for (int i = 0; i < value.docs.length; i++) {
+        valueid.add(value.docs[i].id);
+      }
+      for (int j = 0; j < valueid.length; j++) {
+        firestore
+            .collection('CalendarDataBase')
+            .doc(valueid[j])
+            .collection('AlarmTable')
+            .doc('최인영')
+            .set({
+          'alarmtype': _ischecked_alarmslist,
+          'alarmhour': '99',
+          'alarmminute': '99',
+          'alarmmake': false,
+          'calcode': valueid[j]
+        }, SetOptions(merge: true));
+        firestore
+            .collection('CalendarDataBase')
+            .doc(valueid[j])
+            .collection('AlarmTable')
+            .doc('조동환')
+            .set({
+          'alarmtype': _ischecked_alarmslist,
+          'alarmhour': '99',
+          'alarmminute': '99',
+          'alarmmake': false,
+          'calcode': valueid[j]
+        }, SetOptions(merge: true));
+        firestore
+            .collection('CalendarDataBase')
+            .doc(valueid[j])
+            .collection('AlarmTable')
+            .doc('조성수')
+            .set({
+          'alarmtype': _ischecked_alarmslist,
+          'alarmhour': '99',
+          'alarmminute': '99',
+          'alarmmake': false,
+          'calcode': valueid[j]
+        }, SetOptions(merge: true));
+      }
     });*/
     docid = Hive.box('user_setting').get('usercode');
     _pController =
