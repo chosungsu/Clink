@@ -322,10 +322,16 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
                                                 color: TextColor(),
                                               ))
                                         : (int.parse(contentmy[index]
-                                                    .startdate
-                                                    .toString()
-                                                    .split(':')[1])
-                                                .isGreaterThan(Date.minute)
+                                                        .startdate
+                                                        .toString()
+                                                        .split(':')[1])
+                                                    .isGreaterThan(
+                                                        Date.minute) &&
+                                                int.parse(contentmy[index]
+                                                        .startdate
+                                                        .toString()
+                                                        .split(':')[0])
+                                                    .isLowerThan(Date.hour)
                                             ? (isChecked_pushalarm
                                                 ? Icon(
                                                     Icons.alarm,
@@ -617,10 +623,16 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                                                 color: TextColor(),
                                               ))
                                         : (int.parse(contentshare[index]
-                                                    .startdate
-                                                    .toString()
-                                                    .split(':')[1])
-                                                .isGreaterThan(Date.minute)
+                                                        .startdate
+                                                        .toString()
+                                                        .split(':')[1])
+                                                    .isGreaterThan(
+                                                        Date.minute) &&
+                                                int.parse(contentshare[index]
+                                                        .startdate
+                                                        .toString()
+                                                        .split(':')[0])
+                                                    .isLowerThan(Date.hour)
                                             ? (isChecked_pushalarm
                                                 ? Icon(
                                                     Icons.alarm,
