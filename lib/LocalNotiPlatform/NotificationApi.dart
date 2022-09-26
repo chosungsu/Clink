@@ -134,8 +134,8 @@ class NotificationApi {
 
   static Future _notificationDetails() async {
     return const NotificationDetails(
-        android: AndroidNotificationDetails('channel id', 'channel name',
-            channelDescription: 'channel description',
+        android: AndroidNotificationDetails('channel id', '캘린더와 메모알림',
+            channelDescription: '캘린더와 메모 등의 푸쉬알림',
             setAsGroupSummary: true,
             fullScreenIntent: false,
             autoCancel: true,
