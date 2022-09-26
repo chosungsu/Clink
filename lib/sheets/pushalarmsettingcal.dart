@@ -289,19 +289,19 @@ content(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           doc_title != ''
-                              ? (Hive.box('user_setting')
-                                              .get('alarm_cal_hour_$id') !=
+                              ? (Hive.box('user_setting').get(
+                                              'alarm_cal_hour_${id}_${cal_share_person.secondname}') !=
                                           '99' ||
-                                      Hive.box('user_setting')
-                                              .get('alarm_cal_minute_$id') !=
+                                      Hive.box('user_setting').get(
+                                              'alarm_cal_minute_${id}_${cal_share_person.secondname}') !=
                                           '99'
                                   ? Text(
                                       '설정시간 : ' +
-                                          Hive.box('user_setting')
-                                              .get('alarm_cal_hour_$id') +
+                                          Hive.box('user_setting').get(
+                                              'alarm_cal_hour_${id}_${cal_share_person.secondname}') +
                                           '시 ' +
-                                          Hive.box('user_setting')
-                                              .get('alarm_cal_minute_$id') +
+                                          Hive.box('user_setting').get(
+                                              'alarm_cal_minute_${id}_${cal_share_person.secondname}') +
                                           '분',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,

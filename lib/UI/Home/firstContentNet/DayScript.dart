@@ -298,89 +298,149 @@ class _DayScriptState extends State<DayScript> {
                         }
                       });
                     }
-                  }
-                });
-                NotificationApi.showScheduledNotification(
-                    id: int.parse(DateFormat('yyyyMMdd').parse(differ_list[j]).toString()) + int.parse(textEditingController2.text.split(':')[1]) <
-                            int.parse(selectedValue.substring(
-                                0, selectedValue.length - 3))
-                        ? int.parse(textEditingController2.text.split(':')[0].length == 1
-                                ? '0' +
-                                    textEditingController2.text.split(':')[0]
-                                : textEditingController2.text.split(':')[0]) -
-                            1
-                        : int.parse(textEditingController2.text.split(':')[0].length == 1
-                                        ? '0' +
-                                            textEditingController2.text
-                                                .split(':')[0]
-                                        : textEditingController2.text.split(':')[0]) +
-                                    int.parse(textEditingController2.text.split(':')[1]) <
-                                int.parse(selectedValue.substring(0, selectedValue.length - 3))
-                            ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
-                            : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
-                    title: textEditingController1.text + '일정이 다가옵니다',
-                    body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                    scheduledate: DateTime.utc(
-                      int.parse(widget.firstdate
-                          .toString()
-                          .toString()
-                          .split(' ')[0]
-                          .toString()
-                          .substring(0, 4)),
-                      int.parse(widget.firstdate
-                          .toString()
-                          .toString()
-                          .split(' ')[0]
-                          .toString()
-                          .substring(5, 7)),
-                      int.parse(widget.firstdate
-                          .toString()
-                          .toString()
-                          .split(' ')[0]
-                          .toString()
-                          .substring(8, 10)),
-                      int.parse(textEditingController2.text.split(':')[1]) <
-                              int.parse(selectedValue.substring(
-                                  0, selectedValue.length - 3))
-                          ? int.parse(textEditingController2.text
-                                          .split(':')[0]
-                                          .length ==
-                                      1
-                                  ? '0' +
-                                      textEditingController2.text.split(':')[0]
-                                  : textEditingController2.text.split(':')[0]) -
-                              1
-                          : int.parse(textEditingController2.text
+                    if (isChecked_pushalarm) {
+                      if (alarmtypes[0] == true) {
+                        NotificationApi.showNotification(
+                          title: '알람설정된 일정 : ' + textEditingController1.text,
+                          body: textEditingController2.text
                                       .split(':')[0]
                                       .length ==
                                   1
-                              ? '0' + textEditingController2.text.split(':')[0]
-                              : textEditingController2.text.split(':')[0]),
-                      int.parse(textEditingController2.text.split(':')[1]) <
-                              int.parse(selectedValue.substring(
-                                  0, selectedValue.length - 3))
-                          ? 60 -
-                              (int.parse(selectedValue.substring(
-                                      0, selectedValue.length - 3)) -
-                                  int.parse(textEditingController2.text
-                                      .split(':')[1]))
-                          : int.parse(
-                                  textEditingController2.text.split(':')[1]) -
-                              int.parse(selectedValue.substring(
-                                  0, selectedValue.length - 3)),
-                    ));
+                              ? (textEditingController3.text
+                                          .split(':')[0]
+                                          .length ==
+                                      1
+                                  ? '예정된 시각 : ' + firsttxt
+                                  : '예정된 시각 : ' + secondtxt)
+                              : (textEditingController3.text
+                                          .split(':')[0]
+                                          .length ==
+                                      1
+                                  ? '예정된 시각 : ' + thirdtxt
+                                  : '예정된 시각 : ' + forthtxt),
+                        );
+                        NotificationApi.showScheduledNotification(
+                            id: int.parse(DateFormat('yyyymm')
+                                    .parse(differ_list[j])
+                                    .toString()) +
+                                int.parse(valueid[j].hashCode.toString()) +
+                                int.parse(cal_share_person.secondname.hashCode
+                                    .toString()),
+                            title: textEditingController1.text + '일정이 다가옵니다',
+                            body: textEditingController2.text
+                                        .split(':')[0]
+                                        .length ==
+                                    1
+                                ? (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + firsttxt
+                                    : '예정된 시각 : ' + secondtxt)
+                                : (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + thirdtxt
+                                    : '예정된 시각 : ' + forthtxt),
+                            scheduledate: DateTime.utc(
+                              int.parse(widget.firstdate
+                                  .toString()
+                                  .toString()
+                                  .split(' ')[0]
+                                  .toString()
+                                  .substring(0, 4)),
+                              int.parse(widget.firstdate
+                                  .toString()
+                                  .toString()
+                                  .split(' ')[0]
+                                  .toString()
+                                  .substring(5, 7)),
+                              int.parse(widget.firstdate
+                                      .toString()
+                                      .toString()
+                                      .split(' ')[0]
+                                      .toString()
+                                      .substring(8, 10)) -
+                                  1,
+                              int.parse(Hive.box('user_setting').get(
+                                  'alarm_cal_hour_${cal_share_person.secondname}')),
+                              int.parse(Hive.box('user_setting').get(
+                                  'alarm_cal_minute_${cal_share_person.secondname}')),
+                            ));
+                      } else {
+                        NotificationApi.showNotification(
+                          title: '알람설정된 일정 : ' + textEditingController1.text,
+                          body: textEditingController2.text
+                                      .split(':')[0]
+                                      .length ==
+                                  1
+                              ? (textEditingController3.text
+                                          .split(':')[0]
+                                          .length ==
+                                      1
+                                  ? '예정된 시각 : ' + firsttxt
+                                  : '예정된 시각 : ' + secondtxt)
+                              : (textEditingController3.text
+                                          .split(':')[0]
+                                          .length ==
+                                      1
+                                  ? '예정된 시각 : ' + thirdtxt
+                                  : '예정된 시각 : ' + forthtxt),
+                        );
+                        NotificationApi.showScheduledNotification(
+                            id: int.parse(DateFormat('yyyymm')
+                                    .parse(differ_list[j])
+                                    .toString()) +
+                                int.parse(valueid[j].hashCode.toString()) +
+                                int.parse(cal_share_person.secondname.hashCode
+                                    .toString()),
+                            title: textEditingController1.text + '일정이 다가옵니다',
+                            body: textEditingController2.text
+                                        .split(':')[0]
+                                        .length ==
+                                    1
+                                ? (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + firsttxt
+                                    : '예정된 시각 : ' + secondtxt)
+                                : (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + thirdtxt
+                                    : '예정된 시각 : ' + forthtxt),
+                            scheduledate: DateTime.utc(
+                              int.parse(widget.firstdate
+                                  .toString()
+                                  .toString()
+                                  .split(' ')[0]
+                                  .toString()
+                                  .substring(0, 4)),
+                              int.parse(widget.firstdate
+                                  .toString()
+                                  .toString()
+                                  .split(' ')[0]
+                                  .toString()
+                                  .substring(5, 7)),
+                              int.parse(widget.firstdate
+                                  .toString()
+                                  .toString()
+                                  .split(' ')[0]
+                                  .toString()
+                                  .substring(8, 10)),
+                              int.parse(Hive.box('user_setting').get(
+                                  'alarm_cal_hour_${cal_share_person.secondname}')),
+                              int.parse(Hive.box('user_setting').get(
+                                  'alarm_cal_minute_${cal_share_person.secondname}')),
+                            ));
+                      }
+                    }
+                  }
+                });
               }
-
-              NotificationApi.showNotification(
-                title: '알람설정된 일정 : ' + textEditingController1.text,
-                body: textEditingController2.text.split(':')[0].length == 1
-                    ? (textEditingController3.text.split(':')[0].length == 1
-                        ? '예정된 시각 : ' + firsttxt
-                        : '예정된 시각 : ' + secondtxt)
-                    : (textEditingController3.text.split(':')[0].length == 1
-                        ? '예정된 시각 : ' + thirdtxt
-                        : '예정된 시각 : ' + forthtxt),
-              );
             } else {
               await firestore.collection('CalendarDataBase').add({
                 'Daytodo': textEditingController1.text,
@@ -454,96 +514,155 @@ class _DayScriptState extends State<DayScript> {
                       }
                     });
                   }
-                }
-              });
-
-              if (isChecked_pushalarm == true) {
-                NotificationApi.showNotification(
-                  title: '알람설정된 일정 : ' + textEditingController1.text,
-                  body: textEditingController2.text.split(':')[0].length == 1
-                      ? (textEditingController3.text.split(':')[0].length == 1
-                          ? '예정된 시각 : ' + firsttxt
-                          : '예정된 시각 : ' + secondtxt)
-                      : (textEditingController3.text.split(':')[0].length == 1
-                          ? '예정된 시각 : ' + thirdtxt
-                          : '예정된 시각 : ' + forthtxt),
-                );
-                NotificationApi.showScheduledNotification(
-                    id: int.parse(widget.firstdate.toString().toString().split(' ')[0].toString().substring(0, 4)) +
-                                int.parse(widget.firstdate
-                                    .toString()
-                                    .toString()
-                                    .split(' ')[0]
-                                    .toString()
-                                    .substring(5, 7)) +
-                                int.parse(widget.firstdate
-                                    .toString()
-                                    .toString()
-                                    .split(' ')[0]
-                                    .toString()
-                                    .substring(8, 10)) +
-                                int.parse(
-                                    textEditingController2.text.split(':')[1]) <
-                            int.parse(selectedValue.substring(
-                                0, selectedValue.length - 3))
-                        ? int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) -
-                            1
-                        : int.parse(textEditingController2.text.split(':')[0].length == 1 ? '0' + textEditingController2.text.split(':')[0] : textEditingController2.text.split(':')[0]) + int.parse(textEditingController2.text.split(':')[1]) <
-                                int.parse(selectedValue.substring(0, selectedValue.length - 3))
-                            ? 60 - (int.parse(selectedValue.substring(0, selectedValue.length - 3)) - int.parse(textEditingController2.text.split(':')[1]))
-                            : int.parse(textEditingController2.text.split(':')[1]) - int.parse(selectedValue.substring(0, selectedValue.length - 3)),
-                    title: textEditingController1.text + '일정이 다가옵니다',
-                    body: textEditingController2.text.split(':')[0].length == 1 ? (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + firsttxt : '예정된 시각 : ' + secondtxt) : (textEditingController3.text.split(':')[0].length == 1 ? '예정된 시각 : ' + thirdtxt : '예정된 시각 : ' + forthtxt),
-                    scheduledate: DateTime.utc(
-                      int.parse(widget.firstdate
-                          .toString()
-                          .toString()
-                          .split(' ')[0]
-                          .toString()
-                          .substring(0, 4)),
-                      int.parse(widget.firstdate
-                          .toString()
-                          .toString()
-                          .split(' ')[0]
-                          .toString()
-                          .substring(5, 7)),
-                      int.parse(widget.firstdate
-                          .toString()
-                          .toString()
-                          .split(' ')[0]
-                          .toString()
-                          .substring(8, 10)),
-                      int.parse(textEditingController2.text.split(':')[1]) <
-                              int.parse(selectedValue.substring(
-                                  0, selectedValue.length - 3))
-                          ? int.parse(textEditingController2.text
-                                          .split(':')[0]
-                                          .length ==
-                                      1
-                                  ? '0' +
-                                      textEditingController2.text.split(':')[0]
-                                  : textEditingController2.text.split(':')[0]) -
-                              1
-                          : int.parse(textEditingController2.text
+                  if (isChecked_pushalarm == true) {
+                    if (alarmtypes[0] == true) {
+                      NotificationApi.showNotification(
+                        title: '알람설정된 일정 : ' + textEditingController1.text,
+                        body:
+                            textEditingController2.text.split(':')[0].length ==
+                                    1
+                                ? (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + firsttxt
+                                    : '예정된 시각 : ' + secondtxt)
+                                : (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + thirdtxt
+                                    : '예정된 시각 : ' + forthtxt),
+                      );
+                      NotificationApi.showScheduledNotification(
+                          id: int.parse(widget.firstdate
+                                  .toString()
+                                  .split(' ')[0]
+                                  .split('-')[0]) +
+                              int.parse(widget.firstdate
+                                  .toString()
+                                  .split(' ')[0]
+                                  .split('-')[1]) +
+                              int.parse(valueid[j].hashCode.toString()) +
+                              int.parse(cal_share_person.secondname.hashCode
+                                  .toString()),
+                          title: textEditingController1.text + '일정이 다가옵니다',
+                          body: textEditingController2.text
                                       .split(':')[0]
                                       .length ==
                                   1
-                              ? '0' + textEditingController2.text.split(':')[0]
-                              : textEditingController2.text.split(':')[0]),
-                      int.parse(textEditingController2.text.split(':')[1]) <
-                              int.parse(selectedValue.substring(
-                                  0, selectedValue.length - 3))
-                          ? 60 -
-                              (int.parse(selectedValue.substring(
-                                      0, selectedValue.length - 3)) -
-                                  int.parse(textEditingController2.text
-                                      .split(':')[1]))
-                          : int.parse(
-                                  textEditingController2.text.split(':')[1]) -
-                              int.parse(selectedValue.substring(
-                                  0, selectedValue.length - 3)),
-                    ));
-              } else {}
+                              ? (textEditingController3.text
+                                          .split(':')[0]
+                                          .length ==
+                                      1
+                                  ? '예정된 시각 : ' + firsttxt
+                                  : '예정된 시각 : ' + secondtxt)
+                              : (textEditingController3.text
+                                          .split(':')[0]
+                                          .length ==
+                                      1
+                                  ? '예정된 시각 : ' + thirdtxt
+                                  : '예정된 시각 : ' + forthtxt),
+                          scheduledate: DateTime.utc(
+                            int.parse(widget.firstdate
+                                .toString()
+                                .toString()
+                                .split(' ')[0]
+                                .toString()
+                                .substring(0, 4)),
+                            int.parse(widget.firstdate
+                                .toString()
+                                .toString()
+                                .split(' ')[0]
+                                .toString()
+                                .substring(5, 7)),
+                            int.parse(widget.firstdate
+                                .toString()
+                                .toString()
+                                .split(' ')[0]
+                                .toString()
+                                .substring(8, 10)),
+                            int.parse(Hive.box('user_setting').get(
+                                'alarm_cal_hour_${cal_share_person.secondname}')),
+                            int.parse(Hive.box('user_setting').get(
+                                'alarm_cal_minute_${cal_share_person.secondname}')),
+                          ));
+                    } else {
+                      NotificationApi.showNotification(
+                        title: '알람설정된 일정 : ' + textEditingController1.text,
+                        body:
+                            textEditingController2.text.split(':')[0].length ==
+                                    1
+                                ? (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + firsttxt
+                                    : '예정된 시각 : ' + secondtxt)
+                                : (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + thirdtxt
+                                    : '예정된 시각 : ' + forthtxt),
+                      );
+                      NotificationApi.showScheduledNotification(
+                          id: int.parse(widget.firstdate
+                                  .toString()
+                                  .split(' ')[0]
+                                  .split('-')[0]) +
+                              int.parse(widget.firstdate
+                                  .toString()
+                                  .split(' ')[0]
+                                  .split('-')[1]) +
+                              int.parse(valueid[j].hashCode.toString()) +
+                              int.parse(cal_share_person.secondname.hashCode
+                                  .toString()),
+                          title: textEditingController1.text + '일정이 다가옵니다',
+                          body: textEditingController2.text
+                                      .split(':')[0]
+                                      .length ==
+                                  1
+                              ? (textEditingController3.text
+                                          .split(':')[0]
+                                          .length ==
+                                      1
+                                  ? '예정된 시각 : ' + firsttxt
+                                  : '예정된 시각 : ' + secondtxt)
+                              : (textEditingController3.text
+                                          .split(':')[0]
+                                          .length ==
+                                      1
+                                  ? '예정된 시각 : ' + thirdtxt
+                                  : '예정된 시각 : ' + forthtxt),
+                          scheduledate: DateTime.utc(
+                            int.parse(widget.firstdate
+                                .toString()
+                                .toString()
+                                .split(' ')[0]
+                                .toString()
+                                .substring(0, 4)),
+                            int.parse(widget.firstdate
+                                .toString()
+                                .toString()
+                                .split(' ')[0]
+                                .toString()
+                                .substring(5, 7)),
+                            int.parse(widget.firstdate
+                                .toString()
+                                .toString()
+                                .split(' ')[0]
+                                .toString()
+                                .substring(8, 10)),
+                            int.parse(Hive.box('user_setting').get(
+                                'alarm_cal_hour_${cal_share_person.secondname}')),
+                            int.parse(Hive.box('user_setting').get(
+                                'alarm_cal_minute_${cal_share_person.secondname}')),
+                          ));
+                    }
+                  }
+                }
+              });
             }
             setState(() {
               controll_memo.setloading(false);

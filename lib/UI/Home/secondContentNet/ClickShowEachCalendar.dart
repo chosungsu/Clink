@@ -187,12 +187,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             NotificationApi.cancelNotification(
                 id: int.parse(widget.date.toString().split('-')[0]) +
                     int.parse(widget.date.toString().split('-')[1]) +
-                    int.parse(widget.date
-                        .toString()
-                        .split('-')[2]
-                        .toString()
-                        .split(' ')[0]) +
-                    int.parse(widget.code.toString().numericOnly()));
+                    int.parse(widget.id.hashCode.toString()) +
+                    int.parse(cal_share_person.secondname.hashCode.toString()));
           });
         });
       });
@@ -312,15 +308,16 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       ? '예정된 시각 : ' + thirdtxt
                       : '예정된 시각 : ' + forthtxt),
             );
+            NotificationApi.cancelNotification(
+                id: int.parse(widget.date.toString().split('-')[0]) +
+                    int.parse(widget.date.toString().split('-')[1]) +
+                    int.parse(widget.id.hashCode.toString()) +
+                    int.parse(cal_share_person.secondname.hashCode.toString()));
             NotificationApi.showScheduledNotification(
                 id: int.parse(widget.date.toString().split('-')[0]) +
                     int.parse(widget.date.toString().split('-')[1]) +
-                    int.parse(widget.date
-                        .toString()
-                        .split('-')[2]
-                        .toString()
-                        .split(' ')[0]) +
-                    int.parse(widget.code.toString().numericOnly()),
+                    int.parse(widget.id.hashCode.toString()) +
+                    int.parse(cal_share_person.secondname.hashCode.toString()),
                 title: textEditingController1.text + '일정이 다가옵니다',
                 body: textEditingController2.text.split(':')[0].length == 1
                     ? (textEditingController3.text.split(':')[0].length == 1
@@ -338,29 +335,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                           .toString()
                           .split(' ')[0]) -
                       1,
-                  int.parse(textEditingController2.text.split(':')[1]) <
-                          int.parse(calendarsetting().minute1.toString())
-                      ? int.parse(textEditingController2.text
-                                      .split(':')[0]
-                                      .length ==
-                                  1
-                              ? '0' + textEditingController2.text.split(':')[0]
-                              : textEditingController2.text.split(':')[0]) -
-                          1
-                      : int.parse(
-                          textEditingController2.text.split(':')[0].length == 1
-                              ? '0' + textEditingController2.text.split(':')[0]
-                              : textEditingController2.text.split(':')[0]),
-                  int.parse(textEditingController2.text.split(':')[1]) <
-                          int.parse(calendarsetting().minute1.toString())
-                      ? 60 -
-                          (int.parse(calendarsetting().minute1.toString()) -
-                              int.parse(
-                                  textEditingController2.text.split(':')[1]))
-                      : int.parse(textEditingController2.text.split(':')[1]) -
-                          int.parse(calendarsetting().minute1.toString()),
+                  int.parse(Hive.box('user_setting').get(
+                      'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}')),
+                  int.parse(Hive.box('user_setting').get(
+                      'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}')),
                 ));
-          } else if (alarmtypes[1] == true) {
+          } else {
             NotificationApi.showNotification(
               title: '알람설정된 일정 : ' + textEditingController1.text,
               body: textEditingController2.text.split(':')[0].length == 1
@@ -371,15 +351,16 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       ? '예정된 시각 : ' + thirdtxt
                       : '예정된 시각 : ' + forthtxt),
             );
+            NotificationApi.cancelNotification(
+                id: int.parse(widget.date.toString().split('-')[0]) +
+                    int.parse(widget.date.toString().split('-')[1]) +
+                    int.parse(widget.id.hashCode.toString()) +
+                    int.parse(cal_share_person.secondname.hashCode.toString()));
             NotificationApi.showScheduledNotification(
                 id: int.parse(widget.date.toString().split('-')[0]) +
                     int.parse(widget.date.toString().split('-')[1]) +
-                    int.parse(widget.date
-                        .toString()
-                        .split('-')[2]
-                        .toString()
-                        .split(' ')[0]) +
-                    int.parse(widget.code.toString().numericOnly()),
+                    int.parse(widget.id.hashCode.toString()) +
+                    int.parse(cal_share_person.secondname.hashCode.toString()),
                 title: textEditingController1.text + '일정이 다가옵니다',
                 body: textEditingController2.text.split(':')[0].length == 1
                     ? (textEditingController3.text.split(':')[0].length == 1
@@ -396,29 +377,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       .split('-')[2]
                       .toString()
                       .split(' ')[0]),
-                  int.parse(textEditingController2.text.split(':')[1]) <
-                          int.parse(calendarsetting().minute1.toString())
-                      ? int.parse(textEditingController2.text
-                                      .split(':')[0]
-                                      .length ==
-                                  1
-                              ? '0' + textEditingController2.text.split(':')[0]
-                              : textEditingController2.text.split(':')[0]) -
-                          1
-                      : int.parse(
-                          textEditingController2.text.split(':')[0].length == 1
-                              ? '0' + textEditingController2.text.split(':')[0]
-                              : textEditingController2.text.split(':')[0]),
-                  int.parse(textEditingController2.text.split(':')[1]) <
-                          int.parse(calendarsetting().minute1.toString())
-                      ? 60 -
-                          (int.parse(calendarsetting().minute1.toString()) -
-                              int.parse(
-                                  textEditingController2.text.split(':')[1]))
-                      : int.parse(textEditingController2.text.split(':')[1]) -
-                          int.parse(calendarsetting().minute1.toString()),
+                  int.parse(Hive.box('user_setting').get(
+                      'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}')),
+                  int.parse(Hive.box('user_setting').get(
+                      'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}')),
                 ));
-          } else {}
+          }
         }
       });
     });
@@ -1055,12 +1019,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     NotificationApi.cancelNotification(
                         id: int.parse(widget.date.toString().split('-')[0]) +
                             int.parse(widget.date.toString().split('-')[1]) +
-                            int.parse(widget.date
-                                .toString()
-                                .split('-')[2]
-                                .toString()
-                                .split(' ')[0]) +
-                            int.parse(widget.code.toString().numericOnly()));
+                            int.parse(widget.id.hashCode.toString()) +
+                            int.parse(cal_share_person.secondname));
                   }
                 });
               }),
@@ -1153,27 +1113,28 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             indent: 15.0,
             endIndent: 15.0,
           ),
-          ListTile(
-            title: Text(
-              '시간 설정',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize(),
-                  color: Colors.black),
-            ),
-            subtitle: Text(
-              '우측 알람 아이콘 클릭',
-              maxLines: 2,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.grey.shade400,
-                  overflow: TextOverflow.ellipsis),
-            ),
-            trailing: IconButton(
-              icon: const Icon(Icons.alarm_add),
-              onPressed: () async {
-                /*await firestore
+          GetBuilder<calendarsetting>(
+              builder: (_) => ListTile(
+                    title: Text(
+                      '시간 설정',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                          color: Colors.black),
+                    ),
+                    subtitle: Text(
+                      '우측 알람 아이콘 클릭',
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.grey.shade400,
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.alarm_add),
+                      onPressed: () async {
+                        /*await firestore
                     .collection('CalendarDataBase')
                     .doc(widget.id)
                     .get()
@@ -1187,23 +1148,25 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     }
                   },
                 );*/
-                hour = Hive.box('user_setting').get(
-                    'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}');
-                minute = Hive.box('user_setting').get(
-                    'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}');
-                pushalarmsettingcal(
-                    context,
-                    setalarmhourNode,
-                    setalarmminuteNode,
-                    hour,
-                    minute,
-                    widget.calinfo,
-                    widget.id,
-                    isChecked_pushalarmwhat,
-                    widget.date);
-              },
-            ),
-          ),
+                        hour = Hive.box('user_setting').get(
+                            'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}');
+                        minute = Hive.box('user_setting').get(
+                            'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}');
+                        print(hour.toString() + ' : ' + minute.toString());
+
+                        pushalarmsettingcal(
+                            context,
+                            setalarmhourNode,
+                            setalarmminuteNode,
+                            hour,
+                            minute,
+                            widget.calinfo,
+                            widget.id,
+                            isChecked_pushalarmwhat,
+                            widget.date);
+                      },
+                    ),
+                  )),
           GetBuilder<calendarsetting>(
               builder: (_) => ListTile(
                     title: Text(

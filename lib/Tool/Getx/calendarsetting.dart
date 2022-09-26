@@ -228,12 +228,17 @@ class calendarsetting extends GetxController {
   void settimeminute(int hour, int minute, String title, String id) {
     final cal_share_person = Get.put(PeopleAdd());
     if (title != '') {
-      Hive.box('user_setting').put('alarm_cal_hour_$id', hour.toString());
-      Hive.box('user_setting').put('alarm_cal_minute_$id', minute.toString());
-      hour1 = Hive.box('user_setting').get('alarm_cal_hour_$id');
-      minute1 = Hive.box('user_setting').get('alarm_cal_minute_$id');
-      firestore.collection('CalendarDataBase').doc(id).update(
-          {'alarmhour': hour1.toString(), 'alarmminute': minute1.toString()});
+      Hive.box('user_setting').put(
+          'alarm_cal_hour_${id}_${cal_share_person.secondname}',
+          hour.toString());
+      Hive.box('user_setting').put(
+          'alarm_cal_minute_${id}_${cal_share_person.secondname}',
+          minute.toString());
+      hour1 = Hive.box('user_setting')
+          .get('alarm_cal_hour_${id}_${cal_share_person.secondname}');
+      minute1 = Hive.box('user_setting')
+          .get('alarm_cal_minute_${id}_${cal_share_person.secondname}');
+      print(hour1 + ':' + minute1);
     } else {
       Hive.box('user_setting').put(
           'alarm_cal_hour_${cal_share_person.secondname}', hour.toString());
