@@ -494,7 +494,7 @@ stream1(
                         ],
                       );
                     }),
-                color: Colors.white)
+                color: BGColor())
           ],
         );
       } else if (snapshot.connectionState == ConnectionState.waiting) {

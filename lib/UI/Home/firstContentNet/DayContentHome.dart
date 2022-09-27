@@ -540,7 +540,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                         'alarm_cal_minute_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}');
                                 isChecked_pushalarm =
                                     value.docs[i].data()['alarmmake'];
-                                calendarsetting().settimeminute(
+                                /*calendarsetting().settimeminute(
                                     int.parse(value.docs[i]
                                         .data()['alarmhour']
                                         .toString()),
@@ -548,7 +548,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                         .data()['alarmminute']
                                         .toString()),
                                     snapshot.data!.docs[index]['Daytodo'],
-                                    snapshot.data!.docs[index].id);
+                                    snapshot.data!.docs[index].id);*/
                               }
                             }
                           }

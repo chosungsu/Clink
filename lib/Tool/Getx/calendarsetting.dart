@@ -228,26 +228,21 @@ class calendarsetting extends GetxController {
   void settimeminute(int hour, int minute, String title, String id) {
     final cal_share_person = Get.put(PeopleAdd());
     if (title != '') {
-      Hive.box('user_setting').put(
+      hour1 = hour.toString();
+      minute1 = minute.toString();
+      /*Hive.box('user_setting').put(
           'alarm_cal_hour_${id}_${cal_share_person.secondname}',
           hour.toString());
       Hive.box('user_setting').put(
           'alarm_cal_minute_${id}_${cal_share_person.secondname}',
-          minute.toString());
-      hour1 = Hive.box('user_setting')
-          .get('alarm_cal_hour_${id}_${cal_share_person.secondname}');
-      minute1 = Hive.box('user_setting')
-          .get('alarm_cal_minute_${id}_${cal_share_person.secondname}');
-      print(hour1 + ':' + minute1);
+          minute.toString());*/
     } else {
-      Hive.box('user_setting').put(
+      hour1 = hour.toString();
+      minute1 = minute.toString();
+      /*Hive.box('user_setting').put(
           'alarm_cal_hour_${cal_share_person.secondname}', hour.toString());
       Hive.box('user_setting').put(
-          'alarm_cal_minute_${cal_share_person.secondname}', minute.toString());
-      hour1 = Hive.box('user_setting')
-          .get('alarm_cal_hour_${cal_share_person.secondname}');
-      minute1 = Hive.box('user_setting')
-          .get('alarm_cal_minute_${cal_share_person.secondname}');
+          'alarm_cal_minute_${cal_share_person.secondname}', minute.toString());*/
     }
     update();
     notifyChildrens();

@@ -81,6 +81,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   String minute = '';
   var isChecked_pushalarmwhat = null;
   final cal_share_person = Get.put(PeopleAdd());
+  final controll_cal = Get.put(calendarsetting());
   String updateidalarm = '';
 
   @override
@@ -279,15 +280,13 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             .collection('CalendarDataBase')
             .doc(widget.id)
             .collection('AlarmTable')
-            .doc(cal_share_person.secondname)
-            .set({
-          'alarmhour': Hive.box('user_setting').get(
-              'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}'),
-          'alarmminute': Hive.box('user_setting').get(
-              'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}'),
+            .doc(name)
+            .update({
+          'alarmhour': controll_cal.hour1,
+          'alarmminute': controll_cal.minute1,
           'alarmmake': isChecked_pushalarm,
           'alarmtype': alarmtypes,
-        }, SetOptions(merge: true));
+        });
       }).whenComplete(() {
         setState(() {
           loading = false;
@@ -339,10 +338,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                           .toString()
                           .split(' ')[0]) -
                       1,
-                  int.parse(Hive.box('user_setting').get(
-                      'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}')),
-                  int.parse(Hive.box('user_setting').get(
-                      'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}')),
+                  int.parse(controll_cal.hour1),
+                  int.parse(controll_cal.minute1),
                 ));
           } else {
             NotificationApi.showNotification(
@@ -381,10 +378,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       .split('-')[2]
                       .toString()
                       .split(' ')[0]),
-                  int.parse(Hive.box('user_setting').get(
-                      'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}')),
-                  int.parse(Hive.box('user_setting').get(
-                      'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}')),
+                  int.parse(controll_cal.hour1),
+                  int.parse(controll_cal.minute1),
                 ));
           }
         } else {
@@ -1144,7 +1139,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.alarm_add),
-                      onPressed: () async {
+                      onPressed: () {
                         /*await firestore
                     .collection('CalendarDataBase')
                     .doc(widget.id)
@@ -1159,10 +1154,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     }
                   },
                 );*/
-                        hour = Hive.box('user_setting').get(
-                            'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}');
-                        minute = Hive.box('user_setting').get(
-                            'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}');
+                        hour = calendarsetting().hour1;
+                        minute = calendarsetting().minute1;
                         pushalarmsettingcal(
                             context,
                             setalarmhourNode,
@@ -1185,30 +1178,22 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                           fontSize: contentTextsize(),
                           color: Colors.black),
                     ),
-                    trailing: Hive.box('user_setting').get(
-                                    'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}') !=
-                                '99' ||
-                            Hive.box('user_setting').get(
-                                    'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}') !=
-                                '99'
+                    trailing: controll_cal.hour1 != '99' ||
+                            controll_cal.minute1 != '99'
                         ? SizedBox(
                             width: 100,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  Hive.box('user_setting').get(
-                                          'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}') +
-                                      '시 ',
+                                  controll_cal.hour1 + '시 ',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: contentTextsize(),
                                       color: Colors.grey.shade400),
                                 ),
                                 Text(
-                                  Hive.box('user_setting').get(
-                                          'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}') +
-                                      '분',
+                                  controll_cal.minute1 + '분',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: contentTextsize(),

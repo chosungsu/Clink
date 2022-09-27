@@ -248,11 +248,14 @@ content(
                                         cancelText: '닫기',
                                         confirmText: '설정',
                                         initialTime:
-                                            hour == '99' && minute == '99'
+                                            controll_cal.hour1 == '99' &&
+                                                    controll_cal.minute1 == '99'
                                                 ? TimeOfDay.now()
                                                 : TimeOfDay(
-                                                    hour: int.parse(hour),
-                                                    minute: int.parse(minute)));
+                                                    hour: int.parse(
+                                                        controll_cal.hour1),
+                                                    minute: int.parse(
+                                                        controll_cal.minute1)));
                                     if (pickednow != null) {
                                       if (doc_title != '') {
                                         controll_cal.settimeminute(
@@ -289,19 +292,13 @@ content(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           doc_title != ''
-                              ? (Hive.box('user_setting').get(
-                                              'alarm_cal_hour_${id}_${cal_share_person.secondname}') !=
-                                          '99' ||
-                                      Hive.box('user_setting').get(
-                                              'alarm_cal_minute_${id}_${cal_share_person.secondname}') !=
-                                          '99'
+                              ? (controll_cal.hour1 != '99' ||
+                                      controll_cal.minute1 != '99'
                                   ? Text(
                                       '설정시간 : ' +
-                                          Hive.box('user_setting').get(
-                                              'alarm_cal_hour_${id}_${cal_share_person.secondname}') +
+                                          controll_cal.hour1 +
                                           '시 ' +
-                                          Hive.box('user_setting').get(
-                                              'alarm_cal_minute_${id}_${cal_share_person.secondname}') +
+                                          controll_cal.minute1 +
                                           '분',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -315,19 +312,13 @@ content(
                                           fontSize: contentTextsize(),
                                           color: Colors.black),
                                     ))
-                              : (Hive.box('user_setting').get(
-                                              'alarm_cal_hour_${cal_share_person.secondname}') !=
-                                          '99' ||
-                                      Hive.box('user_setting').get(
-                                              'alarm_cal_minute_${cal_share_person.secondname}') !=
-                                          '99'
+                              : (controll_cal.hour1 != '99' ||
+                                      controll_cal.minute1 != '99'
                                   ? Text(
                                       '설정시간 : ' +
-                                          Hive.box('user_setting').get(
-                                              'alarm_cal_hour_${cal_share_person.secondname}') +
+                                          controll_cal.hour1 +
                                           '시 ' +
-                                          Hive.box('user_setting').get(
-                                              'alarm_cal_minute_${cal_share_person.secondname}') +
+                                          controll_cal.minute1 +
                                           '분',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
