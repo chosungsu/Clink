@@ -24,11 +24,11 @@ import '../../Sign/UserCheck.dart';
 import '../secondContentNet/PeopleGroup.dart';
 
 class ChooseCalendar extends StatefulWidget {
-  const ChooseCalendar({
-    Key? key,
-    required this.isfromwhere,
-  }) : super(key: key);
+  const ChooseCalendar(
+      {Key? key, required this.isfromwhere, required this.index})
+      : super(key: key);
   final String isfromwhere;
+  final int index;
   @override
   State<StatefulWidget> createState() => _ChooseCalendarState();
 }
@@ -81,7 +81,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     Hive.box('user_setting').put('share_cal_person', '');
     cal_share_person.people = [];
     tabController = TabController(
-      initialIndex: 0,
+      initialIndex: widget.index,
       length: 2,
       vsync: this,
     );

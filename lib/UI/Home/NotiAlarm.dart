@@ -220,44 +220,6 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                               width: 0,
                                                               height: 0,
                                                             )),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                    height: 0,
-                                                  ),
-                                                  IconBtn(
-                                                      child: IconButton(
-                                                          onPressed: () {
-                                                            Future.delayed(
-                                                                const Duration(
-                                                                    seconds: 0),
-                                                                () {
-                                                              GoToMain(context);
-                                                            });
-                                                          },
-                                                          icon: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            width: 30,
-                                                            height: 30,
-                                                            child:
-                                                                NeumorphicIcon(
-                                                              Icons.close,
-                                                              size: 30,
-                                                              style: NeumorphicStyle(
-                                                                  shape:
-                                                                      NeumorphicShape
-                                                                          .convex,
-                                                                  depth: 2,
-                                                                  surfaceIntensity:
-                                                                      0.5,
-                                                                  color:
-                                                                      TextColor(),
-                                                                  lightSource:
-                                                                      LightSource
-                                                                          .topLeft),
-                                                            ),
-                                                          )),
-                                                      color: TextColor())
                                                 ],
                                               ))),
                                     ],
@@ -612,7 +574,10 @@ class _NotiAlarmState extends State<NotiAlarm>
                                       ),
                                   transition: Transition.rightToLeft)
                               : Get.to(
-                                  () => ChooseCalendar(isfromwhere: 'notihome'),
+                                  () => ChooseCalendar(
+                                        isfromwhere: 'notihome',
+                                        index: 0,
+                                      ),
                                   transition: Transition.rightToLeft);
                         },
                         child: Column(

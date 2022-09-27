@@ -1,5 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ContainerDesign extends StatelessWidget {
   const ContainerDesign({Key? key, required this.child, required this.color})
@@ -18,12 +18,12 @@ class ContainerDesign extends StatelessWidget {
             color: color,
             boxShadow: [
               BoxShadow(
-                  color: TextColor().withOpacity(0.5),
+                  color: TextColor(),
                   blurRadius: 5,
                   spreadRadius: 0,
                   offset: const Offset(1, 1)),
               BoxShadow(
-                  color: BGColor().withOpacity(0.5),
+                  color: BGColor(),
                   blurRadius: 5,
                   spreadRadius: 0,
                   offset: const Offset(-1, -1)),

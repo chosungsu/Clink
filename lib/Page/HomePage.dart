@@ -123,31 +123,7 @@ class _HomePageState extends State<HomePage> {
       }
     });*/
     docid = Hive.box('user_setting').get('usercode');
-    firestore
-        .collection('HomeViewCategories')
-        .doc(Hive.box('user_setting').get('usercode'))
-        .get()
-        .then((value) {
-      if (value.exists) {
-        defaulthomeviewlist.clear();
-        userviewlist.clear();
-        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-          defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
-        }
-        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-          userviewlist.add(value.data()!['hidecategory'][j]);
-        }
-      } else {
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': docid,
-          'viewcategory': defaulthomeviewlist,
-          'hidecategory': userviewlist
-        }, SetOptions(merge: true));
-      }
-    });
+
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     isdraweropen = draw.drawopen;
@@ -163,6 +139,47 @@ class _HomePageState extends State<HomePage> {
         yoffset = 0;
       });
     }
+    firestore
+        .collection('HomeViewCategories')
+        .doc(Hive.box('user_setting').get('usercode'))
+        .get()
+        .then((value) {
+      peopleadd.defaulthomeviewlist.clear();
+      peopleadd.userviewlist.clear();
+      if (value.exists) {
+        print(1);
+        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+          peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+        }
+        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+          peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
+        }
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': Hive.box('user_setting').get('usercode'),
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
+        }, SetOptions(merge: true));
+        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+        userviewlist = peopleadd.userviewlist;
+      } else {
+        print(2);
+        peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
+        peopleadd.userviewlist.add(userviewlist);
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': Hive.box('user_setting').get('usercode'),
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
+        }, SetOptions(merge: true));
+        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+        userviewlist = peopleadd.userviewlist;
+      }
+    });
     firestore.collection('AppNoticeByUsers').get().then((value) {
       for (var element in value.docs) {
         if (element.data()['username'] == name ||
@@ -464,9 +481,7 @@ class _HomePageState extends State<HomePage> {
                                       GetBuilder<PeopleAdd>(
                                           builder: (_) => ViewSet(
                                               peopleadd.defaulthomeviewlist,
-                                              peopleadd.userviewlist,
-                                              isresponsive,
-                                              peopleadd.secondname)),
+                                              peopleadd.userviewlist)),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -547,7 +562,9 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () async {
                                   final reloadpage = await Get.to(
                                       () => const ChooseCalendar(
-                                          isfromwhere: 'home'),
+                                            isfromwhere: 'home',
+                                            index: 0,
+                                          ),
                                       transition: Transition.rightToLeft);
                                   if (reloadpage) {
                                     GoToMain(context);

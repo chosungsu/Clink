@@ -7,6 +7,7 @@ class SpaceContent {
   final List share;
   final String code;
   final String summary;
+  final String id;
 
   SpaceContent(
       {required this.title,
@@ -16,7 +17,8 @@ class SpaceContent {
       required this.cname,
       required this.share,
       required this.code,
-      required this.summary});
+      required this.summary,
+      required this.id});
 }
 
 class MemoContent {

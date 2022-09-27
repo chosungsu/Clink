@@ -92,6 +92,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   @override
   void initState() {
     super.initState();
+    print(widget.calinfo +
+        '/' +
+        widget.start +
+        '/' +
+        widget.alarmtypes.toString());
     alarmtypes.clear();
     fToast = FToast();
     fToast.init(context);
@@ -418,14 +423,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: loading == true
-            ? Stack(
-                children: [
-                  UI(),
-                  loading == true ? const Loader() : Container()
-                ],
-              )
-            : UI(),
+        child: Stack(
+          children: [UI(), loading == true ? const Loader() : Container()],
+        ),
       ),
     ));
   }
