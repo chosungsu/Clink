@@ -99,7 +99,6 @@ class _DayScriptState extends State<DayScript> {
   final setalarmhourNode = FocusNode();
   final setalarmminuteNode = FocusNode();
   List valueid = [];
-  final List<bool> _ischecked_alarmslist = [false, false];
   //메모변수
   int _currentValue = 1;
   final scollection = Get.put(selectcollection());
@@ -266,11 +265,9 @@ class _DayScriptState extends State<DayScript> {
                         .collection('AlarmTable')
                         .doc(username)
                         .set({
-                      'alarmtype': _ischecked_alarmslist,
-                      'alarmhour': Hive.box('user_setting')
-                          .get('alarm_cal_hour_${cal_share_person.secondname}'),
-                      'alarmminute': Hive.box('user_setting').get(
-                          'alarm_cal_minute_${cal_share_person.secondname}'),
+                      'alarmtype': alarmtypes,
+                      'alarmhour': controll_cal.hour1,
+                      'alarmminute': controll_cal.minute1,
                       'alarmmake': isChecked_pushalarm,
                       'calcode': valueid[i]
                     });
@@ -294,7 +291,7 @@ class _DayScriptState extends State<DayScript> {
                                 .collection('AlarmTable')
                                 .doc(widget.share[k])
                                 .set({
-                              'alarmtype': _ischecked_alarmslist,
+                              'alarmtype': alarmtypes,
                               'alarmhour': '99',
                               'alarmminute': '99',
                               'alarmmake': false,
@@ -481,11 +478,9 @@ class _DayScriptState extends State<DayScript> {
                       .collection('AlarmTable')
                       .doc(username)
                       .set({
-                    'alarmtype': _ischecked_alarmslist,
-                    'alarmhour': Hive.box('user_setting')
-                        .get('alarm_cal_hour_${cal_share_person.secondname}'),
-                    'alarmminute': Hive.box('user_setting')
-                        .get('alarm_cal_minute_${cal_share_person.secondname}'),
+                    'alarmtype': alarmtypes,
+                    'alarmhour': controll_cal.hour1,
+                    'alarmminute': controll_cal.minute1,
                     'alarmmake': isChecked_pushalarm,
                     'calcode': valueid[i]
                   });
@@ -509,7 +504,7 @@ class _DayScriptState extends State<DayScript> {
                               .collection('AlarmTable')
                               .doc(widget.share[k])
                               .set({
-                            'alarmtype': _ischecked_alarmslist,
+                            'alarmtype': alarmtypes,
                             'alarmhour': '99',
                             'alarmminute': '99',
                             'alarmmake': false,

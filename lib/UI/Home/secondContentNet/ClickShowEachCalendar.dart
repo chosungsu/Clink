@@ -37,6 +37,8 @@ class ClickShowEachCalendar extends StatefulWidget {
     required this.id,
     required this.alarmtypes,
     required this.alarmmake,
+    required this.alarmhour,
+    required this.alarmminute,
   }) : super(key: key);
   final String start;
   final String finish;
@@ -50,6 +52,8 @@ class ClickShowEachCalendar extends StatefulWidget {
   final String id;
   final List<bool> alarmtypes;
   final bool alarmmake;
+  final String alarmhour;
+  final String alarmminute;
   @override
   State<StatefulWidget> createState() => _ClickShowEachCalendarState();
 }
@@ -93,11 +97,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   @override
   void initState() {
     super.initState();
-    print(widget.calinfo +
-        '/' +
-        widget.start +
-        '/' +
-        widget.alarmtypes.toString());
     alarmtypes.clear();
     fToast = FToast();
     fToast.init(context);
@@ -110,6 +109,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
       alarmtypes.add(widget.alarmtypes[i]);
     }
     isChecked_pushalarm = widget.alarmmake;
+    controll_cal.hour1 = widget.alarmhour;
+    controll_cal.minute1 = widget.alarmminute;
 
     isChecked_pushalarmwhat =
         widget.alarmtypes.indexWhere((element) => element == true);
@@ -1154,8 +1155,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     }
                   },
                 );*/
-                        hour = calendarsetting().hour1;
-                        minute = calendarsetting().minute1;
+                        hour = controll_cal.hour1;
+                        minute = controll_cal.minute1;
                         pushalarmsettingcal(
                             context,
                             setalarmhourNode,

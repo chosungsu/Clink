@@ -501,59 +501,7 @@ class _DayContentHomeState extends State<DayContentHome>
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       //수정 및 삭제 시트 띄우기
-                      firestore
-                          .collectionGroup('AlarmTable')
-                          .get()
-                          .then((value) {
-                        if (value.docs.isNotEmpty) {
-                          for (int i = 0; i < value.docs.length; i++) {
-                            if (value.docs[i].id == username) {
-                              if (value.docs[i].data()['calcode'] ==
-                                  snapshot.data!.docs[index].id) {
-                                updateidalarm = value.docs[i].id;
-                                alarmtypes.clear();
-                                for (int j = 0;
-                                    j <
-                                        value.docs[i]
-                                            .data()['alarmtype']
-                                            .length;
-                                    j++) {
-                                  alarmtypes.add(
-                                      value.docs[i].data()['alarmtype'][j]);
-                                }
-                                print(alarmtypes);
-                                Hive.box('user_setting').put(
-                                    'alarm_cal_hour_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}',
-                                    value.docs[i]
-                                        .data()['alarmhour']
-                                        .toString());
-                                Hive.box('user_setting').put(
-                                    'alarm_cal_minute_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}',
-                                    value.docs[i]
-                                        .data()['alarmminute']
-                                        .toString());
-                                calendarsetting().hour1 =
-                                    Hive.box('user_setting').get(
-                                        'alarm_cal_hour_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}');
-                                calendarsetting().minute1 =
-                                    Hive.box('user_setting').get(
-                                        'alarm_cal_minute_${snapshot.data!.docs[index].id}_${cal_share_person.secondname}');
-                                isChecked_pushalarm =
-                                    value.docs[i].data()['alarmmake'];
-                                /*calendarsetting().settimeminute(
-                                    int.parse(value.docs[i]
-                                        .data()['alarmhour']
-                                        .toString()),
-                                    int.parse(value.docs[i]
-                                        .data()['alarmminute']
-                                        .toString()),
-                                    snapshot.data!.docs[index]['Daytodo'],
-                                    snapshot.data!.docs[index].id);*/
-                              }
-                            }
-                          }
-                        }
-                      });
+
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -616,38 +564,84 @@ class _DayContentHomeState extends State<DayContentHome>
                                     Expanded(
                                         flex: 3,
                                         child: InkWell(
-                                          onTap: () {
+                                          onTap: () async {
+                                            await firestore
+                                                .collectionGroup('AlarmTable')
+                                                .get()
+                                                .then((value) {
+                                              if (value.docs.isNotEmpty) {
+                                                for (int i = 0;
+                                                    i < value.docs.length;
+                                                    i++) {
+                                                  if (value.docs[i].id ==
+                                                      username) {
+                                                    if (value.docs[i].data()[
+                                                            'calcode'] ==
+                                                        snapshot.data!
+                                                            .docs[index].id) {
+                                                      updateidalarm =
+                                                          value.docs[i].id;
+                                                      alarmtypes.clear();
+                                                      for (int j = 0;
+                                                          j <
+                                                              value.docs[i]
+                                                                  .data()[
+                                                                      'alarmtype']
+                                                                  .length;
+                                                          j++) {
+                                                        alarmtypes.add(value
+                                                                .docs[i]
+                                                                .data()[
+                                                            'alarmtype'][j]);
+                                                      }
+                                                      print(alarmtypes);
+                                                      hour = value.docs[i]
+                                                          .data()['alarmhour']
+                                                          .toString();
+                                                      minute = value.docs[i]
+                                                          .data()['alarmminute']
+                                                          .toString();
+                                                      isChecked_pushalarm =
+                                                          value.docs[i].data()[
+                                                              'alarmmake'];
+                                                      /*calendarsetting().settimeminute(
+                                    int.parse(value.docs[i]
+                                        .data()['alarmhour']
+                                        .toString()),
+                                    int.parse(value.docs[i]
+                                        .data()['alarmminute']
+                                        .toString()),
+                                    snapshot.data!.docs[index]['Daytodo'],
+                                    snapshot.data!.docs[index].id);*/
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            });
                                             Get.to(
                                                 () => ClickShowEachCalendar(
-                                                      start: snapshot
-                                                              .data!.docs[index]
-                                                          ['Timestart'],
-                                                      finish: snapshot
-                                                              .data!.docs[index]
-                                                          ['Timefinish'],
-                                                      calinfo: snapshot
-                                                              .data!.docs[index]
-                                                          ['Daytodo'],
-                                                      date: _selectedDay,
-                                                      share: snapshot
-                                                              .data!.docs[index]
-                                                          ['Shares'],
-                                                      calname: widget.calname,
-                                                      code: snapshot
-                                                              .data!.docs[index]
-                                                          ['calname'],
-                                                      summary: snapshot
-                                                              .data!.docs[index]
-                                                          ['summary'],
-                                                      isfromwhere: 'dayhome',
-                                                      id: snapshot
-                                                          .data!.docs[index].id,
-                                                      alarmtypes: alarmtypes,
-                                                      alarmmake:
-                                                          isChecked_pushalarm,
-                                                    ),
-                                                transition:
-                                                    Transition.downToUp);
+                                                    start: snapshot.data!.docs[index]
+                                                        ['Timestart'],
+                                                    finish:
+                                                        snapshot.data!.docs[index]
+                                                            ['Timefinish'],
+                                                    calinfo: snapshot.data!
+                                                        .docs[index]['Daytodo'],
+                                                    date: _selectedDay,
+                                                    share: snapshot.data!
+                                                        .docs[index]['Shares'],
+                                                    calname: widget.calname,
+                                                    code: snapshot.data!
+                                                        .docs[index]['calname'],
+                                                    summary: snapshot.data!
+                                                        .docs[index]['summary'],
+                                                    isfromwhere: 'dayhome',
+                                                    id: snapshot.data!.docs[index].id,
+                                                    alarmtypes: alarmtypes,
+                                                    alarmmake: isChecked_pushalarm,
+                                                    alarmhour: hour,
+                                                    alarmminute: minute),
+                                                transition: Transition.downToUp);
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.only(
