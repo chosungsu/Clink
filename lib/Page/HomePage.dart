@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> {
         peopleadd.secondnameset(value.data()!['subname']);
       }
     });
+
     /*firestore.collection('CalendarDataBase').get().then((value) {
       List valueid = [];
       final List<bool> _ischecked_alarmslist = [false, false];
@@ -122,6 +123,31 @@ class _HomePageState extends State<HomePage> {
       }
     });*/
     docid = Hive.box('user_setting').get('usercode');
+    firestore
+        .collection('HomeViewCategories')
+        .doc(Hive.box('user_setting').get('usercode'))
+        .get()
+        .then((value) {
+      if (value.exists) {
+        defaulthomeviewlist.clear();
+        userviewlist.clear();
+        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+          defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+        }
+        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+          userviewlist.add(value.data()!['hidecategory'][j]);
+        }
+      } else {
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': docid,
+          'viewcategory': defaulthomeviewlist,
+          'hidecategory': userviewlist
+        }, SetOptions(merge: true));
+      }
+    });
     _pController =
         PageController(initialPage: currentPage, viewportFraction: 1);
     isdraweropen = draw.drawopen;
