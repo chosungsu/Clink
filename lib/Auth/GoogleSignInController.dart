@@ -19,7 +19,7 @@ class GoogleSignInController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late int count;
 
-  void login(BuildContext context, bool ischecked) async {
+  login(BuildContext context, bool ischecked) async {
     count = 1;
     googleSignInAccount = await _googleSignIn.signIn();
     String nick = googleSignInAccount!.displayName.toString();
@@ -45,11 +45,11 @@ class GoogleSignInController extends GetxController {
 
     //firestore 저장
     firestore.collection('User').doc(nick).get().then((value) async {
-      Snack.show(
+      /*Snack.show(
           title: '로딩중',
           snackType: SnackType.waiting,
           content: '로그인중입니다.잠시만 기다려주세요',
-          context: context);
+          context: context);*/
       if (value.exists) {
         await firestore.collection('User').doc(nick).update({
           'name': nick,
@@ -61,12 +61,13 @@ class GoogleSignInController extends GetxController {
               .collection('User')
               .doc(Hive.box('user_info').get('id'))
               .get()
-              .then((value) {
+              .then((value) async {
             if (value.exists) {
-              Hive.box('user_setting').put('usercode', value.data()!['code']);
+              await Hive.box('user_setting')
+                  .put('usercode', value.data()!['code']);
+              GoToMain(context);
             } else {}
           });
-          GoToMain(context);
         });
       } else {
         await firestore.collection('User').doc(nick).set({
@@ -77,8 +78,8 @@ class GoogleSignInController extends GetxController {
           'time': DateTime.now(),
           'autologin': ischecked,
           'code': code
-        }, SetOptions(merge: true)).whenComplete(() {
-          Hive.box('user_setting').put('usercode', code);
+        }, SetOptions(merge: true)).whenComplete(() async {
+          await Hive.box('user_setting').put('usercode', code);
           GoToMain(context);
         });
       }
@@ -88,7 +89,7 @@ class GoogleSignInController extends GetxController {
     notifyChildrens();
   }
 
-  void logout(BuildContext context, String name) async {
+  logout(BuildContext context, String name) async {
     count = -1;
     googleSignInAccount = await _googleSignIn.signOut();
     Hive.box('user_info').delete('id');
@@ -96,7 +97,7 @@ class GoogleSignInController extends GetxController {
     notifyChildrens();
   }
 
-  void Deletelogout(BuildContext context, String name) async {
+  Deletelogout(BuildContext context, String name) async {
     count = -1;
     googleSignInAccount = await _googleSignIn.signOut();
     Hive.box('user_info').delete('id');

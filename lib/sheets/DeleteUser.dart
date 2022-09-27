@@ -92,21 +92,6 @@ DeleteUserVerify(BuildContext context, String name) {
                               GoogleSignInController()
                                   .Deletelogout(context, name);
                               await firestore
-                                  .collection('CalendarDataBase')
-                                  .where('OriginalUser', isEqualTo: name)
-                                  .get()
-                                  .then((value) {
-                                for (var element in value.docs) {
-                                  updateid = element.id;
-                                  firestore
-                                      .collection('CalendarDataBase')
-                                      .doc(updateid)
-                                      .update({
-                                    'Alarm': '설정off',
-                                  });
-                                }
-                              });
-                              await firestore
                                   .collection('CalendarSheetHome')
                                   .get()
                                   .then((value) {

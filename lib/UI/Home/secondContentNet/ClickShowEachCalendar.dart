@@ -95,7 +95,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     alarmtypes.clear();
     fToast = FToast();
     fToast.init(context);
-    print(DateTime.now());
     WidgetsBinding.instance.addObserver(this);
     textEditingController1 = TextEditingController(text: widget.calinfo);
     textEditingController2 = TextEditingController(text: widget.start);
@@ -383,6 +382,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}')),
                 ));
           }
+        } else {
+          NotificationApi.cancelNotification(
+              id: int.parse(widget.date.toString().split('-')[0]) +
+                  int.parse(widget.date.toString().split('-')[1]) +
+                  int.parse(widget.id.hashCode.toString()) +
+                  int.parse(cal_share_person.secondname.hashCode.toString()));
         }
       });
     });
@@ -413,9 +418,14 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: Stack(
-          children: [UI(), loading == true ? const Loader() : Container()],
-        ),
+        child: loading == true
+            ? Stack(
+                children: [
+                  UI(),
+                  loading == true ? const Loader() : Container()
+                ],
+              )
+            : UI(),
       ),
     ));
   }
@@ -1020,7 +1030,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                         id: int.parse(widget.date.toString().split('-')[0]) +
                             int.parse(widget.date.toString().split('-')[1]) +
                             int.parse(widget.id.hashCode.toString()) +
-                            int.parse(cal_share_person.secondname));
+                            int.parse(cal_share_person.secondname.hashCode
+                                .toString()));
                   }
                 });
               }),
@@ -1152,8 +1163,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                             'alarm_cal_hour_${widget.id}_${cal_share_person.secondname}');
                         minute = Hive.box('user_setting').get(
                             'alarm_cal_minute_${widget.id}_${cal_share_person.secondname}');
-                        print(hour.toString() + ' : ' + minute.toString());
-
                         pushalarmsettingcal(
                             context,
                             setalarmhourNode,

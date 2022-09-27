@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -15,7 +16,9 @@ import '../Auth/KakaoSignInController.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
+import '../UI/Home/Widgets/CreateCalandmemo.dart';
 import '../route.dart';
 
 class LoginSignPage extends StatefulWidget {
@@ -28,11 +31,15 @@ class LoginSignPage extends StatefulWidget {
 class _LoginSignPageState extends State<LoginSignPage>
     with WidgetsBindingObserver {
   bool _ischecked = false;
+  bool loading = false;
+  late FToast fToast;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    fToast = FToast();
+    fToast.init(context);
     super.initState();
   }
 
@@ -48,96 +55,101 @@ class _LoginSignPageState extends State<LoginSignPage>
       backgroundColor: Colors.white,
       body: WillPopScope(
         onWillPop: _onWillPop,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
           children: [
-            makeBody(context, _ischecked),
-            const Divider(
-              height: 30,
-              color: Colors.grey,
-              thickness: 0.5,
-              indent: 30.0,
-              endIndent: 30.0,
-            ),
-            const Text(
-              '동의항목',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontWeight: FontWeight.bold, // bold
-              ),
-            ),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                        value: _ischecked,
-                        onChanged: (value) {
-                          setState(() {
-                            _ischecked = value!;
-                          });
-                        }),
-                    Flexible(
-                        fit: FlexFit.tight,
-                        child: Row(
-                          children: const [
-                            Text(
-                              '(선택)자동 로그인 사용',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  letterSpacing: 2),
-                            ),
-                          ],
-                        ))
-                  ],
+                makeBody(context, _ischecked),
+                const Divider(
+                  height: 30,
+                  color: Colors.grey,
+                  thickness: 0.5,
+                  indent: 30.0,
+                  endIndent: 30.0,
                 ),
-                widget.first == 'first'
-                    ? Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              const TextSpan(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    letterSpacing: 2),
-                                text: '구글로그인(Google Login)을 클릭하여 로그인 시 ',
+                const Text(
+                  '동의항목',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold, // bold
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                            value: _ischecked,
+                            onChanged: (value) {
+                              setState(() {
+                                _ischecked = value!;
+                              });
+                            }),
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: Row(
+                              children: const [
+                                Text(
+                                  '(선택)자동 로그인 사용',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      letterSpacing: 2),
+                                ),
+                              ],
+                            ))
+                      ],
+                    ),
+                    widget.first == 'first'
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        letterSpacing: 2),
+                                    text: '구글로그인(Google Login)을 클릭하여 로그인 시 ',
+                                  ),
+                                  TextSpan(
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 16,
+                                        color: Colors.blue.shade400,
+                                        letterSpacing: 2),
+                                    text: '앱의 개인정보처리방침',
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        userinfo_draggable(context);
+                                      },
+                                  ),
+                                  const TextSpan(
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        letterSpacing: 2),
+                                    text: '에 동의하는 것으로 간주합니다.',
+                                  ),
+                                ],
                               ),
-                              TextSpan(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16,
-                                    color: Colors.blue.shade400,
-                                    letterSpacing: 2),
-                                text: '앱의 개인정보처리방침',
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    userinfo_draggable(context);
-                                  },
-                              ),
-                              const TextSpan(
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    letterSpacing: 2),
-                                text: '에 동의하는 것으로 간주합니다.',
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : const SizedBox()
+                            ),
+                          )
+                        : const SizedBox()
+                  ],
+                )
               ],
-            )
+            ),
+            loading == true ? const Loader() : Container()
           ],
         ),
       ),
@@ -180,7 +192,14 @@ class _LoginSignPageState extends State<LoginSignPage>
             onTap: () async {
               /*await Provider.of<GoogleSignInController>(context, listen: false)
                   .login(context, ischecked);*/
-              GoogleSignInController().login(context, ischecked);
+              setState(() {
+                loading = true;
+              });
+              await GoogleSignInController().login(context, ischecked);
+              setState(() {
+                loading = false;
+              });
+              CreateCalandmemoSuccessFlushbar('로그인완료', fToast);
               /*await Navigator.of(context).pushReplacement(
                 PageTransition(
                   type: PageTransitionType.bottomToTop,

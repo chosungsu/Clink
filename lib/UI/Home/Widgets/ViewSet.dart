@@ -30,6 +30,31 @@ ViewSet(List defaulthomeviewlist, List userviewlist, bool isresponsive,
   List<Widget> children_cal2 = [];
   List<Widget> children_memo1 = [];
   List<Widget> children_memo2 = [];
+  firestore
+      .collection('HomeViewCategories')
+      .doc(Hive.box('user_setting').get('usercode'))
+      .get()
+      .then((value) {
+    if (value.exists) {
+      peopleadd.defaulthomeviewlist.clear();
+      peopleadd.userviewlist.clear();
+      for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+        peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+      }
+      for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+        peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
+      }
+    } else {
+      firestore
+          .collection('HomeViewCategories')
+          .doc(Hive.box('user_setting').get('usercode'))
+          .set({
+        'usercode': peopleadd.code,
+        'viewcategory': peopleadd.defaulthomeviewlist,
+        'hidecategory': peopleadd.userviewlist
+      }, SetOptions(merge: true));
+    }
+  });
   return GetBuilder<PeopleAdd>(
       builder: (_) => ListView.builder(
           physics: const BouncingScrollPhysics(),
@@ -129,10 +154,9 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
   var updateidalarm = '';
   List<bool> alarmtypes = [];
   bool isChecked_pushalarm = false;
-
   List<Widget> list_all = [];
   List<Widget> children_cal1 = [];
-  firestore
+  /*firestore
       .collection('CalendarDataBase')
       .where('OriginalUser', isEqualTo: peopleadd.secondname)
       .where('Date',
@@ -145,36 +169,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
       .orderBy('Timestart')
       .get()
       .then((value) {
-    contentmy.clear();
-    var timsestart, timefinish, codes, todo, share, summary;
-    List cname = [];
-    final valuespace = value.docs;
-    for (var sp in valuespace) {
-      todo = sp.get('Daytodo');
-      timsestart = sp.get('Timestart');
-      timefinish = sp.get('Timefinish');
-      codes = sp.get('calname');
-      share = sp.get('Shares');
-      summary = sp.get('summary');
-      firestore.collection('CalendarSheetHome').doc(codes).get().then((value) {
-        value.data()!.forEach((key, value) {
-          //print(key + '-' + value);
-          if (key == 'calname') {
-            cname.add(value);
-          }
-        });
-      });
-      contentmy.add(SpaceContent(
-          title: todo,
-          date: timsestart + '-' + timefinish,
-          cname: cname,
-          finishdate: timefinish,
-          startdate: timsestart,
-          share: share,
-          code: codes,
-          summary: summary));
-    }
-  });
+    
+  });*/
   return FutureBuilder<QuerySnapshot>(
     future: firestore
         .collection('CalendarDataBase')
@@ -190,140 +186,152 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
         .get(),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
+        contentmy.clear();
+        var timsestart, timefinish, codes, todo, share, summary;
+        List cname = [];
+        final valuespace = snapshot.data!.docs;
+        for (var sp in valuespace) {
+          todo = sp.get('Daytodo');
+          timsestart = sp.get('Timestart');
+          timefinish = sp.get('Timefinish');
+          codes = sp.get('calname');
+          share = sp.get('Shares');
+          summary = sp.get('summary');
+          firestore
+              .collection('CalendarSheetHome')
+              .doc(codes)
+              .get()
+              .then((value) {
+            value.data()!.forEach((key, value) {
+              //print(key + '-' + value);
+              if (key == 'calname') {
+                cname.add(value);
+              }
+            });
+          });
+          contentmy.add(SpaceContent(
+              title: todo,
+              date: timsestart + '-' + timefinish,
+              cname: cname,
+              finishdate: timefinish,
+              startdate: timsestart,
+              share: share,
+              code: codes,
+              summary: summary));
+        }
         children_cal1 = <Widget>[
           ContainerDesign(
-              child: snapshot.data!.docs.isEmpty
-                  ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: contentmy.length,
+                  itemBuilder: (context, index) {
+                    firestore.collectionGroup('AlarmTable').get().then((value) {
+                      if (value.docs.isNotEmpty) {
+                        for (int i = 0; i < value.docs.length; i++) {
+                          if (value.docs[i].id == name) {
+                            if (value.docs[i].data()['calcode'] ==
+                                snapshot.data!.docs[index].id) {
+                              updateidalarm = value.docs[i].id;
+                              alarmtypes.clear();
+                              for (int j = 0;
+                                  j < value.docs[i].data()['alarmtype'].length;
+                                  j++) {
+                                alarmtypes
+                                    .add(value.docs[i].data()['alarmtype'][j]);
+                              }
+                              Hive.box('user_setting').put(
+                                  'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                  value.docs[i].data()['alarmhour'].toString());
+                              Hive.box('user_setting').put(
+                                  'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                  value.docs[i]
+                                      .data()['alarmminute']
+                                      .toString());
+                              calendarsetting().hour1 = Hive.box('user_setting')
+                                  .get(
+                                      'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                              calendarsetting().minute1 =
+                                  Hive.box('user_setting').get(
+                                      'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                              isChecked_pushalarm =
+                                  value.docs[i].data()['alarmmake'];
+                              calendarsetting().settimeminute(
+                                  int.parse(value.docs[i]
+                                      .data()['alarmhour']
+                                      .toString()),
+                                  int.parse(value.docs[i]
+                                      .data()['alarmminute']
+                                      .toString()),
+                                  snapshot.data!.docs[index]['Daytodo'],
+                                  snapshot.data!.docs[index].id);
+                            }
+                          }
+                        }
+                      }
+                    });
+                    return Column(
                       children: [
-                        SizedBox(
-                          height: isresponsive == true ? 300 : 50,
-                          child: Center(
-                            child: NeumorphicText(
-                              '보여드릴 오늘의 일정이 없습니다.',
-                              style: NeumorphicStyle(
-                                shape: NeumorphicShape.flat,
-                                depth: 3,
-                                color: TextColor(),
-                              ),
-                              textStyle: NeumorphicTextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: contentTextsize(),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    )
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: contentmy.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            GestureDetector(
-                                onTap: () {},
-                                child: StatefulBuilder(
-                                    builder: ((context, setState) {
-                                  return ListTile(
-                                    onTap: () {
-                                      //수정 및 삭제 시트 띄우기
-
-                                      firestore
-                                          .collectionGroup('AlarmTable')
-                                          .get()
-                                          .then((value) {
-                                        if (value.docs.isNotEmpty) {
-                                          for (int i = 0;
-                                              i < value.docs.length;
-                                              i++) {
-                                            if (value.docs[i].id ==
-                                                peopleadd.secondname) {
-                                              if (value.docs[i]
-                                                      .data()['calcode'] ==
-                                                  snapshot
-                                                      .data!.docs[index].id) {
-                                                updateidalarm =
-                                                    value.docs[i].id;
-                                                for (int j = 0;
-                                                    j <
-                                                        value.docs[i]
-                                                            .data()['alarmtype']
-                                                            .length;
-                                                    j++) {
-                                                  alarmtypes.add(value.docs[i]
-                                                      .data()['alarmtype'][j]);
-                                                }
-                                                Hive.box('user_setting').put(
-                                                    'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
-                                                    value.docs[i]
-                                                        .data()['alarmhour']
-                                                        .toString());
-                                                Hive.box('user_setting').put(
-                                                    'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
-                                                    value.docs[i]
-                                                        .data()['alarmminute']
-                                                        .toString());
-                                                calendarsetting().hour1 = Hive
-                                                        .box('user_setting')
-                                                    .get(
-                                                        'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
-                                                calendarsetting().minute1 = Hive
-                                                        .box('user_setting')
-                                                    .get(
-                                                        'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
-                                                isChecked_pushalarm = value
-                                                    .docs[i]
-                                                    .data()['alarmmake'];
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }).whenComplete(() {
-                                        Get.to(
-                                            () => ClickShowEachCalendar(
-                                                  start: contentmy[index]
-                                                      .startdate,
-                                                  finish: contentmy[index]
-                                                      .finishdate,
-                                                  calinfo:
-                                                      contentmy[index].title,
-                                                  date: Date,
-                                                  share: contentmy[index].share,
-                                                  calname: contentmy[index]
-                                                      .cname[index]
-                                                      .toString(),
-                                                  code: contentmy[index].code,
-                                                  summary:
-                                                      contentmy[index].summary,
-                                                  isfromwhere: 'home',
-                                                  id: snapshot
-                                                      .data!.docs[index].id,
-                                                  alarmtypes: alarmtypes,
-                                                  alarmmake:
-                                                      isChecked_pushalarm,
-                                                ),
-                                            transition: Transition.downToUp);
-                                      });
-                                    },
-                                    horizontalTitleGap: 10,
-                                    dense: true,
-                                    leading: Icon(
-                                      Icons.calendar_month,
-                                      color: TextColor(),
-                                    ),
-                                    trailing: int.parse(contentmy[index]
-                                                .startdate
-                                                .toString()
-                                                .split(':')[0])
-                                            .isGreaterThan(Date.hour)
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        GestureDetector(
+                            onTap: () {},
+                            child:
+                                StatefulBuilder(builder: ((context, setState) {
+                              return ListTile(
+                                onTap: () {
+                                  //수정 및 삭제 시트 띄우기
+                                  Get.to(
+                                      () => ClickShowEachCalendar(
+                                            start: contentmy[index].startdate,
+                                            finish: contentmy[index].finishdate,
+                                            calinfo: contentmy[index].title,
+                                            date: Date,
+                                            share: contentmy[index].share,
+                                            calname: contentmy[index]
+                                                .cname[index]
+                                                .toString(),
+                                            code: contentmy[index].code,
+                                            summary: contentmy[index].summary,
+                                            isfromwhere: 'home',
+                                            id: snapshot.data!.docs[index].id,
+                                            alarmtypes: alarmtypes,
+                                            alarmmake: isChecked_pushalarm,
+                                          ),
+                                      transition: Transition.downToUp);
+                                },
+                                horizontalTitleGap: 10,
+                                dense: true,
+                                leading: Icon(
+                                  Icons.calendar_month,
+                                  color: TextColor(),
+                                ),
+                                trailing: int.parse(contentmy[index]
+                                            .startdate
+                                            .toString()
+                                            .split(':')[0])
+                                        .isGreaterThan(Date.hour)
+                                    ? (isChecked_pushalarm
+                                        ? Icon(
+                                            Icons.alarm,
+                                            color: TextColor(),
+                                          )
+                                        : Icon(
+                                            Icons.not_started,
+                                            color: TextColor(),
+                                          ))
+                                    : (int.parse(contentmy[index]
+                                                    .startdate
+                                                    .toString()
+                                                    .split(':')[1])
+                                                .isGreaterThan(Date.minute) &&
+                                            int.parse(contentmy[index]
+                                                    .startdate
+                                                    .toString()
+                                                    .split(':')[0])
+                                                .isLowerThan(Date.hour)
                                         ? (isChecked_pushalarm
                                             ? Icon(
                                                 Icons.alarm,
@@ -333,48 +341,28 @@ FutureBuilder<QuerySnapshot<Object?>> stream1(
                                                 Icons.not_started,
                                                 color: TextColor(),
                                               ))
-                                        : (int.parse(contentmy[index]
-                                                        .startdate
-                                                        .toString()
-                                                        .split(':')[1])
-                                                    .isGreaterThan(
-                                                        Date.minute) &&
-                                                int.parse(contentmy[index]
-                                                        .startdate
-                                                        .toString()
-                                                        .split(':')[0])
-                                                    .isLowerThan(Date.hour)
-                                            ? (isChecked_pushalarm
-                                                ? Icon(
-                                                    Icons.alarm,
-                                                    color: TextColor(),
-                                                  )
-                                                : Icon(
-                                                    Icons.not_started,
-                                                    color: TextColor(),
-                                                  ))
-                                            : Icon(
-                                                Icons.done,
-                                                color: TextColor(),
-                                              )),
-                                    subtitle: Text(contentmy[index].title,
-                                        style: TextStyle(
+                                        : Icon(
+                                            Icons.done,
                                             color: TextColor(),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize())),
-                                    title: Text(contentmy[index].date,
-                                        style: TextStyle(
-                                          color: TextColor(),
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  );
-                                }))),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                          ],
-                        );
-                      }),
+                                          )),
+                                subtitle: Text(contentmy[index].title,
+                                    style: TextStyle(
+                                        color: TextColor(),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize())),
+                                title: Text(contentmy[index].date,
+                                    style: TextStyle(
+                                      color: TextColor(),
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              );
+                            }))),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    );
+                  }),
               color: BGColor())
         ];
       } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -441,7 +429,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
   var updateidalarm = '';
   List<bool> alarmtypes = [];
   bool isChecked_pushalarm = false;
-  firestore
+  /*firestore
       .collection('CalendarDataBase')
       .where('Date',
           isEqualTo: Date.toString().split('-')[0] +
@@ -453,41 +441,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
       .orderBy('Timestart')
       .get()
       .then(((value) {
-    List nameList = [];
-    contentshare.clear();
-    var timsestart, timefinish, codes, todo, summary;
-    List cname = [];
-    final valuespace = value.docs;
-    for (var sp in valuespace) {
-      nameList = sp.get('Shares');
-      todo = sp.get('Daytodo');
-      timsestart = sp.get('Timestart');
-      timefinish = sp.get('Timefinish');
-      codes = sp.get('calname');
-      summary = sp.get('summary');
-      firestore.collection('CalendarSheetHome').doc(codes).get().then((value) {
-        value.data()!.forEach((key, value) {
-          //print(key + '-' + value);
-          if (key == 'calname') {
-            cname.add(value);
-          }
-        });
-      });
-      for (int i = 0; i < nameList.length; i++) {
-        if (nameList[i].contains(secondname)) {
-          contentshare.add(SpaceContent(
-              title: todo,
-              date: timsestart + '-' + timefinish,
-              cname: cname,
-              finishdate: timefinish,
-              startdate: timsestart,
-              share: nameList,
-              code: codes,
-              summary: summary));
-        }
-      }
-    }
-  }));
+    
+  }));*/
   return FutureBuilder<QuerySnapshot>(
     future: firestore
         .collection('CalendarDataBase')
@@ -502,140 +457,150 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
         .get(),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
+        List nameList = [];
+        contentshare.clear();
+        var timsestart, timefinish, codes, todo, summary;
+        List cname = [];
+        final valuespace = snapshot.data!.docs;
+        for (var sp in valuespace) {
+          nameList = sp.get('Shares');
+          todo = sp.get('Daytodo');
+          timsestart = sp.get('Timestart');
+          timefinish = sp.get('Timefinish');
+          codes = sp.get('calname');
+          summary = sp.get('summary');
+          firestore
+              .collection('CalendarSheetHome')
+              .doc(codes)
+              .get()
+              .then((value) {
+            value.data()!.forEach((key, value) {
+              //print(key + '-' + value);
+              if (key == 'calname') {
+                cname.add(value);
+              }
+            });
+          });
+          for (int i = 0; i < nameList.length; i++) {
+            if (nameList[i].contains(secondname)) {
+              contentshare.add(SpaceContent(
+                  title: todo,
+                  date: timsestart + '-' + timefinish,
+                  cname: cname,
+                  finishdate: timefinish,
+                  startdate: timsestart,
+                  share: nameList,
+                  code: codes,
+                  summary: summary));
+            }
+          }
+        }
         children_cal2 = <Widget>[
           ContainerDesign(
-              child: contentshare.isEmpty
-                  ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: contentshare.length,
+                  itemBuilder: (context, index) {
+                    firestore.collectionGroup('AlarmTable').get().then((value) {
+                      if (value.docs.isNotEmpty) {
+                        for (int i = 0; i < value.docs.length; i++) {
+                          if (value.docs[i].id == name) {
+                            if (value.docs[i].data()['calcode'] ==
+                                snapshot.data!.docs[index].id) {
+                              updateidalarm = value.docs[i].id;
+                              for (int j = 0;
+                                  j < value.docs[i].data()['alarmtype'].length;
+                                  j++) {
+                                alarmtypes
+                                    .add(value.docs[i].data()['alarmtype'][j]);
+                              }
+                              Hive.box('user_setting').put(
+                                  'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                  value.docs[i].data()['alarmhour'].toString());
+                              Hive.box('user_setting').put(
+                                  'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                  value.docs[i]
+                                      .data()['alarmminute']
+                                      .toString());
+                              calendarsetting().hour1 = Hive.box('user_setting')
+                                  .get(
+                                      'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                              calendarsetting().minute1 =
+                                  Hive.box('user_setting').get(
+                                      'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                              isChecked_pushalarm =
+                                  value.docs[i].data()['alarmmake'];
+                            }
+                          }
+                        }
+                      }
+                    });
+                    return Column(
                       children: [
-                        SizedBox(
-                            height: isresponsive == true ? 300 : 50,
-                            child: Center(
-                              child: NeumorphicText(
-                                '보여드릴 공유된 일정이 없습니다.',
-                                style: NeumorphicStyle(
-                                  shape: NeumorphicShape.flat,
-                                  depth: 3,
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        GestureDetector(
+                            onTap: () {},
+                            child:
+                                StatefulBuilder(builder: ((context, setState) {
+                              return ListTile(
+                                onTap: () async {
+                                  //수정 및 삭제 시트 띄우기
+                                  Get.to(
+                                      () => ClickShowEachCalendar(
+                                            start:
+                                                contentshare[index].startdate,
+                                            finish:
+                                                contentshare[index].finishdate,
+                                            calinfo: contentshare[index].title,
+                                            date: Date,
+                                            share: contentshare[index].share,
+                                            calname: contentshare[index]
+                                                .cname[index]
+                                                .toString(),
+                                            code: contentshare[index].code,
+                                            summary:
+                                                contentshare[index].summary,
+                                            isfromwhere: 'home',
+                                            id: snapshot.data!.docs[index].id,
+                                            alarmtypes: alarmtypes,
+                                            alarmmake: isChecked_pushalarm,
+                                          ),
+                                      transition: Transition.downToUp);
+                                },
+                                horizontalTitleGap: 10,
+                                dense: true,
+                                leading: Icon(
+                                  Icons.calendar_month,
                                   color: TextColor(),
                                 ),
-                                textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: contentTextsize(),
-                                ),
-                              ),
-                            ))
-                      ],
-                    )
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: contentshare.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            GestureDetector(
-                                onTap: () {},
-                                child: StatefulBuilder(
-                                    builder: ((context, setState) {
-                                  return ListTile(
-                                    onTap: () async {
-                                      //수정 및 삭제 시트 띄우기
-                                      firestore
-                                          .collectionGroup('AlarmTable')
-                                          .get()
-                                          .then((value) {
-                                        if (value.docs.isNotEmpty) {
-                                          for (int i = 0;
-                                              i < value.docs.length;
-                                              i++) {
-                                            if (value.docs[i].id ==
-                                                peopleadd.secondname) {
-                                              if (value.docs[i]
-                                                      .data()['calcode'] ==
-                                                  snapshot
-                                                      .data!.docs[index].id) {
-                                                updateidalarm =
-                                                    value.docs[i].id;
-                                                for (int j = 0;
-                                                    j <
-                                                        value.docs[i]
-                                                            .data()['alarmtype']
-                                                            .length;
-                                                    j++) {
-                                                  alarmtypes.add(value.docs[i]
-                                                      .data()['alarmtype'][j]);
-                                                }
-                                                Hive.box('user_setting').put(
-                                                    'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
-                                                    value.docs[i]
-                                                        .data()['alarmhour']
-                                                        .toString());
-                                                Hive.box('user_setting').put(
-                                                    'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
-                                                    value.docs[i]
-                                                        .data()['alarmminute']
-                                                        .toString());
-                                                calendarsetting().hour1 = Hive
-                                                        .box('user_setting')
-                                                    .get(
-                                                        'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
-                                                calendarsetting().minute1 = Hive
-                                                        .box('user_setting')
-                                                    .get(
-                                                        'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
-                                                isChecked_pushalarm = value
-                                                    .docs[i]
-                                                    .data()['alarmmake'];
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }).whenComplete(() {
-                                        Get.to(
-                                            () => ClickShowEachCalendar(
-                                                  start: contentshare[index]
-                                                      .startdate,
-                                                  finish: contentshare[index]
-                                                      .finishdate,
-                                                  calinfo:
-                                                      contentshare[index].title,
-                                                  date: Date,
-                                                  share:
-                                                      contentshare[index].share,
-                                                  calname: contentshare[index]
-                                                      .cname[index]
-                                                      .toString(),
-                                                  code:
-                                                      contentshare[index].code,
-                                                  summary: contentshare[index]
-                                                      .summary,
-                                                  isfromwhere: 'home',
-                                                  id: snapshot
-                                                      .data!.docs[index].id,
-                                                  alarmtypes: alarmtypes,
-                                                  alarmmake:
-                                                      isChecked_pushalarm,
-                                                ),
-                                            transition: Transition.downToUp);
-                                      });
-                                    },
-                                    horizontalTitleGap: 10,
-                                    dense: true,
-                                    leading: Icon(
-                                      Icons.calendar_month,
-                                      color: TextColor(),
-                                    ),
-                                    trailing: int.parse(contentshare[index]
-                                                .startdate
-                                                .toString()
-                                                .split(':')[0])
-                                            .isGreaterThan(Date.hour)
+                                trailing: int.parse(contentshare[index]
+                                            .startdate
+                                            .toString()
+                                            .split(':')[0])
+                                        .isGreaterThan(Date.hour)
+                                    ? (isChecked_pushalarm
+                                        ? Icon(
+                                            Icons.alarm,
+                                            color: TextColor(),
+                                          )
+                                        : Icon(
+                                            Icons.not_started,
+                                            color: TextColor(),
+                                          ))
+                                    : (int.parse(contentshare[index]
+                                                    .startdate
+                                                    .toString()
+                                                    .split(':')[1])
+                                                .isGreaterThan(Date.minute) &&
+                                            int.parse(contentshare[index]
+                                                    .startdate
+                                                    .toString()
+                                                    .split(':')[0])
+                                                .isLowerThan(Date.hour)
                                         ? (isChecked_pushalarm
                                             ? Icon(
                                                 Icons.alarm,
@@ -645,48 +610,28 @@ FutureBuilder<QuerySnapshot<Object?>> stream2(
                                                 Icons.not_started,
                                                 color: TextColor(),
                                               ))
-                                        : (int.parse(contentshare[index]
-                                                        .startdate
-                                                        .toString()
-                                                        .split(':')[1])
-                                                    .isGreaterThan(
-                                                        Date.minute) &&
-                                                int.parse(contentshare[index]
-                                                        .startdate
-                                                        .toString()
-                                                        .split(':')[0])
-                                                    .isLowerThan(Date.hour)
-                                            ? (isChecked_pushalarm
-                                                ? Icon(
-                                                    Icons.alarm,
-                                                    color: TextColor(),
-                                                  )
-                                                : Icon(
-                                                    Icons.not_started,
-                                                    color: TextColor(),
-                                                  ))
-                                            : Icon(
-                                                Icons.done,
-                                                color: TextColor(),
-                                              )),
-                                    subtitle: Text(contentshare[index].title,
-                                        style: TextStyle(
+                                        : Icon(
+                                            Icons.done,
                                             color: TextColor(),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize())),
-                                    title: Text(contentshare[index].date,
-                                        style: TextStyle(
-                                          color: TextColor(),
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  );
-                                }))),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                          ],
-                        );
-                      }),
+                                          )),
+                                subtitle: Text(contentshare[index].title,
+                                    style: TextStyle(
+                                        color: TextColor(),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize())),
+                                title: Text(contentshare[index].date,
+                                    style: TextStyle(
+                                      color: TextColor(),
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              );
+                            }))),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    );
+                  }),
               color: BGColor())
         ];
       } else if (snapshot.connectionState == ConnectionState.waiting) {

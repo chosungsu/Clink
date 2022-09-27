@@ -151,7 +151,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
 
   ChoiceC() {
     double height = MediaQuery.of(context).size.height;
-    print(Hive.box('user_setting').get('sort_cal_card'));
     return GestureDetector(
       onTap: () {
         inputNode.unfocus();
@@ -425,7 +424,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                         descending: cal_sort.sort == 0 ? true : false)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  print(cal_share_person.secondname);
                   if (snapshot.hasData) {
                     return snapshot.data!.docs.isEmpty
                         ? Column(
@@ -514,7 +512,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                               contentTextsize())),
                                                   onPressed: () {
                                                     //공유자 검색
-                                                    print(0);
                                                     Hive.box('user_setting')
                                                         .put(
                                                             'share_cal_person',

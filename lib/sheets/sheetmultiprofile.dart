@@ -135,6 +135,7 @@ content(
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
   List changepeople = [];
+  var time, ok;
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -625,20 +626,6 @@ content(
                               .update({'Shares': changepeople});
                         }
                         changepeople.clear();
-                      }
-                    });
-                    await firestore
-                        .collection('MemoCollections')
-                        .get()
-                        .then((value) {
-                      for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('MemoCollections')
-                              .doc(value.docs[i].id)
-                              .update({'madeUser': controller.text});
-                        }
                       }
                     });
                     await firestore.collection('ShareHome').get().then((value) {

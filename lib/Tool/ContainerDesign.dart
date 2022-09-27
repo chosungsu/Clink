@@ -10,7 +10,7 @@ class ContainerDesign extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: child,
         decoration: BoxDecoration(
             shape: BoxShape.rectangle,
@@ -21,12 +21,12 @@ class ContainerDesign extends StatelessWidget {
                   color: TextColor().withOpacity(0.5),
                   blurRadius: 5,
                   spreadRadius: 0,
-                  offset: Offset(1, 1)),
+                  offset: const Offset(1, 1)),
               BoxShadow(
                   color: BGColor().withOpacity(0.5),
                   blurRadius: 5,
                   spreadRadius: 0,
-                  offset: Offset(-1, -1)),
+                  offset: const Offset(-1, -1)),
             ]));
   }
 }

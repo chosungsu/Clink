@@ -88,33 +88,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 1);
-    firestore
-        .collection('HomeViewCategories')
-        .doc(Hive.box('user_setting').get('usercode'))
-        .get()
-        .then((value) {
-      if (value.exists) {
-        setState(() {
-          peopleadd.defaulthomeviewlist.clear();
-          peopleadd.userviewlist.clear();
-          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-            peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
-          }
-          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-            peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
-          }
-        });
-      } else {
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': peopleadd.code,
-          'viewcategory': peopleadd.defaulthomeviewlist,
-          'hidecategory': peopleadd.userviewlist
-        }, SetOptions(merge: true));
-      }
-    });
+
     firestore.collection('User').doc(name).get().then((value) {
       if (value.exists) {
         peopleadd.secondnameset(value.data()!['subname']);
@@ -131,19 +105,7 @@ class _HomePageState extends State<HomePage> {
             .collection('CalendarDataBase')
             .doc(valueid[j])
             .collection('AlarmTable')
-            .doc('최인영')
-            .set({
-          'alarmtype': _ischecked_alarmslist,
-          'alarmhour': '99',
-          'alarmminute': '99',
-          'alarmmake': false,
-          'calcode': valueid[j]
-        }, SetOptions(merge: true));
-        firestore
-            .collection('CalendarDataBase')
-            .doc(valueid[j])
-            .collection('AlarmTable')
-            .doc('조동환')
+            .doc('sungsu cho')
             .set({
           'alarmtype': _ischecked_alarmslist,
           'alarmhour': '99',
@@ -156,13 +118,7 @@ class _HomePageState extends State<HomePage> {
             .doc(valueid[j])
             .collection('AlarmTable')
             .doc('조성수')
-            .set({
-          'alarmtype': _ischecked_alarmslist,
-          'alarmhour': '99',
-          'alarmminute': '99',
-          'alarmmake': false,
-          'calcode': valueid[j]
-        }, SetOptions(merge: true));
+            .delete();
       }
     });*/
     docid = Hive.box('user_setting').get('usercode');
