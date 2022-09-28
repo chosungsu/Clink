@@ -453,29 +453,10 @@ stream1(
                                           Icons.not_started,
                                           color: TextColor(),
                                         ))
-                                  : (int.parse(contentmy[index]
-                                                  .startdate
-                                                  .toString()
-                                                  .split(':')[1])
-                                              .isGreaterThan(Date.minute) &&
-                                          int.parse(contentmy[index]
-                                                  .startdate
-                                                  .toString()
-                                                  .split(':')[0])
-                                              .isLowerThan(Date.hour)
-                                      ? (isChecked_pushalarm
-                                          ? Icon(
-                                              Icons.alarm,
-                                              color: TextColor(),
-                                            )
-                                          : Icon(
-                                              Icons.not_started,
-                                              color: TextColor(),
-                                            ))
-                                      : Icon(
-                                          Icons.done,
-                                          color: TextColor(),
-                                        )),
+                                  : Icon(
+                                      Icons.done,
+                                      color: TextColor(),
+                                    ),
                               subtitle: Text(contentmy[index].title,
                                   style: TextStyle(
                                       color: TextColor(),
@@ -573,6 +554,7 @@ stream2(
       if (snapshot.hasData &&
           snapshot.data!.docs.isNotEmpty &&
           contentshare.isNotEmpty) {
+        print(Date.hour);
         children_cal2 = <Widget>[
           ContainerDesign(
               child: ListView.builder(
@@ -675,29 +657,10 @@ stream2(
                                             Icons.not_started,
                                             color: TextColor(),
                                           ))
-                                    : (int.parse(contentshare[index]
-                                                    .startdate
-                                                    .toString()
-                                                    .split(':')[1])
-                                                .isGreaterThan(Date.minute) &&
-                                            int.parse(contentshare[index]
-                                                    .startdate
-                                                    .toString()
-                                                    .split(':')[0])
-                                                .isLowerThan(Date.hour)
-                                        ? (isChecked_pushalarm
-                                            ? Icon(
-                                                Icons.alarm,
-                                                color: TextColor(),
-                                              )
-                                            : Icon(
-                                                Icons.not_started,
-                                                color: TextColor(),
-                                              ))
-                                        : Icon(
-                                            Icons.done,
-                                            color: TextColor(),
-                                          )),
+                                    : Icon(
+                                        Icons.done,
+                                        color: TextColor(),
+                                      ),
                                 subtitle: Text(contentshare[index].title,
                                     style: TextStyle(
                                         color: TextColor(),

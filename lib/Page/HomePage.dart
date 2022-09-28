@@ -539,7 +539,108 @@ class _HomePageState extends State<HomePage> {
   H_Container_2(double height) {
     return SizedBox(
         width: MediaQuery.of(context).size.width - 40,
-        child: ContainerDesign(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(
+              flex: 1,
+              child: ContainerDesign(
+                  color: BGColor(),
+                  child: GestureDetector(
+                    onTap: () async {
+                      final reloadpage = await Get.to(
+                          () => const ChooseCalendar(
+                                isfromwhere: 'home',
+                                index: 0,
+                              ),
+                          transition: Transition.rightToLeft);
+                      if (reloadpage) {
+                        GoToMain(context);
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
+                        //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
+                        Container(
+                          alignment: Alignment.center,
+                          child: NeumorphicIcon(
+                            Icons.calendar_month,
+                            size: isresponsive == true ? 50 : 25,
+                            style: NeumorphicStyle(
+                                shape: NeumorphicShape.convex,
+                                depth: 2,
+                                color: Colors.blue.shade400,
+                                lightSource: LightSource.topLeft),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Center(
+                          child: Text('캘린더',
+                              style: TextStyle(
+                                  color: TextColor(),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize())),
+                        ),
+                      ],
+                    ),
+                  )),
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Flexible(
+                flex: 1,
+                child: ContainerDesign(
+                    color: BGColor(),
+                    child: GestureDetector(
+                      onTap: () async {
+                        final reloadpage = await Get.to(
+                            () => const DayNoteHome(
+                                  title: '',
+                                  isfromwhere: 'home',
+                                ),
+                            transition: Transition.rightToLeft);
+                        if (reloadpage) {
+                          GoToMain(context);
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
+                          //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
+                          Container(
+                            alignment: Alignment.center,
+                            child: NeumorphicIcon(
+                              Icons.description,
+                              size: isresponsive == true ? 50 : 25,
+                              style: NeumorphicStyle(
+                                  shape: NeumorphicShape.convex,
+                                  depth: 2,
+                                  color: Colors.blue.shade400,
+                                  lightSource: LightSource.topLeft),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Center(
+                            child: Text('메모장',
+                                style: TextStyle(
+                                    color: TextColor(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize())),
+                          ),
+                        ],
+                      ),
+                    )))
+          ],
+        )
+        /*ContainerDesign(
             color: BGColor(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -547,6 +648,13 @@ class _HomePageState extends State<HomePage> {
               children: [
                 //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
                 //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
+                Center(
+                  child: Text('마이페이지 이동',
+                      style: TextStyle(
+                          color: TextColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize())),
+                ),
                 GridView.count(
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
@@ -647,7 +755,8 @@ class _HomePageState extends State<HomePage> {
                   }),
                 )
               ],
-            )));
+            ))*/
+        );
   }
 
   H_Container_4(double height) {

@@ -110,6 +110,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                 '');
           } else {
             Hive.box('user_setting').put('alarm_memo', value);
+            controll_memo.ischeckedpushmemoalarm = value;
           }
         });
       } else {
