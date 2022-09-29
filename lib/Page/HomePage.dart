@@ -20,12 +20,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:new_version/new_version.dart';
 import 'package:badges/badges.dart';
+import 'package:package_info/package_info.dart';
+import 'package:page_transition/page_transition.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/Widgets/ViewSet.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
+import '../route.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 
@@ -42,7 +45,6 @@ class _HomePageState extends State<HomePage> {
   double scalefactor = 1;
   bool isdraweropen = false;
   bool isresponsive = false;
-  int currentPage = 0;
   int categorynumber = 0;
   List<SpaceContent> sc = [];
   late DateTime Date = DateTime.now();
@@ -69,7 +71,8 @@ class _HomePageState extends State<HomePage> {
   ];
   List userviewlist = [];
   static final List<Category> fillcategory = [];
-  late final PageController _pController;
+  late final PageController _pController2;
+  int currentPage2 = 0;
   //프로 버전 구매시 사용하게될 코드
   bool isbought = false;
   TextEditingController controller = TextEditingController();
@@ -83,6 +86,8 @@ class _HomePageState extends State<HomePage> {
   List updatefriends = [];
   String docid = '';
   final peopleadd = Get.put(PeopleAdd());
+  late PackageInfo info;
+  String versioninfo = '';
 
   @override
   void initState() {
@@ -124,8 +129,8 @@ class _HomePageState extends State<HomePage> {
     });*/
     docid = Hive.box('user_setting').get('usercode');
 
-    _pController =
-        PageController(initialPage: currentPage, viewportFraction: 1);
+    _pController2 =
+        PageController(initialPage: currentPage2, viewportFraction: 1);
     isdraweropen = draw.drawopen;
 
     if (draw.drawopen == true) {
@@ -200,7 +205,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     super.dispose();
-    _pController.dispose();
+    _pController2.dispose();
+  }
+
+  Future<void> _getAppInfo() async {
+    info = await PackageInfo.fromPlatform();
+    versioninfo = info.version;
   }
 
   @override
@@ -224,21 +234,21 @@ class _HomePageState extends State<HomePage> {
                                       .get('page_index')),
                             ),
                             HomeUi(
-                              _pController,
+                              _pController2,
                             ),
                           ],
                         )
                       : Stack(
                           children: [
                             HomeUi(
-                              _pController,
+                              _pController2,
                             ),
                           ],
                         ))
                   : Stack(
                       children: [
                         HomeUi(
-                          _pController,
+                          _pController2,
                         ),
                       ],
                     ),
@@ -369,80 +379,6 @@ class _HomePageState extends State<HomePage> {
                                                     fontWeight: FontWeight.bold,
                                                   )),
                                             ),
-                                            /*GetBuilder<notishow>(
-                                                builder: (_) => notilist
-                                                            .isread ==
-                                                        true
-                                                    ? IconBtn(
-                                                        color: TextColor(),
-                                                        child: IconButton(
-                                                            onPressed: () {
-                                                              Get.to(
-                                                                  () =>
-                                                                      NotiAlarm(),
-                                                                  transition:
-                                                                      Transition
-                                                                          .zoom);
-                                                            },
-                                                            icon: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                width: 30,
-                                                                height: 30,
-                                                                child:
-                                                                    NeumorphicIcon(
-                                                                  Icons
-                                                                      .notifications_none,
-                                                                  size: 30,
-                                                                  style: NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      surfaceIntensity:
-                                                                          0.5,
-                                                                      depth: 2,
-                                                                      color:
-                                                                          TextColor(),
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
-                                                                ))))
-                                                    : IconBtn(
-                                                        color: TextColor(),
-                                                        child: IconButton(
-                                                          onPressed: () {
-                                                            Get.to(
-                                                                () =>
-                                                                    NotiAlarm(),
-                                                                transition:
-                                                                    Transition
-                                                                        .zoom);
-                                                          },
-                                                          icon: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              width: 30,
-                                                              height: 30,
-                                                              child: Badge(
-                                                                  child:
-                                                                      NeumorphicIcon(
-                                                                Icons
-                                                                    .notifications_none,
-                                                                size: 30,
-                                                                style: NeumorphicStyle(
-                                                                    shape: NeumorphicShape
-                                                                        .convex,
-                                                                    surfaceIntensity:
-                                                                        0.5,
-                                                                    depth: 2,
-                                                                    color:
-                                                                        TextColor(),
-                                                                    lightSource:
-                                                                        LightSource
-                                                                            .topLeft),
-                                                              ))),
-                                                        )))*/
                                           ],
                                         ))),
                               ],
@@ -461,19 +397,25 @@ class _HomePageState extends State<HomePage> {
                                       const EdgeInsets.fromLTRB(20, 0, 20, 0),
                                   child: Column(
                                     children: [
-                                      H_Container_0_eventcompany(
-                                          height, _pController),
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      H_Container_0(height, _pController),
+                                      H_Container_0(height, _pController2),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      H_Container_0_eventcompany(),
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      H_Container_2(height),
+                                      H_Container_3(height),
                                       const SizedBox(
                                         height: 20,
                                       ),
+                                      /*H_Container_2(height),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),*/
                                       H_Container_1(height),
                                       const SizedBox(
                                         height: 20,
@@ -502,15 +444,6 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  H_Container_0_eventcompany(double height, PageController pController) {
-    //프로버전 구매시 보이지 않게 함
-    return EventApps(
-      height: height,
-      pageController: pController,
-      pageindex: 0,
-    );
-  }
-
   H_Container_0(double height, PageController pController) {
     //프로버전 구매시 보이지 않게 함
     return SizedBox(
@@ -528,6 +461,89 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  H_Container_3(double height) {
+    //프로버전 구매시 보이지 않게 함
+    /*Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //ADEvents(context)
+      ],
+    )*/
+    return ContainerDesign(
+        child: SizedBox(
+          height: 60,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  '광고공간입니다',
+                  style: TextStyle(
+                      color: TextColor_shadowcolor(),
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize()),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+            ],
+          ),
+        ),
+        color: BGColor());
+  }
+
+  H_Container_0_eventcompany() {
+    //프로버전 구매시 보이지 않게 함
+    return GestureDetector(
+      onTap: () {
+        draw.setclose();
+        _getAppInfo();
+        Navigator.of(context).pushReplacement(
+          PageTransition(
+            type: PageTransitionType.rightToLeft,
+            child: const MyHomePage(
+              index: 3,
+            ),
+          ),
+        );
+      },
+      child: ContainerDesign(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width - 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: Text(
+                      '새로운 기능은 언제나 실험실에 있어요',
+                      maxLines: 3,
+                      softWrap: true,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                      overflow: TextOverflow.fade,
+                    )),
+                const SizedBox(
+                  width: 10,
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.blue.shade200,
+                      child: Icon(
+                        Icons.chevron_right,
+                        color: BGColor(),
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          color: Colors.blue.shade200),
+    );
+  }
+
   H_Container_1(double height) {
     //프로버전 구매시 보이지 않게 함
     return Column(
@@ -536,7 +552,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_2(double height) {
+  /*H_Container_2(double height) {
     return SizedBox(
         width: MediaQuery.of(context).size.width - 40,
         child: Row(
@@ -575,7 +591,7 @@ class _HomePageState extends State<HomePage> {
                                 lightSource: LightSource.topLeft),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         Center(
@@ -589,7 +605,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Flexible(
@@ -625,7 +641,7 @@ class _HomePageState extends State<HomePage> {
                                   lightSource: LightSource.topLeft),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Center(
@@ -757,7 +773,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ))*/
         );
-  }
+  }*/
 
   H_Container_4(double height) {
     //프로버전 구매시 보이지 않게 함

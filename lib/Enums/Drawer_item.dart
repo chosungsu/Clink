@@ -6,7 +6,7 @@ import '../Tool/Getx/notishow.dart';
 import '../UI/Home/NotiAlarm.dart';
 
 List<Map> drawerItems = [
-  {'icon': Icons.group, 'title': '피플'},
+  {'icon': Icons.list_alt, 'title': 'MY'},
   {'icon': Icons.home, 'title': '홈'},
   {
     'icon': Icons.add_outlined,

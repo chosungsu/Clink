@@ -218,7 +218,7 @@ content(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15)),
                         Icon(
-                          Icons.keyboard_double_arrow_down,
+                          Icons.keyboard_double_arrow_up,
                           size: 15,
                           color: Colors.black45,
                         ),
@@ -242,7 +242,7 @@ content(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15)),
                         Icon(
-                          Icons.keyboard_double_arrow_up,
+                          Icons.keyboard_double_arrow_down,
                           size: 15,
                           color: Colors.black45,
                         ),

@@ -8,11 +8,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../Dialogs/destroyBackKey.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/IconBtn.dart';
 import '../../Tool/NoBehavior.dart';
+import '../Events/ADEvents.dart';
 import 'firstContentNet/ChooseCalendar.dart';
 import 'firstContentNet/DayNoteHome.dart';
 
@@ -40,7 +42,7 @@ class _NotiAlarmState extends State<NotiAlarm>
   final readlist = [];
   final listid = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late TabController tabController;
+  //late TabController tabController;
   int pageindex = 0;
 
   @override
@@ -49,11 +51,11 @@ class _NotiAlarmState extends State<NotiAlarm>
     WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('noti_home_click', 0);
     whatwantnotice = notilist.whatnoticepagenum;
-    tabController = TabController(
+    /*tabController = TabController(
       initialIndex: 0,
-      length: 2,
+      length: 1,
       vsync: this,
-    );
+    );*/
   }
 
   @override
@@ -130,96 +132,166 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                               FontWeight.bold,
                                                         )),
                                                   ),
-                                                  GetBuilder<notishow>(
-                                                      builder: (_) => pageindex ==
-                                                              1
-                                                          ? IconBtn(
-                                                              child: IconButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    final reloadpage = await Get.dialog(OSDialog(
-                                                                            context,
-                                                                            '경고',
-                                                                            Text('알림들을 삭제하시겠습니까?',
-                                                                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: Colors.blueGrey)),
-                                                                            pressed2)) ??
-                                                                        false;
-                                                                    if (reloadpage) {
+                                                  IconBtn(
+                                                      child: IconButton(
+                                                          onPressed: () async {
+                                                            final reloadpage = await Get.dialog(OSDialog(
+                                                                    context,
+                                                                    '경고',
+                                                                    Text(
+                                                                        '알림들을 삭제하시겠습니까?',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                                contentTextsize(),
+                                                                            color:
+                                                                                Colors.blueGrey)),
+                                                                    pressed2)) ??
+                                                                false;
+                                                            if (reloadpage) {
+                                                              firestore
+                                                                  .collection(
+                                                                      'AppNoticeByUsers')
+                                                                  .get()
+                                                                  .then(
+                                                                      (value) {
+                                                                for (var element
+                                                                    in value
+                                                                        .docs) {
+                                                                  if (element
+                                                                          .get(
+                                                                              'sharename')
+                                                                          .toString()
+                                                                          .contains(
+                                                                              name) ==
+                                                                      true) {
+                                                                    updateid =
+                                                                        element
+                                                                            .id;
+                                                                    updateusername = element
+                                                                        .get(
+                                                                            'sharename')
+                                                                        .toString()
+                                                                        .split(
+                                                                            ',')
+                                                                        .toList();
+                                                                    if (updateusername
+                                                                            .length ==
+                                                                        1) {
                                                                       firestore
                                                                           .collection(
                                                                               'AppNoticeByUsers')
-                                                                          .get()
-                                                                          .then(
-                                                                              (value) {
-                                                                        for (var element
-                                                                            in value.docs) {
-                                                                          if (element.get('sharename').toString().contains(name) ==
-                                                                              true) {
-                                                                            updateid =
-                                                                                element.id;
-                                                                            updateusername =
-                                                                                element.get('sharename').toString().split(',').toList();
-                                                                            if (updateusername.length ==
-                                                                                1) {
-                                                                              firestore.collection('AppNoticeByUsers').doc(updateid).delete();
-                                                                            } else {
-                                                                              updateusername.removeWhere((element) => element.toString().contains(name));
-                                                                              firestore.collection('AppNoticeByUsers').doc(updateid).update({
-                                                                                'sharename': updateusername
-                                                                              });
-                                                                            }
-                                                                          } else {
-                                                                            if (element.get('username').toString() ==
-                                                                                name) {
-                                                                              updateid = element.id;
-                                                                              firestore.collection('AppNoticeByUsers').doc(updateid).delete();
-                                                                            } else {}
-                                                                          }
-                                                                        }
-                                                                      }).whenComplete(
-                                                                              () {
-                                                                        setState(
-                                                                            () {
-                                                                          Hive.box('user_setting').put(
-                                                                              'noti_home_click',
-                                                                              0);
-                                                                          whatwantnotice =
-                                                                              0;
-                                                                        });
+                                                                          .doc(
+                                                                              updateid)
+                                                                          .delete();
+                                                                    } else {
+                                                                      updateusername.removeWhere((element) => element
+                                                                          .toString()
+                                                                          .contains(
+                                                                              name));
+                                                                      firestore
+                                                                          .collection(
+                                                                              'AppNoticeByUsers')
+                                                                          .doc(
+                                                                              updateid)
+                                                                          .update({
+                                                                        'sharename':
+                                                                            updateusername
                                                                       });
                                                                     }
-                                                                  },
-                                                                  icon:
-                                                                      Container(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    width: 30,
-                                                                    height: 30,
-                                                                    child:
-                                                                        NeumorphicIcon(
-                                                                      Icons
-                                                                          .delete,
-                                                                      size: 30,
-                                                                      style: NeumorphicStyle(
-                                                                          shape: NeumorphicShape
-                                                                              .convex,
-                                                                          depth:
-                                                                              2,
-                                                                          surfaceIntensity:
-                                                                              0.5,
-                                                                          color:
-                                                                              TextColor(),
-                                                                          lightSource:
-                                                                              LightSource.topLeft),
-                                                                    ),
-                                                                  )),
-                                                              color:
-                                                                  TextColor())
-                                                          : const SizedBox(
-                                                              width: 0,
-                                                              height: 0,
-                                                            )),
+                                                                  } else {
+                                                                    if (element
+                                                                            .get('username')
+                                                                            .toString() ==
+                                                                        name) {
+                                                                      updateid =
+                                                                          element
+                                                                              .id;
+                                                                      firestore
+                                                                          .collection(
+                                                                              'AppNoticeByUsers')
+                                                                          .doc(
+                                                                              updateid)
+                                                                          .delete();
+                                                                    } else {}
+                                                                  }
+                                                                }
+                                                              }).whenComplete(
+                                                                      () {
+                                                                setState(() {
+                                                                  Hive.box(
+                                                                          'user_setting')
+                                                                      .put(
+                                                                          'noti_home_click',
+                                                                          0);
+                                                                  whatwantnotice =
+                                                                      0;
+                                                                });
+                                                              });
+                                                            }
+                                                          },
+                                                          icon: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 30,
+                                                            height: 30,
+                                                            child:
+                                                                NeumorphicIcon(
+                                                              Icons.delete,
+                                                              size: 30,
+                                                              style: NeumorphicStyle(
+                                                                  shape:
+                                                                      NeumorphicShape
+                                                                          .convex,
+                                                                  depth: 2,
+                                                                  surfaceIntensity:
+                                                                      0.5,
+                                                                  color:
+                                                                      TextColor(),
+                                                                  lightSource:
+                                                                      LightSource
+                                                                          .topLeft),
+                                                            ),
+                                                          )),
+                                                      color: TextColor()),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  IconBtn(
+                                                      child: IconButton(
+                                                          onPressed: () async {
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    seconds: 0),
+                                                                () {
+                                                              GoToMain(context);
+                                                            });
+                                                          },
+                                                          icon: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 30,
+                                                            height: 30,
+                                                            child:
+                                                                NeumorphicIcon(
+                                                              Icons.close,
+                                                              size: 30,
+                                                              style: NeumorphicStyle(
+                                                                  shape:
+                                                                      NeumorphicShape
+                                                                          .convex,
+                                                                  depth: 2,
+                                                                  surfaceIntensity:
+                                                                      0.5,
+                                                                  color:
+                                                                      TextColor(),
+                                                                  lightSource:
+                                                                      LightSource
+                                                                          .topLeft),
+                                                            ),
+                                                          )),
+                                                      color: TextColor())
                                                 ],
                                               ))),
                                     ],
@@ -232,7 +304,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                   ],
                 ),
               ),
-              TabViewScreen(),
+              //TabViewScreen(),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -248,6 +320,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               NoticeLists(whatwantnotice),
+                              N_Container_1(height)
                             ],
                           ),
                         );
@@ -259,7 +332,7 @@ class _NotiAlarmState extends State<NotiAlarm>
     );
   }
 
-  TabViewScreen() {
+  /*TabViewScreen() {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Container(
@@ -281,14 +354,14 @@ class _NotiAlarmState extends State<NotiAlarm>
                 indicator: BoxDecoration(
                     color: BGColor(), borderRadius: BorderRadius.circular(30)),
                 tabs: [
-                  Text(
+                  /*Text(
                     '공지사항',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize(),
                     ),
                     overflow: TextOverflow.ellipsis,
-                  ),
+                  ),*/
                   Text(
                     '인앱알림',
                     style: TextStyle(
@@ -300,7 +373,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                 ]),
           )),
     );
-  }
+  }*/
 
   allread() {
     return Column(
@@ -346,14 +419,54 @@ class _NotiAlarmState extends State<NotiAlarm>
     );
   }
 
+  N_Container_1(double height) {
+    //프로버전 구매시 보이지 않게 함
+    /*Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //ADEvents(context)
+      ],
+    )*/
+    return SizedBox(
+      height: 60,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              '광고공간입니다',
+              style: TextStyle(
+                  color: TextColor_shadowcolor(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize()),
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   NoticeLists(int whatwantnotice) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 180,
-      child: TabBarView(
+        height: MediaQuery.of(context).size.height - 180,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              allread(),
+              UserNotice(),
+            ],
+          ),
+        )
+        /*TabBarView(
         controller: tabController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          CompanyNotice(),
+          //CompanyNotice(),
           SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -366,8 +479,8 @@ class _NotiAlarmState extends State<NotiAlarm>
             ),
           )
         ],
-      ),
-    );
+      ),*/
+        );
   }
 
   CompanyNotice() {

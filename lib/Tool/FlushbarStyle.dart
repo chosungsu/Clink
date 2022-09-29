@@ -38,7 +38,7 @@ class Snack {
     );
     fToast.showToast(
       child: toast,
-      toastDuration: const Duration(seconds: 1),
+      toastDuration: const Duration(seconds: 2),
       gravity: ToastGravity.BOTTOM,
     );
   }

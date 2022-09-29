@@ -1,5 +1,5 @@
 import 'package:badges/badges.dart';
-import 'package:clickbyme/Page/GroupPage.dart';
+import 'package:clickbyme/Page/MYPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/NotiAlarm.dart';
@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
-      GroupPage(),
+      MYPage(),
       HomePage(secondname: cal_share_person.secondname),
       HomePage(secondname: cal_share_person.secondname),
       ProfilePage(),
@@ -109,10 +109,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),
                           icon: const Icon(
-                            Icons.group,
+                            Icons.list_alt,
                             size: 25,
                           ),
-                          label: '피플',
+                          label: 'MY',
                         ),
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),

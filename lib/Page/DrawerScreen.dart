@@ -79,7 +79,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         //draw.setclose();
                         addWhole(context, searchNode, controller, name, Date,
                             'home');
-                      } else if (element.containsValue(Icons.group)) {
+                      } else if (element.containsValue(Icons.list_alt)) {
                         //draw.setclose();
                         draw.setclose();
                         Navigator.of(context).pushReplacement(
