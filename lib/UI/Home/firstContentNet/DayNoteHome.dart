@@ -49,6 +49,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   String username = Hive.box('user_info').get(
     'id',
   );
+  String usercode = Hive.box('user_setting').get('usercode');
   List<String> textsummary = [];
   String tmpsummary = '';
   DateTime Date = DateTime.now();
@@ -99,7 +100,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
           }
         });
       });
-    firestore.collection('MemoAllAlarm').doc(username).get().then((value) {
+    firestore.collection('MemoAllAlarm').doc(usercode).get().then((value) {
       if (value.exists) {
         value.data()!.forEach((key, value) {
           if (key == 'alarmtime') {
@@ -116,7 +117,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
       } else {
         firestore
             .collection('MemoAllAlarm')
-            .doc(username)
+            .doc(usercode)
             .set({'ok': false, 'alarmtime': '99:99'});
         Hive.box('user_setting').put('alarm_memo', false);
       }
@@ -349,7 +350,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                       await firestore
                                                           .collection(
                                                               'MemoAllAlarm')
-                                                          .doc(username)
+                                                          .doc(usercode)
                                                           .get()
                                                           .then(
                                                         (value) {
@@ -518,7 +519,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
           ),
           onTap: () async {
             //alarm 설정시트 띄우기
-            await firestore.collection('MemoAllAlarm').doc(username).get().then(
+            await firestore.collection('MemoAllAlarm').doc(usercode).get().then(
               (value) {
                 hour = value
                     .data()!['alarmtime']
@@ -575,7 +576,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
           builder: (_) => StreamBuilder<QuerySnapshot>(
                 stream: firestore
                     .collection('MemoDataBase')
-                    .where('OriginalUser', isEqualTo: username)
+                    .where('OriginalUser', isEqualTo: usercode)
                     .orderBy('EditDate',
                         descending: controll_memo.sort == 0 ? true : false)
                     .snapshots(),

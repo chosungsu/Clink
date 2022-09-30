@@ -2,6 +2,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../Auth/GoogleSignInController.dart';
@@ -16,6 +17,7 @@ DeleteUserVerify(BuildContext context, String name) {
   List changepeople = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
+  String usercode = Hive.box('user_setting').get('usercode');
 
   showModalBottomSheet(
       context: context,
@@ -92,7 +94,7 @@ DeleteUserVerify(BuildContext context, String name) {
                               GoogleSignInController()
                                   .Deletelogout(context, name);
                               await firestore
-                                  .collection('CalendarSheetHome')
+                                  .collection('CalendarSheetHome_update')
                                   .get()
                                   .then((value) {
                                 for (int i = 0; i < value.docs.length; i++) {
@@ -107,7 +109,7 @@ DeleteUserVerify(BuildContext context, String name) {
                                     changepeople.removeWhere((element) =>
                                         element == cal_share_person.secondname);
                                     firestore
-                                        .collection('CalendarSheetHome')
+                                        .collection('CalendarSheetHome_update')
                                         .doc(value.docs[i].id)
                                         .update({'share': changepeople});
                                   }
@@ -139,7 +141,7 @@ DeleteUserVerify(BuildContext context, String name) {
                               });
                               await firestore
                                   .collection('MemoDataBase')
-                                  .where('OriginalUser', isEqualTo: name)
+                                  .where('OriginalUser', isEqualTo: usercode)
                                   .get()
                                   .then((value) {
                                 for (var element in value.docs) {
@@ -155,7 +157,7 @@ DeleteUserVerify(BuildContext context, String name) {
                               });
                               await firestore
                                   .collection('MemoAllAlarm')
-                                  .doc(name)
+                                  .doc(usercode)
                                   .delete();
                               setState(() {
                                 isloading = false;

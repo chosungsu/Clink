@@ -85,6 +85,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   String username = Hive.box('user_info').get(
     'id',
   );
+  String usercode = Hive.box('user_setting').get('usercode');
   final scollection = Get.put(selectcollection());
   final controll_memo = Get.put(memosetting());
   List<TextEditingController> controllers = [];
@@ -253,7 +254,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
       firestore
           .collection('MemoDataBase')
           .where('memoTitle', isEqualTo: textEditingController1.text)
-          .where('OriginalUser', isEqualTo: username)
+          .where('OriginalUser', isEqualTo: usercode)
           .where('color', isEqualTo: widget.doccolor.toInt())
           .where('Date',
               isEqualTo: widget.date.toString().split('-')[0] +
@@ -341,7 +342,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
               checklisttexts.map((e) => e.contentindex).toList().isEmpty
                   ? null
                   : checklisttexts.map((e) => e.contentindex).toList(),
-          'OriginalUser': username,
+          'OriginalUser': usercode,
           'securewith': widget.securewith,
           'color': Hive.box('user_setting').get('coloreachmemo') ??
               _color.value.toInt(),
@@ -813,7 +814,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                         .collection('MemoDataBase')
                         .where('memoTitle',
                             isEqualTo: textEditingController1.text)
-                        .where('OriginalUser', isEqualTo: username)
+                        .where('OriginalUser', isEqualTo: usercode)
                         .where('color', isEqualTo: widget.doccolor.toInt())
                         .where('Date',
                             isEqualTo: widget.date.toString().split('-')[0] +

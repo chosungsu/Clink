@@ -81,6 +81,7 @@ class _DayScriptState extends State<DayScript> {
   late TextEditingController textEditingController3;
   late TextEditingController textEditingController4;
   late TextEditingController textEditingController5;
+  String usercode = Hive.box('user_setting').get('usercode');
   //캘린더변수
   late Map<DateTime, List<Event>> _events;
   static final cal_share_person = Get.put(PeopleAdd());
@@ -242,7 +243,7 @@ class _DayScriptState extends State<DayScript> {
                           ? '0' + textEditingController3.text
                           : textEditingController3.text,
                   'Shares': widget.share,
-                  'OriginalUser': widget.orig,
+                  'OriginalUser': usercode,
                   'calname': widget.title,
                   'summary': textEditingController5.text,
                   'Date': DateFormat('yyyy-MM-dd')
@@ -455,7 +456,7 @@ class _DayScriptState extends State<DayScript> {
                         ? '0' + textEditingController3.text
                         : textEditingController3.text,
                 'Shares': widget.share,
-                'OriginalUser': widget.orig,
+                'OriginalUser': usercode,
                 'calname': widget.title,
                 'summary': textEditingController5.text,
                 'Date': DateFormat('yyyy-MM-dd')
@@ -704,7 +705,7 @@ class _DayScriptState extends State<DayScript> {
                       : scollection.collection,
               'memolist': checklisttexts.map((e) => e.memocontent).toList(),
               'memoindex': checklisttexts.map((e) => e.contentindex).toList(),
-              'OriginalUser': username,
+              'OriginalUser': usercode,
               'alarmok': false,
               'alarmtime': '99:99',
               'color': Hive.box('user_setting').get('coloreachmemo') ??

@@ -148,6 +148,7 @@ content(BuildContext context, List friendnamelist, int index) {
   String username = Hive.box('user_info').get(
     'id',
   );
+  String usercode = Hive.box('user_setting').get('usercode');
   final cal_share_person = Get.put(PeopleAdd());
   List updatenamelist = [];
   return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -221,9 +222,8 @@ content(BuildContext context, List friendnamelist, int index) {
                           }
                         });
                         await firestore
-                            .collection('CalendarSheetHome')
-                            .where('madeUser',
-                                isEqualTo: cal_share_person.secondname)
+                            .collection('CalendarSheetHome_update')
+                            .where('madeUser', isEqualTo: usercode)
                             .get()
                             .then((value) {
                           for (int i = 0; i < value.docs.length; i++) {
@@ -236,7 +236,7 @@ content(BuildContext context, List friendnamelist, int index) {
                               updatenamelist.removeWhere((element) =>
                                   element == friendnamelist[index]);
                               firestore
-                                  .collection('CalendarSheetHome')
+                                  .collection('CalendarSheetHome_update')
                                   .doc(value.docs[i].id)
                                   .update({'share': updatenamelist});
                             }
@@ -272,80 +272,4 @@ content(BuildContext context, List friendnamelist, int index) {
       ],
     );
   });
-}
-
-Future<String> _getEmailBody() async {
-  Map<String, dynamic> userInfo = _getUserInfo();
-  Map<String, dynamic> appInfo = await _getAppInfo();
-  Map<String, dynamic> deviceInfo = await _getDeviceInfo();
-
-  String body = "";
-
-  body += "==============\n";
-  body += "아래는 문의하시는 사용자 정보로, 참고용입니다.\n\n";
-
-  userInfo.forEach((key, value) {
-    body += "$key: $value\n";
-  });
-
-  appInfo.forEach((key, value) {
-    body += "$key: $value\n";
-  });
-
-  deviceInfo.forEach((key, value) {
-    body += "$key: $value\n\n";
-  });
-
-  body += "==============\n\n";
-  body += "아래에 오류 및 건의사항을 적어주시면 됩니다.문의하신 내용은 업데이트에 최대한 반영해보도록 하겠습니다.감사합니다!\n\n";
-  body += "==============\n\n";
-  return body;
-}
-
-Map<String, dynamic> _getUserInfo() {
-  String name = Hive.box('user_info').get('id');
-  String email = Hive.box('user_info').get('email');
-  return {"사용자 이름": name, "사용자 이메일": email};
-}
-
-Future<Map<String, dynamic>> _getDeviceInfo() async {
-  DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Map<String, dynamic> deviceData = <String, dynamic>{};
-
-  try {
-    if (GetPlatform.isAndroid == true) {
-      deviceData = _readAndroidDeviceInfo(await deviceInfoPlugin.androidInfo);
-    } else if (GetPlatform.isIOS == true) {
-      deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
-    }
-  } catch (error) {
-    deviceData = {"Error": "Failed to get platform version."};
-  }
-
-  return deviceData;
-}
-
-Map<String, dynamic> _readAndroidDeviceInfo(AndroidDeviceInfo info) {
-  var release = info.version.release;
-  var sdkInt = info.version.sdkInt;
-  var manufacturer = info.manufacturer;
-  var model = info.model;
-
-  return {
-    "OS 버전": "Android $release (SDK $sdkInt)",
-    "기기": "$manufacturer $model"
-  };
-}
-
-Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo info) {
-  var systemName = info.systemName;
-  var version = info.systemVersion;
-  var machine = info.utsname.machine;
-
-  return {"OS 버전": "$systemName $version", "기기": "$machine"};
-}
-
-Future<Map<String, dynamic>> _getAppInfo() async {
-  PackageInfo info = await PackageInfo.fromPlatform();
-  return {"앱 버전": info.version};
 }

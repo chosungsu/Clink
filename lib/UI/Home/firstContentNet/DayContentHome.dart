@@ -59,6 +59,7 @@ class _DayContentHomeState extends State<DayContentHome>
   String username = Hive.box('user_info').get(
     'id',
   );
+  String usercode = Hive.box('user_setting').get('usercode');
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -83,6 +84,18 @@ class _DayContentHomeState extends State<DayContentHome>
     WidgetsBinding.instance.addObserver(this);
     setcal_fromsheet = widget.view;
     themecal_fromsheet = widget.theme;
+    if (setcal_fromsheet == 0) {
+      controll_cals.showcalendar = 0;
+    } else if (setcal_fromsheet == 1) {
+      controll_cals.showcalendar = 1;
+    } else {
+      controll_cals.showcalendar = 2;
+    }
+    if (themecal_fromsheet == 0) {
+      controll_cals.themecalendar = 0;
+    } else {
+      controll_cals.themecalendar = 1;
+    }
     fromDate = DateTime.now();
     toDate = DateTime.now().add(const Duration(hours: 2));
     _events = {};
@@ -177,7 +190,8 @@ class _DayContentHomeState extends State<DayContentHome>
     return StreamBuilder<QuerySnapshot>(
         stream: firestore
             .collection('CalendarDataBase')
-            .where('calname', isEqualTo: widget.title)
+            .where('calname_update', isEqualTo: widget.title)
+            //.where('calname', isEqualTo: widget.title)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -351,7 +365,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                                   position: 'cal',
                                                   title: widget.title,
                                                   share: widget.share,
-                                                  orig: widget.origin,
+                                                  orig: usercode,
                                                   calname: widget.calname,
                                                   isfromwhere: 'dayhome',
                                                 ),
@@ -376,11 +390,12 @@ class _DayContentHomeState extends State<DayContentHome>
                                     child: IconButton(
                                       onPressed: () {
                                         settingCalendarHome(
-                                            context,
-                                            controll_cals,
-                                            widget.theme,
-                                            widget.view,
-                                            widget.title);
+                                          context,
+                                          controll_cals,
+                                          widget.theme,
+                                          widget.view,
+                                          widget.title,
+                                        );
                                       },
                                       icon: NeumorphicIcon(
                                         Icons.settings,
@@ -461,8 +476,7 @@ class _DayContentHomeState extends State<DayContentHome>
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  child: SheetPage(context, setcal_fromsheet, controll_cals,
-                      themecal_fromsheet, theme, view, title),
+                  child: SheetPage(context, controll_cals, theme, view, title),
                 )),
           );
         }).whenComplete(() {});
@@ -480,7 +494,8 @@ class _DayContentHomeState extends State<DayContentHome>
     return StreamBuilder<QuerySnapshot>(
       stream: firestore
           .collection('CalendarDataBase')
-          .where('calname', isEqualTo: widget.title)
+          .where('calname_update', isEqualTo: widget.title)
+          //.where('calname', isEqualTo: widget.title)
           .where('Date',
               isEqualTo: _selectedDay.toString().split('-')[0] +
                   '-' +

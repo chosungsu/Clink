@@ -173,6 +173,7 @@ content(
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
+  String usercode = Hive.box('user_setting').get('usercode');
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -587,9 +588,11 @@ content(
                   setState(() {
                     if (s == 'home') {
                       choicelist[0] == 1
-                          ? firestore.collection('CalendarSheetHome').add({
+                          ? firestore
+                              .collection('CalendarSheetHome_update')
+                              .add({
                               'calname': controller.text,
-                              'madeUser': cal_share_person.secondname,
+                              'madeUser': usercode,
                               'type': 0,
                               'share': [],
                               'viewsetting': 0,
@@ -631,7 +634,7 @@ content(
                                       .substring(0, 2) +
                                   '일',
                               'memoTitle': controller.text,
-                              'OriginalUser': username,
+                              'OriginalUser': usercode,
                               'alarmok': false,
                               'alarmtime': '99:99',
                               'color': Hive.box('user_setting')
@@ -656,9 +659,9 @@ content(
                               });
                             });
                     } else {
-                      firestore.collection('CalendarSheetHome').add({
+                      firestore.collection('CalendarSheetHome_update').add({
                         'calname': controller.text,
-                        'madeUser': cal_share_person.secondname,
+                        'madeUser': usercode,
                         'type': 0,
                         'share': [],
                         'viewsetting': 0,

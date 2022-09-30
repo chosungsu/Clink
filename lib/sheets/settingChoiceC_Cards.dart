@@ -338,18 +338,21 @@ content(BuildContext context, doc_id, doc_change, doc_shares, doc, doc_theme,
               ),
               onPressed: () {
                 setState(() {
-                  firestore.collection('CalendarSheetHome').doc(doc_id).update({
+                  firestore
+                      .collection('CalendarSheetHome_update')
+                      .doc(doc_id)
+                      .update({
                     'allowance_share': isselected_share,
                     'allowance_change_set': isselected_change_set,
                   }).whenComplete(() {
                     firestore
-                        .collection('ShareHome')
+                        .collection('ShareHome_update')
                         .where('doc', isEqualTo: doc_id)
                         .get()
                         .then((value) {
                       value.docs.forEach((element) {
                         firestore
-                            .collection('ShareHome')
+                            .collection('ShareHome_update')
                             .doc(doc_id + '-' + element['showingUser'])
                             .update({
                           'allowance_share': isselected_share,

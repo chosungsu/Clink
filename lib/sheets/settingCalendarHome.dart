@@ -2,14 +2,8 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../Tool/Getx/calendarsetting.dart';
 
-SheetPage(
-    BuildContext context,
-    int setcal_fromsheet,
-    calendarsetting controll_cals,
-    int themecal_fromsheet,
-    int theme,
-    int view,
-    String docid) {
+SheetPage(BuildContext context, calendarsetting controll_cals, int theme,
+    int view, String docid) {
   return SizedBox(
       child: Padding(
           padding:
@@ -36,8 +30,7 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              content(context, setcal_fromsheet, controll_cals,
-                  themecal_fromsheet, theme, view, docid)
+              content(context, controll_cals, theme, view, docid)
             ],
           )));
 }
@@ -59,14 +52,8 @@ title(
       ));
 }
 
-content(
-    BuildContext context,
-    int setcal_fromsheet,
-    calendarsetting controll_cals,
-    int themecal_fromsheet,
-    int theme,
-    int view,
-    String docid) {
+content(BuildContext context, calendarsetting controll_cals, int theme,
+    int view, String docid) {
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
         child: Column(
@@ -107,7 +94,6 @@ content(
                           setState(() {
                             controll_cals.setcals1w(docid);
                             view = controll_cals.showcalendar;
-                            setcal_fromsheet = view;
                           });
                         },
                         child: Center(
@@ -157,7 +143,6 @@ content(
                         setState(() {
                           controll_cals.setcals2w(docid);
                           view = controll_cals.showcalendar;
-                          setcal_fromsheet = view;
                         });
                       },
                       child: Center(
@@ -208,7 +193,6 @@ content(
                         setState(() {
                           controll_cals.setcals1m(docid);
                           view = controll_cals.showcalendar;
-                          setcal_fromsheet = view;
                         });
                       },
                       child: Center(
@@ -277,7 +261,6 @@ content(
                           setState(() {
                             controll_cals.themecals1(docid);
                             theme = controll_cals.themecalendar;
-                            themecal_fromsheet = theme;
                           });
                         },
                         child: Center(
@@ -327,7 +310,6 @@ content(
                         setState(() {
                           controll_cals.themecals2(docid);
                           theme = controll_cals.themecalendar;
-                          themecal_fromsheet = theme;
                         });
                       },
                       child: Center(

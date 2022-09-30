@@ -13,7 +13,7 @@ import '../../../Tool/TextSize.dart';
 import '../secondContentNet/ClickShowEachCalendar.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
-ViewSet(List defaulthomeviewlist, List userviewlist) {
+ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
   final peopleadd = Get.put(PeopleAdd());
   String name = Hive.box('user_info').get('id');
   DateTime Date = DateTime.now();
@@ -25,7 +25,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   firestore
       .collection('CalendarDataBase')
-      .where('OriginalUser', isEqualTo: peopleadd.secondname)
+      .where('OriginalUser', isEqualTo: usercode)
       .where('Date',
           isEqualTo: Date.toString().split('-')[0] +
               '-' +
@@ -39,33 +39,39 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
     contentmy.clear();
     var timsestart, timefinish, codes, todo, share, summary, id;
     List cname = [];
-    final valuespace = value.docs;
-    for (var sp in valuespace) {
-      id = sp.id;
-      todo = sp.get('Daytodo');
-      timsestart = sp.get('Timestart');
-      timefinish = sp.get('Timefinish');
-      codes = sp.get('calname');
-      share = sp.get('Shares');
-      summary = sp.get('summary');
-      firestore.collection('CalendarSheetHome').doc(codes).get().then((value) {
-        value.data()!.forEach((key, value) {
-          //print(key + '-' + value);
-          if (key == 'calname') {
-            cname.add(value);
-          }
+    if (value.docs.isNotEmpty) {
+      final valuespace = value.docs;
+      for (var sp in valuespace) {
+        id = sp.id;
+        todo = sp.get('Daytodo');
+        timsestart = sp.get('Timestart');
+        timefinish = sp.get('Timefinish');
+        codes = sp.get('calname');
+        share = sp.get('Shares');
+        summary = sp.get('summary');
+        firestore
+            .collection('CalendarSheetHome_update')
+            .doc(codes)
+            .get()
+            .then((value) {
+          value.data()!.forEach((key, value) {
+            //print(key + '-' + value);
+            if (key == 'calname') {
+              cname.add(value);
+            }
+          });
         });
-      });
-      contentmy.add(SpaceContent(
-          title: todo,
-          date: timsestart + '-' + timefinish,
-          cname: cname,
-          finishdate: timefinish,
-          startdate: timsestart,
-          share: share,
-          code: codes,
-          summary: summary,
-          id: id));
+        contentmy.add(SpaceContent(
+            title: todo,
+            date: timsestart + '-' + timefinish,
+            cname: cname,
+            finishdate: timefinish,
+            startdate: timsestart,
+            share: share,
+            code: codes,
+            summary: summary,
+            id: id));
+      }
     }
   });
   firestore
@@ -84,42 +90,48 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
     contentshare.clear();
     var timsestart, timefinish, codes, todo, summary, id;
     List cname = [];
-    final valuespace = value.docs;
-    for (var sp in valuespace) {
-      id = sp.id;
-      nameList = sp.get('Shares');
-      todo = sp.get('Daytodo');
-      timsestart = sp.get('Timestart');
-      timefinish = sp.get('Timefinish');
-      codes = sp.get('calname');
-      summary = sp.get('summary');
-      firestore.collection('CalendarSheetHome').doc(codes).get().then((value) {
-        value.data()!.forEach((key, value) {
-          //print(key + '-' + value);
-          if (key == 'calname') {
-            cname.add(value);
-          }
+    if (value.docs.isNotEmpty) {
+      final valuespace = value.docs;
+      for (var sp in valuespace) {
+        id = sp.id;
+        nameList = sp.get('Shares');
+        todo = sp.get('Daytodo');
+        timsestart = sp.get('Timestart');
+        timefinish = sp.get('Timefinish');
+        codes = sp.get('calname');
+        summary = sp.get('summary');
+        firestore
+            .collection('CalendarSheetHome_update')
+            .doc(codes)
+            .get()
+            .then((value) {
+          value.data()!.forEach((key, value) {
+            //print(key + '-' + value);
+            if (key == 'calname') {
+              cname.add(value);
+            }
+          });
         });
-      });
-      for (int i = 0; i < nameList.length; i++) {
-        if (nameList[i].contains(secondname)) {
-          contentshare.add(SpaceContent(
-              title: todo,
-              date: timsestart + '-' + timefinish,
-              cname: cname,
-              finishdate: timefinish,
-              startdate: timsestart,
-              share: nameList,
-              code: codes,
-              summary: summary,
-              id: id));
+        for (int i = 0; i < nameList.length; i++) {
+          if (nameList[i].contains(secondname)) {
+            contentshare.add(SpaceContent(
+                title: todo,
+                date: timsestart + '-' + timefinish,
+                cname: cname,
+                finishdate: timefinish,
+                startdate: timsestart,
+                share: nameList,
+                code: codes,
+                summary: summary,
+                id: id));
+          }
         }
       }
     }
   }));
   firestore
       .collection('MemoDataBase')
-      .where('OriginalUser', isEqualTo: name)
+      .where('OriginalUser', isEqualTo: usercode)
       .where('homesave', isEqualTo: true)
       .get()
       .then(((value) {
@@ -172,7 +184,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
   }));
   firestore
       .collection('MemoDataBase')
-      .where('OriginalUser', isEqualTo: name)
+      .where('OriginalUser', isEqualTo: usercode)
       .where('homesave', isEqualTo: true)
       .get()
       .then(((value) {
@@ -243,7 +255,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
                   const SizedBox(
                     height: 20,
                   ),
-                  stream1(peopleadd.secondname, contentmy),
+                  stream1(peopleadd.secondname, contentmy, usercode),
                   const SizedBox(
                     height: 20,
                   ),
@@ -262,7 +274,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
                       const SizedBox(
                         height: 20,
                       ),
-                      stream2(peopleadd.secondname, contentshare),
+                      stream2(peopleadd.secondname, contentshare, usercode),
                       const SizedBox(
                         height: 20,
                       ),
@@ -281,7 +293,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
                           const SizedBox(
                             height: 20,
                           ),
-                          stream3(peopleadd.secondname, memosavelist, name),
+                          stream3(peopleadd.secondname, memosavelist, usercode),
                           const SizedBox(
                             height: 20,
                           ),
@@ -299,7 +311,8 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
                           const SizedBox(
                             height: 20,
                           ),
-                          stream4(peopleadd.secondname, memotodaylist, name),
+                          stream4(
+                              peopleadd.secondname, memotodaylist, usercode),
                           const SizedBox(
                             height: 20,
                           ),
@@ -311,6 +324,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist) {
 stream1(
   String secondname,
   List contentmy,
+  String usercode,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
@@ -325,7 +339,7 @@ stream1(
   return FutureBuilder<QuerySnapshot>(
     future: firestore
         .collection('CalendarDataBase')
-        .where('OriginalUser', isEqualTo: secondname)
+        .where('OriginalUser', isEqualTo: usercode)
         .where('Date',
             isEqualTo: Date.toString().split('-')[0] +
                 '-' +
@@ -526,6 +540,7 @@ stream1(
 stream2(
   String secondname,
   List contentshare,
+  String usercode,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id');
@@ -736,7 +751,7 @@ stream2(
 FutureBuilder<QuerySnapshot<Object?>> stream3(
   String secondname,
   List memosavelist,
-  String name,
+  String usercode,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -749,7 +764,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream3(
   return FutureBuilder<QuerySnapshot>(
     future: firestore
         .collection('MemoDataBase')
-        .where('OriginalUser', isEqualTo: name)
+        .where('OriginalUser', isEqualTo: usercode)
         .where('homesave', isEqualTo: true)
         .get(),
     builder: (context, snapshot) {
@@ -1018,7 +1033,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream3(
 FutureBuilder<QuerySnapshot<Object?>> stream4(
   String secondname,
   List memotodaylist,
-  String name,
+  String usercode,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   DateTime Date = DateTime.now();
@@ -1030,7 +1045,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream4(
   return FutureBuilder<QuerySnapshot>(
     future: firestore
         .collection('MemoDataBase')
-        .where('OriginalUser', isEqualTo: name)
+        .where('OriginalUser', isEqualTo: usercode)
         .where('homesave', isEqualTo: true)
         .get(),
     builder: (context, snapshot) {

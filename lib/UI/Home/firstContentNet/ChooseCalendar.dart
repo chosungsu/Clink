@@ -19,6 +19,7 @@ import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import 'package:focused_menu/focused_menu.dart';
+import '../../../sheets/calendarinfo.dart';
 import '../../../sheets/settingChoiceC_Cards.dart';
 import '../../Sign/UserCheck.dart';
 import '../secondContentNet/PeopleGroup.dart';
@@ -41,6 +42,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   String username = Hive.box('user_info').get(
     'id',
   );
+  String usercode = Hive.box('user_setting').get('usercode');
   static final cal_share_person = Get.put(PeopleAdd());
   final cal_sort = Get.put(calendarsetting());
   List finallist = cal_share_person.people;
@@ -418,8 +420,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
       return GetBuilder<calendarsetting>(
           builder: (_) => StreamBuilder<QuerySnapshot>(
                 stream: firestore
-                    .collection('CalendarSheetHome')
-                    .where('madeUser', isEqualTo: cal_share_person.secondname)
+                    .collection('CalendarSheetHome_update')
+                    .where('madeUser', isEqualTo: usercode)
                     .orderBy('date',
                         descending: cal_sort.sort == 0 ? true : false)
                     .snapshots(),
@@ -466,6 +468,33 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                               60,
                                           child: FocusedMenuHolder(
                                             menuItems: [
+                                              FocusedMenuItem(
+                                                  trailingIcon: const Icon(
+                                                    Icons.style,
+                                                    size: 30,
+                                                  ),
+                                                  title: Text('카드정보',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize())),
+                                                  onPressed: () {
+                                                    //카드별 설정 ex.공유자 권한설정
+                                                    calendarinfo(
+                                                      index,
+                                                      snapshot
+                                                          .data!.docs[index].id,
+                                                      snapshot.data!.docs[index]
+                                                          ['date'],
+                                                      snapshot.data!.docs[index]
+                                                          ['calname'],
+                                                      context,
+                                                      snapshot.data!.docs[index]
+                                                          ['madeUser'],
+                                                    );
+                                                  }),
                                               FocusedMenuItem(
                                                   trailingIcon: const Icon(
                                                     Icons.settings,
@@ -618,18 +647,11 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                 const Duration(seconds: 0),
                                             animateMenuItems: true,
                                             menuOffset: 20,
-                                            menuBoxDecoration:
-                                                const BoxDecoration(
-                                                    color: Colors.grey,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                40.0))),
                                             bottomOffsetHeight: 10,
                                             menuWidth: MediaQuery.of(context)
                                                     .size
                                                     .width -
-                                                40,
+                                                60,
                                             openWithTap: false,
                                             onPressed: () {
                                               Get.to(
@@ -672,54 +694,28 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                   CrossAxisAlignment
                                                                       .start,
                                                               children: [
-                                                                SizedBox(
-                                                                  height: 70,
-                                                                  child: Text(
-                                                                    snapshot.data!
-                                                                            .docs[index]
-                                                                        [
-                                                                        'calname'],
-                                                                    maxLines: 2,
-                                                                    softWrap:
-                                                                        true,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color:
-                                                                          TextColor(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          contentTitleTextsize(),
-                                                                    ),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
+                                                                Text(
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'calname'],
+                                                                  maxLines: 2,
+                                                                  softWrap:
+                                                                      true,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTitleTextsize(),
                                                                   ),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 30,
-                                                                  child: Text(
-                                                                    snapshot.data!
-                                                                            .docs[index]
-                                                                        [
-                                                                        'date'],
-                                                                    softWrap:
-                                                                        true,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color:
-                                                                          TextColor(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          contentTextsize(),
-                                                                    ),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
                                                                 ),
                                                                 SizedBox(
                                                                     height: 30,
@@ -772,50 +768,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                     ))
                                                               ],
                                                             ))),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                              border: Border(
-                                                                  left: BorderSide(
-                                                                      color:
-                                                                          TextColor()))),
-                                                          child: RotatedBox(
-                                                              quarterTurns: 3,
-                                                              child:
-                                                                  NeumorphicText(
-                                                                'Made By\n' +
-                                                                    snapshot.data!
-                                                                            .docs[index]
-                                                                        [
-                                                                        'madeUser'],
-                                                                style:
-                                                                    NeumorphicStyle(
-                                                                  shape:
-                                                                      NeumorphicShape
-                                                                          .flat,
-                                                                  depth: 3,
-                                                                  color:
-                                                                      TextColor(),
-                                                                ),
-                                                                textStyle:
-                                                                    NeumorphicTextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      contentTextsize(),
-                                                                ),
-                                                              )),
-                                                        )
-                                                      ],
-                                                    ),
                                                   ],
                                                 ),
                                                 color: snapshot.data!
@@ -893,9 +845,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
       return GetBuilder<calendarsetting>(
           builder: (_) => StreamBuilder<QuerySnapshot>(
                 stream: firestore
-                    .collection('ShareHome')
-                    .where('showingUser',
-                        isEqualTo: cal_share_person.secondname)
+                    .collection('ShareHome_update')
+                    .where('showingUser', isEqualTo: usercode)
                     .orderBy('date',
                         descending: cal_sort.sort == 0 ? true : false)
                     .snapshots(),
@@ -947,6 +898,33 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                               60,
                                           child: FocusedMenuHolder(
                                             menuItems: [
+                                              FocusedMenuItem(
+                                                  trailingIcon: const Icon(
+                                                    Icons.style,
+                                                    size: 30,
+                                                  ),
+                                                  title: Text('카드정보',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize())),
+                                                  onPressed: () {
+                                                    //카드별 설정 ex.공유자 권한설정
+                                                    calendarinfo(
+                                                      index,
+                                                      snapshot
+                                                          .data!.docs[index].id,
+                                                      snapshot.data!.docs[index]
+                                                          ['date'],
+                                                      snapshot.data!.docs[index]
+                                                          ['calname'],
+                                                      context,
+                                                      snapshot.data!.docs[index]
+                                                          ['madeUser'],
+                                                    );
+                                                  }),
                                               FocusedMenuItem(
                                                   trailingIcon: snapshot
                                                               .data!.docs[index]
@@ -1125,18 +1103,11 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                 const Duration(seconds: 0),
                                             animateMenuItems: true,
                                             menuOffset: 20,
-                                            menuBoxDecoration:
-                                                const BoxDecoration(
-                                                    color: Colors.grey,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                40.0))),
                                             bottomOffsetHeight: 10,
                                             menuWidth: MediaQuery.of(context)
                                                     .size
                                                     .width -
-                                                40,
+                                                60,
                                             openWithTap: false,
                                             onPressed: () {
                                               Get.to(
@@ -1181,30 +1152,28 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                   CrossAxisAlignment
                                                                       .start,
                                                               children: [
-                                                                SizedBox(
-                                                                  height: 50,
-                                                                  child: Text(
-                                                                    snapshot.data!
-                                                                            .docs[index]
-                                                                        [
-                                                                        'calname'],
-                                                                    maxLines: 5,
-                                                                    softWrap:
-                                                                        true,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color:
-                                                                          TextColor(),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          contentTitleTextsize(),
-                                                                    ),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
+                                                                Text(
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'calname'],
+                                                                  maxLines: 5,
+                                                                  softWrap:
+                                                                      true,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        TextColor(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTitleTextsize(),
                                                                   ),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
                                                                 ),
                                                                 snapshot
                                                                             .data!
@@ -1262,47 +1231,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                       ),
                                                               ],
                                                             ))),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      children: [
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                              border: Border(
-                                                                  left: BorderSide(
-                                                                      color:
-                                                                          TextColor()))),
-                                                          child: RotatedBox(
-                                                              quarterTurns: 3,
-                                                              child:
-                                                                  NeumorphicText(
-                                                                'Shared By\n' +
-                                                                    snapshot.data!
-                                                                            .docs[index]
-                                                                        [
-                                                                        'madeUser'],
-                                                                style:
-                                                                    NeumorphicStyle(
-                                                                  shape:
-                                                                      NeumorphicShape
-                                                                          .flat,
-                                                                  depth: 3,
-                                                                  color:
-                                                                      TextColor(),
-                                                                ),
-                                                                textStyle:
-                                                                    NeumorphicTextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      contentTextsize(),
-                                                                ),
-                                                              )),
-                                                        )
-                                                      ],
-                                                    ),
                                                   ],
                                                 ),
                                                 color: snapshot.data!

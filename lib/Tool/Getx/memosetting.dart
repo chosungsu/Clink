@@ -13,6 +13,7 @@ class memosetting extends GetxController {
   Color colorfont = Hive.box('user_setting').get('coloreachmemofont') != null
       ? Color(Hive.box('user_setting').get('coloreachmemofont'))
       : Colors.black;
+  String usercode = Hive.box('user_setting').get('usercode');
   int memosort = 0;
   bool ischeckedtohideminus = false;
   bool isseveralmemoalarm = false;
@@ -67,7 +68,7 @@ class memosetting extends GetxController {
         NotificationApi.cancelNotification(id: 1);
         firestore
             .collection('MemoAllAlarm')
-            .doc(username)
+            .doc(usercode)
             .update({'ok': false, 'alarmtime': '99:99'});
       }
     }
@@ -93,7 +94,7 @@ class memosetting extends GetxController {
       minute2 = Hive.box('user_setting').get('alarm_memo_minute');
       firestore
           .collection('MemoAllAlarm')
-          .doc(username)
+          .doc(usercode)
           .update({'alarmtime': hour2.toString() + ':' + minute2.toString()});
     }
   }
@@ -114,10 +115,10 @@ class memosetting extends GetxController {
               int.parse(hour), int.parse(minute), 0));
     } else {
       ischeckedpushmemoalarm = Hive.box('user_setting').get('alarm_memo');
-      firestore.collection('MemoAllAlarm').doc(username).update({
+      firestore.collection('MemoAllAlarm').doc(usercode).update({
         'ok': true,
       });
-      await firestore.collection('MemoAllAlarm').doc(username).update({
+      await firestore.collection('MemoAllAlarm').doc(usercode).update({
         'ok': false,
       });
       NotificationApi.showDailyNotification(
@@ -125,7 +126,7 @@ class memosetting extends GetxController {
           body: '메모알림끄기는 [일상메모]->[톱니바퀴]->[해제]',
           scheduledate: DateTime.utc(now.year, now.month, now.day,
               int.parse(hour), int.parse(minute), 0));
-      firestore.collection('MemoAllAlarm').doc(username).update({'ok': true});
+      firestore.collection('MemoAllAlarm').doc(usercode).update({'ok': true});
     }
     update();
     notifyChildrens();

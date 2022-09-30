@@ -438,7 +438,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                             'read': 'no',
                           });
                           firestore
-                              .collection('CalendarSheetHome')
+                              .collection('CalendarSheetHome_update')
                               .doc(widget.doc)
                               .update({
                             'calname': _controller.text.isEmpty
@@ -512,7 +512,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                             }).whenComplete(() {
                               if (widget.share.isNotEmpty) {
                                 firestore
-                                    .collection('ShareHome')
+                                    .collection('ShareHome_update')
                                     .where('doc', isEqualTo: widget.doc)
                                     .get()
                                     .then((value) {
@@ -522,7 +522,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                   });
                                   for (int i = 0; i < deleteid.length; i++) {
                                     firestore
-                                        .collection('ShareHome')
+                                        .collection('ShareHome_update')
                                         .doc(deleteid[i])
                                         .delete();
                                   }
@@ -531,7 +531,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                       i < listselected_sp.length;
                                       i++) {
                                     firestore
-                                        .collection('ShareHome')
+                                        .collection('ShareHome_update')
                                         .doc(widget.doc +
                                             '-' +
                                             listselected_sp[i])
@@ -539,7 +539,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         .then((value) {
                                       if (value.data() == null) {
                                         firestore
-                                            .collection('ShareHome')
+                                            .collection('ShareHome_update')
                                             .doc(widget.doc +
                                                 '-' +
                                                 listselected_sp[i])
@@ -560,7 +560,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                         });
                                       } else {
                                         firestore
-                                            .collection('ShareHome')
+                                            .collection('ShareHome_update')
                                             .doc(widget.doc +
                                                 '-' +
                                                 widget.share[i])
@@ -594,14 +594,14 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                     i < listselected_sp.length;
                                     i++) {
                                   firestore
-                                      .collection('ShareHome')
+                                      .collection('ShareHome_update')
                                       .doc(
                                           widget.doc + '-' + listselected_sp[i])
                                       .get()
                                       .then((value) {
                                     if (value.data() == null) {
                                       firestore
-                                          .collection('ShareHome')
+                                          .collection('ShareHome_update')
                                           .doc(widget.doc +
                                               '-' +
                                               listselected_sp[i])
@@ -622,7 +622,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
                                       });
                                     } else {
                                       firestore
-                                          .collection('ShareHome')
+                                          .collection('ShareHome_update')
                                           .doc(widget.doc +
                                               '-' +
                                               listselected_sp[i])

@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> {
   final peopleadd = Get.put(PeopleAdd());
   late PackageInfo info;
   String versioninfo = '';
+  String usercode = Hive.box('user_setting').get('usercode');
 
   @override
   void initState() {
@@ -100,31 +101,25 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    /*firestore.collection('CalendarDataBase').get().then((value) {
+    /*firestore.collection('CalendarSheetHome').get().then((value) {
       List valueid = [];
-      final List<bool> _ischecked_alarmslist = [false, false];
       for (int i = 0; i < value.docs.length; i++) {
         valueid.add(value.docs[i].id);
       }
       for (int j = 0; j < valueid.length; j++) {
-        firestore
-            .collection('CalendarDataBase')
-            .doc(valueid[j])
-            .collection('AlarmTable')
-            .doc('sungsu cho')
-            .set({
-          'alarmtype': _ischecked_alarmslist,
-          'alarmhour': '99',
-          'alarmminute': '99',
-          'alarmmake': false,
-          'calcode': valueid[j]
-        }, SetOptions(merge: true));
-        firestore
-            .collection('CalendarDataBase')
-            .doc(valueid[j])
-            .collection('AlarmTable')
-            .doc('조성수')
-            .delete();
+        if (value.docs[j]['madeUser'] == '조동환') {
+          firestore.collection('CalendarDataBase').doc(valueid[j]).update({
+            'madeUser': 'chogm5XzMc',
+          });
+        } else if (value.docs[j]['madeUser'] == '최인영') {
+          firestore.collection('CalendarDataBase').doc(valueid[j]).update({
+            'madeUser': 'inygmhEDD1',
+          });
+        } else if (value.docs[j]['madeUser'] == '개발팀조성수') {
+          firestore.collection('CalendarDataBase').doc(valueid[j]).update({
+            'madeUser': 'skigmZ6hjF',
+          });
+        } else {}
       }
     });*/
     docid = Hive.box('user_setting').get('usercode');
@@ -423,7 +418,8 @@ class _HomePageState extends State<HomePage> {
                                       GetBuilder<PeopleAdd>(
                                           builder: (_) => ViewSet(
                                               peopleadd.defaulthomeviewlist,
-                                              peopleadd.userviewlist)),
+                                              peopleadd.userviewlist,
+                                              usercode)),
                                       const SizedBox(
                                         height: 20,
                                       ),

@@ -64,6 +64,7 @@ content(
       PageController(initialPage: s == 'outside' ? 0 : 1);
   String selectvalue = '';
   final cal_share_person = Get.put(PeopleAdd());
+  String usercode = Hive.box('user_setting').get('usercode');
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
       height: isresponsive == true ? 290 * 2 - 50 : 300,
@@ -164,7 +165,7 @@ content(
                         } else {
                           setState(() {
                             firestore.collection('MemoCollections').add({
-                              'madeUser': cal_share_person.secondname,
+                              'madeUser': usercode,
                               'title': textEditingController_add_sheet.text,
                             }).whenComplete(() {
                               setState(() {
@@ -272,8 +273,7 @@ content(
                       return StreamBuilder<QuerySnapshot>(
                         stream: firestore
                             .collection('MemoCollections')
-                            .where('madeUser',
-                                isEqualTo: cal_share_person.secondname)
+                            .where('madeUser', isEqualTo: usercode)
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {

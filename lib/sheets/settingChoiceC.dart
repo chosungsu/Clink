@@ -152,6 +152,7 @@ content(
   String username = Hive.box('user_info').get(
     'id',
   );
+  String usercode = Hive.box('user_setting').get('usercode');
   DateTime date = DateTime.now();
   Color _color = doc_color == null ? Colors.blue : Color(doc_color);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -321,7 +322,7 @@ content(
                                     .get('noti_calendar_click') ==
                                 0) {
                           firestore
-                              .collection('CalendarSheetHome')
+                              .collection('CalendarSheetHome_update')
                               .doc(doc)
                               .delete();
                           firestore
@@ -340,13 +341,13 @@ content(
                             }
                           });
                           firestore
-                              .collection('ShareHome')
-                              .doc(doc + '-' + secondname)
+                              .collection('ShareHome_update')
+                              .doc(doc + '-' + usercode)
                               .delete();
                         } else {
                           firestore
-                              .collection('ShareHome')
-                              .doc(doc + '-' + secondname)
+                              .collection('ShareHome_update')
+                              .doc(doc + '-' + usercode)
                               .delete();
                         }
                         Navigator.pop(context);
@@ -416,15 +417,15 @@ content(
                       onPressed: () {
                         setState(() {
                           firestore
-                              .collection('CalendarSheetHome')
+                              .collection('CalendarSheetHome_update')
                               .doc(doc)
                               .update({
                             'calname': controller.text,
                             'color': _color.value.toInt(),
                           });
                           firestore
-                              .collection('ShareHome')
-                              .doc(doc + '-' + secondname)
+                              .collection('ShareHome_update')
+                              .doc(doc + '-' + usercode)
                               .update({
                             'calname': controller.text,
                             'color': _color.value.toInt(),

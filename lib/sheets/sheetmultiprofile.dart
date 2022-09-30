@@ -136,6 +136,7 @@ content(
   final cal_share_person = Get.put(PeopleAdd());
   List changepeople = [];
   var time, ok;
+  String usercode = Hive.box('user_setting').get('usercode');
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -229,19 +230,10 @@ content(
                 if (controller.text.isEmpty) {
                   if (_ischecked) {
                     await firestore
-                        .collection('CalendarSheetHome')
+                        .collection('CalendarSheetHome_update')
                         .get()
                         .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('CalendarSheetHome')
-                              .doc(value.docs[i].id)
-                              .update({
-                            'madeUser': Hive.box('user_info').get('id')
-                          });
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('share').length;
                             j++) {
@@ -253,7 +245,7 @@ content(
                               element == cal_share_person.secondname);
                           changepeople.add(Hive.box('user_info').get('id'));
                           firestore
-                              .collection('CalendarSheetHome')
+                              .collection('CalendarSheetHome_update')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }
@@ -265,15 +257,6 @@ content(
                         .get()
                         .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('OriginalUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('CalendarDataBase')
-                              .doc(value.docs[i].id)
-                              .update({
-                            'OriginalUser': Hive.box('user_info').get('id')
-                          });
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('Shares').length;
                             j++) {
@@ -292,17 +275,11 @@ content(
                         changepeople.clear();
                       }
                     });
-                    await firestore.collection('ShareHome').get().then((value) {
+                    await firestore
+                        .collection('ShareHome_update')
+                        .get()
+                        .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('ShareHome')
-                              .doc(value.docs[i].id)
-                              .update({
-                            'madeUser': Hive.box('user_info').get('id')
-                          });
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('share').length;
                             j++) {
@@ -315,7 +292,7 @@ content(
                           changepeople.add(Hive.box('user_info').get('id'));
                           for (int k = 0; k < changepeople.length; k++) {
                             firestore
-                                .collection('ShareHome')
+                                .collection('ShareHome_update')
                                 .doc(value.docs[i].id.split('-')[0] +
                                     changepeople[k])
                                 .set({
@@ -328,7 +305,7 @@ content(
                               'color': value.docs[i].get('color'),
                               'date': value.docs[i].get('date'),
                               'doc': value.docs[i].get('doc'),
-                              'madeUser': Hive.box('user_info').get('id'),
+                              'madeUser': usercode,
                               'showingUser': changepeople[k],
                               'themesetting': value.docs[i].get('themesetting'),
                               'type': value.docs[i].get('type'),
@@ -337,27 +314,11 @@ content(
                           }
 
                           firestore
-                              .collection('ShareHome')
+                              .collection('ShareHome_update')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }
                         changepeople.clear();
-                      }
-                    });
-                    await firestore
-                        .collection('MemoCollections')
-                        .get()
-                        .then((value) {
-                      for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('MemoCollections')
-                              .doc(value.docs[i].id)
-                              .update({
-                            'madeUser': Hive.box('user_info').get('id')
-                          });
-                        }
                       }
                     });
                     await firestore
@@ -407,19 +368,10 @@ content(
                 } else {
                   if (_ischecked) {
                     await firestore
-                        .collection('CalendarSheetHome')
+                        .collection('CalendarSheetHome_update')
                         .get()
                         .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('CalendarSheetHome')
-                              .doc(value.docs[i].id)
-                              .update({
-                            'madeUser': Hive.box('user_info').get('id')
-                          });
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('share').length;
                             j++) {
@@ -432,7 +384,7 @@ content(
                           changepeople.add(Hive.box('user_info').get('id'));
 
                           firestore
-                              .collection('CalendarSheetHome')
+                              .collection('CalendarSheetHome_update')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }
@@ -444,15 +396,6 @@ content(
                         .get()
                         .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('OriginalUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('CalendarDataBase')
-                              .doc(value.docs[i].id)
-                              .update({
-                            'OriginalUser': Hive.box('user_info').get('id')
-                          });
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('Shares').length;
                             j++) {
@@ -471,17 +414,11 @@ content(
                         changepeople.clear();
                       }
                     });
-                    await firestore.collection('ShareHome').get().then((value) {
+                    await firestore
+                        .collection('ShareHome_update')
+                        .get()
+                        .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('ShareHome')
-                              .doc(value.docs[i].id)
-                              .update({
-                            'madeUser': Hive.box('user_info').get('id')
-                          });
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('share').length;
                             j++) {
@@ -494,7 +431,7 @@ content(
                           changepeople.add(Hive.box('user_info').get('id'));
                           for (int k = 0; k < changepeople.length; k++) {
                             firestore
-                                .collection('ShareHome')
+                                .collection('ShareHome_update')
                                 .doc(value.docs[i].id.split('-')[0] +
                                     changepeople[k])
                                 .set({
@@ -507,7 +444,7 @@ content(
                               'color': value.docs[i].get('color'),
                               'date': value.docs[i].get('date'),
                               'doc': value.docs[i].get('doc'),
-                              'madeUser': Hive.box('user_info').get('id'),
+                              'madeUser': usercode,
                               'showingUser': changepeople[k],
                               'themesetting': value.docs[i].get('themesetting'),
                               'type': value.docs[i].get('type'),
@@ -515,14 +452,14 @@ content(
                             });
                           }
                           firestore
-                              .collection('ShareHome')
+                              .collection('ShareHome_update')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }
                         changepeople.clear();
                       }
                     });
-                    await firestore
+                    /*await firestore
                         .collection('MemoCollections')
                         .get()
                         .then((value) {
@@ -537,7 +474,7 @@ content(
                           });
                         }
                       }
-                    });
+                    });*/
                     await firestore
                         .collection('PeopleList')
                         .get()
@@ -569,17 +506,10 @@ content(
                     });
                   } else {
                     await firestore
-                        .collection('CalendarSheetHome')
+                        .collection('CalendarSheetHome_update')
                         .get()
                         .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('CalendarSheetHome')
-                              .doc(value.docs[i].id)
-                              .update({'madeUser': controller.text});
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('share').length;
                             j++) {
@@ -591,7 +521,7 @@ content(
                               element == cal_share_person.secondname);
                           changepeople.add(controller.text);
                           firestore
-                              .collection('CalendarSheetHome')
+                              .collection('CalendarSheetHome_update')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }
@@ -603,13 +533,6 @@ content(
                         .get()
                         .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('OriginalUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('CalendarDataBase')
-                              .doc(value.docs[i].id)
-                              .update({'OriginalUser': controller.text});
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('Shares').length;
                             j++) {
@@ -628,15 +551,11 @@ content(
                         changepeople.clear();
                       }
                     });
-                    await firestore.collection('ShareHome').get().then((value) {
+                    await firestore
+                        .collection('ShareHome_update')
+                        .get()
+                        .then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('ShareHome')
-                              .doc(value.docs[i].id)
-                              .update({'madeUser': controller.text});
-                        }
                         for (int j = 0;
                             j < value.docs[i].get('share').length;
                             j++) {
@@ -648,7 +567,7 @@ content(
                               element == cal_share_person.secondname);
                           changepeople.add(controller.text);
                           firestore
-                              .collection('ShareHome')
+                              .collection('ShareHome_update')
                               .doc(value.docs[i].id)
                               .update({'share': changepeople});
                         }

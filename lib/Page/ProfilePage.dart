@@ -72,6 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String versioninfo = '';
   int pagesetnumber = 0;
   late FToast fToast;
+  String usercode = Hive.box('user_setting').get('usercode');
 
   @override
   void initState() {
@@ -793,12 +794,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Stream<List<QuerySnapshot>> combineStream() {
     Stream<QuerySnapshot> stream1 = firestore
-        .collection('CalendarSheetHome')
-        .where('madeUser', isEqualTo: peopleadd.secondname)
+        .collection('CalendarSheetHome_update')
+        .where('madeUser', isEqualTo: usercode)
         .snapshots();
     Stream<QuerySnapshot> stream2 = firestore
-        .collection('ShareHome')
-        .where('showingUser', isEqualTo: peopleadd.secondname)
+        .collection('ShareHome_update')
+        .where('showingUser', isEqualTo: usercode)
         .snapshots();
 
     return StreamZip([stream1, stream2]);
