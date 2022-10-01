@@ -1,22 +1,23 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/SortMenuHolder.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
-import 'package:clickbyme/sheets/addWhole.dart';
 import 'package:clickbyme/sheets/settingChoiceC.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../../../Page/addWhole_update.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
+import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import 'package:focused_menu/focused_menu.dart';
 import '../../../sheets/calendarinfo.dart';
@@ -42,8 +43,10 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   String username = Hive.box('user_info').get(
     'id',
   );
+  late FToast fToast;
   String usercode = Hive.box('user_setting').get('usercode');
   static final cal_share_person = Get.put(PeopleAdd());
+  var controll_memo = Get.put(memosetting());
   final cal_sort = Get.put(calendarsetting());
   List finallist = cal_share_person.people;
   TextEditingController controller = TextEditingController();
@@ -73,6 +76,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('noti_calendar_click', 0);
     code = Hive.box('user_setting').get('noti_calendar_click') ?? 0;
@@ -237,13 +242,14 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                         Hive.box('user_setting')
                                                             .put('typecalendar',
                                                                 0);
-                                                        addWhole(
+                                                        addWhole_update(
                                                             context,
                                                             searchNode,
                                                             controller,
                                                             username,
                                                             Date,
-                                                            'cal');
+                                                            'cal',
+                                                            fToast);
                                                       },
                                                       icon: Container(
                                                         alignment:

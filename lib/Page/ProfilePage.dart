@@ -10,17 +10,17 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:store_redirect/store_redirect.dart';
+import '../DB/PageList.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
-import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/secondContentNet/PeopleGroup.dart';
 import '../UI/Setting/ShowLicense.dart';
@@ -32,6 +32,8 @@ import '../sheets/userinfotalk.dart';
 import 'DrawerScreen.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
 }
@@ -77,6 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+
     firestore
         .collection('User')
         .where('name', isEqualTo: Hive.box('user_info').get('id'))
@@ -104,7 +107,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _controller.dispose();
     _pController2.dispose();
@@ -119,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ? (draw.drawopen == true
               ? Stack(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 80,
                       child: DrawerScreen(
                           index: Hive.box('user_setting').get('page_index')),
@@ -167,105 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: BGColor(),
                   child: Column(
                     children: [
-                      SizedBox(
-                          height: 80,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10, top: 20, bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                draw.navi == 0
-                                    ? draw.drawopen == true
-                                        ? IconBtn(
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    xoffset = 0;
-                                                    yoffset = 0;
-                                                    scalefactor = 1;
-                                                    isdraweropen = false;
-                                                    draw.setclose();
-                                                    Hive.box('user_setting')
-                                                        .put('page_opened',
-                                                            false);
-                                                  });
-                                                },
-                                                icon: Container(
-                                                  alignment: Alignment.center,
-                                                  width: 30,
-                                                  height: 30,
-                                                  child: NeumorphicIcon(
-                                                    Icons.keyboard_arrow_left,
-                                                    size: 30,
-                                                    style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .convex,
-                                                        depth: 2,
-                                                        surfaceIntensity: 0.5,
-                                                        color: TextColor(),
-                                                        lightSource: LightSource
-                                                            .topLeft),
-                                                  ),
-                                                )),
-                                            color: TextColor())
-                                        : IconBtn(
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    xoffset = 80;
-                                                    yoffset = 0;
-                                                    scalefactor = 1;
-                                                    isdraweropen = true;
-                                                    draw.setopen();
-                                                    Hive.box('user_setting')
-                                                        .put('page_opened',
-                                                            true);
-                                                  });
-                                                },
-                                                icon: Container(
-                                                  alignment: Alignment.center,
-                                                  width: 30,
-                                                  height: 30,
-                                                  child: NeumorphicIcon(
-                                                    Icons.menu,
-                                                    size: 30,
-                                                    style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .convex,
-                                                        surfaceIntensity: 0.5,
-                                                        depth: 2,
-                                                        color: TextColor(),
-                                                        lightSource: LightSource
-                                                            .topLeft),
-                                                  ),
-                                                )),
-                                            color: TextColor())
-                                    : const SizedBox(),
-                                SizedBox(
-                                    width: draw.navi == 0
-                                        ? MediaQuery.of(context).size.width - 70
-                                        : MediaQuery.of(context).size.width -
-                                            20,
-                                    child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text('',
-                                                  style: GoogleFonts.lobster(
-                                                    fontSize: 25,
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                          ],
-                                        ))),
-                              ],
-                            ),
-                          )),
+                      const AppBarCustom(title: ''),
                       Flexible(
                         fit: FlexFit.tight,
                         child: SizedBox(
@@ -284,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     _getAppInfo();
                                     if (value == 0) {
                                       currentPage = 1;
-                                    }
+                                    } else {}
                                   });
                                 }),
                                 itemBuilder: ((context, index) {
@@ -318,10 +222,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   const EdgeInsets.fromLTRB(
                                                       20, 0, 20, 0),
                                               child: Column(
+                                                mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  T_Container(height),
+                                                  G_Container(height),
                                                   const SizedBox(
                                                     height: 20,
                                                   ),
@@ -335,28 +240,49 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   ),*/
                                                 ],
                                               ))
-                                          : Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 0, 20, 0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  G_Container(height),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  G_Container0(height),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  G_Container1(height),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                ],
-                                              )));
+                                          : (pagesetnumber == 1
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          20, 0, 20, 0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      G_Container(height),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      G_Container0(height),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      G_Container1(height),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                    ],
+                                                  ))
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          20, 0, 20, 0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      G_Container(height),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      CompanyNotice(),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                    ],
+                                                  ))));
                                 }),
                               );
                             })),
@@ -370,34 +296,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ));
   }
 
-  T_Container(double height) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width - 40,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.keyboard_double_arrow_right,
-            color: TextColor_shadowcolor(),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Text('왼쪽으로 스와이프하여 설정페이지 이동',
-                maxLines: 2,
-                softWrap: true,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: TextColor_shadowcolor(),
-                    overflow: TextOverflow.fade)),
-          )
-        ],
-      ),
-    );
-  }
-
   Future<void> _getAppInfo() async {
     info = await PackageInfo.fromPlatform();
     versioninfo = info.version;
@@ -409,7 +307,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final List eventsmallcontent = [];
     final List dates = [];
     return SizedBox(
-        height: MediaQuery.of(context).size.height - 300,
+        height: MediaQuery.of(context).size.height - 150,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
@@ -445,7 +343,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 builder: (context, future) => future.connectionState ==
                         ConnectionState.waiting
                     ? SizedBox(
-                        height: MediaQuery.of(context).size.height - 300,
+                        height: MediaQuery.of(context).size.height - 150,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -966,38 +864,52 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       onTap:
                                                                           () {},
                                                                       child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        children: [
                                                                           Container(
-                                                                        child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            Container(
-                                                                              alignment: Alignment.center,
-                                                                              height: 25,
-                                                                              width: 25,
-                                                                              child: Text(sharelist.isNotEmpty ? sharelist[index][0].toString().substring(0, 1) : '', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
-                                                                              decoration: BoxDecoration(
-                                                                                color: Colors.white,
-                                                                                borderRadius: BorderRadius.circular(100),
-                                                                              ),
+                                                                            alignment:
+                                                                                Alignment.center,
+                                                                            height:
+                                                                                25,
+                                                                            width:
+                                                                                25,
+                                                                            child:
+                                                                                Text(sharelist.isNotEmpty ? sharelist[index][0].toString().substring(0, 1) : '', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.white,
+                                                                              borderRadius: BorderRadius.circular(100),
                                                                             ),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text(
-                                                                              sharelist.isNotEmpty ? sharelist[index][0] : '',
-                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: TextColor()),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text(
-                                                                              sharelist.isNotEmpty ? ' 외 ' + (sharelist[index].length - 1).toString() + '명' : '공유인원 없음',
-                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTextsize(), color: TextColor()),
-                                                                            ),
-                                                                          ],
-                                                                        ),
+                                                                          ),
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          ),
+                                                                          Text(
+                                                                            sharelist.isNotEmpty
+                                                                                ? sharelist[index][0]
+                                                                                : '',
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontSize: contentTextsize(),
+                                                                                color: TextColor()),
+                                                                          ),
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          ),
+                                                                          Text(
+                                                                            sharelist.isNotEmpty
+                                                                                ? ' 외 ' + (sharelist[index].length - 1).toString() + '명'
+                                                                                : '공유인원 없음',
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontSize: contentTextsize(),
+                                                                                color: TextColor()),
+                                                                          ),
+                                                                        ],
                                                                       )),
                                                               color:
                                                                   BGColor_shadowcolor()),
@@ -1896,7 +1808,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 width: 10,
               ),
               Text(
-                '도움 및 문의',
+                '공지사항 및 문의',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: contentTextsize(),
@@ -1921,37 +1833,214 @@ class _ProfilePageState extends State<ProfilePage> {
           physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: 1,
+          itemCount: 2,
           itemBuilder: (context, index) {
-            return Column(
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    showreadycontent(context);
-                  },
-                  child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return index == 0
+                ? Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          //showreadycontent(context);
+                          setState(() {
+                            pagesetnumber = 2;
+
+                            currentPage++;
+                            _pController2.nextPage(
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.ease);
+                          });
+                        },
+                        child: SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '공지사항',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: TextColor()),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: TextColor(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                : Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          showreadycontent(context);
+                        },
+                        child: SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '개발자에게 문의하기',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: TextColor()),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: TextColor(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+          }),
+    );
+  }
+
+  CompanyNotice() {
+    final List<PageList> _list_ad = [];
+    return StreamBuilder<QuerySnapshot>(
+      stream: firestore
+          .collection('CompanyNotice')
+          .orderBy('date', descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _list_ad.clear();
+          final valuespace = snapshot.data!.docs;
+          for (var sp in valuespace) {
+            final messageText = sp.get('title');
+            final messageDate = sp.get('date');
+            _list_ad.add(PageList(
+              title: messageText,
+              sub: messageDate,
+            ));
+          }
+
+          return _list_ad.isEmpty
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width - 60,
+                  height: MediaQuery.of(context).size.height - 180,
+                  child: Center(
+                    child: Text(
+                      '공지사항이 없습니다.',
+                      style: TextStyle(
+                          color: TextColor_shadowcolor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: secondTitleTextsize()),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ))
+              : SizedBox(
+                  height: MediaQuery.of(context).size.height - 180,
+                  width: MediaQuery.of(context).size.width - 40,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          '개발자에게 문의하기',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize(),
-                              color: TextColor()),
-                        ),
-                        Icon(
-                          Icons.keyboard_arrow_right,
-                          color: TextColor(),
-                        ),
+                        ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            itemCount: _list_ad.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  ContainerDesign(
+                                    color: BGColor(),
+                                    child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                80,
+                                        height: 100,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      _list_ad[index].title,
+                                                      softWrap: true,
+                                                      maxLines: 2,
+                                                      style: TextStyle(
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize()),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    )
+                                                  ],
+                                                )),
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  _list_ad[index]
+                                                      .sub
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      color: TextColor(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize()),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  )
+                                ],
+                              );
+                            }),
                       ],
                     ),
-                  ),
-                )
-              ],
-            );
-          }),
+                  ));
+        }
+        return SizedBox(
+            width: MediaQuery.of(context).size.width - 60,
+            height: MediaQuery.of(context).size.height - 180,
+            child: Center(
+              child: Text(
+                '공지사항이 없습니다.',
+                style: TextStyle(
+                    color: TextColor_shadowcolor(),
+                    fontWeight: FontWeight.bold,
+                    fontSize: secondTitleTextsize()),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ));
+      },
     );
   }
 
@@ -2012,7 +2101,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       pagesetnumber = 0;
                       currentPage++;
                       _pController2.animateToPage(1,
-                          duration: Duration(milliseconds: 800),
+                          duration: const Duration(milliseconds: 800),
                           curve: Curves.easeIn);
                     });
                   },
@@ -2182,7 +2271,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 pagesetnumber = 1;
                                 currentPage++;
                                 _pController2.animateToPage(1,
-                                    duration: Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn);
                               });
                             },

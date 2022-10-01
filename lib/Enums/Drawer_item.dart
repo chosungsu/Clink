@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../Tool/Getx/notishow.dart';
-import '../UI/Home/NotiAlarm.dart';
+import '../Page/NotiAlarm.dart';
 
 List<Map> drawerItems = [
   {'icon': Icons.list_alt, 'title': 'MY'},

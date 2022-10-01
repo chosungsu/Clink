@@ -1,25 +1,18 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
-import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/UI/AppBarCustom.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
-import 'package:clickbyme/UI/Home/NotiAlarm.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/ShowTips.dart';
-import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:new_version/new_version.dart';
-import 'package:badges/badges.dart';
 import 'package:package_info/package_info.dart';
 import 'package:page_transition/page_transition.dart';
 import '../DB/SpaceContent.dart';
@@ -27,7 +20,6 @@ import '../DB/Category.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/Widgets/ViewSet.dart';
-import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../route.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
@@ -215,39 +207,39 @@ class _HomePageState extends State<HomePage> {
         : isresponsive = false;
     return SafeArea(
         child: Scaffold(
-            backgroundColor: BGColor(),
-            body: GetBuilder<navibool>(
-              init: navibool(),
-              builder: (_) => draw.navi == 0
-                  ? (draw.drawopen == true
-                      ? Stack(
-                          children: [
-                            Container(
-                              width: 80,
-                              child: DrawerScreen(
-                                  index: Hive.box('user_setting')
-                                      .get('page_index')),
-                            ),
-                            HomeUi(
-                              _pController2,
-                            ),
-                          ],
-                        )
-                      : Stack(
-                          children: [
-                            HomeUi(
-                              _pController2,
-                            ),
-                          ],
-                        ))
-                  : Stack(
-                      children: [
-                        HomeUi(
-                          _pController2,
-                        ),
-                      ],
-                    ),
-            )));
+      backgroundColor: BGColor(),
+      body: GetBuilder<navibool>(
+        init: navibool(),
+        builder: (_) => draw.navi == 0
+            ? (draw.drawopen == true
+                ? Stack(
+                    children: [
+                      Container(
+                        width: 80,
+                        child: DrawerScreen(
+                            index: Hive.box('user_setting').get('page_index')),
+                      ),
+                      HomeUi(
+                        _pController2,
+                      ),
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      HomeUi(
+                        _pController2,
+                      ),
+                    ],
+                  ))
+            : Stack(
+                children: [
+                  HomeUi(
+                    _pController2,
+                  ),
+                ],
+              ),
+      ),
+    ));
   }
 
   HomeUi(
@@ -280,105 +272,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                          height: 80,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10, top: 20, bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                draw.navi == 0
-                                    ? draw.drawopen == true
-                                        ? IconBtn(
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    xoffset = 0;
-                                                    yoffset = 0;
-                                                    scalefactor = 1;
-                                                    isdraweropen = false;
-                                                    draw.setclose();
-                                                    Hive.box('user_setting')
-                                                        .put('page_opened',
-                                                            false);
-                                                  });
-                                                },
-                                                icon: Container(
-                                                  alignment: Alignment.center,
-                                                  width: 30,
-                                                  height: 30,
-                                                  child: NeumorphicIcon(
-                                                    Icons.keyboard_arrow_left,
-                                                    size: 30,
-                                                    style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .convex,
-                                                        depth: 2,
-                                                        surfaceIntensity: 0.5,
-                                                        color: TextColor(),
-                                                        lightSource: LightSource
-                                                            .topLeft),
-                                                  ),
-                                                )),
-                                            color: TextColor())
-                                        : IconBtn(
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    xoffset = 80;
-                                                    yoffset = 0;
-                                                    scalefactor = 1;
-                                                    isdraweropen = true;
-                                                    draw.setopen();
-                                                    Hive.box('user_setting')
-                                                        .put('page_opened',
-                                                            true);
-                                                  });
-                                                },
-                                                icon: Container(
-                                                  alignment: Alignment.center,
-                                                  width: 30,
-                                                  height: 30,
-                                                  child: NeumorphicIcon(
-                                                    Icons.menu,
-                                                    size: 30,
-                                                    style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .convex,
-                                                        surfaceIntensity: 0.5,
-                                                        depth: 2,
-                                                        color: TextColor(),
-                                                        lightSource: LightSource
-                                                            .topLeft),
-                                                  ),
-                                                )),
-                                            color: TextColor())
-                                    : const SizedBox(),
-                                SizedBox(
-                                    width: draw.navi == 0
-                                        ? MediaQuery.of(context).size.width - 70
-                                        : MediaQuery.of(context).size.width -
-                                            20,
-                                    child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text('Habit Tracker',
-                                                  style: GoogleFonts.lobster(
-                                                    fontSize: 25,
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                          ],
-                                        ))),
-                              ],
-                            ),
-                          )),
+                      const AppBarCustom(title: 'Habit Tracker'),
                       Flexible(
                           fit: FlexFit.tight,
                           child: SizedBox(
@@ -505,37 +399,41 @@ class _HomePageState extends State<HomePage> {
       },
       child: ContainerDesign(
           child: SizedBox(
-            width: MediaQuery.of(context).size.width - 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Flexible(
-                    fit: FlexFit.tight,
-                    child: Text(
-                      '새로운 기능은 언제나 실험실에 있어요',
-                      maxLines: 3,
-                      softWrap: true,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize()),
-                      overflow: TextOverflow.fade,
-                    )),
-                const SizedBox(
-                  width: 10,
+              width: MediaQuery.of(context).size.width - 40,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 20,
                 ),
-                Container(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.blue.shade200,
-                      child: Icon(
-                        Icons.chevron_right,
-                        color: BGColor(),
-                      ),
-                    )),
-              ],
-            ),
-          ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: Text(
+                          '새로운 기능은 언제나 실험실에 있어요',
+                          maxLines: 3,
+                          softWrap: true,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize()),
+                          overflow: TextOverflow.fade,
+                        )),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                        alignment: Alignment.center,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.blue.shade200,
+                          child: Icon(
+                            Icons.chevron_right,
+                            color: BGColor(),
+                          ),
+                        )),
+                  ],
+                ),
+              )),
           color: Colors.blue.shade200),
     );
   }

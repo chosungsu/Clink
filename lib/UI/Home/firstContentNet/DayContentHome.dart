@@ -190,7 +190,7 @@ class _DayContentHomeState extends State<DayContentHome>
     return StreamBuilder<QuerySnapshot>(
         stream: firestore
             .collection('CalendarDataBase')
-            .where('calname_update', isEqualTo: widget.title)
+            .where('calname', isEqualTo: widget.title)
             //.where('calname', isEqualTo: widget.title)
             .snapshots(),
         builder: (context, snapshot) {
@@ -494,7 +494,7 @@ class _DayContentHomeState extends State<DayContentHome>
     return StreamBuilder<QuerySnapshot>(
       stream: firestore
           .collection('CalendarDataBase')
-          .where('calname_update', isEqualTo: widget.title)
+          .where('calname', isEqualTo: widget.title)
           //.where('calname', isEqualTo: widget.title)
           .where('Date',
               isEqualTo: _selectedDay.toString().split('-')[0] +

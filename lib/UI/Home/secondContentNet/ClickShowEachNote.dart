@@ -196,8 +196,19 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
       await FirebaseFirestore.instance
           .collection('MemoDataBase')
           .doc(doc)
-          .update({
-        'photoUrl': '',
+          .get()
+          .then((value) {
+        List photolist = [];
+        if (value.exists) {
+          if (value.data()!['photoUrl'].length > 0) {
+            FirebaseFirestore.instance
+                .collection('MemoDataBase')
+                .doc(doc)
+                .update({
+              'photoUrl': '',
+            });
+          } else {}
+        }
       });
     } else {}
   }

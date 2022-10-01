@@ -1,24 +1,25 @@
 import 'package:badges/badges.dart';
 import 'package:clickbyme/Page/MYPage.dart';
+import 'package:clickbyme/Page/addWhole_update.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Home/NotiAlarm.dart';
-import 'package:clickbyme/sheets/addWhole.dart';
+import 'package:clickbyme/Page/NotiAlarm.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:new_version/new_version.dart';
+import 'package:page_transition/page_transition.dart';
 import 'Dialogs/destroyBackKey.dart';
 import 'Page/HomePage.dart';
 import 'Page/ProfilePage.dart';
 import 'Tool/AndroidIOS.dart';
 import 'Tool/Getx/PeopleAdd.dart';
+import 'Tool/Getx/memosetting.dart';
 import 'Tool/Getx/navibool.dart';
 import 'Tool/Getx/notishow.dart';
-import 'Tool/IconBtn.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.index}) : super(key: key);
@@ -30,6 +31,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   //curved navi index
   int _selectedIndex = 0;
+  late FToast fToast;
   late DateTime backbuttonpressedTime;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
@@ -41,14 +43,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
+  final controll_memo = Get.put(memosetting());
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _selectedIndex = widget.index;
-
-    Hive.box('user_setting').put('page_index', 1);
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
@@ -72,7 +75,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         builder: (_) => Scaffold(
             backgroundColor: BGColor(),
             body: WillPopScope(
-                onWillPop: _onWillPop, child: pages[_selectedIndex]),
+                onWillPop: Hive.box('user_setting').get('page_index') == 1
+                    ? _onWillPop
+                    : _onWillPop2,
+                child: pages[_selectedIndex]),
             bottomNavigationBar: draw.navi == 1
                 ? Container(
                     decoration: BoxDecoration(
@@ -88,8 +94,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                                 Hive.box('user_setting').get('page_index'));
                             _selectedIndex =
                                 Hive.box('user_setting').get('page_index');
-                            addWhole(context, searchNode, controller, name,
-                                Date, 'home');
+                            /*addWhole(context, searchNode, controller, name,
+                                Date, 'home', fToast);*/
+                            controll_memo.loading = false;
+                            addWhole_update(context, searchNode, controller,
+                                name, Date, 'home', fToast);
                           } else {
                             Hive.box('user_setting').put('page_index', _index);
                             _selectedIndex =
@@ -193,5 +202,27 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     fontSize: contentTextsize())),
             pressed1)) ??
         false;
+  }
+
+  Future<bool> _onWillPop2() async {
+    Hive.box('user_setting').get('page_index') == 0
+        ? Navigator.of(context).pushReplacement(
+            PageTransition(
+              type: PageTransitionType.rightToLeft,
+              child: const MyHomePage(
+                index: 1,
+              ),
+            ),
+          )
+        : Navigator.of(context).pushReplacement(
+            PageTransition(
+              type: PageTransitionType.leftToRight,
+              child: const MyHomePage(
+                index: 1,
+              ),
+            ),
+          );
+    Hive.box('user_setting').put('page_index', 1);
+    return false;
   }
 }

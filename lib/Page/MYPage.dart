@@ -1,27 +1,16 @@
-import 'package:async/async.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/sheets/userinfotalk.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../Tool/ContainerDesign.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
-import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
+import '../UI/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
-import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
-import '../UI/Home/secondContentNet/PeopleGroup.dart';
-import '../UI/Sign/UserCheck.dart';
-import '../sheets/addgroupmember.dart';
 import 'DrawerScreen.dart';
 
 class MYPage extends StatefulWidget {
@@ -117,106 +106,7 @@ class _MYPageState extends State<MYPage> {
                   color: BGColor(),
                   child: Column(
                     children: [
-                      SizedBox(
-                          height: 80,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10, top: 20, bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                draw.navi == 0
-                                    ? draw.drawopen == true
-                                        ? IconBtn(
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    xoffset = 0;
-                                                    yoffset = 0;
-                                                    scalefactor = 1;
-                                                    isdraweropen = false;
-                                                    draw.setclose();
-                                                    Hive.box('user_setting')
-                                                        .put('page_opened',
-                                                            false);
-                                                  });
-                                                },
-                                                icon: Container(
-                                                  alignment: Alignment.center,
-                                                  width: 30,
-                                                  height: 30,
-                                                  child: NeumorphicIcon(
-                                                    Icons.keyboard_arrow_left,
-                                                    size: 30,
-                                                    style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .convex,
-                                                        depth: 2,
-                                                        surfaceIntensity: 0.5,
-                                                        color: TextColor(),
-                                                        lightSource: LightSource
-                                                            .topLeft),
-                                                  ),
-                                                )),
-                                            color: TextColor())
-                                        : IconBtn(
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    xoffset = 80;
-                                                    yoffset = 0;
-                                                    scalefactor = 1;
-                                                    isdraweropen = true;
-                                                    draw.setopen();
-                                                    Hive.box('user_setting')
-                                                        .put('page_opened',
-                                                            true);
-                                                  });
-                                                },
-                                                icon: Container(
-                                                  alignment: Alignment.center,
-                                                  width: 30,
-                                                  height: 30,
-                                                  child: NeumorphicIcon(
-                                                    Icons.menu,
-                                                    size: 30,
-                                                    style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .convex,
-                                                        surfaceIntensity: 0.5,
-                                                        depth: 2,
-                                                        color: TextColor(),
-                                                        lightSource: LightSource
-                                                            .topLeft),
-                                                  ),
-                                                )),
-                                            color: TextColor())
-                                    : const SizedBox(),
-                                SizedBox(
-                                    width: draw.navi == 0
-                                        ? MediaQuery.of(context).size.width - 70
-                                        : MediaQuery.of(context).size.width -
-                                            20,
-                                    child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text('MY',
-                                                  style: TextStyle(
-                                                    fontSize:
-                                                        secondTitleTextsize(),
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                          ],
-                                        ))),
-                              ],
-                            ),
-                          )),
+                      const AppBarCustom(title: 'MY'),
                       Flexible(
                         fit: FlexFit.tight,
                         child: SizedBox(

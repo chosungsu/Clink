@@ -7,16 +7,13 @@ import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
-import '../../Dialogs/destroyBackKey.dart';
-import '../../Tool/AndroidIOS.dart';
-import '../../Tool/IconBtn.dart';
-import '../../Tool/NoBehavior.dart';
-import '../Events/ADEvents.dart';
-import 'firstContentNet/ChooseCalendar.dart';
-import 'firstContentNet/DayNoteHome.dart';
+import '../Dialogs/destroyBackKey.dart';
+import '../Tool/AndroidIOS.dart';
+import '../Tool/IconBtn.dart';
+import '../Tool/NoBehavior.dart';
+import '../UI/Home/firstContentNet/ChooseCalendar.dart';
+import '../UI/Home/firstContentNet/DayNoteHome.dart';
 
 class NotiAlarm extends StatefulWidget {
   @override
@@ -483,136 +480,6 @@ class _NotiAlarmState extends State<NotiAlarm>
         );
   }
 
-  CompanyNotice() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: firestore
-          .collection('AppNoticeByCompany')
-          .orderBy('date', descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _list_ad.clear();
-          final valuespace = snapshot.data!.docs;
-          for (var sp in valuespace) {
-            final messageText = sp.get('title');
-            final messageDate = sp.get('date');
-            _list_ad.add(PageList(
-              title: messageText,
-              sub: messageDate,
-            ));
-          }
-
-          return _list_ad.isEmpty
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width - 60,
-                  height: MediaQuery.of(context).size.height - 180,
-                  child: Center(
-                    child: Text(
-                      '공지사항이 없습니다.',
-                      style: TextStyle(
-                          color: TextColor_shadowcolor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: secondTitleTextsize()),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ))
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height - 180,
-                  width: MediaQuery.of(context).size.width - 60,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          itemCount: _list_ad.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                ContainerDesign(
-                                  color: BGColor(),
-                                  child: SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          80,
-                                      height: 100,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    _list_ad[index].title,
-                                                    softWrap: true,
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                        color: TextColor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentTextsize()),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  )
-                                                ],
-                                              )),
-                                          Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                _list_ad[index].sub.toString(),
-                                                style: TextStyle(
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        contentTextsize()),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      )),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                )
-                              ],
-                            );
-                          }),
-                    ],
-                  ));
-        }
-        return SizedBox(
-            width: MediaQuery.of(context).size.width - 60,
-            height: MediaQuery.of(context).size.height - 180,
-            child: Center(
-              child: Text(
-                '공지사항이 없습니다.',
-                style: TextStyle(
-                    color: TextColor_shadowcolor(),
-                    fontWeight: FontWeight.bold,
-                    fontSize: secondTitleTextsize()),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ));
-      },
-    );
-  }
-
   UserNotice() {
     return StreamBuilder<QuerySnapshot>(
       stream: firestore
@@ -702,7 +569,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                             ContainerDesign(
                               color: readlist[index] == 'no'
                                   ? BGColor()
-                                  : BGColor_shadowcolor(),
+                                  : Colors.grey.shade400,
                               child: Column(
                                 children: [
                                   SizedBox(
