@@ -176,8 +176,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         });
                       },
                       backgroundColor: BGColor(),
-                      selectedFontSize: contentTitleTextsize(),
-                      unselectedFontSize: contentTitleTextsize(),
+                      selectedFontSize: contentTextsize(),
+                      unselectedFontSize: contentTextsize(),
                       selectedItemColor: NaviColor(true),
                       unselectedItemColor: NaviColor(false),
                       showSelectedLabels: true,
