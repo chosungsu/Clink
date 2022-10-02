@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     _selectedIndex = widget.index;
     fToast = FToast();
     fToast.init(context);
-    firestore.collection('User').doc(name).get().then((value) {
+    /*firestore.collection('User').doc(name).get().then((value) {
       if (value.exists) {
         peopleadd.secondnameset(value.data()!['subname']);
       }
@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         isread = true;
         notilist.isread = true;
       }
-    });
+    });*/
   }
 
   @override
@@ -181,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                       selectedItemColor: NaviColor(true),
                       unselectedItemColor: NaviColor(false),
                       showSelectedLabels: true,
-                      showUnselectedLabels: false,
+                      showUnselectedLabels: true,
                       currentIndex: _selectedIndex,
                       items: <BottomNavigationBarItem>[
                         BottomNavigationBarItem(
@@ -220,36 +220,27 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                           backgroundColor: BGColor(),
                           icon: GetBuilder<notishow>(
                               builder: (_) => notilist.isread == true
-                                  ? IconButton(
-                                      onPressed: () {
+                                  ? InkWell(
+                                      onTap: () {
                                         Get.to(() => NotiAlarm(),
                                             transition: Transition.zoom);
                                       },
-                                      icon: Container(
-                                        alignment: Alignment.center,
-                                        width: 25,
-                                        height: 25,
+                                      child: const Icon(
+                                        Icons.notifications_none,
+                                        size: 25,
+                                      ),
+                                    )
+                                  : InkWell(
+                                      onTap: () {
+                                        Get.to(() => NotiAlarm(),
+                                            transition: Transition.zoom);
+                                      },
+                                      child: Badge(
                                         child: const Icon(
                                           Icons.notifications_none,
                                           size: 25,
                                         ),
-                                      ))
-                                  : IconButton(
-                                      onPressed: () {
-                                        Get.to(() => NotiAlarm(),
-                                            transition: Transition.zoom);
-                                      },
-                                      icon: Container(
-                                          alignment: Alignment.center,
-                                          width: 25,
-                                          height: 25,
-                                          child: Badge(
-                                            child: const Icon(
-                                              Icons.notifications_none,
-                                              size: 25,
-                                            ),
-                                          )),
-                                    )),
+                                      ))),
                           label: '알림',
                         ),
                       ],

@@ -3,6 +3,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/UI/Home/Widgets/ViewSet.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +24,8 @@ import 'Page/LoginSignPage.dart';
 import 'package:flutter/foundation.dart';
 import 'Tool/BGColor.dart';
 import 'Tool/Getx/PeopleAdd.dart';
+import 'Tool/Getx/memosetting.dart';
+import 'Tool/Getx/notishow.dart';
 
 const Map<String, String> UNIT_ID = kReleaseMode
     ? {
@@ -73,10 +76,24 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
+{
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
   bool islogined = false;
+  final peopleadd = Get.put(PeopleAdd());
+  final notilist = Get.put(notishow());
+  List updateid = [];
+  bool isread = false;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String name = Hive.box('user_info').get('id');
+  List defaulthomeviewlist = [
+    '오늘의 일정',
+    '공유된 오늘의 일정',
+    '최근에 수정된 메모',
+    '홈뷰에 저장된 메모',
+  ];
+  List userviewlist = [];
 
   @override
   void initState() {
@@ -91,7 +108,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     checkForInitialMessage();
     /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);*/
-    scaleController = AnimationController(
+    /*scaleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     )..addStatusListener(
@@ -110,31 +127,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           }
         },
       );
-
+    
     scaleAnimation =
-        Tween<double>(begin: 0.0, end: 12).animate(scaleController);
-
-    Timer(const Duration(seconds: 2), () {
-      setState(() {
-        scaleController.forward();
-      });
-    });
+        Tween<double>(begin: 0.0, end: 12).animate(scaleController);*/
   }
 
   @override
   void dispose() {
     super.dispose();
-    scaleController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        body: body());
   }
 
   checkForInitialMessage() async {
@@ -146,6 +146,152 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         body: initialMessage.notification?.body,
       );
     }
+  }
+
+  Future<Widget?> initScreen() async {
+    await firestore.collection('User').doc(name).get().then((value) {
+      if (value.exists) {
+        peopleadd.secondnameset(value.data()!['subname']);
+      }
+    });
+    await firestore
+        .collection('HomeViewCategories')
+        .doc(Hive.box('user_setting').get('usercode'))
+        .get()
+        .then((value) {
+      peopleadd.defaulthomeviewlist.clear();
+      peopleadd.userviewlist.clear();
+      if (value.exists) {
+        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+          peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+        }
+        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+          peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
+        }
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': Hive.box('user_setting').get('usercode'),
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
+        }, SetOptions(merge: true));
+        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+        userviewlist = peopleadd.userviewlist;
+      } else {
+        peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
+        peopleadd.userviewlist.add(userviewlist);
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': Hive.box('user_setting').get('usercode'),
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
+        }, SetOptions(merge: true));
+        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+        userviewlist = peopleadd.userviewlist;
+      }
+    });
+    await firestore.collection('AppNoticeByUsers').get().then((value) {
+      for (var element in value.docs) {
+        if (element.data()['username'] == name ||
+            element.data()['sharename'].toString().contains(name)) {
+          updateid.add(element.data()['read']);
+        }
+      }
+      if (updateid.contains('no')) {
+        isread = false;
+        notilist.isread = false;
+      } else {
+        isread = true;
+        notilist.isread = true;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: StatusColor(), statusBarBrightness: Brightness.light));
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: waitingbody()
+        //body()
+        );
+  }
+
+  waitingbody() {
+    return SizedBox(
+        child: FutureBuilder(
+      future: initScreen(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return loadingbody();
+        } else {
+          Hive.box('user_info').get('id') == null ||
+                  Hive.box('user_info').get('autologin') == false
+              ? null
+              : GoToMain(context);
+          return Hive.box('user_info').get('id') == null ||
+                  Hive.box('user_info').get('autologin') == false
+              ? body()
+              : loadingbody();
+        }
+      },
+    ));
+  }
+
+  loadingbody() {
+    double height =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    return SizedBox(
+        height: height,
+        child: Column(
+          children: [
+            SizedBox(
+                height: height * 0.55,
+                child: Center(
+                  child: NeumorphicText(
+                    'Habit Tracker',
+                    style: const NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: Colors.blueGrey,
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  ),
+                )),
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: height * 0.45,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    DefaultTextStyle(
+                      style: const TextStyle(fontSize: 15.0),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          TyperAnimatedText('로그인중입니다...',
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.black),
+                              speed: const Duration(milliseconds: 150)),
+                        ],
+                        isRepeatingAnimation: true,
+                        repeatForever: true,
+                        //displayFullTextOnTap: false,
+                      ),
+                    ),
+                  ],
+                )),
+          ],
+        ));
   }
 
   body() {
@@ -177,57 +323,34 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Hive.box('user_info').get('id') == null ||
-                            Hive.box('user_info').get('autologin') == false
-                        ? Column(
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey.shade400,
+                        ),
+                        onPressed: () {
+                          GoToLogin(context, 'first');
+                        },
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.grey.shade400,
+                              Center(
+                                child: NeumorphicText(
+                                  '로그인',
+                                  style: const NeumorphicStyle(
+                                    shape: NeumorphicShape.flat,
+                                    depth: 3,
+                                    color: Colors.white,
                                   ),
-                                  onPressed: () {
-                                    GoToLogin(context, 'first');
-                                  },
-                                  child: Center(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: NeumorphicText(
-                                            '로그인',
-                                            style: const NeumorphicStyle(
-                                              shape: NeumorphicShape.flat,
-                                              depth: 3,
-                                              color: Colors.white,
-                                            ),
-                                            textStyle: NeumorphicTextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              )
                             ],
-                          )
-                        : DefaultTextStyle(
-                            style: const TextStyle(fontSize: 15.0),
-                            child: AnimatedTextKit(
-                              animatedTexts: [
-                                TyperAnimatedText('로그인중입니다...',
-                                    textStyle: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                    speed: const Duration(milliseconds: 150)),
-                              ],
-                              isRepeatingAnimation: true,
-                              repeatForever: true,
-                              //displayFullTextOnTap: false,
-                            ),
                           ),
+                        )),
                   ],
                 )),
           ],

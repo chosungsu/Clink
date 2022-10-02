@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
         yoffset = 0;
       });
     }
-    /*firestore
+    firestore
         .collection('HomeViewCategories')
         .doc(Hive.box('user_setting').get('usercode'))
         .get()
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
         isread = true;
         notilist.isread = true;
       }
-    });*/
+    });
   }
 
   @override
@@ -284,14 +284,6 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       H_Container_0(height, _pController2),
                                       const SizedBox(
-                                        height: 10,
-                                      ),
-                                      H_Container_0_eventcompany(),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      CompanyNotice(),
-                                      const SizedBox(
                                         height: 20,
                                       ),
                                       H_Container_3(height),
@@ -311,6 +303,14 @@ class _HomePageState extends State<HomePage> {
                                               peopleadd.defaulthomeviewlist,
                                               peopleadd.userviewlist,
                                               usercode)),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      H_Container_testroom(),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      CompanyNotice(),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -510,7 +510,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_0_eventcompany() {
+  H_Container_testroom() {
     //프로버전 구매시 보이지 않게 함
     return GestureDetector(
       onTap: () {
