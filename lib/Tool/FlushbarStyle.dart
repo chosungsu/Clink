@@ -2,7 +2,12 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 
+import '../UI/Home/firstContentNet/ChooseCalendar.dart';
+import '../UI/Home/firstContentNet/DayNoteHome.dart';
+import '../route.dart';
 import 'TextSize.dart';
 
 const kPadding = 8.0; // up to you
@@ -67,6 +72,52 @@ class Snack {
           size: 25,
         ),
         dismissDirection: DismissDirection.horizontal,
+        forwardAnimationCurve: Curves.easeOutBack,
+        margin: const EdgeInsets.all(15),
+        snackPosition: SnackPosition.BOTTOM);
+  }
+
+  static actionshow(
+      {required String title,
+      SnackType snackType = SnackType.info,
+      SnackBarBehavior behavior = SnackBarBehavior.fixed,
+      required BuildContext context,
+      required String s}) {
+    Get.snackbar('', '',
+        borderRadius: 20,
+        titleText: Text(
+          '퀵편집 기능',
+          style: TextStyle(fontSize: contentTextsize(), color: Colors.white),
+        ),
+        messageText: Text(
+          title,
+          style: TextStyle(fontSize: contentTextsize(), color: Colors.white),
+        ),
+        duration: const Duration(seconds: 5),
+        isDismissible: true,
+        dismissDirection: DismissDirection.horizontal,
+        backgroundColor: _getSnackbarColor(snackType),
+        mainButton: TextButton(
+          onPressed: () {
+            s == 'cal'
+                ? Get.to(
+                    () => const ChooseCalendar(
+                          isfromwhere: 'mypagehome',
+                          index: 0,
+                        ),
+                    transition: Transition.rightToLeft)
+                : Get.to(
+                    () => const DayNoteHome(
+                          title: '',
+                          isfromwhere: 'mypagehome',
+                        ),
+                    transition: Transition.rightToLeft);
+          },
+          child: Text(
+            'Go',
+            style: TextStyle(fontSize: contentTextsize(), color: Colors.white),
+          ),
+        ),
         forwardAnimationCurve: Curves.easeOutBack,
         margin: const EdgeInsets.all(15),
         snackPosition: SnackPosition.BOTTOM);

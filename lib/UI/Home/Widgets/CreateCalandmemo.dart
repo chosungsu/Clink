@@ -15,6 +15,18 @@ CreateCalandmemoSuccessFlushbar(String s, FToast fToast) {
       fToast: fToast);
 }
 
+CreateCalandmemoMove(BuildContext context, String s) {
+  Future.delayed(const Duration(seconds: 0), () async {
+    await Snack.actionshow(
+        context: context,
+        title: '이어서 바로 작성하시겠습니까?',
+        snackType: SnackType.info,
+        behavior: SnackBarBehavior.floating,
+        s: s);
+    //Snack.closesnackbars();
+  });
+}
+
 CreateCalandmemoSuccessFlushbarSub(BuildContext context, String s) {
   Future.delayed(const Duration(seconds: 0), () async {
     await Snack.show(

@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -49,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
   var _controller = TextEditingController();
   late final PageController _pController1;
   late final PageController _pController2;
+  ScrollController _scrollController = ScrollController();
   int currentPage = 1;
   bool showsharegroups = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -110,6 +112,12 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
     _controller.dispose();
     _pController2.dispose();
+    _scrollController.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
   }
 
   @override
@@ -175,48 +183,26 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: SizedBox(
                           child: ScrollConfiguration(
                             behavior: NoBehavior(),
-                            child: SingleChildScrollView(child: StatefulBuilder(
-                                builder: (_, StateSetter setState) {
-                              return ExpandablePageView.builder(
-                                physics: const ScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                controller: _pController2,
-                                itemCount: currentPage,
-                                onPageChanged: ((value) {
-                                  setState(() {
-                                    showsharegroups = false;
-                                    _getAppInfo();
-                                    if (value == 0) {
-                                      currentPage = 1;
-                                    } else {}
-                                  });
-                                }),
-                                itemBuilder: ((context, index) {
-                                  return index == 0
-                                      ? Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20, 0, 20, 0),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              S_Container0(height),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                              S_Container1(height),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                              OptionChoice(height, context),
-                                              //S_Container2(),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                            ],
-                                          ))
-                                      : (pagesetnumber == 0
+                            child: SingleChildScrollView(
+                                controller: _scrollController,
+                                child: StatefulBuilder(
+                                    builder: (_, StateSetter setState) {
+                                  return ExpandablePageView.builder(
+                                    physics: const ScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    controller: _pController2,
+                                    itemCount: currentPage,
+                                    onPageChanged: ((value) {
+                                      setState(() {
+                                        showsharegroups = false;
+                                        _getAppInfo();
+                                        if (value == 0) {
+                                          currentPage = 1;
+                                        } else {}
+                                      });
+                                    }),
+                                    itemBuilder: ((context, index) {
+                                      return index == 0
                                           ? Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
@@ -226,21 +212,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  G_Container(height),
+                                                  S_Container0(height),
                                                   const SizedBox(
                                                     height: 20,
                                                   ),
-                                                  T_Container0(height),
+                                                  S_Container1(height),
                                                   const SizedBox(
                                                     height: 20,
                                                   ),
-                                                  /*G_Container1(height),
+                                                  ADBox(),
                                                   const SizedBox(
                                                     height: 20,
-                                                  ),*/
+                                                  ),
+                                                  OptionChoice(height, context),
+                                                  //S_Container2(),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
                                                 ],
                                               ))
-                                          : (pagesetnumber == 1
+                                          : (pagesetnumber == 0
                                               ? Padding(
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
@@ -248,44 +239,64 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
-                                                            .start,
+                                                            .stretch,
                                                     children: [
                                                       G_Container(height),
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
-                                                      G_Container0(height),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      G_Container1(height),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
+                                                      T_Container0(height),
+                                                      ADBox()
+                                                      /*G_Container1(height),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),*/
                                                     ],
                                                   ))
-                                              : Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
+                                              : (pagesetnumber == 1
+                                                  ? Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
                                                           20, 0, 20, 0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      G_Container(height),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      CompanyNotice(),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                    ],
-                                                  ))));
-                                }),
-                              );
-                            })),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          G_Container(height),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          G_Container0(height),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          G_Container1(height),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                        ],
+                                                      ))
+                                                  : Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          20, 0, 20, 0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          G_Container(height),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          CompanyNotice(),
+                                                          ADBox()
+                                                        ],
+                                                      ))));
+                                    }),
+                                  );
+                                })),
                           ),
                         ),
                       ),
@@ -307,280 +318,297 @@ class _ProfilePageState extends State<ProfilePage> {
     final List eventsmallcontent = [];
     final List dates = [];
     return SizedBox(
-        height: MediaQuery.of(context).size.height - 150,
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              FutureBuilder(
-                future: firestore
-                    .collection("AppNoticeByCompany")
-                    .orderBy('date', descending: true)
-                    .limit(5)
-                    .get()
-                    .then(((QuerySnapshot querySnapshot) => {
-                          eventtitle.clear(),
-                          eventcontent.clear(),
-                          eventsmallcontent.clear(),
-                          dates.clear(),
-                          querySnapshot.docs.forEach((doc) {
-                            eventtitle.add(doc.get('title'));
-                            for (int i = 0;
-                                i < doc.get('content').length;
-                                i++) {
-                              eventcontent.add(doc.get('content')[i]);
-                            }
-                            for (int i = 0;
-                                i < doc.get('summaries').length;
-                                i++) {
-                              eventsmallcontent.add(doc.get('summaries')[i]);
-                            }
-                            dates.add(doc.get('date'));
-                          })
-                        })),
-                builder: (context, future) => future.connectionState ==
-                        ConnectionState.waiting
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height - 150,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
+      height: draw.navi == 0
+          ? MediaQuery.of(context).size.height - 220
+          : MediaQuery.of(context).size.height - 310,
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            FutureBuilder(
+              future: firestore
+                  .collection("AppNoticeByCompany")
+                  .orderBy('date', descending: true)
+                  .get()
+                  .then(((QuerySnapshot querySnapshot) {
+                for (int j = 0; j < querySnapshot.docs.length; j++) {
+                  eventtitle.add(querySnapshot.docs[j].get('title'));
+                  eventcontent.add(querySnapshot.docs[j].get('content'));
+                  eventsmallcontent.add(querySnapshot.docs[j].get('summaries'));
+                  dates.add(querySnapshot.docs[j].get('date'));
+                }
+              })),
+              builder: (context, future) => future.connectionState ==
+                      ConnectionState.waiting
+                  ? SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: NeumorphicText(
+                              '릴리즈 노트를 불러오고 있습니다...',
+                              style: NeumorphicStyle(
+                                shape: NeumorphicShape.flat,
+                                depth: 3,
+                                color: TextColor(),
+                              ),
+                              textStyle: NeumorphicTextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize(),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      physics: const ScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: eventtitle.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Center(
-                              child: NeumorphicText(
-                                '릴리즈 노트를 불러오고 있습니다...',
-                                style: NeumorphicStyle(
-                                  shape: NeumorphicShape.flat,
-                                  depth: 3,
-                                  color: TextColor(),
-                                ),
-                                textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize(),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        physics: const ScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: eventtitle.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: ContainerDesign(
-                                    color: Colors.blue.shade200,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                                alignment: Alignment.center,
-                                                child: CircleAvatar(
-                                                  backgroundColor: BGColor(),
-                                                  child: Icon(
-                                                    Icons.new_releases,
-                                                    color:
-                                                        TextColor_shadowcolor(),
-                                                  ),
-                                                )),
-                                            const SizedBox(
-                                              width: 10,
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {},
+                              child: ContainerDesign(
+                                  color: Colors.blue.shade200,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                              alignment: Alignment.center,
+                                              child: CircleAvatar(
+                                                backgroundColor: BGColor(),
+                                                child: Icon(
+                                                  Icons.new_releases,
+                                                  color:
+                                                      TextColor_shadowcolor(),
+                                                ),
+                                              )),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Text(
+                                              eventtitle[index].toString() +
+                                                  ' 릴리즈노트',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: TextColor()),
                                             ),
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text(
-                                                eventtitle[index].toString() +
-                                                    ' 릴리즈노트',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: contentTextsize(),
-                                                    color: TextColor()),
-                                              ),
-                                            ),
-                                            versioninfo !=
-                                                    eventtitle[index].toString()
-                                                ? InkWell(
-                                                    onTap: () {
-                                                      StoreRedirect.redirect(
-                                                        androidAppId:
-                                                            'com.jss.habittracker', // Android app bundle package name
-                                                      );
-                                                    },
-                                                    child: Container(
+                                          ),
+                                          versioninfo !=
+                                                  eventtitle[index].toString()
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    StoreRedirect.redirect(
+                                                      androidAppId:
+                                                          'com.jss.habittracker', // Android app bundle package name
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: CircleAvatar(
+                                                        backgroundColor:
+                                                            BGColor(),
+                                                        child: Icon(
+                                                          Icons.play_for_work,
+                                                          color: Colors
+                                                              .red.shade400,
+                                                        ),
+                                                      )),
+                                                )
+                                              : InkWell(
+                                                  onTap: () {
+                                                    Snack.toast(
+                                                        title:
+                                                            '최신버전이거나 지난버전입니다.',
+                                                        color: Colors.white,
+                                                        backgroundcolor:
+                                                            Colors.greenAccent,
+                                                        fToast: fToast);
+                                                  },
+                                                  child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: CircleAvatar(
+                                                        backgroundColor:
+                                                            BGColor(),
+                                                        child: Icon(
+                                                          Icons.verified,
+                                                          color: Colors
+                                                              .green.shade400,
+                                                        ),
+                                                      ))),
+                                        ],
+                                      ),
+                                      Divider(
+                                        height: 20,
+                                        color: TextColor_shadowcolor(),
+                                        thickness: 1,
+                                        indent: 10.0,
+                                        endIndent: 10.0,
+                                      ),
+                                      ListView.builder(
+                                          physics: const ScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: eventcontent[index].length,
+                                          itemBuilder: ((context, index2) {
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
                                                         alignment:
                                                             Alignment.center,
                                                         child: CircleAvatar(
                                                           backgroundColor:
                                                               BGColor(),
                                                           child: Icon(
-                                                            Icons.play_for_work,
-                                                            color: Colors
-                                                                .red.shade400,
+                                                            Icons.tag,
+                                                            color:
+                                                                TextColor_shadowcolor(),
                                                           ),
                                                         )),
-                                                  )
-                                                : InkWell(
-                                                    onTap: () {
-                                                      Snack.toast(
-                                                          title:
-                                                              '최신버전이거나 지난버전입니다.',
-                                                          color: Colors.white,
-                                                          backgroundcolor:
-                                                              Colors
-                                                                  .greenAccent,
-                                                          fToast: fToast);
-                                                    },
-                                                    child: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: CircleAvatar(
-                                                          backgroundColor:
-                                                              BGColor(),
-                                                          child: Icon(
-                                                            Icons.verified,
-                                                            color: Colors
-                                                                .green.shade400,
-                                                          ),
-                                                        ))),
-                                          ],
-                                        ),
-                                        Divider(
-                                          height: 20,
-                                          color: TextColor_shadowcolor(),
-                                          thickness: 1,
-                                          indent: 10.0,
-                                          endIndent: 10.0,
-                                        ),
-                                        ListView.builder(
-                                            physics: const ScrollPhysics(),
-                                            scrollDirection: Axis.vertical,
-                                            shrinkWrap: true,
-                                            itemCount: eventcontent.length,
-                                            itemBuilder: ((context, index2) {
-                                              return Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: CircleAvatar(
-                                                            backgroundColor:
-                                                                BGColor(),
-                                                            child: Icon(
-                                                              Icons.tag,
-                                                              color:
-                                                                  TextColor_shadowcolor(),
-                                                            ),
-                                                          )),
-                                                      const SizedBox(
-                                                        width: 10,
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Flexible(
+                                                      fit: FlexFit.tight,
+                                                      child: Text(
+                                                        eventcontent[index]
+                                                            [index2],
+                                                        maxLines: 2,
+                                                        softWrap: false,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize(),
+                                                            color: TextColor(),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis),
                                                       ),
-                                                      Flexible(
-                                                        fit: FlexFit.tight,
-                                                        child: Text(
-                                                          eventcontent[index2],
-                                                          maxLines: 2,
-                                                          softWrap: false,
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              color:
-                                                                  TextColor(),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    eventsmallcontent[index2],
-                                                    maxLines: 3,
-                                                    softWrap: false,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentTextsize(),
-                                                        color: TextColor(),
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                ],
-                                              );
-                                            })),
-                                        Divider(
-                                          height: 20,
-                                          color: TextColor_shadowcolor(),
-                                          thickness: 1,
-                                          indent: 10.0,
-                                          endIndent: 10.0,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text(
-                                                dates[index].toString(),
-                                                textAlign: TextAlign.end,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: contentTextsize(),
-                                                    color: TextColor()),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    )),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          );
-                        }),
-              )
-            ],
-          ),
-        ));
+                                                    )
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  eventsmallcontent[index]
+                                                      [index2],
+                                                  maxLines: 3,
+                                                  softWrap: false,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                      color: TextColor(),
+                                                      overflow: TextOverflow
+                                                          .ellipsis),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                              ],
+                                            );
+                                          })),
+                                      Divider(
+                                        height: 20,
+                                        color: TextColor_shadowcolor(),
+                                        thickness: 1,
+                                        indent: 10.0,
+                                        endIndent: 10.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Text(
+                                              dates[index].toString(),
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: TextColor()),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        );
+                      }),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  ADBox() {
+    /*return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ADEvents(context),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
+    )*/
+    return SizedBox(
+      height: 60,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              '광고공간입니다',
+              style: TextStyle(
+                  color: TextColor_shadowcolor(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize()),
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   G_Container(double height) {
@@ -1843,10 +1871,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           //showreadycontent(context);
                           setState(() {
                             pagesetnumber = 2;
+                            _scrollToTop();
 
                             currentPage++;
                             _pController2.nextPage(
-                                duration: Duration(milliseconds: 500),
+                                duration: Duration(milliseconds: 300),
                                 curve: Curves.ease);
                           });
                         },
@@ -1927,7 +1956,9 @@ class _ProfilePageState extends State<ProfilePage> {
           return _list_ad.isEmpty
               ? SizedBox(
                   width: MediaQuery.of(context).size.width - 60,
-                  height: MediaQuery.of(context).size.height - 180,
+                  height: draw.navi == 0
+                      ? MediaQuery.of(context).size.height - 220
+                      : MediaQuery.of(context).size.height - 310,
                   child: Center(
                     child: Text(
                       '공지사항이 없습니다.',
@@ -1939,7 +1970,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ))
               : SizedBox(
-                  height: MediaQuery.of(context).size.height - 180,
+                  height: draw.navi == 0
+                      ? MediaQuery.of(context).size.height - 220
+                      : MediaQuery.of(context).size.height - 310,
                   width: MediaQuery.of(context).size.width - 40,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
@@ -1948,7 +1981,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             itemCount: _list_ad.length,
                             shrinkWrap: true,
@@ -2100,6 +2133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     setState(() {
                       pagesetnumber = 0;
                       currentPage++;
+                      _scrollToTop();
                       _pController2.animateToPage(1,
                           duration: const Duration(milliseconds: 800),
                           curve: Curves.easeIn);
@@ -2270,6 +2304,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               setState(() {
                                 pagesetnumber = 1;
                                 currentPage++;
+                                _scrollToTop();
                                 _pController2.animateToPage(1,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn);

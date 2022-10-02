@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:package_info/package_info.dart';
 import 'package:page_transition/page_transition.dart';
+import '../DB/PageList.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
 import '../Tool/Getx/navibool.dart';
@@ -87,31 +88,23 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     Hive.box('user_setting').put('page_index', 1);
 
-    firestore.collection('User').doc(name).get().then((value) {
+    /*firestore.collection('User').doc(name).get().then((value) {
       if (value.exists) {
         peopleadd.secondnameset(value.data()!['subname']);
       }
-    });
+    });*/
 
-    /*firestore.collection('CalendarSheetHome').get().then((value) {
+    /*firestore.collection('CalendarDataBase').get().then((value) {
       List valueid = [];
+      List change = [];
       for (int i = 0; i < value.docs.length; i++) {
         valueid.add(value.docs[i].id);
+        change.add(value.docs[i].get('calname_update'));
       }
       for (int j = 0; j < valueid.length; j++) {
-        if (value.docs[j]['madeUser'] == '조동환') {
-          firestore.collection('CalendarDataBase').doc(valueid[j]).update({
-            'madeUser': 'chogm5XzMc',
-          });
-        } else if (value.docs[j]['madeUser'] == '최인영') {
-          firestore.collection('CalendarDataBase').doc(valueid[j]).update({
-            'madeUser': 'inygmhEDD1',
-          });
-        } else if (value.docs[j]['madeUser'] == '개발팀조성수') {
-          firestore.collection('CalendarDataBase').doc(valueid[j]).update({
-            'madeUser': 'skigmZ6hjF',
-          });
-        } else {}
+        firestore.collection('CalendarDataBase').doc(valueid[j]).update({
+          'calname': change[j],
+        });
       }
     });*/
     docid = Hive.box('user_setting').get('usercode');
@@ -131,7 +124,7 @@ class _HomePageState extends State<HomePage> {
         yoffset = 0;
       });
     }
-    firestore
+    /*firestore
         .collection('HomeViewCategories')
         .doc(Hive.box('user_setting').get('usercode'))
         .get()
@@ -186,7 +179,7 @@ class _HomePageState extends State<HomePage> {
         isread = true;
         notilist.isread = true;
       }
-    });
+    });*/
   }
 
   @override
@@ -297,6 +290,10 @@ class _HomePageState extends State<HomePage> {
                                       const SizedBox(
                                         height: 20,
                                       ),
+                                      CompanyNotice(),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
                                       H_Container_3(height),
                                       const SizedBox(
                                         height: 20,
@@ -359,27 +356,158 @@ class _HomePageState extends State<HomePage> {
         //ADEvents(context)
       ],
     )*/
-    return ContainerDesign(
-        child: SizedBox(
-          height: 60,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  '광고공간입니다',
-                  style: TextStyle(
-                      color: TextColor_shadowcolor(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize()),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              )
-            ],
-          ),
+    return SizedBox(
+      height: 60,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              '광고공간입니다',
+              style: TextStyle(
+                  color: TextColor_shadowcolor(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize()),
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  H_Con_Alert() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '공지사항',
+          style: TextStyle(
+              color: TextColor(),
+              fontWeight: FontWeight.bold,
+              fontSize: contentTitleTextsize()),
+          overflow: TextOverflow.ellipsis,
         ),
-        color: BGColor());
+      ],
+    );
+  }
+
+  CompanyNotice() {
+    final List<PageList> _list_ad = [];
+    return StreamBuilder<QuerySnapshot>(
+      stream: firestore
+          .collection('CompanyNotice')
+          .orderBy('date', descending: true)
+          .limit(1)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _list_ad.clear();
+          final valuespace = snapshot.data!.docs;
+          for (var sp in valuespace) {
+            final messageText = sp.get('title');
+            final messageDate = sp.get('date');
+            _list_ad.add(PageList(
+              title: messageText,
+              sub: messageDate,
+            ));
+          }
+
+          return _list_ad.isEmpty
+              ? SizedBox(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width - 40,
+                  child: ContainerDesign(
+                    color: BGColor(),
+                    child: SizedBox(
+                        height: 100,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              '공지사항이 없습니다.',
+                              softWrap: true,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  color: TextColor(),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize()),
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          ],
+                        )),
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    H_Con_Alert(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: GestureDetector(
+                          onTap: () {
+                            draw.setclose();
+                            Hive.box('user_setting').put('page_index', 3);
+                            Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const MyHomePage(
+                                  index: 3,
+                                ),
+                              ),
+                            );
+                          },
+                          child: ContainerDesign(
+                            color: BGColor(),
+                            child: SizedBox(
+                              height: 100,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Text(
+                                        _list_ad[0].title,
+                                        maxLines: 3,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize()),
+                                        overflow: TextOverflow.fade,
+                                      )),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Container(
+                                      alignment: Alignment.center,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.blue.shade200,
+                                        child: const Icon(
+                                          Icons.chevron_right,
+                                          color: Colors.white,
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ))
+                  ],
+                );
+        }
+        return LinearProgressIndicator(
+          backgroundColor: BGColor(),
+          valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+        );
+      },
+    );
   }
 
   H_Container_0_eventcompany() {
@@ -388,6 +516,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         draw.setclose();
         _getAppInfo();
+        Hive.box('user_setting').put('page_index', 3);
         Navigator.of(context).pushReplacement(
           PageTransition(
             type: PageTransitionType.rightToLeft,
@@ -426,9 +555,9 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.center,
                         child: CircleAvatar(
                           backgroundColor: Colors.blue.shade200,
-                          child: Icon(
+                          child: const Icon(
                             Icons.chevron_right,
-                            color: BGColor(),
+                            color: Colors.white,
                           ),
                         )),
                   ],

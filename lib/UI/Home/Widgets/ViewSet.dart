@@ -54,12 +54,14 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
             .doc(codes)
             .get()
             .then((value) {
-          value.data()!.forEach((key, value) {
-            //print(key + '-' + value);
-            if (key == 'calname') {
-              cname.add(value);
-            }
-          });
+          if (value.exists) {
+            value.data()!.forEach((key, value) {
+              //print(key + '-' + value);
+              if (key == 'calname') {
+                cname.add(value);
+              }
+            });
+          }
         });
         contentmy.add(SpaceContent(
             title: todo,
@@ -105,12 +107,14 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
             .doc(codes)
             .get()
             .then((value) {
-          value.data()!.forEach((key, value) {
-            //print(key + '-' + value);
-            if (key == 'calname') {
-              cname.add(value);
-            }
-          });
+          if (value.exists) {
+            value.data()!.forEach((key, value) {
+              //print(key + '-' + value);
+              if (key == 'calname') {
+                cname.add(value);
+              }
+            });
+          }
         });
         for (int i = 0; i < nameList.length; i++) {
           if (nameList[i].contains(secondname)) {

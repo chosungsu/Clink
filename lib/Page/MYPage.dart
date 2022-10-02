@@ -147,32 +147,32 @@ class _MYPageState extends State<MYPage> {
   }
 
   M_Container0(double height) {
-    return SizedBox(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text('캘린더 모음',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor_shadowcolor(),
-                    )),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.to(
-                      () => const ChooseCalendar(
-                            isfromwhere: 'mypagehome',
-                            index: 0,
-                          ),
-                      transition: Transition.rightToLeft);
-                },
-                child: Container(
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+            () => const ChooseCalendar(
+                  isfromwhere: 'mypagehome',
+                  index: 0,
+                ),
+            transition: Transition.rightToLeft);
+      },
+      child: SizedBox(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text('캘린더 모음',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: TextColor_shadowcolor(),
+                      )),
+                ),
+                Container(
                   alignment: Alignment.center,
                   width: 30,
                   height: 30,
@@ -187,58 +187,58 @@ class _MYPageState extends State<MYPage> {
                         lightSource: LightSource.topLeft),
                   ),
                 ),
-              )
-            ],
-          ),
-          Text(
-            '우측아이콘을 클릭하여 캘린더 확인',
-            maxLines: 2,
-            softWrap: true,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 15,
-              color: TextColor(),
+              ],
             ),
-          ),
-          const Divider(
-            height: 20,
-            color: Colors.grey,
-            thickness: 1,
-            indent: 10.0,
-            endIndent: 10.0,
-          ),
-        ],
+            Text(
+              '우측아이콘을 클릭하여 캘린더 확인',
+              maxLines: 2,
+              softWrap: true,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 15,
+                color: TextColor(),
+              ),
+            ),
+            const Divider(
+              height: 20,
+              color: Colors.grey,
+              thickness: 1,
+              indent: 10.0,
+              endIndent: 10.0,
+            ),
+          ],
+        ),
       ),
     );
   }
 
   M_Container1(double height) {
-    return SizedBox(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text('메모장 모음',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor_shadowcolor(),
-                    )),
-              ),
-              InkWell(
-                onTap: () {
-                  Get.to(
-                      () => const DayNoteHome(
-                            title: '',
-                            isfromwhere: 'mypagehome',
-                          ),
-                      transition: Transition.rightToLeft);
-                },
-                child: Container(
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+            () => const DayNoteHome(
+                  title: '',
+                  isfromwhere: 'mypagehome',
+                ),
+            transition: Transition.rightToLeft);
+      },
+      child: SizedBox(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text('메모장 모음',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: TextColor_shadowcolor(),
+                      )),
+                ),
+                Container(
                   alignment: Alignment.center,
                   width: 30,
                   height: 30,
@@ -253,27 +253,27 @@ class _MYPageState extends State<MYPage> {
                         lightSource: LightSource.topLeft),
                   ),
                 ),
-              )
-            ],
-          ),
-          Text(
-            '우측아이콘을 클릭하여 메모 확인',
-            maxLines: 2,
-            softWrap: true,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 15,
-              color: TextColor(),
+              ],
             ),
-          ),
-          const Divider(
-            height: 20,
-            color: Colors.grey,
-            thickness: 1,
-            indent: 10.0,
-            endIndent: 10.0,
-          ),
-        ],
+            Text(
+              '우측아이콘을 클릭하여 메모 확인',
+              maxLines: 2,
+              softWrap: true,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 15,
+                color: TextColor(),
+              ),
+            ),
+            const Divider(
+              height: 20,
+              color: Colors.grey,
+              thickness: 1,
+              indent: 10.0,
+              endIndent: 10.0,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -38,12 +38,20 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   String name = Hive.box('user_info').get('id');
   late DateTime Date = DateTime.now();
   final draw = Get.put(navibool());
+  final peopleadd = Get.put(PeopleAdd());
   final notilist = Get.put(notishow());
   List updateid = [];
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
   final controll_memo = Get.put(memosetting());
+  List defaulthomeviewlist = [
+    '오늘의 일정',
+    '공유된 오늘의 일정',
+    '최근에 수정된 메모',
+    '홈뷰에 저장된 메모',
+  ];
+  List userviewlist = [];
 
   @override
   void initState() {
@@ -52,6 +60,67 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     _selectedIndex = widget.index;
     fToast = FToast();
     fToast.init(context);
+    firestore.collection('User').doc(name).get().then((value) {
+      if (value.exists) {
+        peopleadd.secondnameset(value.data()!['subname']);
+      }
+    });
+    firestore
+        .collection('HomeViewCategories')
+        .doc(Hive.box('user_setting').get('usercode'))
+        .get()
+        .then((value) {
+      peopleadd.defaulthomeviewlist.clear();
+      peopleadd.userviewlist.clear();
+      if (value.exists) {
+        print(1);
+        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+          peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+        }
+        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+          peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
+        }
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': Hive.box('user_setting').get('usercode'),
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
+        }, SetOptions(merge: true));
+        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+        userviewlist = peopleadd.userviewlist;
+      } else {
+        print(2);
+        peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
+        peopleadd.userviewlist.add(userviewlist);
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': Hive.box('user_setting').get('usercode'),
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
+        }, SetOptions(merge: true));
+        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+        userviewlist = peopleadd.userviewlist;
+      }
+    });
+    firestore.collection('AppNoticeByUsers').get().then((value) {
+      for (var element in value.docs) {
+        if (element.data()['username'] == name ||
+            element.data()['sharename'].toString().contains(name)) {
+          updateid.add(element.data()['read']);
+        }
+      }
+      if (updateid.contains('no')) {
+        isread = false;
+        notilist.isread = false;
+      } else {
+        isread = true;
+        notilist.isread = true;
+      }
+    });
   }
 
   @override
