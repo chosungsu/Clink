@@ -228,6 +228,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   }
 
   waitingbody() {
+    print('start');
     return SizedBox(
         child: name == ''
             ? body()
@@ -237,11 +238,6 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return loadingbody();
                   } else {
-                    if (Hive.box('user_info').get('id') == '' ||
-                        Hive.box('user_info').get('autologin') == false) {
-                    } else {
-                      GoToMain(context);
-                    }
                     return Hive.box('user_info').get('id') == '' ||
                             Hive.box('user_info').get('autologin') == false
                         ? body()
@@ -291,8 +287,9 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                                   color: Colors.black),
                               speed: const Duration(milliseconds: 150)),
                         ],
-                        isRepeatingAnimation: true,
-                        repeatForever: true,
+                        onFinished: () {
+                          GoToMain(context);
+                        },
                         //displayFullTextOnTap: false,
                       ),
                     ),

@@ -7,6 +7,7 @@ import 'Tool/Getx/PeopleAdd.dart';
 import 'Tool/Getx/notishow.dart';
 
 Future<Widget?> initScreen() async {
+  print('hereinit');
   final peopleadd = Get.put(PeopleAdd());
   final notilist = Get.put(notishow());
   List updateid = [];

@@ -770,6 +770,7 @@ class _DayScriptState extends State<DayScript> {
   }
 
   Future<bool> _onBackPressed() async {
+    print('script');
     final reloadpage = await Get.dialog(OSDialog(
             context,
             '경고',
