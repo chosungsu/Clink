@@ -287,6 +287,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                                   color: Colors.black),
                               speed: const Duration(milliseconds: 150)),
                         ],
+                        totalRepeatCount: 2,
                         onFinished: () {
                           GoToMain(context);
                         },

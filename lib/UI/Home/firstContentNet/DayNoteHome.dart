@@ -22,6 +22,7 @@ import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../sheets/calendarinfo.dart';
 import '../../Sign/UserCheck.dart';
 import '../Widgets/SortMenuHolder.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
@@ -571,6 +572,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   }
 
   listy_My() {
+    String realusername = '';
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return GetBuilder<memosetting>(
           builder: (_) => StreamBuilder<QuerySnapshot>(
@@ -636,6 +638,46 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                   GestureDetector(
                                       child: FocusedMenuHolder(
                                     menuItems: [
+                                      FocusedMenuItem(
+                                          trailingIcon: const Icon(
+                                            Icons.style,
+                                            size: 30,
+                                          ),
+                                          title: Text('카드정보',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                          onPressed: () async {
+                                            //카드별 설정 ex.공유자 권한설정
+                                            await firestore
+                                                .collection('User')
+                                                .where('code',
+                                                    isEqualTo: snapshot
+                                                            .data!.docs[index]
+                                                        ['OriginalUser'])
+                                                .get()
+                                                .then(
+                                              (value) {
+                                                realusername =
+                                                    value.docs[0]['subname'];
+                                              },
+                                            );
+                                            memoinfo(
+                                              index,
+                                              snapshot.data!.docs[index].id,
+                                              snapshot.data!.docs[index]
+                                                  ['Date'],
+                                              snapshot.data!.docs[index]
+                                                  ['EditDate'],
+                                              snapshot.data!.docs[index]
+                                                  ['memoTitle'],
+                                              context,
+                                              realusername,
+                                              snapshot.data!.docs[index]
+                                                  ['Collection'],
+                                            );
+                                          }),
                                       FocusedMenuItem(
                                           trailingIcon: Icon(
                                             snapshot.data!.docs[index]

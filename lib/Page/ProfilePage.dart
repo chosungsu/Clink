@@ -969,11 +969,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 const Duration(seconds: 0),
                                             animateMenuItems: true,
                                             menuOffset: 20,
-                                            menuBoxDecoration: BoxDecoration(
-                                                color: BGColor(),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.zero)),
                                             bottomOffsetHeight: 10,
                                             menuWidth: MediaQuery.of(context)
                                                     .size

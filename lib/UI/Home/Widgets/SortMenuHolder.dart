@@ -38,9 +38,6 @@ SortMenuHolder(int sort, String s) {
         duration: const Duration(seconds: 0),
         animateMenuItems: true,
         menuOffset: 20,
-        menuBoxDecoration: const BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.all(Radius.circular(40.0))),
         bottomOffsetHeight: 10,
         menuWidth: 160,
         openWithTap: true,

@@ -234,9 +234,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
         ), pressed2)) ??
         false;
     if (reloadpage) {
-      setState(() {
-        loading = true;
-      });
+      controll_memo.loading = true;
       Hive.box('user_setting').put('alarm_memo_${widget.docname}', false);
       controll_memo.setalarmmemo(widget.docname, widget.doc);
       _deleteFile(widget.doc);
@@ -284,108 +282,28 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
           firestore.collection('MemoDataBase').doc(deleteid[i]).delete();
         }
       }).whenComplete(() {
-        setState(() {
-          loading = false;
-        });
+        controll_memo.loading = false;
         CreateCalandmemoFlushbardelete(context, '메모');
         widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
       });
     }
   }
 
-  void autosavelogic() {
-    //수정
-    setState(() {
-      loading = true;
-    });
-    searchNode_first_section.unfocus();
-    searchNode_add_section.unfocus();
-    for (int i = 0; i < nodes.length; i++) {
-      nodes[i].unfocus();
-    }
-    if (textEditingController1.text.isNotEmpty) {
-      firestore.collection('AppNoticeByUsers').add({
-        'title': '[' + textEditingController1.text + '] 메모가 변경되었습니다.',
-        'date': DateFormat('yyyy-MM-dd hh:mm')
-                .parse(DateTime.now().toString())
-                .toString()
-                .split(' ')[0] +
-            ' ' +
-            DateFormat('yyyy-MM-dd hh:mm')
-                .parse(DateTime.now().toString())
-                .toString()
-                .split(' ')[1]
-                .split(':')[0] +
-            ':' +
-            DateFormat('yyyy-MM-dd hh:mm')
-                .parse(DateTime.now().toString())
-                .toString()
-                .split(' ')[1]
-                .split(':')[1],
-        'username': username,
-        'sharename': [],
-        'read': 'no',
-      });
-      for (int i = 0; i < scollection.memolistin.length; i++) {
-        checklisttexts.add(MemoList(
-            memocontent: scollection.memolistcontentin[i],
-            contentindex: scollection.memolistin[i]));
-      }
-      for (int j = 0; j < controll_memo.imagelist.length; j++) {
-        savepicturelist.add(controll_memo.imagelist[j]);
-      }
-
-      firestore.collection('MemoDataBase').doc(widget.doc).update(
-        {
-          'memoTitle': textEditingController1.text,
-          'photoUrl': savepicturelist,
-          'Collection': Hive.box('user_setting').get('memocollection') == '' ||
-                  Hive.box('user_setting').get('memocollection') == null
-              ? null
-              : (widget.doccollection !=
-                      Hive.box('user_setting').get('memocollection')
-                  ? Hive.box('user_setting').get('memocollection')
-                  : widget.doccollection),
-          'memolist': checklisttexts.map((e) => e.memocontent).toList().isEmpty
-              ? null
-              : checklisttexts.map((e) => e.memocontent).toList(),
-          'memoindex':
-              checklisttexts.map((e) => e.contentindex).toList().isEmpty
-                  ? null
-                  : checklisttexts.map((e) => e.contentindex).toList(),
-          'OriginalUser': usercode,
-          'securewith': widget.securewith,
-          'color': Hive.box('user_setting').get('coloreachmemo') ??
-              _color.value.toInt(),
-          'colorfont': controll_memo.colorfont.value.toInt(),
-          'EditDate': editDateTo.toString().split('-')[0] +
-              '-' +
-              editDateTo.toString().split('-')[1] +
-              '-' +
-              editDateTo.toString().split('-')[2].substring(0, 2) +
-              '일',
-        },
-      ).whenComplete(() {
-        setState(() {
-          loading = false;
-        });
-
-        CreateCalandmemoSuccessFlushbar('저장완료', fToast);
-        Future.delayed(const Duration(seconds: 1), () {
-          if (widget.isfromwhere == 'home') {
-            GoToMain(context);
-          } else {
-            Get.back();
-          }
-        });
-      });
-    } else {
-      CreateCalandmemoFailSaveTitle(context);
-    }
-  }
-
   Future<bool> _onBackPressed() async {
-    autosavelogic();
+    autosavelogic(
+        context,
+        controll_memo,
+        nodes,
+        textEditingController1.text,
+        scollection,
+        widget.doccollection,
+        usercode,
+        widget.securewith,
+        _color,
+        editDateTo,
+        fToast,
+        widget.doc,
+        widget.isfromwhere);
 
     return false;
   }
@@ -397,23 +315,30 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
         : isresponsive = false;
     return SafeArea(
         child: Scaffold(
-      backgroundColor: BGColor(),
-      resizeToAvoidBottomInset: true,
-      body: WillPopScope(
-        onWillPop: _onBackPressed,
-        child: GestureDetector(
-            onTap: () {
-              searchNode_first_section.unfocus();
-              searchNode_add_section.unfocus();
-              for (int i = 0; i < nodes.length; i++) {
-                nodes[i].unfocus();
-              }
-            },
-            child: Stack(
-              children: [UI(), loading == true ? const Loader() : Container()],
-            )),
-      ),
-    ));
+            backgroundColor: BGColor(),
+            resizeToAvoidBottomInset: true,
+            body: GetBuilder<memosetting>(
+              builder: (_) => WillPopScope(
+                onWillPop: _onBackPressed,
+                child: GestureDetector(
+                  onTap: () {
+                    searchNode_first_section.unfocus();
+                    searchNode_add_section.unfocus();
+                    for (int i = 0; i < nodes.length; i++) {
+                      nodes[i].unfocus();
+                    }
+                  },
+                  child: Stack(
+                    children: [
+                      UI(),
+                      controll_memo.loading == true
+                          ? const Loader()
+                          : Container()
+                    ],
+                  ),
+                ),
+              ),
+            )));
   }
 
   UI() {
@@ -447,7 +372,22 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                               ? IconBtn(
                                                   child: IconButton(
                                                       onPressed: () async {
-                                                        autosavelogic();
+                                                        autosavelogic(
+                                                            context,
+                                                            controll_memo,
+                                                            nodes,
+                                                            textEditingController1
+                                                                .text,
+                                                            scollection,
+                                                            widget
+                                                                .doccollection,
+                                                            usercode,
+                                                            widget.securewith,
+                                                            _color,
+                                                            editDateTo,
+                                                            fToast,
+                                                            widget.doc,
+                                                            widget.isfromwhere);
                                                       },
                                                       icon: Container(
                                                         alignment:
@@ -504,147 +444,40 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                         ),
                                                       ),
                                                       MFHolder(
-                                                        checkbottoms,
-                                                        nodes,
-                                                        scollection,
-                                                        _color,
-                                                        widget.doc,
-                                                        controll_memo
-                                                            .ischeckedtohideminus,
-                                                        controllers,
-                                                        Color(widget
-                                                            .doccolorfont),
-                                                      ),
+                                                          checkbottoms,
+                                                          nodes,
+                                                          scollection,
+                                                          _color,
+                                                          widget.doc,
+                                                          controll_memo
+                                                              .ischeckedtohideminus,
+                                                          controllers,
+                                                          Color(
+                                                            widget.doccolorfont,
+                                                          ),
+                                                          controll_memo
+                                                              .imagelist),
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
-                                                      IconBtn(
-                                                          child: IconButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                checklisttexts
-                                                                    .clear();
-                                                                for (int i = 0;
-                                                                    i <
-                                                                        scollection
-                                                                            .memolistin
-                                                                            .length;
-                                                                    i++) {
-                                                                  checklisttexts.add(MemoList(
-                                                                      memocontent:
-                                                                          scollection.memolistcontentin[
-                                                                              i],
-                                                                      contentindex:
-                                                                          scollection
-                                                                              .memolistin[i]));
-                                                                }
-                                                                final pdfFile = await MakePDF(
-                                                                    textEditingController1
-                                                                        .text,
-                                                                    controll_memo
-                                                                        .imagelist,
-                                                                    Hive.box('user_setting').get('memocollection') ==
-                                                                                '' ||
-                                                                            Hive.box('user_setting').get('memocollection') ==
-                                                                                null
-                                                                        ? null
-                                                                        : (widget.doccollection !=
-                                                                                Hive.box('user_setting').get('memocollection')
-                                                                            ? Hive.box('user_setting').get('memocollection')
-                                                                            : widget.doccollection),
-                                                                    checklisttexts);
-                                                              },
-                                                              icon: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                width: 30,
-                                                                height: 30,
-                                                                child:
-                                                                    NeumorphicIcon(
-                                                                  Icons.share,
-                                                                  size: 30,
-                                                                  style: const NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      depth: 2,
-                                                                      surfaceIntensity:
-                                                                          0.5,
-                                                                      color: Colors
-                                                                          .black,
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
-                                                                ),
-                                                              )),
-                                                          color: Colors.black),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      IconBtn(
-                                                          child: IconButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                autosavelogic();
-                                                              },
-                                                              icon: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                width: 30,
-                                                                height: 30,
-                                                                child:
-                                                                    NeumorphicIcon(
-                                                                  Icons
-                                                                      .save_alt,
-                                                                  size: 30,
-                                                                  style: const NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      depth: 2,
-                                                                      surfaceIntensity:
-                                                                          0.5,
-                                                                      color: Colors
-                                                                          .black,
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
-                                                                ),
-                                                              )),
-                                                          color: Colors.black),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      IconBtn(
-                                                          child: IconButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                autodeletelogic();
-                                                              },
-                                                              icon: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                width: 30,
-                                                                height: 30,
-                                                                child:
-                                                                    NeumorphicIcon(
-                                                                  Icons.delete,
-                                                                  size: 30,
-                                                                  style: const NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      depth: 2,
-                                                                      surfaceIntensity:
-                                                                          0.5,
-                                                                      color: Colors
-                                                                          .black,
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
-                                                                ),
-                                                              )),
-                                                          color: Colors.black),
+                                                      MFHolder_second(
+                                                          checkbottoms,
+                                                          nodes,
+                                                          scollection,
+                                                          checklisttexts,
+                                                          textEditingController1
+                                                              .text,
+                                                          widget.doccollection,
+                                                          context,
+                                                          usercode,
+                                                          widget.securewith,
+                                                          _color,
+                                                          editDateTo,
+                                                          widget.isfromwhere,
+                                                          fToast,
+                                                          widget.doc,
+                                                          widget.docname,
+                                                          widget.date),
                                                     ],
                                                   ))),
                                         ],
@@ -716,43 +549,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RichText(
-            text: TextSpan(children: [
-              const TextSpan(
-                text: '최초 작성시간 : ',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.black),
-              ),
-              TextSpan(
-                  text: widget.date.toString(),
-                  style: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15)),
-            ]),
-          ),
-          RichText(
-            text: TextSpan(children: [
-              const TextSpan(
-                text: '마지막 수정시간 : ',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.black),
-              ),
-              TextSpan(
-                  text: widget.editdate.toString(),
-                  style: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15)),
-            ]),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
           Row(
             children: [
               Text(
@@ -804,200 +600,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                       controller: textEditingController1,
                     ),
                     color: controll_memo.color)),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              '첨부사진',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize(),
-                  color: Colors.black),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            GetBuilder<memosetting>(
-              builder: (_) => SizedBox(
-                height: 100,
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: firestore
-                        .collection('MemoDataBase')
-                        .where('memoTitle',
-                            isEqualTo: textEditingController1.text)
-                        .where('OriginalUser', isEqualTo: usercode)
-                        .where('color', isEqualTo: widget.doccolor.toInt())
-                        .where('Date',
-                            isEqualTo: widget.date.toString().split('-')[0] +
-                                '-' +
-                                widget.date.toString().split('-')[1] +
-                                '-' +
-                                widget.date
-                                    .toString()
-                                    .split('-')[2]
-                                    .substring(0, 2) +
-                                '일')
-                        .snapshots(),
-                    builder: ((context, snapshot) {
-                      if (snapshot.hasData) {
-                        children_imagelist = [
-                          controll_memo.imagelist.isNotEmpty
-                              ? SizedBox(
-                                  height: 90,
-                                  child: ListView.builder(
-                                      physics: const BouncingScrollPhysics(),
-                                      scrollDirection: Axis.horizontal,
-                                      shrinkWrap: true,
-                                      itemCount: controll_memo.imagelist.length,
-                                      itemBuilder: ((context, index) {
-                                        return Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                controll_memo
-                                                    .setimageindex(index);
-                                                Get.to(
-                                                    () => ImageSliderPage(
-                                                        index: index,
-                                                        doc: widget.doc),
-                                                    transition:
-                                                        Transition.rightToLeft);
-                                              },
-                                              child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  child: SizedBox(
-                                                      height: 90,
-                                                      width: 90,
-                                                      child: Image.network(
-                                                          controll_memo
-                                                              .imagelist[index],
-                                                          fit: BoxFit.fill,
-                                                          loadingBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  Widget child,
-                                                                  ImageChunkEvent?
-                                                                      loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) {
-                                                          return child;
-                                                        }
-                                                        return Center(
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            value: loadingProgress
-                                                                        .expectedTotalBytes !=
-                                                                    null
-                                                                ? loadingProgress
-                                                                        .cumulativeBytesLoaded /
-                                                                    loadingProgress
-                                                                        .expectedTotalBytes!
-                                                                : null,
-                                                          ),
-                                                        );
-                                                      }))),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            )
-                                          ],
-                                        );
-                                      })))
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      height: 100,
-                                      child: Center(
-                                          child: RichText(
-                                        softWrap: true,
-                                        maxLines: 2,
-                                        textAlign: TextAlign.center,
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                            text: '상단바의 ',
-                                            style: TextStyle(
-                                                fontSize: contentTextsize(),
-                                                color: Colors.grey.shade400),
-                                          ),
-                                          const WidgetSpan(
-                                            child: Icon(
-                                              Icons.more_vert,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: '아이콘을 클릭하여 추가하세요',
-                                            style: TextStyle(
-                                                fontSize: contentTextsize(),
-                                                color: Colors.grey.shade400),
-                                          ),
-                                        ]),
-                                      )),
-                                    )
-                                  ],
-                                )
-                        ];
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        children_imagelist = <Widget>[
-                          SizedBox(
-                            height: 100,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                    child: CircularProgressIndicator(
-                                  color: Colors.grey.shade400,
-                                ))
-                              ],
-                            ),
-                          )
-                        ];
-                      } else {
-                        children_imagelist = <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 100,
-                                child: Center(
-                                    child: RichText(
-                                  softWrap: true,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(children: [
-                                    TextSpan(
-                                      text: '상단바의 ',
-                                      style: TextStyle(
-                                          fontSize: contentTextsize(),
-                                          color: Colors.grey.shade400),
-                                    ),
-                                    const WidgetSpan(
-                                      child: Icon(
-                                        Icons.more_vert,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: '아이콘을 클릭하여 추가하세요',
-                                      style: TextStyle(
-                                          fontSize: contentTextsize(),
-                                          color: Colors.grey.shade400),
-                                    ),
-                                  ]),
-                                )),
-                              )
-                            ],
-                          )
-                        ];
-                      }
-                      return Column(children: children_imagelist);
-                    })),
-              ),
-            ),
             const SizedBox(
               height: 20,
             ),
@@ -1512,7 +1114,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     );
   }
 
-  MakePDF(
+  /*MakePDF(
     String titletext,
     List savepicturelist,
     collection,
@@ -1608,7 +1210,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
           ];
         }));
     return savefile(name: titletext, pdf: pdf);
-  }
+  }*/
 
   urlimage(element) async {
     final providerimage = await get(Uri.parse(element));
@@ -1616,7 +1218,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     return data;
   }
 
-  savefile({
+  /*savefile({
     required String name,
     required pw.Document pdf,
   }) async {
@@ -1633,5 +1235,5 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
       await file.writeAsBytes(await pdf.save());
     }
     Share.shareFiles(['${directory.path}/$name.pdf']);
-  }
+  }*/
 }

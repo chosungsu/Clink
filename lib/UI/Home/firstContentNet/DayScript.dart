@@ -143,7 +143,6 @@ class _DayScriptState extends State<DayScript> {
         .put('coloreachmemofont', Colors.black.value.toInt());
     controll_memo.colorfont =
         Color(Hive.box('user_setting').get('coloreachmemofont'));
-    controll_memo.imagelist.clear();
     _color = controll_memo.color;
     _colorfont = controll_memo.colorfont;
     checklisttexts.clear();
@@ -795,21 +794,23 @@ class _DayScriptState extends State<DayScript> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: BGColor(),
-        resizeToAvoidBottomInset: true,
-        body: WillPopScope(
-            onWillPop: _onBackPressed,
-            child: Stack(
-              children: [
-                UI(),
-                controll_memo.loading == true ? const Loader() : Container()
-              ],
-            )),
-      ),
+          backgroundColor: BGColor(),
+          resizeToAvoidBottomInset: true,
+          body: GetBuilder<memosetting>(
+            builder: (_) => WillPopScope(
+                onWillPop: _onBackPressed,
+                child: Stack(
+                  children: [
+                    UI(),
+                    controll_memo.loading == true ? const Loader() : Container()
+                  ],
+                )),
+          )),
     );
   }
 
   UI() {
+    print(controll_memo.imagelist);
     double height = MediaQuery.of(context).size.height;
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<memosetting>(
@@ -921,17 +922,20 @@ class _DayScriptState extends State<DayScript> {
                                                         ),
                                                       ),
                                                       widget.position == 'note'
-                                                          ? MFHolder(
-                                                              checkbottoms,
-                                                              nodes,
-                                                              scollection,
-                                                              _color,
-                                                              '',
-                                                              controll_memo
-                                                                  .ischeckedtohideminus,
-                                                              controllers,
-                                                              _colorfont,
-                                                            )
+                                                          ? GetBuilder<
+                                                                  memosetting>(
+                                                              builder: (_) => MFHolder(
+                                                                  checkbottoms,
+                                                                  nodes,
+                                                                  scollection,
+                                                                  _color,
+                                                                  '',
+                                                                  controll_memo
+                                                                      .ischeckedtohideminus,
+                                                                  controllers,
+                                                                  _colorfont,
+                                                                  controll_memo
+                                                                      .imagelist))
                                                           : const SizedBox(),
                                                       widget.position == 'note'
                                                           ? const SizedBox(
@@ -1163,106 +1167,6 @@ class _DayScriptState extends State<DayScript> {
                           controller: textEditingController1,
                         ),
                         color: controll_memo.color),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    '첨부사진',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: Colors.black),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  GetBuilder<memosetting>(
-                    builder: (_) => SizedBox(
-                        height: 100,
-                        child: controll_memo.imagelist.isEmpty
-                            ? Center(
-                                child: RichText(
-                                softWrap: true,
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text: '상단바의 ',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.grey.shade400),
-                                  ),
-                                  const WidgetSpan(
-                                    child: Icon(
-                                      Icons.more_vert,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '아이콘을 클릭하여 추가하세요',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.grey.shade400),
-                                  ),
-                                ]),
-                              ))
-                            : ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemCount: controll_memo.imagelist.length,
-                                itemBuilder: ((context, index) {
-                                  return Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          controll_memo.setimageindex(index);
-                                          Get.to(
-                                              () => ImageSliderPage(
-                                                  index: index, doc: ''),
-                                              transition:
-                                                  Transition.rightToLeft);
-                                        },
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: SizedBox(
-                                                height: 90,
-                                                width: 90,
-                                                child: Image.network(
-                                                    controll_memo
-                                                        .imagelist[index],
-                                                    fit: BoxFit.fill,
-                                                    loadingBuilder: (BuildContext
-                                                            context,
-                                                        Widget child,
-                                                        ImageChunkEvent?
-                                                            loadingProgress) {
-                                                  if (loadingProgress == null) {
-                                                    return child;
-                                                  }
-                                                  return Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      value: loadingProgress
-                                                                  .expectedTotalBytes !=
-                                                              null
-                                                          ? loadingProgress
-                                                                  .cumulativeBytesLoaded /
-                                                              loadingProgress
-                                                                  .expectedTotalBytes!
-                                                          : null,
-                                                    ),
-                                                  );
-                                                }))),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      )
-                                    ],
-                                  );
-                                }))),
                   ),
                   const SizedBox(
                     height: 20,
@@ -1737,7 +1641,7 @@ class _DayScriptState extends State<DayScript> {
                           );
                         },*/
                             )
-                          : const SizedBox())
+                          : const SizedBox()),
                 ],
               );
             },
