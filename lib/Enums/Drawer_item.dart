@@ -6,8 +6,8 @@ import '../Tool/Getx/notishow.dart';
 import '../Page/NotiAlarm.dart';
 
 List<Map> drawerItems = [
-  {'icon': Icons.list_alt, 'title': 'MY'},
   {'icon': Icons.home, 'title': '홈'},
+  {'icon': Icons.list_alt, 'title': 'MY'},
   {
     'icon': Icons.add_outlined,
     'title': '추가',

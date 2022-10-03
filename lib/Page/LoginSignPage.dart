@@ -19,6 +19,7 @@ import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
+import '../initScreenLoading.dart';
 import '../route.dart';
 
 class LoginSignPage extends StatefulWidget {
@@ -196,6 +197,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                 loading = true;
               });
               await GoogleSignInController().login(context, ischecked);
+              await initScreen();
               setState(() {
                 loading = false;
               });

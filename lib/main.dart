@@ -5,6 +5,7 @@ import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/UI/Home/Widgets/ViewSet.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
+import 'package:clickbyme/initScreenLoading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -86,7 +87,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   List updateid = [];
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String name = Hive.box('user_info').get('id');
+  String name = Hive.box('user_info').get('id') ?? '';
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',
@@ -148,68 +149,72 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
     }
   }
 
+/*
   Future<Widget?> initScreen() async {
-    await firestore.collection('User').doc(name).get().then((value) {
-      if (value.exists) {
-        peopleadd.secondnameset(value.data()!['subname']);
-      }
-    });
-    await firestore
-        .collection('HomeViewCategories')
-        .doc(Hive.box('user_setting').get('usercode'))
-        .get()
-        .then((value) {
-      peopleadd.defaulthomeviewlist.clear();
-      peopleadd.userviewlist.clear();
-      if (value.exists) {
-        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-          peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+    if (name == '') {
+    } else {
+      await firestore.collection('User').doc(name).get().then((value) {
+        if (value.exists) {
+          peopleadd.secondnameset(value.data()!['subname']);
         }
-        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-          peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
+      });
+      await firestore
+          .collection('HomeViewCategories')
+          .doc(Hive.box('user_setting').get('usercode'))
+          .get()
+          .then((value) {
+        peopleadd.defaulthomeviewlist.clear();
+        peopleadd.userviewlist.clear();
+        if (value.exists) {
+          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+            peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+          }
+          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+            peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
+          }
+          firestore
+              .collection('HomeViewCategories')
+              .doc(Hive.box('user_setting').get('usercode'))
+              .set({
+            'usercode': Hive.box('user_setting').get('usercode'),
+            'viewcategory': peopleadd.defaulthomeviewlist,
+            'hidecategory': peopleadd.userviewlist
+          }, SetOptions(merge: true));
+          defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+          userviewlist = peopleadd.userviewlist;
+        } else {
+          peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
+          peopleadd.userviewlist.add(userviewlist);
+          firestore
+              .collection('HomeViewCategories')
+              .doc(Hive.box('user_setting').get('usercode'))
+              .set({
+            'usercode': Hive.box('user_setting').get('usercode'),
+            'viewcategory': peopleadd.defaulthomeviewlist,
+            'hidecategory': peopleadd.userviewlist
+          }, SetOptions(merge: true));
+          defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+          userviewlist = peopleadd.userviewlist;
         }
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': Hive.box('user_setting').get('usercode'),
-          'viewcategory': peopleadd.defaulthomeviewlist,
-          'hidecategory': peopleadd.userviewlist
-        }, SetOptions(merge: true));
-        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-        userviewlist = peopleadd.userviewlist;
-      } else {
-        peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
-        peopleadd.userviewlist.add(userviewlist);
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': Hive.box('user_setting').get('usercode'),
-          'viewcategory': peopleadd.defaulthomeviewlist,
-          'hidecategory': peopleadd.userviewlist
-        }, SetOptions(merge: true));
-        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-        userviewlist = peopleadd.userviewlist;
-      }
-    });
-    await firestore.collection('AppNoticeByUsers').get().then((value) {
-      for (var element in value.docs) {
-        if (element.data()['username'] == name ||
-            element.data()['sharename'].toString().contains(name)) {
-          updateid.add(element.data()['read']);
+      });
+      await firestore.collection('AppNoticeByUsers').get().then((value) {
+        for (var element in value.docs) {
+          if (element.data()['username'] == name ||
+              element.data()['sharename'].toString().contains(name)) {
+            updateid.add(element.data()['read']);
+          }
         }
-      }
-      if (updateid.contains('no')) {
-        isread = false;
-        notilist.isread = false;
-      } else {
-        isread = true;
-        notilist.isread = true;
-      }
-    });
+        if (updateid.contains('no')) {
+          isread = false;
+          notilist.isread = false;
+        } else {
+          isread = true;
+          notilist.isread = true;
+        }
+      });
+    }
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -224,23 +229,26 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
 
   waitingbody() {
     return SizedBox(
-        child: FutureBuilder(
-      future: initScreen(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return loadingbody();
-        } else {
-          Hive.box('user_info').get('id') == null ||
-                  Hive.box('user_info').get('autologin') == false
-              ? null
-              : GoToMain(context);
-          return Hive.box('user_info').get('id') == null ||
-                  Hive.box('user_info').get('autologin') == false
-              ? body()
-              : loadingbody();
-        }
-      },
-    ));
+        child: name == ''
+            ? body()
+            : FutureBuilder(
+                future: initScreen(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return loadingbody();
+                  } else {
+                    if (Hive.box('user_info').get('id') == '' ||
+                        Hive.box('user_info').get('autologin') == false) {
+                    } else {
+                      GoToMain(context);
+                    }
+                    return Hive.box('user_info').get('id') == '' ||
+                            Hive.box('user_info').get('autologin') == false
+                        ? body()
+                        : loadingbody();
+                  }
+                },
+              ));
   }
 
   loadingbody() {

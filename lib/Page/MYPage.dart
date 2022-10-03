@@ -21,10 +21,6 @@ class MYPage extends StatefulWidget {
 class _MYPageState extends State<MYPage> {
   bool login_state = false;
   String name = Hive.box('user_info').get('id');
-  double xoffset = 0;
-  double yoffset = 0;
-  double scalefactor = 1;
-  bool isdraweropen = false;
   final draw = Get.put(navibool());
   final cal_share_person = Get.put(PeopleAdd());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -38,8 +34,7 @@ class _MYPageState extends State<MYPage> {
   @override
   void initState() {
     super.initState();
-    Hive.box('user_setting').put('page_index', 0);
-    isdraweropen = draw.drawopen;
+    Hive.box('user_setting').put('page_index', 1);
     _controller = TextEditingController();
   }
 
@@ -53,97 +48,98 @@ class _MYPageState extends State<MYPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: BGColor(),
-      body: draw.navi == 0
-          ? (draw.drawopen == true
-              ? Stack(
-                  children: [
-                    Container(
-                      width: 80,
-                      child: DrawerScreen(
-                        index: Hive.box('user_setting').get('page_index'),
-                      ),
+            backgroundColor: BGColor(),
+            body: GetBuilder<navibool>(
+              builder: (_) => draw.navi == 0
+                  ? (draw.drawopen == true
+                      ? Stack(
+                          children: [
+                            Container(
+                              width: 80,
+                              child: DrawerScreen(
+                                index:
+                                    Hive.box('user_setting').get('page_index'),
+                              ),
+                            ),
+                            GroupBody(context),
+                          ],
+                        )
+                      : Stack(
+                          children: [
+                            GroupBody(context),
+                          ],
+                        ))
+                  : Stack(
+                      children: [
+                        GroupBody(context),
+                      ],
                     ),
-                    GroupBody(context),
-                  ],
-                )
-              : Stack(
-                  children: [
-                    GroupBody(context),
-                  ],
-                ))
-          : Stack(
-              children: [
-                GroupBody(context),
-              ],
-            ),
-    ));
+            )));
   }
 
   Widget GroupBody(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return AnimatedContainer(
-        transform: Matrix4.translationValues(xoffset, yoffset, 0)
-          ..scale(scalefactor),
-        duration: const Duration(milliseconds: 250),
-        child: GetBuilder<navibool>(
-          builder: (_) => GestureDetector(
-            onTap: () {
-              isdraweropen == true
-                  ? setState(() {
-                      xoffset = 0;
-                      yoffset = 0;
-                      scalefactor = 1;
-                      isdraweropen = false;
-                      draw.setclose();
-                      Hive.box('user_setting').put('page_opened', false);
-                    })
-                  : null;
-            },
-            child: SizedBox(
-              height: height,
-              child: Container(
-                  color: BGColor(),
-                  child: Column(
-                    children: [
-                      const AppBarCustom(title: 'MY'),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: SizedBox(
-                          child: ScrollConfiguration(
-                            behavior: NoBehavior(),
-                            child: SingleChildScrollView(child: StatefulBuilder(
-                                builder: (_, StateSetter setState) {
-                              return Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      M_Container0(height),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      M_Container1(height),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  ));
-                            })),
+    return GetBuilder<navibool>(
+        builder: (_) => AnimatedContainer(
+            transform: Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
+              ..scale(draw.scalefactor),
+            duration: const Duration(milliseconds: 250),
+            child: GetBuilder<navibool>(
+              builder: (_) => GestureDetector(
+                onTap: () {
+                  draw.drawopen == true
+                      ? setState(() {
+                          draw.drawopen = false;
+                          draw.setclose();
+                          Hive.box('user_setting').put('page_opened', false);
+                        })
+                      : null;
+                },
+                child: SizedBox(
+                  height: height,
+                  child: Container(
+                      color: BGColor(),
+                      child: Column(
+                        children: [
+                          const AppBarCustom(title: 'MY'),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: SizedBox(
+                              child: ScrollConfiguration(
+                                behavior: NoBehavior(),
+                                child: SingleChildScrollView(child:
+                                    StatefulBuilder(
+                                        builder: (_, StateSetter setState) {
+                                  return Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 0, 20, 0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          M_Container0(height),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          M_Container1(height),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                        ],
+                                      ));
+                                })),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-          ),
-        ));
+                        ],
+                      )),
+                ),
+              ),
+            )));
   }
 
   M_Container0(double height) {

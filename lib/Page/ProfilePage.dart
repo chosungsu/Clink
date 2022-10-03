@@ -42,16 +42,11 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool login_state = false;
   String secondname = '';
-  double xoffset = 0;
-  double yoffset = 0;
-  double scalefactor = 1;
-  bool isdraweropen = false;
   final draw = Get.put(navibool());
   var _controller = TextEditingController();
   late final PageController _pController1;
   late final PageController _pController2;
   ScrollController _scrollController = ScrollController();
-  int currentPage = 1;
   bool showsharegroups = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final List<String> list_app_setting = <String>[
@@ -95,7 +90,6 @@ class _ProfilePageState extends State<ProfilePage> {
     fToast.init(context);
     Hive.box('user_setting').put('page_index', 3);
     _controller = TextEditingController();
-    isdraweropen = draw.drawopen;
     firestore.collection('User').doc(name).get().then((value) {
       if (value.exists) {
         //peopleadd.secondname = value.data()!['subname'];
@@ -123,137 +117,119 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: BGColor(),
-      body: draw.navi == 0
-          ? (draw.drawopen == true
-              ? Stack(
-                  children: [
-                    SizedBox(
-                      width: 80,
-                      child: DrawerScreen(
-                          index: Hive.box('user_setting').get('page_index')),
-                    ),
-                    ProfileBody(context),
-                  ],
-                )
-              : Stack(
-                  children: [
-                    ProfileBody(context),
-                  ],
-                ))
-          : Stack(
-              children: [
-                ProfileBody(context),
-              ],
-            ),
-    ));
+      child: Scaffold(
+          backgroundColor: BGColor(),
+          body: GetBuilder<navibool>(
+            builder: (_) => draw.navi == 0
+                ? (draw.drawopen == true
+                    ? Stack(
+                        children: [
+                          SizedBox(
+                            width: 80,
+                            child: DrawerScreen(
+                                index:
+                                    Hive.box('user_setting').get('page_index')),
+                          ),
+                          ProfileBody(context),
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          ProfileBody(context),
+                        ],
+                      ))
+                : Stack(
+                    children: [
+                      ProfileBody(context),
+                    ],
+                  ),
+          )),
+    );
   }
 
   Widget ProfileBody(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return AnimatedContainer(
-        transform: Matrix4.translationValues(xoffset, yoffset, 0)
-          ..scale(scalefactor),
-        duration: const Duration(milliseconds: 250),
-        child: GetBuilder<navibool>(
-          builder: (_) => GestureDetector(
-            onTap: () {
-              searchNode.unfocus();
-              isdraweropen == true
-                  ? setState(() {
-                      xoffset = 0;
-                      yoffset = 0;
-                      scalefactor = 1;
-                      isdraweropen = false;
-                      draw.setclose();
-                      Hive.box('user_setting').put('page_opened', false);
-                    })
-                  : null;
-            },
-            child: SizedBox(
-              height: height,
-              child: Container(
-                  color: BGColor(),
-                  child: Column(
-                    children: [
-                      const AppBarCustom(title: ''),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: SizedBox(
-                          child: ScrollConfiguration(
-                            behavior: NoBehavior(),
-                            child: SingleChildScrollView(
-                                controller: _scrollController,
-                                child: StatefulBuilder(
-                                    builder: (_, StateSetter setState) {
-                                  return ExpandablePageView.builder(
-                                    physics: const ScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    controller: _pController2,
-                                    itemCount: currentPage,
-                                    onPageChanged: ((value) {
-                                      setState(() {
-                                        showsharegroups = false;
-                                        _getAppInfo();
-                                        if (value == 0) {
-                                          currentPage = 1;
-                                        } else {}
-                                      });
-                                    }),
-                                    itemBuilder: ((context, index) {
-                                      return index == 0
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 0, 20, 0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  S_Container0(height),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  S_Container1(height),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  ADBox(),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  OptionChoice(height, context),
-                                                  //S_Container2(),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                ],
-                                              ))
-                                          : (pagesetnumber == 0
+    return GetBuilder<navibool>(
+        builder: (_) => AnimatedContainer(
+              transform:
+                  Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
+                    ..scale(draw.scalefactor),
+              duration: const Duration(milliseconds: 250),
+              child: GestureDetector(
+                onTap: () {
+                  searchNode.unfocus();
+                  draw.drawopen == true
+                      ? setState(() {
+                          draw.drawopen = false;
+                          draw.setclose();
+                          Hive.box('user_setting').put('page_opened', false);
+                        })
+                      : null;
+                },
+                child: SizedBox(
+                  height: height,
+                  child: Container(
+                      color: BGColor(),
+                      child: Column(
+                        children: [
+                          const AppBarCustom(title: ''),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: SizedBox(
+                              child: ScrollConfiguration(
+                                behavior: NoBehavior(),
+                                child: SingleChildScrollView(
+                                    controller: _scrollController,
+                                    child: StatefulBuilder(
+                                        builder: (_, StateSetter setState) {
+                                      return ExpandablePageView.builder(
+                                        physics: const ScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        controller: _pController2,
+                                        itemCount: draw.currentpage,
+                                        onPageChanged: ((value) {
+                                          setState(() {
+                                            showsharegroups = false;
+                                            _getAppInfo();
+                                            if (value == 0) {
+                                              draw.currentpage = 1;
+                                            } else {}
+                                          });
+                                        }),
+                                        itemBuilder: ((context, index) {
+                                          return index == 0
                                               ? Padding(
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
                                                           20, 0, 20, 0),
                                                   child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
-                                                            .stretch,
+                                                            .start,
                                                     children: [
-                                                      G_Container(height),
+                                                      S_Container0(height),
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
-                                                      T_Container0(height),
-                                                      ADBox()
-                                                      /*G_Container1(height),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),*/
+                                                      S_Container1(height),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      ADBox(),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      OptionChoice(
+                                                          height, context),
+                                                      //S_Container2(),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
                                                     ],
                                                   ))
-                                              : (pagesetnumber == 1
+                                              : (pagesetnumber == 0
                                                   ? Padding(
                                                       padding: const EdgeInsets
                                                               .fromLTRB(
@@ -261,30 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       child: Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          G_Container(height),
-                                                          const SizedBox(
-                                                            height: 20,
-                                                          ),
-                                                          G_Container0(height),
-                                                          const SizedBox(
-                                                            height: 20,
-                                                          ),
-                                                          G_Container1(height),
-                                                          const SizedBox(
-                                                            height: 20,
-                                                          ),
-                                                        ],
-                                                      ))
-                                                  : Padding(
-                                                      padding: const EdgeInsets
-                                                              .fromLTRB(
-                                                          20, 0, 20, 0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                                .stretch,
                                                         children: [
                                                           G_Container(height),
                                                           const SizedBox(
@@ -293,18 +246,66 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           CompanyNotice(),
                                                           ADBox()
                                                         ],
-                                                      ))));
-                                    }),
-                                  );
-                                })),
+                                                      ))
+                                                  : (pagesetnumber == 1
+                                                      ? Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  20, 0, 20, 0),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              G_Container(
+                                                                  height),
+                                                              const SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                              T_Container0(
+                                                                  height),
+                                                              ADBox()
+                                                            ],
+                                                          ))
+                                                      : Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  20, 0, 20, 0),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              G_Container(
+                                                                  height),
+                                                              const SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                              G_Container0(
+                                                                  height),
+                                                              const SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                              G_Container1(
+                                                                  height),
+                                                              const SizedBox(
+                                                                height: 20,
+                                                              ),
+                                                            ],
+                                                          ))));
+                                        }),
+                                      );
+                                    })),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-          ),
-        ));
+                        ],
+                      )),
+                ),
+              ),
+            ));
   }
 
   Future<void> _getAppInfo() async {
@@ -316,6 +317,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final List eventtitle = [];
     final List eventcontent = [];
     final List eventsmallcontent = [];
+    final List eventstates = [];
     final List dates = [];
     return SizedBox(
       height: draw.navi == 0
@@ -334,6 +336,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 for (int j = 0; j < querySnapshot.docs.length; j++) {
                   eventtitle.add(querySnapshot.docs[j].get('title'));
                   eventcontent.add(querySnapshot.docs[j].get('content'));
+                  eventstates.add(querySnapshot.docs[j].get('state'));
                   eventsmallcontent.add(querySnapshot.docs[j].get('summaries'));
                   dates.add(querySnapshot.docs[j].get('date'));
                 }
@@ -418,10 +421,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   eventtitle[index].toString()
                                               ? InkWell(
                                                   onTap: () {
-                                                    StoreRedirect.redirect(
-                                                      androidAppId:
-                                                          'com.jss.habittracker', // Android app bundle package name
-                                                    );
+                                                    if (eventstates[index]
+                                                            .toString() ==
+                                                        'workingnow') {
+                                                      Snack.toast(
+                                                          title:
+                                                              '다음 업데이트를 기대해주세요',
+                                                          color: Colors.white,
+                                                          backgroundcolor:
+                                                              Colors
+                                                                  .greenAccent,
+                                                          fToast: fToast);
+                                                    } else {
+                                                      StoreRedirect.redirect(
+                                                        androidAppId:
+                                                            'com.jss.habittracker', // Android app bundle package name
+                                                      );
+                                                    }
                                                   },
                                                   child: Container(
                                                       alignment:
@@ -439,8 +455,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               : InkWell(
                                                   onTap: () {
                                                     Snack.toast(
-                                                        title:
-                                                            '최신버전이거나 지난버전입니다.',
+                                                        title: '현재 버전입니다.',
                                                         color: Colors.white,
                                                         backgroundcolor:
                                                             Colors.greenAccent,
@@ -1870,10 +1885,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         onTap: () async {
                           //showreadycontent(context);
                           setState(() {
-                            pagesetnumber = 2;
+                            pagesetnumber = 0;
                             _scrollToTop();
-
-                            currentPage++;
+                            draw.currentpage = 2;
                             _pController2.nextPage(
                                 duration: Duration(milliseconds: 300),
                                 curve: Curves.ease);
@@ -2131,8 +2145,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 GestureDetector(
                   onTap: () async {
                     setState(() {
-                      pagesetnumber = 0;
-                      currentPage++;
+                      pagesetnumber = 1;
+                      draw.currentpage = 2;
                       _scrollToTop();
                       _pController2.animateToPage(1,
                           duration: const Duration(milliseconds: 800),
@@ -2302,8 +2316,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         : GestureDetector(
                             onTap: () async {
                               setState(() {
-                                pagesetnumber = 1;
-                                currentPage++;
+                                pagesetnumber = 2;
+                                draw.currentpage = 2;
                                 _scrollToTop();
                                 _pController2.animateToPage(1,
                                     duration: const Duration(milliseconds: 300),

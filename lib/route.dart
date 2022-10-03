@@ -60,67 +60,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     _selectedIndex = widget.index;
     fToast = FToast();
     fToast.init(context);
-    /*firestore.collection('User').doc(name).get().then((value) {
-      if (value.exists) {
-        peopleadd.secondnameset(value.data()!['subname']);
-      }
-    });
-    firestore
-        .collection('HomeViewCategories')
-        .doc(Hive.box('user_setting').get('usercode'))
-        .get()
-        .then((value) {
-      peopleadd.defaulthomeviewlist.clear();
-      peopleadd.userviewlist.clear();
-      if (value.exists) {
-        print(1);
-        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-          peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
-        }
-        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-          peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
-        }
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': Hive.box('user_setting').get('usercode'),
-          'viewcategory': peopleadd.defaulthomeviewlist,
-          'hidecategory': peopleadd.userviewlist
-        }, SetOptions(merge: true));
-        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-        userviewlist = peopleadd.userviewlist;
-      } else {
-        print(2);
-        peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
-        peopleadd.userviewlist.add(userviewlist);
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': Hive.box('user_setting').get('usercode'),
-          'viewcategory': peopleadd.defaulthomeviewlist,
-          'hidecategory': peopleadd.userviewlist
-        }, SetOptions(merge: true));
-        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-        userviewlist = peopleadd.userviewlist;
-      }
-    });
-    firestore.collection('AppNoticeByUsers').get().then((value) {
-      for (var element in value.docs) {
-        if (element.data()['username'] == name ||
-            element.data()['sharename'].toString().contains(name)) {
-          updateid.add(element.data()['read']);
-        }
-      }
-      if (updateid.contains('no')) {
-        isread = false;
-        notilist.isread = false;
-      } else {
-        isread = true;
-        notilist.isread = true;
-      }
-    });*/
   }
 
   @override
@@ -133,8 +72,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
-      MYPage(),
       HomePage(secondname: cal_share_person.secondname),
+      MYPage(),
       HomePage(secondname: cal_share_person.secondname),
       ProfilePage(),
       NotiAlarm(),
@@ -144,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         builder: (_) => Scaffold(
             backgroundColor: BGColor(),
             body: WillPopScope(
-                onWillPop: Hive.box('user_setting').get('page_index') == 1
+                onWillPop: Hive.box('user_setting').get('page_index') == 0
                     ? _onWillPop
                     : _onWillPop2,
                 child: pages[_selectedIndex]),
@@ -187,18 +126,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),
                           icon: const Icon(
-                            Icons.list_alt,
-                            size: 25,
-                          ),
-                          label: 'MY',
-                        ),
-                        BottomNavigationBarItem(
-                          backgroundColor: BGColor(),
-                          icon: const Icon(
                             Icons.home,
                             size: 25,
                           ),
                           label: '홈',
+                        ),
+                        BottomNavigationBarItem(
+                          backgroundColor: BGColor(),
+                          icon: const Icon(
+                            Icons.list_alt,
+                            size: 25,
+                          ),
+                          label: 'MY',
                         ),
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),
@@ -252,6 +191,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop() async {
+    if (draw.drawopen == true) {
+      draw.setclose();
+    }
     return await Get.dialog(OSDialog(
             context,
             '종료',
@@ -265,24 +207,35 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop2() async {
-    Hive.box('user_setting').get('page_index') == 0
-        ? Navigator.of(context).pushReplacement(
-            PageTransition(
-              type: PageTransitionType.rightToLeft,
-              child: const MyHomePage(
-                index: 1,
+    if (draw.drawopen == true) {
+      draw.setclose();
+    }
+
+    if (draw.currentpage == 2) {
+      draw.currentpage = 1;
+      Navigator.of(context).pushReplacement(
+        PageTransition(
+          type: PageTransitionType.leftToRightWithFade,
+          child: const MyHomePage(
+            index: 3,
+          ),
+        ),
+      );
+      Hive.box('user_setting').put('page_index', 3);
+    } else {
+      Hive.box('user_setting').get('page_index') == 0
+          ? null
+          : Navigator.of(context).pushReplacement(
+              PageTransition(
+                type: PageTransitionType.leftToRight,
+                child: const MyHomePage(
+                  index: 0,
+                ),
               ),
-            ),
-          )
-        : Navigator.of(context).pushReplacement(
-            PageTransition(
-              type: PageTransitionType.leftToRight,
-              child: const MyHomePage(
-                index: 1,
-              ),
-            ),
-          );
-    Hive.box('user_setting').put('page_index', 1);
+            );
+      Hive.box('user_setting').put('page_index', 0);
+    }
+
     return false;
   }
 }

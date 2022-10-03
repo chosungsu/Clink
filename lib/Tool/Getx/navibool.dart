@@ -6,6 +6,10 @@ import '../MyTheme.dart';
 
 class navibool extends GetxController {
   bool drawopen = Hive.box('user_setting').get('page_opened') ?? false;
+  int currentpage = 1;
+  double xoffset = 0;
+  double yoffset = 0;
+  double scalefactor = 1;
   int navi = Hive.box('user_setting').get('which_menu_pick') ?? 1;
   Color color = Hive.box('user_setting').get('which_color_background') == null
       ? MyTheme.colorWhite
@@ -13,7 +17,16 @@ class navibool extends GetxController {
           ? MyTheme.colorWhite
           : MyTheme.colorblack);
 
+  void setpagecurrent(int what) {
+    currentpage = what;
+    update();
+    notifyChildrens();
+  }
+
   void setopen() {
+    xoffset = 80;
+    yoffset = 0;
+    scalefactor = 1;
     drawopen = true;
     Hive.box('user_setting').put('page_opened', drawopen);
     update();
@@ -21,6 +34,9 @@ class navibool extends GetxController {
   }
 
   void setclose() {
+    xoffset = 0;
+    yoffset = 0;
+    scalefactor = 1;
     drawopen = false;
     Hive.box('user_setting').put('page_opened', drawopen);
     update();

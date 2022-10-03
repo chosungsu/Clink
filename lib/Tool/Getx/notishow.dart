@@ -9,7 +9,7 @@ class notishow extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool isread = false;
   List updateid = [];
-  String name = Hive.box('user_info').get('id');
+  String name = Hive.box('user_info').get('id') ?? '';
   int whatnoticepagenum = 0;
 
   void setnoti(String a, String b) async {

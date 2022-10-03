@@ -6,7 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class PeopleAdd extends GetxController {
   List people = [];
-  String secondname = Hive.box('user_info').get('id');
+  String secondname = Hive.box('user_info').get('id') ?? '';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String code = '';
   String codes = '';

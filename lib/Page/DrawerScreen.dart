@@ -67,12 +67,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     onTap: () {
                       if (element.containsValue(Icons.home)) {
                         draw.setclose();
-                        Hive.box('user_setting').put('page_index', 1);
+                        Hive.box('user_setting').put('page_index', 0);
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
                             child: MyHomePage(
-                              index: 1,
+                              index: 0,
                             ),
                           ),
                         );
@@ -83,12 +83,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       } else if (element.containsValue(Icons.list_alt)) {
                         //draw.setclose();
                         draw.setclose();
-                        Hive.box('user_setting').put('page_index', 0);
+                        Hive.box('user_setting').put('page_index', 1);
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
                             child: MyHomePage(
-                              index: 0,
+                              index: 1,
                             ),
                           ),
                         );

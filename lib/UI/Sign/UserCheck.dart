@@ -10,7 +10,7 @@ import '../../route.dart';
 GoToMain(BuildContext context) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
     Get.to(
-      () => MyHomePage(index: 1),
+      () => MyHomePage(index: 0),
     );
     Hive.box('user_setting').put('page_index', 1);
   });

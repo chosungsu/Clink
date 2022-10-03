@@ -8,6 +8,7 @@ import 'package:clickbyme/UI/AppBarCustom.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/ShowTips.dart';
+import 'package:clickbyme/initScreenLoading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -33,10 +34,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double xoffset = 0;
-  double yoffset = 0;
-  double scalefactor = 1;
-  bool isdraweropen = false;
   bool isresponsive = false;
   int categorynumber = 0;
   List<SpaceContent> sc = [];
@@ -69,6 +66,7 @@ class _HomePageState extends State<HomePage> {
   //프로 버전 구매시 사용하게될 코드
   bool isbought = false;
   TextEditingController controller = TextEditingController();
+  ScrollController _scrollController = ScrollController();
   var searchNode = FocusNode();
   var newversion;
   var status;
@@ -86,13 +84,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Hive.box('user_setting').put('page_index', 1);
-
-    /*firestore.collection('User').doc(name).get().then((value) {
-      if (value.exists) {
-        peopleadd.secondnameset(value.data()!['subname']);
-      }
-    });*/
+    Hive.box('user_setting').put('page_index', 0);
 
     /*firestore.collection('CalendarDataBase').get().then((value) {
       List valueid = [];
@@ -111,82 +103,20 @@ class _HomePageState extends State<HomePage> {
 
     _pController2 =
         PageController(initialPage: currentPage2, viewportFraction: 1);
-    isdraweropen = draw.drawopen;
-
-    if (draw.drawopen == true) {
-      setState(() {
-        xoffset = 50;
-        yoffset = 0;
-      });
-    } else {
-      setState(() {
-        xoffset = 0;
-        yoffset = 0;
-      });
-    }
-    firestore
-        .collection('HomeViewCategories')
-        .doc(Hive.box('user_setting').get('usercode'))
-        .get()
-        .then((value) {
-      peopleadd.defaulthomeviewlist.clear();
-      peopleadd.userviewlist.clear();
-      if (value.exists) {
-        print(1);
-        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-          peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
-        }
-        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-          peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
-        }
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': Hive.box('user_setting').get('usercode'),
-          'viewcategory': peopleadd.defaulthomeviewlist,
-          'hidecategory': peopleadd.userviewlist
-        }, SetOptions(merge: true));
-        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-        userviewlist = peopleadd.userviewlist;
-      } else {
-        print(2);
-        peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
-        peopleadd.userviewlist.add(userviewlist);
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': Hive.box('user_setting').get('usercode'),
-          'viewcategory': peopleadd.defaulthomeviewlist,
-          'hidecategory': peopleadd.userviewlist
-        }, SetOptions(merge: true));
-        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-        userviewlist = peopleadd.userviewlist;
-      }
-    });
-    firestore.collection('AppNoticeByUsers').get().then((value) {
-      for (var element in value.docs) {
-        if (element.data()['username'] == name ||
-            element.data()['sharename'].toString().contains(name)) {
-          updateid.add(element.data()['read']);
-        }
-      }
-      if (updateid.contains('no')) {
-        isread = false;
-        notilist.isread = false;
-      } else {
-        isread = true;
-        notilist.isread = true;
-      }
-    });
+    initScreen();
   }
 
   @override
   void dispose() {
     super.dispose();
     _pController2.dispose();
+    _scrollController.dispose();
   }
+
+  /*void _scrollToBottom() {
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
+  }*/
 
   Future<void> _getAppInfo() async {
     info = await PackageInfo.fromPlatform();
@@ -239,111 +169,119 @@ class _HomePageState extends State<HomePage> {
     PageController pController,
   ) {
     double height = MediaQuery.of(context).size.height;
-    return AnimatedContainer(
-        transform: Matrix4.translationValues(xoffset, yoffset, 0)
-          ..scale(scalefactor),
-        duration: const Duration(milliseconds: 250),
-        child: GetBuilder<navibool>(
-          builder: (_) => GestureDetector(
-            onTap: () {
-              isdraweropen == true
-                  ? setState(() {
-                      xoffset = 0;
-                      yoffset = 0;
-                      scalefactor = 1;
-                      isdraweropen = false;
-                      draw.setclose();
-                      Hive.box('user_setting').put('page_opened', false);
-                    })
-                  : null;
-            },
-            child: SizedBox(
-              height: height,
-              child: Container(
-                  color: BGColor(),
-                  //decoration: BoxDecoration(color: colorselection),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const AppBarCustom(title: 'Habit Tracker'),
-                      Flexible(
-                          fit: FlexFit.tight,
-                          child: SizedBox(
-                            child: ScrollConfiguration(
-                              behavior: NoBehavior(),
-                              child: SingleChildScrollView(child:
-                                  StatefulBuilder(
-                                      builder: (_, StateSetter setState) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                  child: Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      H_Container_0(height, _pController2),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      H_Container_3(height),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      /*H_Container_2(height),
+    return GetBuilder<navibool>(
+        builder: (_) => AnimatedContainer(
+              transform:
+                  Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
+                    ..scale(draw.scalefactor),
+              duration: const Duration(milliseconds: 250),
+              child: GestureDetector(
+                onTap: () {
+                  draw.drawopen == true
+                      ? setState(() {
+                          draw.drawopen = false;
+                          draw.setclose();
+                          Hive.box('user_setting').put('page_opened', false);
+                        })
+                      : null;
+                },
+                child: SizedBox(
+                  height: height,
+                  child: Container(
+                      color: BGColor(),
+                      //decoration: BoxDecoration(color: colorselection),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const AppBarCustom(title: 'Habit Tracker'),
+                          Flexible(
+                              fit: FlexFit.tight,
+                              child: SizedBox(
+                                child: ScrollConfiguration(
+                                  behavior: NoBehavior(),
+                                  child: SingleChildScrollView(
+                                      controller: _scrollController,
+                                      child: StatefulBuilder(
+                                          builder: (_, StateSetter setState) {
+                                        return Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            H_Container_0(
+                                                height, _pController2),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            H_Container_toBottom(),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            H_Container_3(height),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            /*H_Container_2(height),
                                       const SizedBox(
                                         height: 20,
                                       ),*/
-                                      H_Container_1(height),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      GetBuilder<PeopleAdd>(
-                                          builder: (_) => ViewSet(
-                                              peopleadd.defaulthomeviewlist,
-                                              peopleadd.userviewlist,
-                                              usercode)),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      H_Container_testroom(),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      CompanyNotice(),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      H_Container_4(height),
-                                      const SizedBox(
-                                        height: 50,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              })),
-                            ),
-                          )),
-                    ],
-                  )),
-            ),
-          ),
-        ));
+                                            H_Container_1(height),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            GetBuilder<PeopleAdd>(
+                                                builder: (_) => ViewSet(
+                                                    peopleadd
+                                                        .defaulthomeviewlist,
+                                                    peopleadd.userviewlist,
+                                                    usercode)),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            H_Container_myroom(),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            H_Container_testroom(),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            CompanyNotice(),
+                                            const SizedBox(
+                                              height: 50,
+                                            ),
+                                            H_Container_4(height),
+                                            const SizedBox(
+                                              height: 50,
+                                            ),
+                                          ],
+                                        );
+                                      })),
+                                ),
+                              )),
+                        ],
+                      )),
+                ),
+              ),
+            ));
   }
 
   H_Container_0(double height, PageController pController) {
     //프로버전 구매시 보이지 않게 함
-    return SizedBox(
-      height: 160,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ShowTips(
-            height: height,
-            pageController: pController,
-            pageindex: 0,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: SizedBox(
+        height: 160,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ShowTips(
+              height: height,
+              pageController: pController,
+              pageindex: 0,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -356,40 +294,75 @@ class _HomePageState extends State<HomePage> {
         //ADEvents(context)
       ],
     )*/
-    return SizedBox(
-      height: 60,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              '광고공간입니다',
-              style: TextStyle(
-                  color: TextColor_shadowcolor(),
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize()),
-              overflow: TextOverflow.ellipsis,
-            ),
-          )
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: SizedBox(
+        height: 60,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(
+                '광고공간입니다',
+                style: TextStyle(
+                    color: TextColor_shadowcolor(),
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize()),
+                overflow: TextOverflow.ellipsis,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
   H_Con_Alert() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '공지사항',
-          style: TextStyle(
-              color: TextColor(),
-              fontWeight: FontWeight.bold,
-              fontSize: contentTitleTextsize()),
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Flexible(
+            fit: FlexFit.tight,
+            child: Text(
+              '공지사항',
+              style: TextStyle(
+                  color: TextColor(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize()),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              draw.setclose();
+              Hive.box('user_setting').put('page_index', 3);
+              Navigator.of(context).pushReplacement(
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: const MyHomePage(
+                    index: 3,
+                  ),
+                ),
+              );
+            },
+            child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  '더보기',
+                  maxLines: 1,
+                  softWrap: true,
+                  style: TextStyle(
+                      color: TextColor(),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                  overflow: TextOverflow.fade,
+                )),
+          ),
+        ],
+      ),
     );
   }
 
@@ -416,12 +389,12 @@ class _HomePageState extends State<HomePage> {
 
           return _list_ad.isEmpty
               ? SizedBox(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width - 40,
-                  child: ContainerDesign(
-                    color: BGColor(),
-                    child: SizedBox(
-                        height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  child: Container(
+                      color: ButtonColor(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, top: 20, bottom: 20),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -431,15 +404,14 @@ class _HomePageState extends State<HomePage> {
                               softWrap: true,
                               maxLines: 2,
                               style: TextStyle(
-                                  color: TextColor(),
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTextsize()),
                               overflow: TextOverflow.ellipsis,
                             )
                           ],
-                        )),
-                  ),
-                )
+                        ),
+                      )))
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -448,25 +420,14 @@ class _HomePageState extends State<HomePage> {
                       height: 20,
                     ),
                     SizedBox(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width - 40,
                         child: GestureDetector(
-                          onTap: () {
-                            draw.setclose();
-                            Hive.box('user_setting').put('page_index', 3);
-                            Navigator.of(context).pushReplacement(
-                              PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: const MyHomePage(
-                                  index: 3,
-                                ),
-                              ),
-                            );
-                          },
-                          child: ContainerDesign(
-                            color: BGColor(),
+                      onTap: () {},
+                      child: Container(
+                          color: ButtonColor(),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 20, bottom: 20),
                             child: SizedBox(
-                              height: 100,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -477,28 +438,16 @@ class _HomePageState extends State<HomePage> {
                                         maxLines: 3,
                                         softWrap: true,
                                         style: TextStyle(
-                                            color: TextColor(),
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: contentTextsize()),
                                         overflow: TextOverflow.fade,
                                       )),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                      alignment: Alignment.center,
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.blue.shade200,
-                                        child: const Icon(
-                                          Icons.chevron_right,
-                                          color: Colors.white,
-                                        ),
-                                      )),
                                 ],
                               ),
                             ),
-                          ),
-                        ))
+                          )),
+                    ))
                   ],
                 );
         }
@@ -507,6 +456,115 @@ class _HomePageState extends State<HomePage> {
           valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
         );
       },
+    );
+  }
+
+  H_Container_toBottom() {
+    //프로버전 구매시 보이지 않게 함
+    return GestureDetector(
+      onTap: () {
+        draw.setclose();
+        _getAppInfo();
+        Hive.box('user_setting').put('page_index', 1);
+        //_scrollToBottom();
+        Get.to(() => HomeView(), transition: Transition.zoom);
+      },
+      child: Container(
+          color: ButtonColor(),
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: Text(
+                      '홈에 나타나는 콘텐츠들을 홈뷰설정에서 순서변경이 가능해요',
+                      maxLines: 3,
+                      softWrap: true,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                      overflow: TextOverflow.fade,
+                    )),
+                const SizedBox(
+                  width: 20,
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                        backgroundColor: ButtonColor(),
+                        child: Text(
+                          'Go',
+                          maxLines: 1,
+                          softWrap: true,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize()),
+                          overflow: TextOverflow.fade,
+                        ))),
+              ],
+            ),
+          )),
+    );
+  }
+
+  H_Container_myroom() {
+    //프로버전 구매시 보이지 않게 함
+    return GestureDetector(
+      onTap: () {
+        draw.setclose();
+        _getAppInfo();
+        Hive.box('user_setting').put('page_index', 1);
+        Navigator.of(context).pushReplacement(
+          PageTransition(
+            type: PageTransitionType.rightToLeft,
+            child: const MyHomePage(
+              index: 1,
+            ),
+          ),
+        );
+      },
+      child: Container(
+          color: ButtonColor(),
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: Text(
+                      '마이룸에 작성하신 해빗T들이 자리하고 있어요',
+                      maxLines: 3,
+                      softWrap: true,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                      overflow: TextOverflow.fade,
+                    )),
+                const SizedBox(
+                  width: 20,
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      backgroundColor: ButtonColor(),
+                      child: const Icon(
+                        Icons.chevron_right,
+                        color: Colors.white,
+                      ),
+                    )),
+              ],
+            ),
+          )),
     );
   }
 
@@ -526,44 +584,42 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-      child: ContainerDesign(
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width - 40,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 20,
+      child: Container(
+          color: ButtonColor(),
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: Text(
+                      '더 나은 습관 형성콘텐츠가 넥스트 버전에 출시되는지 알고 싶으시다면?',
+                      maxLines: 3,
+                      softWrap: true,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                      overflow: TextOverflow.fade,
+                    )),
+                const SizedBox(
+                  width: 20,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Flexible(
-                        fit: FlexFit.tight,
-                        child: Text(
-                          '새로운 기능은 언제나 실험실에 있어요',
-                          maxLines: 3,
-                          softWrap: true,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize()),
-                          overflow: TextOverflow.fade,
-                        )),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                        alignment: Alignment.center,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.blue.shade200,
-                          child: const Icon(
-                            Icons.chevron_right,
-                            color: Colors.white,
-                          ),
-                        )),
-                  ],
-                ),
-              )),
-          color: Colors.blue.shade200),
+                Container(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      backgroundColor: ButtonColor(),
+                      child: const Icon(
+                        Icons.chevron_right,
+                        color: Colors.white,
+                      ),
+                    )),
+              ],
+            ),
+          )),
     );
   }
 

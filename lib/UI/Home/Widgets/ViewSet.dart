@@ -247,7 +247,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
       itemCount: defaulthomeviewlist.length,
       itemBuilder: (context, index) {
         return defaulthomeviewlist[index].toString() == '오늘의 일정'
-            ? Column(
+            ? Padding(padding: EdgeInsets.only(left: 20, right: 20), child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -264,9 +264,9 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
                     height: 20,
                   ),
                 ],
-              )
+              ),)
             : (defaulthomeviewlist[index].toString() == '공유된 오늘의 일정'
-                ? Column(
+                ? Padding(padding: EdgeInsets.only(left: 20, right: 20), child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -283,9 +283,9 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
                         height: 20,
                       ),
                     ],
-                  )
+                  ),)
                 : (defaulthomeviewlist[index].toString() == '홈뷰에 저장된 메모'
-                    ? Column(
+                    ? Padding(padding: EdgeInsets.only(left: 20, right: 20), child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -302,8 +302,8 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
                             height: 20,
                           ),
                         ],
-                      )
-                    : Column(
+                      ),)
+                    : Padding(padding: EdgeInsets.only(left: 20, right: 20), child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -321,7 +321,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
                             height: 20,
                           ),
                         ],
-                      )));
+                      ),)));
       });
 }
 
