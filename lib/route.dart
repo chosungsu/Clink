@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             Icons.list_alt,
                             size: 25,
                           ),
-                          label: 'MY',
+                          label: '마이룸',
                         ),
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),

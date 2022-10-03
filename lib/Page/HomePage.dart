@@ -213,10 +213,6 @@ class _HomePageState extends State<HomePage> {
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            H_Container_toBottom(),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
                                             H_Container_3(height),
                                             const SizedBox(
                                               height: 20,
@@ -235,6 +231,10 @@ class _HomePageState extends State<HomePage> {
                                                         .defaulthomeviewlist,
                                                     peopleadd.userviewlist,
                                                     usercode)),
+                                            /*const SizedBox(
+                                              height: 20,
+                                            ),
+                                            H_Container_toBottom(),*/
                                             const SizedBox(
                                               height: 20,
                                             ),
@@ -391,7 +391,7 @@ class _HomePageState extends State<HomePage> {
               ? SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Container(
-                      color: ButtonColor(),
+                      color: Colors.grey.shade400,
                       child: Padding(
                         padding: const EdgeInsets.only(
                             left: 20, right: 20, top: 20, bottom: 20),
@@ -423,7 +423,7 @@ class _HomePageState extends State<HomePage> {
                         child: GestureDetector(
                       onTap: () {},
                       child: Container(
-                          color: ButtonColor(),
+                          color: Colors.grey.shade400,
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 20, bottom: 20),
@@ -459,7 +459,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  H_Container_toBottom() {
+  /*H_Container_toBottom() {
     //프로버전 구매시 보이지 않게 함
     return GestureDetector(
       onTap: () {
@@ -511,7 +511,7 @@ class _HomePageState extends State<HomePage> {
             ),
           )),
     );
-  }
+  }*/
 
   H_Container_myroom() {
     //프로버전 구매시 보이지 않게 함
@@ -596,7 +596,7 @@ class _HomePageState extends State<HomePage> {
                 Flexible(
                     fit: FlexFit.tight,
                     child: Text(
-                      '더 나은 습관 형성콘텐츠가 넥스트 버전에 출시되는지 알고 싶으시다면?',
+                      '넥스트버전에 추가될 사항들은 실험실에 가시면 볼 수 있어요',
                       maxLines: 3,
                       softWrap: true,
                       style: TextStyle(
