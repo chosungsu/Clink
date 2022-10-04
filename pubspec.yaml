@@ -72,6 +72,7 @@ dependencies:
   path_provider: 
   device_info_plus: 
   #UI
+  fab_circular_menu:
   expandable_page_view:
   badges:
   numberpicker: 
@@ -111,6 +112,7 @@ dependencies:
   local_auth_android: 
   google_mobile_ads: 
   store_redirect: 
+  
   
   
   

@@ -27,7 +27,11 @@ class ShowTips extends StatelessWidget {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final List eventtitle = [];
   final List eventcontent = [];
+  final List eventsmalltitles = [];
+  final List eventsmallcontent = [];
   final List eventpage = [];
+  List<Map> eventtotalmap = [];
+  Map eventtotal = {};
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +56,19 @@ class ShowTips extends StatelessWidget {
                       querySnapshot.docs.forEach((doc) {
                         eventtitle.add(doc.get('eventname'));
                         eventcontent.add(doc.get('eventcontent'));
+                        eventsmalltitles.add(doc.get('pagesmalltitles'));
+                        eventsmallcontent.add(doc.get('pagesmallcontent'));
+                        /*eventtotal['eventname'] = doc.get('eventname');
+                        eventtotal['eventcontent'] = doc.get('eventcontent');
+                        eventtotal['pagesmallcontent'] =
+                            doc.get('pagesmallcontent');
+                        eventtotal['pagesmalltitles'] =
+                            doc.get('pagesmalltitles');
+                        eventtotalmap.add(eventtotal);*/
                         if (pageindex == 1) {
                           eventpage.add(doc.get('url'));
                         }
-                      })
+                      }),
                     })),
             builder: (context, future) => future.connectionState ==
                     ConnectionState.waiting
@@ -105,22 +118,31 @@ class ShowTips extends StatelessWidget {
                               itemBuilder: (_, index) => GestureDetector(
                                     onTap: () async {
                                       //개별 인덱스 타이틀마다 이동페이지 다르게 구성
-                                      eventtitle[index]
+                                      Get.to(
+                                        () => HowToUsePage(
+                                            eventtotaltitle:
+                                                eventsmalltitles[index],
+                                            eventtotalcontent:
+                                                eventsmallcontent[index],
+                                            eventname: eventtitle[index]),
+                                        transition: Transition.upToDown,
+                                      );
+                                      /*eventtitle[index]
                                                   .toString()
                                                   .substring(0, 2) ==
                                               '일정'
                                           ? Get.to(
-                                              () => const HowToUsePage(
-                                                stringsend: '캘린더',
-                                              ),
+                                              () => HowToUsePage(
+                                                  stringsend: '캘린더',
+                                                  eventtotal: eventtotalmap),
                                               transition: Transition.zoom,
                                             )
                                           : Get.to(
-                                              () => const HowToUsePage(
-                                                stringsend: '메모',
-                                              ),
+                                              () => HowToUsePage(
+                                                  stringsend: '메모',
+                                                  eventtotal: eventtotalmap),
                                               transition: Transition.zoom,
-                                            );
+                                            );*/
                                     },
                                     child: Column(
                                       children: [

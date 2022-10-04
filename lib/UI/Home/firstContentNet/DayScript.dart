@@ -721,6 +721,12 @@ class _DayScriptState extends State<DayScript> {
               'photoUrl': controll_memo.imagelist.isEmpty
                   ? []
                   : controll_memo.imagelist,
+              'voicefile': controll_memo.voicelist.isEmpty
+                  ? []
+                  : controll_memo.voicelist,
+              'drawingfile': controll_memo.drawinglist.isEmpty
+                  ? []
+                  : controll_memo.drawinglist,
               'pinnumber': '0000',
               'securewith': 999,
               'EditDate': DateFormat('yyyy-MM-dd')

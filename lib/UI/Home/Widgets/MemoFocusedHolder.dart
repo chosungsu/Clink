@@ -516,6 +516,8 @@ void autosavelogic(
   String username = Hive.box('user_info').get(
     'id',
   );
+  fToast = FToast();
+  fToast.init(context);
   List<MemoList> checklisttexts = [];
   List savepicturelist = [];
 

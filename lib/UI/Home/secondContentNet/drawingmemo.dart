@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:clickbyme/UI/Home/secondContentNet/drawingmemo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,13 +21,11 @@ import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/ImageSlider.dart';
 
-class Memodrawer extends StatefulWidget {
-  Memodrawer({Key? key, required this.imagelist, required this.doc})
-      : super(key: key);
+class drawingmemo extends StatefulWidget {
+  drawingmemo({Key? key, required this.doc}) : super(key: key);
   final double translateX = 0.0;
   final double translateY = 0.0;
   final myWidth = 0;
-  final List imagelist;
   final String doc;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final List eventtitle = [];
@@ -35,10 +33,10 @@ class Memodrawer extends StatefulWidget {
   final List eventpage = [];
   bool isresponsive = false;
   @override
-  State<StatefulWidget> createState() => MemodrawerState();
+  State<StatefulWidget> createState() => drawingmemoState();
 }
 
-class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
+class drawingmemoState extends State<drawingmemo> with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
@@ -51,10 +49,13 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
   String usercode = Hive.box('user_setting').get('usercode');
   final scollection = Get.put(selectcollection());
   final controll_memo = Get.put(memosetting());
-  List savepicturelist = [];
-  final imagePicker = ImagePicker();
   bool isresponsive = false;
   late FToast fToast;
+  GlobalKey<FabCircularMenuState> globalKey = GlobalKey();
+  double opacity = 1.0;
+  StrokeCap strokeType = StrokeCap.round;
+  double strokeWidth = 3.0;
+  Color selectedColor = Colors.black;
 
   @override
   void didChangeDependencies() {
@@ -118,7 +119,11 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
   }
 
   Future<bool> _onBackPressed() async {
-    Get.back();
+    if (globalKey.currentState!.isOpen) {
+      globalKey.currentState!.close();
+    } else {
+      Get.back();
+    }
 
     return false;
   }
@@ -158,6 +163,150 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _opacity() async {
+    //Shows AlertDialog
+    return showDialog<void>(
+      context: context,
+
+      //Dismiss alert dialog when set true
+      barrierDismissible: true,
+
+      builder: (BuildContext context) {
+        //Clips its child in a oval shape
+        return ClipOval(
+          child: AlertDialog(
+            //Creates three buttons to pick opacity value.
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(
+                  Icons.opacity,
+                  size: 24,
+                ),
+                onPressed: () {
+                  //most transparent
+                  opacity = 0.1;
+                  Navigator.of(context).pop();
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.opacity,
+                  size: 40,
+                ),
+                onPressed: () {
+                  opacity = 0.5;
+                  Navigator.of(context).pop();
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.opacity,
+                  size: 60,
+                ),
+                onPressed: () {
+                  //not transparent at all.
+                  opacity = 1.0;
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> fabOption() {
+    return <Widget>[
+      /*FloatingActionButton(
+        heroTag: "paint_save",
+        child: Icon(Icons.save),
+        tooltip: 'Save',
+        onPressed: () {
+          //min: 0, max: 50
+          setState(() {
+            _save();
+          });
+        },
+      ),
+      FloatingActionButton(
+        heroTag: "paint_stroke",
+        child: Icon(Icons.brush),
+        tooltip: 'Stroke',
+        onPressed: () {
+          //min: 0, max: 50
+          setState(() {
+            _pickStroke();
+          });
+        },
+      ),*/
+      FloatingActionButton(
+        heroTag: "paint_opacity",
+        child: const Icon(Icons.opacity),
+        tooltip: 'Opacity',
+        onPressed: () {
+          //min:0, max:1
+          setState(() {
+            _opacity();
+          });
+        },
+      ),
+      /*FloatingActionButton(
+          heroTag: "erase",
+          child: Icon(Icons.clear),
+          tooltip: "Erase",
+          onPressed: () {
+            setState(() {
+              points.clear();
+            });
+          }),
+      FloatingActionButton(
+        backgroundColor: Colors.white,
+        heroTag: "color_red",
+        child: colorMenuItem(Colors.red),
+        tooltip: 'Color',
+        onPressed: () {
+          setState(() {
+            selectedColor = Colors.red;
+          });
+        },
+      ),
+      FloatingActionButton(
+        backgroundColor: Colors.white,
+        heroTag: "color_green",
+        child: colorMenuItem(Colors.green),
+        tooltip: 'Color',
+        onPressed: () {
+          setState(() {
+            selectedColor = Colors.green;
+          });
+        },
+      ),
+      FloatingActionButton(
+        backgroundColor: Colors.white,
+        heroTag: "color_pink",
+        child: colorMenuItem(Colors.pink),
+        tooltip: 'Color',
+        onPressed: () {
+          setState(() {
+            selectedColor = Colors.pink;
+          });
+        },
+      ),
+      FloatingActionButton(
+        backgroundColor: Colors.white,
+        heroTag: "color_blue",
+        child: colorMenuItem(Colors.blue),
+        tooltip: 'Color',
+        onPressed: () {
+          setState(() {
+            selectedColor = Colors.blue;
+          });
+        },
+      ),*/
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQuery.of(context).size.height > 900
@@ -182,7 +331,21 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                   ),
                 ),
               ),
-            )));
+            ),
+            floatingActionButton: FabCircularMenu(
+                fabCloseColor: Colors.blue.shade200,
+                fabOpenColor: Colors.yellow.shade200,
+                fabCloseIcon: const Icon(Icons.close),
+                fabOpenIcon: const Icon(Icons.add),
+                key: globalKey,
+                children: <Widget>[
+                  IconButton(
+                      icon: const Icon(Icons.opacity),
+                      onPressed: () {
+                        _opacity();
+                      }),
+                  IconButton(icon: const Icon(Icons.brush), onPressed: () {})
+                ])));
   }
 
   UI() {
@@ -261,7 +424,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                                                       const Flexible(
                                                         fit: FlexFit.tight,
                                                         child: Text(
-                                                          '메모서랍',
+                                                          'Draw-On',
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
@@ -273,7 +436,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                                                       IconBtn(
                                                           child: IconButton(
                                                             onPressed: () {
-                                                              firstdialog();
+                                                              saveordeletedialog();
                                                             },
                                                             icon: Container(
                                                               alignment:
@@ -283,7 +446,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                                                               height: 30,
                                                               child:
                                                                   NeumorphicIcon(
-                                                                Icons.add,
+                                                                Icons.more_vert,
                                                                 size: 30,
                                                                 style: const NeumorphicStyle(
                                                                     shape: NeumorphicShape
@@ -327,10 +490,10 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Contents(),
                                           const SizedBox(
-                                            height: 50,
-                                          )
+                                            height: 20,
+                                          ),
+                                          //Contents(),
                                         ],
                                       ),
                                     ),
@@ -520,7 +683,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                       ),
                       GetBuilder<memosetting>(
                         builder: (_) => SizedBox(
-                            child: controll_memo.voicelist.isEmpty
+                            child: controll_memo.imagelist.isEmpty
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
@@ -566,7 +729,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                                           textAlign: TextAlign.center,
                                           text: TextSpan(children: [
                                             TextSpan(
-                                              text: '파일을 클릭하여 재생해보세요',
+                                              text: '사진을 클릭하여 크게 키워보세요',
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.grey.shade400),
@@ -577,7 +740,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      /*SizedBox(
+                                      SizedBox(
                                         height: 100,
                                         child: ListView.builder(
                                             physics:
@@ -585,151 +748,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                                             scrollDirection: Axis.horizontal,
                                             shrinkWrap: true,
                                             itemCount:
-                                                controll_memo.voicelist.length,
-                                            itemBuilder: ((context, index) {
-                                              return Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      
-                                                    },
-                                                    child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                20),
-                                                        child: SizedBox(
-                                                            height: 100,
-                                                            width: 100,
-                                                            child: Image.network(
-                                                                controll_memo
-                                                                        .voicelist[
-                                                                    index],
-                                                                fit:
-                                                                    BoxFit.fill,
-                                                                loadingBuilder: (BuildContext
-                                                                        context,
-                                                                    Widget
-                                                                        child,
-                                                                    ImageChunkEvent?
-                                                                        loadingProgress) {
-                                                              if (loadingProgress ==
-                                                                  null) {
-                                                                return child;
-                                                              }
-                                                              return Center(
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                                  value: loadingProgress
-                                                                              .expectedTotalBytes !=
-                                                                          null
-                                                                      ? loadingProgress
-                                                                              .cumulativeBytesLoaded /
-                                                                          loadingProgress
-                                                                              .expectedTotalBytes!
-                                                                      : null,
-                                                                ),
-                                                              );
-                                                            }))),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  )
-                                                ],
-                                              );
-                                            })),
-                                      )*/
-                                    ],
-                                  )),
-                      ),
-                    ],
-                  )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        '드로잉',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      GetBuilder<memosetting>(
-                        builder: (_) => SizedBox(
-                            child: controll_memo.drawinglist.isEmpty
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: RichText(
-                                          softWrap: true,
-                                          maxLines: 2,
-                                          textAlign: TextAlign.center,
-                                          text: TextSpan(children: [
-                                            TextSpan(
-                                              text: '상단바의 ',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.grey.shade400),
-                                            ),
-                                            const WidgetSpan(
-                                              child: Icon(
-                                                Icons.add,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: '아이콘을 클릭하여 추가하세요',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.grey.shade400),
-                                            ),
-                                          ]),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Center(
-                                        child: RichText(
-                                          softWrap: true,
-                                          maxLines: 2,
-                                          textAlign: TextAlign.center,
-                                          text: TextSpan(children: [
-                                            TextSpan(
-                                              text: '파일을 클릭하시면 드로잉을 볼수 있어요',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.grey.shade400),
-                                            ),
-                                          ]),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      /*SizedBox(
-                                        height: 100,
-                                        child: ListView.builder(
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            shrinkWrap: true,
-                                            itemCount:
-                                                controll_memo.drawinglist.length,
+                                                controll_memo.imagelist.length,
                                             itemBuilder: ((context, index) {
                                               return Row(
                                                 mainAxisAlignment:
@@ -790,7 +809,158 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                                                 ],
                                               );
                                             })),
-                                      )*/
+                                      )
+                                    ],
+                                  )),
+                      ),
+                    ],
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        '드로잉',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                            color: Colors.black),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      GetBuilder<memosetting>(
+                        builder: (_) => SizedBox(
+                            child: controll_memo.imagelist.isEmpty
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: RichText(
+                                          softWrap: true,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: '상단바의 ',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                            const WidgetSpan(
+                                              child: Icon(
+                                                Icons.add,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: '아이콘을 클릭하여 추가하세요',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ]),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                        child: RichText(
+                                          softWrap: true,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: '사진을 클릭하여 크게 키워보세요',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ]),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      SizedBox(
+                                        height: 100,
+                                        child: ListView.builder(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            scrollDirection: Axis.horizontal,
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                controll_memo.imagelist.length,
+                                            itemBuilder: ((context, index) {
+                                              return Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      controll_memo
+                                                          .setimageindex(index);
+                                                      Get.to(
+                                                          () => ImageSliderPage(
+                                                              index: index,
+                                                              doc: ''),
+                                                          transition: Transition
+                                                              .rightToLeft);
+                                                    },
+                                                    child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                20),
+                                                        child: SizedBox(
+                                                            height: 100,
+                                                            width: 100,
+                                                            child: Image.network(
+                                                                controll_memo
+                                                                        .imagelist[
+                                                                    index],
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                                loadingBuilder: (BuildContext
+                                                                        context,
+                                                                    Widget
+                                                                        child,
+                                                                    ImageChunkEvent?
+                                                                        loadingProgress) {
+                                                              if (loadingProgress ==
+                                                                  null) {
+                                                                return child;
+                                                              }
+                                                              return Center(
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                  value: loadingProgress
+                                                                              .expectedTotalBytes !=
+                                                                          null
+                                                                      ? loadingProgress
+                                                                              .cumulativeBytesLoaded /
+                                                                          loadingProgress
+                                                                              .expectedTotalBytes!
+                                                                      : null,
+                                                                ),
+                                                              );
+                                                            }))),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  )
+                                                ],
+                                              );
+                                            })),
+                                      )
                                     ],
                                   )),
                       ),
@@ -800,7 +970,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
     );
   }
 
-  firstdialog() {
+  saveordeletedialog() {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -823,10 +993,15 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                       GestureDetector(
                         onTap: () async {
                           Navigator.pop(context);
-                          picturedialog();
+                          //저장로직
+                          Snack.toast(
+                              title: '준비중입니다~',
+                              color: Colors.white,
+                              backgroundcolor: Colors.greenAccent,
+                              fToast: fToast);
                         },
                         child: ListTile(
-                          title: Text('사진첨부',
+                          title: Text('저장하기',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -846,118 +1021,9 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                               color: Colors.white,
                               backgroundcolor: Colors.greenAccent,
                               fToast: fToast);
-                          //voicesheet();
                         },
                         child: ListTile(
-                          title: Text('음성파일첨부',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                          leading: Icon(
-                            Icons.mic,
-                            color: Colors.blue.shade400,
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          /*Snack.toast(
-                              title: '준비중입니다~',
-                              color: Colors.white,
-                              backgroundcolor: Colors.greenAccent,
-                              fToast: fToast);*/
-                          Get.to(
-                              () => drawingmemo(
-                                    doc: widget.doc,
-                                  ),
-                              transition: Transition.downToUp);
-                        },
-                        child: ListTile(
-                          title: Text('드로잉첨부',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                          leading: Icon(
-                            Icons.draw,
-                            color: Colors.blue.shade400,
-                            size: 30,
-                          ),
-                        ),
-                      )
-                    ],
-                  )),
-                );
-              },
-            ));
-      },
-    );
-  }
-
-  picturedialog() {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-            title: Text('선택',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize())),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            content: Builder(
-              builder: (context) {
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  child: SingleChildScrollView(
-                      child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          final image = await imagePicker.pickImage(
-                              source: ImageSource.camera);
-                          setState(() {
-                            controll_memo.setloading(true);
-                            _uploadFile(
-                              context,
-                              File(image!.path),
-                              widget.doc,
-                            );
-                            controll_memo.setloading(false);
-                          });
-                        },
-                        child: ListTile(
-                          title: Text('사진 촬영',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                          leading: Icon(
-                            Icons.add_a_photo,
-                            color: Colors.blue.shade400,
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          final image = await imagePicker.pickImage(
-                              source: ImageSource.gallery);
-                          setState(() {
-                            controll_memo.setloading(true);
-                            _uploadFile(context, File(image!.path), widget.doc);
-                            controll_memo.setloading(false);
-                          });
-                        },
-                        child: ListTile(
-                          title: Text('갤러리 선택',
+                          title: Text('삭제하기',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -976,11 +1042,5 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
             ));
       },
     );
-  }
-
-  urlimage(element) async {
-    final providerimage = await get(Uri.parse(element));
-    var data = providerimage.bodyBytes;
-    return data;
   }
 }

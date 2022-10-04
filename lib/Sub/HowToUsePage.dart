@@ -17,9 +17,13 @@ import '../Tool/IconBtn.dart';
 class HowToUsePage extends StatefulWidget {
   const HowToUsePage({
     Key? key,
-    required this.stringsend,
+    required this.eventtotaltitle,
+    required this.eventtotalcontent,
+    required this.eventname,
   }) : super(key: key);
-  final String stringsend;
+  final List eventtotaltitle;
+  final List eventtotalcontent;
+  final String eventname;
   @override
   State<StatefulWidget> createState() => _HowToUsePageState();
 }
@@ -33,6 +37,7 @@ class _HowToUsePageState extends State<HowToUsePage>
   String name = Hive.box('user_info').get('id');
   List eventsmalltitle = [];
   List eventsmallcontent = [];
+  List eventtitle = [];
 
   @override
   void didChangeDependencies() {
@@ -165,7 +170,7 @@ class _HowToUsePageState extends State<HowToUsePage>
           Flexible(
             child: RichText(
               text: TextSpan(
-                  text: widget.stringsend + '를 다음과 같이\n사용해보세요~',
+                  text: widget.eventname.toString(),
                   style: TextStyle(
                     fontSize: secondTitleTextsize(),
                     color: TextColor(),
@@ -182,131 +187,62 @@ class _HowToUsePageState extends State<HowToUsePage>
 
   BuildContent() {
     List<Widget> list_all = [];
-    return FutureBuilder(
-        future: firestore
-            .collection("EventNoticeDataBase")
-            .where('eventpage', isEqualTo: 'home')
-            .get()
-            .then(((QuerySnapshot querySnapshot) => {
-                  eventsmalltitle.clear(),
-                  eventsmallcontent.clear(),
-                  querySnapshot.docs.forEach((doc) {
-                    for (int i = 0;
-                        i < doc.get('pagesmalltitles').length;
-                        i++) {
-                      eventsmalltitle.add(doc.get('pagesmalltitles')[i]);
-                      eventsmallcontent.add(doc.get('pagesmallcontent')[i]);
-                    }
-                  })
-                })),
-        builder: (context, future) {
-          if (future.hasData) {
-            list_all = <Widget>[
-              ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: eventsmalltitle.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        ContainerDesign(
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  horizontalTitleGap: 10,
-                                  dense: true,
-                                  title: Text(
-                                      (index + 1).toString() +
-                                          '.  ' +
-                                          eventsmalltitle[index].toString(),
-                                      style: TextStyle(
-                                        color: TextColor(),
-                                        fontSize: contentTextsize(),
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ),
-                                Divider(
-                                  color: TextColor_shadowcolor(),
-                                  thickness: 1,
-                                  endIndent: 30,
-                                  indent: 30,
-                                ),
-                                ListTile(
-                                  horizontalTitleGap: 10,
-                                  dense: true,
-                                  title:
-                                      Text(eventsmallcontent[index].toString(),
-                                          style: TextStyle(
-                                            color: TextColor_shadowcolor(),
-                                            fontSize: contentTextsize(),
-                                          )),
-                                ),
-                              ],
-                            ),
-                            color: BGColor()),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      ],
-                    );
-                  })
-            ];
-          } else if (future.hasError) {
-            list_all = <Widget>[
+    List eventsmalltitles = [];
+    List eventsmallcontents = [];
+    for (int i = 0; i < widget.eventtotaltitle.length; i++) {
+      eventsmalltitles.add(widget.eventtotaltitle[i]);
+      eventsmallcontents.add(widget.eventtotalcontent[i]);
+    }
+    return ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: eventsmalltitles.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
               ContainerDesign(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(
-                        child:
-                            Text('서버에 해당 이벤트 내용이 존재하지 않습니다. 오류가 지속되면 문의바랍니다.',
-                                style: TextStyle(
-                                  color: TextColor(),
-                                  fontWeight: FontWeight.bold,
-                                )),
-                      )
+                      ListTile(
+                        horizontalTitleGap: 10,
+                        dense: true,
+                        title: Text(
+                            (index + 1).toString() +
+                                '.  ' +
+                                eventsmalltitles[index].toString(),
+                            style: TextStyle(
+                              color: TextColor(),
+                              fontSize: contentTextsize(),
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                      Divider(
+                        color: TextColor_shadowcolor(),
+                        thickness: 1,
+                        endIndent: 30,
+                        indent: 30,
+                      ),
+                      ListTile(
+                        horizontalTitleGap: 10,
+                        dense: true,
+                        title: Text(eventsmallcontents[index].toString(),
+                            style: TextStyle(
+                              color: TextColor_shadowcolor(),
+                              fontSize: contentTextsize(),
+                            )),
+                      ),
                     ],
                   ),
-                  color: BGColor())
-            ];
-          } else if (future.connectionState == ConnectionState.waiting) {
-            list_all = <Widget>[
-              ContainerDesign(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                  color: BGColor())
-            ];
-          } else {
-            list_all = <Widget>[
-              ContainerDesign(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child:
-                            Text('서버에 해당 이벤트 내용이 존재하지 않습니다. 오류가 지속되면 문의바랍니다.',
-                                style: TextStyle(
-                                  color: TextColor(),
-                                  fontWeight: FontWeight.bold,
-                                )),
-                      )
-                    ],
-                  ),
-                  color: BGColor())
-            ];
-          }
-          return Column(children: list_all);
+                  color: BGColor()),
+              const SizedBox(
+                height: 5,
+              ),
+            ],
+          );
         });
   }
 }

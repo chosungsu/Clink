@@ -8,6 +8,7 @@ import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/pushalarmsettingmemo.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -63,6 +64,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   bool can_auth = false;
   String hour = '';
   String minute = '';
+  ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   Future<void> _checkBiometrics() async {
     bool check = false;
@@ -173,6 +175,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
               ),
         const SizedBox(width: 10),
         SpeedDial(
+            openCloseDial: isDialOpen,
             activeIcon: Icons.close,
             icon: Icons.add,
             backgroundColor: Colors.blue,
@@ -241,10 +244,14 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
 
   Future<bool> _onWillPop() async {
     Future.delayed(const Duration(seconds: 0), () {
-      if (widget.isfromwhere == 'home') {
-        GoToMain(context);
+      if (isDialOpen.value == true) {
+        isDialOpen.value = false;
       } else {
-        Get.back();
+        if (widget.isfromwhere == 'home') {
+          GoToMain(context);
+        } else {
+          Get.back();
+        }
       }
     });
     return false;

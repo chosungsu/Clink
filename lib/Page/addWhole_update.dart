@@ -766,6 +766,10 @@ content(
                                                                             '일',
                                                                         'photoUrl':
                                                                             [],
+                                                                        'voicefile':
+                                                                            [],
+                                                                        'drawingfile':
+                                                                            [],
                                                                         'securewith':
                                                                             999,
                                                                       }).whenComplete(

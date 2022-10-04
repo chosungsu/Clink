@@ -175,17 +175,21 @@ title(
   String doc_name,
 ) {
   return SizedBox(
-      height: 50,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(doc_name.toString(),
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25))
-        ],
-      ));
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        doc_name.toString(),
+        maxLines: 2,
+        softWrap: true,
+        style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: contentTitleTextsize()),
+        overflow: TextOverflow.clip,
+      )
+    ],
+  ));
 }
 
 contentcal(
@@ -197,25 +201,6 @@ contentcal(
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
-        Row(
-          children: [
-            const Icon(
-              Icons.event_note,
-              size: 30,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(doc_name.toString(),
-                style: TextStyle(
-                    color: Colors.grey.shade400,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize())),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
         Row(
           children: [
             const Icon(
@@ -267,25 +252,6 @@ contentmemo(
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
-        Row(
-          children: [
-            const Icon(
-              Icons.description,
-              size: 30,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(doc_name.toString(),
-                style: TextStyle(
-                    color: Colors.grey.shade400,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize())),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
         Row(
           children: [
             const Icon(

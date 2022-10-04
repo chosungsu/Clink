@@ -104,7 +104,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   Color tmpcolor = Colors.white;
   List<MemoList> checklisttexts = [];
   DateTime editDateTo = DateTime.now();
-  late FToast fToast;
+  FToast fToast = FToast();
   bool loading = false;
 
   @override
@@ -116,7 +116,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   @override
   void initState() {
     super.initState();
-    fToast = FToast();
     fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
     scollection.memolistin.clear();

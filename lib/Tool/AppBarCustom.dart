@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../Tool/Getx/navibool.dart';
-import '../Tool/IconBtn.dart';
+import 'Getx/navibool.dart';
+import 'IconBtn.dart';
 
 class AppBarCustom extends StatelessWidget {
   const AppBarCustom({Key? key, required this.title}) : super(key: key);

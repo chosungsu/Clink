@@ -422,6 +422,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   }*/
 
   listy_My() {
+    String realusername = '';
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return GetBuilder<calendarsetting>(
           builder: (_) => StreamBuilder<QuerySnapshot>(
@@ -486,8 +487,22 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                               FontWeight.bold,
                                                           fontSize:
                                                               contentTextsize())),
-                                                  onPressed: () {
+                                                  onPressed: () async {
                                                     //카드별 설정 ex.공유자 권한설정
+                                                    await firestore
+                                                        .collection('User')
+                                                        .where('code',
+                                                            isEqualTo: snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                ['madeUser'])
+                                                        .get()
+                                                        .then(
+                                                      (value) {
+                                                        realusername = value
+                                                            .docs[0]['subname'];
+                                                      },
+                                                    );
                                                     calendarinfo(
                                                       index,
                                                       snapshot
@@ -497,8 +512,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                       snapshot.data!.docs[index]
                                                           ['calname'],
                                                       context,
-                                                      snapshot.data!.docs[index]
-                                                          ['madeUser'],
+                                                      realusername,
                                                     );
                                                   }),
                                               FocusedMenuItem(

@@ -20,7 +20,11 @@ class memosetting extends GetxController {
   bool ischeckedpushmemoalarm =
       Hive.box('user_setting').get('alarm_memo') ?? false;
   List imagelist = [];
+  List voicelist = [];
+  List drawinglist = [];
   int imageindex = 0;
+  int voiceindex = 0;
+  int drawingindex = 0;
   String username = Hive.box('user_info').get(
     'id',
   );
@@ -179,6 +183,34 @@ class memosetting extends GetxController {
 
   void setimageindex(int index) {
     imageindex = index;
+    update();
+    notifyChildrens();
+  }
+
+  void setvoicelist(String path) {
+    voicelist.insert(0, path);
+    voiceindex++;
+    update();
+    notifyChildrens();
+  }
+
+  void deletevoicelist(int index) {
+    voicelist.removeAt(index);
+    voiceindex--;
+    update();
+    notifyChildrens();
+  }
+
+  void setdrawinglist(String path) {
+    drawinglist.insert(0, path);
+    drawingindex++;
+    update();
+    notifyChildrens();
+  }
+
+  void deletedrawinglist(int index) {
+    drawinglist.removeAt(index);
+    drawingindex--;
     update();
     notifyChildrens();
   }

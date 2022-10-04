@@ -21,7 +21,7 @@ import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/AppBarCustom.dart';
+import '../Tool/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/secondContentNet/PeopleGroup.dart';
 import '../UI/Setting/ShowLicense.dart';
