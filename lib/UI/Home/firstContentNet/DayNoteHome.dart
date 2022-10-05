@@ -364,20 +364,51 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                         (value) {
                                                           if (value.exists) {
                                                             hour = value
-                                                                .data()![
-                                                                    'alarmtime']
-                                                                .toString()
-                                                                .split(':')[0]
-                                                                .toString();
+                                                                        .data()![
+                                                                            'alarmtime']
+                                                                        .toString()
+                                                                        .split(':')[
+                                                                            0]
+                                                                        .length ==
+                                                                    1
+                                                                ? '0' +
+                                                                    value
+                                                                        .data()![
+                                                                            'alarmtime']
+                                                                        .toString()
+                                                                        .split(':')[
+                                                                            0]
+                                                                        .toString()
+                                                                : value
+                                                                    .data()![
+                                                                        'alarmtime']
+                                                                    .toString()
+                                                                    .split(
+                                                                        ':')[0]
+                                                                    .toString();
                                                             minute = value
-                                                                .data()![
-                                                                    'alarmtime']
-                                                                .toString()
-                                                                .split(':')[1]
-                                                                .toString();
-                                                            print(hour +
-                                                                ' : ' +
-                                                                minute);
+                                                                        .data()![
+                                                                            'alarmtime']
+                                                                        .toString()
+                                                                        .split(':')[
+                                                                            1]
+                                                                        .length ==
+                                                                    1
+                                                                ? '0' +
+                                                                    value
+                                                                        .data()![
+                                                                            'alarmtime']
+                                                                        .toString()
+                                                                        .split(':')[
+                                                                            1]
+                                                                        .toString()
+                                                                : value
+                                                                    .data()![
+                                                                        'alarmtime']
+                                                                    .toString()
+                                                                    .split(
+                                                                        ':')[1]
+                                                                    .toString();
                                                           }
                                                         },
                                                       );

@@ -247,81 +247,94 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
       itemCount: defaulthomeviewlist.length,
       itemBuilder: (context, index) {
         return defaulthomeviewlist[index].toString() == '오늘의 일정'
-            ? Padding(padding: EdgeInsets.only(left: 20, right: 20), child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('오늘의 일정',
-                      style: TextStyle(
-                          color: TextColor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTitleTextsize())),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  stream1(peopleadd.secondname, contentmy, usercode),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),)
+            ? Padding(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('오늘의 일정',
+                        style: TextStyle(
+                            color: TextColor(),
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize())),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    stream1(peopleadd.secondname, contentmy, usercode),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              )
             : (defaulthomeviewlist[index].toString() == '공유된 오늘의 일정'
-                ? Padding(padding: EdgeInsets.only(left: 20, right: 20), child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('공유된 오늘의 일정',
-                          style: TextStyle(
-                              color: TextColor(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize())),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      stream2(peopleadd.secondname, contentshare, usercode),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),)
+                ? Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('공유된 오늘의 일정',
+                            style: TextStyle(
+                                color: TextColor(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize())),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        stream2(peopleadd.secondname, contentshare, usercode),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  )
                 : (defaulthomeviewlist[index].toString() == '홈뷰에 저장된 메모'
-                    ? Padding(padding: EdgeInsets.only(left: 20, right: 20), child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('홈뷰에 저장된 메모',
-                              style: TextStyle(
-                                  color: TextColor(),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          stream3(peopleadd.secondname, memosavelist, usercode),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),)
-                    : Padding(padding: EdgeInsets.only(left: 20, right: 20), child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('오늘 수정 및 생성된 메모',
-                              style: TextStyle(
-                                  color: TextColor(),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          stream4(
-                              peopleadd.secondname, memotodaylist, usercode),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),)));
+                    ? Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('홈뷰에 저장된 메모',
+                                style: TextStyle(
+                                    color: TextColor(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize())),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            stream3(
+                                peopleadd.secondname, memosavelist, usercode),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('오늘 수정 및 생성된 메모',
+                                style: TextStyle(
+                                    color: TextColor(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize())),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            stream4(
+                                peopleadd.secondname, memotodaylist, usercode),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      )));
       });
 }
 
@@ -573,7 +586,6 @@ stream2(
       if (snapshot.hasData &&
           snapshot.data!.docs.isNotEmpty &&
           contentshare.isNotEmpty) {
-        print(Date.hour);
         children_cal2 = <Widget>[
           ContainerDesign(
               child: ListView.builder(

@@ -96,8 +96,10 @@ content(
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.pop(context);
             setState(() {
+              for (int i = 0; i < nodes.length; i++) {
+                nodes[i].unfocus();
+              }
               checkbottoms[0] == false
                   ? checkbottoms[0] = true
                   : checkbottoms[0] = false;
@@ -108,13 +110,14 @@ content(
                 scollection.addmemolistcontentin(scollection.memoindex - 1);
 
                 checkbottoms[0] = false;
-                nodes.add(FocusNode());
-                controllers.add(TextEditingController(
+                nodes.add(FocusNode(canRequestFocus: true));
+                scollection.addmemotextfield();
+
+                /*controllers.add(TextEditingController(
                     text: scollection
-                        .memolistcontentin[scollection.memoindex - 1]));
-              }
-              for (int i = 0; i < nodes.length; i++) {
-                nodes[i].unfocus();
+                        .memolistcontentin[scollection.memoindex - 1]));*/
+                nodes[nodes.length - 1].requestFocus();
+                Navigator.pop(context);
               }
             });
           },
@@ -140,8 +143,10 @@ content(
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pop(context);
             setState(() {
+              for (int i = 0; i < nodes.length; i++) {
+                nodes[i].unfocus();
+              }
               checkbottoms[1] == false
                   ? checkbottoms[1] = true
                   : checkbottoms[1] = false;
@@ -152,13 +157,10 @@ content(
                 scollection.addmemolistcontentin(scollection.memoindex - 1);
 
                 checkbottoms[1] = false;
-                nodes.add(FocusNode());
-                controllers.add(TextEditingController(
-                    text: scollection
-                        .memolistcontentin[scollection.memoindex - 1]));
-              }
-              for (int i = 0; i < nodes.length; i++) {
-                nodes[i].unfocus();
+                nodes.add(FocusNode(canRequestFocus: true));
+                scollection.addmemotextfield();
+                nodes[nodes.length - 1].requestFocus();
+                Navigator.pop(context);
               }
             });
           },
@@ -184,8 +186,10 @@ content(
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pop(context);
             setState(() {
+              for (int i = 0; i < nodes.length; i++) {
+                nodes[i].unfocus();
+              }
               checkbottoms[2] == false
                   ? checkbottoms[2] = true
                   : checkbottoms[2] = false;
@@ -195,13 +199,10 @@ content(
                 scollection.addmemolistin(scollection.memoindex);
                 scollection.addmemolistcontentin(scollection.memoindex - 1);
                 checkbottoms[2] = false;
-                nodes.add(FocusNode());
-                controllers.add(TextEditingController(
-                    text: scollection
-                        .memolistcontentin[scollection.memoindex - 1]));
-              }
-              for (int i = 0; i < nodes.length; i++) {
-                nodes[i].unfocus();
+                nodes.add(FocusNode(canRequestFocus: true));
+                scollection.addmemotextfield();
+                nodes[nodes.length - 1].requestFocus();
+                Navigator.pop(context);
               }
             });
           },

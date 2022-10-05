@@ -268,13 +268,21 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             'Timestart': textEditingController2.text.isEmpty
                 ? widget.start
                 : (textEditingController2.text.split(':')[0].length == 1
-                    ? '0' + textEditingController2.text
-                    : textEditingController2.text),
+                    ? (textEditingController2.text.split(':')[1].length == 1
+                        ? '0' + textEditingController2.text + '0'
+                        : '0' + textEditingController2.text)
+                    : (textEditingController2.text.split(':')[1].length == 1
+                        ? textEditingController2.text + '0'
+                        : textEditingController2.text)),
             'Timefinish': textEditingController3.text.isEmpty
                 ? widget.finish
                 : (textEditingController3.text.split(':')[0].length == 1
-                    ? '0' + textEditingController3.text
-                    : textEditingController3.text),
+                    ? (textEditingController3.text.split(':')[1].length == 1
+                        ? '0' + textEditingController3.text + '0'
+                        : '0' + textEditingController3.text)
+                    : (textEditingController3.text.split(':')[1].length == 1
+                        ? textEditingController3.text + '0'
+                        : textEditingController3.text)),
           });
         }
         firestore

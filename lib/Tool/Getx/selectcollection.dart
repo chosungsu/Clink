@@ -8,6 +8,7 @@ class selectcollection extends GetxController {
   List memolistin = List.empty(growable: true);
   List memolistcontentin = List.empty(growable: true);
   int cursornow = 0;
+  List<TextEditingController> controllersall = [];
 
   void setcursor() {
     cursornow = Hive.box('user_setting').get('cursorposition');
@@ -69,6 +70,13 @@ class selectcollection extends GetxController {
     memoindex = 0;
     memolistin.clear();
     memolistcontentin.clear();
+    update();
+    notifyChildrens();
+  }
+
+  void addmemotextfield() {
+    print(controllersall.length);
+    controllersall.insert(controllersall.length, TextEditingController());
     update();
     notifyChildrens();
   }

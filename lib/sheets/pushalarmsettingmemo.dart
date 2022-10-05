@@ -291,17 +291,71 @@ content(
                           doc_title != ''
                               ? controll_memo.hour1.toString() != '99' ||
                                       controll_memo.minute1.toString() != '99'
-                                  ? Text(
-                                      '설정시간 : ' +
-                                          controll_memo.hour1.toString() +
-                                          '시 ' +
-                                          controll_memo.minute1.toString() +
-                                          '분',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize(),
-                                          color: Colors.black),
-                                    )
+                                  ? (controll_memo.hour1.toString().length < 2
+                                      ? (controll_memo.minute1
+                                                  .toString()
+                                                  .length <
+                                              2
+                                          ? Text(
+                                              '설정시간 : ' +
+                                                  '0' +
+                                                  controll_memo.hour1
+                                                      .toString() +
+                                                  '시 ' +
+                                                  '0' +
+                                                  controll_memo.minute1
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            )
+                                          : Text(
+                                              '설정시간 : ' +
+                                                  '0' +
+                                                  controll_memo.hour1
+                                                      .toString() +
+                                                  '시 ' +
+                                                  controll_memo.minute1
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            ))
+                                      : (controll_memo.minute1
+                                                  .toString()
+                                                  .length <
+                                              2
+                                          ? Text(
+                                              '설정시간 : ' +
+                                                  controll_memo.hour1
+                                                      .toString() +
+                                                  '시 ' +
+                                                  '0' +
+                                                  controll_memo.minute1
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            )
+                                          : Text(
+                                              '설정시간 : ' +
+                                                  controll_memo.hour1
+                                                      .toString() +
+                                                  '시 ' +
+                                                  controll_memo.minute1
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            )))
                                   : Text(
                                       '설정시간 : 없음',
                                       style: TextStyle(
@@ -311,17 +365,71 @@ content(
                                     )
                               : controll_memo.hour2 != '99' ||
                                       controll_memo.minute2 != '99'
-                                  ? Text(
-                                      '설정시간 : ' +
-                                          controll_memo.hour2.toString() +
-                                          '시 ' +
-                                          controll_memo.minute2.toString() +
-                                          '분',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize(),
-                                          color: Colors.black),
-                                    )
+                                  ? (controll_memo.hour2.toString().length < 2
+                                      ? (controll_memo.minute2
+                                                  .toString()
+                                                  .length <
+                                              2
+                                          ? Text(
+                                              '설정시간 : ' +
+                                                  '0' +
+                                                  controll_memo.hour2
+                                                      .toString() +
+                                                  '시 ' +
+                                                  '0' +
+                                                  controll_memo.minute2
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            )
+                                          : Text(
+                                              '설정시간 : ' +
+                                                  '0' +
+                                                  controll_memo.hour2
+                                                      .toString() +
+                                                  '시 ' +
+                                                  controll_memo.minute2
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            ))
+                                      : (controll_memo.minute2
+                                                  .toString()
+                                                  .length <
+                                              2
+                                          ? Text(
+                                              '설정시간 : ' +
+                                                  controll_memo.hour2
+                                                      .toString() +
+                                                  '시 ' +
+                                                  '0' +
+                                                  controll_memo.minute2
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            )
+                                          : Text(
+                                              '설정시간 : ' +
+                                                  controll_memo.hour2
+                                                      .toString() +
+                                                  '시 ' +
+                                                  controll_memo.minute2
+                                                      .toString() +
+                                                  '분',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            )))
                                   : Text(
                                       '설정시간 : 없음',
                                       style: TextStyle(

@@ -28,6 +28,7 @@ import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../../sheets/addcalendarrepeat.dart';
 import '../../../sheets/addmemocollection.dart';
 import 'package:numberpicker/numberpicker.dart';
 
@@ -76,6 +77,7 @@ class _DayScriptState extends State<DayScript> {
   final searchNode_first_section = FocusNode();
   final searchNode_second_section = FocusNode();
   final searchNode_third_section = FocusNode();
+  final searchNode_forth_section = FocusNode();
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
@@ -132,6 +134,7 @@ class _DayScriptState extends State<DayScript> {
     fToast.init(context);
     controll_cal.hour1 = '99';
     controll_cal.minute1 = '99';
+    controll_memo.imagelist.clear();
     Hive.box('user_setting')
         .put('alarm_cal_hour_${cal_share_person.secondname}', '99');
     Hive.box('user_setting')
@@ -146,7 +149,7 @@ class _DayScriptState extends State<DayScript> {
     _color = controll_memo.color;
     _colorfont = controll_memo.colorfont;
     checklisttexts.clear();
-    controllers.clear();
+    scollection.controllersall.clear();
     scollection.memolistin.clear();
     scollection.memolistcontentin.clear();
     scollection.memoindex = 0;
@@ -226,6 +229,126 @@ class _DayScriptState extends State<DayScript> {
               }
             }
             if (differ_list.isNotEmpty) {
+              if (isChecked_pushalarm) {
+                if (alarmtypes[0] == true) {
+                  NotificationApi.showNotification(
+                    title: '알람설정된 일정 : ' + textEditingController1.text,
+                    body: textEditingController2.text.split(':')[0].length == 1
+                        ? (textEditingController3.text.split(':')[0].length == 1
+                            ? '예정된 시각 : ' + firsttxt
+                            : '예정된 시각 : ' + secondtxt)
+                        : (textEditingController3.text.split(':')[0].length == 1
+                            ? '예정된 시각 : ' + thirdtxt
+                            : '예정된 시각 : ' + forthtxt),
+                  );
+                  for (int j = 0; j < differ_list.length; j++) {
+                    NotificationApi.showScheduledNotification(
+                        id: int.parse(DateFormat('yyyymm')
+                                .parse(differ_list[j])
+                                .toString()) +
+                            int.parse(valueid[j].hashCode.toString()) +
+                            int.parse(cal_share_person.secondname.hashCode
+                                .toString()),
+                        title: textEditingController1.text + '일정이 다가옵니다',
+                        body:
+                            textEditingController2.text.split(':')[0].length ==
+                                    1
+                                ? (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + firsttxt
+                                    : '예정된 시각 : ' + secondtxt)
+                                : (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + thirdtxt
+                                    : '예정된 시각 : ' + forthtxt),
+                        scheduledate: DateTime.utc(
+                          int.parse(widget.firstdate
+                              .toString()
+                              .toString()
+                              .split(' ')[0]
+                              .toString()
+                              .substring(0, 4)),
+                          int.parse(widget.firstdate
+                              .toString()
+                              .toString()
+                              .split(' ')[0]
+                              .toString()
+                              .substring(5, 7)),
+                          int.parse(widget.firstdate
+                                  .toString()
+                                  .toString()
+                                  .split(' ')[0]
+                                  .toString()
+                                  .substring(8, 10)) -
+                              1,
+                          int.parse(controll_cal.hour1),
+                          int.parse(controll_cal.minute1),
+                        ));
+                  }
+                } else {
+                  NotificationApi.showNotification(
+                    title: '알람설정된 일정 : ' + textEditingController1.text,
+                    body: textEditingController2.text.split(':')[0].length == 1
+                        ? (textEditingController3.text.split(':')[0].length == 1
+                            ? '예정된 시각 : ' + firsttxt
+                            : '예정된 시각 : ' + secondtxt)
+                        : (textEditingController3.text.split(':')[0].length == 1
+                            ? '예정된 시각 : ' + thirdtxt
+                            : '예정된 시각 : ' + forthtxt),
+                  );
+                  for (int j = 0; j < differ_list.length; j++) {
+                    NotificationApi.showScheduledNotification(
+                        id: int.parse(DateFormat('yyyymm')
+                                .parse(differ_list[j])
+                                .toString()) +
+                            int.parse(valueid[j].hashCode.toString()) +
+                            int.parse(cal_share_person.secondname.hashCode
+                                .toString()),
+                        title: textEditingController1.text + '일정이 다가옵니다',
+                        body:
+                            textEditingController2.text.split(':')[0].length ==
+                                    1
+                                ? (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + firsttxt
+                                    : '예정된 시각 : ' + secondtxt)
+                                : (textEditingController3.text
+                                            .split(':')[0]
+                                            .length ==
+                                        1
+                                    ? '예정된 시각 : ' + thirdtxt
+                                    : '예정된 시각 : ' + forthtxt),
+                        scheduledate: DateTime.utc(
+                          int.parse(widget.firstdate
+                              .toString()
+                              .toString()
+                              .split(' ')[0]
+                              .toString()
+                              .substring(0, 4)),
+                          int.parse(widget.firstdate
+                              .toString()
+                              .toString()
+                              .split(' ')[0]
+                              .toString()
+                              .substring(5, 7)),
+                          int.parse(widget.firstdate
+                              .toString()
+                              .toString()
+                              .split(' ')[0]
+                              .toString()
+                              .substring(8, 10)),
+                          int.parse(controll_cal.hour1),
+                          int.parse(controll_cal.minute1),
+                        ));
+                  }
+                }
+              }
               //calendarsetting().setalarmtype(widget.id, alarmtypes);
               for (int j = 0; j < differ_list.length; j++) {
                 await firestore.collection('CalendarDataBase').add({
@@ -233,14 +356,26 @@ class _DayScriptState extends State<DayScript> {
                   'Alarm': isChecked_pushalarm == true
                       ? Hive.box('user_setting').get('alarming_time')
                       : '설정off',
-                  'Timestart':
-                      textEditingController2.text.split(':')[0].length == 1
-                          ? '0' + textEditingController2.text
-                          : textEditingController2.text,
-                  'Timefinish':
-                      textEditingController3.text.split(':')[0].length == 1
-                          ? '0' + textEditingController3.text
-                          : textEditingController3.text,
+                  'Timestart': (textEditingController2.text
+                              .split(':')[0]
+                              .length ==
+                          1
+                      ? (textEditingController2.text.split(':')[1].length == 1
+                          ? '0' + textEditingController2.text + '0'
+                          : '0' + textEditingController2.text)
+                      : (textEditingController2.text.split(':')[1].length == 1
+                          ? textEditingController2.text + '0'
+                          : textEditingController2.text)),
+                  'Timefinish': (textEditingController3.text
+                              .split(':')[0]
+                              .length ==
+                          1
+                      ? (textEditingController3.text.split(':')[1].length == 1
+                          ? '0' + textEditingController3.text + '0'
+                          : '0' + textEditingController3.text)
+                      : (textEditingController3.text.split(':')[1].length == 1
+                          ? textEditingController3.text + '0'
+                          : textEditingController3.text)),
                   'Shares': widget.share,
                   'OriginalUser': usercode,
                   'calname': widget.title,
@@ -299,142 +434,6 @@ class _DayScriptState extends State<DayScript> {
                             }, SetOptions(merge: true));
                           }
                         });
-                      }
-                    }
-                    if (isChecked_pushalarm) {
-                      if (alarmtypes[0] == true) {
-                        NotificationApi.showNotification(
-                          title: '알람설정된 일정 : ' + textEditingController1.text,
-                          body: textEditingController2.text
-                                      .split(':')[0]
-                                      .length ==
-                                  1
-                              ? (textEditingController3.text
-                                          .split(':')[0]
-                                          .length ==
-                                      1
-                                  ? '예정된 시각 : ' + firsttxt
-                                  : '예정된 시각 : ' + secondtxt)
-                              : (textEditingController3.text
-                                          .split(':')[0]
-                                          .length ==
-                                      1
-                                  ? '예정된 시각 : ' + thirdtxt
-                                  : '예정된 시각 : ' + forthtxt),
-                        );
-                        NotificationApi.showScheduledNotification(
-                            id: int.parse(DateFormat('yyyymm')
-                                    .parse(differ_list[j])
-                                    .toString()) +
-                                int.parse(valueid[j].hashCode.toString()) +
-                                int.parse(cal_share_person.secondname.hashCode
-                                    .toString()),
-                            title: textEditingController1.text + '일정이 다가옵니다',
-                            body: textEditingController2.text
-                                        .split(':')[0]
-                                        .length ==
-                                    1
-                                ? (textEditingController3.text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + firsttxt
-                                    : '예정된 시각 : ' + secondtxt)
-                                : (textEditingController3.text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + thirdtxt
-                                    : '예정된 시각 : ' + forthtxt),
-                            scheduledate: DateTime.utc(
-                              int.parse(widget.firstdate
-                                  .toString()
-                                  .toString()
-                                  .split(' ')[0]
-                                  .toString()
-                                  .substring(0, 4)),
-                              int.parse(widget.firstdate
-                                  .toString()
-                                  .toString()
-                                  .split(' ')[0]
-                                  .toString()
-                                  .substring(5, 7)),
-                              int.parse(widget.firstdate
-                                      .toString()
-                                      .toString()
-                                      .split(' ')[0]
-                                      .toString()
-                                      .substring(8, 10)) -
-                                  1,
-                              int.parse(controll_cal.hour1),
-                              int.parse(controll_cal.minute1),
-                            ));
-                      } else {
-                        NotificationApi.showNotification(
-                          title: '알람설정된 일정 : ' + textEditingController1.text,
-                          body: textEditingController2.text
-                                      .split(':')[0]
-                                      .length ==
-                                  1
-                              ? (textEditingController3.text
-                                          .split(':')[0]
-                                          .length ==
-                                      1
-                                  ? '예정된 시각 : ' + firsttxt
-                                  : '예정된 시각 : ' + secondtxt)
-                              : (textEditingController3.text
-                                          .split(':')[0]
-                                          .length ==
-                                      1
-                                  ? '예정된 시각 : ' + thirdtxt
-                                  : '예정된 시각 : ' + forthtxt),
-                        );
-                        NotificationApi.showScheduledNotification(
-                            id: int.parse(DateFormat('yyyymm')
-                                    .parse(differ_list[j])
-                                    .toString()) +
-                                int.parse(valueid[j].hashCode.toString()) +
-                                int.parse(cal_share_person.secondname.hashCode
-                                    .toString()),
-                            title: textEditingController1.text + '일정이 다가옵니다',
-                            body: textEditingController2.text
-                                        .split(':')[0]
-                                        .length ==
-                                    1
-                                ? (textEditingController3.text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + firsttxt
-                                    : '예정된 시각 : ' + secondtxt)
-                                : (textEditingController3.text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + thirdtxt
-                                    : '예정된 시각 : ' + forthtxt),
-                            scheduledate: DateTime.utc(
-                              int.parse(widget.firstdate
-                                  .toString()
-                                  .toString()
-                                  .split(' ')[0]
-                                  .toString()
-                                  .substring(0, 4)),
-                              int.parse(widget.firstdate
-                                  .toString()
-                                  .toString()
-                                  .split(' ')[0]
-                                  .toString()
-                                  .substring(5, 7)),
-                              int.parse(widget.firstdate
-                                  .toString()
-                                  .toString()
-                                  .split(' ')[0]
-                                  .toString()
-                                  .substring(8, 10)),
-                              int.parse(controll_cal.hour1),
-                              int.parse(controll_cal.minute1),
-                            ));
                       }
                     }
                   }
@@ -769,13 +768,12 @@ class _DayScriptState extends State<DayScript> {
     textEditingController4.dispose();
     textEditingController5.dispose();
     textEditingController_add_sheet.dispose();
-    for (int i = 0; i < controllers.length; i++) {
-      controllers[i].dispose();
+    for (int i = 0; i < scollection.controllersall.length; i++) {
+      scollection.controllersall[i].dispose();
     }
   }
 
   Future<bool> _onBackPressed() async {
-    print('script');
     final reloadpage = await Get.dialog(OSDialog(
             context,
             '경고',
@@ -816,7 +814,6 @@ class _DayScriptState extends State<DayScript> {
   }
 
   UI() {
-    print(controll_memo.imagelist);
     double height = MediaQuery.of(context).size.height;
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<memosetting>(
@@ -877,21 +874,39 @@ class _DayScriptState extends State<DayScript> {
                                                           Icons
                                                               .keyboard_arrow_left,
                                                           size: 30,
-                                                          style: const NeumorphicStyle(
+                                                          style: NeumorphicStyle(
                                                               shape:
                                                                   NeumorphicShape
                                                                       .convex,
                                                               depth: 2,
                                                               surfaceIntensity:
                                                                   0.5,
-                                                              color:
-                                                                  Colors.black,
+                                                              color: widget
+                                                                          .position ==
+                                                                      'note'
+                                                                  ? (controll_memo
+                                                                              .color ==
+                                                                          Colors
+                                                                              .black
+                                                                      ? Colors
+                                                                          .white
+                                                                      : Colors
+                                                                          .black)
+                                                                  : Colors
+                                                                      .black,
                                                               lightSource:
                                                                   LightSource
                                                                       .topLeft),
                                                         ),
                                                       )),
-                                                  color: Colors.black)
+                                                  color: widget.position ==
+                                                          'note'
+                                                      ? (controll_memo.color ==
+                                                              Colors.black
+                                                          ? Colors.white
+                                                          : Colors.black)
+                                                      : Colors.black,
+                                                )
                                               : const SizedBox(),
                                           SizedBox(
                                               width:
@@ -918,13 +933,23 @@ class _DayScriptState extends State<DayScript> {
                                                               ? '새 일정 작성'
                                                               : '새 메모 작성',
                                                           style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  secondTitleTextsize(),
-                                                              color:
-                                                                  Colors.black),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                secondTitleTextsize(),
+                                                            color: widget
+                                                                        .position ==
+                                                                    'note'
+                                                                ? (controll_memo
+                                                                            .color ==
+                                                                        Colors
+                                                                            .black
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black)
+                                                                : Colors.black,
+                                                          ),
                                                         ),
                                                       ),
                                                       widget.position == 'note'
@@ -938,7 +963,8 @@ class _DayScriptState extends State<DayScript> {
                                                                   '',
                                                                   controll_memo
                                                                       .ischeckedtohideminus,
-                                                                  controllers,
+                                                                  scollection
+                                                                      .controllersall,
                                                                   _colorfont,
                                                                   controll_memo
                                                                       .imagelist))
@@ -949,36 +975,51 @@ class _DayScriptState extends State<DayScript> {
                                                             )
                                                           : const SizedBox(),
                                                       IconBtn(
-                                                          child: IconButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                autosavelogic();
-                                                              },
-                                                              icon: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                width: 30,
-                                                                height: 30,
-                                                                child:
-                                                                    NeumorphicIcon(
-                                                                  Icons
-                                                                      .done_all,
-                                                                  size: 30,
-                                                                  style: const NeumorphicStyle(
-                                                                      shape: NeumorphicShape
-                                                                          .convex,
-                                                                      depth: 2,
-                                                                      surfaceIntensity:
-                                                                          0.5,
-                                                                      color: Colors
-                                                                          .black,
-                                                                      lightSource:
-                                                                          LightSource
-                                                                              .topLeft),
-                                                                ),
-                                                              )),
-                                                          color: Colors.black),
+                                                        child: IconButton(
+                                                            onPressed:
+                                                                () async {
+                                                              autosavelogic();
+                                                            },
+                                                            icon: Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              width: 30,
+                                                              height: 30,
+                                                              child:
+                                                                  NeumorphicIcon(
+                                                                Icons.done_all,
+                                                                size: 30,
+                                                                style: NeumorphicStyle(
+                                                                    shape: NeumorphicShape
+                                                                        .convex,
+                                                                    depth: 2,
+                                                                    surfaceIntensity:
+                                                                        0.5,
+                                                                    color: widget.position ==
+                                                                            'note'
+                                                                        ? (controll_memo.color == Colors.black
+                                                                            ? Colors
+                                                                                .white
+                                                                            : Colors
+                                                                                .black)
+                                                                        : Colors
+                                                                            .black,
+                                                                    lightSource:
+                                                                        LightSource
+                                                                            .topLeft),
+                                                              ),
+                                                            )),
+                                                        color: widget
+                                                                    .position ==
+                                                                'note'
+                                                            ? (controll_memo
+                                                                        .color ==
+                                                                    Colors.black
+                                                                ? Colors.white
+                                                                : Colors.black)
+                                                            : Colors.black,
+                                                      ),
                                                     ],
                                                   ))),
                                         ],
@@ -1007,7 +1048,7 @@ class _DayScriptState extends State<DayScript> {
                                           nodes[i].unfocus();
                                         }
                                         scollection.memolistcontentin[i] =
-                                            controllers[i].text;
+                                            scollection.controllersall[i].text;
                                       }
                                     },
                                     child: Padding(
@@ -1109,16 +1150,26 @@ class _DayScriptState extends State<DayScript> {
         ? Text(
             '일정제목',
             style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize(),
-                color: Colors.black),
+              fontWeight: FontWeight.bold,
+              fontSize: contentTitleTextsize(),
+              color: widget.position == 'note'
+                  ? (controll_memo.color == Colors.black
+                      ? Colors.white
+                      : Colors.black)
+                  : Colors.black,
+            ),
           )
         : Text(
             '메모제목',
             style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize(),
-                color: Colors.black),
+              fontWeight: FontWeight.bold,
+              fontSize: contentTitleTextsize(),
+              color: widget.position == 'note'
+                  ? (controll_memo.color == Colors.black
+                      ? Colors.white
+                      : Colors.black)
+                  : Colors.black,
+            ),
           );
   }
 
@@ -1160,7 +1211,10 @@ class _DayScriptState extends State<DayScript> {
                           maxLines: 1,
                           focusNode: searchNode_first_section,
                           style: TextStyle(
-                              fontSize: contentTextsize(), color: Colors.black),
+                              fontSize: contentTextsize(),
+                              color: controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : controll_memo.colorfont),
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.only(left: 10),
                             border: InputBorder.none,
@@ -1185,41 +1239,57 @@ class _DayScriptState extends State<DayScript> {
                         child: Text(
                           '컬렉션 선택',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                              color: Colors.black),
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                            color: widget.position == 'note'
+                                ? (controll_memo.color == Colors.black
+                                    ? Colors.white
+                                    : Colors.black)
+                                : Colors.black,
+                          ),
                         ),
                       ),
                       IconBtn(
-                          child: InkWell(
-                              onTap: () {
-                                for (int i = 0;
-                                    i < scollection.memolistcontentin.length;
-                                    i++) {
-                                  nodes[i].unfocus();
-                                  scollection.memolistcontentin[i] =
-                                      controllers[i].text;
-                                }
-                                addmemocollector(
-                                    context,
-                                    username,
-                                    textEditingController_add_sheet,
-                                    searchNode_add_section,
-                                    'inside',
-                                    scollection,
-                                    isresponsible);
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.only(left: 10, right: 10),
-                                child: Text(
-                                  'Click',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      color: Colors.black),
+                        child: InkWell(
+                            onTap: () {
+                              for (int i = 0;
+                                  i < scollection.memolistcontentin.length;
+                                  i++) {
+                                nodes[i].unfocus();
+                                scollection.memolistcontentin[i] =
+                                    scollection.controllersall[i].text;
+                              }
+                              addmemocollector(
+                                  context,
+                                  username,
+                                  textEditingController_add_sheet,
+                                  searchNode_add_section,
+                                  'inside',
+                                  scollection,
+                                  isresponsible);
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Text(
+                                'Click',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: widget.position == 'note'
+                                      ? (controll_memo.color == Colors.black
+                                          ? Colors.white
+                                          : Colors.black)
+                                      : Colors.black,
                                 ),
-                              )),
-                          color: Colors.black)
+                              ),
+                            )),
+                        color: widget.position == 'note'
+                            ? (controll_memo.color == Colors.black
+                                ? Colors.white
+                                : Colors.black)
+                            : Colors.black,
+                      )
                     ],
                   )),
                   const SizedBox(
@@ -1245,9 +1315,14 @@ class _DayScriptState extends State<DayScript> {
                     child: Text(
                       '메모내용',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTitleTextsize(),
-                          color: Colors.black),
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: widget.position == 'note'
+                            ? (controll_memo.color == Colors.black
+                                ? Colors.white
+                                : Colors.black)
+                            : Colors.black,
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -1263,10 +1338,14 @@ class _DayScriptState extends State<DayScript> {
                         style: TextStyle(
                             fontSize: 15, color: Colors.grey.shade400),
                       ),
-                      const WidgetSpan(
+                      WidgetSpan(
                         child: Icon(
                           Icons.more_vert,
-                          color: Colors.black,
+                          color: widget.position == 'note'
+                              ? (controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : Colors.black)
+                              : Colors.black,
                         ),
                       ),
                       TextSpan(
@@ -1301,7 +1380,14 @@ class _DayScriptState extends State<DayScript> {
                                             index: index,
                                             child: Icon(
                                               Icons.drag_indicator_outlined,
-                                              color: _colorfont,
+                                              color: controll_memo.color ==
+                                                      Colors.black
+                                                  ? Colors.white
+                                                  : _colorfont ==
+                                                          controll_memo
+                                                              .colorfont
+                                                      ? _colorfont
+                                                      : controll_memo.colorfont,
                                             ),
                                           ),
                                           scollection.memolistin[index] == 0
@@ -1334,10 +1420,17 @@ class _DayScriptState extends State<DayScript> {
                                                                   fontSize:
                                                                       contentTextsize(),
                                                                   color: controll_memo
-                                                                      .colorfont,
+                                                                              .color ==
+                                                                          Colors
+                                                                              .black
+                                                                      ? Colors
+                                                                          .white
+                                                                      : controll_memo
+                                                                          .colorfont,
                                                                 ),
                                                                 controller:
-                                                                    controllers[
+                                                                    scollection
+                                                                            .controllersall[
                                                                         index],
                                                                 decoration:
                                                                     InputDecoration(
@@ -1372,10 +1465,10 @@ class _DayScriptState extends State<DayScript> {
                                                                               onTap: () {
                                                                                 setState(() {
                                                                                   scollection.removelistitem(index);
-                                                                                  controllers.removeAt(index);
+                                                                                  scollection.controllersall.removeAt(index);
 
                                                                                   for (int i = 0; i < scollection.memolistin.length; i++) {
-                                                                                    controllers[i].text = scollection.memolistcontentin[i];
+                                                                                    scollection.controllersall[i].text = scollection.memolistcontentin[i];
                                                                                   }
                                                                                 });
                                                                               },
@@ -1441,8 +1534,11 @@ class _DayScriptState extends State<DayScript> {
                                                                       style: TextStyle(
                                                                           fontSize:
                                                                               contentTextsize(),
-                                                                          color: controll_memo
-                                                                              .colorfont,
+                                                                          color: controll_memo.color == Colors.black
+                                                                              ? Colors
+                                                                                  .white
+                                                                              : controll_memo
+                                                                                  .colorfont,
                                                                           decorationThickness:
                                                                               2.3,
                                                                           decoration: scollection.memolistin[index] == 999
@@ -1467,8 +1563,14 @@ class _DayScriptState extends State<DayScript> {
                                                                             });
                                                                           },
                                                                           child: scollection.memolistin[index] == 999
-                                                                              ? const Icon(Icons.check_box, color: Colors.black)
-                                                                              : const Icon(Icons.check_box_outline_blank, color: Colors.black),
+                                                                              ? Icon(
+                                                                                  Icons.check_box,
+                                                                                  color: widget.position == 'note' ? (controll_memo.color == Colors.black ? Colors.white : Colors.black) : Colors.black,
+                                                                                )
+                                                                              : Icon(
+                                                                                  Icons.check_box_outline_blank,
+                                                                                  color: widget.position == 'note' ? (controll_memo.color == Colors.black ? Colors.white : Colors.black) : Colors.black,
+                                                                                ),
                                                                         ),
                                                                         suffixIconConstraints:
                                                                             const BoxConstraints(maxWidth: 30),
@@ -1488,10 +1590,10 @@ class _DayScriptState extends State<DayScript> {
                                                                                     onTap: () {
                                                                                       setState(() {
                                                                                         scollection.removelistitem(index);
-                                                                                        controllers.removeAt(index);
+                                                                                        scollection.controllersall.removeAt(index);
 
                                                                                         for (int i = 0; i < scollection.memolistin.length; i++) {
-                                                                                          controllers[i].text = scollection.memolistcontentin[i];
+                                                                                          scollection.controllersall[i].text = scollection.memolistcontentin[i];
                                                                                         }
                                                                                       });
                                                                                     },
@@ -1508,8 +1610,8 @@ class _DayScriptState extends State<DayScript> {
                                                                                 Colors.grey.shade400),
                                                                       ),
                                                                       controller:
-                                                                          controllers[
-                                                                              index],
+                                                                          scollection
+                                                                              .controllersall[index],
                                                                     ),
                                                                   )))
                                                   : SizedBox(
@@ -1548,8 +1650,11 @@ class _DayScriptState extends State<DayScript> {
                                                                         style: TextStyle(
                                                                             fontSize:
                                                                                 contentTextsize(),
-                                                                            color: controll_memo
-                                                                                .colorfont),
+                                                                            color: controll_memo.color == Colors.black
+                                                                                ? Colors
+                                                                                    .white
+                                                                                : controll_memo
+                                                                                    .colorfont),
                                                                         decoration:
                                                                             InputDecoration(
                                                                           isCollapsed:
@@ -1560,11 +1665,16 @@ class _DayScriptState extends State<DayScript> {
                                                                               const EdgeInsets.only(left: 10),
                                                                           border:
                                                                               InputBorder.none,
-                                                                          prefixIcon: const Icon(
-                                                                              Icons.star_rate,
-                                                                              color: Colors.black),
-                                                                          prefixIconColor:
-                                                                              Colors.black,
+                                                                          prefixIcon:
+                                                                              Icon(
+                                                                            Icons.star_rate,
+                                                                            color: widget.position == 'note'
+                                                                                ? (controll_memo.color == Colors.black ? Colors.white : Colors.black)
+                                                                                : Colors.black,
+                                                                          ),
+                                                                          prefixIconColor: widget.position == 'note'
+                                                                              ? (controll_memo.color == Colors.black ? Colors.white : Colors.black)
+                                                                              : Colors.black,
                                                                           suffixIconConstraints:
                                                                               const BoxConstraints(maxWidth: 30),
                                                                           suffixIcon:
@@ -1581,10 +1691,10 @@ class _DayScriptState extends State<DayScript> {
                                                                                       onTap: () {
                                                                                         setState(() {
                                                                                           scollection.removelistitem(index);
-                                                                                          controllers.removeAt(index);
+                                                                                          scollection.controllersall.removeAt(index);
 
                                                                                           for (int i = 0; i < scollection.memolistin.length; i++) {
-                                                                                            controllers[i].text = scollection.memolistcontentin[i];
+                                                                                            scollection.controllersall[i].text = scollection.memolistcontentin[i];
                                                                                           }
                                                                                         });
                                                                                       },
@@ -1599,7 +1709,7 @@ class _DayScriptState extends State<DayScript> {
                                                                               color: Colors.grey.shade400),
                                                                         ),
                                                                         controller:
-                                                                            controllers[index]),
+                                                                            scollection.controllersall[index]),
                                                               )))),
                                         ],
                                       ),
@@ -1629,7 +1739,7 @@ class _DayScriptState extends State<DayScript> {
                                   for (int i = 0;
                                       i < scollection.memolistcontentin.length;
                                       i++) {
-                                    controllers[i].text =
+                                    scollection.controllersall[i].text =
                                         scollection.memolistcontentin[i];
                                   }
                                 });
@@ -1660,9 +1770,14 @@ class _DayScriptState extends State<DayScript> {
       child: Text(
         '일정세부사항',
         style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: contentTitleTextsize(),
-            color: Colors.black),
+          fontWeight: FontWeight.bold,
+          fontSize: contentTitleTextsize(),
+          color: widget.position == 'note'
+              ? (controll_memo.color == Colors.black
+                  ? Colors.white
+                  : Colors.black)
+              : Colors.black,
+        ),
       ),
     );
   }
@@ -1685,11 +1800,15 @@ class _DayScriptState extends State<DayScript> {
                           leading: NeumorphicIcon(
                             Icons.today,
                             size: 30,
-                            style: const NeumorphicStyle(
+                            style: NeumorphicStyle(
                                 shape: NeumorphicShape.convex,
                                 depth: 2,
                                 surfaceIntensity: 0.5,
-                                color: Colors.black,
+                                color: widget.position == 'note'
+                                    ? (controll_memo.color == Colors.black
+                                        ? Colors.white
+                                        : Colors.black)
+                                    : Colors.black,
                                 lightSource: LightSource.topLeft),
                           ),
                           title: Text(
@@ -1698,9 +1817,14 @@ class _DayScriptState extends State<DayScript> {
                                 widget.lastdate.toString().split(' ')[0] +
                                 '까지',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize(),
-                                color: Colors.black),
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                              color: widget.position == 'note'
+                                  ? (controll_memo.color == Colors.black
+                                      ? Colors.white
+                                      : Colors.black)
+                                  : Colors.black,
+                            ),
                           ),
                         ),
                       ),
@@ -1712,19 +1836,28 @@ class _DayScriptState extends State<DayScript> {
                           leading: NeumorphicIcon(
                             Icons.today,
                             size: 30,
-                            style: const NeumorphicStyle(
+                            style: NeumorphicStyle(
                                 shape: NeumorphicShape.convex,
                                 depth: 2,
                                 surfaceIntensity: 0.5,
-                                color: Colors.black,
+                                color: widget.position == 'note'
+                                    ? (controll_memo.color == Colors.black
+                                        ? Colors.white
+                                        : Colors.black)
+                                    : Colors.black,
                                 lightSource: LightSource.topLeft),
                           ),
                           title: Text(
                             widget.firstdate.toString().split(' ')[0],
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize(),
-                                color: Colors.black),
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                              color: widget.position == 'note'
+                                  ? (controll_memo.color == Colors.black
+                                      ? Colors.white
+                                      : Colors.black)
+                                  : Colors.black,
+                            ),
                           ),
                         ),
                       ),
@@ -1739,11 +1872,15 @@ class _DayScriptState extends State<DayScript> {
                     leading: NeumorphicIcon(
                       Icons.schedule,
                       size: 30,
-                      style: const NeumorphicStyle(
+                      style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,
                           depth: 2,
                           surfaceIntensity: 0.5,
-                          color: Colors.black,
+                          color: widget.position == 'note'
+                              ? (controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : Colors.black)
+                              : Colors.black,
                           lightSource: LightSource.topLeft),
                     ),
                     title: Text(
@@ -1751,12 +1888,21 @@ class _DayScriptState extends State<DayScript> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTitleTextsize(),
-                          color: Colors.black),
+                          color: widget.position == 'note'
+                              ? (controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : Colors.black)
+                              : Colors.black),
                     ),
                     subtitle: TextFormField(
                       readOnly: true,
                       style: TextStyle(
-                          fontSize: contentTextsize(), color: Colors.black),
+                          fontSize: contentTextsize(),
+                          color: widget.position == 'note'
+                              ? (controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : Colors.black)
+                              : Colors.black),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         isCollapsed: true,
@@ -1768,9 +1914,13 @@ class _DayScriptState extends State<DayScript> {
                         pickDates(
                             context, textEditingController2, widget.firstdate);
                       },
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_drop_down,
-                        color: Colors.black,
+                        color: widget.position == 'note'
+                            ? (controll_memo.color == Colors.black
+                                ? Colors.white
+                                : Colors.black)
+                            : Colors.black,
                       ),
                     ),
                   ),
@@ -1786,11 +1936,15 @@ class _DayScriptState extends State<DayScript> {
                     leading: NeumorphicIcon(
                       Icons.schedule,
                       size: 30,
-                      style: const NeumorphicStyle(
+                      style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,
                           depth: 2,
                           surfaceIntensity: 0.5,
-                          color: Colors.black,
+                          color: widget.position == 'note'
+                              ? (controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : Colors.black)
+                              : Colors.black,
                           lightSource: LightSource.topLeft),
                     ),
                     title: Text(
@@ -1798,12 +1952,21 @@ class _DayScriptState extends State<DayScript> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTitleTextsize(),
-                          color: Colors.black),
+                          color: widget.position == 'note'
+                              ? (controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : Colors.black)
+                              : Colors.black),
                     ),
                     subtitle: TextFormField(
                       readOnly: true,
                       style: TextStyle(
-                          fontSize: contentTextsize(), color: Colors.black),
+                          fontSize: contentTextsize(),
+                          color: widget.position == 'note'
+                              ? (controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : Colors.black)
+                              : Colors.black),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         isCollapsed: true,
@@ -1815,9 +1978,13 @@ class _DayScriptState extends State<DayScript> {
                         pickDates(
                             context, textEditingController3, widget.firstdate);
                       },
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_drop_down,
-                        color: Colors.black,
+                        color: widget.position == 'note'
+                            ? (controll_memo.color == Colors.black
+                                ? Colors.white
+                                : Colors.black)
+                            : Colors.black,
                       ),
                     ),
                   ),
@@ -1839,16 +2006,25 @@ class _DayScriptState extends State<DayScript> {
                                 leading: NeumorphicIcon(
                                   Icons.sync,
                                   size: 30,
-                                  style: const NeumorphicStyle(
+                                  style: NeumorphicStyle(
                                       shape: NeumorphicShape.convex,
                                       depth: 2,
                                       surfaceIntensity: 0.5,
-                                      color: Colors.black,
+                                      color: widget.position == 'note'
+                                          ? (controll_memo.color == Colors.black
+                                              ? Colors.white
+                                              : Colors.black)
+                                          : Colors.black,
                                       lightSource: LightSource.topLeft),
                                 ),
                                 trailing: InkWell(
-                                  onTap: () {
-                                    showDialog(
+                                    onTap: () {
+                                      showrepeatdate(
+                                          context,
+                                          textEditingController4,
+                                          searchNode_forth_section);
+
+                                      /*showDialog(
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
@@ -1858,7 +2034,13 @@ class _DayScriptState extends State<DayScript> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize:
                                                       contentTitleTextsize(),
-                                                  color: Colors.black),
+                                                  color: widget.position ==
+                                                          'note'
+                                                      ? (controll_memo.color ==
+                                                              Colors.black
+                                                          ? Colors.white
+                                                          : Colors.black)
+                                                      : Colors.black),
                                             ),
                                             content: StatefulBuilder(
                                               builder: ((context, setState) {
@@ -1893,42 +2075,58 @@ class _DayScriptState extends State<DayScript> {
                                               )
                                             ],
                                           );
-                                        });
-                                  },
-                                  child: NeumorphicIcon(
+                                        });*/
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      child: Text(
+                                        'Click',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize(),
+                                            color: controll_memo.color ==
+                                                    Colors.black
+                                                ? Colors.white
+                                                : Colors.black),
+                                      ),
+                                    )
+                                    /*NeumorphicIcon(
                                     Icons.arrow_drop_down,
                                     size: 30,
-                                    style: const NeumorphicStyle(
+                                    style: NeumorphicStyle(
                                         shape: NeumorphicShape.convex,
                                         depth: 2,
                                         surfaceIntensity: 0.5,
-                                        color: Colors.black,
+                                        color: widget.position == 'note'
+                                            ? (controll_memo.color ==
+                                                    Colors.black
+                                                ? Colors.white
+                                                : Colors.black)
+                                            : Colors.black,
                                         lightSource: LightSource.topLeft),
-                                  ),
-                                ),
-                                subtitle: TextFormField(
-                                  readOnly: true,
+                                  ),*/
+                                    ),
+                                subtitle: Text(
+                                  cal.repeatdate.toString() + '주 반복설정됨',
                                   style: TextStyle(
                                       fontSize: contentTextsize(),
-                                      color: Colors.black),
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    isCollapsed: true,
-                                  ),
-                                  controller: cal.repeatdate == 1
-                                      ? (textEditingController4
-                                        ..text = cal.repeatdate.toString() +
-                                            '주 반복생성(기본값)')
-                                      : (textEditingController4
-                                        ..text = cal.repeatdate.toString() +
-                                            '주 반복생성'),
+                                      color: widget.position == 'note'
+                                          ? (controll_memo.color == Colors.black
+                                              ? Colors.white
+                                              : Colors.black)
+                                          : Colors.black),
                                 ),
                                 title: Text(
                                   '반복작성설정',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: contentTitleTextsize(),
-                                      color: Colors.black),
+                                      color: widget.position == 'note'
+                                          ? (controll_memo.color == Colors.black
+                                              ? Colors.white
+                                              : Colors.black)
+                                          : Colors.black),
                                 ),
                               ),
                             ),
@@ -1952,7 +2150,11 @@ class _DayScriptState extends State<DayScript> {
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: contentTitleTextsize(),
-              color: Colors.black),
+              color: widget.position == 'note'
+                  ? (controll_memo.color == Colors.black
+                      ? Colors.white
+                      : Colors.black)
+                  : Colors.black),
         ),
         const SizedBox(
           height: 20,
@@ -1962,8 +2164,13 @@ class _DayScriptState extends State<DayScript> {
               minLines: 5,
               maxLines: null,
               focusNode: searchNode_second_section,
-              style:
-                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
+              style: TextStyle(
+                  fontSize: contentTextsize(),
+                  color: widget.position == 'note'
+                      ? (controll_memo.color == Colors.black
+                          ? Colors.white
+                          : Colors.black)
+                      : Colors.black),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 10),
                 border: InputBorder.none,
@@ -1979,118 +2186,6 @@ class _DayScriptState extends State<DayScript> {
     ));
   }
 
-  /*SetAlarmTitle() {
-    return widget.position == 'cal'
-        ? SizedBox(
-            child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text(
-                  '알람설정',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: Colors.black),
-                ),
-              ),
-              Transform.scale(
-                scale: 1,
-                child: Switch(
-                    activeColor: Colors.blue,
-                    inactiveThumbColor: Colors.black,
-                    inactiveTrackColor: Colors.grey.shade400,
-                    value: isChecked_pushalarm,
-                    onChanged: (bool val) {
-                      setState(() {
-                        isChecked_pushalarm = val;
-                        if (isChecked_pushalarm) {
-                          Hive.box('user_setting')
-                              .put('alarming_time', selectedValue);
-                        }
-                      });
-                    }),
-              )
-            ],
-          ))
-        : const SizedBox();
-  }
-
-  List<DropdownMenuItem<String>> get dropdownItems_alarm {
-    List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(child: Text("1분 전"), value: "1분 전"),
-      const DropdownMenuItem(child: Text("5분 전"), value: "5분 전"),
-      const DropdownMenuItem(child: Text("10분 전"), value: "10분 전"),
-      const DropdownMenuItem(child: Text("30분 전"), value: "30분 전"),
-    ];
-    return menuItems;
-  }
-
-  Alarm() {
-    return widget.position == 'cal'
-        ? SizedBox(
-            child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ContainerDesign(
-                color: Colors.white,
-                child: ListTile(
-                  leading: NeumorphicIcon(
-                    Icons.alarm,
-                    size: 30,
-                    style: const NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        depth: 2,
-                        surfaceIntensity: 0.5,
-                        color: Colors.black,
-                        lightSource: LightSource.topLeft),
-                  ),
-                  title: Text(
-                    '알람',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: Colors.black),
-                  ),
-                  trailing: isChecked_pushalarm == true
-                      ? DropdownButton(
-                          value: selectedValue,
-                          dropdownColor: Colors.white,
-                          items: dropdownItems_alarm,
-                          icon: NeumorphicIcon(
-                            Icons.arrow_drop_down,
-                            size: 20,
-                            style: const NeumorphicStyle(
-                                shape: NeumorphicShape.convex,
-                                depth: 2,
-                                surfaceIntensity: 0.5,
-                                color: Colors.black,
-                                lightSource: LightSource.topLeft),
-                          ),
-                          style: TextStyle(
-                              color: Colors.black, fontSize: contentTextsize()),
-                          onChanged: isChecked_pushalarm == true
-                              ? (String? value) {
-                                  setState(() {
-                                    selectedValue = value!;
-                                    Hive.box('user_setting')
-                                        .put('alarming_time', selectedValue);
-                                  });
-                                }
-                              : null,
-                        )
-                      : Text(
-                          '설정off상태입니다.',
-                          style: TextStyle(
-                              fontSize: contentTextsize(), color: Colors.black),
-                        ),
-                ),
-              ),
-            ],
-          ))
-        : const SizedBox();
-  }*/
   buildAlarmTitleupdateversion() {
     return SizedBox(
         child: Row(
@@ -2103,14 +2198,22 @@ class _DayScriptState extends State<DayScript> {
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: contentTitleTextsize(),
-                color: Colors.black),
+                color: widget.position == 'note'
+                    ? (controll_memo.color == Colors.black
+                        ? Colors.white
+                        : Colors.black)
+                    : Colors.black),
           ),
         ),
         Transform.scale(
           scale: 1,
           child: Switch(
               activeColor: Colors.blue,
-              inactiveThumbColor: Colors.black,
+              inactiveThumbColor: widget.position == 'note'
+                  ? (controll_memo.color == Colors.black
+                      ? Colors.white
+                      : Colors.black)
+                  : Colors.black,
               inactiveTrackColor: Colors.grey.shade100,
               value: isChecked_pushalarm,
               onChanged: (bool val) {
@@ -2136,7 +2239,11 @@ class _DayScriptState extends State<DayScript> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTextsize(),
-                  color: Colors.black),
+                  color: widget.position == 'note'
+                      ? (controll_memo.color == Colors.black
+                          ? Colors.white
+                          : Colors.black)
+                      : Colors.black),
             ),
             subtitle: Text(
               '이 기능은 하루전날만 알람이 울립니다.',
@@ -2170,7 +2277,11 @@ class _DayScriptState extends State<DayScript> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTextsize(),
-                  color: Colors.black),
+                  color: widget.position == 'note'
+                      ? (controll_memo.color == Colors.black
+                          ? Colors.white
+                          : Colors.black)
+                      : Colors.black),
             ),
             subtitle: Text(
               '이 기능은 당일만 알람이 울립니다.',
@@ -2211,7 +2322,11 @@ class _DayScriptState extends State<DayScript> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTextsize(),
-                  color: Colors.black),
+                  color: widget.position == 'note'
+                      ? (controll_memo.color == Colors.black
+                          ? Colors.white
+                          : Colors.black)
+                      : Colors.black),
             ),
             subtitle: Text(
               '우측 알람 아이콘 클릭',
@@ -2264,7 +2379,11 @@ class _DayScriptState extends State<DayScript> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTextsize(),
-                          color: Colors.black),
+                          color: widget.position == 'note'
+                              ? (controll_memo.color == Colors.black
+                                  ? Colors.white
+                                  : Colors.black)
+                              : Colors.black),
                     ),
                     trailing: controll_cal.hour1 != '99' ||
                             controll_cal.minute1 != '99'
@@ -2359,6 +2478,9 @@ pickDates(BuildContext context, TextEditingController timecontroller,
     if (timeOfDay != null) {
       hour = timeOfDay.hour.toString();
       minute = timeOfDay.minute.toString();
+      if (minute.length == 1) {
+        minute = '0' + minute;
+      }
       timecontroller.text = '$hour:$minute';
     }
   });

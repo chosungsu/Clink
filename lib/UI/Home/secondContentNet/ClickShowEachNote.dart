@@ -121,6 +121,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     scollection.memolistin.clear();
     scollection.memolistcontentin.clear();
     scollection.memoindex = 0;
+    scollection.controllersall.clear();
     controll_memo.imagelist.clear();
     Hive.box('user_setting').put('coloreachmemo', widget.doccolor);
     Hive.box('user_setting').put('coloreachmemofont', widget.doccolorfont);
@@ -148,8 +149,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
               k, Hive.box('user_setting').get('optionmemocontentinput'));
       nodes.add(FocusNode());
       widget.docsummary[k] == null
-          ? controllers.insert(k, TextEditingController(text: null))
-          : controllers.insert(
+          ? scollection.controllersall
+              .insert(k, TextEditingController(text: null))
+          : scollection.controllersall.insert(
               k,
               TextEditingController(
                   text:
@@ -397,22 +399,30 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           Icons
                                                               .keyboard_arrow_left,
                                                           size: 30,
-                                                          style: const NeumorphicStyle(
+                                                          style: NeumorphicStyle(
                                                               shape:
                                                                   NeumorphicShape
                                                                       .convex,
                                                               depth: 2,
                                                               surfaceIntensity:
                                                                   0.5,
-                                                              color:
-                                                                  Colors.black,
+                                                              color: controll_memo
+                                                                          .color ==
+                                                                      Colors
+                                                                          .black
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
                                                               lightSource:
                                                                   LightSource
                                                                       .topLeft),
                                                         ),
                                                       )),
-                                                  color: Colors.black)
-                                              : SizedBox(),
+                                                  color: controll_memo.color ==
+                                                          Colors.black
+                                                      ? Colors.white
+                                                      : Colors.black)
+                                              : const SizedBox(),
                                           SizedBox(
                                               width:
                                                   GetPlatform.isMobile == false
@@ -430,7 +440,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           left: 10, right: 10),
                                                   child: Row(
                                                     children: [
-                                                      const Flexible(
+                                                      Flexible(
                                                         fit: FlexFit.tight,
                                                         child: Text(
                                                           '',
@@ -438,24 +448,34 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 25,
-                                                            color: Colors.black,
+                                                            color: controll_memo
+                                                                        .color ==
+                                                                    Colors.black
+                                                                ? Colors.white
+                                                                : Colors.black,
                                                           ),
                                                         ),
                                                       ),
-                                                      MFHolder(
-                                                          checkbottoms,
-                                                          nodes,
-                                                          scollection,
-                                                          _color,
-                                                          widget.doc,
-                                                          controll_memo
-                                                              .ischeckedtohideminus,
-                                                          controllers,
-                                                          Color(
-                                                            widget.doccolorfont,
-                                                          ),
-                                                          controll_memo
-                                                              .imagelist),
+                                                      GetBuilder<
+                                                          selectcollection>(
+                                                        builder: (_) =>
+                                                            MFHolder(
+                                                                checkbottoms,
+                                                                nodes,
+                                                                scollection,
+                                                                _color,
+                                                                widget.doc,
+                                                                controll_memo
+                                                                    .ischeckedtohideminus,
+                                                                scollection
+                                                                    .controllersall,
+                                                                Color(
+                                                                  widget
+                                                                      .doccolorfont,
+                                                                ),
+                                                                controll_memo
+                                                                    .imagelist),
+                                                      ),
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
@@ -505,7 +525,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                           nodes[i].unfocus();
                                         }
                                         scollection.memolistcontentin[i] =
-                                            controllers[i].text;
+                                            scollection.controllersall[i].text;
                                       }
                                     },
                                     child: Padding(
@@ -556,7 +576,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: contentTitleTextsize(),
-                    color: Colors.black),
+                    color: controll_memo.color == Colors.black
+                        ? Colors.white
+                        : Colors.black),
               )
             ],
           ),
@@ -585,8 +607,11 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                       textAlign: TextAlign.start,
                       textAlignVertical: TextAlignVertical.center,
                       style: TextStyle(
-                          fontSize: contentTextsize(),
-                          color: controll_memo.colorfont),
+                        fontSize: contentTextsize(),
+                        color: controll_memo.color == Colors.black
+                            ? Colors.white
+                            : controll_memo.colorfont,
+                      ),
                       decoration: InputDecoration(
                         isCollapsed: true,
                         contentPadding: const EdgeInsets.only(left: 10),
@@ -611,7 +636,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: contentTitleTextsize(),
-                        color: Colors.black),
+                        color: controll_memo.color == Colors.black
+                            ? Colors.white
+                            : Colors.black),
                   ),
                 ),
                 IconBtn(
@@ -622,7 +649,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                               i++) {
                             nodes[i].unfocus();
                             scollection.memolistcontentin[i] =
-                                controllers[i].text;
+                                scollection.controllersall[i].text;
                           }
                           addmemocollector(
                               context,
@@ -640,10 +667,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize(),
-                                color: Colors.black),
+                                color: controll_memo.color == Colors.black
+                                    ? Colors.white
+                                    : Colors.black),
                           ),
                         )),
-                    color: Colors.black)
+                    color: controll_memo.color == Colors.black
+                        ? Colors.white
+                        : Colors.black)
               ],
             ),
             GetBuilder<selectcollection>(
@@ -679,7 +710,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: contentTitleTextsize(),
-                    color: Colors.black),
+                    color: controll_memo.color == Colors.black
+                        ? Colors.white
+                        : Colors.black),
               ),
             ),
             const SizedBox(
@@ -695,10 +728,12 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                   style: TextStyle(
                       fontSize: contentTextsize(), color: Colors.grey.shade400),
                 ),
-                const WidgetSpan(
+                WidgetSpan(
                   child: Icon(
                     Icons.more_vert,
-                    color: Colors.black,
+                    color: controll_memo.color == Colors.black
+                        ? Colors.white
+                        : Colors.black,
                   ),
                 ),
                 TextSpan(
@@ -733,7 +768,13 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                       index: index,
                                       child: Icon(
                                         Icons.drag_indicator_outlined,
-                                        color: _colorfont,
+                                        color:
+                                            controll_memo.color == Colors.black
+                                                ? Colors.white
+                                                : _colorfont ==
+                                                        controll_memo.colorfont
+                                                    ? _colorfont
+                                                    : controll_memo.colorfont,
                                       ),
                                     ),
                                     scollection.memolistin[index] == 0
@@ -759,10 +800,15 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                           fontSize:
                                                               contentTextsize(),
                                                           color: controll_memo
-                                                              .colorfont,
+                                                                      .color ==
+                                                                  Colors.black
+                                                              ? Colors.white
+                                                              : controll_memo
+                                                                  .colorfont,
                                                         ),
-                                                        controller:
-                                                            controllers[index],
+                                                        controller: scollection
+                                                                .controllersall[
+                                                            index],
                                                         decoration:
                                                             InputDecoration(
                                                           isCollapsed: true,
@@ -798,13 +844,14 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                             () {
                                                                           scollection
                                                                               .removelistitem(index);
-                                                                          controllers
+                                                                          scollection
+                                                                              .controllersall
                                                                               .removeAt(index);
 
                                                                           for (int i = 0;
                                                                               i < scollection.memolistin.length;
                                                                               i++) {
-                                                                            controllers[i].text =
+                                                                            scollection.controllersall[i].text =
                                                                                 scollection.memolistcontentin[i];
                                                                           }
                                                                         });
@@ -866,8 +913,13 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         contentTextsize(),
-                                                                    color: controll_memo
-                                                                        .colorfont,
+                                                                    color: controll_memo.color ==
+                                                                            Colors
+                                                                                .black
+                                                                        ? Colors
+                                                                            .white
+                                                                        : controll_memo
+                                                                            .colorfont,
                                                                     decorationThickness:
                                                                         2.3,
                                                                     decoration: scollection.memolistin[index] ==
@@ -907,16 +959,20 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     },
                                                                     child: scollection.memolistin[index] ==
                                                                             999
-                                                                        ? const Icon(
+                                                                        ? Icon(
                                                                             Icons
                                                                                 .check_box,
-                                                                            color: Colors
-                                                                                .black)
-                                                                        : const Icon(
+                                                                            color: controll_memo.color == Colors.black
+                                                                                ? Colors
+                                                                                    .white
+                                                                                : Colors
+                                                                                    .black)
+                                                                        : Icon(
                                                                             Icons
                                                                                 .check_box_outline_blank,
-                                                                            color:
-                                                                                Colors.black),
+                                                                            color: controll_memo.color == Colors.black
+                                                                                ? Colors.white
+                                                                                : Colors.black),
                                                                   ),
                                                                   suffixIcon:
                                                                       Row(
@@ -936,10 +992,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                               onTap: () {
                                                                                 setState(() {
                                                                                   scollection.removelistitem(index);
-                                                                                  controllers.removeAt(index);
+                                                                                  scollection.controllersall.removeAt(index);
 
                                                                                   for (int i = 0; i < scollection.memolistin.length; i++) {
-                                                                                    controllers[i].text = scollection.memolistcontentin[i];
+                                                                                    scollection.controllersall[i].text = scollection.memolistcontentin[i];
                                                                                   }
                                                                                 });
                                                                               },
@@ -957,7 +1013,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                           .shade400),
                                                                 ),
                                                                 controller:
-                                                                    controllers[
+                                                                    scollection
+                                                                            .controllersall[
                                                                         index],
                                                               ),
                                                             )))
@@ -990,11 +1047,18 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                   textAlignVertical:
                                                                       TextAlignVertical
                                                                           .center,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          contentTextsize(),
-                                                                      color: controll_memo
-                                                                          .colorfont),
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                    color: controll_memo.color ==
+                                                                            Colors
+                                                                                .black
+                                                                        ? Colors
+                                                                            .white
+                                                                        : controll_memo
+                                                                            .colorfont,
+                                                                  ),
                                                                   decoration:
                                                                       InputDecoration(
                                                                     isCollapsed:
@@ -1012,13 +1076,19 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                     border:
                                                                         InputBorder
                                                                             .none,
-                                                                    prefixIcon: const Icon(
+                                                                    prefixIcon: Icon(
                                                                         Icons
                                                                             .star_rate,
-                                                                        color: Colors
-                                                                            .black),
-                                                                    prefixIconColor:
-                                                                        Colors
+                                                                        color: controll_memo.color ==
+                                                                                Colors.black
+                                                                            ? Colors.white
+                                                                            : Colors.black),
+                                                                    prefixIconColor: controll_memo.color ==
+                                                                            Colors
+                                                                                .black
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
                                                                             .black,
                                                                     suffixIcon:
                                                                         Row(
@@ -1036,10 +1106,10 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                                 onTap: () {
                                                                                   setState(() {
                                                                                     scollection.removelistitem(index);
-                                                                                    controllers.removeAt(index);
+                                                                                    scollection.controllersall.removeAt(index);
 
                                                                                     for (int i = 0; i < scollection.memolistin.length; i++) {
-                                                                                      controllers[i].text = scollection.memolistcontentin[i];
+                                                                                      scollection.controllersall[i].text = scollection.memolistcontentin[i];
                                                                                     }
                                                                                   });
                                                                                 },
@@ -1057,7 +1127,8 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                                             .shade400),
                                                                   ),
                                                                   controller:
-                                                                      controllers[
+                                                                      scollection
+                                                                              .controllersall[
                                                                           index]),
                                                             )))),
                                   ],
@@ -1088,7 +1159,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                             for (int i = 0;
                                 i < scollection.memolistcontentin.length;
                                 i++) {
-                              controllers[i].text =
+                              scollection.controllersall[i].text =
                                   scollection.memolistcontentin[i];
                             }
                           });

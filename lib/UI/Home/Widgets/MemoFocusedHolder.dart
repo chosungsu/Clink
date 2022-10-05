@@ -44,7 +44,6 @@ MFHolder(
   Color _colorfont,
   List imagelist,
 ) {
-  print(imagelist);
   final controll_memo = Get.put(memosetting());
   List _image = [];
   final imagePicker = ImagePicker();
@@ -60,15 +59,19 @@ MFHolder(
               child: NeumorphicIcon(
                 Icons.more_vert,
                 size: 30,
-                style: const NeumorphicStyle(
+                style: NeumorphicStyle(
                     shape: NeumorphicShape.convex,
                     depth: 2,
                     surfaceIntensity: 0.5,
-                    color: Colors.black,
+                    color: controll_memo.color == Colors.black
+                        ? Colors.white
+                        : Colors.black,
                     lightSource: LightSource.topLeft),
               ),
             ),
-            color: Colors.black),
+            color: controll_memo.color == Colors.black
+                ? Colors.white
+                : Colors.black),
         onPressed: () {},
         duration: const Duration(seconds: 0),
         animateMenuItems: true,
@@ -129,7 +132,87 @@ MFHolder(
                                   width:
                                       MediaQuery.of(context).size.width * 0.85,
                                   child: SingleChildScrollView(
-                                    child: ColorPicker(
+                                      child: BlockPicker(
+                                    availableColors: [
+                                      Colors.red,
+                                      Colors.pink,
+                                      Colors.deepOrangeAccent,
+                                      Colors.yellowAccent,
+                                      Colors.green,
+                                      Colors.lightGreen,
+                                      Colors.lightGreenAccent,
+                                      Colors.greenAccent.shade200,
+                                      Colors.indigo,
+                                      Colors.blue,
+                                      Colors.lightBlue,
+                                      Colors.lightBlueAccent,
+                                      Colors.purple,
+                                      Colors.deepPurple,
+                                      Colors.blueGrey.shade300,
+                                      Colors.grey,
+                                      Colors.amber,
+                                      Colors.brown,
+                                      Colors.white,
+                                      Colors.black,
+                                    ],
+                                    itemBuilder:
+                                        ((color, isCurrentColor, changeColor) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          changeColor();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1)),
+                                          child: isCurrentColor
+                                              ? CircleAvatar(
+                                                  backgroundColor: color,
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Icons.check,
+                                                      color:
+                                                          color != Colors.black
+                                                              ? Colors.black
+                                                              : Colors.white,
+                                                    ),
+                                                  ),
+                                                )
+                                              : CircleAvatar(
+                                                  backgroundColor: color,
+                                                ),
+                                        ),
+                                      );
+                                    }),
+                                    onColorChanged: (Color color) {
+                                      setState(() {
+                                        Hive.box('user_setting').put(
+                                            'coloreachmemo',
+                                            color.value.toInt());
+                                        controll_memo.setcolor();
+                                        _color = controll_memo.color;
+                                        if (_color == Colors.black) {
+                                          Hive.box('user_setting').put(
+                                              'coloreachmemofont',
+                                              Colors.white.value.toInt());
+                                          controll_memo.setcolorfont();
+                                          _colorfont = controll_memo.colorfont;
+                                        } else {
+                                          Hive.box('user_setting').put(
+                                              'coloreachmemofont',
+                                              Colors.black.value.toInt());
+                                          controll_memo.setcolorfont();
+                                          _colorfont = controll_memo.colorfont;
+                                        }
+                                      });
+                                    },
+                                    pickerColor: _color == controll_memo.color
+                                        ? _color
+                                        : controll_memo.color,
+                                  )
+                                      /*ColorPicker(
                                       pickerColor: _color,
                                       onColorChanged: (Color color) {
                                         setState(() {
@@ -140,8 +223,8 @@ MFHolder(
                                           _color = controll_memo.color;
                                         });
                                       },
-                                    ),
-                                  ));
+                                    ),*/
+                                      ));
                             },
                           ),
                           actions: <Widget>[
@@ -188,7 +271,75 @@ MFHolder(
                                   width:
                                       MediaQuery.of(context).size.width * 0.85,
                                   child: SingleChildScrollView(
-                                    child: ColorPicker(
+                                      child: BlockPicker(
+                                    availableColors: [
+                                      Colors.red,
+                                      Colors.pink,
+                                      Colors.deepOrangeAccent,
+                                      Colors.yellowAccent,
+                                      Colors.green,
+                                      Colors.lightGreen,
+                                      Colors.lightGreenAccent,
+                                      Colors.greenAccent.shade200,
+                                      Colors.indigo,
+                                      Colors.blue,
+                                      Colors.lightBlue,
+                                      Colors.lightBlueAccent,
+                                      Colors.purple,
+                                      Colors.deepPurple,
+                                      Colors.blueGrey.shade300,
+                                      Colors.grey,
+                                      Colors.amber,
+                                      Colors.brown,
+                                      Colors.white,
+                                      Colors.black,
+                                    ],
+                                    itemBuilder:
+                                        ((color, isCurrentColor, changeColor) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          changeColor();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1)),
+                                          child: isCurrentColor
+                                              ? CircleAvatar(
+                                                  backgroundColor: color,
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Icons.check,
+                                                      color:
+                                                          color != Colors.black
+                                                              ? Colors.black
+                                                              : Colors.white,
+                                                    ),
+                                                  ),
+                                                )
+                                              : CircleAvatar(
+                                                  backgroundColor: color,
+                                                ),
+                                        ),
+                                      );
+                                    }),
+                                    onColorChanged: (Color color) {
+                                      setState(() {
+                                        Hive.box('user_setting').put(
+                                            'coloreachmemofont',
+                                            color.value.toInt());
+                                        controll_memo.setcolorfont();
+                                        _colorfont = controll_memo.colorfont;
+                                      });
+                                    },
+                                    pickerColor:
+                                        _colorfont == controll_memo.colorfont
+                                            ? _colorfont
+                                            : controll_memo.colorfont,
+                                  )
+                                      /*ColorPicker(
                                       pickerColor: _colorfont,
                                       onColorChanged: (Color color) {
                                         setState(() {
@@ -199,8 +350,8 @@ MFHolder(
                                           _colorfont = controll_memo.colorfont;
                                         });
                                       },
-                                    ),
-                                  ));
+                                    ),*/
+                                      ));
                             },
                           ),
                           actions: <Widget>[
@@ -312,15 +463,19 @@ MFHolder_second(
               child: NeumorphicIcon(
                 Icons.menu,
                 size: 30,
-                style: const NeumorphicStyle(
+                style: NeumorphicStyle(
                     shape: NeumorphicShape.convex,
                     depth: 2,
                     surfaceIntensity: 0.5,
-                    color: Colors.black,
+                    color: controll_memo.color == Colors.black
+                        ? Colors.white
+                        : Colors.black,
                     lightSource: LightSource.topLeft),
               ),
             ),
-            color: Colors.black),
+            color: controll_memo.color == Colors.black
+                ? Colors.white
+                : Colors.black),
         onPressed: () {},
         duration: const Duration(seconds: 0),
         animateMenuItems: true,
@@ -665,7 +820,6 @@ MakePDF(
           .add(MemoList(memocontent: '작성된 메모리스트가 없습니다.', contentindex: 0));
     }
   } catch (e) {
-    print("****ERROR: $e****");
     return;
   }
   pdf.addPage(pw.MultiPage(

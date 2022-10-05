@@ -516,7 +516,9 @@ class _DayContentHomeState extends State<DayContentHome>
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       //수정 및 삭제 시트 띄우기
-
+                      print(snapshot.data!.docs[index]['Timestart']
+                          .toString()
+                          .split(':')[1]);
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
