@@ -10,8 +10,15 @@ import 'Getx/navibool.dart';
 import 'IconBtn.dart';
 
 class AppBarCustom extends StatelessWidget {
-  const AppBarCustom({Key? key, required this.title}) : super(key: key);
+  const AppBarCustom(
+      {Key? key,
+      required this.title,
+      required this.righticon,
+      required this.func})
+      : super(key: key);
   final String title;
+  final bool righticon;
+  final void func;
 
   @override
   Widget build(BuildContext context) {

@@ -106,8 +106,16 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         );
                       } else {
                         draw.setclose();
-                        Get.to(() => NotiAlarm(), transition: Transition.zoom);
-                        Hive.box('user_setting').put('page_index', 1);
+                        //Get.to(() => NotiAlarm(), transition: Transition.zoom);
+                        Hive.box('user_setting').put('page_index', 4);
+                        Navigator.of(context).pushReplacement(
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: MyHomePage(
+                              index: 4,
+                            ),
+                          ),
+                        );
                       }
                     },
                     child: Column(

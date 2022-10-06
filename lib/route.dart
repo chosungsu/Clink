@@ -78,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       ProfilePage(),
       NotiAlarm(),
     ];
+    print(Hive.box('user_setting').get('page_index'));
 
     return GetBuilder<navibool>(
         builder: (_) => Scaffold(
@@ -159,27 +160,16 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                           backgroundColor: BGColor(),
                           icon: GetBuilder<notishow>(
                               builder: (_) => notilist.isread == true
-                                  ? InkWell(
-                                      onTap: () {
-                                        Get.to(() => NotiAlarm(),
-                                            transition: Transition.zoom);
-                                      },
+                                  ? const Icon(
+                                      Icons.notifications_none,
+                                      size: 25,
+                                    )
+                                  : Badge(
                                       child: const Icon(
                                         Icons.notifications_none,
                                         size: 25,
                                       ),
-                                    )
-                                  : InkWell(
-                                      onTap: () {
-                                        Get.to(() => NotiAlarm(),
-                                            transition: Transition.zoom);
-                                      },
-                                      child: Badge(
-                                        child: const Icon(
-                                          Icons.notifications_none,
-                                          size: 25,
-                                        ),
-                                      ))),
+                                    )),
                           label: '알림',
                         ),
                       ],
@@ -211,30 +201,17 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       draw.setclose();
     }
 
-    if (draw.currentpage == 2) {
-      draw.currentpage = 1;
-      Navigator.of(context).pushReplacement(
-        PageTransition(
-          type: PageTransitionType.leftToRightWithFade,
-          child: const MyHomePage(
-            index: 3,
-          ),
-        ),
-      );
-      Hive.box('user_setting').put('page_index', 3);
-    } else {
-      Hive.box('user_setting').get('page_index') == 0
-          ? null
-          : Navigator.of(context).pushReplacement(
-              PageTransition(
-                type: PageTransitionType.leftToRight,
-                child: const MyHomePage(
-                  index: 0,
-                ),
+    Hive.box('user_setting').get('page_index') == 0
+        ? null
+        : Navigator.of(context).pushReplacement(
+            PageTransition(
+              type: PageTransitionType.leftToRight,
+              child: const MyHomePage(
+                index: 0,
               ),
-            );
-      Hive.box('user_setting').put('page_index', 0);
-    }
+            ),
+          );
+    Hive.box('user_setting').put('page_index', 0);
 
     return false;
   }

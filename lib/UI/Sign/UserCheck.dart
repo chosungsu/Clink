@@ -12,7 +12,7 @@ GoToMain(BuildContext context) {
     Get.to(
       () => MyHomePage(index: 0),
     );
-    Hive.box('user_setting').put('page_index', 1);
+    Hive.box('user_setting').put('page_index', 0);
   });
   return _time;
 }

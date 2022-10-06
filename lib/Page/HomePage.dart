@@ -193,7 +193,11 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const AppBarCustom(title: 'Habit Tracker'),
+                          const AppBarCustom(
+                            title: 'Habit Tracker',
+                            righticon: false,
+                            func: null,
+                          ),
                           Flexible(
                               fit: FlexFit.tight,
                               child: SizedBox(

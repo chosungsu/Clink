@@ -10,10 +10,13 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/AndroidIOS.dart';
+import '../Tool/AppBarCustom.dart';
+import '../Tool/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
+import 'DrawerScreen.dart';
 
 class NotiAlarm extends StatefulWidget {
   @override
@@ -36,6 +39,7 @@ class _NotiAlarmState extends State<NotiAlarm>
   var updateid = '';
   var updateusername = [];
   final notilist = Get.put(notishow());
+  final draw = Get.put(navibool());
   final readlist = [];
   final listid = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -72,16 +76,328 @@ class _NotiAlarmState extends State<NotiAlarm>
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+            backgroundColor: BGColor(),
+            body: GetBuilder<navibool>(
+              builder: (_) => draw.navi == 0
+                  ? (draw.drawopen == true
+                      ? Stack(
+                          children: [
+                            Container(
+                              width: 80,
+                              child: DrawerScreen(
+                                index:
+                                    Hive.box('user_setting').get('page_index'),
+                              ),
+                            ),
+                            UI(),
+                          ],
+                        )
+                      : Stack(
+                          children: [
+                            UI(),
+                          ],
+                        ))
+                  : Stack(
+                      children: [
+                        UI(),
+                      ],
+                    ),
+            ))
+        /*Scaffold(
       backgroundColor: BGColor(),
       body: WillPopScope(
         onWillPop: _onWillPop,
         child: UI(),
       ),
-    ));
+    )*/
+        );
   }
 
   UI() {
     double height = MediaQuery.of(context).size.height;
+    return GetBuilder<navibool>(
+        builder: (_) => AnimatedContainer(
+            transform: Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
+              ..scale(draw.scalefactor),
+            duration: const Duration(milliseconds: 250),
+            child: GetBuilder<navibool>(
+              builder: (_) => GestureDetector(
+                onTap: () {
+                  draw.drawopen == true
+                      ? setState(() {
+                          draw.drawopen = false;
+                          draw.setclose();
+                          Hive.box('user_setting').put('page_opened', false);
+                        })
+                      : null;
+                },
+                child: SizedBox(
+                  height: height,
+                  child: Container(
+                      color: BGColor(),
+                      child: Column(
+                        children: [
+                          GetBuilder<navibool>(
+                              builder: (_) => SizedBox(
+                                  height: 80,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        top: 20,
+                                        bottom: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        draw.navi == 0
+                                            ? draw.drawopen == true
+                                                ? IconBtn(
+                                                    child: IconButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            draw.setclose();
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'page_opened',
+                                                                    false);
+                                                          });
+                                                        },
+                                                        icon: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 30,
+                                                          height: 30,
+                                                          child: NeumorphicIcon(
+                                                            Icons
+                                                                .keyboard_arrow_left,
+                                                            size: 30,
+                                                            style: NeumorphicStyle(
+                                                                shape:
+                                                                    NeumorphicShape
+                                                                        .convex,
+                                                                depth: 2,
+                                                                surfaceIntensity:
+                                                                    0.5,
+                                                                color:
+                                                                    TextColor(),
+                                                                lightSource:
+                                                                    LightSource
+                                                                        .topLeft),
+                                                          ),
+                                                        )),
+                                                    color: TextColor())
+                                                : IconBtn(
+                                                    child: IconButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            draw.setopen();
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'page_opened',
+                                                                    true);
+                                                          });
+                                                        },
+                                                        icon: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 30,
+                                                          height: 30,
+                                                          child: NeumorphicIcon(
+                                                            Icons.menu,
+                                                            size: 30,
+                                                            style: NeumorphicStyle(
+                                                                shape:
+                                                                    NeumorphicShape
+                                                                        .convex,
+                                                                surfaceIntensity:
+                                                                    0.5,
+                                                                depth: 2,
+                                                                color:
+                                                                    TextColor(),
+                                                                lightSource:
+                                                                    LightSource
+                                                                        .topLeft),
+                                                          ),
+                                                        )),
+                                                    color: TextColor())
+                                            : const SizedBox(),
+                                        SizedBox(
+                                            width: draw.navi == 0
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    70
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    20,
+                                            child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Row(
+                                                  children: [
+                                                    Flexible(
+                                                      fit: FlexFit.tight,
+                                                      child: Text('알림',
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                secondTitleTextsize(),
+                                                            color: TextColor(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                    ),
+                                                    IconBtn(
+                                                        child: IconButton(
+                                                            onPressed:
+                                                                () async {
+                                                              final reloadpage = await Get.dialog(OSDialog(
+                                                                      context,
+                                                                      '경고',
+                                                                      Text(
+                                                                          '알림들을 삭제하시겠습니까?',
+                                                                          style: TextStyle(
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontSize: contentTextsize(),
+                                                                              color: Colors.blueGrey)),
+                                                                      pressed2)) ??
+                                                                  false;
+                                                              if (reloadpage) {
+                                                                firestore
+                                                                    .collection(
+                                                                        'AppNoticeByUsers')
+                                                                    .get()
+                                                                    .then(
+                                                                        (value) {
+                                                                  for (var element
+                                                                      in value
+                                                                          .docs) {
+                                                                    if (element
+                                                                            .get('sharename')
+                                                                            .toString()
+                                                                            .contains(name) ==
+                                                                        true) {
+                                                                      updateid =
+                                                                          element
+                                                                              .id;
+                                                                      updateusername = element
+                                                                          .get(
+                                                                              'sharename')
+                                                                          .toString()
+                                                                          .split(
+                                                                              ',')
+                                                                          .toList();
+                                                                      if (updateusername
+                                                                              .length ==
+                                                                          1) {
+                                                                        firestore
+                                                                            .collection('AppNoticeByUsers')
+                                                                            .doc(updateid)
+                                                                            .delete();
+                                                                      } else {
+                                                                        updateusername.removeWhere((element) => element
+                                                                            .toString()
+                                                                            .contains(name));
+                                                                        firestore
+                                                                            .collection(
+                                                                                'AppNoticeByUsers')
+                                                                            .doc(
+                                                                                updateid)
+                                                                            .update({
+                                                                          'sharename':
+                                                                              updateusername
+                                                                        });
+                                                                      }
+                                                                    } else {
+                                                                      if (element
+                                                                              .get('username')
+                                                                              .toString() ==
+                                                                          name) {
+                                                                        updateid =
+                                                                            element.id;
+                                                                        firestore
+                                                                            .collection('AppNoticeByUsers')
+                                                                            .doc(updateid)
+                                                                            .delete();
+                                                                      } else {}
+                                                                    }
+                                                                  }
+                                                                }).whenComplete(
+                                                                        () {
+                                                                  setState(() {
+                                                                    Hive.box(
+                                                                            'user_setting')
+                                                                        .put(
+                                                                            'noti_home_click',
+                                                                            0);
+                                                                    whatwantnotice =
+                                                                        0;
+                                                                  });
+                                                                });
+                                                              }
+                                                            },
+                                                            icon: Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              width: 30,
+                                                              height: 30,
+                                                              child:
+                                                                  NeumorphicIcon(
+                                                                Icons.delete,
+                                                                size: 30,
+                                                                style: NeumorphicStyle(
+                                                                    shape: NeumorphicShape
+                                                                        .convex,
+                                                                    depth: 2,
+                                                                    surfaceIntensity:
+                                                                        0.5,
+                                                                    color:
+                                                                        TextColor(),
+                                                                    lightSource:
+                                                                        LightSource
+                                                                            .topLeft),
+                                                              ),
+                                                            )),
+                                                        color: TextColor()),
+                                                  ],
+                                                ))),
+                                      ],
+                                    ),
+                                  ))),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: SizedBox(
+                              child: ScrollConfiguration(
+                                behavior: NoBehavior(),
+                                child: SingleChildScrollView(child:
+                                    StatefulBuilder(
+                                        builder: (_, StateSetter setState) {
+                                  return Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 0, 20, 0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          NoticeLists(whatwantnotice),
+                                          N_Container_1(height)
+                                        ],
+                                      ));
+                                })),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ),
+            )));
+    /*double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: height,
       child: Container(
@@ -91,216 +407,6 @@ class _NotiAlarmState extends State<NotiAlarm>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: 80,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 20, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                  fit: FlexFit.tight,
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              20,
-                                          child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: Row(
-                                                children: [
-                                                  Flexible(
-                                                    fit: FlexFit.tight,
-                                                    child: Text('알림',
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              secondTitleTextsize(),
-                                                          color: TextColor(),
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        )),
-                                                  ),
-                                                  IconBtn(
-                                                      child: IconButton(
-                                                          onPressed: () async {
-                                                            final reloadpage = await Get.dialog(OSDialog(
-                                                                    context,
-                                                                    '경고',
-                                                                    Text(
-                                                                        '알림들을 삭제하시겠습니까?',
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            fontSize:
-                                                                                contentTextsize(),
-                                                                            color:
-                                                                                Colors.blueGrey)),
-                                                                    pressed2)) ??
-                                                                false;
-                                                            if (reloadpage) {
-                                                              firestore
-                                                                  .collection(
-                                                                      'AppNoticeByUsers')
-                                                                  .get()
-                                                                  .then(
-                                                                      (value) {
-                                                                for (var element
-                                                                    in value
-                                                                        .docs) {
-                                                                  if (element
-                                                                          .get(
-                                                                              'sharename')
-                                                                          .toString()
-                                                                          .contains(
-                                                                              name) ==
-                                                                      true) {
-                                                                    updateid =
-                                                                        element
-                                                                            .id;
-                                                                    updateusername = element
-                                                                        .get(
-                                                                            'sharename')
-                                                                        .toString()
-                                                                        .split(
-                                                                            ',')
-                                                                        .toList();
-                                                                    if (updateusername
-                                                                            .length ==
-                                                                        1) {
-                                                                      firestore
-                                                                          .collection(
-                                                                              'AppNoticeByUsers')
-                                                                          .doc(
-                                                                              updateid)
-                                                                          .delete();
-                                                                    } else {
-                                                                      updateusername.removeWhere((element) => element
-                                                                          .toString()
-                                                                          .contains(
-                                                                              name));
-                                                                      firestore
-                                                                          .collection(
-                                                                              'AppNoticeByUsers')
-                                                                          .doc(
-                                                                              updateid)
-                                                                          .update({
-                                                                        'sharename':
-                                                                            updateusername
-                                                                      });
-                                                                    }
-                                                                  } else {
-                                                                    if (element
-                                                                            .get('username')
-                                                                            .toString() ==
-                                                                        name) {
-                                                                      updateid =
-                                                                          element
-                                                                              .id;
-                                                                      firestore
-                                                                          .collection(
-                                                                              'AppNoticeByUsers')
-                                                                          .doc(
-                                                                              updateid)
-                                                                          .delete();
-                                                                    } else {}
-                                                                  }
-                                                                }
-                                                              }).whenComplete(
-                                                                      () {
-                                                                setState(() {
-                                                                  Hive.box(
-                                                                          'user_setting')
-                                                                      .put(
-                                                                          'noti_home_click',
-                                                                          0);
-                                                                  whatwantnotice =
-                                                                      0;
-                                                                });
-                                                              });
-                                                            }
-                                                          },
-                                                          icon: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            width: 30,
-                                                            height: 30,
-                                                            child:
-                                                                NeumorphicIcon(
-                                                              Icons.delete,
-                                                              size: 30,
-                                                              style: NeumorphicStyle(
-                                                                  shape:
-                                                                      NeumorphicShape
-                                                                          .convex,
-                                                                  depth: 2,
-                                                                  surfaceIntensity:
-                                                                      0.5,
-                                                                  color:
-                                                                      TextColor(),
-                                                                  lightSource:
-                                                                      LightSource
-                                                                          .topLeft),
-                                                            ),
-                                                          )),
-                                                      color: TextColor()),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  IconBtn(
-                                                      child: IconButton(
-                                                          onPressed: () async {
-                                                            Future.delayed(
-                                                                const Duration(
-                                                                    seconds: 0),
-                                                                () {
-                                                              GoToMain(context);
-                                                            });
-                                                          },
-                                                          icon: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            width: 30,
-                                                            height: 30,
-                                                            child:
-                                                                NeumorphicIcon(
-                                                              Icons.close,
-                                                              size: 30,
-                                                              style: NeumorphicStyle(
-                                                                  shape:
-                                                                      NeumorphicShape
-                                                                          .convex,
-                                                                  depth: 2,
-                                                                  surfaceIntensity:
-                                                                      0.5,
-                                                                  color:
-                                                                      TextColor(),
-                                                                  lightSource:
-                                                                      LightSource
-                                                                          .topLeft),
-                                                            ),
-                                                          )),
-                                                      color: TextColor())
-                                                ],
-                                              ))),
-                                    ],
-                                  )),
-                            ],
-                          ),
-                        )),
-                    //NoticeApps(),
-                    //whatwantnotice == 0 ? const SizedBox() : allread(),
-                  ],
-                ),
-              ),
               //TabViewScreen(),
               Flexible(
                   fit: FlexFit.tight,
@@ -326,7 +432,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                   )),
             ],
           )),
-    );
+    );*/
   }
 
   /*TabViewScreen() {
@@ -446,38 +552,14 @@ class _NotiAlarmState extends State<NotiAlarm>
   }
 
   NoticeLists(int whatwantnotice) {
-    return SizedBox(
-        height: MediaQuery.of(context).size.height - 180,
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              allread(),
-              UserNotice(),
-            ],
-          ),
-        )
-        /*TabBarView(
-        controller: tabController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          //CompanyNotice(),
-          SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                allread(),
-                UserNotice(),
-              ],
-            ),
-          )
-        ],
-      ),*/
-        );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        allread(),
+        UserNotice(),
+      ],
+    );
   }
 
   UserNotice() {
@@ -511,7 +593,9 @@ class _NotiAlarmState extends State<NotiAlarm>
           return notilist.listad.isEmpty
               ? SizedBox(
                   width: MediaQuery.of(context).size.width - 60,
-                  height: MediaQuery.of(context).size.height - 180,
+                  height: draw.navi == 1
+                      ? MediaQuery.of(context).size.height - 300
+                      : MediaQuery.of(context).size.height - 240,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -534,64 +618,92 @@ class _NotiAlarmState extends State<NotiAlarm>
                     ],
                   ),
                 )
-              : ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: notilist.listad.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () {
-                          notilist.updatenoti(listid[index]);
-                          setState(() {
-                            readlist[index] = 'yes';
-                          });
-                          notilist.listad[index].title.toString().contains('메모')
-                              ? Get.to(
-                                  () => const DayNoteHome(
-                                        title: '',
-                                        isfromwhere: 'notihome',
-                                      ),
-                                  transition: Transition.rightToLeft)
-                              : Get.to(
-                                  () => ChooseCalendar(
-                                        isfromwhere: 'notihome',
-                                        index: 0,
-                                      ),
-                                  transition: Transition.rightToLeft);
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ContainerDesign(
-                              color: readlist[index] == 'no'
-                                  ? BGColor()
-                                  : Colors.grey.shade400,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      height: 100,
-                                      width: MediaQuery.of(context).size.width -
-                                          80,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Column(
+              : SizedBox(
+                  height: draw.navi == 1
+                      ? MediaQuery.of(context).size.height - 300
+                      : MediaQuery.of(context).size.height - 240,
+                  child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: notilist.listad.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                            onTap: () {
+                              notilist.updatenoti(listid[index]);
+                              setState(() {
+                                readlist[index] = 'yes';
+                              });
+                              notilist.listad[index].title
+                                      .toString()
+                                      .contains('메모')
+                                  ? Get.to(
+                                      () => const DayNoteHome(
+                                            title: '',
+                                            isfromwhere: 'notihome',
+                                          ),
+                                      transition: Transition.rightToLeft)
+                                  : Get.to(
+                                      () => ChooseCalendar(
+                                            isfromwhere: 'notihome',
+                                            index: 0,
+                                          ),
+                                      transition: Transition.rightToLeft);
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                ContainerDesign(
+                                  color: readlist[index] == 'no'
+                                      ? BGColor()
+                                      : Colors.grey.shade400,
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                          height: 100,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              80,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Flexible(
+                                                  fit: FlexFit.tight,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        notilist.listad[index]
+                                                            .title,
+                                                        softWrap: true,
+                                                        maxLines: 2,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: TextColor(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize()),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      )
+                                                    ],
+                                                  )),
+                                              Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.end,
                                                 children: [
                                                   Text(
-                                                    notilist
-                                                        .listad[index].title,
-                                                    softWrap: true,
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.center,
+                                                    notilist.listad[index].sub
+                                                        .toString(),
                                                     style: TextStyle(
                                                         color: TextColor(),
                                                         fontWeight:
@@ -600,40 +712,27 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                             contentTextsize()),
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                  )
+                                                  ),
                                                 ],
-                                              )),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                notilist.listad[index].sub
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        contentTextsize()),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
+                                              )
                                             ],
-                                          )
-                                        ],
-                                      )),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            )
-                          ],
-                        ));
-                  });
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                )
+                              ],
+                            ));
+                      }),
+                );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
               width: MediaQuery.of(context).size.width - 60,
-              height: MediaQuery.of(context).size.height - 180,
+              height: draw.navi == 1
+                  ? MediaQuery.of(context).size.height - 300
+                  : MediaQuery.of(context).size.height - 240,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -642,7 +741,9 @@ class _NotiAlarmState extends State<NotiAlarm>
         }
         return SizedBox(
           width: MediaQuery.of(context).size.width - 60,
-          height: MediaQuery.of(context).size.height - 180,
+          height: draw.navi == 1
+              ? MediaQuery.of(context).size.height - 300
+              : MediaQuery.of(context).size.height - 240,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

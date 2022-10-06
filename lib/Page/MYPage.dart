@@ -101,7 +101,11 @@ class _MYPageState extends State<MYPage> {
                       color: BGColor(),
                       child: Column(
                         children: [
-                          const AppBarCustom(title: 'MY'),
+                          const AppBarCustom(
+                            title: 'MY',
+                            righticon: false,
+                            func: null,
+                          ),
                           Flexible(
                             fit: FlexFit.tight,
                             child: SizedBox(

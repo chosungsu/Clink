@@ -102,7 +102,7 @@ class GoogleSignInController extends GetxController {
     googleSignInAccount = await _googleSignIn.signOut();
     Hive.box('user_info').delete('id');
     //firestore 삭제
-    await firestore.collection('User').doc(name).delete();
+    //await firestore.collection('User').doc(name).delete();
     update();
     notifyChildrens();
   }

@@ -172,7 +172,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: BGColor(),
                       child: Column(
                         children: [
-                          const AppBarCustom(title: ''),
+                          const AppBarCustom(
+                            title: '',
+                            righticon: false,
+                            func: null,
+                          ),
                           Flexible(
                             fit: FlexFit.tight,
                             child: SizedBox(

@@ -66,32 +66,14 @@ addWhole_update(
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     String name = Hive.box('user_info').get('id');
     if (s == 'home') {
-      Hive.box('user_setting').get('page_index') == 0
-          ? Navigator.of(context).pushReplacement(
-              PageTransition(
-                type: PageTransitionType.fade,
-                child: const MyHomePage(
-                  index: 0,
-                ),
-              ),
-            )
-          : (Hive.box('user_setting').get('page_index') == 1
-              ? Navigator.of(context).pushReplacement(
-                  PageTransition(
-                    type: PageTransitionType.fade,
-                    child: const MyHomePage(
-                      index: 1,
-                    ),
-                  ),
-                )
-              : Navigator.of(context).pushReplacement(
-                  PageTransition(
-                    type: PageTransitionType.fade,
-                    child: const MyHomePage(
-                      index: 3,
-                    ),
-                  ),
-                ));
+      Navigator.of(context).pushReplacement(
+        PageTransition(
+          type: PageTransitionType.fade,
+          child: MyHomePage(
+            index: Hive.box('user_setting').get('page_index'),
+          ),
+        ),
+      );
     }
   });
 }
@@ -518,9 +500,80 @@ content(
                                                                 .size
                                                                 .width *
                                                             0.85,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: ColorPicker(
+                                                    child: SingleChildScrollView(
+                                                        child: BlockPicker(
+                                                      availableColors: [
+                                                        Colors.red,
+                                                        Colors.pink,
+                                                        Colors.deepOrangeAccent,
+                                                        Colors.yellowAccent,
+                                                        Colors.green,
+                                                        Colors.lightGreen,
+                                                        Colors.lightGreenAccent,
+                                                        Colors.greenAccent
+                                                            .shade200,
+                                                        Colors.indigo,
+                                                        Colors.blue,
+                                                        Colors.lightBlue,
+                                                        Colors.lightBlueAccent,
+                                                        Colors.purple,
+                                                        Colors.deepPurple,
+                                                        Colors
+                                                            .blueGrey.shade300,
+                                                        Colors.grey,
+                                                        Colors.amber,
+                                                        Colors.brown,
+                                                        Colors.white,
+                                                        Colors.black,
+                                                      ],
+                                                      itemBuilder: ((color,
+                                                          isCurrentColor,
+                                                          changeColor) {
+                                                        return GestureDetector(
+                                                          onTap: () {
+                                                            changeColor();
+                                                          },
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 1)),
+                                                            child: isCurrentColor
+                                                                ? CircleAvatar(
+                                                                    backgroundColor:
+                                                                        color,
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .check,
+                                                                        color: color !=
+                                                                                Colors.black
+                                                                            ? Colors.black
+                                                                            : Colors.white,
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : CircleAvatar(
+                                                                    backgroundColor:
+                                                                        color,
+                                                                  ),
+                                                          ),
+                                                        );
+                                                      }),
+                                                      onColorChanged:
+                                                          (Color color) {
+                                                        setState(() {
+                                                          _color = color;
+                                                        });
+                                                      },
+                                                      pickerColor: _color,
+                                                    )
+                                                        /*ColorPicker(
                                                         pickerColor: _color,
                                                         onColorChanged:
                                                             (Color color) {
@@ -528,8 +581,8 @@ content(
                                                             _color = color;
                                                           });
                                                         },
-                                                      ),
-                                                    ),
+                                                      ),*/
+                                                        ),
                                                   );
                                                 },
                                               ),
@@ -997,7 +1050,77 @@ content(
                                                         .width *
                                                     0.85,
                                                 child: SingleChildScrollView(
-                                                  child: ColorPicker(
+                                                    child: BlockPicker(
+                                                  availableColors: [
+                                                    Colors.red,
+                                                    Colors.pink,
+                                                    Colors.deepOrangeAccent,
+                                                    Colors.yellowAccent,
+                                                    Colors.green,
+                                                    Colors.lightGreen,
+                                                    Colors.lightGreenAccent,
+                                                    Colors.greenAccent.shade200,
+                                                    Colors.indigo,
+                                                    Colors.blue,
+                                                    Colors.lightBlue,
+                                                    Colors.lightBlueAccent,
+                                                    Colors.purple,
+                                                    Colors.deepPurple,
+                                                    Colors.blueGrey.shade300,
+                                                    Colors.grey,
+                                                    Colors.amber,
+                                                    Colors.brown,
+                                                    Colors.white,
+                                                    Colors.black,
+                                                  ],
+                                                  itemBuilder: ((color,
+                                                      isCurrentColor,
+                                                      changeColor) {
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        changeColor();
+                                                      },
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .black,
+                                                                width: 1)),
+                                                        child: isCurrentColor
+                                                            ? CircleAvatar(
+                                                                backgroundColor:
+                                                                    color,
+                                                                child: Center(
+                                                                  child: Icon(
+                                                                    Icons.check,
+                                                                    color: color !=
+                                                                            Colors
+                                                                                .black
+                                                                        ? Colors
+                                                                            .black
+                                                                        : Colors
+                                                                            .white,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : CircleAvatar(
+                                                                backgroundColor:
+                                                                    color,
+                                                              ),
+                                                      ),
+                                                    );
+                                                  }),
+                                                  onColorChanged:
+                                                      (Color color) {
+                                                    setState(() {
+                                                      _color = color;
+                                                    });
+                                                  },
+                                                  pickerColor: _color,
+                                                )
+                                                    /*ColorPicker(
                                                     pickerColor: _color,
                                                     onColorChanged:
                                                         (Color color) {
@@ -1005,8 +1128,8 @@ content(
                                                         _color = color;
                                                       });
                                                     },
-                                                  ),
-                                                ),
+                                                  ),*/
+                                                    ),
                                               );
                                             },
                                           ),

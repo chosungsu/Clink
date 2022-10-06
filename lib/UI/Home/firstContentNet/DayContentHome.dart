@@ -355,7 +355,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                 IconBtn(
                                     child: IconButton(
                                       onPressed: () {
-                                        controll_cals.setrepeatdate(1);
+                                        controll_cals.setrepeatdate(1, '주');
                                         Get.to(
                                             () => DayScript(
                                                   firstdate: _rangeStart ??

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
 import '../Tool/Getx/calendarsetting.dart';
+import '../Tool/RadioCustom.dart';
 import '../Tool/TextSize.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
@@ -31,12 +32,17 @@ showrepeatdate(
               bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
             child: GestureDetector(
-              onTap: () {
-                searchNode_forth_section.unfocus();
-              },
-              child: readycontent(
-                  context, textEditingController4, searchNode_forth_section),
-            ),
+                onTap: () {
+                  searchNode_forth_section.unfocus();
+                },
+                child: SingleChildScrollView(
+                    physics: const ScrollPhysics(),
+                    child: Column(
+                      children: [
+                        readycontent(context, textEditingController4,
+                            searchNode_forth_section),
+                      ],
+                    ))),
           )),
     ),
     backgroundColor: Colors.transparent,
@@ -109,7 +115,7 @@ title(
                   fontSize: contentTitleTextsize(),
                   color: Colors.blue.shade400,
                   letterSpacing: 2),
-              text: '주단위',
+              text: '주/월/년단위',
             ),
             TextSpan(
               style: TextStyle(
@@ -132,10 +138,331 @@ content(
   FocusNode searchNode_forth_section,
 ) {
   var cal = Get.put(calendarsetting());
+  int changeset = 0;
   textEditingController4.text = cal.repeatdate.toString();
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return GetBuilder<calendarsetting>(
         builder: (_) => Column(
+              children: [
+                ListView.builder(
+                    physics: const ScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: 3,
+                    itemBuilder: ((context, index) {
+                      return index == 0
+                          ? GestureDetector(
+                              onTap: () {
+                                /*setState(() {
+                          if (choicelist[0] == 1) {
+                            choicelist.clear();
+                            choicelist.add(0);
+                            choicelist.add(0);
+                          } else {
+                            choicelist.clear();
+                            choicelist.add(1);
+                            choicelist.add(0);
+                          }
+                        });*/
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        changeset = 0;
+                                      });
+                                    },
+                                    child: MyRadioListTile<int>(
+                                      value: 0,
+                                      groupValue: changeset,
+                                      leading: 'W',
+                                      title: Text('주간 반복'),
+                                      onChanged: (value) =>
+                                          setState(() => changeset = value!),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  changeset == 0
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              width: 200,
+                                              child: TextField(
+                                                focusNode:
+                                                    searchNode_forth_section,
+                                                textAlign: TextAlign.center,
+                                                controller:
+                                                    textEditingController4,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize:
+                                                        contentTextsize()),
+                                                decoration: InputDecoration(
+                                                  enabledBorder:
+                                                      UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color: Colors.grey
+                                                                  .shade400)),
+                                                  focusedBorder:
+                                                      UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color: Colors.blue
+                                                                  .shade400)),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              '주간 반복',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: Colors.black),
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
+                            )
+                          : (index == 1
+                              ? GestureDetector(
+                                  onTap: () {
+                                    /*setState(() {
+                          if (choicelist[1] == 1) {
+                            choicelist.clear();
+                            choicelist.add(0);
+                            choicelist.add(0);
+                          } else {
+                            choicelist.clear();
+                            choicelist.add(0);
+                            choicelist.add(1);
+                          }
+                        });*/
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            changeset = 1;
+                                          });
+                                        },
+                                        child: MyRadioListTile<int>(
+                                          value: 1,
+                                          groupValue: changeset,
+                                          leading: 'M',
+                                          title: Text('월간 반복'),
+                                          onChanged: (value) => setState(
+                                              () => changeset = value!),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      changeset == 1
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: 200,
+                                                  child: TextField(
+                                                    focusNode:
+                                                        searchNode_forth_section,
+                                                    textAlign: TextAlign.center,
+                                                    controller:
+                                                        textEditingController4,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize:
+                                                            contentTextsize()),
+                                                    decoration: InputDecoration(
+                                                      enabledBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade400)),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .blue
+                                                                      .shade400)),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Text(
+                                                  '월간 반복',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                      color: Colors.black),
+                                                ),
+                                              ],
+                                            )
+                                          : SizedBox(),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    /*setState(() {
+                          if (choicelist[1] == 1) {
+                            choicelist.clear();
+                            choicelist.add(0);
+                            choicelist.add(0);
+                          } else {
+                            choicelist.clear();
+                            choicelist.add(0);
+                            choicelist.add(1);
+                          }
+                        });*/
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            changeset = 2;
+                                          });
+                                        },
+                                        child: MyRadioListTile<int>(
+                                          value: 2,
+                                          groupValue: changeset,
+                                          leading: 'Y',
+                                          title: Text('연간 반복'),
+                                          onChanged: (value) => setState(
+                                              () => changeset = value!),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      changeset == 2
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: 200,
+                                                  child: TextField(
+                                                    focusNode:
+                                                        searchNode_forth_section,
+                                                    textAlign: TextAlign.center,
+                                                    controller:
+                                                        textEditingController4,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize:
+                                                            contentTextsize()),
+                                                    decoration: InputDecoration(
+                                                      enabledBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade400)),
+                                                      focusedBorder:
+                                                          UnderlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .blue
+                                                                      .shade400)),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Text(
+                                                  '연간 반복',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                      color: Colors.black),
+                                                ),
+                                              ],
+                                            )
+                                          : SizedBox(),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ));
+                    })),
+                SizedBox(
+                  height: 50,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        primary: Colors.blue,
+                      ),
+                      onPressed: () {
+                        Get.back();
+                        cal.setrepeatdate(
+                            int.parse(textEditingController4.text),
+                            changeset == 0
+                                ? '주'
+                                : (changeset == 1 ? '월' : '연'));
+                      },
+                      child: Center(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: NeumorphicText(
+                                '설정하기',
+                                style: const NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: Colors.white,
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ),
+              ],
+            )
+        /*Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
@@ -211,6 +538,7 @@ content(
                       )),
                 ),
               ],
-            ));
+            )*/
+        );
   });
 }

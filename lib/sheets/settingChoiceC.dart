@@ -158,7 +158,7 @@ content(
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var controll_cals = Get.put(calendarsetting());
   final cal_share_person = Get.put(PeopleAdd());
-
+  List changepeople = [];
   List deleteid = [];
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -248,15 +248,76 @@ content(
                                       width: MediaQuery.of(context).size.width *
                                           0.85,
                                       child: SingleChildScrollView(
-                                        child: ColorPicker(
+                                          child: BlockPicker(
+                                        availableColors: [
+                                          Colors.red,
+                                          Colors.pink,
+                                          Colors.deepOrangeAccent,
+                                          Colors.yellowAccent,
+                                          Colors.green,
+                                          Colors.lightGreen,
+                                          Colors.lightGreenAccent,
+                                          Colors.greenAccent.shade200,
+                                          Colors.indigo,
+                                          Colors.blue,
+                                          Colors.lightBlue,
+                                          Colors.lightBlueAccent,
+                                          Colors.purple,
+                                          Colors.deepPurple,
+                                          Colors.blueGrey.shade300,
+                                          Colors.grey,
+                                          Colors.amber,
+                                          Colors.brown,
+                                          Colors.white,
+                                          Colors.black,
+                                        ],
+                                        itemBuilder: ((color, isCurrentColor,
+                                            changeColor) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              changeColor();
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                      color: Colors.black,
+                                                      width: 1)),
+                                              child: isCurrentColor
+                                                  ? CircleAvatar(
+                                                      backgroundColor: color,
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.check,
+                                                          color: color !=
+                                                                  Colors.black
+                                                              ? Colors.black
+                                                              : Colors.white,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : CircleAvatar(
+                                                      backgroundColor: color,
+                                                    ),
+                                            ),
+                                          );
+                                        }),
+                                        onColorChanged: (Color color) {
+                                          setState(() {
+                                            _color = color;
+                                          });
+                                        },
+                                        pickerColor: _color,
+                                      )
+                                          /*ColorPicker(
                                           pickerColor: _color,
                                           onColorChanged: (Color color) {
                                             setState(() {
                                               _color = color;
                                             });
                                           },
-                                        ),
-                                      ));
+                                        ),*/
+                                          ));
                                 },
                               ),
                               actions: <Widget>[
@@ -425,11 +486,37 @@ content(
                           });
                           firestore
                               .collection('ShareHome_update')
+                              .get()
+                              .then((value) {
+                            for (int i = 0; i < value.docs.length; i++) {
+                              if (value.docs[i].toString() == doc) {
+                                for (int j = 0;
+                                    j < value.docs[i].get('share').length;
+                                    j++) {
+                                  changepeople
+                                      .add(value.docs[i].get('share')[j]);
+                                }
+                                for (int k = 0; k < changepeople.length; k++) {
+                                  firestore
+                                      .collection('ShareHome_update')
+                                      .doc(value.docs[i].id.split('-')[0] +
+                                          changepeople[k])
+                                      .update({
+                                    'calname': controller.text,
+                                    'color': _color.value.toInt(),
+                                  });
+                                }
+                                changepeople.clear();
+                              }
+                            }
+                          });
+                          /*firestore
+                              .collection('ShareHome_update')
                               .doc(doc + '-' + usercode)
                               .update({
                             'calname': controller.text,
                             'color': _color.value.toInt(),
-                          });
+                          });*/
                           firestore.collection('AppNoticeByUsers').add({
                             'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
                             'date': DateFormat('yyyy-MM-dd hh:mm')

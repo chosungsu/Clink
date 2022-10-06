@@ -13,13 +13,16 @@ class calendarsetting extends GetxController {
   List sharehomeid = [];
   int sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
   int repeatdate = 1;
+  String repeatwhile = '주';
   DateTime now = DateTime.now();
   String hour1 = '99';
   String minute1 = '99';
 
-  void setrepeatdate(int num) {
+  void setrepeatdate(int num, String whilecreate) {
     Hive.box('user_setting').put('repeatdate', num);
     repeatdate = Hive.box('user_setting').get('repeatdate');
+    Hive.box('user_setting').put('repeatwhile', whilecreate);
+    repeatwhile = Hive.box('user_setting').get('repeatwhile');
     update();
     notifyChildrens();
   }
