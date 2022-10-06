@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 child: pages[_selectedIndex]),
             bottomNavigationBar: draw.navi == 1
                 ? Container(
+                    height: 70,
                     decoration: BoxDecoration(
                         border: Border(
                             top: BorderSide(color: draw.color, width: 1))),
@@ -199,20 +200,30 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Future<bool> _onWillPop2() async {
     if (draw.drawopen == true) {
       draw.setclose();
+      Hive.box('user_setting').put('page_opened', false);
     }
-
-    Hive.box('user_setting').get('page_index') == 0
-        ? null
-        : Navigator.of(context).pushReplacement(
-            PageTransition(
-              type: PageTransitionType.leftToRight,
-              child: const MyHomePage(
-                index: 0,
-              ),
-            ),
-          );
-    Hive.box('user_setting').put('page_index', 0);
-
+    if (draw.currentpage == 2) {
+      draw.currentpage = 1;
+      Hive.box('user_setting').put('page_index', 3);
+      Navigator.of(context).pushReplacement(
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          child: const MyHomePage(
+            index: 3,
+          ),
+        ),
+      );
+    } else {
+      Hive.box('user_setting').put('page_index', 0);
+      Navigator.of(context).pushReplacement(
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          child: const MyHomePage(
+            index: 0,
+          ),
+        ),
+      );
+    }
     return false;
   }
 }

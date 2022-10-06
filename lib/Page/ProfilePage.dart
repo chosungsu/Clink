@@ -287,16 +287,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               const SizedBox(
                                                                 height: 20,
                                                               ),
-                                                              G_Container0(
+                                                              /*G_Container0(
                                                                   height),
                                                               const SizedBox(
                                                                 height: 20,
-                                                              ),
+                                                              ),*/
                                                               G_Container1(
                                                                   height),
-                                                              const SizedBox(
-                                                                height: 20,
-                                                              ),
+                                                              ADBox()
                                                             ],
                                                           ))));
                                         }),
@@ -325,8 +323,8 @@ class _ProfilePageState extends State<ProfilePage> {
     final List dates = [];
     return SizedBox(
       height: draw.navi == 0
-          ? MediaQuery.of(context).size.height - 220
-          : MediaQuery.of(context).size.height - 310,
+          ? MediaQuery.of(context).size.height - 80 - 50 - 20 - 90
+          : MediaQuery.of(context).size.height - 80 - 70 - 50 - 20 - 90,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -633,6 +631,7 @@ class _ProfilePageState extends State<ProfilePage> {
   G_Container(double height) {
     return SizedBox(
       width: MediaQuery.of(context).size.width - 40,
+      height: 50,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -658,7 +657,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  G_Container0(double height) {
+  /*G_Container0(double height) {
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1168,7 +1167,7 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
-  }
+  }*/
 
   G_Container1(double height) {
     return SizedBox(
@@ -1220,6 +1219,20 @@ class _ProfilePageState extends State<ProfilePage> {
           return friendnamelist.isEmpty
               ? SizedBox(
                   width: MediaQuery.of(context).size.width - 40,
+                  height: draw.navi == 0
+                      ? MediaQuery.of(context).size.height -
+                          80 -
+                          50 -
+                          20 -
+                          20 -
+                          130
+                      : MediaQuery.of(context).size.height -
+                          80 -
+                          70 -
+                          50 -
+                          20 -
+                          20 -
+                          130,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1243,97 +1256,126 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 )
               : SizedBox(
+                  height: draw.navi == 0
+                      ? MediaQuery.of(context).size.height -
+                          80 -
+                          50 -
+                          20 -
+                          20 -
+                          130
+                      : MediaQuery.of(context).size.height -
+                          80 -
+                          70 -
+                          50 -
+                          20 -
+                          20 -
+                          130,
                   child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    ListView.builder(
-                        physics: const ScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: friendnamelist.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  userinfotalk(context, index, friendnamelist);
-                                },
-                                child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 40,
-                                    decoration: BoxDecoration(
-                                        color: BGColor(),
-                                        borderRadius: BorderRadius.circular(0),
-                                        border: Border.all(
-                                            width: 1,
-                                            color: Colors.blue.shade200)),
-                                    child: Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Container(
-                                              alignment: Alignment.center,
-                                              height: 25,
-                                              width: 25,
-                                              child: Text(
-                                                  friendnamelist[index]
-                                                      .toString()
-                                                      .substring(0, 1),
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ListView.builder(
+                          physics: const ScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: friendnamelist.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    userinfotalk(
+                                        context, index, friendnamelist);
+                                  },
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          40,
+                                      decoration: BoxDecoration(
+                                          color: BGColor(),
+                                          borderRadius:
+                                              BorderRadius.circular(0),
+                                          border: Border.all(
+                                              width: 1,
+                                              color: Colors.blue.shade200)),
+                                      child: Column(
+                                        children: [
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Container(
+                                                alignment: Alignment.center,
+                                                height: 25,
+                                                width: 25,
+                                                child: Text(
+                                                    friendnamelist[index]
+                                                        .toString()
+                                                        .substring(0, 1),
+                                                    style: TextStyle(
+                                                        color:
+                                                            BGColor_shadowcolor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18)),
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      TextColor_shadowcolor(),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Text(
+                                                  friendnamelist[index],
                                                   style: TextStyle(
-                                                      color:
-                                                          BGColor_shadowcolor(),
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 18)),
-                                              decoration: BoxDecoration(
-                                                color: TextColor_shadowcolor(),
-                                                borderRadius:
-                                                    BorderRadius.circular(100),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text(
-                                                friendnamelist[index],
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: contentTextsize(),
-                                                    color: TextColor()),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        )
-                                      ],
-                                    )),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              )
-                            ],
-                          );
-                        }),
-                  ],
-                ));
+                                                      fontSize:
+                                                          contentTextsize(),
+                                                      color: TextColor()),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          )
+                                        ],
+                                      )),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                )
+                              ],
+                            );
+                          }),
+                    ],
+                  ));
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
+              height: draw.navi == 0
+                  ? MediaQuery.of(context).size.height - 80 - 50 - 20 - 20 - 130
+                  : MediaQuery.of(context).size.height -
+                      80 -
+                      70 -
+                      50 -
+                      20 -
+                      20 -
+                      130,
               width: MediaQuery.of(context).size.width - 40,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -1343,6 +1385,15 @@ class _ProfilePageState extends State<ProfilePage> {
               ));
         }
         return SizedBox(
+          height: draw.navi == 0
+              ? MediaQuery.of(context).size.height - 80 - 50 - 20 - 20 - 130
+              : MediaQuery.of(context).size.height -
+                  80 -
+                  70 -
+                  50 -
+                  20 -
+                  20 -
+                  130,
           width: MediaQuery.of(context).size.width - 40,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -1970,8 +2021,14 @@ class _ProfilePageState extends State<ProfilePage> {
               ? SizedBox(
                   width: MediaQuery.of(context).size.width - 60,
                   height: draw.navi == 0
-                      ? MediaQuery.of(context).size.height - 220
-                      : MediaQuery.of(context).size.height - 310,
+                      ? MediaQuery.of(context).size.height - 80 - 50 - 20 - 90
+                      : MediaQuery.of(context).size.height -
+                          80 -
+                          70 -
+                          50 -
+                          20 -
+                          90,
+                  //MediaQuery.of(context).size.height - 310,
                   child: Center(
                     child: Text(
                       '공지사항이 없습니다.',
@@ -1984,8 +2041,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   ))
               : SizedBox(
                   height: draw.navi == 0
-                      ? MediaQuery.of(context).size.height - 220
-                      : MediaQuery.of(context).size.height - 310,
+                      ? MediaQuery.of(context).size.height - 80 - 50 - 20 - 90
+                      : MediaQuery.of(context).size.height -
+                          80 -
+                          70 -
+                          50 -
+                          20 -
+                          90,
                   width: MediaQuery.of(context).size.width - 40,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
@@ -2075,7 +2137,9 @@ class _ProfilePageState extends State<ProfilePage> {
         }
         return SizedBox(
             width: MediaQuery.of(context).size.width - 60,
-            height: MediaQuery.of(context).size.height - 180,
+            height: draw.navi == 0
+                ? MediaQuery.of(context).size.height - 80 - 50 - 20 - 90
+                : MediaQuery.of(context).size.height - 80 - 70 - 50 - 20 - 90,
             child: Center(
               child: Text(
                 '공지사항이 없습니다.',

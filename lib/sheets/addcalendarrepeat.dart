@@ -403,7 +403,7 @@ content(
                                                   width: 20,
                                                 ),
                                                 Text(
-                                                  '연간 반복',
+                                                  '년간 반복',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -435,7 +435,7 @@ content(
                             int.parse(textEditingController4.text),
                             changeset == 0
                                 ? '주'
-                                : (changeset == 1 ? '월' : '연'));
+                                : (changeset == 1 ? '월' : '년'));
                       },
                       child: Center(
                         child: Row(
