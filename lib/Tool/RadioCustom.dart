@@ -6,6 +6,7 @@ class MyRadioListTile<T> extends StatelessWidget {
   final T value;
   final T groupValue;
   final String leading;
+  final Widget trailing;
   final Widget? title;
   final ValueChanged<T?> onChanged;
 
@@ -14,6 +15,7 @@ class MyRadioListTile<T> extends StatelessWidget {
     required this.groupValue,
     required this.onChanged,
     required this.leading,
+    required this.trailing,
     this.title,
   });
 
@@ -41,6 +43,7 @@ class MyRadioListTile<T> extends StatelessWidget {
               color: groupValue == value ? Colors.blue : Colors.white),
           const SizedBox(width: 10),
           if (title != null) title,
+          trailing,
         ],
       ),
     );

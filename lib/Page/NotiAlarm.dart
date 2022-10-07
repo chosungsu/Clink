@@ -16,9 +16,14 @@ import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
+import '../initScreenLoading.dart';
+import '../route.dart';
 import 'DrawerScreen.dart';
 
 class NotiAlarm extends StatefulWidget {
+  const NotiAlarm({
+    Key? key,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _NotiAlarmState();
 }
@@ -45,6 +50,7 @@ class _NotiAlarmState extends State<NotiAlarm>
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   //late TabController tabController;
   int pageindex = 0;
+  late Animation animation;
 
   @override
   void initState() {
@@ -57,19 +63,33 @@ class _NotiAlarmState extends State<NotiAlarm>
       length: 1,
       vsync: this,
     );*/
+    /*notilist.noticontroller = AnimationController(
+        duration: const Duration(milliseconds: 200),
+        vsync: this,
+        value: 0,
+        upperBound: 1.05,
+        lowerBound: 0.95);
+    animation = CurvedAnimation(
+        parent: notilist.noticontroller, curve: Curves.decelerate);
+    notilist.noticontroller.forward();
+
+    // forward면 AnimationStatus.completed
+    // reverse면 AnimationStatus.dismissed
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        notilist.noticontroller.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {
+        notilist.noticontroller.forward();
+      }
+    });*/
+    initScreen();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    //notilist.noticontroller.dispose();
     super.dispose();
-  }
-
-  Future<bool> _onWillPop() async {
-    Future.delayed(const Duration(seconds: 0), () {
-      GoToMain(context);
-    });
-    return false;
   }
 
   @override
@@ -328,6 +348,8 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                                 }).whenComplete(
                                                                         () {
                                                                   setState(() {
+                                                                    notilist
+                                                                        .isreadnoti();
                                                                     Hive.box(
                                                                             'user_setting')
                                                                         .put(

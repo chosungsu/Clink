@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'DB/Event.dart';
 import 'Tool/Getx/PeopleAdd.dart';
 import 'Tool/Getx/notishow.dart';
 
 Future<Widget?> initScreen() async {
-  print('hereinit');
   final peopleadd = Get.put(PeopleAdd());
   final notilist = Get.put(notishow());
   List updateid = [];
@@ -84,3 +84,37 @@ Future<Widget?> initScreen() async {
     });
   }
 }
+/*
+Stream<Object?> initcalendarloading(
+  String title,
+  Map<DateTime, List<Event>> _events,
+) {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  firestore
+      .collection('CalendarDataBase')
+      .where('calname', isEqualTo: title)
+      .get()
+      .then((value) {
+    if (value.docs.isNotEmpty) {
+      _events.clear();
+      final valuespace = value.docs;
+      for (var sp in valuespace) {
+        final ev_date = sp.get('Date');
+        final ev_todo = sp.get('Daytodo');
+        if (_events[DateTime.parse(
+                sp.get('Date').toString().split('일')[0] + ' 00:00:00.000Z')] !=
+            null) {
+          _events[DateTime.parse(
+                  sp.get('Date').toString().split('일')[0] + ' 00:00:00.000Z')]!
+              .add(Event(title: sp.get('Daytodo')));
+        } else {
+          _events[DateTime.parse(
+              sp.get('Date').toString().split('일')[0] + ' 00:00:00.000Z')] = [
+            Event(title: sp.get('Daytodo'))
+          ];
+        }
+      }
+    }
+  });
+  return 
+}*/

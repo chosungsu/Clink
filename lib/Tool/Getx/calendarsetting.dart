@@ -15,8 +15,17 @@ class calendarsetting extends GetxController {
   int repeatdate = 1;
   String repeatwhile = '주';
   DateTime now = DateTime.now();
+  DateTime selectedDay = DateTime.now();
+  DateTime focusedDay = DateTime.now();
   String hour1 = '99';
   String minute1 = '99';
+
+  void setclickday(DateTime selectone, DateTime focusone) {
+    selectedDay = selectone;
+    focusedDay = focusone;
+    update();
+    notifyChildrens();
+  }
 
   void setrepeatdate(int num, String whilecreate) {
     Hive.box('user_setting').put('repeatdate', num);

@@ -65,7 +65,9 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
         });
         contentmy.add(SpaceContent(
             title: todo,
-            date: timsestart + '-' + timefinish,
+            date: timsestart == '하루종일 일정으로 기록' && timefinish == '하루종일 일정으로 기록'
+                ? ('하루종일 일정으로 기록')
+                : timsestart + '-' + timefinish,
             cname: cname,
             finishdate: timefinish,
             startdate: timsestart,
@@ -120,7 +122,10 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
           if (nameList[i].contains(secondname)) {
             contentshare.add(SpaceContent(
                 title: todo,
-                date: timsestart + '-' + timefinish,
+                date:
+                    timsestart == '하루종일 일정으로 기록' && timefinish == '하루종일 일정으로 기록'
+                        ? ('하루종일 일정으로 기록')
+                        : timsestart + '-' + timefinish,
                 cname: cname,
                 finishdate: timefinish,
                 startdate: timsestart,
@@ -470,24 +475,35 @@ stream1(
                                 Icons.calendar_month,
                                 color: TextColor(),
                               ),
-                              trailing: int.parse(contentmy[index]
-                                          .startdate
-                                          .toString()
-                                          .split(':')[0])
-                                      .isGreaterThan(Date.hour)
-                                  ? (isChecked_pushalarm
+                              trailing: contentmy[index].startdate.toString() ==
+                                      '하루종일 일정으로 기록'
+                                  ? ((isChecked_pushalarm
                                       ? Icon(
                                           Icons.alarm,
                                           color: TextColor(),
                                         )
                                       : Icon(
-                                          Icons.not_started,
+                                          Icons.done,
                                           color: TextColor(),
-                                        ))
-                                  : Icon(
-                                      Icons.done,
-                                      color: TextColor(),
-                                    ),
+                                        )))
+                                  : (int.parse(contentmy[index]
+                                              .startdate
+                                              .toString()
+                                              .split(':')[0])
+                                          .isGreaterThan(Date.hour)
+                                      ? (isChecked_pushalarm
+                                          ? Icon(
+                                              Icons.alarm,
+                                              color: TextColor(),
+                                            )
+                                          : Icon(
+                                              Icons.not_started,
+                                              color: TextColor(),
+                                            ))
+                                      : Icon(
+                                          Icons.done,
+                                          color: TextColor(),
+                                        )),
                               subtitle: Text(contentmy[index].title,
                                   style: TextStyle(
                                       color: TextColor(),
@@ -674,24 +690,36 @@ stream2(
                                   Icons.calendar_month,
                                   color: TextColor(),
                                 ),
-                                trailing: int.parse(contentshare[index]
-                                            .startdate
-                                            .toString()
-                                            .split(':')[0])
-                                        .isGreaterThan(Date.hour)
-                                    ? (isChecked_pushalarm
-                                        ? Icon(
-                                            Icons.alarm,
-                                            color: TextColor(),
-                                          )
-                                        : Icon(
-                                            Icons.not_started,
-                                            color: TextColor(),
-                                          ))
-                                    : Icon(
-                                        Icons.done,
-                                        color: TextColor(),
-                                      ),
+                                trailing:
+                                    contentshare[index].startdate.toString() ==
+                                            '하루종일 일정으로 기록'
+                                        ? ((isChecked_pushalarm
+                                            ? Icon(
+                                                Icons.alarm,
+                                                color: TextColor(),
+                                              )
+                                            : Icon(
+                                                Icons.done,
+                                                color: TextColor(),
+                                              )))
+                                        : (int.parse(contentshare[index]
+                                                    .startdate
+                                                    .toString()
+                                                    .split(':')[0])
+                                                .isGreaterThan(Date.hour)
+                                            ? (isChecked_pushalarm
+                                                ? Icon(
+                                                    Icons.alarm,
+                                                    color: TextColor(),
+                                                  )
+                                                : Icon(
+                                                    Icons.not_started,
+                                                    color: TextColor(),
+                                                  ))
+                                            : Icon(
+                                                Icons.done,
+                                                color: TextColor(),
+                                              )),
                                 subtitle: Text(contentshare[index].title,
                                     style: TextStyle(
                                         color: TextColor(),

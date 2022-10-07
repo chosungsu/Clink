@@ -66,6 +66,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   int sortsection = 0;
   late TabController tabController;
   int pageindex = 0;
+  String realusername = '';
 
   @override
   void didChangeDependencies() {
@@ -422,7 +423,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   }*/
 
   listy_My() {
-    String realusername = '';
     return StatefulBuilder(builder: (_, StateSetter setState) {
       return GetBuilder<calendarsetting>(
           builder: (_) => StreamBuilder<QuerySnapshot>(
@@ -488,7 +488,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                           fontSize:
                                                               contentTextsize())),
                                                   onPressed: () async {
-                                                    //카드별 설정 ex.공유자 권한설정
                                                     await firestore
                                                         .collection('User')
                                                         .where('code',
@@ -866,7 +865,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
           builder: (_) => StreamBuilder<QuerySnapshot>(
                 stream: firestore
                     .collection('ShareHome_update')
-                    .where('showingUser', isEqualTo: usercode)
+                    .where('showingUser',
+                        isEqualTo: cal_share_person.secondname)
                     .orderBy('date',
                         descending: cal_sort.sort == 0 ? true : false)
                     .snapshots(),
@@ -930,8 +930,21 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                               FontWeight.bold,
                                                           fontSize:
                                                               contentTextsize())),
-                                                  onPressed: () {
-                                                    //카드별 설정 ex.공유자 권한설정
+                                                  onPressed: () async {
+                                                    await firestore
+                                                        .collection('User')
+                                                        .where('code',
+                                                            isEqualTo: snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                ['madeUser'])
+                                                        .get()
+                                                        .then(
+                                                      (value) {
+                                                        realusername = value
+                                                            .docs[0]['subname'];
+                                                      },
+                                                    );
                                                     calendarinfo(
                                                       index,
                                                       snapshot
@@ -941,8 +954,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                       snapshot.data!.docs[index]
                                                           ['calname'],
                                                       context,
-                                                      snapshot.data!.docs[index]
-                                                          ['madeUser'],
+                                                      realusername,
                                                     );
                                                   }),
                                               FocusedMenuItem(

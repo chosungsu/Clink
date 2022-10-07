@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -11,6 +12,13 @@ class notishow extends GetxController {
   List updateid = [];
   String name = Hive.box('user_info').get('id') ?? '';
   int whatnoticepagenum = 0;
+  late AnimationController noticontroller;
+
+  void ringing(AnimationController noticontroller) {
+    noticontroller.forward();
+    update();
+    notifyChildrens();
+  }
 
   void setnoti(String a, String b) async {
     listad.add(PageList(title: a, sub: b));

@@ -33,7 +33,7 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool isresponsive = false;
   int categorynumber = 0;
   List<SpaceContent> sc = [];
@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
   List updateid = [];
   bool isread = false;
   final notilist = Get.put(notishow());
+  late Animation animation;
   List updatefriends = [];
   String docid = '';
   final peopleadd = Get.put(PeopleAdd());
@@ -85,7 +86,25 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
+    /*notilist.noticontroller = AnimationController(
+        duration: const Duration(milliseconds: 200),
+        vsync: this,
+        value: 0,
+        upperBound: 1.05,
+        lowerBound: 0.95);
+    animation = CurvedAnimation(
+        parent: notilist.noticontroller, curve: Curves.decelerate);
+    notilist.noticontroller.forward();
 
+    // forward면 AnimationStatus.completed
+    // reverse면 AnimationStatus.dismissed
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        notilist.noticontroller.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {
+        notilist.noticontroller.forward();
+      }
+    });*/
     /*firestore.collection('CalendarDataBase').get().then((value) {
       List valueid = [];
       List change = [];
@@ -108,9 +127,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    //notilist.noticontroller.dispose();
     super.dispose();
     _pController2.dispose();
     _scrollController.dispose();
+    //notilist.noticontroller.dispose();
   }
 
   /*void _scrollToBottom() {

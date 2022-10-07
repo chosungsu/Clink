@@ -7,21 +7,27 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
+import '../Tool/Getx/notishow.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
+import '../initScreenLoading.dart';
 import 'DrawerScreen.dart';
 
 class MYPage extends StatefulWidget {
+  const MYPage({
+    Key? key,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _MYPageState();
 }
 
-class _MYPageState extends State<MYPage> {
+class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   bool login_state = false;
   String name = Hive.box('user_info').get('id');
   final draw = Get.put(navibool());
+  final notilist = Get.put(notishow());
   final cal_share_person = Get.put(PeopleAdd());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final sharelist = [];
@@ -30,18 +36,41 @@ class _MYPageState extends State<MYPage> {
   final friendnamelist = [];
   final searchNode = FocusNode();
   var _controller = TextEditingController();
+  late Animation animation;
 
   @override
   void initState() {
     super.initState();
+    /*notilist.noticontroller = AnimationController(
+        duration: const Duration(milliseconds: 200),
+        vsync: this,
+        value: 0,
+        upperBound: 1.05,
+        lowerBound: 0.95);
+    animation = CurvedAnimation(
+        parent: notilist.noticontroller, curve: Curves.decelerate);
+    notilist.noticontroller.forward();
+
+    // forward면 AnimationStatus.completed
+    // reverse면 AnimationStatus.dismissed
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        notilist.noticontroller.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {
+        notilist.noticontroller.forward();
+      }
+    });*/
     Hive.box('user_setting').put('page_index', 1);
     _controller = TextEditingController();
+    initScreen();
   }
 
   @override
   void dispose() {
+    //notilist.noticontroller.dispose();
     super.dispose();
     _controller.dispose();
+    //notilist.noticontroller.dispose();
   }
 
   @override

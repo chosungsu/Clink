@@ -138,8 +138,18 @@ content(
   FocusNode searchNode_forth_section,
 ) {
   var cal = Get.put(calendarsetting());
-  int changeset = 0;
+  int changeset = cal.repeatwhile == '주'
+      ? 0
+      : (cal.repeatwhile == '월' ? 1 : (cal.repeatwhile == 'no' ? 0 : 2));
   textEditingController4.text = cal.repeatdate.toString();
+  List<bool> switchval = List.filled(3, false, growable: true);
+  if (cal.repeatwhile == '주') {
+    switchval[0] = true;
+  } else if (cal.repeatwhile == '월') {
+    switchval[1] = true;
+  } else if (cal.repeatwhile == '년') {
+    switchval[2] = true;
+  } else {}
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return GetBuilder<calendarsetting>(
         builder: (_) => Column(
@@ -179,12 +189,42 @@ content(
                                       value: 0,
                                       groupValue: changeset,
                                       leading: 'W',
-                                      title: Text('주간 반복'),
-                                      onChanged: (value) =>
-                                          setState(() => changeset = value!),
+                                      trailing: changeset == 0
+                                          ? Transform.scale(
+                                              scale: 1,
+                                              child: Switch(
+                                                  activeColor: Colors.blue,
+                                                  inactiveThumbColor:
+                                                      Colors.black,
+                                                  inactiveTrackColor:
+                                                      Colors.grey.shade100,
+                                                  value: switchval[0],
+                                                  onChanged: (bool val) {
+                                                    setState(() {
+                                                      changeset = 0;
+                                                      switchval[0] = val;
+                                                      if (switchval[1] ==
+                                                              true ||
+                                                          switchval[2] ==
+                                                              true) {
+                                                        switchval[1] = false;
+                                                        switchval[2] = false;
+                                                      }
+                                                    });
+                                                  }),
+                                            )
+                                          : const SizedBox(),
+                                      title: const Flexible(
+                                        fit: FlexFit.tight,
+                                        child: Text('주간 반복'),
+                                      ),
+                                      onChanged: (value) => setState(() {
+                                        changeset = value!;
+                                        switchval[0] = false;
+                                      }),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   changeset == 0
@@ -218,11 +258,11 @@ content(
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                             Text(
-                                              '주간 반복',
+                                              '번 반복',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: contentTextsize(),
@@ -230,8 +270,8 @@ content(
                                             ),
                                           ],
                                         )
-                                      : SizedBox(),
-                                  SizedBox(
+                                      : const SizedBox(),
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                 ],
@@ -267,12 +307,44 @@ content(
                                           value: 1,
                                           groupValue: changeset,
                                           leading: 'M',
-                                          title: Text('월간 반복'),
-                                          onChanged: (value) => setState(
-                                              () => changeset = value!),
+                                          trailing: changeset == 1
+                                              ? Transform.scale(
+                                                  scale: 1,
+                                                  child: Switch(
+                                                      activeColor: Colors.blue,
+                                                      inactiveThumbColor:
+                                                          Colors.black,
+                                                      inactiveTrackColor:
+                                                          Colors.grey.shade100,
+                                                      value: switchval[1],
+                                                      onChanged: (bool val) {
+                                                        setState(() {
+                                                          changeset = 1;
+                                                          switchval[1] = val;
+                                                          if (switchval[0] ==
+                                                                  true ||
+                                                              switchval[2] ==
+                                                                  true) {
+                                                            switchval[0] =
+                                                                false;
+                                                            switchval[2] =
+                                                                false;
+                                                          }
+                                                        });
+                                                      }),
+                                                )
+                                              : const SizedBox(),
+                                          title: const Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Text('월간 반복'),
+                                          ),
+                                          onChanged: (value) => setState(() {
+                                            changeset = value!;
+                                            switchval[1] = false;
+                                          }),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                       changeset == 1
@@ -308,11 +380,11 @@ content(
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 20,
                                                 ),
                                                 Text(
-                                                  '월간 반복',
+                                                  '번 반복',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -322,8 +394,8 @@ content(
                                                 ),
                                               ],
                                             )
-                                          : SizedBox(),
-                                      SizedBox(
+                                          : const SizedBox(),
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                     ],
@@ -358,12 +430,44 @@ content(
                                           value: 2,
                                           groupValue: changeset,
                                           leading: 'Y',
-                                          title: Text('연간 반복'),
-                                          onChanged: (value) => setState(
-                                              () => changeset = value!),
+                                          trailing: changeset == 2
+                                              ? Transform.scale(
+                                                  scale: 1,
+                                                  child: Switch(
+                                                      activeColor: Colors.blue,
+                                                      inactiveThumbColor:
+                                                          Colors.black,
+                                                      inactiveTrackColor:
+                                                          Colors.grey.shade100,
+                                                      value: switchval[2],
+                                                      onChanged: (bool val) {
+                                                        setState(() {
+                                                          changeset = 2;
+                                                          switchval[2] = val;
+                                                          if (switchval[1] ==
+                                                                  true ||
+                                                              switchval[0] ==
+                                                                  true) {
+                                                            switchval[1] =
+                                                                false;
+                                                            switchval[0] =
+                                                                false;
+                                                          }
+                                                        });
+                                                      }),
+                                                )
+                                              : const SizedBox(),
+                                          title: const Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Text('연간 반복'),
+                                          ),
+                                          onChanged: (value) => setState(() {
+                                            changeset = value!;
+                                            switchval[2] = false;
+                                          }),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                       changeset == 2
@@ -399,11 +503,11 @@ content(
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 20,
                                                 ),
                                                 Text(
-                                                  '년간 반복',
+                                                  '번 반복',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -413,8 +517,8 @@ content(
                                                 ),
                                               ],
                                             )
-                                          : SizedBox(),
-                                      SizedBox(
+                                          : const SizedBox(),
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                     ],
@@ -431,11 +535,18 @@ content(
                       ),
                       onPressed: () {
                         Get.back();
-                        cal.setrepeatdate(
-                            int.parse(textEditingController4.text),
-                            changeset == 0
-                                ? '주'
-                                : (changeset == 1 ? '월' : '년'));
+                        if (switchval[0] != false ||
+                            switchval[1] != false ||
+                            switchval[2] != false) {
+                          cal.setrepeatdate(
+                              int.parse(textEditingController4.text),
+                              changeset == 0
+                                  ? '주'
+                                  : (changeset == 1 ? '월' : '년'));
+                        } else {
+                          cal.repeatwhile = 'no';
+                          cal.repeatdate = 1;
+                        }
                       },
                       child: Center(
                         child: Row(

@@ -20,12 +20,14 @@ import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
+import '../Tool/Getx/notishow.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/secondContentNet/PeopleGroup.dart';
 import '../UI/Setting/ShowLicense.dart';
 import '../UI/Setting/UserDetails.dart';
+import '../initScreenLoading.dart';
 import '../sheets/addgroupmember.dart';
 import '../sheets/readycontent.dart';
 import '../sheets/userinfo_draggable.dart';
@@ -34,12 +36,12 @@ import 'DrawerScreen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
   bool login_state = false;
   String secondname = '';
   final draw = Get.put(navibool());
@@ -63,6 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final searchNode = FocusNode();
   String name = Hive.box('user_info').get('id');
   final peopleadd = Get.put(PeopleAdd());
+  final notilist = Get.put(notishow());
   final friendnamelist = [];
   final calnamelist = [];
   final sharelist = [];
@@ -72,11 +75,30 @@ class _ProfilePageState extends State<ProfilePage> {
   int pagesetnumber = 0;
   late FToast fToast;
   String usercode = Hive.box('user_setting').get('usercode');
+  late Animation animation;
 
   @override
   void initState() {
     super.initState();
+    /*notilist.noticontroller = AnimationController(
+        duration: const Duration(milliseconds: 200),
+        vsync: this,
+        value: 0,
+        upperBound: 1.05,
+        lowerBound: 0.95);
+    animation = CurvedAnimation(
+        parent: notilist.noticontroller, curve: Curves.decelerate);
+    notilist.noticontroller.forward();
 
+    // forward면 AnimationStatus.completed
+    // reverse면 AnimationStatus.dismissed
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        notilist.noticontroller.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {
+        notilist.noticontroller.forward();
+      }
+    });*/
     firestore
         .collection('User')
         .where('name', isEqualTo: Hive.box('user_info').get('id'))
@@ -99,14 +121,17 @@ class _ProfilePageState extends State<ProfilePage> {
     _pController1 = PageController(initialPage: 0, viewportFraction: 1);
     _pController2 = PageController(initialPage: 0, viewportFraction: 1);
     //peopleadd.secondnameset(name);
+    initScreen();
   }
 
   @override
   void dispose() {
+    //notilist.noticontroller.dispose();
     super.dispose();
     _controller.dispose();
     _pController2.dispose();
     _scrollController.dispose();
+    //notilist.noticontroller.dispose();
   }
 
   void _scrollToTop() {

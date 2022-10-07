@@ -4,6 +4,7 @@ import 'package:clickbyme/Page/addWhole_update.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/Page/NotiAlarm.dart';
+import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +21,7 @@ import 'Tool/Getx/PeopleAdd.dart';
 import 'Tool/Getx/memosetting.dart';
 import 'Tool/Getx/navibool.dart';
 import 'Tool/Getx/notishow.dart';
+import 'initScreenLoading.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.index}) : super(key: key);
@@ -28,11 +30,14 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+class _MyHomePageState extends State<MyHomePage>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   //curved navi index
   int _selectedIndex = 0;
   late FToast fToast;
   late DateTime backbuttonpressedTime;
+  late AnimationController noticontroller;
+  late Animation animation;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
   String name = Hive.box('user_info').get('id');
@@ -60,16 +65,39 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     _selectedIndex = widget.index;
     fToast = FToast();
     fToast.init(context);
+    notilist.noticontroller = AnimationController(
+        duration: const Duration(milliseconds: 300),
+        vsync: this,
+        value: 0,
+        upperBound: 1.05,
+        lowerBound: 0.95);
+    animation = CurvedAnimation(
+        parent: notilist.noticontroller, curve: Curves.decelerate);
+    notilist.noticontroller.forward();
+    // forward면 AnimationStatus.completed
+    // reverse면 AnimationStatus.dismissed
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        notilist.noticontroller.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {
+        notilist.noticontroller.forward();
+      }
+    });
+    initScreen();
   }
 
   @override
   void dispose() {
+    //notilist.noticontroller.dispose();
     super.dispose();
+    //notilist.noticontroller.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
   Widget build(BuildContext context) {
+    notilist.noticontroller.forward();
+
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
       HomePage(secondname: cal_share_person.secondname),
@@ -78,8 +106,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       ProfilePage(),
       NotiAlarm(),
     ];
-    print(Hive.box('user_setting').get('page_index'));
 
+    //noticontroller.forward();
     return GetBuilder<navibool>(
         builder: (_) => Scaffold(
             backgroundColor: BGColor(),
@@ -165,10 +193,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                                       Icons.notifications_none,
                                       size: 25,
                                     )
-                                  : Badge(
-                                      child: const Icon(
-                                        Icons.notifications_none,
-                                        size: 25,
+                                  : RotationTransition(
+                                      turns: notilist.noticontroller,
+                                      child: Badge(
+                                        child: const Icon(
+                                          Icons.notifications_none,
+                                          size: 25,
+                                        ),
                                       ),
                                     )),
                           label: '알림',
@@ -182,6 +213,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop() async {
+    print('here');
     if (draw.drawopen == true) {
       draw.setclose();
     }
@@ -198,6 +230,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<bool> _onWillPop2() async {
+    print('here2');
     if (draw.drawopen == true) {
       draw.setclose();
       Hive.box('user_setting').put('page_opened', false);

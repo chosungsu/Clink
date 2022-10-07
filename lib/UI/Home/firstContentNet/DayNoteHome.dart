@@ -221,14 +221,15 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                 onTap: () {
                   Get.to(
                       () => DayScript(
-                          firstdate: DateTime.now(),
-                          lastdate: DateTime.now(),
-                          position: 'note',
-                          title: '',
-                          share: const [],
-                          orig: '',
-                          calname: '',
-                          isfromwhere: 'memohome'),
+                            firstdate: DateTime.now(),
+                            lastdate: DateTime.now(),
+                            position: 'note',
+                            title: '',
+                            share: const [],
+                            orig: '',
+                            calname: '',
+                            isfromwhere: 'memohome',
+                          ),
                       transition: Transition.downToUp);
                 },
                 label: '메모 추가',
