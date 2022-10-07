@@ -544,8 +544,7 @@ content(
                                   ? '주'
                                   : (changeset == 1 ? '월' : '년'));
                         } else {
-                          cal.repeatwhile = 'no';
-                          cal.repeatdate = 1;
+                          cal.setrepeatdate(1, 'no');
                         }
                       },
                       child: Center(
