@@ -31,18 +31,14 @@ showrepeatdate(
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
-            child: GestureDetector(
-                onTap: () {
-                  searchNode_forth_section.unfocus();
-                },
-                child: SingleChildScrollView(
-                    physics: const ScrollPhysics(),
-                    child: Column(
-                      children: [
-                        readycontent(context, textEditingController4,
-                            searchNode_forth_section),
-                      ],
-                    ))),
+            child: SingleChildScrollView(
+                physics: const ScrollPhysics(),
+                child: Column(
+                  children: [
+                    readycontent(context, textEditingController4,
+                        searchNode_forth_section),
+                  ],
+                )),
           )),
     ),
     backgroundColor: Colors.transparent,
@@ -235,6 +231,8 @@ content(
                                             SizedBox(
                                               width: 200,
                                               child: TextField(
+                                                keyboardType:
+                                                    TextInputType.number,
                                                 focusNode:
                                                     searchNode_forth_section,
                                                 textAlign: TextAlign.center,
@@ -355,6 +353,8 @@ content(
                                                 SizedBox(
                                                   width: 200,
                                                   child: TextField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     focusNode:
                                                         searchNode_forth_section,
                                                     textAlign: TextAlign.center,
@@ -478,6 +478,8 @@ content(
                                                 SizedBox(
                                                   width: 200,
                                                   child: TextField(
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     focusNode:
                                                         searchNode_forth_section,
                                                     textAlign: TextAlign.center,
@@ -538,13 +540,17 @@ content(
                         if (switchval[0] != false ||
                             switchval[1] != false ||
                             switchval[2] != false) {
-                          cal.setrepeatdate(
-                              int.parse(textEditingController4.text),
-                              changeset == 0
-                                  ? '주'
-                                  : (changeset == 1 ? '월' : '년'));
+                          if (textEditingController4.text.isEmpty) {
+                            cal.repeatwhile = 'no';
+                          } else {
+                            cal.setrepeatdate(
+                                int.parse(textEditingController4.text),
+                                changeset == 0
+                                    ? '주'
+                                    : (changeset == 1 ? '월' : '년'));
+                          }
                         } else {
-                          cal.setrepeatdate(1, 'no');
+                          cal.setrepeatdate(0, 'no');
                         }
                       },
                       child: Center(

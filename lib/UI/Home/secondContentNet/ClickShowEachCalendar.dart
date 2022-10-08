@@ -103,12 +103,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     WidgetsBinding.instance.addObserver(this);
     textEditingController1 = TextEditingController(text: widget.calinfo);
     if (widget.start == '' || widget.start == '하루종일 일정으로 기록') {
-      textEditingController2 = TextEditingController(text: '하루종일 일정으로 기록');
+      textEditingController2 = TextEditingController(text: '하루종일 일정');
     } else {
       textEditingController2 = TextEditingController(text: widget.start);
     }
     if (widget.finish == '' || widget.finish == '하루종일 일정으로 기록') {
-      textEditingController3 = TextEditingController(text: '하루종일 일정으로 기록');
+      textEditingController3 = TextEditingController(text: '하루종일 일정');
     } else {
       textEditingController3 = TextEditingController(text: widget.finish);
     }
@@ -195,7 +195,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             setState(() {
               loading = false;
             });
-            CreateCalandmemoFlushbardelete(context, '일정');
+            CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
             widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
 
             NotificationApi.cancelNotification(
@@ -275,8 +275,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             'summary': textEditingController4.text,
             'Timestart': textEditingController2.text.isEmpty
                 ? widget.start
-                : (textEditingController2.text == '하루종일 일정으로 기록'
-                    ? textEditingController2.text
+                : (textEditingController2.text == '하루종일 일정'
+                    ? textEditingController2.text + '으로 기록'
                     : (textEditingController2.text.split(':')[0].length == 1
                         ? (textEditingController2.text.split(':')[1].length == 1
                             ? '0' + textEditingController2.text + '0'
@@ -286,8 +286,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                             : textEditingController2.text))),
             'Timefinish': textEditingController3.text.isEmpty
                 ? widget.finish
-                : (textEditingController3.text == '하루종일 일정으로 기록'
-                    ? textEditingController3.text
+                : (textEditingController3.text == '하루종일 일정'
+                    ? textEditingController3.text + '으로 기록'
                     : (textEditingController3.text.split(':')[0].length == 1
                         ? (textEditingController3.text.split(':')[1].length == 1
                             ? '0' + textEditingController3.text + '0'
@@ -440,7 +440,14 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
       body: WillPopScope(
         onWillPop: _onWillPop,
         child: Stack(
-          children: [UI(), loading == true ? const Loader() : Container()],
+          children: [
+            UI(),
+            loading == true
+                ? const Loader(
+                    wherein: 'caleach',
+                  )
+                : Container()
+          ],
         ),
       ),
     ));

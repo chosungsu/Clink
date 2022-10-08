@@ -23,6 +23,7 @@ import 'package:focused_menu/focused_menu.dart';
 import '../../../sheets/calendarinfo.dart';
 import '../../../sheets/settingChoiceC_Cards.dart';
 import '../../Sign/UserCheck.dart';
+import '../Widgets/CreateCalandmemo.dart';
 import '../secondContentNet/PeopleGroup.dart';
 
 class ChooseCalendar extends StatefulWidget {
@@ -238,7 +239,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                               ),
                                               IconBtn(
                                                   child: IconButton(
-                                                      onPressed: () {
+                                                      onPressed: () async {
                                                         //리스트 추가하는 창 띄우기
                                                         Hive.box('user_setting')
                                                             .put('typecalendar',
@@ -659,7 +660,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                 .docs[index]
                                                             ['share'],
                                                         cal_share_person
-                                                            .secondname);
+                                                            .secondname,
+                                                        fToast);
                                                   })
                                             ],
                                             duration:
@@ -1116,7 +1118,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                                   .docs[index]
                                                               ['share'],
                                                           cal_share_person
-                                                              .secondname);
+                                                              .secondname,
+                                                          fToast);
                                                     } else {
                                                       Snack.show(
                                                           context: context,

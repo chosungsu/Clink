@@ -12,7 +12,7 @@ class calendarsetting extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List sharehomeid = [];
   int sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
-  int repeatdate = 1;
+  int repeatdate = 0;
   String repeatwhile = '주';
   DateTime now = DateTime.now();
   DateTime selectedDay = DateTime.now();
@@ -28,10 +28,16 @@ class calendarsetting extends GetxController {
   }
 
   void setrepeatdate(int num, String whilecreate) {
-    Hive.box('user_setting').put('repeatdate', num);
-    repeatdate = Hive.box('user_setting').get('repeatdate');
-    Hive.box('user_setting').put('repeatwhile', whilecreate);
-    repeatwhile = Hive.box('user_setting').get('repeatwhile');
+    if (num.toString() != '') {
+      Hive.box('user_setting').put('repeatdate', num);
+      repeatdate = Hive.box('user_setting').get('repeatdate');
+      Hive.box('user_setting').put('repeatwhile', whilecreate);
+      repeatwhile = Hive.box('user_setting').get('repeatwhile');
+    } else {
+      Hive.box('user_setting').put('repeatwhile', 'no');
+      repeatwhile = Hive.box('user_setting').get('repeatwhile');
+    }
+
     update();
     notifyChildrens();
   }

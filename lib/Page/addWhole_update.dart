@@ -1220,15 +1220,11 @@ content(
                                                         .split('-')[2]
                                                         .substring(0, 2) +
                                                     '일'
-                                              }).whenComplete(() {
+                                              }).whenComplete(() async {
                                                 controll_memo.setloading(false);
-                                                Get.back();
-                                                Future.delayed(
-                                                    const Duration(seconds: 2),
-                                                    () {
-                                                  CreateCalandmemoSuccessFlushbar(
-                                                      '정상적으로 추가됨', fToast);
-                                                });
+                                                await CreateCalandmemoSuccessFlushbar(
+                                                    '정상적으로 추가됨', fToast);
+                                                Snack.isopensnacks();
                                               });
                                             });
                                           }

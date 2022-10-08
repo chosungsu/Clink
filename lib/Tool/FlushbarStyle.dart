@@ -132,6 +132,13 @@ class Snack {
     });
   }
 
+  static isopensnacks() {
+    if (Get.isSnackbarOpen) {
+    } else {
+      Get.back();
+    }
+  }
+
   static Color _getSnackbarColor(SnackType type) {
     if (type == SnackType.waiting) return Colors.green.shade200;
     if (type == SnackType.warning) return Colors.red.shade200;

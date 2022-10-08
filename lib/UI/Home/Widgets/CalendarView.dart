@@ -71,7 +71,7 @@ calendarView(
                             GetBuilder<calendarsetting>(
                               builder: (_) => TableCalendar(
                                 locale: 'ko_KR',
-                                focusedDay: controll_cals.selectedDay,
+                                focusedDay: controll_cals.focusedDay,
                                 calendarBuilders: CalendarBuilders(
                                     dowBuilder: (context, day) {
                                   if (day.weekday == DateTime.sunday) {
@@ -151,7 +151,7 @@ calendarView(
                                 pageJumpingEnabled: false,
                                 shouldFillViewport: false,
                                 rowHeight: 55,
-                                weekendDays: [DateTime.saturday],
+                                weekendDays: const [DateTime.saturday],
                                 holidayPredicate: (day) {
                                   return day.weekday == DateTime.sunday;
                                 },
@@ -171,6 +171,9 @@ calendarView(
                                   setState(() {
                                     controll_cals.selectedDay = selectedDay;
                                     controll_cals.focusedDay = focusedDay;
+                                    print(controll_cals.selectedDay.toString() +
+                                        '/' +
+                                        controll_cals.focusedDay.toString());
                                     cal_date.setclickday(
                                         controll_cals.selectedDay,
                                         controll_cals.focusedDay);
@@ -184,7 +187,8 @@ calendarView(
                                 daysOfWeekHeight: 50,
                                 headerStyle: HeaderStyle(
                                     formatButtonVisible: false,
-                                    headerMargin: EdgeInsets.only(left: 10),
+                                    headerMargin:
+                                        const EdgeInsets.only(left: 10),
                                     titleTextFormatter: (date, locale) =>
                                         DateFormat.yMMM(locale).format(date),
                                     leftChevronVisible:
@@ -232,9 +236,11 @@ calendarView(
                                                 Get.to(
                                                     () => DayScript(
                                                           firstdate:
-                                                              _selectedDay,
+                                                              controll_cals
+                                                                  .selectedDay,
                                                           lastdate:
-                                                              _selectedDay,
+                                                              controll_cals
+                                                                  .selectedDay,
                                                           position: 'cal',
                                                           title: title,
                                                           share: share,
@@ -331,7 +337,7 @@ calendarView(
                 GetBuilder<calendarsetting>(
                   builder: (_) => TableCalendar(
                     locale: 'ko_KR',
-                    focusedDay: controll_cals.selectedDay,
+                    focusedDay: controll_cals.focusedDay,
                     calendarBuilders:
                         CalendarBuilders(dowBuilder: (context, day) {
                       if (day.weekday == DateTime.sunday) {
@@ -395,7 +401,7 @@ calendarView(
                     pageJumpingEnabled: false,
                     shouldFillViewport: false,
                     rowHeight: 55,
-                    weekendDays: [DateTime.saturday],
+                    weekendDays: const [DateTime.saturday],
                     holidayPredicate: (day) {
                       return day.weekday == DateTime.sunday;
                     },
@@ -412,17 +418,16 @@ calendarView(
                     },
                     onDaySelected: (selectedDay, focusedDay) {
                       setState(() {
-                        _selectedDay = selectedDay;
-                        _focusedDay = focusedDay;
-                        cal_date.setclickday(_selectedDay, _focusedDay);
+                        controll_cals.selectedDay = selectedDay;
+                        controll_cals.focusedDay = focusedDay;
+                        cal_date.setclickday(selectedDay, focusedDay);
                         /*_rangeStart = null;
                   _rangeEnd = null;
                   _rangeSelectionMode = RangeSelectionMode.toggledOff;*/
                       });
                     },
                     onPageChanged: (focusedDay) {
-                      _focusedDay = focusedDay;
-                      cal_date.setclickday(_selectedDay, _focusedDay);
+                      controll_cals.focusedDay = focusedDay;
                     },
                     startingDayOfWeek: StartingDayOfWeek.sunday,
                     daysOfWeekVisible: true,
@@ -469,8 +474,10 @@ calendarView(
                                     controll_cals.setrepeatdate(1, '주');
                                     Get.to(
                                         () => DayScript(
-                                              firstdate: _selectedDay,
-                                              lastdate: _selectedDay,
+                                              firstdate:
+                                                  controll_cals.selectedDay,
+                                              lastdate:
+                                                  controll_cals.selectedDay,
                                               position: 'cal',
                                               title: title,
                                               share: share,

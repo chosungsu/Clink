@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +12,9 @@ import '../Tool/AndroidIOS.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/calendarsetting.dart';
+import '../Tool/Getx/memosetting.dart';
 import '../Tool/TextSize.dart';
+import '../UI/Home/Widgets/CreateCalandmemo.dart';
 
 settingChoiceCal(
   BuildContext context,
@@ -25,6 +28,7 @@ settingChoiceCal(
   List finallist,
   doc_share,
   String secondname,
+  FToast fToast,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -66,7 +70,8 @@ settingChoiceCal(
                         doc_made_user,
                         finallist,
                         doc_share,
-                        secondname),
+                        secondname,
+                        fToast),
                   )),
             ));
       }).whenComplete(() {
@@ -85,7 +90,8 @@ SheetPageC(
     doc_made_user,
     List finallist,
     doc_share,
-    String secondname) {
+    String secondname,
+    FToast fToast) {
   return SizedBox(
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
@@ -111,8 +117,19 @@ SheetPageC(
               const SizedBox(
                 height: 20,
               ),
-              content(context, searchNode, controller, doc, doc_type, doc_color,
-                  doc_name, doc_made_user, finallist, doc_share, secondname),
+              content(
+                  context,
+                  searchNode,
+                  controller,
+                  doc,
+                  doc_type,
+                  doc_color,
+                  doc_name,
+                  doc_made_user,
+                  finallist,
+                  doc_share,
+                  secondname,
+                  fToast),
               const SizedBox(
                 height: 20,
               ),
@@ -148,7 +165,8 @@ content(
     doc_made_user,
     List finallist,
     doc_share,
-    String secondname) {
+    String secondname,
+    FToast fToast) {
   String username = Hive.box('user_info').get(
     'id',
   );
@@ -158,6 +176,7 @@ content(
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var controll_cals = Get.put(calendarsetting());
   final cal_share_person = Get.put(PeopleAdd());
+  var controll_memo = Get.put(memosetting());
   List changepeople = [];
   List deleteid = [];
   return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -376,17 +395,20 @@ content(
                               ), pressed2)) ??
                               false;
                       if (reloadpage) {
+                        setState(() {
+                          controll_memo.setloading(true);
+                        });
                         if (Hive.box('user_setting')
                                     .get('noti_calendar_click') ==
                                 null ||
                             Hive.box('user_setting')
                                     .get('noti_calendar_click') ==
                                 0) {
-                          firestore
+                          await firestore
                               .collection('CalendarSheetHome_update')
                               .doc(doc)
                               .delete();
-                          firestore
+                          await firestore
                               .collection('CalendarDataBase')
                               .where('calname', isEqualTo: doc)
                               .get()
@@ -401,23 +423,28 @@ content(
                                   .delete();
                             }
                           });
-                          firestore
+                          await firestore
                               .collection('ShareHome_update')
                               .doc(doc + '-' + usercode)
                               .delete();
                         } else {
-                          firestore
+                          await firestore
                               .collection('ShareHome_update')
                               .doc(doc + '-' + usercode)
                               .delete();
                         }
-                        Navigator.pop(context);
+                        setState(() {
+                          controll_memo.setloading(false);
+                        });
+                        await CreateCalandmemoSuccessFlushbar('삭제 완료!', fToast);
+                        Snack.isopensnacks();
+                        /*Navigator.pop(context);
                         Snack.show(
                             context: context,
                             title: '알림',
                             content: '캘린더의 카드가 삭제되었습니다.',
                             snackType: SnackType.warning,
-                            behavior: SnackBarBehavior.floating);
+                            behavior: SnackBarBehavior.floating);*/
                         firestore.collection('AppNoticeByUsers').add({
                           'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
                           'date': DateFormat('yyyy-MM-dd hh:mm')
@@ -447,20 +474,35 @@ content(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Center(
-                            child: NeumorphicText(
-                              '삭제',
-                              style: const NeumorphicStyle(
-                                shape: NeumorphicShape.flat,
-                                depth: 3,
-                                color: Colors.red,
-                              ),
-                              textStyle: NeumorphicTextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize(),
-                              ),
-                            ),
-                          )
+                          controll_memo.loading == true
+                              ? Center(
+                                  child: NeumorphicText(
+                                    '대기',
+                                    style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: Colors.red,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                    ),
+                                  ),
+                                )
+                              : Center(
+                                  child: NeumorphicText(
+                                    '삭제',
+                                    style: const NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: Colors.red,
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                    ),
+                                  ),
+                                )
                         ],
                       ),
                     )),
@@ -475,99 +517,121 @@ content(
                             borderRadius: BorderRadius.circular(100)),
                         primary: Colors.blue,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         setState(() {
-                          firestore
-                              .collection('CalendarSheetHome_update')
-                              .doc(doc)
-                              .update({
-                            'calname': controller.text,
-                            'color': _color.value.toInt(),
-                          });
-                          firestore
-                              .collection('ShareHome_update')
-                              .get()
-                              .then((value) {
-                            for (int i = 0; i < value.docs.length; i++) {
-                              if (value.docs[i].toString() == doc) {
-                                for (int j = 0;
-                                    j < value.docs[i].get('share').length;
-                                    j++) {
-                                  changepeople
-                                      .add(value.docs[i].get('share')[j]);
-                                }
-                                for (int k = 0; k < changepeople.length; k++) {
-                                  firestore
-                                      .collection('ShareHome_update')
-                                      .doc(value.docs[i].id.split('-')[0] +
-                                          changepeople[k])
-                                      .update({
-                                    'calname': controller.text,
-                                    'color': _color.value.toInt(),
-                                  });
-                                }
-                                changepeople.clear();
+                          controll_memo.setloading(true);
+                        });
+
+                        await firestore
+                            .collection('CalendarSheetHome_update')
+                            .doc(doc)
+                            .update({
+                          'calname': controller.text,
+                          'color': _color.value.toInt(),
+                        });
+                        await firestore
+                            .collection('ShareHome_update')
+                            .get()
+                            .then((value) {
+                          for (int i = 0; i < value.docs.length; i++) {
+                            if (value.docs[i].toString() == doc) {
+                              for (int j = 0;
+                                  j < value.docs[i].get('share').length;
+                                  j++) {
+                                changepeople.add(value.docs[i].get('share')[j]);
                               }
+                              for (int k = 0; k < changepeople.length; k++) {
+                                firestore
+                                    .collection('ShareHome_update')
+                                    .doc(value.docs[i].id.split('-')[0] +
+                                        changepeople[k])
+                                    .update({
+                                  'calname': controller.text,
+                                  'color': _color.value.toInt(),
+                                });
+                              }
+                              changepeople.clear();
                             }
-                          });
-                          /*firestore
+                          }
+                        });
+                        /*firestore
                               .collection('ShareHome_update')
                               .doc(doc + '-' + usercode)
                               .update({
                             'calname': controller.text,
                             'color': _color.value.toInt(),
                           });*/
-                          firestore.collection('AppNoticeByUsers').add({
-                            'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
-                            'date': DateFormat('yyyy-MM-dd hh:mm')
-                                    .parse(date.toString())
-                                    .toString()
-                                    .split(' ')[0] +
-                                ' ' +
-                                DateFormat('yyyy-MM-dd hh:mm')
-                                    .parse(date.toString())
-                                    .toString()
-                                    .split(' ')[1]
-                                    .split(':')[0] +
-                                ':' +
-                                DateFormat('yyyy-MM-dd hh:mm')
-                                    .parse(date.toString())
-                                    .toString()
-                                    .split(' ')[1]
-                                    .split(':')[1],
-                            'sharename': doc_share,
-                            'username': username,
-                            'read': 'no',
-                          });
+                        setState(() {
+                          controll_memo.setloading(false);
+                        });
 
-                          Navigator.pop(context);
+                        await CreateCalandmemoSuccessFlushbar('수정 완료!', fToast);
+                        Snack.isopensnacks();
+                        firestore.collection('AppNoticeByUsers').add({
+                          'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
+                          'date': DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[0] +
+                              ' ' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[0] +
+                              ':' +
+                              DateFormat('yyyy-MM-dd hh:mm')
+                                  .parse(date.toString())
+                                  .toString()
+                                  .split(' ')[1]
+                                  .split(':')[1],
+                          'sharename': doc_share,
+                          'username': username,
+                          'read': 'no',
+                        });
+
+                        /*Navigator.pop(context);
                           Snack.show(
                               context: context,
                               title: '알림',
                               content: '캘린더의 카드가 변경되었습니다.',
                               snackType: SnackType.info,
-                              behavior: SnackBarBehavior.floating);
-                        });
+                              behavior: SnackBarBehavior.floating);*/
                       },
                       child: Center(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Center(
-                              child: NeumorphicText(
-                                '변경',
-                                style: const NeumorphicStyle(
-                                  shape: NeumorphicShape.flat,
-                                  depth: 3,
-                                  color: Colors.white,
-                                ),
-                                textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize(),
-                                ),
-                              ),
-                            )
+                            controll_memo.loading == true
+                                ? Center(
+                                    child: NeumorphicText(
+                                      '처리중',
+                                      style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: Colors.white,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                      ),
+                                    ),
+                                  )
+                                : Center(
+                                    child: NeumorphicText(
+                                      '변경',
+                                      style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: Colors.white,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                      ),
+                                    ),
+                                  )
                           ],
                         ),
                       )),

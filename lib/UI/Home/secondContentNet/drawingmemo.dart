@@ -325,7 +325,9 @@ class drawingmemoState extends State<drawingmemo> with WidgetsBindingObserver {
                     children: [
                       UI(),
                       controll_memo.loading == true
-                          ? const Loader()
+                          ? const Loader(
+                              wherein: 'memoeach',
+                            )
                           : Container()
                     ],
                   ),

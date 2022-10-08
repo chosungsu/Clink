@@ -669,7 +669,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                           ],
                                         ),
                                       ),
-                                      color: themecal_fromsheet == 0
+                                      color: controll_cals.themecalendar == 0
                                           ? (index % 4 == 0
                                               ? MyTheme.colororigred
                                               : (index % 4 == 1

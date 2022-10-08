@@ -541,7 +541,7 @@ MFHolder_second(
               text: TextSpan(children: [
                 WidgetSpan(
                   child: Icon(
-                    Icons.remove_circle_outline,
+                    Icons.delete,
                     color: Colors.red.shade400,
                   ),
                 ),
@@ -647,7 +647,7 @@ void autodeletelogic(
       }
     }).whenComplete(() {
       controll_memo.setloading(false);
-      CreateCalandmemoSuccessFlushbar('정상적으로 삭제됨', fToast);
+      CreateCalandmemoSuccessFlushbar('메모삭제 완료!', fToast);
       isfromwhere == 'home' ? GoToMain(context) : Get.back();
     });
   }

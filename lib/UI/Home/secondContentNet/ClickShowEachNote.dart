@@ -214,82 +214,6 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
     } else {}
   }
 
-  void autodeletelogic() async {
-    //삭제
-    for (int i = 0; i < nodes.length; i++) {
-      nodes[i].unfocus();
-    }
-    var reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
-          builder: (context) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width * 0.85,
-              child: SingleChildScrollView(
-                child: Text('정말 이 메모를 삭제하시겠습니까?',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize(),
-                        color: Colors.blueGrey)),
-              ),
-            );
-          },
-        ), pressed2)) ??
-        false;
-    if (reloadpage) {
-      controll_memo.loading = true;
-      Hive.box('user_setting').put('alarm_memo_${widget.docname}', false);
-      controll_memo.setalarmmemo(widget.docname, widget.doc);
-      _deleteFile(widget.doc);
-      firestore.collection('AppNoticeByUsers').add({
-        'title': '[' + textEditingController1.text + '] 메모가 삭제되었습니다.',
-        'date': DateFormat('yyyy-MM-dd hh:mm')
-                .parse(DateTime.now().toString())
-                .toString()
-                .split(' ')[0] +
-            ' ' +
-            DateFormat('yyyy-MM-dd hh:mm')
-                .parse(DateTime.now().toString())
-                .toString()
-                .split(' ')[1]
-                .split(':')[0] +
-            ':' +
-            DateFormat('yyyy-MM-dd hh:mm')
-                .parse(DateTime.now().toString())
-                .toString()
-                .split(' ')[1]
-                .split(':')[1],
-        'username': username,
-        'sharename': [],
-        'read': 'no',
-      });
-      firestore
-          .collection('MemoDataBase')
-          .where('memoTitle', isEqualTo: textEditingController1.text)
-          .where('OriginalUser', isEqualTo: usercode)
-          .where('color', isEqualTo: widget.doccolor.toInt())
-          .where('Date',
-              isEqualTo: widget.date.toString().split('-')[0] +
-                  '-' +
-                  widget.date.toString().split('-')[1] +
-                  '-' +
-                  widget.date.toString().split('-')[2].substring(0, 2) +
-                  '일')
-          .get()
-          .then((value) {
-        deleteid.clear();
-        value.docs.forEach((element) {
-          deleteid.add(element.id);
-        });
-        for (int i = 0; i < deleteid.length; i++) {
-          firestore.collection('MemoDataBase').doc(deleteid[i]).delete();
-        }
-      }).whenComplete(() {
-        controll_memo.loading = false;
-        CreateCalandmemoFlushbardelete(context, '메모');
-        widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
-      });
-    }
-  }
-
   Future<bool> _onBackPressed() async {
     autosavelogic(
         context,
@@ -333,7 +257,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                     children: [
                       UI(),
                       controll_memo.loading == true
-                          ? const Loader()
+                          ? const Loader(
+                              wherein: 'noteeach',
+                            )
                           : Container()
                     ],
                   ),
