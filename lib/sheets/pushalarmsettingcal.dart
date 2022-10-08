@@ -6,6 +6,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
@@ -14,6 +15,7 @@ import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/IconBtn.dart';
+import '../UI/Home/Widgets/CreateCalandmemo.dart';
 
 pushalarmsettingcal(
   BuildContext context,
@@ -25,6 +27,7 @@ pushalarmsettingcal(
   String id,
   int isChecked_pushalarmwhat,
   DateTime date,
+  FToast fToast,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -67,7 +70,8 @@ pushalarmsettingcal(
                             doc_title,
                             id,
                             isChecked_pushalarmwhat,
-                            date))),
+                            date,
+                            fToast))),
               )),
         );
       });
@@ -83,6 +87,7 @@ SheetPage(
   String id,
   int isChecked_pushalarmwhat,
   DateTime date,
+  FToast fToast,
 ) {
   return SizedBox(
       child: Padding(
@@ -110,7 +115,7 @@ SheetPage(
                 height: 20,
               ),
               content(context, setalarmhourNode, setalarmminuteNode, hour,
-                  minute, doc_title, id, isChecked_pushalarmwhat, date),
+                  minute, doc_title, id, isChecked_pushalarmwhat, date, fToast),
               const SizedBox(
                 height: 20,
               ),
@@ -168,9 +173,11 @@ content(
   String id,
   int isChecked_pushalarmwhat,
   DateTime date,
+  FToast fToast,
 ) {
   DateTime now = DateTime.now();
   final controll_cal = Get.put(calendarsetting());
+  final controll_memo = Get.put(memosetting());
   TimeOfDay? pickednow;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String username = Hive.box('user_info').get(
@@ -453,14 +460,26 @@ content(
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          Get.back();
+                                          if (controll_memo.hour1.toString() ==
+                                                  '99' ||
+                                              controll_memo.hour2.toString() ==
+                                                  '99') {
+                                            CreateCalandmemoSuccessFlushbar(
+                                                '시간 설정안됨!', fToast);
+                                          } else {
+                                            CreateCalandmemoSuccessFlushbar(
+                                                '설정 완료!', fToast);
+                                            Snack.isopensnacks();
+                                          }
+
+                                          /*Get.back();
                                           Snack.show(
                                               context: context,
                                               title: '알림',
                                               content: '알람설정 완료',
                                               snackType: SnackType.info,
                                               behavior:
-                                                  SnackBarBehavior.floating);
+                                                  SnackBarBehavior.floating);*/
                                         });
                                       },
                                       child: Container(
@@ -501,14 +520,17 @@ content(
                                         onTap: () {
                                           controll_cal.setalarmcal(
                                               doc_title, id);
-                                          Get.back();
+                                          CreateCalandmemoSuccessFlushbar(
+                                              '해제 완료!', fToast);
+                                          Snack.isopensnacks();
+                                          /*Get.back();
                                           Snack.show(
                                               context: context,
                                               title: '알림',
                                               content: '알람해제 완료!',
                                               snackType: SnackType.info,
                                               behavior:
-                                                  SnackBarBehavior.floating);
+                                                  SnackBarBehavior.floating);*/
                                         },
                                         child: Container(
                                           color: Colors.red.shade400,

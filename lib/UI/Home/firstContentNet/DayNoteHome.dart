@@ -12,6 +12,7 @@ import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
@@ -64,6 +65,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   bool can_auth = false;
   String hour = '';
   String minute = '';
+  late FToast fToast;
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   Future<void> _checkBiometrics() async {
@@ -89,6 +91,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     _checkBiometrics();
+    fToast = FToast();
+    fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('sort_memo_card', 0);
     controll_memo.sort = Hive.box('user_setting').get('sort_memo_card');
@@ -426,7 +430,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                           hour,
                                                           minute,
                                                           '',
-                                                          '');
+                                                          '',
+                                                          fToast);
                                                     },
                                                     icon: Container(
                                                       alignment:
@@ -577,7 +582,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
             controll_memo.settimeminute(
                 int.parse(hour), int.parse(minute), '', '');
             pushalarmsettingmemo(context, setalarmhourNode, setalarmminuteNode,
-                hour, minute, '', '');
+                hour, minute, '', '', fToast);
 
             /*Get.to(
                 () => SecureAuth(
@@ -769,8 +774,8 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                                       .split(':')[1],
                                                   snapshot.data!.docs[index]
                                                       ['memoTitle'],
-                                                  snapshot
-                                                      .data!.docs[index].id);
+                                                  snapshot.data!.docs[index].id,
+                                                  fToast);
                                             });
                                           }),
                                       FocusedMenuItem(

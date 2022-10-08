@@ -5,6 +5,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
@@ -12,6 +13,8 @@ import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/IconBtn.dart';
+import '../Tool/Loader.dart';
+import '../UI/Home/Widgets/CreateCalandmemo.dart';
 
 pushalarmsettingmemo(
   BuildContext context,
@@ -21,6 +24,7 @@ pushalarmsettingmemo(
   String controller_minute,
   String doc_title,
   String id,
+  FToast fToast,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -34,35 +38,61 @@ pushalarmsettingmemo(
       context: context,
       isScrollControlled: true,
       builder: (context) {
+        var controll_memo = Get.put(memosetting());
         return Container(
           margin: const EdgeInsets.all(10),
           child: Padding(
               padding: MediaQuery.of(context).viewInsets,
               child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                child: GestureDetector(
-                    onTap: () {
-                      setalarmhourNode.unfocus();
-                      setalarmminuteNode.unfocus();
-                    },
-                    child: SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: SheetPage(
-                            context,
-                            setalarmhourNode,
-                            setalarmminuteNode,
-                            controller_hour,
-                            controller_minute,
-                            doc_title,
-                            id))),
-              )),
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  child: GetBuilder<memosetting>(
+                      builder: (_) => Padding(
+                          padding: MediaQuery.of(context).viewInsets,
+                          child: Container(
+                            margin: const EdgeInsets.all(10),
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                )),
+                            child: Stack(
+                              children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      setalarmhourNode.unfocus();
+                                      setalarmminuteNode.unfocus();
+                                    },
+                                    child: SingleChildScrollView(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        child: SheetPage(
+                                            context,
+                                            setalarmhourNode,
+                                            setalarmminuteNode,
+                                            controller_hour,
+                                            controller_minute,
+                                            doc_title,
+                                            id,
+                                            fToast))),
+                                controll_memo.loading == true
+                                    ? const Loader_sheets(
+                                        wherein: 'memoeach',
+                                        height: 400,
+                                      )
+                                    : SizedBox(),
+                              ],
+                            ),
+                          ))))),
         );
       });
 }
@@ -75,6 +105,7 @@ SheetPage(
   String controller_minute,
   String doc_title,
   String id,
+  FToast fToast,
 ) {
   return SizedBox(
       child: Padding(
@@ -102,7 +133,7 @@ SheetPage(
                 height: 20,
               ),
               content(context, setalarmhourNode, setalarmminuteNode,
-                  controller_hour, controller_minute, doc_title, id),
+                  controller_hour, controller_minute, doc_title, id, fToast),
               const SizedBox(
                 height: 20,
               ),
@@ -164,9 +195,10 @@ content(
   String controller_minute,
   String doc_title,
   String id,
+  FToast fToast,
 ) {
   DateTime now = DateTime.now();
-  final controll_memo = Get.put(memosetting());
+  var controll_memo = Get.put(memosetting());
   TimeOfDay? pickednow;
   if (doc_title != '') {
     Hive.box('user_setting').put('alarm_memo_hour_$title', controller_hour);
@@ -450,37 +482,53 @@ content(
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          doc_title != ''
-                                              ? Hive.box('user_setting').put(
-                                                  'alarm_memo_$doc_title', true)
-                                              : Hive.box('user_setting')
-                                                  .put('alarm_memo', true);
-                                          doc_title != ''
-                                              ? controll_memo.setalarmmemotimetable(
-                                                  Hive.box('user_setting')
-                                                      .get(
-                                                          'alarm_memo_hour_$doc_title')
-                                                      .toString(),
-                                                  Hive.box('user_setting')
-                                                      .get(
-                                                          'alarm_memo_minute_$doc_title')
-                                                      .toString(),
-                                                  doc_title,
-                                                  id)
-                                              : controll_memo
-                                                  .setalarmmemotimetable(
-                                                      controll_memo.hour2,
-                                                      controll_memo.minute2,
-                                                      '',
-                                                      '');
-                                          Get.back();
+                                          controll_memo.setloading(true);
+                                          if (controll_memo.hour1.toString() ==
+                                                  '99' ||
+                                              controll_memo.hour2.toString() ==
+                                                  '99') {
+                                            controll_memo.setloading(false);
+                                            CreateCalandmemoSuccessFlushbar(
+                                                '시간 설정안됨!', fToast);
+                                          } else {
+                                            doc_title != ''
+                                                ? Hive.box('user_setting').put(
+                                                    'alarm_memo_$doc_title',
+                                                    true)
+                                                : Hive.box('user_setting')
+                                                    .put('alarm_memo', true);
+                                            doc_title != ''
+                                                ? controll_memo.setalarmmemotimetable(
+                                                    Hive.box('user_setting')
+                                                        .get(
+                                                            'alarm_memo_hour_$doc_title')
+                                                        .toString(),
+                                                    Hive.box('user_setting')
+                                                        .get(
+                                                            'alarm_memo_minute_$doc_title')
+                                                        .toString(),
+                                                    doc_title,
+                                                    id)
+                                                : controll_memo
+                                                    .setalarmmemotimetable(
+                                                        controll_memo.hour2,
+                                                        controll_memo.minute2,
+                                                        '',
+                                                        '');
+                                            controll_memo.setloading(false);
+                                            CreateCalandmemoSuccessFlushbar(
+                                                '설정 완료!', fToast);
+                                            Snack.isopensnacks();
+                                          }
+
+                                          /*Get.back();
                                           Snack.show(
                                               context: context,
                                               title: '알림',
                                               content: '알람설정 완료',
                                               snackType: SnackType.info,
                                               behavior:
-                                                  SnackBarBehavior.floating);
+                                                  SnackBarBehavior.floating);*/
                                         });
                                       },
                                       child: Container(
@@ -519,6 +567,9 @@ content(
                                       height: 50,
                                       child: InkWell(
                                         onTap: () {
+                                          setState(() {
+                                            controll_memo.setloading(true);
+                                          });
                                           doc_title != ''
                                               ? Hive.box('user_setting').put(
                                                   'alarm_memo_$doc_title',
@@ -527,14 +578,20 @@ content(
                                                   .put('alarm_memo', false);
                                           controll_memo.setalarmmemo(
                                               doc_title, id);
-                                          Get.back();
+                                          setState(() {
+                                            controll_memo.setloading(false);
+                                            CreateCalandmemoSuccessFlushbar(
+                                                '해제 완료!', fToast);
+                                            Snack.isopensnacks();
+                                          });
+                                          /*Get.back();
                                           Snack.show(
                                               context: context,
                                               title: '알림',
                                               content: '알람해제 완료!',
                                               snackType: SnackType.info,
                                               behavior:
-                                                  SnackBarBehavior.floating);
+                                                  SnackBarBehavior.floating);*/
                                         },
                                         child: Container(
                                           color: Colors.red.shade400,

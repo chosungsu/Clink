@@ -13,6 +13,7 @@ import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/Getx/memosetting.dart';
+import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
 
@@ -42,38 +43,52 @@ settingChoiceCal(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Container(
-              margin: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  )),
-              child: GestureDetector(
-                  onTap: () {
-                    searchNode.unfocus();
-                  },
-                  child: SizedBox(
-                    child: SheetPageC(
-                        context,
-                        controller,
-                        searchNode,
-                        doc,
-                        doc_type,
-                        doc_color,
-                        doc_name,
-                        doc_made_user,
-                        finallist,
-                        doc_share,
-                        secondname,
-                        fToast),
-                  )),
-            ));
+        var controll_memo = Get.put(memosetting());
+        return GetBuilder<memosetting>(
+            builder: (_) => Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            searchNode.unfocus();
+                          },
+                          child: SizedBox(
+                            child: SheetPageC(
+                                context,
+                                controller,
+                                searchNode,
+                                doc,
+                                doc_type,
+                                doc_color,
+                                doc_name,
+                                doc_made_user,
+                                finallist,
+                                doc_share,
+                                secondname,
+                                fToast),
+                          )),
+                      controll_memo.loading == true
+                          ? const Loader_sheets(
+                              wherein: 'cal',
+                              height: 315,
+                            )
+                          : SizedBox(
+                              height: 315,
+                            ),
+                    ],
+                  ),
+                )));
       }).whenComplete(() {
     controller.clear();
   });
@@ -435,10 +450,11 @@ content(
                         }
                         setState(() {
                           controll_memo.setloading(false);
+                          CreateCalandmemoSuccessFlushbar('삭제 완료!', fToast);
+                          Snack.isopensnacks();
                         });
-                        await CreateCalandmemoSuccessFlushbar('삭제 완료!', fToast);
-                        Snack.isopensnacks();
-                        /*Navigator.pop(context);
+                        /*Snack.isopensnacks();
+                        Navigator.pop(context);
                         Snack.show(
                             context: context,
                             title: '알림',
@@ -563,10 +579,9 @@ content(
                           });*/
                         setState(() {
                           controll_memo.setloading(false);
+                          CreateCalandmemoSuccessFlushbar('수정 완료!', fToast);
+                          Snack.isopensnacks();
                         });
-
-                        await CreateCalandmemoSuccessFlushbar('수정 완료!', fToast);
-                        Snack.isopensnacks();
                         firestore.collection('AppNoticeByUsers').add({
                           'title': '[' + doc_name + '] 캘린더의 카드설정이 변경되었습니다.',
                           'date': DateFormat('yyyy-MM-dd hh:mm')
