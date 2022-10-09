@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
-import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/UI/Home/Widgets/ViewSet.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:clickbyme/initScreenLoading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,15 +14,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
-import 'package:provider/provider.dart';
-import 'Auth/GoogleSignInController.dart';
-import 'Auth/KakaoSignInController.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
-import 'Page/LoginSignPage.dart';
 import 'package:flutter/foundation.dart';
 import 'Tool/BGColor.dart';
 import 'Tool/Getx/PeopleAdd.dart';
-import 'Tool/Getx/memosetting.dart';
 import 'Tool/Getx/notishow.dart';
 
 const Map<String, String> UNIT_ID = kReleaseMode

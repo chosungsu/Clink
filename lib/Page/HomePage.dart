@@ -246,10 +246,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       const SizedBox(
                                         height: 20,
                                       ),*/
-                                            H_Container_1(height),
+                                            /*H_Container_1(height),
                                             const SizedBox(
                                               height: 20,
-                                            ),
+                                            ),*/
                                             GetBuilder<PeopleAdd>(
                                                 builder: (_) => ViewSet(
                                                     peopleadd

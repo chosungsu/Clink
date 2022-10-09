@@ -846,7 +846,7 @@ class _DayScriptState extends State<DayScript> {
                           ? (_color == controll_memo.color
                               ? _color
                               : controll_memo.color)
-                          : Colors.white,
+                          : BGColor(),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -913,8 +913,7 @@ class _DayScriptState extends State<DayScript> {
                                                                           .white
                                                                       : Colors
                                                                           .black)
-                                                                  : Colors
-                                                                      .black,
+                                                                  : TextColor(),
                                                               lightSource:
                                                                   LightSource
                                                                       .topLeft),
@@ -926,7 +925,7 @@ class _DayScriptState extends State<DayScript> {
                                                               Colors.black
                                                           ? Colors.white
                                                           : Colors.black)
-                                                      : Colors.black,
+                                                      : TextColor(),
                                                 )
                                               : const SizedBox(),
                                           SizedBox(
@@ -1024,8 +1023,7 @@ class _DayScriptState extends State<DayScript> {
                                                                                 .white
                                                                             : Colors
                                                                                 .black)
-                                                                        : Colors
-                                                                            .black,
+                                                                        : TextColor(),
                                                                     lightSource:
                                                                         LightSource
                                                                             .topLeft),
@@ -1039,7 +1037,7 @@ class _DayScriptState extends State<DayScript> {
                                                                     Colors.black
                                                                 ? Colors.white
                                                                 : Colors.black)
-                                                            : Colors.black,
+                                                            : TextColor(),
                                                       ),
                                                     ],
                                                   ))),
@@ -1177,7 +1175,7 @@ class _DayScriptState extends State<DayScript> {
                   ? (controll_memo.color == Colors.black
                       ? Colors.white
                       : Colors.black)
-                  : Colors.black,
+                  : TextColor(),
             ),
           )
         : Text(
@@ -1189,7 +1187,7 @@ class _DayScriptState extends State<DayScript> {
                   ? (controll_memo.color == Colors.black
                       ? Colors.white
                       : Colors.black)
-                  : Colors.black,
+                  : TextColor(),
             ),
           );
   }
@@ -1202,8 +1200,7 @@ class _DayScriptState extends State<DayScript> {
               minLines: 1,
               maxLines: 3,
               focusNode: searchNode_first_section,
-              style:
-                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
+              style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 10),
                 border: InputBorder.none,
@@ -1214,7 +1211,7 @@ class _DayScriptState extends State<DayScript> {
               ),
               controller: textEditingController1,
             ),
-            color: Colors.white)
+            color: BGColor())
         : ListView.builder(
             itemCount: 1,
             shrinkWrap: true,
@@ -1797,7 +1794,7 @@ class _DayScriptState extends State<DayScript> {
               ? (controll_memo.color == Colors.black
                   ? Colors.white
                   : Colors.black)
-              : Colors.black,
+              : TextColor(),
         ),
       ),
     );
@@ -1814,122 +1811,10 @@ class _DayScriptState extends State<DayScript> {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              widget.lastdate == widget.firstdate
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ContainerDesign(
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (checkdayyang[1] == true) {
-                                    checkdayyang[1] = false;
-                                    checkdayyang[0] = true;
-                                    solar = CalendarConverter.lunarToSolar(
-                                        int.parse(controll_cal.selectedDay
-                                            .toString()
-                                            .split(' ')[0]
-                                            .split('-')[0]),
-                                        int.parse(controll_cal.selectedDay
-                                            .toString()
-                                            .split(' ')[0]
-                                            .split('-')[1]),
-                                        int.parse(controll_cal.selectedDay
-                                            .toString()
-                                            .split(' ')[0]
-                                            .split('-')[2]),
-                                        0,
-                                        Timezone.Korean);
-                                    controll_cal.selectedDay =
-                                        DateFormat('yyyy-MM-dd').parse(
-                                            solar[2].toString() +
-                                                '-' +
-                                                solar[1].toString() +
-                                                '-' +
-                                                solar[0].toString());
-                                    if (controll_cal.selectedDay !=
-                                        _selectedDay) {
-                                    } else {
-                                      controll_cal.selectedDay = _selectedDay;
-                                    }
-                                  } else {
-                                    checkdayyang[0] = false;
-                                    checkdayyang[1] = true;
-                                    lunar = CalendarConverter.solarToLunar(
-                                        int.parse(controll_cal.selectedDay
-                                            .toString()
-                                            .split(' ')[0]
-                                            .split('-')[0]),
-                                        int.parse(controll_cal.selectedDay
-                                            .toString()
-                                            .split(' ')[0]
-                                            .split('-')[1]),
-                                        int.parse(controll_cal.selectedDay
-                                            .toString()
-                                            .split(' ')[0]
-                                            .split('-')[2]),
-                                        Timezone.Korean);
-                                    controll_cal.selectedDay =
-                                        DateFormat('yyyy-MM-dd').parse(
-                                            lunar[2].toString() +
-                                                '-' +
-                                                lunar[1].toString() +
-                                                '-' +
-                                                lunar[0].toString());
-                                  }
-                                });
-                              },
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '양력',
-                                    style: TextStyle(
-                                        fontWeight: checkdayyang[0] == true
-                                            ? FontWeight.bold
-                                            : FontWeight.normal,
-                                        fontSize: checkdayyang[0] == true
-                                            ? contentTitleTextsize()
-                                            : 16,
-                                        color: widget.position == 'note'
-                                            ? (controll_memo.color ==
-                                                    Colors.black
-                                                ? Colors.white
-                                                : Colors.black)
-                                            : Colors.black),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    '음력',
-                                    style: TextStyle(
-                                        fontWeight: checkdayyang[1] == true
-                                            ? FontWeight.bold
-                                            : FontWeight.normal,
-                                        fontSize: checkdayyang[1] == true
-                                            ? contentTitleTextsize()
-                                            : 16,
-                                        color: widget.position == 'note'
-                                            ? (controll_memo.color ==
-                                                    Colors.black
-                                                ? Colors.white
-                                                : Colors.black)
-                                            : Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            color: Colors.white)
-                      ],
-                    )
-                  : const SizedBox(),
-              const SizedBox(
-                height: 20,
-              ),
               widget.lastdate != widget.firstdate
                   ? SizedBox(
                       child: ContainerDesign(
-                        color: Colors.white,
+                        color: BGColor(),
                         child: ListTile(
                           leading: NeumorphicIcon(
                             Icons.today,
@@ -1942,7 +1827,7 @@ class _DayScriptState extends State<DayScript> {
                                     ? (controll_memo.color == Colors.black
                                         ? Colors.white
                                         : Colors.black)
-                                    : Colors.black,
+                                    : TextColor(),
                                 lightSource: LightSource.topLeft),
                           ),
                           title: Text(
@@ -1957,20 +1842,21 @@ class _DayScriptState extends State<DayScript> {
                                   ? (controll_memo.color == Colors.black
                                       ? Colors.white
                                       : Colors.black)
-                                  : Colors.black,
+                                  : TextColor(),
                             ),
                           ),
                         ),
                       ),
                     )
-                  : SizedBox(
-                      child: ContainerDesign(
-                        color: Colors.white,
-                        child: ListTile(
-                            trailing: InkWell(
+                  : Row(
+                      children: [
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: GestureDetector(
                               onTap: () {
                                 searchNode_first_section.unfocus();
-                                Future.delayed(Duration(milliseconds: 300), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 300), () {
                                   calendarView(
                                       context,
                                       controll_cal,
@@ -1986,109 +1872,228 @@ class _DayScriptState extends State<DayScript> {
                                       'oncreate');
                                 });
                               },
-                              child: Text(
-                                '변경',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                    color: controll_memo.color == Colors.black
-                                        ? Colors.white
-                                        : Colors.black),
-                              ),
-                            ),
-                            leading: NeumorphicIcon(
-                              Icons.today,
-                              size: 30,
-                              style: NeumorphicStyle(
-                                  shape: NeumorphicShape.convex,
-                                  depth: 2,
-                                  surfaceIntensity: 0.5,
-                                  color: widget.position == 'note'
-                                      ? (controll_memo.color == Colors.black
-                                          ? Colors.white
-                                          : Colors.black)
-                                      : Colors.black,
-                                  lightSource: LightSource.topLeft),
-                            ),
-                            title: GetBuilder<calendarsetting>(
-                              builder: (_) => Text(
-                                controll_cal.selectedDay
-                                    .toString()
-                                    .split(' ')[0],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize(),
-                                  color: widget.position == 'note'
-                                      ? (controll_memo.color == Colors.black
-                                          ? Colors.white
-                                          : Colors.black)
-                                      : Colors.black,
+                              child: SizedBox(
+                                child: ContainerDesign(
+                                  color: BGColor(),
+                                  child: ListTile(
+                                      leading: NeumorphicIcon(
+                                        Icons.today,
+                                        size: 30,
+                                        style: NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            depth: 2,
+                                            surfaceIntensity: 0.5,
+                                            color: widget.position == 'note'
+                                                ? (controll_memo.color ==
+                                                        Colors.black
+                                                    ? Colors.white
+                                                    : Colors.black)
+                                                : TextColor(),
+                                            lightSource: LightSource.topLeft),
+                                      ),
+                                      title: GetBuilder<calendarsetting>(
+                                        builder: (_) => Text(
+                                          controll_cal.selectedDay
+                                              .toString()
+                                              .split(' ')[0],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTitleTextsize(),
+                                            color: widget.position == 'note'
+                                                ? (controll_memo.color ==
+                                                        Colors.black
+                                                    ? Colors.white
+                                                    : Colors.black)
+                                                : TextColor(),
+                                          ),
+                                        ),
+                                      )),
                                 ),
                               ),
                             )),
-                      ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        widget.lastdate == widget.firstdate
+                            ? Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  ContainerDesign(
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            if (checkdayyang[1] == true) {
+                                              checkdayyang[1] = false;
+                                              checkdayyang[0] = true;
+                                              solar = CalendarConverter
+                                                  .lunarToSolar(
+                                                      int.parse(controll_cal
+                                                          .selectedDay
+                                                          .toString()
+                                                          .split(' ')[0]
+                                                          .split('-')[0]),
+                                                      int.parse(controll_cal
+                                                          .selectedDay
+                                                          .toString()
+                                                          .split(' ')[0]
+                                                          .split('-')[1]),
+                                                      int.parse(controll_cal
+                                                          .selectedDay
+                                                          .toString()
+                                                          .split(' ')[0]
+                                                          .split('-')[2]),
+                                                      0,
+                                                      Timezone.Korean);
+                                              controll_cal.selectedDay =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .parse(solar[2]
+                                                              .toString() +
+                                                          '-' +
+                                                          solar[1].toString() +
+                                                          '-' +
+                                                          solar[0].toString());
+                                              if (controll_cal.selectedDay !=
+                                                  _selectedDay) {
+                                              } else {
+                                                controll_cal.selectedDay =
+                                                    _selectedDay;
+                                              }
+                                            } else {
+                                              checkdayyang[0] = false;
+                                              checkdayyang[1] = true;
+                                              lunar = CalendarConverter
+                                                  .solarToLunar(
+                                                      int.parse(controll_cal
+                                                          .selectedDay
+                                                          .toString()
+                                                          .split(' ')[0]
+                                                          .split('-')[0]),
+                                                      int.parse(controll_cal
+                                                          .selectedDay
+                                                          .toString()
+                                                          .split(' ')[0]
+                                                          .split('-')[1]),
+                                                      int.parse(controll_cal
+                                                          .selectedDay
+                                                          .toString()
+                                                          .split(' ')[0]
+                                                          .split('-')[2]),
+                                                      Timezone.Korean);
+                                              controll_cal.selectedDay =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .parse(lunar[2]
+                                                              .toString() +
+                                                          '-' +
+                                                          lunar[1].toString() +
+                                                          '-' +
+                                                          lunar[0].toString());
+                                            }
+                                          });
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              '양력',
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                      checkdayyang[0] == true
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal,
+                                                  fontSize: checkdayyang[0] ==
+                                                          true
+                                                      ? contentTitleTextsize()
+                                                      : 16,
+                                                  color: widget.position ==
+                                                          'note'
+                                                      ? (controll_memo.color ==
+                                                              Colors.black
+                                                          ? Colors.white
+                                                          : Colors.black)
+                                                      : TextColor()),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '음력',
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                      checkdayyang[1] == true
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal,
+                                                  fontSize: checkdayyang[1] ==
+                                                          true
+                                                      ? contentTitleTextsize()
+                                                      : 16,
+                                                  color: widget.position ==
+                                                          'note'
+                                                      ? (controll_memo.color ==
+                                                              Colors.black
+                                                          ? Colors.white
+                                                          : Colors.black)
+                                                      : TextColor()),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      color: BGColor())
+                                ],
+                              )
+                            : const SizedBox(),
+                      ],
                     ),
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                child: ContainerDesign(
-                  color: Colors.white,
-                  child: ListTile(
-                    leading: NeumorphicIcon(
-                      Icons.schedule,
-                      size: 30,
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.convex,
-                          depth: 2,
-                          surfaceIntensity: 0.5,
-                          color: widget.position == 'note'
-                              ? (controll_memo.color == Colors.black
-                                  ? Colors.white
-                                  : Colors.black)
-                              : Colors.black,
-                          lightSource: LightSource.topLeft),
-                    ),
-                    title: Text(
-                      '일정시작시간',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTitleTextsize(),
-                          color: widget.position == 'note'
-                              ? (controll_memo.color == Colors.black
-                                  ? Colors.white
-                                  : Colors.black)
-                              : Colors.black),
-                    ),
-                    subtitle: TextFormField(
-                      readOnly: true,
-                      style: TextStyle(
-                          fontSize: contentTextsize(),
-                          color: widget.position == 'note'
-                              ? (controll_memo.color == Colors.black
-                                  ? Colors.white
-                                  : Colors.black)
-                              : Colors.black),
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        isCollapsed: true,
-                      ),
-                      controller: textEditingController2,
-                    ),
-                    trailing: InkWell(
-                      onTap: () {
-                        pickDates(
-                            context, textEditingController2, widget.firstdate);
-                      },
-                      child: Icon(
-                        Icons.arrow_drop_down,
+              ContainerDesign(
+                color: BGColor(),
+                child: ListTile(
+                  onTap: () {
+                    pickDates(
+                        context, textEditingController2, widget.firstdate);
+                  },
+                  leading: NeumorphicIcon(
+                    Icons.schedule,
+                    size: 30,
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.convex,
+                        depth: 2,
+                        surfaceIntensity: 0.5,
                         color: widget.position == 'note'
                             ? (controll_memo.color == Colors.black
                                 ? Colors.white
                                 : Colors.black)
-                            : Colors.black,
-                      ),
+                            : TextColor(),
+                        lightSource: LightSource.topLeft),
+                  ),
+                  title: Text(
+                    '일정시작시간',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: widget.position == 'note'
+                            ? (controll_memo.color == Colors.black
+                                ? Colors.white
+                                : Colors.black)
+                            : TextColor()),
+                  ),
+                  subtitle: TextFormField(
+                    readOnly: true,
+                    style: TextStyle(
+                        fontSize: contentTextsize(),
+                        color: widget.position == 'note'
+                            ? (controll_memo.color == Colors.black
+                                ? Colors.white
+                                : Colors.black)
+                            : TextColor()),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      isCollapsed: true,
                     ),
+                    controller: textEditingController2,
                   ),
                 ),
               ),
@@ -2097,8 +2102,12 @@ class _DayScriptState extends State<DayScript> {
               ),
               SizedBox(
                 child: ContainerDesign(
-                  color: Colors.white,
+                  color: BGColor(),
                   child: ListTile(
+                    onTap: () {
+                      pickDates(
+                          context, textEditingController3, widget.firstdate);
+                    },
                     leading: NeumorphicIcon(
                       Icons.schedule,
                       size: 30,
@@ -2110,7 +2119,7 @@ class _DayScriptState extends State<DayScript> {
                               ? (controll_memo.color == Colors.black
                                   ? Colors.white
                                   : Colors.black)
-                              : Colors.black,
+                              : TextColor(),
                           lightSource: LightSource.topLeft),
                     ),
                     title: Text(
@@ -2122,7 +2131,7 @@ class _DayScriptState extends State<DayScript> {
                               ? (controll_memo.color == Colors.black
                                   ? Colors.white
                                   : Colors.black)
-                              : Colors.black),
+                              : TextColor()),
                     ),
                     subtitle: TextFormField(
                       readOnly: true,
@@ -2132,26 +2141,12 @@ class _DayScriptState extends State<DayScript> {
                               ? (controll_memo.color == Colors.black
                                   ? Colors.white
                                   : Colors.black)
-                              : Colors.black),
+                              : TextColor()),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         isCollapsed: true,
                       ),
                       controller: textEditingController3,
-                    ),
-                    trailing: InkWell(
-                      onTap: () {
-                        pickDates(
-                            context, textEditingController3, widget.firstdate);
-                      },
-                      child: Icon(
-                        Icons.arrow_drop_down,
-                        color: widget.position == 'note'
-                            ? (controll_memo.color == Colors.black
-                                ? Colors.white
-                                : Colors.black)
-                            : Colors.black,
-                      ),
                     ),
                   ),
                 ),
@@ -2167,7 +2162,7 @@ class _DayScriptState extends State<DayScript> {
                   ? GetBuilder<calendarsetting>(
                       builder: (_) => SizedBox(
                             child: ContainerDesign(
-                              color: Colors.white,
+                              color: BGColor(),
                               child: ListTile(
                                 leading: NeumorphicIcon(
                                   Icons.sync,
@@ -2180,14 +2175,14 @@ class _DayScriptState extends State<DayScript> {
                                           ? (controll_memo.color == Colors.black
                                               ? Colors.white
                                               : Colors.black)
-                                          : Colors.black,
+                                          : TextColor(),
                                       lightSource: LightSource.topLeft),
                                 ),
                                 trailing: InkWell(
                                   onTap: () {
                                     searchNode_first_section.unfocus();
-                                    Future.delayed(Duration(milliseconds: 300),
-                                        () {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 300), () {
                                       showrepeatdate(
                                           context,
                                           textEditingController4,
@@ -2202,23 +2197,8 @@ class _DayScriptState extends State<DayScript> {
                                         color:
                                             controll_memo.color == Colors.black
                                                 ? Colors.white
-                                                : Colors.black),
+                                                : TextColor()),
                                   ),
-                                  /*NeumorphicIcon(
-                                    Icons.arrow_drop_down,
-                                    size: 30,
-                                    style: NeumorphicStyle(
-                                        shape: NeumorphicShape.convex,
-                                        depth: 2,
-                                        surfaceIntensity: 0.5,
-                                        color: widget.position == 'note'
-                                            ? (controll_memo.color ==
-                                                    Colors.black
-                                                ? Colors.white
-                                                : Colors.black)
-                                            : Colors.black,
-                                        lightSource: LightSource.topLeft),
-                                  ),*/
                                 ),
                                 subtitle: cal.repeatwhile == 'no'
                                     ? Text(
@@ -2230,7 +2210,7 @@ class _DayScriptState extends State<DayScript> {
                                                         Colors.black
                                                     ? Colors.white
                                                     : Colors.black)
-                                                : Colors.black),
+                                                : TextColor()),
                                       )
                                     : Text(
                                         cal.repeatwhile +
@@ -2244,7 +2224,7 @@ class _DayScriptState extends State<DayScript> {
                                                         Colors.black
                                                     ? Colors.white
                                                     : Colors.black)
-                                                : Colors.black),
+                                                : TextColor()),
                                       ),
                                 title: Text(
                                   '반복작성설정',
@@ -2255,7 +2235,7 @@ class _DayScriptState extends State<DayScript> {
                                           ? (controll_memo.color == Colors.black
                                               ? Colors.white
                                               : Colors.black)
-                                          : Colors.black),
+                                          : TextColor()),
                                 ),
                               ),
                             ),
@@ -2283,7 +2263,7 @@ class _DayScriptState extends State<DayScript> {
                   ? (controll_memo.color == Colors.black
                       ? Colors.white
                       : Colors.black)
-                  : Colors.black),
+                  : TextColor()),
         ),
         const SizedBox(
           height: 20,
@@ -2299,7 +2279,7 @@ class _DayScriptState extends State<DayScript> {
                       ? (controll_memo.color == Colors.black
                           ? Colors.white
                           : Colors.black)
-                      : Colors.black),
+                      : TextColor()),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 10),
                 border: InputBorder.none,
@@ -2310,7 +2290,7 @@ class _DayScriptState extends State<DayScript> {
               ),
               controller: textEditingController5,
             ),
-            color: Colors.white)
+            color: BGColor())
       ],
     ));
   }
@@ -2331,7 +2311,7 @@ class _DayScriptState extends State<DayScript> {
                     ? (controll_memo.color == Colors.black
                         ? Colors.white
                         : Colors.black)
-                    : Colors.black),
+                    : TextColor()),
           ),
         ),
         Transform.scale(
@@ -2342,7 +2322,7 @@ class _DayScriptState extends State<DayScript> {
                   ? (controll_memo.color == Colors.black
                       ? Colors.white
                       : Colors.black)
-                  : Colors.black,
+                  : TextColor(),
               inactiveTrackColor: Colors.grey.shade100,
               value: isChecked_pushalarm,
               onChanged: (bool val) {
@@ -2358,85 +2338,93 @@ class _DayScriptState extends State<DayScript> {
   Alarmupdateversion() {
     return SizedBox(
         child: ContainerDesign(
-      color: Colors.white,
+      color: BGColor(),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CheckboxListTile(
-            title: Text(
-              '하루전 알람',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize(),
-                  color: widget.position == 'note'
-                      ? (controll_memo.color == Colors.black
-                          ? Colors.white
-                          : Colors.black)
-                      : Colors.black),
+          Theme(
+              data: ThemeData(
+                  disabledColor: TextColor(),
+                  unselectedWidgetColor: TextColor()),
+              child: CheckboxListTile(
+                title: Text(
+                  '하루전 알람',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize(),
+                      color: widget.position == 'note'
+                          ? (controll_memo.color == Colors.black
+                              ? Colors.white
+                              : Colors.black)
+                          : TextColor()),
+                ),
+                subtitle: Text(
+                  '이 기능은 하루전날만 알람이 울립니다.',
+                  maxLines: 2,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.grey.shade400,
+                      overflow: TextOverflow.ellipsis),
+                ),
+                enabled: !isChecked_pushalarm == true ? false : true,
+                value: alarmtypes[0],
+                onChanged: (bool? value) {
+                  setState(() {
+                    if (alarmtypes[1] == true) {
+                      alarmtypes[1] = false;
+                      alarmtypes[0] = value!;
+                    } else {
+                      alarmtypes[0] = value!;
+                    }
+                    isChecked_pushalarmwhat = 0;
+                  });
+                },
+                activeColor: BGColor(),
+                checkColor: Colors.blue,
+                selected: alarmtypes[0],
+              )),
+          Theme(
+            data: ThemeData(
+                disabledColor: TextColor(), unselectedWidgetColor: TextColor()),
+            child: CheckboxListTile(
+              title: Text(
+                '당일 알람',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize(),
+                    color: widget.position == 'note'
+                        ? (controll_memo.color == Colors.black
+                            ? Colors.white
+                            : Colors.black)
+                        : TextColor()),
+              ),
+              subtitle: Text(
+                '이 기능은 당일만 알람이 울립니다.',
+                maxLines: 2,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.grey.shade400,
+                    overflow: TextOverflow.ellipsis),
+              ),
+              enabled: !isChecked_pushalarm == true ? false : true,
+              value: alarmtypes[1],
+              onChanged: (bool? value) {
+                setState(() {
+                  if (alarmtypes[0] == true) {
+                    alarmtypes[0] = false;
+                    alarmtypes[1] = value!;
+                  } else {
+                    alarmtypes[1] = value!;
+                  }
+                  isChecked_pushalarmwhat = 1;
+                });
+              },
+              activeColor: BGColor(),
+              checkColor: Colors.blue,
+              selected: alarmtypes[1],
             ),
-            subtitle: Text(
-              '이 기능은 하루전날만 알람이 울립니다.',
-              maxLines: 2,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.grey.shade400,
-                  overflow: TextOverflow.ellipsis),
-            ),
-            enabled: !isChecked_pushalarm == true ? false : true,
-            value: alarmtypes[0],
-            onChanged: (bool? value) {
-              setState(() {
-                if (alarmtypes[1] == true) {
-                  alarmtypes[1] = false;
-                  alarmtypes[0] = value!;
-                } else {
-                  alarmtypes[0] = value!;
-                }
-                isChecked_pushalarmwhat = 0;
-              });
-            },
-            activeColor: Colors.white,
-            checkColor: Colors.blue,
-            selected: alarmtypes[0],
-          ),
-          CheckboxListTile(
-            title: Text(
-              '당일 알람',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize(),
-                  color: widget.position == 'note'
-                      ? (controll_memo.color == Colors.black
-                          ? Colors.white
-                          : Colors.black)
-                      : Colors.black),
-            ),
-            subtitle: Text(
-              '이 기능은 당일만 알람이 울립니다.',
-              maxLines: 2,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.grey.shade400,
-                  overflow: TextOverflow.ellipsis),
-            ),
-            enabled: !isChecked_pushalarm == true ? false : true,
-            value: alarmtypes[1],
-            onChanged: (bool? value) {
-              setState(() {
-                if (alarmtypes[0] == true) {
-                  alarmtypes[0] = false;
-                  alarmtypes[1] = value!;
-                } else {
-                  alarmtypes[1] = value!;
-                }
-                isChecked_pushalarmwhat = 1;
-              });
-            },
-            activeColor: Colors.white,
-            checkColor: Colors.blue,
-            selected: alarmtypes[1],
           ),
           const Divider(
             height: 30,
@@ -2455,7 +2443,7 @@ class _DayScriptState extends State<DayScript> {
                       ? (controll_memo.color == Colors.black
                           ? Colors.white
                           : Colors.black)
-                      : Colors.black),
+                      : TextColor()),
             ),
             subtitle: Text(
               '우측 알람 아이콘 클릭',
@@ -2468,7 +2456,10 @@ class _DayScriptState extends State<DayScript> {
             ),
             enabled: !isChecked_pushalarm == true ? false : true,
             trailing: IconButton(
-              icon: const Icon(Icons.alarm_add),
+              icon: Icon(
+                Icons.alarm_add,
+                color: TextColor(),
+              ),
               onPressed: !isChecked_pushalarm == true
                   ? null
                   : () async {
@@ -2513,7 +2504,7 @@ class _DayScriptState extends State<DayScript> {
                               ? (controll_memo.color == Colors.black
                                   ? Colors.white
                                   : Colors.black)
-                              : Colors.black),
+                              : TextColor()),
                     ),
                     trailing: controll_cal.hour1 != '99' ||
                             controll_cal.minute1 != '99'
@@ -2536,7 +2527,7 @@ class _DayScriptState extends State<DayScript> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
-                                                color: Colors.black),
+                                                color: TextColor()),
                                           )
                                         : Text(
                                             '0' +
@@ -2548,7 +2539,7 @@ class _DayScriptState extends State<DayScript> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
-                                                color: Colors.black),
+                                                color: TextColor()),
                                           ))
                                     : (controll_cal.minute1.toString().length <
                                             2
@@ -2562,7 +2553,7 @@ class _DayScriptState extends State<DayScript> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
-                                                color: Colors.black),
+                                                color: TextColor()),
                                           )
                                         : Text(
                                             controll_cal.hour1.toString() +
@@ -2573,7 +2564,7 @@ class _DayScriptState extends State<DayScript> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
-                                                color: Colors.black),
+                                                color: TextColor()),
                                           )))
                                 /*Text(
                                   controll_cal.hour1 + '시 ',

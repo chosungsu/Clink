@@ -460,9 +460,9 @@ content(
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          if (controll_memo.hour1.toString() ==
+                                          if (controll_cal.hour1.toString() ==
                                                   '99' ||
-                                              controll_memo.hour2.toString() ==
+                                              controll_cal.minute1.toString() ==
                                                   '99') {
                                             CreateCalandmemoSuccessFlushbar(
                                                 '시간 설정안됨!', fToast);
