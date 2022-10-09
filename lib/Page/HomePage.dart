@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const AppBarCustom(
-                            title: 'HashedLine',
+                            title: 'HashedLiv',
                             righticon: false,
                             func: null,
                           ),

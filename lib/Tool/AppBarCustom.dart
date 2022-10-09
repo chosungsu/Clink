@@ -96,12 +96,18 @@ class AppBarCustom extends StatelessWidget {
                               children: [
                                 Flexible(
                                   fit: FlexFit.tight,
-                                  child: Text(title.toString(),
-                                      style: GoogleFonts.lobster(
-                                        fontSize: 25,
-                                        color: TextColor(),
-                                        fontWeight: FontWeight.bold,
-                                      )),
+                                  child: NeumorphicText(
+                                    title.toString(),
+                                    textAlign: TextAlign.start,
+                                    style: NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: TextColor()),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ))),

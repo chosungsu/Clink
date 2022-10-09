@@ -312,7 +312,7 @@ calendarView(
                                         color: Colors.white,
                                         fontSize: contentTitleTextsize()),
                                     defaultTextStyle:
-                                        TextStyle(color: TextColor()),
+                                        const TextStyle(color: Colors.black),
                                     holidayTextStyle:
                                         const TextStyle(color: Colors.red),
                                     holidayDecoration: const BoxDecoration(

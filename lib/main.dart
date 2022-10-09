@@ -141,72 +141,6 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
     }
   }
 
-/*
-  Future<Widget?> initScreen() async {
-    if (name == '') {
-    } else {
-      await firestore.collection('User').doc(name).get().then((value) {
-        if (value.exists) {
-          peopleadd.secondnameset(value.data()!['subname']);
-        }
-      });
-      await firestore
-          .collection('HomeViewCategories')
-          .doc(Hive.box('user_setting').get('usercode'))
-          .get()
-          .then((value) {
-        peopleadd.defaulthomeviewlist.clear();
-        peopleadd.userviewlist.clear();
-        if (value.exists) {
-          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-            peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
-          }
-          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-            peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
-          }
-          firestore
-              .collection('HomeViewCategories')
-              .doc(Hive.box('user_setting').get('usercode'))
-              .set({
-            'usercode': Hive.box('user_setting').get('usercode'),
-            'viewcategory': peopleadd.defaulthomeviewlist,
-            'hidecategory': peopleadd.userviewlist
-          }, SetOptions(merge: true));
-          defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-          userviewlist = peopleadd.userviewlist;
-        } else {
-          peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
-          peopleadd.userviewlist.add(userviewlist);
-          firestore
-              .collection('HomeViewCategories')
-              .doc(Hive.box('user_setting').get('usercode'))
-              .set({
-            'usercode': Hive.box('user_setting').get('usercode'),
-            'viewcategory': peopleadd.defaulthomeviewlist,
-            'hidecategory': peopleadd.userviewlist
-          }, SetOptions(merge: true));
-          defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-          userviewlist = peopleadd.userviewlist;
-        }
-      });
-      await firestore.collection('AppNoticeByUsers').get().then((value) {
-        for (var element in value.docs) {
-          if (element.data()['username'] == name ||
-              element.data()['sharename'].toString().contains(name)) {
-            updateid.add(element.data()['read']);
-          }
-        }
-        if (updateid.contains('no')) {
-          isread = false;
-          notilist.isread = false;
-        } else {
-          isread = true;
-          notilist.isread = true;
-        }
-      });
-    }
-  }
-*/
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -220,7 +154,6 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   }
 
   waitingbody() {
-    print('start');
     return SizedBox(
         child: name == ''
             ? body()
@@ -250,7 +183,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                 height: height * 0.55,
                 child: Center(
                   child: NeumorphicText(
-                    'Habit Tracker',
+                    'HashedLiv',
                     style: const NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,
@@ -279,7 +212,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                                   color: Colors.black),
                               speed: const Duration(milliseconds: 150)),
                         ],
-                        totalRepeatCount: 2,
+                        totalRepeatCount: 1,
                         onFinished: () {
                           GoToMain(context);
                         },
@@ -303,7 +236,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                 height: height * 0.55,
                 child: Center(
                   child: NeumorphicText(
-                    'Habit Tracker',
+                    'HashedLiv',
                     style: const NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,
