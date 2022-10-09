@@ -100,8 +100,8 @@ calendarView(
                                       child: Center(
                                         child: Text(
                                             DateFormat.E('ko_KR').format(day),
-                                            style:
-                                                TextStyle(color: TextColor())),
+                                            style: const TextStyle(
+                                                color: Colors.black)),
                                       ),
                                     );
                                   }
@@ -297,7 +297,7 @@ calendarView(
                                       ],
                                     ),
                                     titleTextStyle: TextStyle(
-                                      color: TextColor(),
+                                      color: Colors.black,
                                       fontSize: contentTitleTextsize(),
                                       fontWeight: FontWeight.bold,
                                     ),
