@@ -215,26 +215,29 @@ class _DayScriptState extends State<DayScript> {
             : (cal.repeatwhile != 'no'
                 ? differ_date = cal.repeatdate
                 : differ_date = 0);
-        for (int i = 0; i <= differ_date; i++) {
-          if (differ_date == 0) {
-          } else {
-            widget.lastdate != widget.firstdate
-                ? differ_list.add(DateTime(widget.firstdate.year,
-                    widget.firstdate.month, widget.firstdate.day + i))
-                : (cal.repeatwhile == '주'
-                    ? differ_list.add(DateTime(
-                        controll_cal.selectedDay.year,
-                        controll_cal.selectedDay.month,
-                        controll_cal.selectedDay.day + 7 * i))
-                    : (cal.repeatwhile == '월'
-                        ? differ_list.add(DateTime(
-                            controll_cal.selectedDay.year,
-                            controll_cal.selectedDay.month + i,
-                            controll_cal.selectedDay.day))
-                        : differ_list.add(DateTime(
-                            controll_cal.selectedDay.year + i,
-                            controll_cal.selectedDay.month,
-                            controll_cal.selectedDay.day))));
+        if (differ_date == 0) {
+        } else {
+          for (int i = 0; i <= differ_date; i++) {
+            if (differ_date == 0) {
+            } else {
+              widget.lastdate != widget.firstdate
+                  ? differ_list.add(DateTime(widget.firstdate.year,
+                      widget.firstdate.month, widget.firstdate.day + i))
+                  : (cal.repeatwhile == '주'
+                      ? differ_list.add(DateTime(
+                          controll_cal.selectedDay.year,
+                          controll_cal.selectedDay.month,
+                          controll_cal.selectedDay.day + 7 * i))
+                      : (cal.repeatwhile == '월'
+                          ? differ_list.add(DateTime(
+                              controll_cal.selectedDay.year,
+                              controll_cal.selectedDay.month + i,
+                              controll_cal.selectedDay.day))
+                          : differ_list.add(DateTime(
+                              controll_cal.selectedDay.year + i,
+                              controll_cal.selectedDay.month,
+                              controll_cal.selectedDay.day))));
+            }
           }
         }
         firestore.collection('AppNoticeByUsers').add({

@@ -3,6 +3,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
+import '../Dialogs/destroyBackKey.dart';
+import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/RadioCustom.dart';
 import '../Tool/TextSize.dart';
@@ -535,22 +537,80 @@ content(
                             borderRadius: BorderRadius.circular(20)),
                         primary: Colors.blue,
                       ),
-                      onPressed: () {
-                        Get.back();
+                      onPressed: () async {
                         if (switchval[0] != false ||
                             switchval[1] != false ||
                             switchval[2] != false) {
-                          if (textEditingController4.text.isEmpty) {
+                          if (textEditingController4.text.isEmpty ||
+                              int.parse(textEditingController4.text) == 0) {
                             cal.repeatwhile = 'no';
+                            Get.back();
                           } else {
                             cal.setrepeatdate(
                                 int.parse(textEditingController4.text),
                                 changeset == 0
                                     ? '주'
                                     : (changeset == 1 ? '월' : '년'));
+                            final reloadpage = await Get.dialog(
+                                    OSDialogthird(context, '알림', Builder(
+                                  builder: (context) {
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.85,
+                                      child: SingleChildScrollView(
+                                        child: Text(
+                                            '설정하신 ' +
+                                                cal.repeatdate.toString() +
+                                                '기간은 일정의 첫 시작일을 반복기간에 포함한 기간인가요? (\'네 맞습니다\'를 누르시면 자동으로 설정하신 기간에서 1일을 감소하여 저장해드립니다!)',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize(),
+                                                color: Colors.blueGrey)),
+                                      ),
+                                    );
+                                  },
+                                ), pressed2)) ??
+                                false;
+                            if (reloadpage) {
+                              Get.back();
+                              if (switchval[0] != false ||
+                                  switchval[1] != false ||
+                                  switchval[2] != false) {
+                                if (textEditingController4.text.isEmpty) {
+                                  cal.repeatwhile = 'no';
+                                } else {
+                                  cal.setrepeatdate(
+                                      int.parse(textEditingController4.text) -
+                                          1,
+                                      changeset == 0
+                                          ? '주'
+                                          : (changeset == 1 ? '월' : '년'));
+                                }
+                              } else {
+                                cal.setrepeatdate(0, 'no');
+                              }
+                            } else {
+                              Get.back();
+                              if (switchval[0] != false ||
+                                  switchval[1] != false ||
+                                  switchval[2] != false) {
+                                if (textEditingController4.text.isEmpty) {
+                                  cal.repeatwhile = 'no';
+                                } else {
+                                  cal.setrepeatdate(
+                                      int.parse(textEditingController4.text),
+                                      changeset == 0
+                                          ? '주'
+                                          : (changeset == 1 ? '월' : '년'));
+                                }
+                              } else {
+                                cal.setrepeatdate(0, 'no');
+                              }
+                            }
                           }
                         } else {
                           cal.setrepeatdate(0, 'no');
+                          Get.back();
                         }
                       },
                       child: Center(
@@ -577,84 +637,6 @@ content(
                       )),
                 ),
               ],
-            )
-        /*Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      child: TextField(
-                        focusNode: searchNode_forth_section,
-                        textAlign: TextAlign.center,
-                        controller: textEditingController4,
-                        style: TextStyle(
-                            color: Colors.black, fontSize: contentTextsize()),
-                        decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade400)),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue.shade400)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      '주간 반복',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                          color: Colors.black),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        primary: Colors.blue,
-                      ),
-                      onPressed: () {
-                        Get.back();
-                        cal.setrepeatdate(
-                            int.parse(textEditingController4.text));
-                      },
-                      child: Center(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: NeumorphicText(
-                                '설정하기',
-                                style: const NeumorphicStyle(
-                                  shape: NeumorphicShape.flat,
-                                  depth: 3,
-                                  color: Colors.white,
-                                ),
-                                textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
-                ),
-              ],
-            )*/
-        );
+            ));
   });
 }
