@@ -1,6 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/DayContentHome.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:clickbyme/initScreenLoading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -71,6 +73,7 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
 {
+  late final NotificationApi notificationApi;
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
   bool islogined = false;
@@ -91,6 +94,8 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    notificationApi = NotificationApi();
+    listenToNotificationStream();
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notifications = PushNotification(
@@ -128,6 +133,23 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   @override
   void dispose() {
     super.dispose();
+  }
+
+  listenToNotificationStream() {
+    NotificationApi.behaviorSubject.listen((payload) {
+      if (payload.isNotEmpty) {
+        Get.to(() {
+          DayContentHome(title: payload);
+        }, transition: Transition.downToUp);
+      } else {
+        Get.to(() {
+          const DayNoteHome(
+            title: '',
+            isfromwhere: 'home',
+          );
+        }, transition: Transition.downToUp);
+      }
+    });
   }
 
   checkForInitialMessage() async {
@@ -212,7 +234,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                                   color: Colors.black),
                               speed: const Duration(milliseconds: 150)),
                         ],
-                        totalRepeatCount: 1,
+                        totalRepeatCount: 2,
                         onFinished: () {
                           GoToMain(context);
                         },

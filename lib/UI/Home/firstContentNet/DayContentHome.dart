@@ -26,18 +26,18 @@ class DayContentHome extends StatefulWidget {
   const DayContentHome({
     Key? key,
     required this.title,
-    required this.share,
+    /*required this.share,
     required this.origin,
     required this.theme,
     required this.view,
-    required this.calname,
+    required this.calname,*/
   }) : super(key: key);
   final String title;
-  final List share;
+  /*final List share;
   final String origin;
   final String calname;
   final int theme;
-  final int view;
+  final int view;*/
   @override
   State<StatefulWidget> createState() => _DayContentHomeState();
 }
@@ -49,11 +49,11 @@ class _DayContentHomeState extends State<DayContentHome>
   double myWidth = 0.0;
   final cal_share_person = Get.put(PeopleAdd());
   var controll_cals = Get.put(calendarsetting());
-  int setcal_fromsheet = 0;
-  int themecal_fromsheet = 0;
+  //int setcal_fromsheet = 0;
+  //int themecal_fromsheet = 0;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
-  late Map<DateTime, List<Event>> _events;
+  late Map<DateTime, List<Event>> events;
   late DateTime fromDate = DateTime.now();
   late DateTime toDate = DateTime.now();
   String hour = '';
@@ -62,7 +62,11 @@ class _DayContentHomeState extends State<DayContentHome>
     'id',
   );
   String usercode = Hive.box('user_setting').get('usercode');
-
+  String madeUser = '';
+  int theme = 0;
+  int view = 0;
+  String calname = '';
+  List share = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   var _rangeStart = null;
@@ -71,7 +75,7 @@ class _DayContentHomeState extends State<DayContentHome>
   List<bool> alarmtypes = [];
   bool isChecked_pushalarm = false;
   List<Event> getList(DateTime date) {
-    return _events[date] ?? [];
+    return events[date] ?? [];
   }
 
   @override
@@ -84,7 +88,7 @@ class _DayContentHomeState extends State<DayContentHome>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    setcal_fromsheet = widget.view;
+    /*setcal_fromsheet = widget.view;
     themecal_fromsheet = widget.theme;
     if (setcal_fromsheet == 0) {
       controll_cals.showcalendar = 0;
@@ -97,12 +101,31 @@ class _DayContentHomeState extends State<DayContentHome>
       controll_cals.themecalendar = 0;
     } else {
       controll_cals.themecalendar = 1;
-    }
+    }*/
     fromDate = DateTime.now();
     toDate = DateTime.now().add(const Duration(hours: 2));
-    _events = {};
+    events = {};
     controll_cals.selectedDay = _selectedDay;
     controll_cals.focusedDay = _focusedDay;
+    firestore
+        .collection('CalendarSheetHome_update')
+        .where('madeUser', isEqualTo: usercode)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        for (int i = 0; i < value.docs.length; i++) {
+          if (value.docs[i].id == widget.title) {
+            madeUser = value.docs[i]['madeUser'];
+            theme = value.docs[i]['themesetting'];
+            view = value.docs[i]['viewsetting'];
+            share = value.docs[i]['share'];
+            calname = value.docs[i]['calname'];
+            controll_cals.showcalendar = view;
+            controll_cals.themecalendar = theme;
+          }
+        }
+      }
+    });
   }
 
   @override
@@ -127,7 +150,7 @@ class _DayContentHomeState extends State<DayContentHome>
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: BGColor(),
-            body: EnterCheckUi(controll_cals, _events)));
+            body: EnterCheckUi(controll_cals, events)));
   }
 
   EnterCheckUi(
@@ -148,21 +171,21 @@ class _DayContentHomeState extends State<DayContentHome>
                   builder: ((context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.docs.isNotEmpty) {
-                        _events.clear();
+                        events.clear();
                         final valuespace = snapshot.data!.docs;
                         for (var sp in valuespace) {
                           final ev_date = sp.get('Date');
                           final ev_todo = sp.get('Daytodo');
-                          if (_events[DateTime.parse(
+                          if (events[DateTime.parse(
                                   sp.get('Date').toString().split('일')[0] +
                                       ' 00:00:00.000Z')] !=
                               null) {
-                            _events[DateTime.parse(
+                            events[DateTime.parse(
                                     sp.get('Date').toString().split('일')[0] +
                                         ' 00:00:00.000Z')]!
                                 .add(Event(title: sp.get('Daytodo')));
                           } else {
-                            _events[DateTime.parse(
+                            events[DateTime.parse(
                                 sp.get('Date').toString().split('일')[0] +
                                     ' 00:00:00.000Z')] = [
                               Event(title: sp.get('Daytodo'))
@@ -179,11 +202,15 @@ class _DayContentHomeState extends State<DayContentHome>
                             _focusedDay,
                             _selectedDay,
                             widget.title,
-                            widget.share,
-                            widget.calname,
+                            /*widget.share,
+                            widget.calname,*/
+                            share,
+                            calname,
                             usercode,
-                            widget.theme,
-                            widget.view,
+                            /*widget.theme,
+                            widget.view,*/
+                            theme,
+                            view,
                             'oncontent'));
                   })),
               Flexible(
@@ -451,48 +478,6 @@ class _DayContentHomeState extends State<DayContentHome>
                                                                     ),
                                                             ],
                                                           )
-                                                    /*NeumorphicText(
-                                                            snapshot
-                                                                        .data!
-                                                                        .docs[index]
-                                                                            [
-                                                                            'Timestart']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            1]
-                                                                        .length ==
-                                                                    1
-                                                                ? snapshot.data!.docs[index]['Timestart']
-                                                                            .toString()
-                                                                            .split(':')[
-                                                                        0] +
-                                                                    ':0' +
-                                                                    snapshot
-                                                                        .data!
-                                                                        .docs[
-                                                                            index][
-                                                                            'Timestart']
-                                                                        .toString()
-                                                                        .split(
-                                                                            ':')[1]
-                                                                : snapshot.data!.docs[index]['Timestart'],
-                                                            style:
-                                                                NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .flat,
-                                                              depth: 3,
-                                                              color:
-                                                                  TextColor(),
-                                                            ),
-                                                            textStyle:
-                                                                NeumorphicTextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 20,
-                                                            ),
-                                                          ),*/
                                                   ],
                                                 )),
                                             VerticalDivider(
@@ -520,7 +505,8 @@ class _DayContentHomeState extends State<DayContentHome>
                                                             i++) {
                                                           if (value
                                                                   .docs[i].id ==
-                                                              username) {
+                                                              cal_share_person
+                                                                  .secondname) {
                                                             if (value.docs[i]
                                                                         .data()[
                                                                     'calcode'] ==
@@ -577,34 +563,38 @@ class _DayContentHomeState extends State<DayContentHome>
                                                       }
                                                     });
                                                     Get.to(
-                                                        () => ClickShowEachCalendar(
-                                                            start: snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                ['Timestart'],
-                                                            finish: snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                ['Timefinish'],
-                                                            calinfo: snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                ['Daytodo'],
-                                                            date: controll_cals
-                                                                .selectedDay,
-                                                            share: snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                ['Shares'],
-                                                            calname: widget.calname,
-                                                            code: snapshot.data!.docs[index]['calname'],
-                                                            summary: snapshot.data!.docs[index]['summary'],
-                                                            isfromwhere: 'dayhome',
-                                                            id: snapshot.data!.docs[index].id,
-                                                            alarmtypes: alarmtypes,
-                                                            alarmmake: isChecked_pushalarm,
-                                                            alarmhour: hour,
-                                                            alarmminute: minute),
+                                                        () =>
+                                                            ClickShowEachCalendar(
+                                                                start: snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    [
+                                                                    'Timestart'],
+                                                                finish: snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    [
+                                                                    'Timefinish'],
+                                                                calinfo: snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    ['Daytodo'],
+                                                                date: controll_cals
+                                                                    .selectedDay,
+                                                                share: snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                    ['Shares'],
+                                                                //calname: widget.calname,
+                                                                calname: calname,
+                                                                code: snapshot.data!.docs[index]['calname'],
+                                                                summary: snapshot.data!.docs[index]['summary'],
+                                                                isfromwhere: 'dayhome',
+                                                                id: snapshot.data!.docs[index].id,
+                                                                alarmtypes: alarmtypes,
+                                                                alarmmake: isChecked_pushalarm,
+                                                                alarmhour: hour,
+                                                                alarmminute: minute),
                                                         transition: Transition.downToUp);
                                                   },
                                                   child: Container(

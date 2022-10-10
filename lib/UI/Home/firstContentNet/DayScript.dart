@@ -315,7 +315,7 @@ class _DayScriptState extends State<DayScript> {
                     .collection('CalendarDataBase')
                     .doc(value.id)
                     .collection('AlarmTable')
-                    .doc(username)
+                    .doc(cal_share_person.secondname)
                     .set({
                   'alarmtype': alarmtypes,
                   'alarmhour': controll_cal.hour1,
@@ -382,21 +382,19 @@ class _DayScriptState extends State<DayScript> {
                                         1
                                     ? '예정된 시각 : ' + thirdtxt
                                     : '예정된 시각 : ' + forthtxt),
+                        payload: value.id,
                         scheduledate: DateTime.utc(
-                          int.parse(widget.firstdate
-                              .toString()
+                          int.parse(differ_list[h]
                               .toString()
                               .split(' ')[0]
                               .toString()
                               .substring(0, 4)),
-                          int.parse(widget.firstdate
-                              .toString()
+                          int.parse(differ_list[h]
                               .toString()
                               .split(' ')[0]
                               .toString()
                               .substring(5, 7)),
-                          int.parse(widget.firstdate
-                                  .toString()
+                          int.parse(differ_list[h]
                                   .toString()
                                   .split(' ')[0]
                                   .toString()
@@ -436,21 +434,19 @@ class _DayScriptState extends State<DayScript> {
                                         1
                                     ? '예정된 시각 : ' + thirdtxt
                                     : '예정된 시각 : ' + forthtxt),
+                        payload: value.id,
                         scheduledate: DateTime.utc(
-                          int.parse(widget.firstdate
-                              .toString()
+                          int.parse(differ_list[h]
                               .toString()
                               .split(' ')[0]
                               .toString()
                               .substring(0, 4)),
-                          int.parse(widget.firstdate
-                              .toString()
+                          int.parse(differ_list[h]
                               .toString()
                               .split(' ')[0]
                               .toString()
                               .substring(5, 7)),
-                          int.parse(widget.firstdate
-                              .toString()
+                          int.parse(differ_list[h]
                               .toString()
                               .split(' ')[0]
                               .toString()
@@ -515,7 +511,7 @@ class _DayScriptState extends State<DayScript> {
                     .collection('CalendarDataBase')
                     .doc(valueid[i])
                     .collection('AlarmTable')
-                    .doc(username)
+                    .doc(cal_share_person.secondname)
                     .set({
                   'alarmtype': alarmtypes,
                   'alarmhour': controll_cal.hour1,
@@ -596,6 +592,7 @@ class _DayScriptState extends State<DayScript> {
                                         1
                                     ? '예정된 시각 : ' + thirdtxt
                                     : '예정된 시각 : ' + forthtxt),
+                        payload: valueid[j],
                         scheduledate: DateTime.utc(
                           int.parse(widget.firstdate
                               .toString()
@@ -660,6 +657,7 @@ class _DayScriptState extends State<DayScript> {
                                         1
                                     ? '예정된 시각 : ' + thirdtxt
                                     : '예정된 시각 : ' + forthtxt),
+                        payload: valueid[j],
                         scheduledate: DateTime.utc(
                           int.parse(widget.firstdate
                               .toString()

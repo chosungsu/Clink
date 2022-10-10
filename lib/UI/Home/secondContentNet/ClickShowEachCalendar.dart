@@ -301,12 +301,34 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             .collection('CalendarDataBase')
             .doc(widget.id)
             .collection('AlarmTable')
-            .doc(name)
-            .update({
-          'alarmhour': controll_cal.hour1,
-          'alarmminute': controll_cal.minute1,
-          'alarmmake': isChecked_pushalarm,
-          'alarmtype': alarmtypes,
+            .doc(cal_share_person.secondname)
+            .get()
+            .then((value) {
+          if (value.exists) {
+            firestore
+                .collection('CalendarDataBase')
+                .doc(widget.id)
+                .collection('AlarmTable')
+                .doc(cal_share_person.secondname)
+                .update({
+              'alarmhour': controll_cal.hour1,
+              'alarmminute': controll_cal.minute1,
+              'alarmmake': isChecked_pushalarm,
+              'alarmtype': alarmtypes,
+            });
+          } else {
+            firestore
+                .collection('CalendarDataBase')
+                .doc(widget.id)
+                .collection('AlarmTable')
+                .doc(cal_share_person.secondname)
+                .set({
+              'alarmhour': controll_cal.hour1,
+              'alarmminute': controll_cal.minute1,
+              'alarmmake': isChecked_pushalarm,
+              'alarmtype': alarmtypes,
+            }, SetOptions(merge: true));
+          }
         });
       }).whenComplete(() {
         setState(() {
@@ -350,6 +372,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     : (textEditingController3.text.split(':')[0].length == 1
                         ? '예정된 시각 : ' + thirdtxt
                         : '예정된 시각 : ' + forthtxt),
+                payload: widget.id,
                 scheduledate: DateTime.utc(
                   int.parse(widget.date.toString().split('-')[0]),
                   int.parse(widget.date.toString().split('-')[1]),
@@ -391,6 +414,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     : (textEditingController3.text.split(':')[0].length == 1
                         ? '예정된 시각 : ' + thirdtxt
                         : '예정된 시각 : ' + forthtxt),
+                payload: widget.id,
                 scheduledate: DateTime.utc(
                   int.parse(widget.date.toString().split('-')[0]),
                   int.parse(widget.date.toString().split('-')[1]),

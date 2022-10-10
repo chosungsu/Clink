@@ -1,9 +1,12 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:rxdart/subjects.dart';
 
 class NotificationApi {
+  NotificationApi();
   static final _notifications = FlutterLocalNotificationsPlugin();
+  static final BehaviorSubject<String> behaviorSubject = BehaviorSubject();
 
   static Future cancelNotification({required int id}) async {
     await _notifications.cancel(id);
@@ -29,6 +32,7 @@ class NotificationApi {
       {int? id,
       String? title,
       String? body,
+      String? payload,
       required DateTime scheduledate}) async {
     await _notifications
         .resolvePlatformSpecificImplementation<
@@ -36,22 +40,19 @@ class NotificationApi {
         ?.deleteNotificationChannelGroup('id');
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
-    _notifications.zonedSchedule(
-      id!,
-      title,
-      body,
-      _nextInstance(scheduledate),
-      await _notificationDetails(),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+    _notifications.zonedSchedule(id!, title, body, _nextInstance(scheduledate),
+        await _notificationDetails(),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: payload);
   }
 
   static void showDailyNotification(
       {int id = 1,
       String? title,
       String? body,
+      String? payload,
       required DateTime scheduledate}) async {
     await _notifications
         .resolvePlatformSpecificImplementation<
@@ -59,23 +60,20 @@ class NotificationApi {
         ?.deleteNotificationChannelGroup('id');
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
-    _notifications.zonedSchedule(
-      id,
-      title,
-      body,
-      _nextInstancedaily(scheduledate),
-      await _notificationDetails(),
-      matchDateTimeComponents: DateTimeComponents.time,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+    _notifications.zonedSchedule(id, title, body,
+        _nextInstancedaily(scheduledate), await _notificationDetails(),
+        matchDateTimeComponents: DateTimeComponents.time,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: payload);
   }
 
   static void showDailyNotification_severalnotes(
       {int? id,
       String? title,
       String? body,
+      String? payload,
       required DateTime scheduledate}) async {
     await _notifications
         .resolvePlatformSpecificImplementation<
@@ -83,17 +81,13 @@ class NotificationApi {
         ?.deleteNotificationChannelGroup('id');
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
-    _notifications.zonedSchedule(
-      id!,
-      title,
-      body,
-      _nextInstancedaily(scheduledate),
-      await _notificationDetails(),
-      matchDateTimeComponents: DateTimeComponents.time,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+    _notifications.zonedSchedule(id!, title, body,
+        _nextInstancedaily(scheduledate), await _notificationDetails(),
+        matchDateTimeComponents: DateTimeComponents.time,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: payload);
   }
 
   // 알림일자
@@ -157,8 +151,13 @@ class NotificationApi {
         requestBadgePermission: true);
     const settings = InitializationSettings(android: android, iOS: iOS);
 
-    await _notifications.initialize(
-      settings,
-    );
+    await _notifications.initialize(settings,
+        onSelectNotification: onSelectNoti);
+  }
+
+  static void onSelectNoti(String? payload) async {
+    if (payload != null && payload.isNotEmpty) {
+      behaviorSubject.add(payload);
+    }
   }
 }

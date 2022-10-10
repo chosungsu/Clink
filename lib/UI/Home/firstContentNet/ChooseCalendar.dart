@@ -679,7 +679,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                 () => DayContentHome(
                                                   title: snapshot
                                                       .data!.docs[index].id,
-                                                  share: snapshot.data!
+                                                  /*share: snapshot.data!
                                                       .docs[index]['share'],
                                                   origin: snapshot.data!
                                                       .docs[index]['madeUser'],
@@ -690,7 +690,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                       snapshot.data!.docs[index]
                                                           ['viewsetting'],
                                                   calname: snapshot.data!
-                                                      .docs[index]['calname'],
+                                                      .docs[index]['calname'],*/
                                                 ),
                                                 transition:
                                                     Transition.rightToLeft,
@@ -1149,7 +1149,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                 () => DayContentHome(
                                                   title: snapshot
                                                       .data!.docs[index]['doc'],
-                                                  share: snapshot.data!
+                                                  /*share: snapshot.data!
                                                       .docs[index]['share'],
                                                   origin: snapshot.data!
                                                       .docs[index]['madeUser'],
@@ -1162,7 +1162,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                               ['viewsetting'] ??
                                                           0,
                                                   calname: snapshot.data!
-                                                      .docs[index]['calname'],
+                                                      .docs[index]['calname'],*/
                                                 ),
                                                 transition:
                                                     Transition.rightToLeft,

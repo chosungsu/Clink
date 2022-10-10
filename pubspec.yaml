@@ -112,6 +112,7 @@ dependencies:
   local_auth_android: 
   google_mobile_ads: 
   store_redirect: 
+  rxdart: 
   
   
   
