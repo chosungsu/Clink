@@ -26,7 +26,77 @@ pushalarmsettingmemo(
   String id,
   FToast fToast,
 ) {
-  showModalBottomSheet(
+  Get.bottomSheet(
+    Container(
+      margin: const EdgeInsets.all(10),
+      child: Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              child: GetBuilder<memosetting>(
+                  builder: (_) => Padding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      child: Container(
+                        margin: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            )),
+                        child: Stack(
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  setalarmhourNode.unfocus();
+                                  setalarmminuteNode.unfocus();
+                                },
+                                child: SingleChildScrollView(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    child: SheetPage(
+                                        context,
+                                        setalarmhourNode,
+                                        setalarmminuteNode,
+                                        controller_hour,
+                                        controller_minute,
+                                        doc_title,
+                                        id,
+                                        fToast))),
+                            memosetting().loading == true
+                                ? const Loader_sheets(
+                                    wherein: 'memoeach',
+                                    height: 400,
+                                  )
+                                : SizedBox(),
+                          ],
+                        ),
+                      ))))),
+    ),
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(20),
+      bottomLeft: Radius.circular(20),
+      topRight: Radius.circular(20),
+      bottomRight: Radius.circular(20),
+    )),
+  );
+  /*showModalBottomSheet(
       backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -94,7 +164,7 @@ pushalarmsettingmemo(
                             ),
                           ))))),
         );
-      });
+      });*/
 }
 
 SheetPage(

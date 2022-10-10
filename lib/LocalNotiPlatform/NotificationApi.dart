@@ -1,7 +1,11 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rxdart/subjects.dart';
+
+import '../UI/Home/firstContentNet/DayContentHome.dart';
+import '../UI/Home/firstContentNet/DayNoteHome.dart';
 
 class NotificationApi {
   NotificationApi();
@@ -156,8 +160,44 @@ class NotificationApi {
   }
 
   static void onSelectNoti(String? payload) async {
+    print(payload);
     if (payload != null && payload.isNotEmpty) {
-      behaviorSubject.add(payload);
+      if (payload.isNotEmpty) {
+        if (payload == 'memo') {
+          Get.to(
+              () => const DayNoteHome(
+                    title: '',
+                    isfromwhere: 'home',
+                  ),
+              transition: Transition.downToUp);
+        } else {
+          Get.to(() => DayContentHome(id: payload),
+              transition: Transition.downToUp);
+        }
+      } else {}
     }
   }
+
+  /*void _runWhileAppIsTerminated() async {
+    var details = await _notifications.getNotificationAppLaunchDetails();
+
+    if (details!.didNotificationLaunchApp) {
+      if (details.payload != null) {
+        final prefs = await SharedPreferences.getInstance();
+
+        if (prefs.getBool('hasMsgId')) {
+          prefs.remove('hasMsgId');
+
+          if (prefs.get('authId').toString() != null) {
+            Navigator.of(context).pushNamed(
+              ItemDetailsScreen.routeName,
+              arguments: details.payload,
+            );
+          } else {
+            Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
+          }
+        }
+      }
+    }
+  }*/
 }

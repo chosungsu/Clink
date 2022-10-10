@@ -25,6 +25,7 @@ import '../firstContentNet/DayScript.dart';
 class ClickShowEachCalendar extends StatefulWidget {
   const ClickShowEachCalendar({
     Key? key,
+    required this.groupcode,
     required this.start,
     required this.finish,
     required this.calinfo,
@@ -40,6 +41,7 @@ class ClickShowEachCalendar extends StatefulWidget {
     required this.alarmhour,
     required this.alarmminute,
   }) : super(key: key);
+  final String groupcode;
   final String start;
   final String finish;
   final String calinfo;
@@ -87,6 +89,10 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   final cal_share_person = Get.put(PeopleAdd());
   final controll_cal = Get.put(calendarsetting());
   String updateidalarm = '';
+  String deleterepeatwhile = '';
+  int deleterepeatdate = 0;
+  List differ_list = [];
+  String deleteidsingle = '';
 
   @override
   void didChangeDependencies() {
@@ -97,6 +103,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   @override
   void initState() {
     super.initState();
+    print(widget.date);
     alarmtypes.clear();
     fToast = FToast();
     fToast.init(context);
@@ -119,13 +126,14 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     isChecked_pushalarm = widget.alarmmake;
     controll_cal.hour1 = widget.alarmhour;
     controll_cal.minute1 = widget.alarmminute;
-
+    deleteid = [];
     isChecked_pushalarmwhat =
         widget.alarmtypes.indexWhere((element) => element == true);
   }
 
   void deletelogic() async {
     //삭제
+    deleteid.clear();
     final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
           builder: (context) {
             return SizedBox(
@@ -173,37 +181,142 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             .collection('CalendarDataBase')
             .where('calname', isEqualTo: widget.code)
             .where('Daytodo', isEqualTo: widget.calinfo)
-            .where('Date',
+            .where('code', isEqualTo: widget.groupcode)
+            .where('OriginalUser',
+                isEqualTo: Hive.box('user_setting').get('usercode'))
+            /*.where('Date',
                 isEqualTo: widget.date.toString().split('-')[0] +
                     '-' +
                     widget.date.toString().split('-')[1] +
                     '-' +
                     widget.date.toString().split('-')[2].substring(0, 2) +
-                    '일')
+                    '일')*/
             .where('Timestart', isEqualTo: widget.start)
             .get()
-            .then((value) {
-          deleteid.clear();
+            .then((value) async {
           for (var element in value.docs) {
             deleteid.add(element.id);
+            deleterepeatwhile = element.data()['whenrepeat'];
+            deleterepeatdate = element.data()['whattimecnt'];
+            differ_list.add(element.data()['Date']);
           }
-          for (int i = 0; i < deleteid.length; i++) {
-            firestore.collection('CalendarDataBase').doc(deleteid[i]).delete();
-          }
-        }).whenComplete(() {
-          Future.delayed(const Duration(seconds: 0), () async {
-            setState(() {
-              loading = false;
-            });
-            CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
-            widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
-
-            NotificationApi.cancelNotification(
-                id: int.parse(widget.date.toString().split('-')[0]) +
-                    int.parse(widget.date.toString().split('-')[1]) +
-                    int.parse(widget.id.hashCode.toString()) +
-                    int.parse(cal_share_person.secondname.hashCode.toString()));
+          await firestore
+              .collection('CalendarDataBase')
+              .where('calname', isEqualTo: widget.code)
+              .where('Daytodo', isEqualTo: widget.calinfo)
+              .where('Date',
+                  isEqualTo: widget.date.toString().split('-')[0] +
+                      '-' +
+                      widget.date.toString().split('-')[1] +
+                      '-' +
+                      widget.date.toString().split('-')[2].substring(0, 2) +
+                      '일')
+              .where('Timestart', isEqualTo: widget.start)
+              .get()
+              .then((value) {
+            deleteidsingle = value.docs[0].id;
           });
+        }).whenComplete(() async {
+          if (deleterepeatwhile == 'no') {
+            Future.delayed(const Duration(seconds: 0), () async {
+              setState(() {
+                loading = false;
+              });
+              CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
+              widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+              firestore
+                  .collection('CalendarDataBase')
+                  .doc(deleteidsingle)
+                  .delete();
+              NotificationApi.cancelNotification(
+                  id: int.parse(widget.date.toString().split('-')[0]) +
+                      int.parse(widget.date.toString().split('-')[1]) +
+                      int.parse(widget.id.hashCode.toString()) +
+                      int.parse(
+                          cal_share_person.secondname.hashCode.toString()));
+            });
+          } else {
+            if (differ_list.length == 1) {
+              Future.delayed(const Duration(seconds: 0), () async {
+                setState(() {
+                  loading = false;
+                });
+                CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
+                widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+                firestore
+                    .collection('CalendarDataBase')
+                    .doc(deleteidsingle)
+                    .delete();
+                NotificationApi.cancelNotification(
+                    id: int.parse(widget.date.toString().split('-')[0]) +
+                        int.parse(widget.date.toString().split('-')[1]) +
+                        int.parse(widget.id.hashCode.toString()) +
+                        int.parse(
+                            cal_share_person.secondname.hashCode.toString()));
+              });
+            } else {
+              final reloadpage =
+                  await Get.dialog(OSDialogsecond(context, '알림', Builder(
+                        builder: (context) {
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            child: SingleChildScrollView(
+                              child: Text(
+                                  '이 일정은 ' +
+                                      deleterepeatwhile +
+                                      '간 반복 설정되어 ' +
+                                      (differ_list.length - 1).toString() +
+                                      '개의 동일일정이 있습니다. 무엇을 도와드릴까요?',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                      color: Colors.blueGrey)),
+                            ),
+                          );
+                        },
+                      ), pressed2)) ??
+                      false;
+              if (reloadpage) {
+                Future.delayed(const Duration(seconds: 0), () async {
+                  setState(() {
+                    loading = false;
+                  });
+                  CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
+                  widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+                  for (int i = 0; i <= deleterepeatdate; i++) {
+                    firestore
+                        .collection('CalendarDataBase')
+                        .doc(deleteid[i])
+                        .delete();
+                    NotificationApi.cancelNotification(
+                        id: int.parse(differ_list[i].toString().split('-')[0]) +
+                            int.parse(differ_list[i].toString().split('-')[1]) +
+                            int.parse(widget.id.hashCode.toString()) +
+                            int.parse(cal_share_person.secondname.hashCode
+                                .toString()));
+                  }
+                });
+              } else {
+                Future.delayed(const Duration(seconds: 0), () async {
+                  setState(() {
+                    loading = false;
+                  });
+                  CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
+                  widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+                  firestore
+                      .collection('CalendarDataBase')
+                      .doc(deleteidsingle)
+                      .delete();
+                  NotificationApi.cancelNotification(
+                      id: int.parse(widget.date.toString().split('-')[0]) +
+                          int.parse(widget.date.toString().split('-')[1]) +
+                          int.parse(widget.id.hashCode.toString()) +
+                          int.parse(
+                              cal_share_person.secondname.hashCode.toString()));
+                });
+              }
+            }
+          }
         });
       });
     }
@@ -372,7 +485,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     : (textEditingController3.text.split(':')[0].length == 1
                         ? '예정된 시각 : ' + thirdtxt
                         : '예정된 시각 : ' + forthtxt),
-                payload: widget.id,
+                payload: widget.code,
                 scheduledate: DateTime.utc(
                   int.parse(widget.date.toString().split('-')[0]),
                   int.parse(widget.date.toString().split('-')[1]),
@@ -414,7 +527,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     : (textEditingController3.text.split(':')[0].length == 1
                         ? '예정된 시각 : ' + thirdtxt
                         : '예정된 시각 : ' + forthtxt),
-                payload: widget.id,
+                payload: widget.code,
                 scheduledate: DateTime.utc(
                   int.parse(widget.date.toString().split('-')[0]),
                   int.parse(widget.date.toString().split('-')[1]),

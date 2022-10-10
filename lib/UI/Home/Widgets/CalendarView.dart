@@ -18,7 +18,7 @@ calendarView(
   Map<DateTime, List<Event>> events,
   DateTime _focusedDay,
   DateTime _selectedDay,
-  String title,
+  String id,
   List share,
   String calname,
   String usercode,
@@ -242,7 +242,7 @@ calendarView(
                                                               controll_cals
                                                                   .selectedDay,
                                                           position: 'cal',
-                                                          title: title,
+                                                          id: id,
                                                           share: share,
                                                           orig: usercode,
                                                           calname: calname,
@@ -277,7 +277,7 @@ calendarView(
                                                   controll_cals,
                                                   theme,
                                                   view,
-                                                  title,
+                                                  id,
                                                 );
                                               },
                                               icon: NeumorphicIcon(
@@ -479,7 +479,7 @@ calendarView(
                                               lastdate:
                                                   controll_cals.selectedDay,
                                               position: 'cal',
-                                              title: title,
+                                              id: id,
                                               share: share,
                                               orig: usercode,
                                               calname: calname,
@@ -510,7 +510,7 @@ calendarView(
                                       controll_cals,
                                       theme,
                                       view,
-                                      title,
+                                      id,
                                     );
                                   },
                                   icon: NeumorphicIcon(

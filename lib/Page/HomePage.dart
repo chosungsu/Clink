@@ -19,9 +19,12 @@ import 'package:page_transition/page_transition.dart';
 import '../DB/PageList.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
+import '../LocalNotiPlatform/NotificationApi.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/Widgets/ViewSet.dart';
+import '../UI/Home/firstContentNet/DayContentHome.dart';
+import '../UI/Home/firstContentNet/DayNoteHome.dart';
 import '../route.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
@@ -107,14 +110,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });*/
     /*firestore.collection('CalendarDataBase').get().then((value) {
       List valueid = [];
-      List change = [];
       for (int i = 0; i < value.docs.length; i++) {
         valueid.add(value.docs[i].id);
-        change.add(value.docs[i].get('calname_update'));
       }
       for (int j = 0; j < valueid.length; j++) {
         firestore.collection('CalendarDataBase').doc(valueid[j]).update({
-          'calname': change[j],
+          'code': '',
         });
       }
     });*/

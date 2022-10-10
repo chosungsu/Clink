@@ -430,7 +430,7 @@ stream1(
                                     int.parse(value.docs[i]
                                         .data()['alarmminute']
                                         .toString()),
-                                    contentmy[index].title,
+                                    contentmy[index].id,
                                     contentmy[index].id);
                               }
                             }

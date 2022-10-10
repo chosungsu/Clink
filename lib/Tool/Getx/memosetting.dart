@@ -115,6 +115,7 @@ class memosetting extends GetxController {
           id: 1 + title.hashCode,
           title: '띵동! $title 메모알림이에요',
           body: '메모알림끄기는 [메모 길게클릭]->[알람Off]',
+          payload: 'memo',
           scheduledate: DateTime.utc(now.year, now.month, now.day,
               int.parse(hour), int.parse(minute), 0));
     } else {
@@ -128,6 +129,7 @@ class memosetting extends GetxController {
       NotificationApi.showDailyNotification(
           title: '띵동! 메모 알림이에요',
           body: '메모알림끄기는 [일상메모]->[톱니바퀴]->[해제]',
+          payload: 'memo',
           scheduledate: DateTime.utc(now.year, now.month, now.day,
               int.parse(hour), int.parse(minute), 0));
       firestore.collection('MemoAllAlarm').doc(usercode).update({'ok': true});

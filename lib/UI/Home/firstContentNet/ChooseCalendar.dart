@@ -677,7 +677,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                             onPressed: () {
                                               Get.to(
                                                 () => DayContentHome(
-                                                  title: snapshot
+                                                  id: snapshot
                                                       .data!.docs[index].id,
                                                   /*share: snapshot.data!
                                                       .docs[index]['share'],
@@ -1147,8 +1147,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                             onPressed: () {
                                               Get.to(
                                                 () => DayContentHome(
-                                                  title: snapshot
-                                                      .data!.docs[index]['doc'],
+                                                  id: snapshot.data!.docs[index]
+                                                      ['doc'],
                                                   /*share: snapshot.data!
                                                       .docs[index]['share'],
                                                   origin: snapshot.data!

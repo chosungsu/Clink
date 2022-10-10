@@ -228,7 +228,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                             firstdate: DateTime.now(),
                             lastdate: DateTime.now(),
                             position: 'note',
-                            title: '',
+                            id: '',
                             share: const [],
                             orig: '',
                             calname: '',

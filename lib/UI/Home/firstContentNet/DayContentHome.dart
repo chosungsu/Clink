@@ -25,14 +25,14 @@ import '../secondContentNet/ClickShowEachCalendar.dart';
 class DayContentHome extends StatefulWidget {
   const DayContentHome({
     Key? key,
-    required this.title,
+    required this.id,
     /*required this.share,
     required this.origin,
     required this.theme,
     required this.view,
     required this.calname,*/
   }) : super(key: key);
-  final String title;
+  final String id;
   /*final List share;
   final String origin;
   final String calname;
@@ -114,7 +114,7 @@ class _DayContentHomeState extends State<DayContentHome>
         .then((value) {
       if (value.docs.isNotEmpty) {
         for (int i = 0; i < value.docs.length; i++) {
-          if (value.docs[i].id == widget.title) {
+          if (value.docs[i].id == widget.id) {
             madeUser = value.docs[i]['madeUser'];
             theme = value.docs[i]['themesetting'];
             view = value.docs[i]['viewsetting'];
@@ -166,7 +166,7 @@ class _DayContentHomeState extends State<DayContentHome>
               StreamBuilder<QuerySnapshot>(
                   stream: firestore
                       .collection('CalendarDataBase')
-                      .where('calname', isEqualTo: widget.title)
+                      .where('calname', isEqualTo: widget.id)
                       .snapshots(),
                   builder: ((context, snapshot) {
                     if (snapshot.hasData) {
@@ -201,7 +201,7 @@ class _DayContentHomeState extends State<DayContentHome>
                             events,
                             _focusedDay,
                             _selectedDay,
-                            widget.title,
+                            widget.id,
                             /*widget.share,
                             widget.calname,*/
                             share,
@@ -263,7 +263,7 @@ class _DayContentHomeState extends State<DayContentHome>
         builder: (_) => StreamBuilder<QuerySnapshot>(
               stream: firestore
                   .collection('CalendarDataBase')
-                  .where('calname', isEqualTo: widget.title)
+                  .where('calname', isEqualTo: widget.id)
                   //.where('calname', isEqualTo: widget.title)
                   .where('Date',
                       isEqualTo: controll_cals.selectedDay
@@ -565,15 +565,15 @@ class _DayContentHomeState extends State<DayContentHome>
                                                     Get.to(
                                                         () =>
                                                             ClickShowEachCalendar(
-                                                                start: snapshot
+                                                                groupcode: snapshot
                                                                         .data!
                                                                         .docs[index]
-                                                                    [
+                                                                    ['code'],
+                                                                start: snapshot.data!.docs[index][
                                                                     'Timestart'],
                                                                 finish: snapshot
                                                                         .data!
-                                                                        .docs[index]
-                                                                    [
+                                                                        .docs[index][
                                                                     'Timefinish'],
                                                                 calinfo: snapshot
                                                                         .data!
@@ -582,9 +582,8 @@ class _DayContentHomeState extends State<DayContentHome>
                                                                 date: controll_cals
                                                                     .selectedDay,
                                                                 share: snapshot
-                                                                        .data!
-                                                                        .docs[index]
-                                                                    ['Shares'],
+                                                                    .data!
+                                                                    .docs[index]['Shares'],
                                                                 //calname: widget.calname,
                                                                 calname: calname,
                                                                 code: snapshot.data!.docs[index]['calname'],

@@ -62,3 +62,59 @@ OSDialog(BuildContext context, String title, content, pressed) {
           ],
         );
 }
+
+OSDialogsecond(BuildContext context, String title, content, pressed) {
+  return GetPlatform.isAndroid == true
+      ? AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(title,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+          content: content,
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: Text('하루만 삭제할게요',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+            ),
+            TextButton(
+              onPressed: pressed,
+              child: Text('네. 모두 삭제할게요',
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+            ),
+          ],
+        )
+      : CupertinoAlertDialog(
+          title: Text(title,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+          content: content,
+          actions: [
+            CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text("Yes"),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            CupertinoDialogAction(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                })
+          ],
+        );
+}

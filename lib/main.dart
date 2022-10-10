@@ -73,7 +73,6 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
 {
-  late final NotificationApi notificationApi;
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
   bool islogined = false;
@@ -94,8 +93,6 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    notificationApi = NotificationApi();
-    listenToNotificationStream();
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notifications = PushNotification(
@@ -133,23 +130,6 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   @override
   void dispose() {
     super.dispose();
-  }
-
-  listenToNotificationStream() {
-    NotificationApi.behaviorSubject.listen((payload) {
-      if (payload.isNotEmpty) {
-        Get.to(() {
-          DayContentHome(title: payload);
-        }, transition: Transition.downToUp);
-      } else {
-        Get.to(() {
-          const DayNoteHome(
-            title: '',
-            isfromwhere: 'home',
-          );
-        }, transition: Transition.downToUp);
-      }
-    });
   }
 
   checkForInitialMessage() async {

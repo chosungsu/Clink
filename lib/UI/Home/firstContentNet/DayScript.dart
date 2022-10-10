@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
 import 'package:clickbyme/UI/Home/Widgets/CalendarView.dart';
 import 'package:clickbyme/UI/Home/Widgets/ImageSlider.dart';
@@ -42,7 +43,7 @@ class DayScript extends StatefulWidget {
       {Key? key,
       required this.firstdate,
       required this.position,
-      required this.title,
+      required this.id,
       required this.share,
       required this.orig,
       required this.lastdate,
@@ -52,7 +53,7 @@ class DayScript extends StatefulWidget {
   final DateTime firstdate;
   final DateTime lastdate;
   final String position;
-  final String title;
+  final String id;
   final String orig;
   final List share;
   final String calname;
@@ -73,6 +74,9 @@ class _DayScriptState extends State<DayScript> {
   String username = Hive.box('user_info').get(
     'id',
   );
+  var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
+  String code = '';
   late FToast fToast;
   bool isresponsible = false;
   bool iskeyboardup = false;
@@ -139,6 +143,7 @@ class _DayScriptState extends State<DayScript> {
   @override
   void initState() {
     super.initState();
+    print(widget.id);
     fToast = FToast();
     fToast.init(context);
     _selectedDay = controll_cal.selectedDay;
@@ -187,7 +192,6 @@ class _DayScriptState extends State<DayScript> {
   }
 
   void autosavelogic() {
-    print(widget.lastdate == widget.firstdate);
     setState(() {
       controll_memo.setloading(true);
     });
@@ -277,8 +281,15 @@ class _DayScriptState extends State<DayScript> {
             Future.delayed(const Duration(seconds: 1), () {
               Get.back();
             });
+            if (cal.repeatwhile != 'no') {
+              code = String.fromCharCodes(Iterable.generate(
+                  5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+            }
             for (int h = 0; h < differ_list.length; h++) {
               await firestore.collection('CalendarDataBase').add({
+                'code': code,
+                'whenrepeat': cal.repeatwhile,
+                'whattimecnt': cal.repeatdate,
                 'Daytodo': textEditingController1.text,
                 'Alarm': isChecked_pushalarm == true
                     ? Hive.box('user_setting').get('alarming_time')
@@ -303,7 +314,7 @@ class _DayScriptState extends State<DayScript> {
                             : textEditingController3.text)),
                 'Shares': widget.share,
                 'OriginalUser': usercode,
-                'calname': widget.title,
+                'calname': widget.id,
                 'summary': textEditingController5.text,
                 'Date': DateFormat('yyyy-MM-dd')
                         .parse(differ_list[h].toString())
@@ -382,7 +393,7 @@ class _DayScriptState extends State<DayScript> {
                                         1
                                     ? '예정된 시각 : ' + thirdtxt
                                     : '예정된 시각 : ' + forthtxt),
-                        payload: value.id,
+                        payload: widget.id,
                         scheduledate: DateTime.utc(
                           int.parse(differ_list[h]
                               .toString()
@@ -434,7 +445,7 @@ class _DayScriptState extends State<DayScript> {
                                         1
                                     ? '예정된 시각 : ' + thirdtxt
                                     : '예정된 시각 : ' + forthtxt),
-                        payload: value.id,
+                        payload: widget.id,
                         scheduledate: DateTime.utc(
                           int.parse(differ_list[h]
                               .toString()
@@ -460,6 +471,9 @@ class _DayScriptState extends State<DayScript> {
             }
           } else {
             await firestore.collection('CalendarDataBase').add({
+              'code': '',
+              'whenrepeat': 'no',
+              'whattimecnt': 0,
               'Daytodo': textEditingController1.text,
               'Alarm': isChecked_pushalarm == true
                   ? Hive.box('user_setting').get('alarming_time')
@@ -484,7 +498,7 @@ class _DayScriptState extends State<DayScript> {
                           : textEditingController3.text)),
               'Shares': widget.share,
               'OriginalUser': usercode,
-              'calname': widget.title,
+              'calname': widget.id,
               'summary': textEditingController5.text,
               'Date': DateFormat('yyyy-MM-dd')
                       .parse(controll_cal.selectedDay.toString())
@@ -501,7 +515,7 @@ class _DayScriptState extends State<DayScript> {
             });
             firestore
                 .collection('CalendarDataBase')
-                .where('calname', isEqualTo: widget.title)
+                .where('calname', isEqualTo: widget.id)
                 .where('Daytodo', isEqualTo: textEditingController1.text)
                 .get()
                 .then((value) {
@@ -592,7 +606,7 @@ class _DayScriptState extends State<DayScript> {
                                         1
                                     ? '예정된 시각 : ' + thirdtxt
                                     : '예정된 시각 : ' + forthtxt),
-                        payload: valueid[j],
+                        payload: widget.id,
                         scheduledate: DateTime.utc(
                           int.parse(widget.firstdate
                               .toString()
@@ -657,7 +671,7 @@ class _DayScriptState extends State<DayScript> {
                                         1
                                     ? '예정된 시각 : ' + thirdtxt
                                     : '예정된 시각 : ' + forthtxt),
-                        payload: valueid[j],
+                        payload: widget.id,
                         scheduledate: DateTime.utc(
                           int.parse(widget.firstdate
                               .toString()
@@ -1861,7 +1875,7 @@ class _DayScriptState extends State<DayScript> {
                                       _events,
                                       _focusedDay,
                                       _selectedDay,
-                                      widget.title,
+                                      widget.id,
                                       widget.share,
                                       widget.calname,
                                       usercode,

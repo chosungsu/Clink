@@ -656,7 +656,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                               setState(() {
                                 readlist[index] = 'yes';
                               });
-                              notilist.listad[index].title
+                              notilist.listad[index].id
                                       .toString()
                                       .contains('메모')
                                   ? Get.to(
