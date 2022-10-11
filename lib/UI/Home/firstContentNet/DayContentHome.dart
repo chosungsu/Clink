@@ -107,25 +107,22 @@ class _DayContentHomeState extends State<DayContentHome>
     events = {};
     controll_cals.selectedDay = _selectedDay;
     controll_cals.focusedDay = _focusedDay;
-    firestore
+    /*firestore
         .collection('CalendarSheetHome_update')
-        .where('madeUser', isEqualTo: usercode)
+        .doc(widget.id)
         .get()
         .then((value) {
-      if (value.docs.isNotEmpty) {
-        for (int i = 0; i < value.docs.length; i++) {
-          if (value.docs[i].id == widget.id) {
-            madeUser = value.docs[i]['madeUser'];
-            theme = value.docs[i]['themesetting'];
-            view = value.docs[i]['viewsetting'];
-            share = value.docs[i]['share'];
-            calname = value.docs[i]['calname'];
-            controll_cals.showcalendar = view;
-            controll_cals.themecalendar = theme;
-          }
-        }
+      if (value.exists) {
+        madeUser = value.data()!['madeUser'];
+        theme = value.data()!['themesetting'];
+        view = value.data()!['viewsetting'];
+        share = value.data()!['share'];
+        calname = value.data()!['calname'];
+        controll_cals.showcalendar = view;
+        controll_cals.themecalendar = theme;
       }
     });
+    print(view);*/
   }
 
   @override
@@ -150,7 +147,26 @@ class _DayContentHomeState extends State<DayContentHome>
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: BGColor(),
-            body: EnterCheckUi(controll_cals, events)));
+            body: FutureBuilder(
+              future: firestore
+                  .collection('CalendarSheetHome_update')
+                  .doc(widget.id)
+                  .get()
+                  .then((value) {
+                if (value.exists) {
+                  madeUser = value.data()!['madeUser'];
+                  theme = value.data()!['themesetting'];
+                  view = value.data()!['viewsetting'];
+                  share = value.data()!['share'];
+                  calname = value.data()!['calname'];
+                  controll_cals.showcalendar = view;
+                  controll_cals.themecalendar = theme;
+                }
+              }),
+              builder: ((context, snapshot) {
+                return EnterCheckUi(controll_cals, events);
+              }),
+            )));
   }
 
   EnterCheckUi(
