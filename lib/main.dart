@@ -216,7 +216,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                         ],
                         totalRepeatCount: 2,
                         onFinished: () {
-                          GoToMain(context);
+                          NotificationApi.runWhileAppIsTerminated(context);
                         },
                         //displayFullTextOnTap: false,
                       ),

@@ -553,42 +553,86 @@ content(
                                       onTap: () {
                                         setState(() {
                                           controll_memo.setloading(true);
-                                          if (controll_memo.hour1.toString() ==
-                                                  '99' ||
-                                              controll_memo.hour2.toString() ==
-                                                  '99') {
-                                            controll_memo.setloading(false);
-                                            CreateCalandmemoSuccessFlushbar(
-                                                '시간 설정안됨!', fToast);
+                                          if (doc_title != '') {
+                                            if (controll_memo.hour1
+                                                        .toString() ==
+                                                    '99' ||
+                                                controll_memo.minute1
+                                                        .toString() ==
+                                                    '99') {
+                                              controll_memo.setloading(false);
+                                              CreateCalandmemoSuccessFlushbar(
+                                                  '시간 설정안됨!', fToast);
+                                            } else {
+                                              doc_title != ''
+                                                  ? Hive.box('user_setting').put(
+                                                      'alarm_memo_$doc_title',
+                                                      true)
+                                                  : Hive.box('user_setting')
+                                                      .put('alarm_memo', true);
+                                              doc_title != ''
+                                                  ? controll_memo.setalarmmemotimetable(
+                                                      Hive.box('user_setting')
+                                                          .get(
+                                                              'alarm_memo_hour_$doc_title')
+                                                          .toString(),
+                                                      Hive.box('user_setting')
+                                                          .get(
+                                                              'alarm_memo_minute_$doc_title')
+                                                          .toString(),
+                                                      doc_title,
+                                                      id)
+                                                  : controll_memo
+                                                      .setalarmmemotimetable(
+                                                          controll_memo.hour2,
+                                                          controll_memo.minute2,
+                                                          '',
+                                                          '');
+                                              controll_memo.setloading(false);
+                                              CreateCalandmemoSuccessFlushbar(
+                                                  '설정 완료!', fToast);
+                                              Snack.isopensnacks();
+                                            }
                                           } else {
-                                            doc_title != ''
-                                                ? Hive.box('user_setting').put(
-                                                    'alarm_memo_$doc_title',
-                                                    true)
-                                                : Hive.box('user_setting')
-                                                    .put('alarm_memo', true);
-                                            doc_title != ''
-                                                ? controll_memo.setalarmmemotimetable(
-                                                    Hive.box('user_setting')
-                                                        .get(
-                                                            'alarm_memo_hour_$doc_title')
-                                                        .toString(),
-                                                    Hive.box('user_setting')
-                                                        .get(
-                                                            'alarm_memo_minute_$doc_title')
-                                                        .toString(),
-                                                    doc_title,
-                                                    id)
-                                                : controll_memo
-                                                    .setalarmmemotimetable(
-                                                        controll_memo.hour2,
-                                                        controll_memo.minute2,
-                                                        '',
-                                                        '');
-                                            controll_memo.setloading(false);
-                                            CreateCalandmemoSuccessFlushbar(
-                                                '설정 완료!', fToast);
-                                            Snack.isopensnacks();
+                                            if (controll_memo.hour2
+                                                        .toString() ==
+                                                    '99' ||
+                                                controll_memo.minute2
+                                                        .toString() ==
+                                                    '99') {
+                                              controll_memo.setloading(false);
+                                              CreateCalandmemoSuccessFlushbar(
+                                                  '시간 설정안됨!', fToast);
+                                            } else {
+                                              doc_title != ''
+                                                  ? Hive.box('user_setting').put(
+                                                      'alarm_memo_$doc_title',
+                                                      true)
+                                                  : Hive.box('user_setting')
+                                                      .put('alarm_memo', true);
+                                              doc_title != ''
+                                                  ? controll_memo.setalarmmemotimetable(
+                                                      Hive.box('user_setting')
+                                                          .get(
+                                                              'alarm_memo_hour_$doc_title')
+                                                          .toString(),
+                                                      Hive.box('user_setting')
+                                                          .get(
+                                                              'alarm_memo_minute_$doc_title')
+                                                          .toString(),
+                                                      doc_title,
+                                                      id)
+                                                  : controll_memo
+                                                      .setalarmmemotimetable(
+                                                          controll_memo.hour2,
+                                                          controll_memo.minute2,
+                                                          '',
+                                                          '');
+                                              controll_memo.setloading(false);
+                                              CreateCalandmemoSuccessFlushbar(
+                                                  '설정 완료!', fToast);
+                                              Snack.isopensnacks();
+                                            }
                                           }
 
                                           /*Get.back();

@@ -111,11 +111,20 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
       if (value.exists) {
         value.data()!.forEach((key, value) {
           if (key == 'alarmtime') {
-            controll_memo.settimeminute(
+            Hive.box('user_setting').put(
+                'alarm_memo_hour', int.parse(value.toString().split(':')[0]));
+            Hive.box('user_setting').put(
+                'alarm_memo_minute', int.parse(value.toString().split(':')[1]));
+            firestore.collection('MemoAllAlarm').doc(usercode).update({
+              'alarmtime': value.toString().split(':')[0] +
+                  ':' +
+                  value.toString().split(':')[1]
+            });
+            /*controll_memo.settimeminute(
                 int.parse(value.toString().split(':')[0]),
                 int.parse(value.toString().split(':')[1]),
                 '',
-                '');
+                '');*/
           } else {
             Hive.box('user_setting').put('alarm_memo', value);
             controll_memo.ischeckedpushmemoalarm = value;

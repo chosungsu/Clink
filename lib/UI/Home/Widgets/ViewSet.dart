@@ -10,6 +10,7 @@ import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/TextSize.dart';
+import '../firstContentNet/DayContentHome.dart';
 import '../secondContentNet/ClickShowEachCalendar.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
@@ -445,11 +446,17 @@ stream1(
                           InkWell(
                             onTap: () {
                               Get.to(
+                                () => DayContentHome(
+                                  id: contentmy[index].code,
+                                ),
+                                transition: Transition.rightToLeft,
+                              );
+                              /*Get.to(
                                   () => ChooseCalendar(
                                         isfromwhere: 'home',
                                         index: 0,
                                       ),
-                                  transition: Transition.downToUp);
+                                  transition: Transition.downToUp);*/
                               /*Get.to(
                                   () => ClickShowEachCalendar(
                                         start: contentmy[index].startdate,
@@ -657,30 +664,15 @@ stream2(
                                 onTap: () async {
                                   //수정 및 삭제 시트 띄우기
                                   Get.to(
+                                    () => DayContentHome(
+                                      id: contentshare[index].code,
+                                    ),
+                                    transition: Transition.rightToLeft,
+                                  );
+                                  /*Get.to(
                                       () => ChooseCalendar(
                                             isfromwhere: 'home',
                                             index: 1,
-                                          ),
-                                      transition: Transition.downToUp);
-                                  /*Get.to(
-                                      () => ClickShowEachCalendar(
-                                            start:
-                                                contentshare[index].startdate,
-                                            finish:
-                                                contentshare[index].finishdate,
-                                            calinfo: contentshare[index].title,
-                                            date: Date,
-                                            share: contentshare[index].share,
-                                            calname: contentshare[index]
-                                                .cname[index]
-                                                .toString(),
-                                            code: contentshare[index].code,
-                                            summary:
-                                                contentshare[index].summary,
-                                            isfromwhere: 'home',
-                                            id: snapshot.data!.docs[index].id,
-                                            alarmtypes: alarmtypes,
-                                            alarmmake: isChecked_pushalarm,
                                           ),
                                       transition: Transition.downToUp);*/
                                 },

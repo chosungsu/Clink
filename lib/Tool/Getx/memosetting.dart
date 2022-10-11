@@ -91,7 +91,6 @@ class memosetting extends GetxController {
           .doc(id)
           .update({'alarmtime': hour1.toString() + ':' + minute1.toString()});
     } else {
-      print('third (memosetting) ' + hour.toString() + ':' + minute.toString());
       Hive.box('user_setting').put('alarm_memo_hour', hour.toString());
       Hive.box('user_setting').put('alarm_memo_minute', minute.toString());
       hour2 = Hive.box('user_setting').get('alarm_memo_hour');
@@ -101,6 +100,8 @@ class memosetting extends GetxController {
           .doc(usercode)
           .update({'alarmtime': hour2.toString() + ':' + minute2.toString()});
     }
+    update();
+    notifyChildrens();
   }
 
   Future<void> setalarmmemotimetable(
