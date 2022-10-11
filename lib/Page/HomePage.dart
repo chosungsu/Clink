@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ? (draw.drawopen == true
                 ? Stack(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 80,
                         child: DrawerScreen(
                             index: Hive.box('user_setting').get('page_index')),
@@ -445,35 +445,40 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     const SizedBox(
                       height: 20,
                     ),
-                    SizedBox(
-                        child: GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                          color: Colors.grey.shade400,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 20, bottom: 20),
-                            child: SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Text(
-                                        _list_ad[0].title,
-                                        maxLines: 3,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize()),
-                                        overflow: TextOverflow.fade,
-                                      )),
-                                ],
+                    Container(
+                        height: 50,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: ContainerDesign(
+                                color: BGColor(),
+                                child: SizedBox(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text(
+                                            _list_ad[0].title,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize()),
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          )),
-                    ))
+                            )
+                          ],
+                        ))
                   ],
                 );
         }
