@@ -1,0 +1,128 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pt-rPT\\values-pt-rPT.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\488add8fcbfce0f92d52470af50893cf\\transformed\\jetified-play-services-base-18.0.1\\res\\values-pt-rPT\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "197,298,457,581,685,849,973,1091,1196,1380,1484,1650,1777,1932,2106,2170,2235",
+                        "endColumns": "100,158,123,103,163,123,117,104,183,103,165,126,154,173,63,64,82",
+                        "endOffsets": "297,456,580,684,848,972,1090,1195,1379,1483,1649,1776,1931,2105,2169,2234,2317"
+                    },
+                    "to": {
+                        "startLines": "29,30,31,32,33,34,35,36,38,39,40,41,42,43,44,45,46",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "2836,2941,3104,3232,3340,3508,3636,3758,4012,4200,4308,4478,4609,4768,4946,5014,5083",
+                        "endColumns": "104,162,127,107,167,127,121,108,187,107,169,130,158,177,67,68,86",
+                        "endOffsets": "2936,3099,3227,3335,3503,3631,3753,3862,4195,4303,4473,4604,4763,4941,5009,5078,5165"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\459c66d1e51a95e1617f363b1d95997f\\transformed\\biometric-1.1.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,171,266,395,534,681,816,945,1092,1194,1334,1483",
+                        "endColumns": "115,94,128,138,146,134,128,146,101,139,148,125",
+                        "endOffsets": "166,261,390,529,676,811,940,1087,1189,1329,1478,1604"
+                    },
+                    "to": {
+                        "startLines": "47,49,53,54,55,56,57,58,59,60,61,62",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "5170,5402,5811,5940,6079,6226,6361,6490,6637,6739,6879,7028",
+                        "endColumns": "115,94,128,138,146,134,128,146,101,139,148,125",
+                        "endOffsets": "5281,5492,5935,6074,6221,6356,6485,6632,6734,6874,7023,7149"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\e79d5833ebd07547e4d9354d9414cec6\\transformed\\appcompat-1.4.1\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,213,319,426,515,616,734,819,899,991,1085,1182,1276,1375,1469,1565,1660,1752,1844,1929,2036,2147,2249,2357,2465,2572,2737,2836",
+                        "endColumns": "107,105,106,88,100,117,84,79,91,93,96,93,98,93,95,94,91,91,84,106,110,101,107,107,106,164,98,85",
+                        "endOffsets": "208,314,421,510,611,729,814,894,986,1080,1177,1271,1370,1464,1560,1655,1747,1839,1924,2031,2142,2244,2352,2460,2567,2732,2831,2917"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,77",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,213,319,426,515,616,734,819,899,991,1085,1182,1276,1375,1469,1565,1660,1752,1844,1929,2036,2147,2249,2357,2465,2572,2737,8186",
+                        "endColumns": "107,105,106,88,100,117,84,79,91,93,96,93,98,93,95,94,91,91,84,106,110,101,107,107,106,164,98,85",
+                        "endOffsets": "208,314,421,510,611,729,814,894,986,1080,1177,1271,1370,1464,1560,1655,1747,1839,1924,2031,2142,2244,2352,2460,2567,2732,2831,8267"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\16c8a06a0254749976851f78b8ca74e8\\transformed\\jetified-play-services-ads-21.0.0\\res\\values-pt-rPT\\values.xml",
+                    "from": {
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "203,281,381,431,549,600,711,800,842,933,968,1003,1057,1135",
+                        "endColumns": "77,99,49,117,50,110,88,41,90,34,34,53,77,43",
+                        "endOffsets": "280,380,430,548,599,710,799,841,932,967,1002,1056,1134,1178"
+                    },
+                    "to": {
+                        "startLines": "63,64,65,66,67,68,69,70,71,72,73,74,75,76",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "7154,7236,7340,7394,7516,7571,7686,7779,7825,7920,7959,7998,8056,8138",
+                        "endColumns": "81,103,53,121,54,114,92,45,94,38,38,57,81,47",
+                        "endOffsets": "7231,7335,7389,7511,7566,7681,7774,7820,7915,7954,7993,8051,8133,8181"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\5c251bb3b1e4a85a3963cae72e640fd3\\transformed\\browser-1.4.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,171,270,382",
+                        "endColumns": "115,98,111,102",
+                        "endOffsets": "166,265,377,480"
+                    },
+                    "to": {
+                        "startLines": "48,50,51,52",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "5286,5497,5596,5708",
+                        "endColumns": "115,98,111,102",
+                        "endOffsets": "5397,5591,5703,5806"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\315f441822456f09c01d1a23898e501d\\transformed\\jetified-play-services-basement-18.0.0\\res\\values-pt-rPT\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "199",
+                        "endColumns": "140",
+                        "endOffsets": "339"
+                    },
+                    "to": {
+                        "startLines": "37",
+                        "startColumns": "4",
+                        "startOffsets": "3867",
+                        "endColumns": "144",
+                        "endOffsets": "4007"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\a1b0f94d7508d68471e1b16e647912c1\\transformed\\core-1.8.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "78",
+                        "startColumns": "4",
+                        "startOffsets": "8272",
+                        "endColumns": "100",
+                        "endOffsets": "8368"
+                    }
+                }
+            ]
+        }
+    ]
+}

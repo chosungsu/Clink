@@ -1,0 +1,62 @@
+[
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\layout\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_media.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_template_media.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_big_media_custom.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_template_big_media_custom.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\custom_dialog.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\layout\\custom_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_part_chronometer.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\layout\\notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_part_time.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\layout\\notification_template_part_time.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_media_custom.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_template_media_custom.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_media_cancel_action.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_media_cancel_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_lines_media.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_template_lines_media.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_big_media_narrow_custom.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_template_big_media_narrow_custom.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\layout\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_action.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\layout\\notification_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_media_action.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_media_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_big_media_narrow.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_template_big_media_narrow.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_local_notifications\\intermediates\\merged_res\\release\\layout\\notification_template_big_media.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\c86d8ba64b4cecc40e87a951c4195e47\\transformed\\media-1.1.0\\res\\layout\\notification_template_big_media.xml"
+    }
+]

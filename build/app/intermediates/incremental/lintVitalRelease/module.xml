@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="C:\Users\Public\Downloads\clickbyme\android\app"
+    name=":app"
+    type="APP"
+    maven="android:app:"
+    gradle="7.0.2"
+    buildFolder="C:\Users\Public\Downloads\clickbyme\build\app"
+    bootClassPath="C:\Users\chosungsu\AppData\Local\Android\sdk\platforms\android-33\android.jar;C:\Users\chosungsu\AppData\Local\Android\sdk\build-tools\30.0.2\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-33">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

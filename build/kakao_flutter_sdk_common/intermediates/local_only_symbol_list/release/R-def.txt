@@ -1,0 +1,4 @@
+R_DEF: Internal format may change without notice
+local
+layout activity_talk_auth_code
+style TransparentCompat

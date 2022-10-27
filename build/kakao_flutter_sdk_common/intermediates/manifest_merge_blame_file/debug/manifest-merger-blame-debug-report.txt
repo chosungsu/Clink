@@ -1,0 +1,65 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.kakao.sdk.flutter" >
+4
+5    <uses-sdk android:minSdkVersion="19" />
+5-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml
+6
+7    <queries>
+7-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:18:5-29:15
+8        <package android:name="com.kakao.talk" />
+8-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:19:9-50
+8-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:19:18-47
+9        <package android:name="com.kakao.onetalk" />
+9-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:20:9-53
+9-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:20:18-50
+10        <package android:name="com.locnall.KimGiSa" />
+10-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:21:9-55
+10-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:21:18-52
+11        <package android:name="com.lguplus.navi" />
+11-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:22:9-52
+11-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:22:18-49
+12
+13        <intent>
+13-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:24:9-28:18
+14            <action android:name="android.intent.action.VIEW" />
+14-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:25:13-65
+14-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:25:21-62
+15
+16            <category android:name="android.intent.category.BROWSABLE" />
+16-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:26:13-74
+16-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:26:23-71
+17
+18            <data android:scheme="https" />
+18-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:27:13-44
+18-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:27:19-41
+19        </intent>
+20    </queries>
+21
+22    <application>
+22-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:4:5-16:19
+23        <activity
+23-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:5:9-10:56
+24            android:name="com.kakao.sdk.flutter.TalkAuthCodeActivity"
+24-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:6:13-49
+25            android:configChanges="orientation|screenSize|keyboardHidden"
+25-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:7:13-74
+26            android:exported="false"
+26-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:8:13-37
+27            android:launchMode="singleTask"
+27-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:9:13-44
+28            android:theme="@style/TransparentCompat" />
+28-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:10:13-53
+29        <activity
+29-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:11:9-15:56
+30            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+30-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:12:13-55
+31            android:exported="true"
+31-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:13:13-36
+32            android:launchMode="singleTask"
+32-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:14:13-44
+33            android:theme="@style/TransparentCompat" />
+33-->C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\kakao_flutter_sdk_common-1.2.2\android\src\main\AndroidManifest.xml:15:13-53
+34    </application>
+35
+36</manifest>

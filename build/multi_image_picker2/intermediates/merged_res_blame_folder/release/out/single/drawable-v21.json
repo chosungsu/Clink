@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\avd_show_password.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\fa409bc5812ead063f630c3218593688\\transformed\\material-1.0.0\\res\\drawable-v21\\avd_show_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\abc_btn_colored_material.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\4ec12e9c23afbd48557fbfb50a837ff9\\transformed\\appcompat-1.0.0\\res\\drawable-v21\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\abc_list_divider_material.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\4ec12e9c23afbd48557fbfb50a837ff9\\transformed\\appcompat-1.0.0\\res\\drawable-v21\\abc_list_divider_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\abc_edit_text_material.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\4ec12e9c23afbd48557fbfb50a837ff9\\transformed\\appcompat-1.0.0\\res\\drawable-v21\\abc_edit_text_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\abc_dialog_material_background.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\4ec12e9c23afbd48557fbfb50a837ff9\\transformed\\appcompat-1.0.0\\res\\drawable-v21\\abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\notification_action_background.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\drawable-v21\\notification_action_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\design_password_eye.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\fa409bc5812ead063f630c3218593688\\transformed\\material-1.0.0\\res\\drawable-v21\\design_password_eye.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\avd_hide_password.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\fa409bc5812ead063f630c3218593688\\transformed\\material-1.0.0\\res\\drawable-v21\\avd_hide_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\abc_action_bar_item_background_material.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\4ec12e9c23afbd48557fbfb50a837ff9\\transformed\\appcompat-1.0.0\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\multi_image_picker2\\intermediates\\merged_res\\release\\drawable-v21\\design_bottom_navigation_item_background.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\fa409bc5812ead063f630c3218593688\\transformed\\material-1.0.0\\res\\drawable-v21\\design_bottom_navigation_item_background.xml"
+    }
+]
