@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ar\\values-ar.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ar\\values-ar.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\5c251bb3b1e4a85a3963cae72e640fd3\\transformed\\browser-1.4.0\\res\\values-ar\\values-ar.xml",

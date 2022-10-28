@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_mobile_ads\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-fa\\values-fa.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_mobile_ads\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-fa\\values-fa.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\315f441822456f09c01d1a23898e501d\\transformed\\jetified-play-services-basement-18.0.0\\res\\values-fa\\values.xml",
@@ -74,7 +74,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\values-fa\\values-fa.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\values-fa\\values-fa.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\315f441822456f09c01d1a23898e501d\\transformed\\jetified-play-services-basement-18.0.0\\res\\values-fa\\values.xml",

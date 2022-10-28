@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_mobile_ads\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v23\\values-v23.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\values-v23\\values-v23.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\884f53918d3c75af565c49510694d279\\transformed\\work-runtime-2.7.0\\res\\values-v23\\values-v23.xml",
@@ -16,7 +16,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\values-v23\\values-v23.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_mobile_ads\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v23\\values-v23.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\884f53918d3c75af565c49510694d279\\transformed\\work-runtime-2.7.0\\res\\values-v23\\values-v23.xml",

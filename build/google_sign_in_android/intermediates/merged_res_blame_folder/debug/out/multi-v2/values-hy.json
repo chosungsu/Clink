@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_sign_in_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hy\\values-hy.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_sign_in_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hy\\values-hy.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\488add8fcbfce0f92d52470af50893cf\\transformed\\jetified-play-services-base-18.0.1\\res\\values-hy\\values.xml",
@@ -57,7 +57,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_sign_in_android\\intermediates\\merged_res\\debug\\values-hy\\values-hy.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_sign_in_android\\intermediates\\merged_res\\debug\\values-hy\\values-hy.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\488add8fcbfce0f92d52470af50893cf\\transformed\\jetified-play-services-base-18.0.1\\res\\values-hy\\values.xml",

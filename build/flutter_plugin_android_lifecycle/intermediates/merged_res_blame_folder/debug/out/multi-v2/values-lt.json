@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\flutter_plugin_android_lifecycle\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-lt\\values-lt.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_plugin_android_lifecycle\\intermediates\\merged_res\\debug\\values-lt\\values-lt.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\values-lt\\values-lt.xml",
@@ -16,7 +16,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\flutter_plugin_android_lifecycle\\intermediates\\merged_res\\debug\\values-lt\\values-lt.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\flutter_plugin_android_lifecycle\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-lt\\values-lt.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\de4e97a7fee747a6ef8c67a5444d1b42\\transformed\\core-1.6.0\\res\\values-lt\\values-lt.xml",
