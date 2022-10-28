@@ -94,6 +94,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
         body: message.notification?.body,
       );
     });
+    initScreen();
     checkForInitialMessage();
   }
 
@@ -111,10 +112,8 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   }
 
   waitingbody() {
-    return SizedBox(
-        child: name == ''
-            ? body()
-            : FutureBuilder(
+    return SizedBox(child: name == '' ? body() : loadingbody()
+        /*FutureBuilder(
                 future: initScreen(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -126,7 +125,8 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                         : loadingbody();
                   }
                 },
-              ));
+              )*/
+        );
   }
 
   loadingbody() {
@@ -172,6 +172,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                         totalRepeatCount: 2,
                         onFinished: () {
                           NotificationApi.runWhileAppIsTerminated(context);
+                          GoToMain(context);
                         },
                         //displayFullTextOnTap: false,
                       ),

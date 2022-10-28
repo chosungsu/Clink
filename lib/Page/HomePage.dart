@@ -71,6 +71,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late PackageInfo info;
   String versioninfo = '';
   String usercode = Hive.box('user_setting').get('usercode');
+  bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
   void initState() {
@@ -80,7 +81,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _pController2 =
         PageController(initialPage: currentPage2, viewportFraction: 1);
-    initScreen();
     /*firestore.collection('MemoAllAlarm').get().then((value) {
       if (value.docs.isNotEmpty) {
         for (int i = 0; i < value.docs.length; i++) {
@@ -94,7 +94,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    //notilist.noticontroller.dispose();
     super.dispose();
     _pController2.dispose();
     _scrollController.dispose();
@@ -198,25 +197,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         return Column(
                                           children: [
                                             const SizedBox(
+                                              height: 20,
+                                            ),
+                                            CompanyNotice(),
+                                            /*const SizedBox(
                                               height: 10,
                                             ),
                                             H_Container_0(
-                                                height, _pController2),
-                                            const SizedBox(
+                                                height, _pController2),*/
+                                            /*const SizedBox(
                                               height: 20,
                                             ),
-                                            H_Container_3(height),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            /*H_Container_2(height),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),*/
-                                            /*H_Container_1(height),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),*/
+                                            H_Container_3(height),*/
+
                                             GetBuilder<PeopleAdd>(
                                                 builder: (_) => ViewSet(
                                                     peopleadd
@@ -226,19 +219,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             /*const SizedBox(
                                               height: 20,
                                             ),
-                                            H_Container_toBottom(),*/
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
                                             H_Container_myroom(),
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            H_Container_testroom(),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            CompanyNotice(),
+                                            H_Container_testroom(),*/
                                             const SizedBox(
                                               height: 50,
                                             ),
@@ -310,207 +295,186 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  H_Con_Alert() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Flexible(
-            fit: FlexFit.tight,
-            child: Text(
-              '공지사항',
-              style: TextStyle(
-                  color: TextColor(),
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize()),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              draw.setclose();
-              Hive.box('user_setting').put('page_index', 3);
-              Navigator.of(context).pushReplacement(
-                PageTransition(
-                  type: PageTransitionType.rightToLeft,
-                  child: const MyHomePage(
-                    index: 3,
-                  ),
-                ),
-              );
-            },
-            child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  '더보기',
-                  maxLines: 1,
-                  softWrap: true,
-                  style: TextStyle(
-                      color: TextColor(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                  overflow: TextOverflow.fade,
-                )),
-          ),
-        ],
-      ),
-    );
-  }
-
   CompanyNotice() {
-    final List<PageList> _list_ad = [];
-    return StreamBuilder<QuerySnapshot>(
-      stream: firestore
-          .collection('CompanyNotice')
-          .orderBy('date', descending: true)
-          .limit(1)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _list_ad.clear();
-          final valuespace = snapshot.data!.docs;
-          for (var sp in valuespace) {
-            final messageText = sp.get('title');
-            final messageDate = sp.get('date');
-            _list_ad.add(PageList(
-              title: messageText,
-              sub: messageDate,
-            ));
-          }
-
-          return _list_ad.isEmpty
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Container(
-                      color: Colors.grey.shade400,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, top: 20, bottom: 20),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              '공지사항이 없습니다.',
-                              softWrap: true,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize()),
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          ],
-                        ),
-                      )))
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    H_Con_Alert(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                        height: 50,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: ContainerDesign(
-                                color: BGColor(),
-                                child: SizedBox(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Flexible(
-                                          fit: FlexFit.tight,
-                                          child: Text(
-                                            _list_ad[0].title,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize()),
-                                            overflow: TextOverflow.ellipsis,
-                                          )),
-                                    ],
+    final List<PageList> listcompanytousers = [];
+    return serverstatus == true
+        ? FutureBuilder(
+            future:
+                MongoDB.getData(collectionname: 'companynotice').then((value) {
+              for (int j = 0; j < value.length; j++) {
+                final messageText = value[j]['title'];
+                final messageDate = value[j]['date'];
+                final messageyes = value[j]['showthisinapp'];
+                if (messageyes == 'yes') {
+                  listcompanytousers.add(PageList(
+                    title: messageText,
+                    sub: messageDate,
+                  ));
+                }
+              }
+            }),
+            builder: (context, snapshot) {
+              return listcompanytousers.isEmpty
+                  ? const SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              draw.setclose();
+                              Hive.box('user_setting').put('page_index', 3);
+                              Navigator.of(context).pushReplacement(
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: const MyHomePage(
+                                    index: 3,
                                   ),
                                 ),
+                              );
+                            },
+                            child: ContainerDesign(
+                              color: Colors.grey.shade300,
+                              child: SizedBox(
+                                height: 90,
+                                width: double.infinity,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Icon(
+                                      Icons.new_releases,
+                                      color: TextColor(),
+                                      size: 40,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          listcompanytousers[0].title,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: TextColor(),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize()),
+                                          overflow: TextOverflow.ellipsis,
+                                        )),
+                                  ],
+                                ),
                               ),
-                            )
-                          ],
-                        ))
-                  ],
-                );
-        }
-        return LinearProgressIndicator(
-          backgroundColor: BGColor(),
-          valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-        );
-      },
-    );
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ));
+            },
+          )
+        : StreamBuilder<QuerySnapshot>(
+            stream: firestore
+                .collection('CompanyNotice')
+                .orderBy('date', descending: true)
+                .limit(1)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                listcompanytousers.clear();
+                final valuespace = snapshot.data!.docs;
+                for (var sp in valuespace) {
+                  final messageText = sp.get('title');
+                  final messageDate = sp.get('date');
+                  listcompanytousers.add(PageList(
+                    title: messageText,
+                    sub: messageDate,
+                  ));
+                }
+
+                return listcompanytousers.isEmpty
+                    ? SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Container(
+                            color: Colors.grey.shade400,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, top: 20, bottom: 20),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '공지사항이 없습니다.',
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize()),
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                ],
+                              ),
+                            )))
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              height: 50,
+                              alignment: Alignment.center,
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: ContainerDesign(
+                                      color: BGColor(),
+                                      child: SizedBox(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Text(
+                                                  listcompanytousers[0].title,
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                      color: TextColor(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize()),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ))
+                        ],
+                      );
+              }
+              return LinearProgressIndicator(
+                backgroundColor: BGColor(),
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+              );
+            },
+          );
   }
 
-  /*H_Container_toBottom() {
-    //프로버전 구매시 보이지 않게 함
-    return GestureDetector(
-      onTap: () {
-        draw.setclose();
-        _getAppInfo();
-        Hive.box('user_setting').put('page_index', 1);
-        //_scrollToBottom();
-        Get.to(() => HomeView(), transition: Transition.zoom);
-      },
-      child: Container(
-          color: ButtonColor(),
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Flexible(
-                    fit: FlexFit.tight,
-                    child: Text(
-                      '홈에 나타나는 콘텐츠들을 홈뷰설정에서 순서변경이 가능해요',
-                      maxLines: 3,
-                      softWrap: true,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize()),
-                      overflow: TextOverflow.fade,
-                    )),
-                const SizedBox(
-                  width: 20,
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                        backgroundColor: ButtonColor(),
-                        child: Text(
-                          'Go',
-                          maxLines: 1,
-                          softWrap: true,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize()),
-                          overflow: TextOverflow.fade,
-                        ))),
-              ],
-            ),
-          )),
-    );
-  }*/
-
-  H_Container_myroom() {
+  /*H_Container_myroom() {
     //프로버전 구매시 보이지 않게 함
     return GestureDetector(
       onTap: () {
@@ -618,239 +582,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           )),
     );
-  }
-
-  H_Container_1(double height) {
-    //프로버전 구매시 보이지 않게 함
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [ADEvents(context)],
-    );
-  }
-
-  /*H_Container_2(double height) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width - 40,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Flexible(
-              flex: 1,
-              child: ContainerDesign(
-                  color: BGColor(),
-                  child: GestureDetector(
-                    onTap: () async {
-                      final reloadpage = await Get.to(
-                          () => const ChooseCalendar(
-                                isfromwhere: 'home',
-                                index: 0,
-                              ),
-                          transition: Transition.rightToLeft);
-                      if (reloadpage) {
-                        GoToMain(context);
-                      }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
-                        //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
-                        Container(
-                          alignment: Alignment.center,
-                          child: NeumorphicIcon(
-                            Icons.calendar_month,
-                            size: isresponsive == true ? 50 : 25,
-                            style: NeumorphicStyle(
-                                shape: NeumorphicShape.convex,
-                                depth: 2,
-                                color: Colors.blue.shade400,
-                                lightSource: LightSource.topLeft),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Center(
-                          child: Text('캘린더',
-                              style: TextStyle(
-                                  color: TextColor(),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                        ),
-                      ],
-                    ),
-                  )),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Flexible(
-                flex: 1,
-                child: ContainerDesign(
-                    color: BGColor(),
-                    child: GestureDetector(
-                      onTap: () async {
-                        final reloadpage = await Get.to(
-                            () => const DayNoteHome(
-                                  title: '',
-                                  isfromwhere: 'home',
-                                ),
-                            transition: Transition.rightToLeft);
-                        if (reloadpage) {
-                          GoToMain(context);
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
-                          //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
-                          Container(
-                            alignment: Alignment.center,
-                            child: NeumorphicIcon(
-                              Icons.description,
-                              size: isresponsive == true ? 50 : 25,
-                              style: NeumorphicStyle(
-                                  shape: NeumorphicShape.convex,
-                                  depth: 2,
-                                  color: Colors.blue.shade400,
-                                  lightSource: LightSource.topLeft),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Center(
-                            child: Text('메모장',
-                                style: TextStyle(
-                                    color: TextColor(),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize())),
-                          ),
-                        ],
-                      ),
-                    )))
-          ],
-        )
-        /*ContainerDesign(
-            color: BGColor(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //카테고리가 늘어날수록 한줄 제한을 3으로 줄이고
-                //최대 두줄로 늘린 후 카테고리 로우 옆에 모두보기를 텍스트로 생성하기
-                Center(
-                  child: Text('마이페이지 이동',
-                      style: TextStyle(
-                          color: TextColor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize())),
-                ),
-                GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  shrinkWrap: true,
-                  childAspectRatio: 2 / 1,
-                  children: List.generate(2, (index) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        index == 0
-                            ? GestureDetector(
-                                onTap: () async {
-                                  final reloadpage = await Get.to(
-                                      () => const ChooseCalendar(
-                                            isfromwhere: 'home',
-                                            index: 0,
-                                          ),
-                                      transition: Transition.rightToLeft);
-                                  if (reloadpage) {
-                                    GoToMain(context);
-                                  }
-                                },
-                                child: SizedBox(
-                                  height: isresponsive == true ? 110 : 60,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: NeumorphicIcon(
-                                          Icons.calendar_month,
-                                          size: isresponsive == true ? 50 : 25,
-                                          style: NeumorphicStyle(
-                                              shape: NeumorphicShape.convex,
-                                              depth: 2,
-                                              color: TextColor(),
-                                              lightSource: LightSource.topLeft),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: isresponsive == true ? 40 : 30,
-                                        child: Center(
-                                          child: Text('캘린더',
-                                              style: TextStyle(
-                                                  color: TextColor(),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : GestureDetector(
-                                onTap: () async {
-                                  final reloadpage = await Get.to(
-                                      () => const DayNoteHome(
-                                            title: '',
-                                            isfromwhere: 'home',
-                                          ),
-                                      transition: Transition.rightToLeft);
-                                  if (reloadpage) {
-                                    GoToMain(context);
-                                  }
-                                },
-                                child: SizedBox(
-                                  height: isresponsive == true ? 110 : 60,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: NeumorphicIcon(
-                                          Icons.description,
-                                          size: isresponsive == true ? 50 : 25,
-                                          style: NeumorphicStyle(
-                                              shape: NeumorphicShape.convex,
-                                              depth: 2,
-                                              color: TextColor(),
-                                              lightSource: LightSource.topLeft),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: isresponsive == true ? 40 : 30,
-                                        child: Center(
-                                          child: Text('일상메모',
-                                              style: TextStyle(
-                                                  color: TextColor(),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                      ],
-                    );
-                  }),
-                )
-              ],
-            ))*/
-        );
   }*/
-
   H_Container_4(double height) {
     //프로버전 구매시 보이지 않게 함
     return Row(
@@ -863,7 +595,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           child: Row(
             children: [
               InkWell(
-                onTap: () {
+                onTap: () async {
+                  await MongoDB.find(
+                      collectionname: 'homeview',
+                      query: 'usercode',
+                      what: Hive.box('user_setting').get('usercode'));
+                  peopleadd.setcode();
                   Get.to(() => HomeView(), transition: Transition.zoom);
                 },
                 child: Text('홈뷰설정',

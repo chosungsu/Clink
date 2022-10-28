@@ -38,6 +38,50 @@ class MongoDB {
     collection_noticebyusers = db.collection(APPNOTICEBYUSERS_COLLECTION);
   }
 
+  static Future<List<Map<String, dynamic>>> getData(
+      {required String collectionname}) async {
+    final arrdata;
+    if (collectionname == 'user') {
+      arrdata = await collection_user.find().toList();
+      return arrdata;
+    } else if (collectionname == 'sharehome') {
+      arrdata = await collection_share.find().toList();
+      return arrdata;
+    } else if (collectionname == 'people') {
+      arrdata = await collection_people.find().toList();
+      return arrdata;
+    } else if (collectionname == 'memo') {
+      arrdata = await collection_memo.find().toList();
+      return arrdata;
+    } else if (collectionname == 'homeview') {
+      arrdata = await collection_homeview.find().toList();
+      return arrdata;
+    } else if (collectionname == 'tag') {
+      arrdata = await collection_tag.find().toList();
+      return arrdata;
+    } else if (collectionname == 'memoallalarm') {
+      arrdata = await collection_memoallalarm.find().toList();
+      return arrdata;
+    } else if (collectionname == 'eventnotice') {
+      arrdata = await collection_eventnotice.find().toList();
+      return arrdata;
+    } else if (collectionname == 'companynotice') {
+      arrdata = await collection_companynotice.find().toList();
+      return arrdata;
+    } else if (collectionname == 'applicense') {
+      arrdata = await collection_applicense.find().toList();
+      return arrdata;
+    } else if (collectionname == 'notibycompany') {
+      arrdata = await collection_noticebycompany.find().toList();
+      return arrdata;
+    } else if (collectionname == 'notibyusers') {
+      arrdata = await collection_noticebyusers.find().toList();
+      return arrdata;
+    } else {
+      return [];
+    }
+  }
+
   static add(
       {required String collectionname,
       required Map<String, dynamic> addlist}) async {
@@ -207,10 +251,6 @@ class MongoDB {
       });
     } else if (collectionname == 'notibycompany') {
       res = await collection_noticebycompany.find({query: what}).forEach((v) {
-        res = v;
-      });
-    } else if (collectionname == 'notibyusers') {
-      res = await collection_noticebyusers.find({query: what}).forEach((v) {
         res = v;
       });
     }

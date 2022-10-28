@@ -62,7 +62,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     });*/
     Hive.box('user_setting').put('page_index', 1);
     _controller = TextEditingController();
-    initScreen();
   }
 
   @override

@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../providers/mongodatabase.dart';
+
 class PeopleAdd extends GetxController {
   List people = [];
   String secondname = Hive.box('user_info').get('id') ?? '';
@@ -14,6 +16,7 @@ class PeopleAdd extends GetxController {
   Random _rnd = Random();
   List defaulthomeviewlist = [];
   List userviewlist = [];
+  bool serverstatus = Hive.box('user_info').get('server_status');
 
   void setcode() {
     firestore
@@ -44,7 +47,7 @@ class PeopleAdd extends GetxController {
   }
 
   setcategory() {
-    firestore
+    /*firestore
         .collection('HomeViewCategories')
         .doc(Hive.box('user_setting').get('usercode'))
         .get()
@@ -76,7 +79,75 @@ class PeopleAdd extends GetxController {
           'hidecategory': userviewlist
         }, SetOptions(merge: true));
       }
-    });
+    });*/
+    if (serverstatus) {
+      if (MongoDB.res == null) {
+        defaulthomeviewlist.clear();
+        userviewlist.clear();
+        defaulthomeviewlist.add(defaulthomeviewlist);
+        userviewlist.add(userviewlist);
+      } else {
+        defaulthomeviewlist.clear();
+        userviewlist.clear();
+        for (int i = 0; i < MongoDB.res['viewcategory'].length; i++) {
+          defaulthomeviewlist.add(MongoDB.res['viewcategory'][i]);
+        }
+        for (int j = 0; j < MongoDB.res['hidecategory'].length; j++) {
+          userviewlist.add(MongoDB.res['hidecategory'][j]);
+        }
+      }
+      firestore
+          .collection('HomeViewCategories')
+          .doc(Hive.box('user_setting').get('usercode'))
+          .get()
+          .then((value) {
+        if (value.exists) {
+          defaulthomeviewlist.clear();
+          userviewlist.clear();
+          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+            defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+          }
+          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+            userviewlist.add(value.data()!['hidecategory'][j]);
+          }
+        } else {
+          firestore
+              .collection('HomeViewCategories')
+              .doc(Hive.box('user_setting').get('usercode'))
+              .set({
+            'usercode': Hive.box('user_setting').get('usercode'),
+            'viewcategory': defaulthomeviewlist,
+            'hidecategory': userviewlist
+          }, SetOptions(merge: true));
+        }
+      });
+    } else {
+      firestore
+          .collection('HomeViewCategories')
+          .doc(Hive.box('user_setting').get('usercode'))
+          .get()
+          .then((value) {
+        if (value.exists) {
+          defaulthomeviewlist.clear();
+          userviewlist.clear();
+          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+            defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+          }
+          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+            userviewlist.add(value.data()!['hidecategory'][j]);
+          }
+        } else {
+          firestore
+              .collection('HomeViewCategories')
+              .doc(Hive.box('user_setting').get('usercode'))
+              .set({
+            'usercode': Hive.box('user_setting').get('usercode'),
+            'viewcategory': defaulthomeviewlist,
+            'hidecategory': userviewlist
+          }, SetOptions(merge: true));
+        }
+      });
+    }
     update();
     notifyChildrens();
   }

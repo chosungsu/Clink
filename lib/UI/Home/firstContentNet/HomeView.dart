@@ -15,6 +15,7 @@ import '../../../Tool/BGColor.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
+import '../../../providers/mongodatabase.dart';
 import '../../Sign/UserCheck.dart';
 
 class HomeView extends StatefulWidget {
@@ -36,7 +37,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   ];
   List userviewlist = [];
   final peopleadd = Get.put(PeopleAdd());
-  String code = '';
+  bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
   void didChangeDependencies() {
@@ -48,43 +49,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    firestore
-        .collection('User')
-        .doc(Hive.box('user_info').get('id'))
-        .get()
-        .then((value) {
-      if (value.exists) {
-        code = value.data()!['code'];
-        Hive.box('user_setting').put('usercode', code);
-      } else {}
-    });
-    firestore
-        .collection('HomeViewCategories')
-        .doc(Hive.box('user_setting').get('usercode'))
-        .get()
-        .then((value) {
-      if (value.exists) {
-        setState(() {
-          peopleadd.defaulthomeviewlist.clear();
-          peopleadd.userviewlist.clear();
-          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-            peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
-          }
-          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-            peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
-          }
-        });
-      } else {
-        firestore
-            .collection('HomeViewCategories')
-            .doc(Hive.box('user_setting').get('usercode'))
-            .set({
-          'usercode': Hive.box('user_setting').get('usercode'),
-          'viewcategory': peopleadd.defaulthomeviewlist,
-          'hidecategory': peopleadd.userviewlist
-        }, SetOptions(merge: true));
-      }
-    });
   }
 
   @override
@@ -235,165 +199,232 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                         fontWeight: FontWeight.bold,
                         fontSize: contentTitleTextsize())),
                 peopleadd.defaulthomeviewlist.isNotEmpty
-                    ? ReorderableListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: peopleadd.defaulthomeviewlist.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return SizedBox(
-                            key: ValueKey(index),
-                            height: 70,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: ListTile(
-                                    onTap: () {},
-                                    horizontalTitleGap: 10,
-                                    dense: true,
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.drag_indicator,
-                                          color: TextColor(),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              if (peopleadd.defaulthomeviewlist
-                                                      .length >
-                                                  2) {
-                                                peopleadd.userviewlist.add(
-                                                    peopleadd
-                                                            .defaulthomeviewlist[
-                                                        index]);
-                                                peopleadd.defaulthomeviewlist
-                                                    .removeAt(index);
-                                                firestore
-                                                    .collection(
-                                                        'HomeViewCategories')
-                                                    .doc(
-                                                        Hive.box('user_setting')
-                                                            .get('usercode'))
-                                                    .update({
-                                                  'viewcategory': peopleadd
-                                                      .defaulthomeviewlist,
-                                                  'hidecategory':
+                    ? GetBuilder<PeopleAdd>(
+                        builder: ((controller) => ReorderableListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: peopleadd.defaulthomeviewlist.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return SizedBox(
+                                  key: ValueKey(index),
+                                  height: 80,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: ListTile(
+                                          onTap: () {},
+                                          horizontalTitleGap: 10,
+                                          dense: true,
+                                          trailing: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.drag_indicator,
+                                                color: TextColor(),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (peopleadd
+                                                            .defaulthomeviewlist
+                                                            .length >
+                                                        2) {
                                                       peopleadd.userviewlist
-                                                });
-                                              } else {
-                                                Snack.show(
-                                                    title: '알림',
-                                                    content:
-                                                        '홈뷰는 2개 미만으로 설정 불가합니다.',
-                                                    snackType:
-                                                        SnackType.warning,
-                                                    context: context);
-                                              }
-                                            });
-                                          },
-                                          child: Text('숨김',
-                                              style: TextStyle(
-                                                  color: peopleadd
-                                                              .defaulthomeviewlist
-                                                              .length >
-                                                          2
-                                                      ? TextColor()
-                                                      : TextColor_shadowcolor(),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                        ),
-                                      ],
-                                    ),
-                                    leading: SizedBox(
-                                      height: 45,
-                                      width: 45,
-                                      child: Container(
-                                          alignment: Alignment.center,
-                                          height: 30,
-                                          width: 30,
-                                          child: CircleAvatar(
-                                            backgroundColor:
-                                                Colors.blue.shade200,
-                                            child: Icon(
-                                              peopleadd.defaulthomeviewlist[
-                                                              index]
-                                                          .toString()
-                                                          .substring(
-                                                              peopleadd
-                                                                      .defaulthomeviewlist[
-                                                                          index]
-                                                                      .toString()
-                                                                      .length -
-                                                                  2,
-                                                              peopleadd
+                                                          .add(peopleadd
                                                                   .defaulthomeviewlist[
-                                                                      index]
-                                                                  .toString()
-                                                                  .length) ==
-                                                      '일정'
-                                                  ? Icons.calendar_month
-                                                  : Icons.description,
-                                              color: Colors.white,
-                                            ),
-                                          )),
-                                    ),
-                                    title: Text(
-                                        peopleadd.defaulthomeviewlist[index],
-                                        style: TextStyle(
-                                            color: TextColor(),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize())),
+                                                              index]);
+                                                      peopleadd
+                                                          .defaulthomeviewlist
+                                                          .removeAt(index);
+                                                      if (serverstatus) {
+                                                        MongoDB.update(
+                                                            collectionname:
+                                                                'homeview',
+                                                            query: 'usercode',
+                                                            what: Hive.box(
+                                                                    'user_setting')
+                                                                .get(
+                                                                    'usercode'),
+                                                            updatelist: {
+                                                              'viewcategory':
+                                                                  peopleadd
+                                                                      .defaulthomeviewlist,
+                                                              'hidecategory':
+                                                                  peopleadd
+                                                                      .userviewlist
+                                                            });
+                                                        firestore
+                                                            .collection(
+                                                                'HomeViewCategories')
+                                                            .doc(Hive.box(
+                                                                    'user_setting')
+                                                                .get(
+                                                                    'usercode'))
+                                                            .update({
+                                                          'viewcategory': peopleadd
+                                                              .defaulthomeviewlist,
+                                                          'hidecategory':
+                                                              peopleadd
+                                                                  .userviewlist
+                                                        });
+                                                      } else {
+                                                        firestore
+                                                            .collection(
+                                                                'HomeViewCategories')
+                                                            .doc(Hive.box(
+                                                                    'user_setting')
+                                                                .get(
+                                                                    'usercode'))
+                                                            .update({
+                                                          'viewcategory': peopleadd
+                                                              .defaulthomeviewlist,
+                                                          'hidecategory':
+                                                              peopleadd
+                                                                  .userviewlist
+                                                        });
+                                                      }
+                                                    } else {
+                                                      Snack.show(
+                                                          title: '알림',
+                                                          content:
+                                                              '홈뷰는 2개 미만으로 설정 불가합니다.',
+                                                          snackType:
+                                                              SnackType.warning,
+                                                          context: context);
+                                                    }
+                                                  });
+                                                },
+                                                child: Text('숨김',
+                                                    style: TextStyle(
+                                                        color: peopleadd
+                                                                    .defaulthomeviewlist
+                                                                    .length >
+                                                                2
+                                                            ? TextColor()
+                                                            : TextColor_shadowcolor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            contentTextsize())),
+                                              ),
+                                            ],
+                                          ),
+                                          leading: SizedBox(
+                                            height: 60,
+                                            width: 60,
+                                            child: Container(
+                                                alignment: Alignment.center,
+                                                height: 40,
+                                                width: 40,
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      Colors.blue.shade200,
+                                                  child: Icon(
+                                                    peopleadd.defaulthomeviewlist[index].toString().substring(
+                                                                peopleadd
+                                                                        .defaulthomeviewlist[
+                                                                            index]
+                                                                        .toString()
+                                                                        .length -
+                                                                    2,
+                                                                peopleadd
+                                                                    .defaulthomeviewlist[
+                                                                        index]
+                                                                    .toString()
+                                                                    .length) ==
+                                                            '일정'
+                                                        ? Icons.calendar_month
+                                                        : Icons.description,
+                                                    color: Colors.white,
+                                                  ),
+                                                )),
+                                          ),
+                                          title: GetBuilder<PeopleAdd>(
+                                            builder: (controller) => Text(
+                                                peopleadd
+                                                    .defaulthomeviewlist[index]
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    color: TextColor(),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        contentTextsize())),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        onReorder: (int oldIndex, int newIndex) {
-                          setState(() {
-                            if (oldIndex < newIndex) {
-                              newIndex -= 1;
-                            }
-                            final element = peopleadd.defaulthomeviewlist
-                                .removeAt(oldIndex);
-                            peopleadd.defaulthomeviewlist
-                                .insert(newIndex, element);
-                          });
-                          firestore
-                              .collection('HomeViewCategories')
-                              .doc(Hive.box('user_setting').get('usercode'))
-                              .update(
-                            {
-                              'viewcategory': peopleadd.defaulthomeviewlist,
-                            },
-                          );
-                          peopleadd.setcategory();
-                        },
-                        proxyDecorator: (Widget child, int index,
-                            Animation<double> animation) {
-                          return Material(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: TextColor_shadowcolor(),
-                                      width: 1)),
-                              child: child,
-                            ),
-                          );
-                        },
-                      )
+                                );
+                              },
+                              onReorder: (int oldIndex, int newIndex) {
+                                setState(() {
+                                  if (oldIndex < newIndex) {
+                                    newIndex -= 1;
+                                  }
+                                  final element = peopleadd.defaulthomeviewlist
+                                      .removeAt(oldIndex);
+                                  peopleadd.defaulthomeviewlist
+                                      .insert(newIndex, element);
+                                });
+                                if (serverstatus) {
+                                  MongoDB.update(
+                                    collectionname: 'homeview',
+                                    query: 'usercode',
+                                    what: Hive.box('user_setting')
+                                        .get('usercode'),
+                                    updatelist: {
+                                      'viewcategory':
+                                          peopleadd.defaulthomeviewlist,
+                                    },
+                                  );
+                                  firestore
+                                      .collection('HomeViewCategories')
+                                      .doc(Hive.box('user_setting')
+                                          .get('usercode'))
+                                      .update(
+                                    {
+                                      'viewcategory':
+                                          peopleadd.defaulthomeviewlist,
+                                    },
+                                  );
+                                } else {
+                                  firestore
+                                      .collection('HomeViewCategories')
+                                      .doc(Hive.box('user_setting')
+                                          .get('usercode'))
+                                      .update(
+                                    {
+                                      'viewcategory':
+                                          peopleadd.defaulthomeviewlist,
+                                    },
+                                  );
+                                }
+                                peopleadd.setcategory();
+                              },
+                              proxyDecorator: (Widget child, int index,
+                                  Animation<double> animation) {
+                                return Material(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: TextColor_shadowcolor(),
+                                            width: 1)),
+                                    child: child,
+                                  ),
+                                );
+                              },
+                            )))
                     : ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
@@ -403,7 +434,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                           return Column(
                             children: [
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                               ContainerDesign(
                                   child: ListTile(
@@ -416,9 +447,9 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                             fontWeight: FontWeight.bold,
                                             fontSize: contentTextsize())),
                                   ),
-                                  color: BGColor_shadowcolor()),
+                                  color: Colors.grey.shade300),
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                             ],
                           );
@@ -441,7 +472,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                           return Column(
                             children: [
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                               GestureDetector(
                                 onTap: () {},
@@ -459,17 +490,42 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                                 peopleadd.userviewlist[index]);
                                             peopleadd.userviewlist
                                                 .removeAt(index);
-                                            firestore
-                                                .collection(
-                                                    'HomeViewCategories')
-                                                .doc(Hive.box('user_setting')
-                                                    .get('usercode'))
-                                                .update({
-                                              'viewcategory':
-                                                  peopleadd.defaulthomeviewlist,
-                                              'hidecategory':
-                                                  peopleadd.userviewlist
-                                            });
+                                            if (serverstatus) {
+                                              MongoDB.update(
+                                                  collectionname: 'homeview',
+                                                  query: 'usercode',
+                                                  what: Hive.box('user_setting')
+                                                      .get('usercode'),
+                                                  updatelist: {
+                                                    'viewcategory': peopleadd
+                                                        .defaulthomeviewlist,
+                                                    'hidecategory':
+                                                        peopleadd.userviewlist
+                                                  });
+                                              firestore
+                                                  .collection(
+                                                      'HomeViewCategories')
+                                                  .doc(Hive.box('user_setting')
+                                                      .get('usercode'))
+                                                  .update({
+                                                'viewcategory': peopleadd
+                                                    .defaulthomeviewlist,
+                                                'hidecategory':
+                                                    peopleadd.userviewlist
+                                              });
+                                            } else {
+                                              firestore
+                                                  .collection(
+                                                      'HomeViewCategories')
+                                                  .doc(Hive.box('user_setting')
+                                                      .get('usercode'))
+                                                  .update({
+                                                'viewcategory': peopleadd
+                                                    .defaulthomeviewlist,
+                                                'hidecategory':
+                                                    peopleadd.userviewlist
+                                              });
+                                            }
                                           });
                                         },
                                         child: Text('보기',
@@ -481,12 +537,12 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                     ],
                                   ),
                                   leading: SizedBox(
-                                    height: 45,
-                                    width: 45,
+                                    height: 60,
+                                    width: 60,
                                     child: Container(
                                         alignment: Alignment.center,
-                                        height: 30,
-                                        width: 30,
+                                        height: 40,
+                                        width: 40,
                                         child: CircleAvatar(
                                           backgroundColor: Colors.blue.shade200,
                                           child: Icon(
@@ -511,7 +567,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                           ),
                                         )),
                                   ),
-                                  title: Text(peopleadd.userviewlist[index],
+                                  title: Text(
+                                      peopleadd.userviewlist[index].toString(),
                                       style: TextStyle(
                                           color: TextColor(),
                                           fontWeight: FontWeight.bold,
@@ -519,7 +576,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                 ),
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                             ],
                           );
@@ -533,7 +590,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                           return Column(
                             children: [
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                               ContainerDesign(
                                   child: ListTile(
@@ -546,9 +603,9 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                             fontWeight: FontWeight.bold,
                                             fontSize: contentTextsize())),
                                   ),
-                                  color: BGColor_shadowcolor()),
+                                  color: Colors.grey.shade300),
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                             ],
                           );

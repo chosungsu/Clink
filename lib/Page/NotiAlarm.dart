@@ -82,7 +82,6 @@ class _NotiAlarmState extends State<NotiAlarm>
         notilist.noticontroller.forward();
       }
     });*/
-    initScreen();
   }
 
   @override

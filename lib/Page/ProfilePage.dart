@@ -121,7 +121,6 @@ class _ProfilePageState extends State<ProfilePage>
     _pController1 = PageController(initialPage: 0, viewportFraction: 1);
     _pController2 = PageController(initialPage: 0, viewportFraction: 1);
     //peopleadd.secondnameset(name);
-    initScreen();
   }
 
   @override

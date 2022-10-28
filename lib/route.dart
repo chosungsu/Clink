@@ -35,8 +35,8 @@ class _MyHomePageState extends State<MyHomePage>
   int _selectedIndex = 0;
   late FToast fToast;
   late DateTime backbuttonpressedTime;
-  late AnimationController noticontroller;
-  late Animation animation;
+  //late AnimationController noticontroller;
+  //late Animation animation;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
   String name = Hive.box('user_info').get('id');
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage>
     _selectedIndex = widget.index;
     fToast = FToast();
     fToast.init(context);
-    notilist.noticontroller = AnimationController(
+    /*notilist.noticontroller = AnimationController(
         duration: const Duration(milliseconds: 300),
         vsync: this,
         value: 0,
@@ -82,13 +82,11 @@ class _MyHomePageState extends State<MyHomePage>
       } else if (status == AnimationStatus.dismissed) {
         notilist.noticontroller.forward();
       }
-    });
-    initScreen();
+    });*/
   }
 
   @override
   void dispose() {
-    //notilist.noticontroller.dispose();
     super.dispose();
     //notilist.noticontroller.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -96,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    notilist.noticontroller.forward();
+    //notilist.noticontroller.forward();
 
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
@@ -188,12 +186,18 @@ class _MyHomePageState extends State<MyHomePage>
                         BottomNavigationBarItem(
                           backgroundColor: BGColor(),
                           icon: GetBuilder<notishow>(
-                              builder: (_) => notilist.isread == true
-                                  ? const Icon(
+                            builder: (_) => notilist.isread == true
+                                ? const Icon(
+                                    Icons.notifications_none,
+                                    size: 25,
+                                  )
+                                : Badge(
+                                    child: const Icon(
                                       Icons.notifications_none,
                                       size: 25,
-                                    )
-                                  : RotationTransition(
+                                    ),
+                                  ),
+                            /*RotationTransition(
                                       turns: notilist.noticontroller,
                                       child: Badge(
                                         child: const Icon(
@@ -201,7 +205,8 @@ class _MyHomePageState extends State<MyHomePage>
                                           size: 25,
                                         ),
                                       ),
-                                    )),
+                                    )*/
+                          ),
                           label: '알림',
                         ),
                       ],
