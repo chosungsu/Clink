@@ -1,12 +1,12 @@
-#Thu Oct 27 08:53:53 KST 2022
+#Fri Oct 28 09:46:11 KST 2022
 path.3=classes4.dex
 path.2=classes3.dex
 path.1=classes2.dex
 path.0=classes.dex
-base.3=C\:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes4.dex
-base.2=C\:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes3.dex
-base.1=C\:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes2.dex
-base.0=C\:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+base.3=C\:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes4.dex
+base.2=C\:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes3.dex
+base.1=C\:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes2.dex
+base.0=C\:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.3=classes4.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex

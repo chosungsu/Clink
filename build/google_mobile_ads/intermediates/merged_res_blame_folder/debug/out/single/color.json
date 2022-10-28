@@ -1,14 +1,14 @@
 [
     {
-        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\color\\common_google_signin_btn_text_light.xml",
-        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\5bf8d15b2a0ecb6d309070301226d385\\transformed\\jetified-play-services-base-18.0.0\\res\\color\\common_google_signin_btn_text_light.xml"
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\color\\common_google_signin_btn_tint.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\5bf8d15b2a0ecb6d309070301226d385\\transformed\\jetified-play-services-base-18.0.0\\res\\color\\common_google_signin_btn_tint.xml"
     },
     {
-        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\color\\common_google_signin_btn_text_dark.xml",
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\color\\common_google_signin_btn_text_dark.xml",
         "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\5bf8d15b2a0ecb6d309070301226d385\\transformed\\jetified-play-services-base-18.0.0\\res\\color\\common_google_signin_btn_text_dark.xml"
     },
     {
-        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\color\\common_google_signin_btn_tint.xml",
-        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\5bf8d15b2a0ecb6d309070301226d385\\transformed\\jetified-play-services-base-18.0.0\\res\\color\\common_google_signin_btn_tint.xml"
+        "merged": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_mobile_ads\\intermediates\\merged_res\\debug\\color\\common_google_signin_btn_text_light.xml",
+        "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\5bf8d15b2a0ecb6d309070301226d385\\transformed\\jetified-play-services-base-18.0.0\\res\\color\\common_google_signin_btn_text_light.xml"
     }
 ]

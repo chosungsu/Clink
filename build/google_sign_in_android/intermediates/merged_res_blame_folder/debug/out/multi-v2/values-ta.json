@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_sign_in_android\\intermediates\\merged_res\\debug\\values-ta\\values-ta.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_sign_in_android\\intermediates\\merged_res\\debug\\values-ta\\values-ta.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\315f441822456f09c01d1a23898e501d\\transformed\\jetified-play-services-basement-18.0.0\\res\\values-ta\\values.xml",
@@ -57,7 +57,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_sign_in_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ta\\values-ta.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_sign_in_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ta\\values-ta.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\315f441822456f09c01d1a23898e501d\\transformed\\jetified-play-services-basement-18.0.0\\res\\values-ta\\values.xml",

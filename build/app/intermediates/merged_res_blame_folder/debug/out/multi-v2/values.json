@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\328781dd6969afaabdeade93eebe3b29\\transformed\\jetified-play-services-ads-lite-21.0.0\\res\\values\\values.xml",
@@ -40,22 +40,22 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\local_auth_android\\intermediates\\packaged_res\\debug\\values\\values.xml",
+                    "source": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,100,144,189,237,285,331,377,425",
-                        "endLines": "2,3,4,5,6,7,8,9,15",
-                        "endColumns": "44,43,44,47,47,45,45,47,10",
-                        "endOffsets": "95,139,184,232,280,326,372,420,720"
+                        "startLines": "3,14",
+                        "startColumns": "4,4",
+                        "startOffsets": "176,821",
+                        "endLines": "7,16",
+                        "endColumns": "12,12",
+                        "endOffsets": "472,987"
                     },
                     "to": {
-                        "startLines": "228,272,275,313,320,403,473,477,779",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "11595,14759,14938,17427,17882,23426,28077,28346,49904",
-                        "endLines": "228,272,275,313,320,403,473,477,784",
-                        "endColumns": "44,43,44,47,47,45,45,47,10",
-                        "endOffsets": "11635,14798,14978,17470,17925,23467,28118,28389,50199"
+                        "startLines": "2246,2251",
+                        "startColumns": "4,4",
+                        "startOffsets": "145816,146113",
+                        "endLines": "2250,2253",
+                        "endColumns": "12,12",
+                        "endOffsets": "146108,146277"
                     }
                 },
                 {
@@ -113,25 +113,6 @@
                         "endLines": "245,246,247,248,249,250,251,252,693,694,695,696,697,698,699,700,702,703,704,705,706,707,708,709,710,4445,4740",
                         "endColumns": "89,79,89,89,79,80,79,79,104,180,124,106,179,122,115,102,187,104,180,124,174,147,62,61,78,20,20",
                         "endOffsets": "12864,12944,13034,13124,13204,13285,13365,13445,41430,41611,41736,41843,42023,42146,42262,42365,42720,42825,43006,43131,43306,43454,43517,43579,43658,284788,301128"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Public\\Downloads\\clickbyme\\android\\app\\src\\main\\res\\values\\styles.xml",
-                    "from": {
-                        "startLines": "3,14",
-                        "startColumns": "4,4",
-                        "startOffsets": "176,821",
-                        "endLines": "7,16",
-                        "endColumns": "12,12",
-                        "endOffsets": "472,987"
-                    },
-                    "to": {
-                        "startLines": "2246,2251",
-                        "startColumns": "4,4",
-                        "startOffsets": "145816,146113",
-                        "endLines": "2250,2253",
-                        "endColumns": "12,12",
-                        "endOffsets": "146108,146277"
                     }
                 },
                 {
@@ -313,7 +294,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
+                    "source": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8",
                         "startColumns": "4,4,4,4,4,4,4",
@@ -363,6 +344,25 @@
                         "startOffsets": "37596",
                         "endColumns": "59",
                         "endOffsets": "37651"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\kakao_flutter_sdk_common\\intermediates\\packaged_res\\debug\\values\\values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "100",
+                        "endLines": "12",
+                        "endColumns": "12",
+                        "endOffsets": "773"
+                    },
+                    "to": {
+                        "startLines": "2826",
+                        "startColumns": "4",
+                        "startOffsets": "186477",
+                        "endLines": "2836",
+                        "endColumns": "12",
+                        "endOffsets": "187150"
                     }
                 },
                 {
@@ -548,22 +548,22 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\kakao_flutter_sdk_common\\intermediates\\packaged_res\\debug\\values\\values.xml",
+                    "source": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\local_auth_android\\intermediates\\packaged_res\\debug\\values\\values.xml",
                     "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "100",
-                        "endLines": "12",
-                        "endColumns": "12",
-                        "endOffsets": "773"
+                        "startLines": "2,3,4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,100,144,189,237,285,331,377,425",
+                        "endLines": "2,3,4,5,6,7,8,9,15",
+                        "endColumns": "44,43,44,47,47,45,45,47,10",
+                        "endOffsets": "95,139,184,232,280,326,372,420,720"
                     },
                     "to": {
-                        "startLines": "2826",
-                        "startColumns": "4",
-                        "startOffsets": "186477",
-                        "endLines": "2836",
-                        "endColumns": "12",
-                        "endOffsets": "187150"
+                        "startLines": "228,272,275,313,320,403,473,477,779",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "11595,14759,14938,17427,17882,23426,28077,28346,49904",
+                        "endLines": "228,272,275,313,320,403,473,477,784",
+                        "endColumns": "44,43,44,47,47,45,45,47,10",
+                        "endOffsets": "11635,14798,14978,17470,17925,23467,28118,28389,50199"
                     }
                 }
             ]

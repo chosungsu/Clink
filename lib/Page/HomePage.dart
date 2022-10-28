@@ -9,6 +9,7 @@ import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/ShowTips.dart';
 import 'package:clickbyme/initScreenLoading.dart';
+import 'package:clickbyme/providers/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -80,6 +81,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _pController2 =
         PageController(initialPage: currentPage2, viewportFraction: 1);
     initScreen();
+    /*firestore.collection('AppLicense').get().then((value) {
+      if (value.docs.isNotEmpty) {
+        for (int i = 0; i < value.docs.length; i++) {
+          //print(value.docs[i].data());
+          MongoDB.add(
+              collectionname: 'applicense', addlist: value.docs[i].data());
+        }
+      }
+    });*/
   }
 
   @override

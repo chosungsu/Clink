@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:clickbyme/initScreenLoading.dart';
+import 'package:clickbyme/providers/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,6 +30,7 @@ void main() async {
   KakaoSdk.init(nativeAppKey: '	caac43875f322f45a8cec21c52741a24');
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
+  await MongoDB.connect();
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');

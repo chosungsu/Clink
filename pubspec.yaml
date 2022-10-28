@@ -62,6 +62,8 @@ dependencies:
   provider: 
   get: 
   async:
+  http:
+  mongo_dart:
   #image picker
   image_picker: 
   multi_image_picker2: 

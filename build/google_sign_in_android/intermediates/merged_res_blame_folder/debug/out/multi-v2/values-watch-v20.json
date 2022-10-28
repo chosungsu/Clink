@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_sign_in_android\\intermediates\\merged_res\\debug\\values-watch-v20\\values-watch-v20.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_sign_in_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v20\\values-watch-v20.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\9520a3b2e72c10aba4458371e6058cfb\\transformed\\jetified-play-services-auth-20.0.1\\res\\values-watch-v20\\values.xml",
@@ -23,7 +23,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\google_sign_in_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v20\\values-watch-v20.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\google_sign_in_android\\intermediates\\merged_res\\debug\\values-watch-v20\\values-watch-v20.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\9520a3b2e72c10aba4458371e6058cfb\\transformed\\jetified-play-services-auth-20.0.1\\res\\values-watch-v20\\values.xml",

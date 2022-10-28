@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\image_picker_android\\intermediates\\merged_res\\debug\\values-bg\\values-bg.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\image_picker_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-bg\\values-bg.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\a1b0f94d7508d68471e1b16e647912c1\\transformed\\core-1.8.0\\res\\values-bg\\values-bg.xml",
@@ -16,7 +16,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\image_picker_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-bg\\values-bg.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\image_picker_android\\intermediates\\merged_res\\debug\\values-bg\\values-bg.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\a1b0f94d7508d68471e1b16e647912c1\\transformed\\core-1.8.0\\res\\values-bg\\values-bg.xml",

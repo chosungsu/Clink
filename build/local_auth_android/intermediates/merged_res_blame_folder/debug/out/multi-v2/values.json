@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\local_auth_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\local_auth_android\\intermediates\\merged_res\\debug\\values\\values.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\1dc8096e3ac2808f04ad18ef41eb7227\\transformed\\jetified-appcompat-resources-1.2.0\\res\\values\\values.xml",
@@ -241,7 +241,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\build\\local_auth_android\\intermediates\\merged_res\\debug\\values\\values.xml",
+            "outputFile": "C:\\Users\\Public\\Downloads\\clickbyme\\FrameworkStation\\build\\local_auth_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
                 {
                     "source": "C:\\Users\\chosungsu\\.gradle\\caches\\transforms-3\\1dc8096e3ac2808f04ad18ef41eb7227\\transformed\\jetified-appcompat-resources-1.2.0\\res\\values\\values.xml",
