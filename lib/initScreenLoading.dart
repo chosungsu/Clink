@@ -5,15 +5,18 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'DB/Event.dart';
 import 'Tool/Getx/PeopleAdd.dart';
+import 'Tool/Getx/memosetting.dart';
 import 'Tool/Getx/notishow.dart';
 
 Future<Widget?> initScreen() async {
   final peopleadd = Get.put(PeopleAdd());
   final notilist = Get.put(notishow());
+  final controll_memo = Get.put(memosetting());
   List updateid = [];
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id') ?? '';
+  String usercode = Hive.box('user_setting').get('usercode');
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',
@@ -26,6 +29,41 @@ Future<Widget?> initScreen() async {
     await firestore.collection('User').doc(name).get().then((value) {
       if (value.exists) {
         peopleadd.secondnameset(value.data()!['subname']);
+      }
+    });
+    await firestore
+        .collection('MemoAllAlarm')
+        .doc(usercode)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        value.data()!.forEach((key, value) {
+          if (key == 'alarmtime') {
+            Hive.box('user_setting').put(
+                'alarm_memo_hour', int.parse(value.toString().split(':')[0]));
+            Hive.box('user_setting').put(
+                'alarm_memo_minute', int.parse(value.toString().split(':')[1]));
+            firestore.collection('MemoAllAlarm').doc(usercode).update({
+              'alarmtime': value.toString().split(':')[0] +
+                  ':' +
+                  value.toString().split(':')[1]
+            });
+            /*controll_memo.settimeminute(
+                int.parse(value.toString().split(':')[0]),
+                int.parse(value.toString().split(':')[1]),
+                '',
+                '');*/
+          } else if (key == 'ok') {
+            Hive.box('user_setting').put('alarm_memo', value);
+            controll_memo.ischeckedpushmemoalarm = value;
+          } else {}
+        });
+      } else {
+        firestore
+            .collection('MemoAllAlarm')
+            .doc(usercode)
+            .set({'ok': false, 'alarmtime': '99:99'});
+        Hive.box('user_setting').put('alarm_memo', false);
       }
     });
     await firestore

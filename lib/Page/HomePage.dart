@@ -81,12 +81,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _pController2 =
         PageController(initialPage: currentPage2, viewportFraction: 1);
     initScreen();
-    /*firestore.collection('AppLicense').get().then((value) {
+    /*firestore.collection('MemoAllAlarm').get().then((value) {
       if (value.docs.isNotEmpty) {
         for (int i = 0; i < value.docs.length; i++) {
           //print(value.docs[i].data());
           MongoDB.add(
-              collectionname: 'applicense', addlist: value.docs[i].data());
+              collectionname: 'memoallalarm', addlist: value.docs[i].data());
         }
       }
     });*/

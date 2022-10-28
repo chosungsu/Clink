@@ -17,8 +17,7 @@ class memosetting extends GetxController {
   int memosort = 0;
   bool ischeckedtohideminus = false;
   bool isseveralmemoalarm = false;
-  bool ischeckedpushmemoalarm =
-      Hive.box('user_setting').get('alarm_memo') ?? false;
+  bool ischeckedpushmemoalarm = false;
   List imagelist = [];
   List voicelist = [];
   List drawinglist = [];

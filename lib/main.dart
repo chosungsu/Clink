@@ -30,11 +30,11 @@ void main() async {
   KakaoSdk.init(nativeAppKey: '	caac43875f322f45a8cec21c52741a24');
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
-  await MongoDB.connect();
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
+  await MongoDB.connect();
   runApp(const MyApp());
 }
 
@@ -169,7 +169,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                                   color: Colors.black),
                               speed: const Duration(milliseconds: 150)),
                         ],
-                        totalRepeatCount: 1,
+                        totalRepeatCount: 2,
                         onFinished: () {
                           NotificationApi.runWhileAppIsTerminated(context);
                         },

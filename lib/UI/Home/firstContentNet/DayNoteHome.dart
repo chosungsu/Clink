@@ -125,10 +125,10 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                 int.parse(value.toString().split(':')[1]),
                 '',
                 '');*/
-          } else {
+          } else if (key == 'ok') {
             Hive.box('user_setting').put('alarm_memo', value);
             controll_memo.ischeckedpushmemoalarm = value;
-          }
+          } else {}
         });
       } else {
         firestore

@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,16 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
-import 'package:page_transition/page_transition.dart';
 
-import '../Tool/Getx/PeopleAdd.dart';
-import '../route.dart';
+import '../providers/mongodatabase.dart';
 
 class GoogleSignInController extends GetxController {
   final _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? googleSignInAccount;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late int count;
+  bool serverstatus = Hive.box('user_info').get('server_status');
 
   login(BuildContext context, bool ischecked) async {
     count = 1;
@@ -44,46 +41,65 @@ class GoogleSignInController extends GetxController {
             5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
     //firestore 저장
-    firestore.collection('User').doc(nick).get().then((value) async {
-      /*Snack.show(
-          title: '로딩중',
-          snackType: SnackType.waiting,
-          content: '로그인중입니다.잠시만 기다려주세요',
-          context: context);*/
-      if (value.exists) {
-        await firestore.collection('User').doc(nick).update({
-          'name': nick,
-          'email': email,
-          'login_where': 'google_user',
-          'autologin': ischecked,
-        }).whenComplete(() {
-          firestore
-              .collection('User')
-              .doc(Hive.box('user_info').get('id'))
-              .get()
-              .then((value) async {
-            if (value.exists) {
-              await Hive.box('user_setting')
-                  .put('usercode', value.data()!['code']);
-              GoToMain(context);
-            } else {}
-          });
-        });
-      } else {
-        await firestore.collection('User').doc(nick).set({
+    if (serverstatus) {
+      await MongoDB.find(collectionname: 'user', query: 'name', what: nick);
+      if (MongoDB.res == null) {
+        await MongoDB.add(collectionname: 'user', addlist: {
           'name': nick,
           'subname': nick,
           'email': email,
           'login_where': 'google_user',
-          'time': DateTime.now(),
           'autologin': ischecked,
           'code': code
-        }, SetOptions(merge: true)).whenComplete(() async {
-          await Hive.box('user_setting').put('usercode', code);
-          GoToMain(context);
         });
+      } else {
+        await MongoDB.update(
+            collectionname: 'user',
+            query: 'name',
+            what: nick,
+            updatelist: {
+              'name': nick,
+              'email': email,
+              'login_where': 'google_user',
+              'autologin': ischecked,
+            });
       }
-    });
+
+      firestore.collection('User').doc(nick).get().then((value) async {
+        if (value.exists) {
+          await firestore.collection('User').doc(nick).update({
+            'name': nick,
+            'email': email,
+            'login_where': 'google_user',
+            'autologin': ischecked,
+          }).whenComplete(() {
+            firestore
+                .collection('User')
+                .doc(Hive.box('user_info').get('id'))
+                .get()
+                .then((value) async {
+              if (value.exists) {
+                await Hive.box('user_setting')
+                    .put('usercode', value.data()!['code']);
+              } else {}
+            });
+          });
+        } else {
+          await firestore.collection('User').doc(nick).set({
+            'name': nick,
+            'subname': nick,
+            'email': email,
+            'login_where': 'google_user',
+            'time': DateTime.now(),
+            'autologin': ischecked,
+            'code': code
+          }, SetOptions(merge: true)).whenComplete(() async {
+            await Hive.box('user_setting').put('usercode', code);
+          });
+        }
+      });
+      GoToMain(context);
+    }
 
     update();
     notifyChildrens();
