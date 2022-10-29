@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:clickbyme/providers/mongodb_constant.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -13,7 +11,6 @@ class MongoDB {
       collection_homeview,
       collection_tag,
       collection_memoallalarm,
-      collection_eventnotice,
       collection_companynotice,
       collection_applicense,
       collection_noticebycompany,
@@ -31,7 +28,6 @@ class MongoDB {
     collection_homeview = db.collection(HOMEVIEW_COLLECTION);
     collection_tag = db.collection(TAG_COLLECTION);
     collection_memoallalarm = db.collection(MEMOALLALARM_COLLECTION);
-    collection_eventnotice = db.collection(EVENTNOTICE_COLLECTION);
     collection_companynotice = db.collection(COMPANYNOTICE_COLLECTION);
     collection_applicense = db.collection(APPLICENSE_COLLECTION);
     collection_noticebycompany = db.collection(APPNOTICEBYCOMPANY_COLLECTION);
@@ -61,9 +57,6 @@ class MongoDB {
       return arrdata;
     } else if (collectionname == 'memoallalarm') {
       arrdata = await collection_memoallalarm.find().toList();
-      return arrdata;
-    } else if (collectionname == 'eventnotice') {
-      arrdata = await collection_eventnotice.find().toList();
       return arrdata;
     } else if (collectionname == 'companynotice') {
       arrdata = await collection_companynotice.find().toList();
@@ -99,8 +92,6 @@ class MongoDB {
       await collection_tag.insertOne(addlist);
     } else if (collectionname == 'memoallalarm') {
       await collection_memoallalarm.insertOne(addlist);
-    } else if (collectionname == 'eventnotice') {
-      await collection_eventnotice.insertOne(addlist);
     } else if (collectionname == 'companynotice') {
       await collection_companynotice.insertOne(addlist);
     } else if (collectionname == 'applicense') {
@@ -162,13 +153,6 @@ class MongoDB {
     } else if (collectionname == 'memoallalarm') {
       for (int i = 0; i < updatelist.length; i++) {
         await collection_memoallalarm.update(
-            where.eq(query, what),
-            modify.set(
-                updatelist.keys.toList()[i], updatelist.values.toList()[i]));
-      }
-    } else if (collectionname == 'eventnotice') {
-      for (int i = 0; i < updatelist.length; i++) {
-        await collection_eventnotice.update(
             where.eq(query, what),
             modify.set(
                 updatelist.keys.toList()[i], updatelist.values.toList()[i]));
@@ -235,10 +219,6 @@ class MongoDB {
       });
     } else if (collectionname == 'memoallalarm') {
       res = await collection_memoallalarm.find({query: what}).forEach((v) {
-        res = v;
-      });
-    } else if (collectionname == 'eventnotice') {
-      res = await collection_eventnotice.find({query: what}).forEach((v) {
         res = v;
       });
     } else if (collectionname == 'companynotice') {

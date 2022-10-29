@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:package_info/package_info.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
@@ -297,6 +298,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   CompanyNotice() {
     final List<PageList> listcompanytousers = [];
+    var url;
     return serverstatus == true
         ? FutureBuilder(
             future:
@@ -305,11 +307,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 final messageText = value[j]['title'];
                 final messageDate = value[j]['date'];
                 final messageyes = value[j]['showthisinapp'];
-                if (messageyes == 'yes') {
+                final messagewhere = value[j]['where'];
+                if (messageyes == 'yes' && messagewhere == 'home') {
                   listcompanytousers.add(PageList(
                     title: messageText,
                     sub: messageDate,
                   ));
+                  url = Uri.parse(value[j]['url']);
                 }
               }
             }),
@@ -322,9 +326,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               draw.setclose();
-                              Hive.box('user_setting').put('page_index', 3);
+                              /*Hive.box('user_setting').put('page_index', 3);
                               Navigator.of(context).pushReplacement(
                                 PageTransition(
                                   type: PageTransitionType.rightToLeft,
@@ -332,7 +336,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     index: 3,
                                   ),
                                 ),
-                              );
+                              );*/
+                              if (await canLaunchUrl(url)) {
+                                launchUrl(url);
+                              }
                             },
                             child: ContainerDesign(
                               color: Colors.grey.shade300,
@@ -390,81 +397,82 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 for (var sp in valuespace) {
                   final messageText = sp.get('title');
                   final messageDate = sp.get('date');
-                  listcompanytousers.add(PageList(
-                    title: messageText,
-                    sub: messageDate,
-                  ));
+                  final messageyes = sp.get('showthisinapp');
+                  final messagewhere = sp.get('where');
+                  if (messageyes == 'yes' && messagewhere == 'home') {
+                    listcompanytousers.add(PageList(
+                      title: messageText,
+                      sub: messageDate,
+                    ));
+                    url = Uri.parse(sp.get('url'));
+                  }
                 }
 
                 return listcompanytousers.isEmpty
-                    ? SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Container(
-                            color: Colors.grey.shade400,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 20, bottom: 20),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '공지사항이 없습니다.',
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize()),
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                ],
-                              ),
-                            )))
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              height: 50,
-                              alignment: Alignment.center,
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: ContainerDesign(
-                                      color: BGColor(),
-                                      child: SizedBox(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Text(
-                                                  listcompanytousers[0].title,
-                                                  maxLines: 1,
-                                                  style: TextStyle(
-                                                      color: TextColor(),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize()),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                )),
-                                          ],
-                                        ),
+                    ? const SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                draw.setclose();
+                                /*Hive.box('user_setting').put('page_index', 3);
+                              Navigator.of(context).pushReplacement(
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: const MyHomePage(
+                                    index: 3,
+                                  ),
+                                ),
+                              );*/
+                                if (await canLaunchUrl(url)) {
+                                  launchUrl(url);
+                                }
+                              },
+                              child: ContainerDesign(
+                                color: Colors.grey.shade300,
+                                child: SizedBox(
+                                  height: 90,
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
                                       ),
-                                    ),
-                                  )
-                                ],
-                              ))
-                        ],
-                      );
+                                      Icon(
+                                        Icons.new_releases,
+                                        color: TextColor(),
+                                        size: 40,
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text(
+                                            listcompanytousers[0].title,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize()),
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ));
               }
               return LinearProgressIndicator(
                 backgroundColor: BGColor(),

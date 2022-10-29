@@ -68,11 +68,6 @@ Future<Widget?> initScreen() async {
               'hidecategory': peopleadd.userviewlist
             });
       }
-      await firestore.collection('User').doc(name).get().then((value) {
-        if (value.exists) {
-          peopleadd.secondnameset(value.data()!['subname']);
-        }
-      });
       await firestore
           .collection('HomeViewCategories')
           .doc(Hive.box('user_setting').get('usercode'))

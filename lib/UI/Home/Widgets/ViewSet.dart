@@ -1,4 +1,3 @@
-import 'package:clickbyme/UI/Home/firstContentNet/ChooseCalendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -11,7 +10,6 @@ import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../firstContentNet/DayContentHome.dart';
-import '../secondContentNet/ClickShowEachCalendar.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
 ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
