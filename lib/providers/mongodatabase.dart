@@ -14,7 +14,8 @@ class MongoDB {
       collection_companynotice,
       collection_applicense,
       collection_noticebycompany,
-      collection_noticebyusers;
+      collection_noticebyusers,
+      collection_howtouse;
 
   static connect() async {
     var db = await Db.create(MONGO_URL);
@@ -32,6 +33,7 @@ class MongoDB {
     collection_applicense = db.collection(APPLICENSE_COLLECTION);
     collection_noticebycompany = db.collection(APPNOTICEBYCOMPANY_COLLECTION);
     collection_noticebyusers = db.collection(APPNOTICEBYUSERS_COLLECTION);
+    collection_howtouse = db.collection(HOWTOUSE_COLLECTION);
   }
 
   static Future<List<Map<String, dynamic>>> getData(
@@ -69,6 +71,9 @@ class MongoDB {
       return arrdata;
     } else if (collectionname == 'notibyusers') {
       arrdata = await collection_noticebyusers.find().toList();
+      return arrdata;
+    } else if (collectionname == 'howtouse') {
+      arrdata = await collection_howtouse.find().toList();
       return arrdata;
     } else {
       return [];
@@ -231,6 +236,10 @@ class MongoDB {
       });
     } else if (collectionname == 'notibycompany') {
       res = await collection_noticebycompany.find({query: what}).forEach((v) {
+        res = v;
+      });
+    } else if (collectionname == 'howtouse') {
+      res = await collection_howtouse.find({query: what}).forEach((v) {
         res = v;
       });
     }

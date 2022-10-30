@@ -201,30 +201,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               height: 20,
                                             ),
                                             CompanyNotice(),
-                                            /*const SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                             H_Container_0(
-                                                height, _pController2),*/
+                                                height, _pController2),
                                             /*const SizedBox(
                                               height: 20,
                                             ),
                                             H_Container_3(height),*/
-
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
                                             GetBuilder<PeopleAdd>(
                                                 builder: (_) => ViewSet(
                                                     peopleadd
                                                         .defaulthomeviewlist,
                                                     peopleadd.userviewlist,
                                                     usercode)),
-                                            /*const SizedBox(
-                                              height: 20,
-                                            ),
-                                            H_Container_myroom(),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            H_Container_testroom(),*/
                                             const SizedBox(
                                               height: 50,
                                             ),
@@ -249,10 +243,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: SizedBox(
-        height: 160,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Text(
+                  '이렇게 해보세요',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                      color: TextColor()),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             ShowTips(
               height: height,
               pageController: pController,
@@ -328,38 +336,31 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           GestureDetector(
                             onTap: () async {
                               draw.setclose();
-                              /*Hive.box('user_setting').put('page_index', 3);
-                              Navigator.of(context).pushReplacement(
-                                PageTransition(
-                                  type: PageTransitionType.rightToLeft,
-                                  child: const MyHomePage(
-                                    index: 3,
-                                  ),
-                                ),
-                              );*/
                               if (await canLaunchUrl(url)) {
                                 launchUrl(url);
                               }
                             },
-                            child: ContainerDesign(
-                              color: Colors.grey.shade300,
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey.shade200,
+                              ),
                               child: SizedBox(
-                                height: 90,
+                                height: 30,
                                 width: double.infinity,
-                                child: Column(
+                                child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Icon(
-                                      Icons.new_releases,
-                                      color: TextColor(),
-                                      size: 40,
+                                    const Icon(
+                                      Icons.campaign,
+                                      color: Colors.black45,
+                                      size: 30,
                                     ),
                                     const SizedBox(
-                                      height: 5,
+                                      width: 10,
                                     ),
                                     Flexible(
                                         fit: FlexFit.tight,
@@ -367,7 +368,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           listcompanytousers[0].title,
                                           maxLines: 1,
                                           style: TextStyle(
-                                              color: TextColor(),
+                                              color: Colors.black45,
                                               fontWeight: FontWeight.bold,
                                               fontSize: contentTextsize()),
                                           overflow: TextOverflow.ellipsis,
@@ -482,115 +483,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           );
   }
 
-  /*H_Container_myroom() {
-    //프로버전 구매시 보이지 않게 함
-    return GestureDetector(
-      onTap: () {
-        draw.setclose();
-        _getAppInfo();
-        Hive.box('user_setting').put('page_index', 1);
-        Navigator.of(context).pushReplacement(
-          PageTransition(
-            type: PageTransitionType.rightToLeft,
-            child: const MyHomePage(
-              index: 1,
-            ),
-          ),
-        );
-      },
-      child: Container(
-          color: ButtonColor(),
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Flexible(
-                    fit: FlexFit.tight,
-                    child: Text(
-                      '마이룸에 작성하신 해빗T들이 자리하고 있어요',
-                      maxLines: 3,
-                      softWrap: true,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize()),
-                      overflow: TextOverflow.fade,
-                    )),
-                const SizedBox(
-                  width: 20,
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      backgroundColor: ButtonColor(),
-                      child: const Icon(
-                        Icons.chevron_right,
-                        color: Colors.white,
-                      ),
-                    )),
-              ],
-            ),
-          )),
-    );
-  }
-
-  H_Container_testroom() {
-    //프로버전 구매시 보이지 않게 함
-    return GestureDetector(
-      onTap: () {
-        draw.setclose();
-        _getAppInfo();
-        Hive.box('user_setting').put('page_index', 3);
-        Navigator.of(context).pushReplacement(
-          PageTransition(
-            type: PageTransitionType.rightToLeft,
-            child: const MyHomePage(
-              index: 3,
-            ),
-          ),
-        );
-      },
-      child: Container(
-          color: ButtonColor(),
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Flexible(
-                    fit: FlexFit.tight,
-                    child: Text(
-                      '넥스트버전에 추가될 사항들은 실험실에 가시면 볼 수 있어요',
-                      maxLines: 3,
-                      softWrap: true,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize()),
-                      overflow: TextOverflow.fade,
-                    )),
-                const SizedBox(
-                  width: 20,
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      backgroundColor: ButtonColor(),
-                      child: const Icon(
-                        Icons.chevron_right,
-                        color: Colors.white,
-                      ),
-                    )),
-              ],
-            ),
-          )),
-    );
-  }*/
   H_Container_4(double height) {
     //프로버전 구매시 보이지 않게 함
     return Row(
