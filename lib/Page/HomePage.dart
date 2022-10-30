@@ -184,6 +184,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           const AppBarCustom(
                             title: 'LinkAI',
                             righticon: false,
+                            iconname: Icons.abc,
                             func: null,
                           ),
                           Flexible(

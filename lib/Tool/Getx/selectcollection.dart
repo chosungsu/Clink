@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class selectcollection extends GetxController {
   var collection = Hive.box('user_setting').get('memocollection') ?? '';
   var memoindex = 0;
+  List collectionlink = List.empty(growable: true);
   List memolistin = List.empty(growable: true);
   List memolistcontentin = List.empty(growable: true);
   int cursornow = 0;
@@ -30,6 +31,18 @@ class selectcollection extends GetxController {
 
   void addmemolist(int length) {
     memoindex += length;
+    update();
+    notifyChildrens();
+  }
+
+  void resetcollectionlink() {
+    collectionlink.clear();
+    update();
+    notifyChildrens();
+  }
+
+  void addmemolistlink(String str) {
+    collectionlink.add(str);
     update();
     notifyChildrens();
   }

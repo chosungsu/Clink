@@ -1,4 +1,4 @@
-#Sat Oct 29 22:29:55 KST 2022
+#Sun Oct 30 15:45:19 KST 2022
 base.1=C\:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes2.dex
 path.1=classes2.dex
 base.0=C\:\\Users\\Public\\Downloads\\clickbyme\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex

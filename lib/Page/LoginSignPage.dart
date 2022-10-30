@@ -1,26 +1,16 @@
-import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
-import 'package:clickbyme/sheets/userinfo_draggable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Auth/GoogleSignInController.dart';
-import '../Auth/KakaoSignInController.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/AndroidIOS.dart';
-import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
-import '../initScreenLoading.dart';
-import '../route.dart';
 
 class LoginSignPage extends StatefulWidget {
   const LoginSignPage({Key? key, required this.first}) : super(key: key);
@@ -129,8 +119,13 @@ class _LoginSignPageState extends State<LoginSignPage>
                                         letterSpacing: 2),
                                     text: '앱의 개인정보처리방침',
                                     recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        userinfo_draggable(context);
+                                      ..onTap = () async {
+                                        var url = Uri.parse(
+                                            'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
+
+                                        if (await canLaunchUrl(url)) {
+                                          launchUrl(url);
+                                        }
                                       },
                                   ),
                                   const TextSpan(

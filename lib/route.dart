@@ -4,6 +4,7 @@ import 'package:clickbyme/Page/addWhole_update.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/Page/NotiAlarm.dart';
+import 'package:clickbyme/providers/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -122,8 +123,13 @@ class _MyHomePageState extends State<MyHomePage>
                             top: BorderSide(color: draw.color, width: 1))),
                     child: BottomNavigationBar(
                       type: BottomNavigationBarType.fixed,
-                      onTap: (_index) {
+                      onTap: (_index) async {
                         //Handle button tap
+                        await MongoDB.db.close();
+                        await MongoDB.db.open().then((success) {
+                          Hive.box('user_info')
+                              .put('server_status', MongoDB.db.isConnected);
+                        });
                         setState(() {
                           if (_index == 2) {
                             Hive.box('user_setting').put('page_index',

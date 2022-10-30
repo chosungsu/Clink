@@ -162,26 +162,28 @@ content(
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.grey.shade300,
+                color: Colors.grey.shade400,
                 width: 2,
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
             ),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.blue,
                 width: 2,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
             contentPadding: const EdgeInsets.only(left: 10),
             border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
+            filled: true,
+            fillColor: Colors.grey.shade200,
             isCollapsed: true,
             hintText: '다른 사용자에게 보일 이름 작성',
-            hintStyle: TextStyle(
-                fontSize: contentTextsize(), color: Colors.grey.shade400),
+            hintStyle:
+                TextStyle(fontSize: contentTextsize(), color: Colors.black45),
           ),
           controller: controller,
         ),

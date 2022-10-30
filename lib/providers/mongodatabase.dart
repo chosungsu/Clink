@@ -4,6 +4,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoDB {
   static var res,
+      db,
       collection_user,
       collection_share,
       collection_people,
@@ -15,10 +16,11 @@ class MongoDB {
       collection_applicense,
       collection_noticebycompany,
       collection_noticebyusers,
-      collection_howtouse;
+      collection_howtouse,
+      collection_linknet;
 
   static connect() async {
-    var db = await Db.create(MONGO_URL);
+    db = await Db.create(MONGO_URL);
     await db.open().then((success) {
       Hive.box('user_info').put('server_status', db.isConnected);
     });
@@ -34,6 +36,7 @@ class MongoDB {
     collection_noticebycompany = db.collection(APPNOTICEBYCOMPANY_COLLECTION);
     collection_noticebyusers = db.collection(APPNOTICEBYUSERS_COLLECTION);
     collection_howtouse = db.collection(HOWTOUSE_COLLECTION);
+    collection_linknet = db.collection(LINKNET_COLLECTION);
   }
 
   static Future<List<Map<String, dynamic>>> getData(
@@ -75,6 +78,9 @@ class MongoDB {
     } else if (collectionname == 'howtouse') {
       arrdata = await collection_howtouse.find().toList();
       return arrdata;
+    } else if (collectionname == 'linknet') {
+      arrdata = await collection_linknet.find().toList();
+      return arrdata;
     } else {
       return [];
     }
@@ -105,6 +111,8 @@ class MongoDB {
       await collection_noticebycompany.insertOne(addlist);
     } else if (collectionname == 'notibyusers') {
       await collection_noticebyusers.insertOne(addlist);
+    } else if (collectionname == 'linknet') {
+      await collection_linknet.insertOne(addlist);
     }
   }
 
@@ -190,6 +198,13 @@ class MongoDB {
             modify.set(
                 updatelist.keys.toList()[i], updatelist.values.toList()[i]));
       }
+    } else if (collectionname == 'linknet') {
+      for (int i = 0; i < updatelist.length; i++) {
+        await collection_linknet.update(
+            where.eq(query, what),
+            modify.set(
+                updatelist.keys.toList()[i], updatelist.values.toList()[i]));
+      }
     }
   }
 
@@ -240,6 +255,10 @@ class MongoDB {
       });
     } else if (collectionname == 'howtouse') {
       res = await collection_howtouse.find({query: what}).forEach((v) {
+        res = v;
+      });
+    } else if (collectionname == 'linknet') {
+      res = await collection_linknet.find({query: what}).forEach((v) {
         res = v;
       });
     }

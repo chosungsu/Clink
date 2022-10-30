@@ -11,10 +11,12 @@ class AppBarCustom extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.righticon,
+      required this.iconname,
       required this.func})
       : super(key: key);
   final String title;
   final bool righticon;
+  final IconData iconname;
   final void func;
 
   @override
@@ -106,6 +108,16 @@ class AppBarCustom extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                righticon == true
+                                    ? InkWell(
+                                        onTap: () => func,
+                                        child: Icon(
+                                          iconname,
+                                          size: 30,
+                                          color: TextColor_shadowcolor(),
+                                        ),
+                                      )
+                                    : const SizedBox()
                               ],
                             ))),
                   ],

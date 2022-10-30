@@ -24,7 +24,6 @@ import '../UI/Setting/UserDetails.dart';
 import '../providers/mongodatabase.dart';
 import '../sheets/addgroupmember.dart';
 import '../sheets/readycontent.dart';
-import '../sheets/userinfo_draggable.dart';
 import '../sheets/userinfotalk.dart';
 import 'DrawerScreen.dart';
 
@@ -192,6 +191,7 @@ class _ProfilePageState extends State<ProfilePage>
                           const AppBarCustom(
                             title: '',
                             righticon: false,
+                            iconname: Icons.abc,
                             func: null,
                           ),
                           Flexible(
