@@ -78,7 +78,11 @@ class _ProfilePageState extends State<ProfilePage>
       MongoDB.find(collectionname: 'user', query: 'name', what: name);
       if (MongoDB.res == null) {
       } else {
-        peopleadd.secondnameset(MongoDB.res['subname']);
+        firestore
+            .collection('User')
+            .doc(Hive.box('user_info').get('id'))
+            .update({'subname': name});
+        peopleadd.secondname = MongoDB.res['subname'];
         peopleadd.code = MongoDB.res['code'];
       }
     } else {
@@ -231,16 +235,15 @@ class _ProfilePageState extends State<ProfilePage>
                                                         height: 20,
                                                       ),
                                                       S_Container1(height),
-                                                      const SizedBox(
+                                                      /*const SizedBox(
                                                         height: 20,
                                                       ),
-                                                      ADBox(),
+                                                      ADBox(),*/
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
                                                       OptionChoice(
                                                           height, context),
-                                                      //S_Container2(),
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
@@ -1623,7 +1626,7 @@ class _ProfilePageState extends State<ProfilePage>
                                 curve: Curves.ease);
                           });*/
                           var url = Uri.parse(
-                              'https://rust-peak-d3a.notion.site/248e10e6aaa243199868fc19991bd8f0?v=d1a3826c43a8435eb90bcdd2f65de7f0');
+                              'https://linkaiteam.github.io/LINKAITEAM/전체');
                           if (await canLaunchUrl(url)) {
                             launchUrl(url);
                           }

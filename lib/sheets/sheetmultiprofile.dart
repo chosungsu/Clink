@@ -155,17 +155,17 @@ content(
           height: 10,
         ),
         TextField(
-          minLines: 1,
-          maxLines: 1,
+          minLines: 2,
+          maxLines: 2,
           focusNode: node,
           style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
           decoration: InputDecoration(
-            enabledBorder: const OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.black,
+                color: Colors.grey.shade300,
                 width: 2,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             ),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(

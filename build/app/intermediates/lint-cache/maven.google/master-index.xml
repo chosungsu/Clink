@@ -53,11 +53,13 @@
   <androidx.games/>
   <androidx.gaming/>
   <androidx.glance/>
+  <androidx.graphics/>
   <androidx.gridlayout/>
   <androidx.health/>
   <androidx.health.connect/>
   <androidx.heifwriter/>
   <androidx.hilt/>
+  <androidx.input/>
   <androidx.interpolator/>
   <androidx.javascriptengine/>
   <androidx.leanback/>
@@ -103,6 +105,7 @@
   <androidx.textclassifier/>
   <androidx.tracing/>
   <androidx.transition/>
+  <androidx.tv/>
   <androidx.tvprovider/>
   <androidx.ui/>
   <androidx.vectordrawable/>
@@ -213,6 +216,7 @@
   <com.google.firebase.appdistribution/>
   <com.google.firebase.crashlytics/>
   <com.google.firebase.firebase-perf/>
+  <com.google.firebase.testlab/>
   <com.google.gms/>
   <com.google.gms.google-services/>
   <com.google.jacquard/>
@@ -221,6 +225,7 @@
   <com.google.net.cronet/>
   <com.google.oboe/>
   <com.google.prefab/>
+  <com.google.relay/>
   <com.google.test.platform/>
   <com.google.testing.platform/>
   <io.fabric.sdk.android/>
