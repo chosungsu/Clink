@@ -1,16 +1,19 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:clickbyme/initScreenLoading.dart';
 import 'package:clickbyme/providers/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
 import 'package:flutter/foundation.dart';
 import 'Tool/Getx/PeopleAdd.dart';
@@ -105,6 +108,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    StatusBarControl.setColor(BGColor(), animated: true);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,

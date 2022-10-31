@@ -6,6 +6,8 @@ import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/Tool/AppBarCustom.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/ChooseCalendar.dart';
+import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/ShowTips.dart';
 import 'package:clickbyme/initScreenLoading.dart';
@@ -183,8 +185,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         children: [
                           const AppBarCustom(
                             title: 'LinkAI',
-                            righticon: false,
-                            iconname: Icons.abc,
+                            righticon: true,
+                            iconname: Icons.notifications,
                             func: null,
                           ),
                           Flexible(

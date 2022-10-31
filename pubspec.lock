@@ -1316,6 +1316,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  status_bar_control:
+    dependency: "direct main"
+    description:
+      name: status_bar_control
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.1"
   store_redirect:
     dependency: "direct main"
     description:

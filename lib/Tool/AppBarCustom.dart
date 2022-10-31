@@ -1,3 +1,4 @@
+import 'package:clickbyme/Page/NotiAlarm.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,8 @@ class AppBarCustom extends StatelessWidget {
   final bool righticon;
   final IconData iconname;
   final void func;
+
+  func1() => Get.to(() => const NotiAlarm(), transition: Transition.upToDown);
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +113,10 @@ class AppBarCustom extends StatelessWidget {
                                 ),
                                 righticon == true
                                     ? InkWell(
-                                        onTap: () => func,
+                                        onTap: () =>
+                                            iconname == Icons.notifications
+                                                ? func1()
+                                                : func,
                                         child: Icon(
                                           iconname,
                                           size: 30,

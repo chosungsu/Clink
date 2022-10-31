@@ -58,30 +58,6 @@ class _NotiAlarmState extends State<NotiAlarm>
     WidgetsBinding.instance.addObserver(this);
     Hive.box('user_setting').put('noti_home_click', 0);
     whatwantnotice = notilist.whatnoticepagenum;
-    /*tabController = TabController(
-      initialIndex: 0,
-      length: 1,
-      vsync: this,
-    );*/
-    /*notilist.noticontroller = AnimationController(
-        duration: const Duration(milliseconds: 200),
-        vsync: this,
-        value: 0,
-        upperBound: 1.05,
-        lowerBound: 0.95);
-    animation = CurvedAnimation(
-        parent: notilist.noticontroller, curve: Curves.decelerate);
-    notilist.noticontroller.forward();
-
-    // forward면 AnimationStatus.completed
-    // reverse면 AnimationStatus.dismissed
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        notilist.noticontroller.reverse(from: 1.0);
-      } else if (status == AnimationStatus.dismissed) {
-        notilist.noticontroller.forward();
-      }
-    });*/
   }
 
   @override

@@ -94,8 +94,6 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    //notilist.noticontroller.forward();
-
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     List pages = [
       HomePage(secondname: cal_share_person.secondname),

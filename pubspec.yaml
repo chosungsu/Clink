@@ -104,6 +104,7 @@ dependencies:
   url_launcher: 
   flutter_time_picker_spinner: 
   fluttertoast:
+  status_bar_control:
   #local db
   encrypt:
   hive: 
