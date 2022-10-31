@@ -97,7 +97,6 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
         body: message.notification?.body,
       );
     });
-    initScreen();
     checkForInitialMessage();
   }
 
@@ -176,6 +175,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                         totalRepeatCount: 2,
                         onFinished: () {
                           NotificationApi.runWhileAppIsTerminated(context);
+
                           GoToMain(context);
                         },
                         //displayFullTextOnTap: false,

@@ -73,30 +73,11 @@ class _NotiAlarmState extends State<NotiAlarm>
         child: Scaffold(
             backgroundColor: BGColor(),
             body: GetBuilder<navibool>(
-              builder: (_) => draw.navi == 0
-                  ? (draw.drawopen == true
-                      ? Stack(
-                          children: [
-                            Container(
-                              width: 80,
-                              child: DrawerScreen(
-                                index:
-                                    Hive.box('user_setting').get('page_index'),
-                              ),
-                            ),
-                            UI(),
-                          ],
-                        )
-                      : Stack(
-                          children: [
-                            UI(),
-                          ],
-                        ))
-                  : Stack(
-                      children: [
-                        UI(),
-                      ],
-                    ),
+              builder: (_) => Stack(
+                children: [
+                  UI(),
+                ],
+              ),
             ))
         /*Scaffold(
       backgroundColor: BGColor(),
@@ -145,90 +126,12 @@ class _NotiAlarmState extends State<NotiAlarm>
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        draw.navi == 0
-                                            ? draw.drawopen == true
-                                                ? IconBtn(
-                                                    child: IconButton(
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            draw.setclose();
-                                                            Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'page_opened',
-                                                                    false);
-                                                          });
-                                                        },
-                                                        icon: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          width: 30,
-                                                          height: 30,
-                                                          child: NeumorphicIcon(
-                                                            Icons
-                                                                .keyboard_arrow_left,
-                                                            size: 30,
-                                                            style: NeumorphicStyle(
-                                                                shape:
-                                                                    NeumorphicShape
-                                                                        .convex,
-                                                                depth: 2,
-                                                                surfaceIntensity:
-                                                                    0.5,
-                                                                color:
-                                                                    TextColor(),
-                                                                lightSource:
-                                                                    LightSource
-                                                                        .topLeft),
-                                                          ),
-                                                        )),
-                                                    color: TextColor())
-                                                : IconBtn(
-                                                    child: IconButton(
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            draw.setopen();
-                                                            Hive.box(
-                                                                    'user_setting')
-                                                                .put(
-                                                                    'page_opened',
-                                                                    true);
-                                                          });
-                                                        },
-                                                        icon: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          width: 30,
-                                                          height: 30,
-                                                          child: NeumorphicIcon(
-                                                            Icons.menu,
-                                                            size: 30,
-                                                            style: NeumorphicStyle(
-                                                                shape:
-                                                                    NeumorphicShape
-                                                                        .convex,
-                                                                surfaceIntensity:
-                                                                    0.5,
-                                                                depth: 2,
-                                                                color:
-                                                                    TextColor(),
-                                                                lightSource:
-                                                                    LightSource
-                                                                        .topLeft),
-                                                          ),
-                                                        )),
-                                                    color: TextColor())
-                                            : const SizedBox(),
+                                        const SizedBox(),
                                         SizedBox(
-                                            width: draw.navi == 0
-                                                ? MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    70
-                                                : MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    20,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                20,
                                             child: Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 10),

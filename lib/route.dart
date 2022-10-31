@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage>
       const MYPage(),
       HomePage(secondname: cal_share_person.secondname),
       const ProfilePage(),
-      const NotiAlarm(),
+      //const NotiAlarm(),
     ];
 
     //noticontroller.forward();
@@ -186,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 ),
                                 label: '설정',
                               ),
-                              BottomNavigationBarItem(
+                              /*BottomNavigationBarItem(
                                 backgroundColor: BGColor(),
                                 icon: GetBuilder<notishow>(
                                   builder: (_) => notilist.isread == true
@@ -211,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     )*/
                                 ),
                                 label: '알림',
-                              ),
+                              ),*/
                             ],
                           ),
                         )

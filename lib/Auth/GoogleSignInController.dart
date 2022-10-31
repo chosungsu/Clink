@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 
+import '../initScreenLoading.dart';
 import '../providers/mongodatabase.dart';
 
 class GoogleSignInController extends GetxController {
@@ -52,6 +53,7 @@ class GoogleSignInController extends GetxController {
           'autologin': ischecked,
           'code': code
         });
+        Hive.box('user_setting').put('usercode', MongoDB.res['code']);
       } else {
         await MongoDB.update(
             collectionname: 'user',
@@ -63,6 +65,7 @@ class GoogleSignInController extends GetxController {
               'login_where': 'google_user',
               'autologin': ischecked,
             });
+        Hive.box('user_setting').put('usercode', MongoDB.res['code']);
       }
 
       firestore.collection('User').doc(nick).get().then((value) async {
@@ -98,6 +101,43 @@ class GoogleSignInController extends GetxController {
           });
         }
       });
+      await initScreen();
+      GoToMain(context);
+    } else {
+      firestore.collection('User').doc(nick).get().then((value) async {
+        if (value.exists) {
+          await firestore.collection('User').doc(nick).update({
+            'name': nick,
+            'email': email,
+            'login_where': 'google_user',
+            'autologin': ischecked,
+          }).whenComplete(() {
+            firestore
+                .collection('User')
+                .doc(Hive.box('user_info').get('id'))
+                .get()
+                .then((value) async {
+              if (value.exists) {
+                await Hive.box('user_setting')
+                    .put('usercode', value.data()!['code']);
+              } else {}
+            });
+          });
+        } else {
+          await firestore.collection('User').doc(nick).set({
+            'name': nick,
+            'subname': nick,
+            'email': email,
+            'login_where': 'google_user',
+            'time': DateTime.now(),
+            'autologin': ischecked,
+            'code': code
+          }, SetOptions(merge: true)).whenComplete(() async {
+            await Hive.box('user_setting').put('usercode', code);
+          });
+        }
+      });
+      await initScreen();
       GoToMain(context);
     }
 

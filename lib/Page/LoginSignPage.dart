@@ -11,6 +11,7 @@ import '../Tool/AndroidIOS.dart';
 import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
+import '../initScreenLoading.dart';
 
 class LoginSignPage extends StatefulWidget {
   const LoginSignPage({Key? key, required this.first}) : super(key: key);
@@ -192,6 +193,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                 loading = true;
               });
               await GoogleSignInController().login(context, ischecked);
+
               setState(() {
                 loading = false;
               });

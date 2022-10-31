@@ -114,7 +114,7 @@ class AppBarCustom extends StatelessWidget {
                                 righticon == true
                                     ? InkWell(
                                         onTap: () =>
-                                            iconname == Icons.notifications
+                                            iconname == Icons.notifications_none
                                                 ? func1()
                                                 : func,
                                         child: Icon(

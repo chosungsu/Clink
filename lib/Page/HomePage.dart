@@ -73,14 +73,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final peopleadd = Get.put(PeopleAdd());
   late PackageInfo info;
   String versioninfo = '';
-  String usercode = Hive.box('user_setting').get('usercode') ?? '';
+  String usercode = Hive.box('user_setting').get('usercode');
   bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
-    docid = Hive.box('user_setting').get('usercode');
+    docid = Hive.box('user_setting').get('usercode') ?? '';
 
     _pController2 =
         PageController(initialPage: currentPage2, viewportFraction: 1);
@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           const AppBarCustom(
                             title: 'LinkAI',
                             righticon: true,
-                            iconname: Icons.notifications,
+                            iconname: Icons.notifications_none,
                             func: null,
                           ),
                           Flexible(

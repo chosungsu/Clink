@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 
+import '../BGColor.dart';
 import '../MyTheme.dart';
 
 class navibool extends GetxController {
@@ -59,6 +61,7 @@ class navibool extends GetxController {
         : (Hive.box('user_setting').get('which_color_background') == 0
             ? color = MyTheme.colorWhite
             : color = MyTheme.colorblack);
+    StatusBarControl.setColor(color, animated: true);
     update();
     notifyChildrens();
   }
