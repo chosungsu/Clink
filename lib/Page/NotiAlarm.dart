@@ -3,22 +3,17 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../Dialogs/destroyBackKey.dart';
 import '../Tool/AndroidIOS.dart';
-import '../Tool/AppBarCustom.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
-import '../initScreenLoading.dart';
-import '../route.dart';
-import 'DrawerScreen.dart';
 
 class NotiAlarm extends StatefulWidget {
   const NotiAlarm({
@@ -78,15 +73,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                   UI(),
                 ],
               ),
-            ))
-        /*Scaffold(
-      backgroundColor: BGColor(),
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: UI(),
-      ),
-    )*/
-        );
+            )));
   }
 
   UI() {
@@ -112,6 +99,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                   child: Container(
                       color: BGColor(),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GetBuilder<navibool>(
                               builder: (_) => SizedBox(
@@ -268,132 +256,45 @@ class _NotiAlarmState extends State<NotiAlarm>
                                       ],
                                     ),
                                   ))),
+                          allread(),
                           Flexible(
-                            fit: FlexFit.tight,
-                            child: SizedBox(
-                              child: ScrollConfiguration(
-                                behavior: NoBehavior(),
-                                child: SingleChildScrollView(child:
-                                    StatefulBuilder(
-                                        builder: (_, StateSetter setState) {
-                                  return Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 20, 0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          NoticeLists(whatwantnotice),
-                                          N_Container_1(height)
-                                        ],
-                                      ));
-                                })),
-                              ),
-                            ),
-                          ),
+                              fit: FlexFit.tight,
+                              child: SizedBox(
+                                child: ScrollConfiguration(
+                                  behavior: NoBehavior(),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                    child: UserNotice(),
+                                  ),
+                                ),
+                              )),
+                          N_Container_1(height)
                         ],
                       )),
                 ),
               ),
             )));
-    /*double height = MediaQuery.of(context).size.height;
-    return SizedBox(
-      height: height,
-      child: Container(
-          decoration: BoxDecoration(
-            color: BGColor(),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //TabViewScreen(),
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: SizedBox(
-                    child: ScrollConfiguration(
-                      behavior: NoBehavior(),
-                      child: SingleChildScrollView(child:
-                          StatefulBuilder(builder: (_, StateSetter setState) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              NoticeLists(whatwantnotice),
-                              N_Container_1(height)
-                            ],
-                          ),
-                        );
-                      })),
-                    ),
-                  )),
-            ],
-          )),
-    );*/
   }
 
-  /*TabViewScreen() {
+  allread() {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
-      child: Container(
-          height: 60,
-          decoration: BoxDecoration(
-              color: TextColor_shadowcolor(),
-              borderRadius: BorderRadius.circular(30)),
-          child: Padding(
-            padding: const EdgeInsets.all(5),
-            child: TabBar(
-                onTap: (index) {
-                  setState(() {
-                    pageindex = index;
-                  });
-                },
-                controller: tabController,
-                labelColor: TextColor(),
-                unselectedLabelColor: BGColor(),
-                indicator: BoxDecoration(
-                    color: BGColor(), borderRadius: BorderRadius.circular(30)),
-                tabs: [
-                  /*Text(
-                    '공지사항',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize(),
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),*/
-                  Text(
-                    '인앱알림',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize(),
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ]),
-          )),
-    );
-  }*/
-
-  allread() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 5,
-        ),
-        allreadBox()
-      ],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 5,
+          ),
+          allreadBox()
+        ],
+      ),
     );
   }
 
   allreadBox() {
     return SizedBox(
-      height: 50,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -422,46 +323,6 @@ class _NotiAlarmState extends State<NotiAlarm>
     );
   }
 
-  N_Container_1(double height) {
-    //프로버전 구매시 보이지 않게 함
-    /*Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        //ADEvents(context)
-      ],
-    )*/
-    return SizedBox(
-      height: 60,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              '광고공간입니다',
-              style: TextStyle(
-                  color: TextColor_shadowcolor(),
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize()),
-              overflow: TextOverflow.ellipsis,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  NoticeLists(int whatwantnotice) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        allread(),
-        UserNotice(),
-      ],
-    );
-  }
-
   UserNotice() {
     return StreamBuilder<QuerySnapshot>(
       stream: firestore
@@ -469,11 +330,6 @@ class _NotiAlarmState extends State<NotiAlarm>
           .orderBy('date', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
-        /*notilist.listad.sort(
-          (a, b) {
-            return b.sub.toString().compareTo(a.sub);
-          },
-        );*/
         if (snapshot.hasData) {
           notilist.listad.clear();
           listid.clear();
@@ -491,37 +347,22 @@ class _NotiAlarmState extends State<NotiAlarm>
             }
           }
           return notilist.listad.isEmpty
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width - 60,
-                  height: draw.navi == 1
-                      ? MediaQuery.of(context).size.height - 300
-                      : MediaQuery.of(context).size.height - 240,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: NeumorphicText(
-                          '생성된 푸시알림이 아직 없습니다.',
-                          style: NeumorphicStyle(
-                            shape: NeumorphicShape.flat,
-                            depth: 3,
-                            color: TextColor_shadowcolor(),
-                          ),
-                          textStyle: NeumorphicTextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
+              ? Center(
+                  child: NeumorphicText(
+                    '텅! 비어있어요~',
+                    style: NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: TextColor_shadowcolor(),
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize(),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 )
               : SizedBox(
-                  height: draw.navi == 1
-                      ? MediaQuery.of(context).size.height - 300
-                      : MediaQuery.of(context).size.height - 240,
                   child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.vertical,
@@ -544,7 +385,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                                           ),
                                       transition: Transition.rightToLeft)
                                   : Get.to(
-                                      () => ChooseCalendar(
+                                      () => const ChooseCalendar(
                                             isfromwhere: 'notihome',
                                             index: 0,
                                           ),
@@ -629,21 +470,13 @@ class _NotiAlarmState extends State<NotiAlarm>
                 );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
-              width: MediaQuery.of(context).size.width - 60,
-              height: draw.navi == 1
-                  ? MediaQuery.of(context).size.height - 300
-                  : MediaQuery.of(context).size.height - 240,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [Center(child: CircularProgressIndicator())],
-              ));
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [Center(child: CircularProgressIndicator())],
+          ));
         }
         return SizedBox(
-          width: MediaQuery.of(context).size.width - 60,
-          height: draw.navi == 1
-              ? MediaQuery.of(context).size.height - 300
-              : MediaQuery.of(context).size.height - 240,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -667,6 +500,38 @@ class _NotiAlarmState extends State<NotiAlarm>
           ),
         );
       },
+    );
+  }
+
+  N_Container_1(double height) {
+    //프로버전 구매시 보이지 않게 함
+    /*Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //ADEvents(context)
+      ],
+    )*/
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+          border: Border(
+              top: BorderSide(color: TextColor_shadowcolor(), width: 1))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              '광고공간입니다',
+              style: TextStyle(
+                  color: TextColor_shadowcolor(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize()),
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

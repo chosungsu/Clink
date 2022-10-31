@@ -28,6 +28,7 @@ import '../UI/Home/Widgets/ViewSet.dart';
 import '../route.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
+import 'NotiAlarm.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.secondname}) : super(key: key);
@@ -187,7 +188,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             title: 'LinkAI',
                             righticon: true,
                             iconname: Icons.notifications_none,
-                            func: null,
                           ),
                           Flexible(
                               fit: FlexFit.tight,

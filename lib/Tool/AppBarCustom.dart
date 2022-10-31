@@ -1,5 +1,6 @@
 import 'package:clickbyme/Page/NotiAlarm.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/sheets/movetolinkspace.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,22 +9,19 @@ import 'Getx/navibool.dart';
 import 'IconBtn.dart';
 
 class AppBarCustom extends StatelessWidget {
-  const AppBarCustom(
-      {Key? key,
-      required this.title,
-      required this.righticon,
-      required this.iconname,
-      required this.func})
-      : super(key: key);
+  const AppBarCustom({
+    Key? key,
+    required this.title,
+    required this.righticon,
+    required this.iconname,
+  }) : super(key: key);
   final String title;
   final bool righticon;
   final IconData iconname;
-  final void func;
-
-  func1() => Get.to(() => const NotiAlarm(), transition: Transition.upToDown);
-
   @override
   Widget build(BuildContext context) {
+    func1() => Get.to(() => const NotiAlarm(), transition: Transition.upToDown);
+    func2() => movetolinkspace(context);
     final draw = Get.put(navibool());
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<navibool>(
@@ -116,7 +114,7 @@ class AppBarCustom extends StatelessWidget {
                                         onTap: () =>
                                             iconname == Icons.notifications_none
                                                 ? func1()
-                                                : func,
+                                                : func2(),
                                         child: Icon(
                                           iconname,
                                           size: 30,

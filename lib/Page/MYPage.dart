@@ -8,7 +8,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/selectcollection.dart';
@@ -18,7 +17,6 @@ import '../Tool/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
 import '../providers/mongodatabase.dart';
-import '../sheets/addmemocollection.dart';
 import 'DrawerScreen.dart';
 
 class MYPage extends StatefulWidget {
@@ -139,7 +137,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                             title: '',
                             righticon: true,
                             iconname: Icons.settings,
-                            func: null,
                           ),
                           Flexible(
                             fit: FlexFit.tight,

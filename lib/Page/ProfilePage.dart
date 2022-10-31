@@ -192,7 +192,6 @@ class _ProfilePageState extends State<ProfilePage>
                             title: '',
                             righticon: false,
                             iconname: Icons.abc,
-                            func: null,
                           ),
                           Flexible(
                             fit: FlexFit.tight,

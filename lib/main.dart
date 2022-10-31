@@ -37,7 +37,7 @@ void main() async {
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
-  await MongoDB.connect();
+
   runApp(const MyApp());
 }
 
@@ -108,6 +108,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     StatusBarControl.setColor(BGColor(), animated: true);
+    initScreen();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -115,21 +116,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   }
 
   waitingbody() {
-    return SizedBox(child: name == '' ? body() : loadingbody()
-        /*FutureBuilder(
-                future: initScreen(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return loadingbody();
-                  } else {
-                    return Hive.box('user_info').get('id') == '' ||
-                            Hive.box('user_info').get('autologin') == false
-                        ? body()
-                        : loadingbody();
-                  }
-                },
-              )*/
-        );
+    return SizedBox(child: name == '' ? body() : loadingbody());
   }
 
   loadingbody() {
@@ -175,7 +162,6 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                         totalRepeatCount: 2,
                         onFinished: () {
                           NotificationApi.runWhileAppIsTerminated(context);
-
                           GoToMain(context);
                         },
                         //displayFullTextOnTap: false,

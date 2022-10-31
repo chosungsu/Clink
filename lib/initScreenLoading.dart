@@ -29,6 +29,7 @@ Future<Widget?> initScreen() async {
 
   if (name == '') {
   } else {
+    await MongoDB.connect();
     if (serverstatus) {
       await MongoDB.find(collectionname: 'user', query: 'name', what: name);
       if (MongoDB.res == null) {
