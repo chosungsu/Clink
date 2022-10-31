@@ -192,7 +192,7 @@
 90-->[androidx.core:core:1.8.0] C:\Users\chosungsu\.gradle\caches\transforms-3\a1b0f94d7508d68471e1b16e647912c1\transformed\core-1.8.0\AndroidManifest.xml:24:18-86
 91        android:debuggable="true"
 92        android:icon="@mipmap/ic_launcher"
-93        android:label="HashedLiv"
+93        android:label="LinkAI"
 94        android:requestLegacyExternalStorage="true" >
 95        <activity
 96            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"

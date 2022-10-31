@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final peopleadd = Get.put(PeopleAdd());
   late PackageInfo info;
   String versioninfo = '';
-  String usercode = Hive.box('user_setting').get('usercode');
+  String usercode = Hive.box('user_setting').get('usercode') ?? '';
   bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override

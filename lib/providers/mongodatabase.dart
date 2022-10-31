@@ -4,7 +4,6 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoDB {
   static var res,
-      db,
       collection_user,
       collection_share,
       collection_people,
@@ -20,7 +19,7 @@ class MongoDB {
       collection_linknet;
 
   static connect() async {
-    db = await Db.create(MONGO_URL);
+    var db = await Db.create(MONGO_URL);
     await db.open().then((success) {
       Hive.box('user_info').put('server_status', db.isConnected);
     });

@@ -90,7 +90,7 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="HashedLiv"
+        android:label="LinkAI"
         android:requestLegacyExternalStorage="true" >
         <activity
             android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"

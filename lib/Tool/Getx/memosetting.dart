@@ -13,7 +13,7 @@ class memosetting extends GetxController {
   Color colorfont = Hive.box('user_setting').get('coloreachmemofont') != null
       ? Color(Hive.box('user_setting').get('coloreachmemofont'))
       : Colors.black;
-  String usercode = Hive.box('user_setting').get('usercode');
+  String usercode = Hive.box('user_setting').get('usercode') ?? '';
   int memosort = 0;
   bool ischeckedtohideminus = false;
   bool isseveralmemoalarm = false;
@@ -25,8 +25,9 @@ class memosetting extends GetxController {
   int voiceindex = 0;
   int drawingindex = 0;
   String username = Hive.box('user_info').get(
-    'id',
-  );
+        'id',
+      ) ??
+      '';
   int sort = Hive.box('user_setting').get('sort_memo_card') ?? 0;
   DateTime now = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
