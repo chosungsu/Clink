@@ -1,6 +1,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
+import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -161,7 +162,7 @@ content(
   bool isresponsible,
   FToast fToast,
 ) {
-  var controll_memo = Get.put(memosetting());
+  var uiset = Get.put(uisetting());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
   String usercode = Hive.box('user_setting').get('usercode');
@@ -353,20 +354,20 @@ content(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)),
-                              primary: controll_memo.loading == true
+                              primary: uiset.loading == true
                                   ? Colors.grey.shade100
                                   : Colors.blue,
                             ),
                             onPressed: () {
                               setState(() {
                                 print(choicelist);
-                                controll_memo.setloading(true);
+                                uiset.setloading(true);
                                 if (choicelist[0] == 0 && choicelist[1] == 0) {
-                                  controll_memo.setloading(false);
+                                  uiset.setloading(false);
                                   CreateCalandmemoFailSaveCategory(context);
                                 } else {
                                   currentPage = 2;
-                                  controll_memo.setloading(false);
+                                  uiset.setloading(false);
                                   initialpage = 1;
                                 }
                               });
@@ -377,7 +378,7 @@ content(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Center(
-                                    child: controll_memo.loading == true
+                                    child: uiset.loading == true
                                         ? NeumorphicText(
                                             '로딩중',
                                             style: const NeumorphicStyle(
@@ -638,8 +639,7 @@ content(
                                                       .instance.primaryFocus
                                                       ?.unfocus();
                                                   currentPage = 2;
-                                                  controll_memo
-                                                      .setloading(false);
+                                                  uiset.setloading(false);
                                                   initialpage = 0;
                                                 });
                                               },
@@ -686,222 +686,236 @@ content(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             20)),
-                                                primary:
-                                                    controll_memo.loading ==
-                                                            true
-                                                        ? Colors.grey.shade400
-                                                        : Colors.blue,
+                                                primary: uiset.loading == true
+                                                    ? Colors.grey.shade400
+                                                    : Colors.blue,
                                               ),
-                                              onPressed:
-                                                  controll_memo.loading == true
-                                                      ? null
-                                                      : () {
-                                                          FocusManager.instance
-                                                              .primaryFocus
-                                                              ?.unfocus();
-                                                          controll_memo
-                                                              .setloading(true);
+                                              onPressed: uiset.loading == true
+                                                  ? null
+                                                  : () {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                      uiset.setloading(true);
 
-                                                          if (controller
-                                                              .text.isEmpty) {
-                                                            controll_memo
-                                                                .setloading(
-                                                                    false);
-                                                            CreateCalandmemoFailSaveTitle(
-                                                                context);
-                                                          } else if (choicelist[
-                                                                      0] ==
-                                                                  0 &&
-                                                              choicelist[1] ==
-                                                                  0 &&
-                                                              s == 'home') {
-                                                            controll_memo
-                                                                .setloading(
-                                                                    false);
-                                                            CreateCalandmemoFailSaveCategory(
-                                                                context);
-                                                          } else {
-                                                            setState(() {
-                                                              if (s == 'home') {
-                                                                choicelist[0] ==
-                                                                        1
-                                                                    ? firestore
-                                                                        .collection(
-                                                                            'CalendarSheetHome_update')
-                                                                        .add({
-                                                                        'calname':
-                                                                            controller.text,
-                                                                        'madeUser':
-                                                                            usercode,
-                                                                        'type':
-                                                                            0,
-                                                                        'share':
-                                                                            [],
-                                                                        'viewsetting':
-                                                                            0,
-                                                                        'themesetting':
-                                                                            0,
-                                                                        'allowance_share':
-                                                                            false,
-                                                                        'allowance_change_set':
-                                                                            false,
-                                                                        'color':
-                                                                            Hive.box('user_setting').get('typecolorcalendar') ??
-                                                                                _color.value.toInt(),
-                                                                        'date': date.toString().split('-')[0] +
-                                                                            '-' +
-                                                                            date.toString().split('-')[
-                                                                                1] +
-                                                                            '-' +
-                                                                            date.toString().split('-')[2].substring(0,
-                                                                                2) +
-                                                                            '일'
-                                                                      }).whenComplete(
-                                                                            () {
-                                                                        controll_memo
-                                                                            .setloading(false);
-                                                                        Get.back();
-                                                                        Future.delayed(
-                                                                            const Duration(seconds: 0),
-                                                                            () {
-                                                                          CreateCalandmemoMove(
-                                                                              context,
-                                                                              'cal');
-                                                                        });
-                                                                      })
-                                                                    : firestore
-                                                                        .collection(
-                                                                            'MemoDataBase')
-                                                                        .doc()
-                                                                        .set({
-                                                                        'Collection':
-                                                                            null,
-                                                                        'memoindex':
-                                                                            null,
-                                                                        'memolist':
-                                                                            null,
-                                                                        'homesave':
-                                                                            false,
-                                                                        'security':
-                                                                            false,
-                                                                        'pinnumber':
-                                                                            '0000',
-                                                                        'EditDate': date.toString().split('-')[0] +
-                                                                            '-' +
-                                                                            date.toString().split('-')[
-                                                                                1] +
-                                                                            '-' +
-                                                                            date.toString().split('-')[2].substring(0,
-                                                                                2) +
-                                                                            '일',
-                                                                        'memoTitle':
-                                                                            controller.text,
-                                                                        'OriginalUser':
-                                                                            usercode,
-                                                                        'alarmok':
-                                                                            false,
-                                                                        'alarmtime':
-                                                                            '99:99',
-                                                                        'color':
-                                                                            Hive.box('user_setting').get('typecolorcalendar') ??
-                                                                                _color.value.toInt(),
-                                                                        'colorfont': Colors
-                                                                            .black
-                                                                            .value
-                                                                            .toInt(),
-                                                                        'Date': date.toString().split('-')[0] +
-                                                                            '-' +
-                                                                            date.toString().split('-')[
-                                                                                1] +
-                                                                            '-' +
-                                                                            date.toString().split('-')[2].substring(0,
-                                                                                2) +
-                                                                            '일',
-                                                                        'photoUrl':
-                                                                            [],
-                                                                        'voicefile':
-                                                                            [],
-                                                                        'drawingfile':
-                                                                            [],
-                                                                        'securewith':
-                                                                            999,
-                                                                      }).whenComplete(
-                                                                            () {
-                                                                        controll_memo
-                                                                            .setloading(false);
-                                                                        Get.back();
-                                                                        Future.delayed(
-                                                                            const Duration(seconds: 0),
-                                                                            () {
-                                                                          CreateCalandmemoMove(
-                                                                              context,
-                                                                              'memo');
-                                                                        });
-                                                                      });
-                                                              } else {
-                                                                firestore
+                                                      if (controller
+                                                          .text.isEmpty) {
+                                                        uiset.setloading(false);
+                                                        CreateCalandmemoFailSaveTitle(
+                                                            context);
+                                                      } else if (choicelist[
+                                                                  0] ==
+                                                              0 &&
+                                                          choicelist[1] == 0 &&
+                                                          s == 'home') {
+                                                        uiset.setloading(false);
+                                                        CreateCalandmemoFailSaveCategory(
+                                                            context);
+                                                      } else {
+                                                        setState(() {
+                                                          if (s == 'home') {
+                                                            choicelist[0] == 1
+                                                                ? firestore
                                                                     .collection(
                                                                         'CalendarSheetHome_update')
                                                                     .add({
-                                                                  'calname':
-                                                                      controller
-                                                                          .text,
-                                                                  'madeUser':
-                                                                      usercode,
-                                                                  'type': 0,
-                                                                  'share': [],
-                                                                  'viewsetting':
-                                                                      0,
-                                                                  'themesetting':
-                                                                      0,
-                                                                  'allowance_share':
-                                                                      false,
-                                                                  'allowance_change_set':
-                                                                      false,
-                                                                  'color': Hive.box(
-                                                                              'user_setting')
-                                                                          .get(
-                                                                              'typecolorcalendar') ??
-                                                                      _color
-                                                                          .value
-                                                                          .toInt(),
-                                                                  'date': date
-                                                                              .toString()
-                                                                              .split('-')[
-                                                                          0] +
-                                                                      '-' +
-                                                                      date.toString().split(
-                                                                              '-')[
-                                                                          1] +
-                                                                      '-' +
-                                                                      date
-                                                                          .toString()
-                                                                          .split('-')[
-                                                                              2]
-                                                                          .substring(
-                                                                              0,
-                                                                              2) +
-                                                                      '일'
-                                                                }).whenComplete(
+                                                                    'calname':
+                                                                        controller
+                                                                            .text,
+                                                                    'madeUser':
+                                                                        usercode,
+                                                                    'type': 0,
+                                                                    'share': [],
+                                                                    'viewsetting':
+                                                                        0,
+                                                                    'themesetting':
+                                                                        0,
+                                                                    'allowance_share':
+                                                                        false,
+                                                                    'allowance_change_set':
+                                                                        false,
+                                                                    'color': Hive.box('user_setting').get(
+                                                                            'typecolorcalendar') ??
+                                                                        _color
+                                                                            .value
+                                                                            .toInt(),
+                                                                    'date': date
+                                                                                .toString()
+                                                                                .split('-')[
+                                                                            0] +
+                                                                        '-' +
+                                                                        date.toString().split('-')[
+                                                                            1] +
+                                                                        '-' +
+                                                                        date
+                                                                            .toString()
+                                                                            .split('-')[
+                                                                                2]
+                                                                            .substring(0,
+                                                                                2) +
+                                                                        '일'
+                                                                  }).whenComplete(
                                                                         () {
-                                                                  controll_memo
-                                                                      .setloading(
-                                                                          false);
-                                                                  Get.back();
-                                                                  Future.delayed(
-                                                                      const Duration(
-                                                                          seconds:
-                                                                              0),
-                                                                      () {
-                                                                    CreateCalandmemoMove(
-                                                                        context,
-                                                                        'cal');
+                                                                    uiset.setloading(
+                                                                        false);
+                                                                    Get.back();
+                                                                    Future.delayed(
+                                                                        const Duration(
+                                                                            seconds:
+                                                                                0),
+                                                                        () {
+                                                                      CreateCalandmemoMove(
+                                                                          context,
+                                                                          'cal');
+                                                                    });
+                                                                  })
+                                                                : firestore
+                                                                    .collection(
+                                                                        'MemoDataBase')
+                                                                    .doc()
+                                                                    .set({
+                                                                    'Collection':
+                                                                        null,
+                                                                    'memoindex':
+                                                                        null,
+                                                                    'memolist':
+                                                                        null,
+                                                                    'homesave':
+                                                                        false,
+                                                                    'security':
+                                                                        false,
+                                                                    'pinnumber':
+                                                                        '0000',
+                                                                    'EditDate': date
+                                                                                .toString()
+                                                                                .split('-')[
+                                                                            0] +
+                                                                        '-' +
+                                                                        date.toString().split('-')[
+                                                                            1] +
+                                                                        '-' +
+                                                                        date
+                                                                            .toString()
+                                                                            .split('-')[
+                                                                                2]
+                                                                            .substring(0,
+                                                                                2) +
+                                                                        '일',
+                                                                    'memoTitle':
+                                                                        controller
+                                                                            .text,
+                                                                    'OriginalUser':
+                                                                        usercode,
+                                                                    'alarmok':
+                                                                        false,
+                                                                    'alarmtime':
+                                                                        '99:99',
+                                                                    'color': Hive.box('user_setting').get(
+                                                                            'typecolorcalendar') ??
+                                                                        _color
+                                                                            .value
+                                                                            .toInt(),
+                                                                    'colorfont': Colors
+                                                                        .black
+                                                                        .value
+                                                                        .toInt(),
+                                                                    'Date': date
+                                                                                .toString()
+                                                                                .split('-')[
+                                                                            0] +
+                                                                        '-' +
+                                                                        date.toString().split('-')[
+                                                                            1] +
+                                                                        '-' +
+                                                                        date
+                                                                            .toString()
+                                                                            .split('-')[
+                                                                                2]
+                                                                            .substring(0,
+                                                                                2) +
+                                                                        '일',
+                                                                    'photoUrl':
+                                                                        [],
+                                                                    'voicefile':
+                                                                        [],
+                                                                    'drawingfile':
+                                                                        [],
+                                                                    'securewith':
+                                                                        999,
+                                                                  }).whenComplete(
+                                                                        () {
+                                                                    uiset.setloading(
+                                                                        false);
+                                                                    Get.back();
+                                                                    Future.delayed(
+                                                                        const Duration(
+                                                                            seconds:
+                                                                                0),
+                                                                        () {
+                                                                      CreateCalandmemoMove(
+                                                                          context,
+                                                                          'memo');
+                                                                    });
                                                                   });
-                                                                });
-                                                              }
+                                                          } else {
+                                                            firestore
+                                                                .collection(
+                                                                    'CalendarSheetHome_update')
+                                                                .add({
+                                                              'calname':
+                                                                  controller
+                                                                      .text,
+                                                              'madeUser':
+                                                                  usercode,
+                                                              'type': 0,
+                                                              'share': [],
+                                                              'viewsetting': 0,
+                                                              'themesetting': 0,
+                                                              'allowance_share':
+                                                                  false,
+                                                              'allowance_change_set':
+                                                                  false,
+                                                              'color': Hive.box(
+                                                                          'user_setting')
+                                                                      .get(
+                                                                          'typecolorcalendar') ??
+                                                                  _color.value
+                                                                      .toInt(),
+                                                              'date': date
+                                                                          .toString()
+                                                                          .split(
+                                                                              '-')[
+                                                                      0] +
+                                                                  '-' +
+                                                                  date.toString().split(
+                                                                      '-')[1] +
+                                                                  '-' +
+                                                                  date
+                                                                      .toString()
+                                                                      .split('-')[
+                                                                          2]
+                                                                      .substring(
+                                                                          0,
+                                                                          2) +
+                                                                  '일'
+                                                            }).whenComplete(() {
+                                                              uiset.setloading(
+                                                                  false);
+                                                              Get.back();
+                                                              Future.delayed(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          0),
+                                                                  () {
+                                                                CreateCalandmemoMove(
+                                                                    context,
+                                                                    'cal');
+                                                              });
                                                             });
                                                           }
-                                                        },
+                                                        });
+                                                      }
+                                                    },
                                               child: Center(
                                                 child: Row(
                                                   crossAxisAlignment:
@@ -910,49 +924,48 @@ content(
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Center(
-                                                      child: controll_memo
-                                                                  .loading ==
-                                                              true
-                                                          ? NeumorphicText(
-                                                              '로딩중',
-                                                              style:
-                                                                  const NeumorphicStyle(
-                                                                shape:
-                                                                    NeumorphicShape
-                                                                        .flat,
-                                                                depth: 3,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              textStyle:
-                                                                  NeumorphicTextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                              ),
-                                                            )
-                                                          : NeumorphicText(
-                                                              '생성하기',
-                                                              style:
-                                                                  const NeumorphicStyle(
-                                                                shape:
-                                                                    NeumorphicShape
-                                                                        .flat,
-                                                                depth: 3,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              textStyle:
-                                                                  NeumorphicTextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    contentTextsize(),
-                                                              ),
-                                                            ),
+                                                      child:
+                                                          uiset.loading == true
+                                                              ? NeumorphicText(
+                                                                  '로딩중',
+                                                                  style:
+                                                                      const NeumorphicStyle(
+                                                                    shape:
+                                                                        NeumorphicShape
+                                                                            .flat,
+                                                                    depth: 3,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                  textStyle:
+                                                                      NeumorphicTextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                  ),
+                                                                )
+                                                              : NeumorphicText(
+                                                                  '생성하기',
+                                                                  style:
+                                                                      const NeumorphicStyle(
+                                                                    shape:
+                                                                        NeumorphicShape
+                                                                            .flat,
+                                                                    depth: 3,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                  textStyle:
+                                                                      NeumorphicTextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                  ),
+                                                                ),
                                                     ),
                                                   ],
                                                 ),
@@ -1167,25 +1180,25 @@ content(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
-                                    primary: controll_memo.loading == true
+                                    primary: uiset.loading == true
                                         ? Colors.grey.shade400
                                         : Colors.blue,
                                   ),
-                                  onPressed: controll_memo.loading == true
+                                  onPressed: uiset.loading == true
                                       ? null
                                       : () {
                                           FocusManager.instance.primaryFocus
                                               ?.unfocus();
-                                          controll_memo.setloading(true);
+                                          uiset.setloading(true);
 
                                           if (controller.text.isEmpty) {
-                                            controll_memo.setloading(false);
+                                            uiset.setloading(false);
                                             CreateCalandmemoFailSaveTitle(
                                                 context);
                                           } else if (choicelist[0] == 0 &&
                                               choicelist[1] == 0 &&
                                               s == 'home') {
-                                            controll_memo.setloading(false);
+                                            uiset.setloading(false);
                                             CreateCalandmemoFailSaveCategory(
                                                 context);
                                           } else {
@@ -1221,7 +1234,7 @@ content(
                                                         .substring(0, 2) +
                                                     '일'
                                               }).whenComplete(() async {
-                                                controll_memo.setloading(false);
+                                                uiset.setloading(false);
                                                 await CreateCalandmemoSuccessFlushbar(
                                                     '정상적으로 추가됨', fToast);
                                                 Snack.isopensnacks();
@@ -1237,7 +1250,7 @@ content(
                                           MainAxisAlignment.center,
                                       children: [
                                         Center(
-                                          child: controll_memo.loading == true
+                                          child: uiset.loading == true
                                               ? NeumorphicText(
                                                   '로딩중',
                                                   style: const NeumorphicStyle(

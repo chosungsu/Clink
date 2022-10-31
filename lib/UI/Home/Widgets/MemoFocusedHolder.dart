@@ -26,6 +26,7 @@ import '../../../Dialogs/destroyBackKey.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
+import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/showmemocontent.dart';
@@ -599,7 +600,7 @@ void autodeletelogic(
       ), pressed2)) ??
       false;
   if (reloadpage) {
-    controll_memo.setloading(true);
+    uisetting().setloading(true);
     Hive.box('user_setting').put('alarm_memo_${docname}', false);
     controll_memo.setalarmmemo(docname, doc);
     _deleteFile(doc);
@@ -647,7 +648,7 @@ void autodeletelogic(
         firestore.collection('MemoDataBase').doc(deleteid[i]).delete();
       }
     }).whenComplete(() {
-      controll_memo.setloading(false);
+      uisetting().setloading(false);
       CreateCalandmemoSuccessFlushbar('메모삭제 완료!', fToast);
       isfromwhere == 'home' ? GoToMain(context) : Get.back();
     });
@@ -687,7 +688,7 @@ void autosavelogic(
     //제목이 같은 경우
   }
   if (text.isNotEmpty) {
-    controll_memo.setloading(true);
+    uisetting().setloading(true);
     firestore.collection('AppNoticeByUsers').add({
       'title': '[' + text + '] 메모가 변경되었습니다.',
       'date': DateFormat('yyyy-MM-dd hh:mm')
@@ -750,7 +751,7 @@ void autosavelogic(
     ).whenComplete(() {
       CreateCalandmemoSuccessFlushbar('저장완료', fToast);
       Future.delayed(const Duration(seconds: 1), () {
-        controll_memo.setloading(false);
+        uisetting().setloading(false);
         if (isfromwhere == 'home') {
           GoToMain(context);
         } else {

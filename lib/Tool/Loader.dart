@@ -65,21 +65,37 @@ class Loader extends StatelessWidget {
                               overflow: TextOverflow.clip),
                         ),
                       )
-                    : SizedBox(
-                        width: MediaQuery.of(context).size.width - 40,
-                        child: const Center(
-                          child: Text('당신의 메모를 편집하는중...',
-                              maxLines: 2,
-                              softWrap: true,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.blueAccent,
-                              ),
-                              overflow: TextOverflow.clip),
-                        ),
-                      ))
+                    : (wherein == 'route'
+                        ? SizedBox(
+                            width: MediaQuery.of(context).size.width - 40,
+                            child: const Center(
+                              child: Text('페이지 이동중이에요~',
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.blueAccent,
+                                  ),
+                                  overflow: TextOverflow.clip),
+                            ),
+                          )
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width - 40,
+                            child: const Center(
+                              child: Text('당신의 메모를 편집하는중...',
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.blueAccent,
+                                  ),
+                                  overflow: TextOverflow.clip),
+                            ),
+                          )))
           ],
         )),
       ],

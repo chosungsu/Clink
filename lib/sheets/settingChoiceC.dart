@@ -13,6 +13,7 @@ import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/Getx/memosetting.dart';
+import '../Tool/Getx/uisetting.dart';
 import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
@@ -78,7 +79,7 @@ settingChoiceCal(
                                 secondname,
                                 fToast),
                           )),
-                      controll_memo.loading == true
+                      uisetting().loading == true
                           ? const Loader_sheets(
                               wherein: 'cal',
                               height: 315,
@@ -411,7 +412,7 @@ content(
                               false;
                       if (reloadpage) {
                         setState(() {
-                          controll_memo.setloading(true);
+                          uisetting().setloading(true);
                         });
                         if (Hive.box('user_setting')
                                     .get('noti_calendar_click') ==
@@ -449,7 +450,7 @@ content(
                               .delete();
                         }
                         setState(() {
-                          controll_memo.setloading(false);
+                          uisetting().setloading(false);
                           CreateCalandmemoSuccessFlushbar('삭제 완료!', fToast);
                           Snack.isopensnacks();
                         });
@@ -490,7 +491,7 @@ content(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          controll_memo.loading == true
+                          uisetting().loading == true
                               ? Center(
                                   child: NeumorphicText(
                                     '대기',
@@ -535,7 +536,7 @@ content(
                       ),
                       onPressed: () async {
                         setState(() {
-                          controll_memo.setloading(true);
+                          uisetting().setloading(true);
                         });
 
                         await firestore
@@ -578,7 +579,7 @@ content(
                             'color': _color.value.toInt(),
                           });*/
                         setState(() {
-                          controll_memo.setloading(false);
+                          uisetting().setloading(false);
                           CreateCalandmemoSuccessFlushbar('수정 완료!', fToast);
                           Snack.isopensnacks();
                         });
@@ -618,7 +619,7 @@ content(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            controll_memo.loading == true
+                            uisetting().loading == true
                                 ? Center(
                                     child: NeumorphicText(
                                       '처리중',

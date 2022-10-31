@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/memosetting.dart';
+import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ pushalarmsettingmemo(
                                         doc_title,
                                         id,
                                         fToast))),
-                            memosetting().loading == true
+                            uisetting().loading == true
                                 ? const Loader_sheets(
                                     wherein: 'memoeach',
                                     height: 400,
@@ -96,75 +97,6 @@ pushalarmsettingmemo(
       bottomRight: Radius.circular(20),
     )),
   );
-  /*showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        bottomLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
-        bottomRight: Radius.circular(20),
-      )),
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        var controll_memo = Get.put(memosetting());
-        return Container(
-          margin: const EdgeInsets.all(10),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  child: GetBuilder<memosetting>(
-                      builder: (_) => Padding(
-                          padding: MediaQuery.of(context).viewInsets,
-                          child: Container(
-                            margin: const EdgeInsets.all(10),
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                )),
-                            child: Stack(
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      setalarmhourNode.unfocus();
-                                      setalarmminuteNode.unfocus();
-                                    },
-                                    child: SingleChildScrollView(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        child: SheetPage(
-                                            context,
-                                            setalarmhourNode,
-                                            setalarmminuteNode,
-                                            controller_hour,
-                                            controller_minute,
-                                            doc_title,
-                                            id,
-                                            fToast))),
-                                controll_memo.loading == true
-                                    ? const Loader_sheets(
-                                        wherein: 'memoeach',
-                                        height: 400,
-                                      )
-                                    : SizedBox(),
-                              ],
-                            ),
-                          ))))),
-        );
-      });*/
 }
 
 SheetPage(
@@ -269,6 +201,7 @@ content(
 ) {
   DateTime now = DateTime.now();
   var controll_memo = Get.put(memosetting());
+  var uiset = Get.put(uisetting());
   TimeOfDay? pickednow;
   if (doc_title != '') {
     Hive.box('user_setting').put('alarm_memo_hour_$title', controller_hour);
@@ -552,7 +485,7 @@ content(
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          controll_memo.setloading(true);
+                                          uiset.setloading(true);
                                           if (doc_title != '') {
                                             if (controll_memo.hour1
                                                         .toString() ==
@@ -560,7 +493,7 @@ content(
                                                 controll_memo.minute1
                                                         .toString() ==
                                                     '99') {
-                                              controll_memo.setloading(false);
+                                              uiset.setloading(false);
                                               CreateCalandmemoSuccessFlushbar(
                                                   '시간 설정안됨!', fToast);
                                             } else {
@@ -588,7 +521,7 @@ content(
                                                           controll_memo.minute2,
                                                           '',
                                                           '');
-                                              controll_memo.setloading(false);
+                                              uiset.setloading(false);
                                               CreateCalandmemoSuccessFlushbar(
                                                   '설정 완료!', fToast);
                                               Snack.isopensnacks();
@@ -600,7 +533,7 @@ content(
                                                 controll_memo.minute2
                                                         .toString() ==
                                                     '99') {
-                                              controll_memo.setloading(false);
+                                              uiset.setloading(false);
                                               CreateCalandmemoSuccessFlushbar(
                                                   '시간 설정안됨!', fToast);
                                             } else {
@@ -628,7 +561,7 @@ content(
                                                           controll_memo.minute2,
                                                           '',
                                                           '');
-                                              controll_memo.setloading(false);
+                                              uiset.setloading(false);
                                               CreateCalandmemoSuccessFlushbar(
                                                   '설정 완료!', fToast);
                                               Snack.isopensnacks();
@@ -682,7 +615,7 @@ content(
                                       child: InkWell(
                                         onTap: () {
                                           setState(() {
-                                            controll_memo.setloading(true);
+                                            uiset.setloading(true);
                                           });
                                           doc_title != ''
                                               ? Hive.box('user_setting').put(
@@ -693,7 +626,7 @@ content(
                                           controll_memo.setalarmmemo(
                                               doc_title, id);
                                           setState(() {
-                                            controll_memo.setloading(false);
+                                            uiset.setloading(false);
                                             CreateCalandmemoSuccessFlushbar(
                                                 '해제 완료!', fToast);
                                             Snack.isopensnacks();

@@ -14,6 +14,7 @@ import '../../../DB/MemoList.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
+import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
@@ -240,7 +241,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                   child: Stack(
                     children: [
                       UI(),
-                      controll_memo.loading == true
+                      uisetting().loading == true
                           ? const Loader(
                               wherein: 'noteeach',
                             )

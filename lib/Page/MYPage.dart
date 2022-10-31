@@ -1,5 +1,6 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/showaddLink.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,9 +8,11 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/selectcollection.dart';
+import '../Tool/Loader.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
@@ -32,6 +35,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   final draw = Get.put(navibool());
   final notilist = Get.put(notishow());
   final cal_share_person = Get.put(PeopleAdd());
+  final uiset = Get.put(uisetting());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final sharelist = [];
   final colorlist = [];
@@ -77,16 +81,31 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                               ),
                             ),
                             GroupBody(context),
+                            uiset.loading == true
+                                ? const Loader(
+                                    wherein: 'route',
+                                  )
+                                : Container()
                           ],
                         )
                       : Stack(
                           children: [
                             GroupBody(context),
+                            uiset.loading == true
+                                ? const Loader(
+                                    wherein: 'route',
+                                  )
+                                : Container()
                           ],
                         ))
                   : Stack(
                       children: [
                         GroupBody(context),
+                        uiset.loading == true
+                            ? const Loader(
+                                wherein: 'route',
+                              )
+                            : Container()
                       ],
                     ),
             )));

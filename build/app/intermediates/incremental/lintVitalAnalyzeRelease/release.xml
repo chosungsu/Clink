@@ -45,7 +45,7 @@
       classOutputs="C:\Users\Public\Downloads\clickbyme\build\app\intermediates\javac\release\classes;C:\Users\Public\Downloads\clickbyme\build\app\tmp\kotlin-classes\release;C:\Users\Public\Downloads\clickbyme\build\app\kotlinToolingMetadata;C:\Users\Public\Downloads\clickbyme\build\app\intermediates\compile_and_runtime_not_namespaced_r_class_jar\release\R.jar"
       applicationId="com.jss.habittracker"
       generatedSourceFolders="C:\Users\Public\Downloads\clickbyme\build\app\generated\ap_generated_sources\release\out;C:\Users\Public\Downloads\clickbyme\build\app\generated\aidl_source_output_dir\release\out;C:\Users\Public\Downloads\clickbyme\build\app\generated\source\buildConfig\release;C:\Users\Public\Downloads\clickbyme\build\app\generated\renderscript_source_output_dir\release\out"
-      generatedResourceFolders="C:\Users\Public\Downloads\clickbyme\build\app\generated\res\rs\release;C:\Users\Public\Downloads\clickbyme\build\app\generated\res\resValues\release">
+      generatedResourceFolders="C:\Users\Public\Downloads\clickbyme\build\app\generated\res\google-services\release;C:\Users\Public\Downloads\clickbyme\build\app\generated\res\rs\release;C:\Users\Public\Downloads\clickbyme\build\app\generated\res\resValues\release">
   </mainArtifact>
   <testArtifact>
   </testArtifact>

@@ -28,6 +28,7 @@ import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
+import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -193,7 +194,7 @@ class _DayScriptState extends State<DayScript> {
 
   void autosavelogic() {
     setState(() {
-      controll_memo.setloading(true);
+      uisetting().setloading(true);
     });
     var firsttxt = '0' +
         textEditingController2.text +
@@ -278,7 +279,7 @@ class _DayScriptState extends State<DayScript> {
               );
             }
             setState(() {
-              controll_memo.setloading(false);
+              uisetting().setloading(false);
             });
             CreateCalandmemoSuccessFlushbar('저장완료', fToast);
             Future.delayed(const Duration(seconds: 1), () {
@@ -510,7 +511,7 @@ class _DayScriptState extends State<DayScript> {
                   '일',
             });
             setState(() {
-              controll_memo.setloading(false);
+              uisetting().setloading(false);
             });
             CreateCalandmemoSuccessFlushbar('저장완료', fToast);
             Future.delayed(const Duration(seconds: 1), () {
@@ -769,7 +770,7 @@ class _DayScriptState extends State<DayScript> {
                 '일',
           }, SetOptions(merge: true)).whenComplete(() {
             setState(() {
-              controll_memo.setloading(false);
+              uisetting().setloading(false);
             });
             CreateCalandmemoSuccessFlushbar('저장완료', fToast);
             Future.delayed(const Duration(seconds: 1), () {
@@ -780,7 +781,7 @@ class _DayScriptState extends State<DayScript> {
       }
     } else {
       setState(() {
-        controll_memo.setloading(false);
+        uisetting().setloading(false);
       });
       CreateCalandmemoFailSaveTitle(context);
     }
@@ -834,7 +835,7 @@ class _DayScriptState extends State<DayScript> {
                 child: Stack(
                   children: [
                     UI(),
-                    controll_memo.loading == true
+                    uisetting().loading == true
                         ? (widget.position == 'note'
                             ? const Loader(
                                 wherein: 'note',

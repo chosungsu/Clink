@@ -15,6 +15,7 @@ import '../../../Tool/BGColor.dart';
 import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
+import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -175,7 +176,7 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                   child: Stack(
                     children: [
                       UI(),
-                      controll_memo.loading == true
+                      uisetting().loading == true
                           ? const Loader(
                               wherein: 'memoeach',
                             )
@@ -925,13 +926,13 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                           final image = await imagePicker.pickImage(
                               source: ImageSource.camera);
                           setState(() {
-                            controll_memo.setloading(true);
+                            uisetting().setloading(true);
                             _uploadFile(
                               context,
                               File(image!.path),
                               widget.doc,
                             );
-                            controll_memo.setloading(false);
+                            uisetting().setloading(false);
                           });
                         },
                         child: ListTile(
@@ -953,9 +954,9 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                           final image = await imagePicker.pickImage(
                               source: ImageSource.gallery);
                           setState(() {
-                            controll_memo.setloading(true);
+                            uisetting().setloading(true);
                             _uploadFile(context, File(image!.path), widget.doc);
-                            controll_memo.setloading(false);
+                            uisetting().setloading(false);
                           });
                         },
                         child: ListTile(

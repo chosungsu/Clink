@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:clickbyme/Page/MYPage.dart';
 import 'package:clickbyme/Page/addWhole_update.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/Page/NotiAlarm.dart';
 import 'package:clickbyme/providers/mongodatabase.dart';
@@ -33,7 +34,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   //curved navi index
-  int _selectedIndex = 0;
   late FToast fToast;
   late DateTime backbuttonpressedTime;
   //late AnimationController noticontroller;
@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage>
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
-  final controll_memo = Get.put(memosetting());
+  final uiset = Get.put(uisetting());
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',
@@ -61,9 +61,8 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
-    print('here');
     WidgetsBinding.instance.addObserver(this);
-    _selectedIndex = widget.index;
+    uiset.pagenumber = widget.index;
     fToast = FToast();
     fToast.init(context);
     /*notilist.noticontroller = AnimationController(
@@ -108,102 +107,102 @@ class _MyHomePageState extends State<MyHomePage>
 
     //noticontroller.forward();
     return GetBuilder<navibool>(
-        builder: (_) => Scaffold(
-            backgroundColor: BGColor(),
-            body: WillPopScope(
-                onWillPop: Hive.box('user_setting').get('page_index') == 0
-                    ? _onWillPop
-                    : _onWillPop2,
-                child: pages[_selectedIndex]),
-            bottomNavigationBar: draw.navi == 1
-                ? Container(
-                    height: 70,
-                    decoration: BoxDecoration(
-                        border: Border(
-                            top: BorderSide(color: draw.color, width: 1))),
-                    child: BottomNavigationBar(
-                      type: BottomNavigationBarType.fixed,
-                      onTap: (_index) async {
-                        //Handle button tap
-                        await MongoDB.db.close();
-                        await MongoDB.db.open().then((success) {
-                          Hive.box('user_info')
-                              .put('server_status', MongoDB.db.isConnected);
-                        });
-                        setState(() {
-                          if (_index == 2) {
-                            Hive.box('user_setting').put('page_index',
-                                Hive.box('user_setting').get('page_index'));
-                            _selectedIndex =
-                                Hive.box('user_setting').get('page_index');
-                            /*addWhole(context, searchNode, controller, name,
+        builder: (_) => GetBuilder<uisetting>(builder: ((_) {
+              return Scaffold(
+                  backgroundColor: BGColor(),
+                  body: WillPopScope(
+                      onWillPop: Hive.box('user_setting').get('page_index') == 0
+                          ? _onWillPop
+                          : _onWillPop2,
+                      child: pages[uiset.pagenumber]),
+                  bottomNavigationBar: draw.navi == 1
+                      ? Container(
+                          height: 70,
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  top:
+                                      BorderSide(color: draw.color, width: 1))),
+                          child: BottomNavigationBar(
+                            type: BottomNavigationBarType.fixed,
+                            onTap: (_index) async {
+                              //Handle button tap
+                              uiset.setloading(true);
+                              MongoDB.connect();
+
+                              if (_index == 2) {
+                                Hive.box('user_setting').put('page_index',
+                                    Hive.box('user_setting').get('page_index'));
+                                uiset.setpageindex(
+                                    Hive.box('user_setting').get('page_index'));
+                                /*addWhole(context, searchNode, controller, name,
                                 Date, 'home', fToast);*/
-                            controll_memo.loading = false;
-                            addWhole_update(context, searchNode, controller,
-                                name, Date, 'home', fToast);
-                          } else {
-                            Hive.box('user_setting').put('page_index', _index);
-                            _selectedIndex =
-                                Hive.box('user_setting').get('page_index');
-                          }
-                        });
-                      },
-                      backgroundColor: BGColor(),
-                      selectedFontSize: contentTextsize(),
-                      unselectedFontSize: contentTextsize(),
-                      selectedItemColor: NaviColor(true),
-                      unselectedItemColor: NaviColor(false),
-                      showSelectedLabels: true,
-                      showUnselectedLabels: true,
-                      currentIndex: _selectedIndex,
-                      items: <BottomNavigationBarItem>[
-                        BottomNavigationBarItem(
-                          backgroundColor: BGColor(),
-                          icon: const Icon(
-                            Icons.home,
-                            size: 25,
-                          ),
-                          label: '홈',
-                        ),
-                        BottomNavigationBarItem(
-                          backgroundColor: BGColor(),
-                          icon: const Icon(
-                            Icons.list_alt,
-                            size: 25,
-                          ),
-                          label: '마이룸',
-                        ),
-                        BottomNavigationBarItem(
-                          backgroundColor: BGColor(),
-                          icon: const Icon(
-                            Icons.add_outlined,
-                            size: 25,
-                          ),
-                          label: '추가',
-                        ),
-                        BottomNavigationBarItem(
-                          backgroundColor: BGColor(),
-                          icon: const Icon(
-                            Icons.account_circle_outlined,
-                            size: 25,
-                          ),
-                          label: '설정',
-                        ),
-                        BottomNavigationBarItem(
-                          backgroundColor: BGColor(),
-                          icon: GetBuilder<notishow>(
-                            builder: (_) => notilist.isread == true
-                                ? const Icon(
-                                    Icons.notifications_none,
-                                    size: 25,
-                                  )
-                                : Badge(
-                                    child: const Icon(
-                                      Icons.notifications_none,
-                                      size: 25,
-                                    ),
-                                  ),
-                            /*RotationTransition(
+                                addWhole_update(context, searchNode, controller,
+                                    name, Date, 'home', fToast);
+                              } else {
+                                Hive.box('user_setting')
+                                    .put('page_index', _index);
+                                uiset.setpageindex(
+                                    Hive.box('user_setting').get('page_index'));
+                              }
+
+                              uiset.setloading(false);
+                            },
+                            backgroundColor: BGColor(),
+                            selectedFontSize: contentTextsize(),
+                            unselectedFontSize: contentTextsize(),
+                            selectedItemColor: NaviColor(true),
+                            unselectedItemColor: NaviColor(false),
+                            showSelectedLabels: true,
+                            showUnselectedLabels: true,
+                            currentIndex: uiset.pagenumber,
+                            items: <BottomNavigationBarItem>[
+                              BottomNavigationBarItem(
+                                backgroundColor: BGColor(),
+                                icon: const Icon(
+                                  Icons.home,
+                                  size: 25,
+                                ),
+                                label: '홈',
+                              ),
+                              BottomNavigationBarItem(
+                                backgroundColor: BGColor(),
+                                icon: const Icon(
+                                  Icons.list_alt,
+                                  size: 25,
+                                ),
+                                label: '마이룸',
+                              ),
+                              BottomNavigationBarItem(
+                                backgroundColor: BGColor(),
+                                icon: const Icon(
+                                  Icons.add_outlined,
+                                  size: 25,
+                                ),
+                                label: '추가',
+                              ),
+                              BottomNavigationBarItem(
+                                backgroundColor: BGColor(),
+                                icon: const Icon(
+                                  Icons.account_circle_outlined,
+                                  size: 25,
+                                ),
+                                label: '설정',
+                              ),
+                              BottomNavigationBarItem(
+                                backgroundColor: BGColor(),
+                                icon: GetBuilder<notishow>(
+                                  builder: (_) => notilist.isread == true
+                                      ? const Icon(
+                                          Icons.notifications_none,
+                                          size: 25,
+                                        )
+                                      : Badge(
+                                          child: const Icon(
+                                            Icons.notifications_none,
+                                            size: 25,
+                                          ),
+                                        ),
+                                  /*RotationTransition(
                                       turns: notilist.noticontroller,
                                       child: Badge(
                                         child: const Icon(
@@ -212,15 +211,16 @@ class _MyHomePageState extends State<MyHomePage>
                                         ),
                                       ),
                                     )*/
+                                ),
+                                label: '알림',
+                              ),
+                            ],
                           ),
-                          label: '알림',
-                        ),
-                      ],
-                    ),
-                  )
-                : const SizedBox(
-                    height: 0,
-                  )));
+                        )
+                      : const SizedBox(
+                          height: 0,
+                        ));
+            })));
   }
 
   Future<bool> _onWillPop() async {
@@ -257,6 +257,7 @@ class _MyHomePageState extends State<MyHomePage>
       );
     } else {
       Hive.box('user_setting').put('page_index', 0);
+      MongoDB.connect();
       Navigator.of(context).pushReplacement(
         PageTransition(
           type: PageTransitionType.leftToRight,
