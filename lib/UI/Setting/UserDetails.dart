@@ -1,7 +1,6 @@
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/sheetmultiprofile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -9,10 +8,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../Auth/GoogleSignInController.dart';
-import '../../Auth/KakaoSignInController.dart';
-import '../Sign/UserCheck.dart';
+import '../../Route/subroute.dart';
 import '../../sheets/DeleteUser.dart';
 
 class UserDetails extends StatelessWidget {

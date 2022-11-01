@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:clickbyme/UI/Sign/UserCheck.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,9 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 
-import '../initScreenLoading.dart';
-import '../providers/mongodatabase.dart';
+import '../Route/subroute.dart';
+import '../Route/initScreenLoading.dart';
+import '../mongoDB/mongodatabase.dart';
 
 class GoogleSignInController extends GetxController {
   final _googleSignIn = GoogleSignIn();

@@ -6,12 +6,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Auth/GoogleSignInController.dart';
-import '../Dialogs/destroyBackKey.dart';
+import '../Route/subroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
-import '../initScreenLoading.dart';
+import '../Route/initScreenLoading.dart';
 
 class LoginSignPage extends StatefulWidget {
   const LoginSignPage({Key? key, required this.first}) : super(key: key);

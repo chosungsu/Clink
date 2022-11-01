@@ -1,4 +1,4 @@
-import 'package:clickbyme/providers/mongodb_constant.dart';
+import 'package:clickbyme/mongoDB/mongodb_constant.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
@@ -16,7 +16,8 @@ class MongoDB {
       collection_noticebycompany,
       collection_noticebyusers,
       collection_howtouse,
-      collection_linknet;
+      collection_linknet,
+      collection_pinchannel;
 
   static connect() async {
     var db = await Db.create(MONGO_URL);
@@ -36,6 +37,7 @@ class MongoDB {
     collection_noticebyusers = db.collection(APPNOTICEBYUSERS_COLLECTION);
     collection_howtouse = db.collection(HOWTOUSE_COLLECTION);
     collection_linknet = db.collection(LINKNET_COLLECTION);
+    collection_pinchannel = db.collection(PINCHANNEL_COLLECTION);
   }
 
   static Future<List<Map<String, dynamic>>> getData(
@@ -80,6 +82,9 @@ class MongoDB {
     } else if (collectionname == 'linknet') {
       arrdata = await collection_linknet.find().toList();
       return arrdata;
+    } else if (collectionname == 'pinchannel') {
+      arrdata = await collection_pinchannel.find().toList();
+      return arrdata;
     } else {
       return [];
     }
@@ -112,6 +117,8 @@ class MongoDB {
       await collection_noticebyusers.insertOne(addlist);
     } else if (collectionname == 'linknet') {
       await collection_linknet.insertOne(addlist);
+    } else if (collectionname == 'pinchannel') {
+      await collection_pinchannel.insertOne(addlist);
     }
   }
 
@@ -204,6 +211,13 @@ class MongoDB {
             modify.set(
                 updatelist.keys.toList()[i], updatelist.values.toList()[i]));
       }
+    } else if (collectionname == 'pinchannel') {
+      for (int i = 0; i < updatelist.length; i++) {
+        await collection_pinchannel.update(
+            where.eq(query, what),
+            modify.set(
+                updatelist.keys.toList()[i], updatelist.values.toList()[i]));
+      }
     }
   }
 
@@ -258,6 +272,10 @@ class MongoDB {
       });
     } else if (collectionname == 'linknet') {
       res = await collection_linknet.find({query: what}).forEach((v) {
+        res = v;
+      });
+    } else if (collectionname == 'pinchannel') {
+      res = await collection_pinchannel.find({query: what}).forEach((v) {
         res = v;
       });
     }

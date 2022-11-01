@@ -11,7 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import 'NotiAlarm.dart';
-import '../route.dart';
+import '../Route/mainroute.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({
@@ -71,7 +71,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: MyHomePage(
+                            child: mainroute(
                               index: 0,
                             ),
                           ),
@@ -87,7 +87,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: MyHomePage(
+                            child: mainroute(
                               index: 1,
                             ),
                           ),
@@ -99,7 +99,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: MyHomePage(
+                            child: mainroute(
                               index: 3,
                             ),
                           ),
@@ -111,7 +111,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: MyHomePage(
+                            child: mainroute(
                               index: 4,
                             ),
                           ),

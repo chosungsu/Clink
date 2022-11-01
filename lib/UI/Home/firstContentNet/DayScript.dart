@@ -1,16 +1,11 @@
-import 'dart:io';
 import 'dart:math';
 import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
 import 'package:clickbyme/UI/Home/Widgets/CalendarView.dart';
-import 'package:clickbyme/UI/Home/Widgets/ImageSlider.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
-import 'package:clickbyme/initScreenLoading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -19,11 +14,10 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../DB/Event.dart';
 import '../../../DB/MemoList.dart';
-import '../../../Dialogs/destroyBackKey.dart';
+import '../../../Route/subroute.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
-import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/Getx/memosetting.dart';
@@ -35,9 +29,7 @@ import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/lunarToSolar.dart';
 import '../../../sheets/addcalendarrepeat.dart';
 import '../../../sheets/addmemocollection.dart';
-import 'package:numberpicker/numberpicker.dart';
 import '../../../sheets/pushalarmsettingcal.dart';
-import '../../Sign/UserCheck.dart';
 
 class DayScript extends StatefulWidget {
   DayScript(

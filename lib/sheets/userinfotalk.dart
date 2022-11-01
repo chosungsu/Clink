@@ -5,7 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
-import '../Dialogs/destroyBackKey.dart';
+import '../Route/subroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/IconBtn.dart';

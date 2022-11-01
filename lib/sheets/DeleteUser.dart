@@ -6,10 +6,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../Auth/GoogleSignInController.dart';
+import '../Route/subroute.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
-import '../UI/Sign/UserCheck.dart';
 
 DeleteUserVerify(BuildContext context, String name) {
   bool isloading = false;

@@ -10,8 +10,8 @@ import 'package:clickbyme/UI/Home/firstContentNet/ChooseCalendar.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/ShowTips.dart';
-import 'package:clickbyme/initScreenLoading.dart';
-import 'package:clickbyme/providers/mongodatabase.dart';
+import 'package:clickbyme/Route/initScreenLoading.dart';
+import 'package:clickbyme/mongoDB/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -25,7 +25,7 @@ import '../DB/Category.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/Widgets/ViewSet.dart';
-import '../route.dart';
+import '../Route/mainroute.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 import 'NotiAlarm.dart';
@@ -82,7 +82,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     Hive.box('user_setting').put('page_index', 0);
     docid = Hive.box('user_setting').get('usercode') ?? '';
-
     _pController2 =
         PageController(initialPage: currentPage2, viewportFraction: 1);
     /*firestore.collection('MemoAllAlarm').get().then((value) {
@@ -200,15 +199,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           builder: (_, StateSetter setState) {
                                         return Column(
                                           children: [
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            CompanyNotice(),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            H_Container_0(
-                                                height, _pController2),
+                                            FutureBuilder(
+                                                future: initScreen(),
+                                                builder: ((context, snapshot) {
+                                                  return Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      CompanyNotice(),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      H_Container_0(height,
+                                                          _pController2),
+                                                    ],
+                                                  );
+                                                })),
+
                                             /*const SizedBox(
                                               height: 20,
                                             ),

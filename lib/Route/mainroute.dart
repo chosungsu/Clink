@@ -1,11 +1,9 @@
-import 'package:badges/badges.dart';
 import 'package:clickbyme/Page/MYPage.dart';
 import 'package:clickbyme/Page/addWhole_update.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/Page/NotiAlarm.dart';
-import 'package:clickbyme/providers/mongodatabase.dart';
+import 'package:clickbyme/mongoDB/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,24 +12,22 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'Dialogs/destroyBackKey.dart';
-import 'Page/HomePage.dart';
-import 'Page/ProfilePage.dart';
-import 'Tool/AndroidIOS.dart';
-import 'Tool/Getx/PeopleAdd.dart';
-import 'Tool/Getx/memosetting.dart';
-import 'Tool/Getx/navibool.dart';
-import 'Tool/Getx/notishow.dart';
-import 'initScreenLoading.dart';
+import 'subroute.dart';
+import '../Page/HomePage.dart';
+import '../Page/ProfilePage.dart';
+import '../Tool/AndroidIOS.dart';
+import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/Getx/navibool.dart';
+import '../Tool/Getx/notishow.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.index}) : super(key: key);
+class mainroute extends StatefulWidget {
+  const mainroute({Key? key, required this.index}) : super(key: key);
   final int index;
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<mainroute> createState() => _mainrouteState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
+class _mainrouteState extends State<mainroute>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   //curved navi index
   late FToast fToast;
@@ -57,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage>
     '홈뷰에 저장된 메모',
   ];
   List userviewlist = [];
+  bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
   void initState() {
@@ -90,6 +87,59 @@ class _MyHomePageState extends State<MyHomePage>
     super.dispose();
     //notilist.noticontroller.dispose();
     WidgetsBinding.instance.removeObserver(this);
+  }
+
+  Future<bool> _onWillPop() async {
+    final draw = Get.put(navibool());
+    if (draw.drawopen == true) {
+      draw.setclose();
+    }
+    return await Get.dialog(OSDialog(
+            context,
+            '종료',
+            Text('앱을 종료하시겠습니까?',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize())),
+            pressed1)) ??
+        false;
+  }
+
+  Future<bool> _onWillPop2() async {
+    final draw = Get.put(navibool());
+    if (draw.drawopen == true) {
+      draw.setclose();
+      Hive.box('user_setting').put('page_opened', false);
+    }
+    if (draw.currentpage == 2) {
+      draw.currentpage = 1;
+      Hive.box('user_setting').put('page_index', 3);
+      Navigator.of(context).pushReplacement(
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          child: const mainroute(
+            index: 3,
+          ),
+        ),
+      );
+    } else {
+      Hive.box('user_setting').put('page_index', 0);
+      if (serverstatus) {
+      } else {
+        MongoDB.connect();
+      }
+
+      Navigator.of(context).pushReplacement(
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          child: const mainroute(
+            index: 0,
+          ),
+        ),
+      );
+    }
+    return false;
   }
 
   @override
@@ -219,52 +269,5 @@ class _MyHomePageState extends State<MyHomePage>
                           height: 0,
                         ));
             })));
-  }
-
-  Future<bool> _onWillPop() async {
-    if (draw.drawopen == true) {
-      draw.setclose();
-    }
-    return await Get.dialog(OSDialog(
-            context,
-            '종료',
-            Text('앱을 종료하시겠습니까?',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize())),
-            pressed1)) ??
-        false;
-  }
-
-  Future<bool> _onWillPop2() async {
-    if (draw.drawopen == true) {
-      draw.setclose();
-      Hive.box('user_setting').put('page_opened', false);
-    }
-    if (draw.currentpage == 2) {
-      draw.currentpage = 1;
-      Hive.box('user_setting').put('page_index', 3);
-      Navigator.of(context).pushReplacement(
-        PageTransition(
-          type: PageTransitionType.leftToRight,
-          child: const MyHomePage(
-            index: 3,
-          ),
-        ),
-      );
-    } else {
-      Hive.box('user_setting').put('page_index', 0);
-      MongoDB.connect();
-      Navigator.of(context).pushReplacement(
-        PageTransition(
-          type: PageTransitionType.leftToRight,
-          child: const MyHomePage(
-            index: 0,
-          ),
-        ),
-      );
-    }
-    return false;
   }
 }

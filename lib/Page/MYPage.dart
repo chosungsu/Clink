@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../DB/PageList.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
@@ -16,7 +18,7 @@ import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
-import '../providers/mongodatabase.dart';
+import '../mongoDB/mongodatabase.dart';
 import 'DrawerScreen.dart';
 
 class MYPage extends StatefulWidget {
@@ -154,7 +156,11 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      M_Container1(height),
+                                      CompanyNotice(),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      M_Container0(height),
                                       Container(
                                         height: 20,
                                         color: Colors.grey.shade200,
@@ -162,7 +168,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      M_Container0(height),
+                                      M_Container1(height),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -177,6 +183,185 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                 ),
               ),
             )));
+  }
+
+  CompanyNotice() {
+    final List<PageList> listcompanytousers = [];
+    var url;
+    return serverstatus == true
+        ? FutureBuilder(
+            future:
+                MongoDB.getData(collectionname: 'companynotice').then((value) {
+              for (int j = 0; j < value.length; j++) {
+                final messageText = value[j]['title'];
+                final messageDate = value[j]['date'];
+                final messageyes = value[j]['showthisinapp'];
+                final messagewhere = value[j]['where'];
+                if (messageyes == 'yes' && messagewhere == 'template') {
+                  listcompanytousers.add(PageList(
+                    title: messageText,
+                    sub: messageDate,
+                  ));
+                  url = Uri.parse(value[j]['url']);
+                }
+              }
+            }),
+            builder: (context, snapshot) {
+              return listcompanytousers.isEmpty
+                  ? const SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              draw.setclose();
+                              if (await canLaunchUrl(url)) {
+                                launchUrl(url);
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey.shade200,
+                              ),
+                              child: SizedBox(
+                                height: 30,
+                                width: double.infinity,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.campaign,
+                                      color: Colors.black45,
+                                      size: 30,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          listcompanytousers[0].title,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.black45,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize()),
+                                          overflow: TextOverflow.ellipsis,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ));
+            },
+          )
+        : StreamBuilder<QuerySnapshot>(
+            stream: firestore
+                .collection('CompanyNotice')
+                .orderBy('date', descending: true)
+                .limit(1)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                listcompanytousers.clear();
+                final valuespace = snapshot.data!.docs;
+                for (var sp in valuespace) {
+                  final messageText = sp.get('title');
+                  final messageDate = sp.get('date');
+                  final messageyes = sp.get('showthisinapp');
+                  final messagewhere = sp.get('where');
+                  if (messageyes == 'yes' && messagewhere == 'home') {
+                    listcompanytousers.add(PageList(
+                      title: messageText,
+                      sub: messageDate,
+                    ));
+                    url = Uri.parse(sp.get('url'));
+                  }
+                }
+
+                return listcompanytousers.isEmpty
+                    ? const SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                draw.setclose();
+                                /*Hive.box('user_setting').put('page_index', 3);
+                              Navigator.of(context).pushReplacement(
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: const MyHomePage(
+                                    index: 3,
+                                  ),
+                                ),
+                              );*/
+                                if (await canLaunchUrl(url)) {
+                                  launchUrl(url);
+                                }
+                              },
+                              child: ContainerDesign(
+                                color: Colors.grey.shade300,
+                                child: SizedBox(
+                                  height: 90,
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Icon(
+                                        Icons.new_releases,
+                                        color: TextColor(),
+                                        size: 40,
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text(
+                                            listcompanytousers[0].title,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize()),
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ));
+              }
+              return LinearProgressIndicator(
+                backgroundColor: BGColor(),
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+              );
+            },
+          );
   }
 
   M_Container0(double height) {

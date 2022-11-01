@@ -19,7 +19,7 @@ import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/onequeform.dart';
 import '../Tool/NoBehavior.dart';
-import '../route.dart';
+import '../Route/mainroute.dart';
 
 addWhole_update(
     BuildContext context,
@@ -70,7 +70,7 @@ addWhole_update(
       Navigator.of(context).pushReplacement(
         PageTransition(
           type: PageTransitionType.fade,
-          child: MyHomePage(
+          child: mainroute(
             index: Hive.box('user_setting').get('page_index'),
           ),
         ),

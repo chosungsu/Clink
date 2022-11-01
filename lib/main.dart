@@ -1,9 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/UI/Sign/UserCheck.dart';
-import 'package:clickbyme/initScreenLoading.dart';
-import 'package:clickbyme/providers/mongodatabase.dart';
+import 'package:clickbyme/Route/initScreenLoading.dart';
+import 'package:clickbyme/mongoDB/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -14,6 +13,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import 'Route/subroute.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
 import 'package:flutter/foundation.dart';
 import 'Tool/Getx/PeopleAdd.dart';
@@ -108,7 +108,6 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     StatusBarControl.setColor(BGColor(), animated: true);
-    initScreen();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -142,33 +141,38 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                     ),
                   ),
                 )),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: height * 0.45,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    DefaultTextStyle(
-                      style: const TextStyle(fontSize: 15.0),
-                      child: AnimatedTextKit(
-                        animatedTexts: [
-                          TyperAnimatedText('로그인중입니다...',
-                              textStyle: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.black),
-                              speed: const Duration(milliseconds: 150)),
+            FutureBuilder(
+                future: initScreen(),
+                builder: ((context, snapshot) {
+                  return SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: height * 0.45,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          DefaultTextStyle(
+                            style: const TextStyle(fontSize: 15.0),
+                            child: AnimatedTextKit(
+                              animatedTexts: [
+                                TyperAnimatedText('로그인중입니다...',
+                                    textStyle: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black),
+                                    speed: const Duration(milliseconds: 150)),
+                              ],
+                              totalRepeatCount: 2,
+                              onFinished: () {
+                                NotificationApi.runWhileAppIsTerminated(
+                                    context);
+                                GoToMain(context);
+                              },
+                              //displayFullTextOnTap: false,
+                            ),
+                          ),
                         ],
-                        totalRepeatCount: 2,
-                        onFinished: () {
-                          NotificationApi.runWhileAppIsTerminated(context);
-                          GoToMain(context);
-                        },
-                        //displayFullTextOnTap: false,
-                      ),
-                    ),
-                  ],
-                )),
+                      ));
+                }))
           ],
         ));
   }

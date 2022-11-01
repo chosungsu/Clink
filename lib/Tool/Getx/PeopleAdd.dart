@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../providers/mongodatabase.dart';
+import '../../mongoDB/mongodatabase.dart';
 
 class PeopleAdd extends GetxController {
   List people = [];

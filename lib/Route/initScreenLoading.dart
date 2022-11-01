@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'DB/Event.dart';
-import 'Tool/Getx/PeopleAdd.dart';
-import 'Tool/Getx/memosetting.dart';
-import 'Tool/Getx/notishow.dart';
-import 'providers/mongodatabase.dart';
+import '../DB/Event.dart';
+import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/Getx/memosetting.dart';
+import '../Tool/Getx/notishow.dart';
+import '../mongoDB/mongodatabase.dart';
 
 Future<Widget?> initScreen() async {
   final peopleadd = Get.put(PeopleAdd());

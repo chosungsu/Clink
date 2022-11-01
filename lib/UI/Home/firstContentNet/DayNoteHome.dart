@@ -20,12 +20,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
+import '../../../Route/subroute.dart';
 import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../sheets/calendarinfo.dart';
-import '../../Sign/UserCheck.dart';
 import '../Widgets/SortMenuHolder.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 

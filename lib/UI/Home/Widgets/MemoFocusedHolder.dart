@@ -22,7 +22,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../Dialogs/destroyBackKey.dart';
+import '../../../Route/subroute.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
@@ -31,8 +31,6 @@ import '../../../Tool/IconBtn.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/showmemocontent.dart';
 import 'package:pdf/widgets.dart' as pw;
-
-import '../../Sign/UserCheck.dart';
 
 MFHolder(
   List<bool> checkbottoms,
