@@ -1,14 +1,18 @@
+import 'package:clickbyme/DB/Linkpage.dart';
+import 'package:clickbyme/Page/Linkin.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/sheets/showaddLink.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
+import '../Route/subuiroute.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
@@ -17,8 +21,8 @@ import '../Tool/Loader.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
-import '../UI/Home/firstContentNet/DayNoteHome.dart';
 import '../mongoDB/mongodatabase.dart';
+import '../sheets/movetolinkspace.dart';
 import 'DrawerScreen.dart';
 
 class MYPage extends StatefulWidget {
@@ -42,17 +46,35 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   final calnamelist = [];
   final friendnamelist = [];
   final searchNode = FocusNode();
+  var scrollController;
   var _controller = TextEditingController();
+  late FToast fToast;
   final scollection = Get.put(selectcollection());
   late Animation animation;
   String usercode = Hive.box('user_setting').get('usercode');
+  final List<Linkpage> listpinlink = [];
+  final List<PageList> listcompanytousers = [];
+  var url;
   bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
   void initState() {
     super.initState();
+    listpinlink.clear();
     Hive.box('user_setting').put('page_index', 1);
+    fToast = FToast();
+    fToast.init(context);
     _controller = TextEditingController();
+    scrollController = ScrollController()
+      ..addListener(() {
+        setState(() {
+          if (scrollController.offset >= 150) {
+            uiset.showtopbutton = true; // show the back-to-top button
+          } else {
+            uiset.showtopbutton = false; // hide the back-to-top button
+          }
+        });
+      });
   }
 
   @override
@@ -60,6 +82,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     //notilist.noticontroller.dispose();
     super.dispose();
     _controller.dispose();
+    scrollController.dispose();
     //notilist.noticontroller.dispose();
   }
 
@@ -68,6 +91,18 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     return SafeArea(
         child: Scaffold(
             backgroundColor: BGColor(),
+            floatingActionButton: uiset.showtopbutton == false
+                ? null
+                : FloatingActionButton(
+                    onPressed: (() {
+                      scrollToTop(scrollController);
+                    }),
+                    backgroundColor: BGColor(),
+                    child: Icon(
+                      Icons.arrow_upward,
+                      color: TextColor(),
+                    ),
+                  ),
             body: GetBuilder<navibool>(
               builder: (_) => draw.navi == 0
                   ? (draw.drawopen == true
@@ -137,44 +172,78 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                         children: [
                           const AppBarCustom(
                             title: '',
-                            righticon: true,
-                            iconname: Icons.settings,
+                            righticon: false,
+                            iconname: Icons.search,
                           ),
                           Flexible(
                             fit: FlexFit.tight,
                             child: SizedBox(
                               child: ScrollConfiguration(
                                 behavior: NoBehavior(),
-                                child: SingleChildScrollView(child:
-                                    StatefulBuilder(
+                                child: SingleChildScrollView(
+                                    controller: scrollController,
+                                    physics: const BouncingScrollPhysics(),
+                                    child: StatefulBuilder(
                                         builder: (_, StateSetter setState) {
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      CompanyNotice(),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      M_Container0(height),
-                                      Container(
-                                        height: 20,
-                                        color: Colors.grey.shade200,
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      M_Container1(height),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  );
-                                })),
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          FutureBuilder(
+                                              future: MongoDB.getData(
+                                                      collectionname:
+                                                          'companynotice')
+                                                  .then((value) {
+                                                for (int j = 0;
+                                                    j < value.length;
+                                                    j++) {
+                                                  final messageText =
+                                                      value[j]['title'];
+                                                  final messageDate =
+                                                      value[j]['date'];
+                                                  final messageyes =
+                                                      value[j]['showthisinapp'];
+                                                  final messagewhere =
+                                                      value[j]['where'];
+                                                  if (messageyes == 'yes' &&
+                                                      messagewhere ==
+                                                          'template') {
+                                                    listcompanytousers
+                                                        .add(PageList(
+                                                      title: messageText,
+                                                      sub: messageDate,
+                                                    ));
+                                                    url = Uri.parse(
+                                                        value[j]['url']);
+                                                    uiset.seteventspace(
+                                                        listcompanytousers[0]
+                                                            .title,
+                                                        value[j]['url']);
+                                                  }
+                                                }
+                                              }),
+                                              builder: ((context, snapshot) {
+                                                return CompanyNotice(
+                                                    'template',
+                                                    serverstatus,
+                                                    uiset.eventtitle,
+                                                    uiset.eventurl);
+                                              })),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          ADSHOW(height),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          M_Container0(height),
+                                        ],
+                                      );
+                                    })),
                               ),
                             ),
                           ),
@@ -185,331 +254,104 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
             )));
   }
 
-  CompanyNotice() {
-    final List<PageList> listcompanytousers = [];
-    var url;
-    return serverstatus == true
-        ? FutureBuilder(
-            future:
-                MongoDB.getData(collectionname: 'companynotice').then((value) {
-              for (int j = 0; j < value.length; j++) {
-                final messageText = value[j]['title'];
-                final messageDate = value[j]['date'];
-                final messageyes = value[j]['showthisinapp'];
-                final messagewhere = value[j]['where'];
-                if (messageyes == 'yes' && messagewhere == 'template') {
-                  listcompanytousers.add(PageList(
-                    title: messageText,
-                    sub: messageDate,
-                  ));
-                  url = Uri.parse(value[j]['url']);
-                }
-              }
-            }),
-            builder: (context, snapshot) {
-              return listcompanytousers.isEmpty
-                  ? const SizedBox()
-                  : Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              draw.setclose();
-                              if (await canLaunchUrl(url)) {
-                                launchUrl(url);
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey.shade200,
-                              ),
-                              child: SizedBox(
-                                height: 30,
-                                width: double.infinity,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Icon(
-                                      Icons.campaign,
-                                      color: Colors.black45,
-                                      size: 30,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Flexible(
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          listcompanytousers[0].title,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                              color: Colors.black45,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize()),
-                                          overflow: TextOverflow.ellipsis,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ));
-            },
-          )
-        : StreamBuilder<QuerySnapshot>(
-            stream: firestore
-                .collection('CompanyNotice')
-                .orderBy('date', descending: true)
-                .limit(1)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                listcompanytousers.clear();
-                final valuespace = snapshot.data!.docs;
-                for (var sp in valuespace) {
-                  final messageText = sp.get('title');
-                  final messageDate = sp.get('date');
-                  final messageyes = sp.get('showthisinapp');
-                  final messagewhere = sp.get('where');
-                  if (messageyes == 'yes' && messagewhere == 'home') {
-                    listcompanytousers.add(PageList(
-                      title: messageText,
-                      sub: messageDate,
-                    ));
-                    url = Uri.parse(sp.get('url'));
-                  }
-                }
-
-                return listcompanytousers.isEmpty
-                    ? const SizedBox()
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                draw.setclose();
-                                /*Hive.box('user_setting').put('page_index', 3);
-                              Navigator.of(context).pushReplacement(
-                                PageTransition(
-                                  type: PageTransitionType.rightToLeft,
-                                  child: const MyHomePage(
-                                    index: 3,
-                                  ),
-                                ),
-                              );*/
-                                if (await canLaunchUrl(url)) {
-                                  launchUrl(url);
-                                }
-                              },
-                              child: ContainerDesign(
-                                color: Colors.grey.shade300,
-                                child: SizedBox(
-                                  height: 90,
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Icon(
-                                        Icons.new_releases,
-                                        color: TextColor(),
-                                        size: 40,
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Flexible(
-                                          fit: FlexFit.tight,
-                                          child: Text(
-                                            listcompanytousers[0].title,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize()),
-                                            overflow: TextOverflow.ellipsis,
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ));
-              }
-              return LinearProgressIndicator(
-                backgroundColor: BGColor(),
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-              );
-            },
-          );
-  }
-
   M_Container0(double height) {
-    return SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('템플릿',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize(),
-                    color: TextColor(),
-                  )),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 150,
-                child: ListView.builder(
-                    itemCount: 2,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: ((context, index) {
-                      return Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              index == 0
-                                  ? Get.to(
-                                      () => const ChooseCalendar(
-                                            isfromwhere: 'mypagehome',
-                                            index: 0,
-                                          ),
-                                      transition: Transition.rightToLeft)
-                                  : Get.to(
-                                      () => const DayNoteHome(
-                                            title: '',
-                                            isfromwhere: 'mypagehome',
-                                          ),
-                                      transition: Transition.rightToLeft);
-                            },
-                            child: ContainerDesign(
-                                child: SizedBox(
-                                  height: 120,
-                                  width: 120,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Container(
-                                            alignment: Alignment.center,
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              child: index == 0
-                                                  ? const Icon(
-                                                      Icons.event,
-                                                      color: Colors.white,
-                                                      size: 35,
-                                                    )
-                                                  : const Icon(
-                                                      Icons
-                                                          .format_list_bulleted,
-                                                      color: Colors.white,
-                                                      size: 35,
-                                                    ),
-                                            )),
-                                      ),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            width: double.infinity,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              index == 0 ? '공유캘린더' : '커스텀메모',
-                                              maxLines: 1,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                                color: Colors.green.shade300),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          )
-                        ],
-                      );
-                    })),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
-          ),
-        ));
-  }
-
-  M_Container1(double height) {
     final link = [];
+
     return SizedBox(
         width: double.infinity,
-        height: 120,
-        child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 50,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Text('MY LINK',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                              color: TextColor(),
-                            )),
-                      ),
-                      InkWell(
-                        onTap: () => addmylink(context, usercode, _controller,
-                            searchNode, scollection),
-                        child: Text('추가',
-                            style: TextStyle(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: RichText(
+                        text: TextSpan(children: [
+                      WidgetSpan(
+                          style: TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: contentTextsize(),
-                              color: TextColor_shadowcolor(),
-                            )),
-                      )
-                    ],
+                              color: TextColor_shadowcolor()),
+                          child: GestureDetector(
+                            onTap: () => movetolinkspace(context),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'MY LINK',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTitleTextsize(),
+                                      color: TextColor()),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  Icons.swap_horiz,
+                                  color: TextColor_shadowcolor(),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ])),
                   ),
-                ),
-                GetBuilder<selectcollection>(builder: ((controller) {
+                  InkWell(
+                    onTap: () => movetolinkspace(context),
+                    child: Icon(
+                      Icons.search,
+                      color: TextColor_shadowcolor(),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                      text: TextSpan(children: [
+                    WidgetSpan(
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: contentTextsize(),
+                            decoration: TextDecoration.underline,
+                            color: TextColor_shadowcolor()),
+                        child: GestureDetector(
+                          onTap: () => addmylink(context, usercode, _controller,
+                              searchNode, scollection),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.add,
+                                color: TextColor_shadowcolor(),
+                              ),
+                              Text(
+                                '추가하기',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: contentTextsize(),
+                                    color: TextColor_shadowcolor()),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ])),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            /*GetBuilder<selectcollection>(builder: ((controller) {
                   return SizedBox(
                       height: 50,
                       child: FutureBuilder(
@@ -616,9 +458,330 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                   }));
                         },
                       ));
-                }))
-              ],
-            )));
+                }))*/
+            serverstatus == true
+                ? FutureBuilder(
+                    future: MongoDB.getData(collectionname: 'linknet')
+                        .then((value) {
+                      listpinlink.clear();
+                      if (value.isEmpty) {
+                      } else {
+                        for (int j = 0; j < value.length; j++) {
+                          final user = value[j]['username'];
+                          if (user == usercode) {
+                            for (int i = 0; i < value[j]['link'].length; i++) {
+                              listpinlink
+                                  .add(Linkpage(link: value[j]['link'][i]));
+                            }
+                          }
+                        }
+                      }
+                    }),
+                    builder: (context, snapshot) {
+                      return listpinlink.isEmpty
+                          ? SizedBox(
+                              child: Center(
+                              child: NeumorphicText(
+                                '텅! 비어있어요~',
+                                style: NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: TextColor_shadowcolor(),
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize(),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ))
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: GridView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  physics: const ScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 1,
+                                          childAspectRatio: 3 / 1,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 20),
+                                  itemCount: listpinlink.length,
+                                  itemBuilder: ((context, index) {
+                                    return GestureDetector(
+                                        onTap: () async {},
+                                        child: FocusedMenuHolder(
+                                            menuItems: [
+                                              FocusedMenuItem(
+                                                  trailingIcon: const Icon(
+                                                    Icons.style,
+                                                    size: 30,
+                                                  ),
+                                                  title: Text('상세정보',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize())),
+                                                  onPressed: () async {}),
+                                              FocusedMenuItem(
+                                                  trailingIcon: const Icon(
+                                                    Icons.share,
+                                                    size: 30,
+                                                  ),
+                                                  title: Text('Sharing 설정',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize())),
+                                                  onPressed: () async {}),
+                                              FocusedMenuItem(
+                                                  trailingIcon: const Icon(
+                                                    Icons.edit,
+                                                    size: 30,
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.red.shade200,
+                                                  title: Text('변경 및 삭제',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize())),
+                                                  onPressed: () async {
+                                                    SetChangeLink(
+                                                        context,
+                                                        _controller,
+                                                        searchNode,
+                                                        fToast,
+                                                        listpinlink[index]
+                                                            .link);
+                                                  }),
+                                            ],
+                                            duration:
+                                                const Duration(seconds: 0),
+                                            animateMenuItems: true,
+                                            menuOffset: 20,
+                                            bottomOffsetHeight: 10,
+                                            menuWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                40,
+                                            openWithTap: false,
+                                            onPressed: () {
+                                              index == 0
+                                                  ? Get.to(
+                                                      () =>
+                                                          const ChooseCalendar(
+                                                              isfromwhere:
+                                                                  'mypagehome',
+                                                              index: 0),
+                                                      transition: Transition
+                                                          .rightToLeft)
+                                                  : Get.to(
+                                                      () => const Linkin(
+                                                            isfromwhere:
+                                                                'mypagehome',
+                                                          ),
+                                                      transition: Transition
+                                                          .rightToLeft);
+                                            },
+                                            child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.rectangle,
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  color: Colors.grey.shade200,
+                                                ),
+                                                child: SizedBox(
+                                                    child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                      Flexible(
+                                                          fit: FlexFit.tight,
+                                                          child: Text(
+                                                            listpinlink[index]
+                                                                .link
+                                                                .toString(),
+                                                            maxLines: 2,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black45,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize:
+                                                                    contentTextsize()),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ))
+                                                    ])))));
+                                  })));
+                    },
+                  )
+                : StreamBuilder<QuerySnapshot>(
+                    stream: firestore.collection('Linknet').snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        listpinlink.clear();
+                        final valuespace = snapshot.data!.docs;
+                        for (var sp in valuespace) {
+                          final user = sp.get('username');
+                          if (user == usercode) {
+                            for (int i = 0; i < sp.get('link').length; i++) {
+                              listpinlink
+                                  .add(Linkpage(link: sp.get('link')[i]));
+                            }
+                          }
+                        }
+                        return listpinlink.isEmpty
+                            ? SizedBox(
+                                child: Center(
+                                child: NeumorphicText(
+                                  '텅! 비어있어요~',
+                                  style: NeumorphicStyle(
+                                    shape: NeumorphicShape.flat,
+                                    depth: 3,
+                                    color: TextColor_shadowcolor(),
+                                  ),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize(),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ))
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: GridView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    physics: const ScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 1,
+                                            childAspectRatio: 3 / 1,
+                                            crossAxisSpacing: 20,
+                                            mainAxisSpacing: 20),
+                                    itemCount: listpinlink.length,
+                                    itemBuilder: ((context, index) {
+                                      return GestureDetector(
+                                          onTap: () async {},
+                                          child: FocusedMenuHolder(
+                                              menuItems: [
+                                                FocusedMenuItem(
+                                                    trailingIcon: const Icon(
+                                                      Icons.style,
+                                                      size: 30,
+                                                    ),
+                                                    title: Text('상세정보',
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize())),
+                                                    onPressed: () async {}),
+                                                FocusedMenuItem(
+                                                    trailingIcon: const Icon(
+                                                      Icons.share,
+                                                      size: 30,
+                                                    ),
+                                                    title: Text('Sharing 설정',
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize())),
+                                                    onPressed: () {
+                                                      //공유자 검색
+                                                    }),
+                                              ],
+                                              duration:
+                                                  const Duration(seconds: 0),
+                                              animateMenuItems: true,
+                                              menuOffset: 20,
+                                              bottomOffsetHeight: 10,
+                                              menuWidth: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  40,
+                                              openWithTap: false,
+                                              onPressed: () {},
+                                              child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.rectangle,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    color: Colors.grey.shade200,
+                                                  ),
+                                                  child: SizedBox(
+                                                      child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                        Flexible(
+                                                            fit: FlexFit.tight,
+                                                            child: Text(
+                                                              listpinlink[index]
+                                                                  .link
+                                                                  .toString(),
+                                                              maxLines: 2,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black45,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      contentTextsize()),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ))
+                                                      ])))));
+                                    })));
+                      }
+                      return LinearProgressIndicator(
+                        backgroundColor: BGColor(),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.blue),
+                      );
+                    },
+                  ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        ));
   }
 
   addmylink(

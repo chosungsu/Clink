@@ -40,8 +40,7 @@ class MongoDB {
     collection_pinchannel = db.collection(PINCHANNEL_COLLECTION);
   }
 
-  static Future<List<Map<String, dynamic>>> getData(
-      {required String collectionname}) async {
+  static Future getData({required String collectionname}) async {
     final arrdata;
     if (collectionname == 'user') {
       arrdata = await collection_user.find().toList();
@@ -218,6 +217,38 @@ class MongoDB {
             modify.set(
                 updatelist.keys.toList()[i], updatelist.values.toList()[i]));
       }
+    }
+  }
+
+  static delete(
+      {required String collectionname,
+      required Map<String, dynamic> deletelist}) async {
+    if (collectionname == 'user') {
+      await collection_user.deleteOne(deletelist);
+    } else if (collectionname == 'sharehome') {
+      await collection_share.deleteOne(deletelist);
+    } else if (collectionname == 'people') {
+      await collection_people.deleteOne(deletelist);
+    } else if (collectionname == 'memo') {
+      await collection_memo.deleteOne(deletelist);
+    } else if (collectionname == 'homeview') {
+      await collection_homeview.deleteOne(deletelist);
+    } else if (collectionname == 'tag') {
+      await collection_tag.deleteOne(deletelist);
+    } else if (collectionname == 'memoallalarm') {
+      await collection_memoallalarm.deleteOne(deletelist);
+    } else if (collectionname == 'companynotice') {
+      await collection_companynotice.deleteOne(deletelist);
+    } else if (collectionname == 'applicense') {
+      await collection_applicense.deleteOne(deletelist);
+    } else if (collectionname == 'notibycompany') {
+      await collection_noticebycompany.deleteOne(deletelist);
+    } else if (collectionname == 'notibyusers') {
+      await collection_noticebyusers.deleteOne(deletelist);
+    } else if (collectionname == 'linknet') {
+      await collection_linknet.deleteOne(deletelist);
+    } else if (collectionname == 'pinchannel') {
+      await collection_pinchannel.deleteOne(deletelist);
     }
   }
 

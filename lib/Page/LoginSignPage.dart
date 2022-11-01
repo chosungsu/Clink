@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Auth/GoogleSignInController.dart';
-import '../Route/subroute.dart';
+import '../Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';

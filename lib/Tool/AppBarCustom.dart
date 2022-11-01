@@ -110,17 +110,30 @@ class AppBarCustom extends StatelessWidget {
                                   ),
                                 ),
                                 righticon == true
-                                    ? InkWell(
-                                        onTap: () =>
-                                            iconname == Icons.notifications_none
+                                    ? IconBtn(
+                                        child: IconButton(
+                                            onPressed: () => iconname ==
+                                                    Icons.notifications_none
                                                 ? func1()
                                                 : func2(),
-                                        child: Icon(
-                                          iconname,
-                                          size: 30,
-                                          color: TextColor_shadowcolor(),
-                                        ),
-                                      )
+                                            icon: Container(
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                              height: 30,
+                                              child: NeumorphicIcon(
+                                                iconname,
+                                                size: 30,
+                                                style: NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    depth: 2,
+                                                    surfaceIntensity: 0.5,
+                                                    color: TextColor(),
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            )),
+                                        color: TextColor())
                                     : const SizedBox()
                               ],
                             ))),

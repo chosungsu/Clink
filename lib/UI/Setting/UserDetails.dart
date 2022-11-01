@@ -9,7 +9,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
 import '../../Auth/GoogleSignInController.dart';
-import '../../Route/subroute.dart';
+import '../../Route/subuiroute.dart';
 import '../../sheets/DeleteUser.dart';
 
 class UserDetails extends StatelessWidget {

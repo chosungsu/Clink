@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import '../Route/subroute.dart';
+import '../Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
@@ -269,7 +269,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                                   ),
                                 ),
                               )),
-                          N_Container_1(height)
+                          ADSHOW(height),
                         ],
                       )),
                 ),
@@ -500,38 +500,6 @@ class _NotiAlarmState extends State<NotiAlarm>
           ),
         );
       },
-    );
-  }
-
-  N_Container_1(double height) {
-    //프로버전 구매시 보이지 않게 함
-    /*Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        //ADEvents(context)
-      ],
-    )*/
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-          border: Border(
-              top: BorderSide(color: TextColor_shadowcolor(), width: 1))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              '광고공간입니다',
-              style: TextStyle(
-                  color: TextColor_shadowcolor(),
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize()),
-              overflow: TextOverflow.ellipsis,
-            ),
-          )
-        ],
-      ),
     );
   }
 }

@@ -13,7 +13,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import 'Route/subroute.dart';
+import 'Route/subuiroute.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
 import 'package:flutter/foundation.dart';
 import 'Tool/Getx/PeopleAdd.dart';
@@ -37,7 +37,7 @@ void main() async {
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
-
+  await MongoDB.connect();
   runApp(const MyApp());
 }
 

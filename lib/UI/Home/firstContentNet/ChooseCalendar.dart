@@ -1,4 +1,5 @@
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/SortMenuHolder.dart';
@@ -12,7 +13,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../../../Route/subroute.dart';
+import '../../../Route/subuiroute.dart';
 import '../../../Page/addWhole_update.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/FlushbarStyle.dart';
@@ -47,8 +48,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   late FToast fToast;
   String usercode = Hive.box('user_setting').get('usercode');
   static final cal_share_person = Get.put(PeopleAdd());
-  var controll_memo = Get.put(memosetting());
+  final controll_memo = Get.put(memosetting());
   final cal_sort = Get.put(calendarsetting());
+  final uiset = Get.put(uisetting());
   List finallist = cal_share_person.people;
   TextEditingController controller = TextEditingController();
   final searchNode = FocusNode();
@@ -56,9 +58,8 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List list_calendar_home = [];
   List updateid = [];
-  bool _showBackToTopButton = false;
   DateTime Date = DateTime.now();
-  ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
   final List noticalendarlist = [
     'MY',
     '공유된 캘린더',
@@ -96,13 +97,13 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     );
 
     finallist = cal_share_person.people;
-    _scrollController = ScrollController()
+    scrollController = ScrollController()
       ..addListener(() {
         setState(() {
-          if (_scrollController.offset >= 150) {
-            _showBackToTopButton = true; // show the back-to-top button
+          if (scrollController.offset >= 150) {
+            uiset.showtopbutton = true; // show the back-to-top button
           } else {
-            _showBackToTopButton = false; // hide the back-to-top button
+            uiset.showtopbutton = false; // hide the back-to-top button
           }
         });
       });
@@ -110,17 +111,9 @@ class _ChooseCalendarState extends State<ChooseCalendar>
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  void _scrollToTop() {
-    _scrollController.animateTo(0,
-        duration: const Duration(seconds: 1), curve: Curves.easeIn);
-    if (_scrollController.offset == 0) {
-      _showBackToTopButton = false; // show the back-to-top button
-    }
   }
 
   Future<bool> _onWillPop() async {
@@ -145,10 +138,12 @@ class _ChooseCalendarState extends State<ChooseCalendar>
         child: ChoiceC(),
       ),
 
-      floatingActionButton: _showBackToTopButton == false
+      floatingActionButton: uiset.showtopbutton == false
           ? null
           : FloatingActionButton(
-              onPressed: _scrollToTop,
+              onPressed: (() {
+                scrollToTop(scrollController);
+              }),
               backgroundColor: BGColor(),
               child: Icon(
                 Icons.arrow_upward,
@@ -291,7 +286,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                       child: ScrollConfiguration(
                           behavior: NoBehavior(),
                           child: SingleChildScrollView(
-                              controller: _scrollController,
+                              controller: scrollController,
                               physics: const ScrollPhysics(),
                               child: StatefulBuilder(
                                   builder: (_, StateSetter setState) {

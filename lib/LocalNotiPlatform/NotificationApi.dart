@@ -5,7 +5,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rxdart/subjects.dart';
 
-import '../Route/subroute.dart';
+import '../Route/subuiroute.dart';
 import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
 

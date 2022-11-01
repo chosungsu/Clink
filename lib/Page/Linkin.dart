@@ -1,4 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
@@ -9,7 +8,6 @@ import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/pushalarmsettingmemo.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -21,25 +19,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
-import '../../../Route/subuiroute.dart';
+import '../Route/subuiroute.dart';
 import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../sheets/calendarinfo.dart';
-import '../Widgets/SortMenuHolder.dart';
-import '../secondContentNet/ClickShowEachNote.dart';
+import '../UI/Home/Widgets/SortMenuHolder.dart';
+import '../UI/Home/secondContentNet/ClickShowEachNote.dart';
 
-class DayNoteHome extends StatefulWidget {
-  const DayNoteHome({Key? key, required this.title, required this.isfromwhere})
-      : super(key: key);
-  final String title;
+class Linkin extends StatefulWidget {
+  const Linkin({Key? key, required this.isfromwhere}) : super(key: key);
   final String isfromwhere;
   @override
-  State<StatefulWidget> createState() => _DayNoteHomeState();
+  State<StatefulWidget> createState() => _LinkinState();
 }
 
-class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
+class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;

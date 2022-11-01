@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage>
   var _controller = TextEditingController();
   late final PageController _pController1;
   late final PageController _pController2;
-  ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
   bool showsharegroups = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final List<String> list_app_setting = <String>[
@@ -116,13 +116,8 @@ class _ProfilePageState extends State<ProfilePage>
     super.dispose();
     _controller.dispose();
     _pController2.dispose();
-    _scrollController.dispose();
+    scrollController.dispose();
     //notilist.noticontroller.dispose();
-  }
-
-  void _scrollToTop() {
-    _scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
   }
 
   Future<void> _getAppInfo() async {
@@ -199,7 +194,7 @@ class _ProfilePageState extends State<ProfilePage>
                               child: ScrollConfiguration(
                                 behavior: NoBehavior(),
                                 child: SingleChildScrollView(
-                                    controller: _scrollController,
+                                    controller: scrollController,
                                     child: StatefulBuilder(
                                         builder: (_, StateSetter setState) {
                                       return ExpandablePageView.builder(
@@ -1887,7 +1882,7 @@ class _ProfilePageState extends State<ProfilePage>
                     setState(() {
                       pagesetnumber = 1;
                       draw.currentpage = 2;
-                      _scrollToTop();
+                      scrollToTop(scrollController);
                       _pController2.animateToPage(1,
                           duration: const Duration(milliseconds: 800),
                           curve: Curves.easeIn);
@@ -2058,7 +2053,7 @@ class _ProfilePageState extends State<ProfilePage>
                               setState(() {
                                 pagesetnumber = 2;
                                 draw.currentpage = 2;
-                                _scrollToTop();
+                                scrollToTop(scrollController);
                                 _pController2.animateToPage(1,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn);

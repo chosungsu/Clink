@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../Route/subroute.dart';
+import '../../../Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';

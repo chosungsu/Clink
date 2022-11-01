@@ -12,7 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'subroute.dart';
+import 'subuiroute.dart';
 import '../Page/HomePage.dart';
 import '../Page/ProfilePage.dart';
 import '../Tool/AndroidIOS.dart';
@@ -127,7 +127,7 @@ class _mainrouteState extends State<mainroute>
       Hive.box('user_setting').put('page_index', 0);
       if (serverstatus) {
       } else {
-        MongoDB.connect();
+        await MongoDB.connect();
       }
 
       Navigator.of(context).pushReplacement(
@@ -175,8 +175,6 @@ class _mainrouteState extends State<mainroute>
                             onTap: (_index) async {
                               //Handle button tap
                               uiset.setloading(true);
-                              MongoDB.connect();
-
                               if (_index == 2) {
                                 Hive.box('user_setting').put('page_index',
                                     Hive.box('user_setting').get('page_index'));

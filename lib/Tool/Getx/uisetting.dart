@@ -9,6 +9,9 @@ import '../BGColor.dart';
 class uisetting extends GetxController {
   bool loading = false;
   int pagenumber = 0;
+  bool showtopbutton = false;
+  String eventtitle = '';
+  String eventurl = '';
 
   void setloading(bool what) {
     loading = what;
@@ -18,6 +21,19 @@ class uisetting extends GetxController {
 
   void setpageindex(int what) {
     pagenumber = what;
+    update();
+    notifyChildrens();
+  }
+
+  void settopbutton(bool what) {
+    showtopbutton = what;
+    update();
+    notifyChildrens();
+  }
+
+  void seteventspace(String title, String url) {
+    eventtitle = title;
+    eventurl = url;
     update();
     notifyChildrens();
   }

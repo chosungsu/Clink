@@ -1,13 +1,8 @@
-import 'package:clickbyme/Sub/HowToUsePage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/mongoDB/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:new_version/new_version.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../Tool/TextSize.dart';
 
@@ -36,8 +31,6 @@ class ShowTips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final newversion = NewVersion();
-    final status = newversion.getVersionStatus();
     bool serverstatus = Hive.box('user_info').get('server_status');
 
     return SizedBox(

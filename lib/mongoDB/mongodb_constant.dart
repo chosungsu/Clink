@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 const MONGO_URL =
     'mongodb+srv://owner:linkAI9999@clusterlinkai.siulstb.mongodb.net/LINKAIDATABASE_ACTIVE?retryWrites=true&w=majority';
 const USER_COLLECTION = 'USER';

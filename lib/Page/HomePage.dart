@@ -3,6 +3,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
+import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/Tool/AppBarCustom.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
@@ -22,6 +23,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
+import '../Route/subuiroute.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/Widgets/ViewSet.dart';
@@ -72,6 +74,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List updatefriends = [];
   String docid = '';
   final peopleadd = Get.put(PeopleAdd());
+  final uiset = Get.put(uisetting());
   late PackageInfo info;
   String versioninfo = '';
   String usercode = Hive.box('user_setting').get('usercode');
@@ -159,6 +162,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     PageController pController,
   ) {
     double height = MediaQuery.of(context).size.height;
+    final List<PageList> listcompanytousers = [];
+    var url;
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
@@ -199,23 +204,54 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           builder: (_, StateSetter setState) {
                                         return Column(
                                           children: [
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
                                             FutureBuilder(
-                                                future: initScreen(),
+                                                future: MongoDB.getData(
+                                                        collectionname:
+                                                            'companynotice')
+                                                    .then((value) {
+                                                  for (int j = 0;
+                                                      j < value.length;
+                                                      j++) {
+                                                    final messageText =
+                                                        value[j]['title'];
+                                                    final messageDate =
+                                                        value[j]['date'];
+                                                    final messageyes = value[j]
+                                                        ['showthisinapp'];
+                                                    final messagewhere =
+                                                        value[j]['where'];
+                                                    if (messageyes == 'yes' &&
+                                                        messagewhere ==
+                                                            'home') {
+                                                      listcompanytousers
+                                                          .add(PageList(
+                                                        title: messageText,
+                                                        sub: messageDate,
+                                                      ));
+                                                      url = Uri.parse(
+                                                          value[j]['url']);
+                                                      uiset.seteventspace(
+                                                          listcompanytousers[0]
+                                                              .title,
+                                                          value[j]['url']);
+                                                    }
+                                                  }
+                                                }),
                                                 builder: ((context, snapshot) {
-                                                  return Column(
-                                                    children: [
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      CompanyNotice(),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      H_Container_0(height,
-                                                          _pController2),
-                                                    ],
-                                                  );
+                                                  return CompanyNotice(
+                                                      'home',
+                                                      serverstatus,
+                                                      uiset.eventtitle,
+                                                      uiset.eventurl);
                                                 })),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            H_Container_0(
+                                                height, _pController2),
 
                                             /*const SizedBox(
                                               height: 20,
@@ -313,185 +349,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-
-  CompanyNotice() {
-    final List<PageList> listcompanytousers = [];
-    var url;
-    return serverstatus == true
-        ? FutureBuilder(
-            future:
-                MongoDB.getData(collectionname: 'companynotice').then((value) {
-              for (int j = 0; j < value.length; j++) {
-                final messageText = value[j]['title'];
-                final messageDate = value[j]['date'];
-                final messageyes = value[j]['showthisinapp'];
-                final messagewhere = value[j]['where'];
-                if (messageyes == 'yes' && messagewhere == 'home') {
-                  listcompanytousers.add(PageList(
-                    title: messageText,
-                    sub: messageDate,
-                  ));
-                  url = Uri.parse(value[j]['url']);
-                }
-              }
-            }),
-            builder: (context, snapshot) {
-              return listcompanytousers.isEmpty
-                  ? const SizedBox()
-                  : Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              draw.setclose();
-                              if (await canLaunchUrl(url)) {
-                                launchUrl(url);
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey.shade200,
-                              ),
-                              child: SizedBox(
-                                height: 30,
-                                width: double.infinity,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Icon(
-                                      Icons.campaign,
-                                      color: Colors.black45,
-                                      size: 30,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Flexible(
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          listcompanytousers[0].title,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                              color: Colors.black45,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize()),
-                                          overflow: TextOverflow.ellipsis,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ));
-            },
-          )
-        : StreamBuilder<QuerySnapshot>(
-            stream: firestore
-                .collection('CompanyNotice')
-                .orderBy('date', descending: true)
-                .limit(1)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                listcompanytousers.clear();
-                final valuespace = snapshot.data!.docs;
-                for (var sp in valuespace) {
-                  final messageText = sp.get('title');
-                  final messageDate = sp.get('date');
-                  final messageyes = sp.get('showthisinapp');
-                  final messagewhere = sp.get('where');
-                  if (messageyes == 'yes' && messagewhere == 'home') {
-                    listcompanytousers.add(PageList(
-                      title: messageText,
-                      sub: messageDate,
-                    ));
-                    url = Uri.parse(sp.get('url'));
-                  }
-                }
-
-                return listcompanytousers.isEmpty
-                    ? const SizedBox()
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                draw.setclose();
-                                /*Hive.box('user_setting').put('page_index', 3);
-                              Navigator.of(context).pushReplacement(
-                                PageTransition(
-                                  type: PageTransitionType.rightToLeft,
-                                  child: const MyHomePage(
-                                    index: 3,
-                                  ),
-                                ),
-                              );*/
-                                if (await canLaunchUrl(url)) {
-                                  launchUrl(url);
-                                }
-                              },
-                              child: ContainerDesign(
-                                color: Colors.grey.shade300,
-                                child: SizedBox(
-                                  height: 90,
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Icon(
-                                        Icons.new_releases,
-                                        color: TextColor(),
-                                        size: 40,
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Flexible(
-                                          fit: FlexFit.tight,
-                                          child: Text(
-                                            listcompanytousers[0].title,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize()),
-                                            overflow: TextOverflow.ellipsis,
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ));
-              }
-              return LinearProgressIndicator(
-                backgroundColor: BGColor(),
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-              );
-            },
-          );
   }
 
   H_Container_4(double height) {
