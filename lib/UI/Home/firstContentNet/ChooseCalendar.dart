@@ -22,7 +22,7 @@ import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import 'package:focused_menu/focused_menu.dart';
-import '../../../sheets/calendarinfo.dart';
+import '../../../sheets/infoshow.dart';
 import '../../../sheets/settingChoiceC_Cards.dart';
 import '../Widgets/CreateCalandmemo.dart';
 import '../secondContentNet/PeopleGroup.dart';
@@ -498,17 +498,19 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             .docs[0]['subname'];
                                                       },
                                                     );
-                                                    calendarinfo(
-                                                      index,
-                                                      snapshot
-                                                          .data!.docs[index].id,
-                                                      snapshot.data!.docs[index]
-                                                          ['date'],
-                                                      snapshot.data!.docs[index]
-                                                          ['calname'],
-                                                      context,
-                                                      realusername,
-                                                    );
+                                                    infoshow(
+                                                        index,
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['date'],
+                                                        '',
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['calname'],
+                                                        context,
+                                                        realusername,
+                                                        '',
+                                                        'calendar');
                                                   }),
                                               FocusedMenuItem(
                                                   trailingIcon: const Icon(
@@ -942,17 +944,19 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                             .docs[0]['subname'];
                                                       },
                                                     );
-                                                    calendarinfo(
-                                                      index,
-                                                      snapshot
-                                                          .data!.docs[index].id,
-                                                      snapshot.data!.docs[index]
-                                                          ['date'],
-                                                      snapshot.data!.docs[index]
-                                                          ['calname'],
-                                                      context,
-                                                      realusername,
-                                                    );
+                                                    infoshow(
+                                                        index,
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['date'],
+                                                        '',
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['calname'],
+                                                        context,
+                                                        realusername,
+                                                        '',
+                                                        'calendar');
                                                   }),
                                               FocusedMenuItem(
                                                   trailingIcon: snapshot

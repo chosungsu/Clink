@@ -4,6 +4,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
+import 'package:clickbyme/sheets/infoshow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,7 +14,9 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../DB/PageList.dart';
 import '../Route/subuiroute.dart';
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/selectcollection.dart';
@@ -50,6 +53,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   var _controller = TextEditingController();
   late FToast fToast;
   final scollection = Get.put(selectcollection());
+  final linkspaceset = Get.put(linkspacesetting());
   late Animation animation;
   String usercode = Hive.box('user_setting').get('usercode');
   final List<Linkpage> listpinlink = [];
@@ -351,305 +355,28 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
             const SizedBox(
               height: 20,
             ),
-            /*GetBuilder<selectcollection>(builder: ((controller) {
-                  return SizedBox(
-                      height: 50,
-                      child: FutureBuilder(
-                        future: MongoDB.getData(collectionname: 'linknet')
-                            .then((value) {
-                          scollection.resetcollectionlink();
+            GetBuilder<linkspacesetting>(builder: (_) {
+              return serverstatus == true
+                  ? FutureBuilder(
+                      future: MongoDB.getData(collectionname: 'linknet')
+                          .then((value) {
+                        listpinlink.clear();
+                        if (value.isEmpty) {
+                        } else {
                           for (int j = 0; j < value.length; j++) {
-                            link.clear();
                             final user = value[j]['username'];
-
                             if (user == usercode) {
                               for (int i = 0;
                                   i < value[j]['link'].length;
                                   i++) {
-                                link.add(value[j]['link'][i]);
-                                scollection.addmemolistlink(link[i]);
+                                listpinlink
+                                    .add(Linkpage(link: value[j]['link'][i]));
                               }
                             }
                           }
-                        }),
-                        builder: (context, snapshot) {
-                          return scollection.collectionlink.isEmpty
-                              ? ContainerDesign(
-                                  color: Colors.grey.shade300,
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Flexible(
-                                            fit: FlexFit.tight,
-                                            child: Text(
-                                              '추가버튼으로 추가하세요',
-                                              maxLines: 1,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black45,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize()),
-                                              overflow: TextOverflow.ellipsis,
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              : ListView.builder(
-                                  itemCount: scollection.collectionlink.length,
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemBuilder: ((context, index) {
-                                    return Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () async {},
-                                          child: Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.rectangle,
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              color: Colors.grey.shade200,
-                                            ),
-                                            child: SizedBox(
-                                              width: 80,
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Flexible(
-                                                      fit: FlexFit.tight,
-                                                      child: Text(
-                                                        scollection
-                                                            .collectionlink[
-                                                                index]
-                                                            .toString(),
-                                                        maxLines: 1,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black45,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize()),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      )),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 20,
-                                        )
-                                      ],
-                                    );
-                                  }));
-                        },
-                      ));
-                }))*/
-            serverstatus == true
-                ? FutureBuilder(
-                    future: MongoDB.getData(collectionname: 'linknet')
-                        .then((value) {
-                      listpinlink.clear();
-                      if (value.isEmpty) {
-                      } else {
-                        for (int j = 0; j < value.length; j++) {
-                          final user = value[j]['username'];
-                          if (user == usercode) {
-                            for (int i = 0; i < value[j]['link'].length; i++) {
-                              listpinlink
-                                  .add(Linkpage(link: value[j]['link'][i]));
-                            }
-                          }
                         }
-                      }
-                    }),
-                    builder: (context, snapshot) {
-                      return listpinlink.isEmpty
-                          ? SizedBox(
-                              child: Center(
-                              child: NeumorphicText(
-                                '텅! 비어있어요~',
-                                style: NeumorphicStyle(
-                                  shape: NeumorphicShape.flat,
-                                  depth: 3,
-                                  color: TextColor_shadowcolor(),
-                                ),
-                                textStyle: NeumorphicTextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize(),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ))
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
-                              child: GridView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  physics: const ScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 1,
-                                          childAspectRatio: 3 / 1,
-                                          crossAxisSpacing: 20,
-                                          mainAxisSpacing: 20),
-                                  itemCount: listpinlink.length,
-                                  itemBuilder: ((context, index) {
-                                    return GestureDetector(
-                                        onTap: () async {},
-                                        child: FocusedMenuHolder(
-                                            menuItems: [
-                                              FocusedMenuItem(
-                                                  trailingIcon: const Icon(
-                                                    Icons.style,
-                                                    size: 30,
-                                                  ),
-                                                  title: Text('상세정보',
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize())),
-                                                  onPressed: () async {}),
-                                              FocusedMenuItem(
-                                                  trailingIcon: const Icon(
-                                                    Icons.share,
-                                                    size: 30,
-                                                  ),
-                                                  title: Text('Sharing 설정',
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize())),
-                                                  onPressed: () async {}),
-                                              FocusedMenuItem(
-                                                  trailingIcon: const Icon(
-                                                    Icons.edit,
-                                                    size: 30,
-                                                  ),
-                                                  backgroundColor:
-                                                      Colors.red.shade200,
-                                                  title: Text('변경 및 삭제',
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize())),
-                                                  onPressed: () async {
-                                                    SetChangeLink(
-                                                        context,
-                                                        _controller,
-                                                        searchNode,
-                                                        fToast,
-                                                        listpinlink[index]
-                                                            .link);
-                                                  }),
-                                            ],
-                                            duration:
-                                                const Duration(seconds: 0),
-                                            animateMenuItems: true,
-                                            menuOffset: 20,
-                                            bottomOffsetHeight: 10,
-                                            menuWidth: MediaQuery.of(context)
-                                                    .size
-                                                    .width -
-                                                40,
-                                            openWithTap: false,
-                                            onPressed: () {
-                                              index == 0
-                                                  ? Get.to(
-                                                      () =>
-                                                          const ChooseCalendar(
-                                                              isfromwhere:
-                                                                  'mypagehome',
-                                                              index: 0),
-                                                      transition: Transition
-                                                          .rightToLeft)
-                                                  : Get.to(
-                                                      () => const Linkin(
-                                                            isfromwhere:
-                                                                'mypagehome',
-                                                          ),
-                                                      transition: Transition
-                                                          .rightToLeft);
-                                            },
-                                            child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.rectangle,
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  color: Colors.grey.shade200,
-                                                ),
-                                                child: SizedBox(
-                                                    child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                      Flexible(
-                                                          fit: FlexFit.tight,
-                                                          child: Text(
-                                                            listpinlink[index]
-                                                                .link
-                                                                .toString(),
-                                                            maxLines: 2,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black45,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    contentTextsize()),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ))
-                                                    ])))));
-                                  })));
-                    },
-                  )
-                : StreamBuilder<QuerySnapshot>(
-                    stream: firestore.collection('Linknet').snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        listpinlink.clear();
-                        final valuespace = snapshot.data!.docs;
-                        for (var sp in valuespace) {
-                          final user = sp.get('username');
-                          if (user == usercode) {
-                            for (int i = 0; i < sp.get('link').length; i++) {
-                              listpinlink
-                                  .add(Linkpage(link: sp.get('link')[i]));
-                            }
-                          }
-                        }
+                      }),
+                      builder: (context, snapshot) {
                         return listpinlink.isEmpty
                             ? SizedBox(
                                 child: Center(
@@ -698,7 +425,32 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                                 FontWeight.bold,
                                                             fontSize:
                                                                 contentTextsize())),
-                                                    onPressed: () async {}),
+                                                    onPressed: () async {
+                                                      var realusername;
+                                                      await firestore
+                                                          .collection('User')
+                                                          .where('code',
+                                                              isEqualTo:
+                                                                  usercode)
+                                                          .get()
+                                                          .then(
+                                                        (value) {
+                                                          realusername =
+                                                              value.docs[0]
+                                                                  ['subname'];
+                                                        },
+                                                      );
+                                                      infoshow(
+                                                          index,
+                                                          '',
+                                                          '',
+                                                          listpinlink[index]
+                                                              .link,
+                                                          context,
+                                                          realusername,
+                                                          '',
+                                                          'link');
+                                                    }),
                                                 FocusedMenuItem(
                                                     trailingIcon: const Icon(
                                                       Icons.share,
@@ -711,8 +463,29 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                                 FontWeight.bold,
                                                             fontSize:
                                                                 contentTextsize())),
-                                                    onPressed: () {
-                                                      //공유자 검색
+                                                    onPressed: () async {}),
+                                                FocusedMenuItem(
+                                                    trailingIcon: const Icon(
+                                                      Icons.edit,
+                                                      size: 30,
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.red.shade200,
+                                                    title: Text('변경 및 삭제',
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize())),
+                                                    onPressed: () async {
+                                                      SetChangeLink(
+                                                          context,
+                                                          _controller,
+                                                          searchNode,
+                                                          fToast,
+                                                          listpinlink[index]
+                                                              .link);
                                                     }),
                                               ],
                                               duration:
@@ -725,7 +498,24 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                       .width -
                                                   40,
                                               openWithTap: false,
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                index == 0
+                                                    ? Get.to(
+                                                        () =>
+                                                            const ChooseCalendar(
+                                                                isfromwhere:
+                                                                    'mypagehome',
+                                                                index: 0),
+                                                        transition: Transition
+                                                            .rightToLeft)
+                                                    : Get.to(
+                                                        () => const Linkin(
+                                                              isfromwhere:
+                                                                  'mypagehome',
+                                                            ),
+                                                        transition: Transition
+                                                            .rightToLeft);
+                                              },
                                               child: Container(
                                                   padding:
                                                       const EdgeInsets.all(10),
@@ -769,14 +559,160 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                             ))
                                                       ])))));
                                     })));
-                      }
-                      return LinearProgressIndicator(
-                        backgroundColor: BGColor(),
-                        valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.blue),
-                      );
-                    },
-                  ),
+                      },
+                    )
+                  : StreamBuilder<QuerySnapshot>(
+                      stream: firestore.collection('Linknet').snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          listpinlink.clear();
+                          final valuespace = snapshot.data!.docs;
+                          for (var sp in valuespace) {
+                            final user = sp.get('username');
+                            if (user == usercode) {
+                              for (int i = 0; i < sp.get('link').length; i++) {
+                                listpinlink
+                                    .add(Linkpage(link: sp.get('link')[i]));
+                              }
+                            }
+                          }
+                          return listpinlink.isEmpty
+                              ? SizedBox(
+                                  child: Center(
+                                  child: NeumorphicText(
+                                    '텅! 비어있어요~',
+                                    style: NeumorphicStyle(
+                                      shape: NeumorphicShape.flat,
+                                      depth: 3,
+                                      color: TextColor_shadowcolor(),
+                                    ),
+                                    textStyle: NeumorphicTextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTitleTextsize(),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ))
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: GridView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      physics: const ScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 1,
+                                              childAspectRatio: 3 / 1,
+                                              crossAxisSpacing: 20,
+                                              mainAxisSpacing: 20),
+                                      itemCount: listpinlink.length,
+                                      itemBuilder: ((context, index) {
+                                        return GestureDetector(
+                                            onTap: () async {},
+                                            child: FocusedMenuHolder(
+                                                menuItems: [
+                                                  FocusedMenuItem(
+                                                      trailingIcon: const Icon(
+                                                        Icons.style,
+                                                        size: 30,
+                                                      ),
+                                                      title: Text('상세정보',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                      onPressed: () async {}),
+                                                  FocusedMenuItem(
+                                                      trailingIcon: const Icon(
+                                                        Icons.share,
+                                                        size: 30,
+                                                      ),
+                                                      title: Text('Sharing 설정',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                      onPressed: () {
+                                                        //공유자 검색
+                                                      }),
+                                                ],
+                                                duration:
+                                                    const Duration(seconds: 0),
+                                                animateMenuItems: true,
+                                                menuOffset: 20,
+                                                bottomOffsetHeight: 10,
+                                                menuWidth:
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .width -
+                                                        40,
+                                                openWithTap: false,
+                                                onPressed: () {},
+                                                child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.rectangle,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      color:
+                                                          Colors.grey.shade200,
+                                                    ),
+                                                    child: SizedBox(
+                                                        child: Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                          Flexible(
+                                                              fit:
+                                                                  FlexFit.tight,
+                                                              child: Text(
+                                                                listpinlink[
+                                                                        index]
+                                                                    .link
+                                                                    .toString(),
+                                                                maxLines: 2,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black45,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize()),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ))
+                                                        ])))));
+                                      })));
+                        }
+                        return LinearProgressIndicator(
+                          backgroundColor: BGColor(),
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.blue),
+                        );
+                      },
+                    );
+            }),
             const SizedBox(
               height: 20,
             ),
@@ -827,139 +763,16 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
         .whenComplete(() {
-      textEditingController_add_sheet.clear();
+      if (linkspaceset.iscompleted) {
+        textEditingController_add_sheet.clear();
+        linkspaceset.resetcompleted();
+        Snack.show(
+            context: context,
+            title: '알림',
+            content: '정상적으로 추가되었습니다.',
+            snackType: SnackType.info,
+            behavior: SnackBarBehavior.floating);
+      } else {}
     });
   }
-
-  /*M_Container0(double height) {
-    return GestureDetector(
-      onTap: () {
-        Get.to(
-            () => const ChooseCalendar(
-                  isfromwhere: 'mypagehome',
-                  index: 0,
-                ),
-            transition: Transition.rightToLeft);
-      },
-      child: SizedBox(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Text('캘린더 모음',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: TextColor_shadowcolor(),
-                      )),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 30,
-                  height: 30,
-                  child: NeumorphicIcon(
-                    Icons.shortcut,
-                    size: 30,
-                    style: NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        surfaceIntensity: 0.5,
-                        depth: 2,
-                        color: TextColor(),
-                        lightSource: LightSource.topLeft),
-                  ),
-                ),
-              ],
-            ),
-            Text(
-              '우측아이콘을 클릭하여 캘린더 확인',
-              maxLines: 2,
-              softWrap: true,
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 15,
-                color: TextColor(),
-              ),
-            ),
-            const Divider(
-              height: 20,
-              color: Colors.grey,
-              thickness: 1,
-              indent: 10.0,
-              endIndent: 10.0,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  M_Container1(double height) {
-    return GestureDetector(
-      onTap: () {
-        Get.to(
-            () => const DayNoteHome(
-                  title: '',
-                  isfromwhere: 'mypagehome',
-                ),
-            transition: Transition.rightToLeft);
-      },
-      child: SizedBox(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Text('메모장 모음',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        color: TextColor_shadowcolor(),
-                      )),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 30,
-                  height: 30,
-                  child: NeumorphicIcon(
-                    Icons.shortcut,
-                    size: 30,
-                    style: NeumorphicStyle(
-                        shape: NeumorphicShape.convex,
-                        surfaceIntensity: 0.5,
-                        depth: 2,
-                        color: TextColor(),
-                        lightSource: LightSource.topLeft),
-                  ),
-                ),
-              ],
-            ),
-            Text(
-              '우측아이콘을 클릭하여 메모 확인',
-              maxLines: 2,
-              softWrap: true,
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 15,
-                color: TextColor(),
-              ),
-            ),
-            const Divider(
-              height: 20,
-              color: Colors.grey,
-              thickness: 1,
-              indent: 10.0,
-              endIndent: 10.0,
-            ),
-          ],
-        ),
-      ),
-    );
-  }*/
 }

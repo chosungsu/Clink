@@ -1,4 +1,5 @@
 import 'package:clickbyme/Route/initScreenLoading.dart';
+import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -457,6 +458,7 @@ contentthird(
   bool serverstatus = Hive.box('user_info').get('server_status');
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final updatelist = [];
+  final linkspaceset = Get.put(linkspacesetting());
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -523,6 +525,8 @@ contentthird(
                         'username': username,
                         'link': [textEditingController_add_sheet.text],
                       });
+                      linkspaceset
+                          .setspacelink(textEditingController_add_sheet.text);
                     } else {
                       await MongoDB.getData(collectionname: 'linknet')
                           .then((value) async {
@@ -546,19 +550,31 @@ contentthird(
                         'username': username,
                         'link': updatelist,
                       });
+                      for (int k = 0; k < updatelist.length; k++) {
+                        linkspaceset.setspacelink(updatelist[k]);
+                      }
                     }
-                    Snack.show(
-                        context: context,
-                        title: '알림',
-                        content: '정상적으로 추가되었습니다.',
-                        snackType: SnackType.info,
-                        behavior: SnackBarBehavior.floating);
+                    linkspaceset.setcompleted(true);
+                    Get.back();
+                    var id = '';
+                    firestore.collection('Linknet').get().then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('username') == username) {
+                          id = value.docs[i].id;
+                        }
+                      }
+                      firestore.collection('Linknet').doc(id).delete();
+                    });
+                    firestore.collection('Linknet').add({
+                      'username': username,
+                      'title': updatelist,
+                    }).whenComplete(() {});
                   } else {
                     updatelist.clear();
                     var id = '';
                     firestore.collection('Linknet').get().then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('originuser') == username) {
+                        if (value.docs[i].get('username') == username) {
                           for (int j = 0;
                               j < value.docs[i].get('link').length;
                               j++) {
@@ -571,21 +587,16 @@ contentthird(
                     });
                     updatelist.add(textEditingController_add_sheet.text);
                     firestore.collection('Linknet').add({
-                      'originuser': username,
+                      'username': username,
                       'title': updatelist,
                     }).whenComplete(() {
-                      setState(() {
-                        textEditingController_add_sheet.clear();
-                        Snack.show(
-                            context: context,
-                            title: '알림',
-                            content: '정상적으로 추가되었습니다.',
-                            snackType: SnackType.info,
-                            behavior: SnackBarBehavior.floating);
-                      });
+                      linkspaceset.setcompleted(true);
+                      Get.back();
+                      for (int k = 0; k < updatelist.length; k++) {
+                        linkspaceset.setspacelink(updatelist[k]);
+                      }
                     });
                   }
-                  Get.back();
                 }
               },
               child: Center(
@@ -661,16 +672,17 @@ SetChangeLink(
                   ),
                 )));
       }).whenComplete(() async {
-    controller.clear();
-    Navigator.of(context).pushReplacement(
-      PageTransition(
-        type: PageTransitionType.fade,
-        child: const mainroute(
-          index: 1,
-        ),
-      ),
-    );
-    await initScreen();
+    final linkspaceset = Get.put(linkspacesetting());
+    if (linkspaceset.iscompleted) {
+      controller.clear();
+      linkspaceset.resetcompleted();
+      Snack.show(
+          context: context,
+          title: '알림',
+          content: '정상적으로 추가되었습니다.',
+          snackType: SnackType.info,
+          behavior: SnackBarBehavior.floating);
+    } else {}
   });
 }
 
@@ -732,6 +744,7 @@ contentforth(BuildContext context, FocusNode searchNode,
   bool serverstatus = Hive.box('user_info').get('server_status');
   final updatelist = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final linkspaceset = Get.put(linkspacesetting());
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -831,43 +844,42 @@ contentforth(BuildContext context, FocusNode searchNode,
                                 }
                               }
                             }
-                            if (updatelist.isEmpty) {
-                            } else {
-                              await MongoDB.delete(
-                                  collectionname: 'linknet',
-                                  deletelist: {
-                                    'username': usercode,
-                                  });
-                              await MongoDB.add(
-                                  collectionname: 'linknet',
-                                  addlist: {
-                                    'username': usercode,
-                                    'link': updatelist,
-                                  });
-                              var id = '';
-                              await firestore
-                                  .collection('Linknet')
-                                  .get()
-                                  .then((value) {
-                                for (int i = 0; i < value.docs.length; i++) {
-                                  if (value.docs[i].get('username') ==
-                                      usercode) {
-                                    id = value.docs[i].id;
-                                  }
+                            await MongoDB.delete(
+                                collectionname: 'linknet',
+                                deletelist: {
+                                  'username': usercode,
+                                });
+                            await MongoDB.add(
+                                collectionname: 'linknet',
+                                addlist: {
+                                  'username': usercode,
+                                  'link': updatelist,
+                                });
+                            var id = '';
+                            await firestore
+                                .collection('Linknet')
+                                .get()
+                                .then((value) {
+                              for (int i = 0; i < value.docs.length; i++) {
+                                if (value.docs[i].get('username') == usercode) {
+                                  id = value.docs[i].id;
                                 }
-                                firestore
-                                    .collection('Linknet')
-                                    .doc(id)
-                                    .delete();
-                              });
+                              }
+                              firestore.collection('Linknet').doc(id).delete();
+                            }).whenComplete(() {
                               firestore.collection('Linknet').add({
                                 'username': usercode,
                                 'title': updatelist,
                               });
-                            }
+                            });
                           }).whenComplete(() {
                             controller.clear();
-                            Get.back(result: true);
+                            linkspaceset.resetspacelink();
+                            for (int k = 0; k < updatelist.length; k++) {
+                              linkspaceset.setspacelink(updatelist[k]);
+                            }
+                            linkspaceset.setcompleted(true);
+                            Get.back();
                           });
                         } else {
                           updatelist.clear();
@@ -897,7 +909,12 @@ contentforth(BuildContext context, FocusNode searchNode,
                             'title': updatelist,
                           }).whenComplete(() {
                             controller.clear();
-                            Get.back(result: true);
+                            linkspaceset.resetspacelink();
+                            for (int k = 0; k < updatelist.length; k++) {
+                              linkspaceset.setspacelink(updatelist[k]);
+                            }
+                            linkspaceset.setcompleted(true);
+                            Get.back();
                           });
                         }
                       }
@@ -975,25 +992,19 @@ contentforth(BuildContext context, FocusNode searchNode,
                                   }
                                 }
                               }
-                              if (updatelist.isEmpty) {
-                              } else {
-                                await MongoDB.delete(
-                                    collectionname: 'linknet',
-                                    deletelist: {
-                                      'username': usercode,
-                                    });
-                                updatelist.add(controller.text);
-                                await MongoDB.add(
-                                    collectionname: 'linknet',
-                                    addlist: {
-                                      'username': usercode,
-                                      'link': updatelist,
-                                    });
-                              }
+                              updatelist.add(controller.text);
+                              await MongoDB.delete(
+                                  collectionname: 'linknet',
+                                  deletelist: {
+                                    'username': usercode,
+                                  });
+                              await MongoDB.add(
+                                  collectionname: 'linknet',
+                                  addlist: {
+                                    'username': usercode,
+                                    'link': updatelist,
+                                  });
                             }).whenComplete(() {
-                              controller.clear();
-                              Get.back(result: true);
-
                               var id = '';
                               firestore
                                   .collection('Linknet')
@@ -1016,6 +1027,14 @@ contentforth(BuildContext context, FocusNode searchNode,
                                     'title': updatelist,
                                   });
                                 }
+                              }).whenComplete(() {
+                                linkspaceset.resetspacelink();
+                                for (int k = 0; k < updatelist.length; k++) {
+                                  linkspaceset.setspacelink(updatelist[k]);
+                                }
+                                linkspaceset.setcompleted(true);
+                                controller.clear();
+                                Get.back();
                               });
                             });
                           } else {
@@ -1049,7 +1068,12 @@ contentforth(BuildContext context, FocusNode searchNode,
                               }
                             }).whenComplete(() {
                               controller.clear();
-                              Get.back(result: true);
+                              linkspaceset.resetspacelink();
+                              for (int k = 0; k < updatelist.length; k++) {
+                                linkspaceset.setspacelink(updatelist[k]);
+                              }
+                              linkspaceset.setcompleted(true);
+                              Get.back();
                             });
                           }
                         }

@@ -24,7 +24,7 @@ import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/calendarinfo.dart';
+import '../sheets/infoshow.dart';
 import '../UI/Home/Widgets/SortMenuHolder.dart';
 import '../UI/Home/secondContentNet/ClickShowEachNote.dart';
 
@@ -699,20 +699,19 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                     value.docs[0]['subname'];
                                               },
                                             );
-                                            memoinfo(
-                                              index,
-                                              snapshot.data!.docs[index].id,
-                                              snapshot.data!.docs[index]
-                                                  ['Date'],
-                                              snapshot.data!.docs[index]
-                                                  ['EditDate'],
-                                              snapshot.data!.docs[index]
-                                                  ['memoTitle'],
-                                              context,
-                                              realusername,
-                                              snapshot.data!.docs[index]
-                                                  ['Collection'],
-                                            );
+                                            infoshow(
+                                                index,
+                                                snapshot.data!.docs[index]
+                                                    ['Date'],
+                                                snapshot.data!.docs[index]
+                                                    ['EditDate'],
+                                                snapshot.data!.docs[index]
+                                                    ['memoTitle'],
+                                                context,
+                                                realusername,
+                                                snapshot.data!.docs[index]
+                                                    ['Collection'],
+                                                'memo');
                                           }),
                                       FocusedMenuItem(
                                           trailingIcon: Icon(
