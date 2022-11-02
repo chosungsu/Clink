@@ -186,7 +186,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                 behavior: NoBehavior(),
                                 child: SingleChildScrollView(
                                     controller: scrollController,
-                                    physics: const BouncingScrollPhysics(),
+                                    physics: const ScrollPhysics(),
                                     child: StatefulBuilder(
                                         builder: (_, StateSetter setState) {
                                       return Column(
@@ -479,11 +479,20 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                             fontSize:
                                                                 contentTextsize())),
                                                     onPressed: () async {
+                                                      _controller.text =
+                                                          listpinlink[index]
+                                                              .link;
+                                                      _controller.selection =
+                                                          TextSelection.fromPosition(
+                                                              TextPosition(
+                                                                  offset: listpinlink[
+                                                                          index]
+                                                                      .link
+                                                                      .length));
                                                       SetChangeLink(
                                                           context,
                                                           _controller,
                                                           searchNode,
-                                                          fToast,
                                                           listpinlink[index]
                                                               .link);
                                                     }),
@@ -509,9 +518,12 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                         transition: Transition
                                                             .rightToLeft)
                                                     : Get.to(
-                                                        () => const Linkin(
+                                                        () => Linkin(
                                                               isfromwhere:
                                                                   'mypagehome',
+                                                              name: listpinlink[
+                                                                      index]
+                                                                  .link,
                                                             ),
                                                         transition: Transition
                                                             .rightToLeft);
@@ -718,61 +730,5 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
             ),
           ],
         ));
-  }
-
-  addmylink(
-    BuildContext context,
-    String username,
-    TextEditingController textEditingController_add_sheet,
-    FocusNode searchNode_add_section,
-    selectcollection scollection,
-  ) {
-    Get.bottomSheet(
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: Padding(
-                  padding: MediaQuery.of(context).viewInsets,
-                  child: Container(
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20),
-                          )),
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            searchNode_add_section.unfocus();
-                          });
-                        },
-                        child: linkstation(
-                            context,
-                            textEditingController_add_sheet,
-                            searchNode_add_section,
-                            scollection,
-                            username),
-                      ))),
-            ),
-            backgroundColor: Colors.transparent,
-            isScrollControlled: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-        .whenComplete(() {
-      if (linkspaceset.iscompleted) {
-        textEditingController_add_sheet.clear();
-        linkspaceset.resetcompleted();
-        Snack.show(
-            context: context,
-            title: '알림',
-            content: '정상적으로 추가되었습니다.',
-            snackType: SnackType.info,
-            behavior: SnackBarBehavior.floating);
-      } else {}
-    });
   }
 }

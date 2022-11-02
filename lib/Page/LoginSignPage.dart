@@ -124,9 +124,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                         var url = Uri.parse(
                                             'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
 
-                                        if (await canLaunchUrl(url)) {
-                                          launchUrl(url);
-                                        }
+                                        launchUrl(url);
                                       },
                                   ),
                                   const TextSpan(

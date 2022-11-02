@@ -1,30 +1,18 @@
-import 'package:clickbyme/Route/initScreenLoading.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:package_info/package_info.dart';
-import 'package:page_transition/page_transition.dart';
-import '../Route/mainroute.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/selectcollection.dart';
 import '../Tool/TextSize.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
-import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/uisetting.dart';
-import '../Tool/Loader.dart';
-import '../UI/Home/Widgets/CreateCalandmemo.dart';
 import '../mongoDB/mongodatabase.dart';
 
 movetolinkspace(
@@ -166,7 +154,7 @@ content(
             ],
           ),
         ),
-        const SizedBox(
+        /*const SizedBox(
           height: 30,
         ),
         GestureDetector(
@@ -206,7 +194,7 @@ content(
               Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
             ],
           ),
-        )
+        )*/
       ],
     );
   });
@@ -344,7 +332,7 @@ contentsecond(BuildContext context, String str) {
             ],
           ),
         ),
-        const SizedBox(
+        /*const SizedBox(
           height: 30,
         ),
         GestureDetector(
@@ -383,9 +371,70 @@ contentsecond(BuildContext context, String str) {
               Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
             ],
           ),
-        )
+        )*/
       ],
     );
+  });
+}
+
+addmylink(
+  BuildContext context,
+  String username,
+  TextEditingController textEditingController_add_sheet,
+  FocusNode searchNode_add_section,
+  selectcollection scollection,
+) {
+  Get.bottomSheet(
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        )),
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: StatefulBuilder(
+                      builder: ((context, setState) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              searchNode_add_section.unfocus();
+                            });
+                          },
+                          child: linkstation(
+                              context,
+                              textEditingController_add_sheet,
+                              searchNode_add_section,
+                              scollection,
+                              username),
+                        );
+                      }),
+                    ))),
+          ),
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+      .whenComplete(() {
+    final linkspaceset = Get.put(linkspacesetting());
+    if (linkspaceset.iscompleted) {
+      textEditingController_add_sheet.clear();
+      linkspaceset.resetcompleted();
+      Snack.show(
+          context: context,
+          title: '알림',
+          content: '정상적으로 추가되었습니다.',
+          snackType: SnackType.info,
+          behavior: SnackBarBehavior.floating);
+    } else {}
   });
 }
 
@@ -631,7 +680,6 @@ SetChangeLink(
   BuildContext context,
   TextEditingController controller,
   FocusNode searchNode,
-  FToast fToast,
   String link,
 ) {
   showModalBottomSheet(
@@ -666,8 +714,8 @@ SetChangeLink(
                             searchNode.unfocus();
                           },
                           child: SizedBox(
-                              child: SetchangeLink(context, controller,
-                                  searchNode, fToast, link))),
+                              child: SetchangeLink(
+                                  context, controller, searchNode, link))),
                     ],
                   ),
                 )));
@@ -687,7 +735,7 @@ SetChangeLink(
 }
 
 SetchangeLink(BuildContext context, TextEditingController controller,
-    FocusNode searchNode, FToast fToast, String link) {
+    FocusNode searchNode, String link) {
   return SizedBox(
       child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
@@ -713,7 +761,7 @@ SetchangeLink(BuildContext context, TextEditingController controller,
               const SizedBox(
                 height: 20,
               ),
-              contentforth(context, searchNode, controller, fToast, link),
+              contentforth(context, searchNode, controller, link),
               const SizedBox(
                 height: 20,
               ),
@@ -739,12 +787,13 @@ titleforth(
 }
 
 contentforth(BuildContext context, FocusNode searchNode,
-    TextEditingController controller, FToast fToast, String link) {
+    TextEditingController controller, String link) {
   String usercode = Hive.box('user_setting').get('usercode');
   bool serverstatus = Hive.box('user_info').get('server_status');
   final updatelist = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
+  final uiset = Get.put(uisetting());
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -829,9 +878,21 @@ contentforth(BuildContext context, FocusNode searchNode,
                               false;
                       if (reloadpage) {
                         if (serverstatus) {
+                          uiset.setloading(true);
                           await MongoDB.getData(collectionname: 'linknet')
                               .then((value) async {
                             updatelist.clear();
+                            await MongoDB.delete(
+                                collectionname: 'linknet',
+                                deletelist: {
+                                  'username': usercode,
+                                });
+                            await MongoDB.delete(
+                                collectionname: 'pinchannel',
+                                deletelist: {
+                                  'username': usercode,
+                                  'linkname': link,
+                                });
                             for (int j = 0; j < value.length; j++) {
                               final user = value[j]['username'];
                               if (user == usercode) {
@@ -844,11 +905,6 @@ contentforth(BuildContext context, FocusNode searchNode,
                                 }
                               }
                             }
-                            await MongoDB.delete(
-                                collectionname: 'linknet',
-                                deletelist: {
-                                  'username': usercode,
-                                });
                             await MongoDB.add(
                                 collectionname: 'linknet',
                                 addlist: {
@@ -871,17 +927,36 @@ contentforth(BuildContext context, FocusNode searchNode,
                                 'username': usercode,
                                 'title': updatelist,
                               });
+                              firestore
+                                  .collection('Pinchannel')
+                                  .get()
+                                  .then((value) {
+                                for (int i = 0; i < value.docs.length; i++) {
+                                  if (value.docs[i].get('linkname') == link) {
+                                    if (value.docs[i].get('username') ==
+                                        usercode) {
+                                      id = value.docs[i].id;
+                                    }
+                                  }
+                                }
+                                firestore
+                                    .collection('Pinchannel')
+                                    .doc(id)
+                                    .delete();
+                              });
                             });
                           }).whenComplete(() {
                             controller.clear();
+                            uiset.setloading(false);
+                            Get.back();
                             linkspaceset.resetspacelink();
                             for (int k = 0; k < updatelist.length; k++) {
                               linkspaceset.setspacelink(updatelist[k]);
                             }
                             linkspaceset.setcompleted(true);
-                            Get.back();
                           });
                         } else {
+                          uiset.setloading(true);
                           updatelist.clear();
                           var id = '';
 
@@ -909,51 +984,72 @@ contentforth(BuildContext context, FocusNode searchNode,
                             'title': updatelist,
                           }).whenComplete(() {
                             controller.clear();
+                            uiset.setloading(false);
+                            Get.back();
+
                             linkspaceset.resetspacelink();
+                            firestore
+                                .collection('Pinchannel')
+                                .get()
+                                .then((value) {
+                              for (int i = 0; i < value.docs.length; i++) {
+                                if (value.docs[i].get('linkname') == link) {
+                                  if (value.docs[i].get('username') ==
+                                      usercode) {
+                                    id = value.docs[i].id;
+                                  }
+                                }
+                              }
+                              firestore
+                                  .collection('Pinchannel')
+                                  .doc(id)
+                                  .delete();
+                            });
                             for (int k = 0; k < updatelist.length; k++) {
                               linkspaceset.setspacelink(updatelist[k]);
                             }
                             linkspaceset.setcompleted(true);
-                            Get.back();
                           });
                         }
                       }
                     },
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          uisetting().loading == true
-                              ? Center(
-                                  child: NeumorphicText(
-                                    '대기',
-                                    style: const NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: Colors.red,
+                    child: GetBuilder<uisetting>(
+                      builder: (_) => Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            uiset.loading == true
+                                ? Center(
+                                    child: NeumorphicText(
+                                      '대기',
+                                      style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: Colors.red,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                      ),
                                     ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
+                                  )
+                                : Center(
+                                    child: NeumorphicText(
+                                      '삭제',
+                                      style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: Colors.red,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : Center(
-                                  child: NeumorphicText(
-                                    '삭제',
-                                    style: const NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: Colors.red,
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
-                                    ),
-                                  ),
-                                )
-                        ],
+                                  )
+                          ],
+                        ),
                       ),
                     )),
                 const SizedBox(
@@ -977,9 +1073,21 @@ contentforth(BuildContext context, FocusNode searchNode,
                               behavior: SnackBarBehavior.floating);
                         } else {
                           if (serverstatus) {
+                            uiset.setloading(true);
                             await MongoDB.getData(collectionname: 'linknet')
                                 .then((value) async {
                               updatelist.clear();
+                              await MongoDB.delete(
+                                  collectionname: 'linknet',
+                                  deletelist: {
+                                    'username': usercode,
+                                  });
+                              await MongoDB.delete(
+                                  collectionname: 'pinchannel',
+                                  deletelist: {
+                                    'username': usercode,
+                                    'linkname': link,
+                                  });
                               for (int j = 0; j < value.length; j++) {
                                 final user = value[j]['username'];
                                 if (user == usercode) {
@@ -993,19 +1101,23 @@ contentforth(BuildContext context, FocusNode searchNode,
                                 }
                               }
                               updatelist.add(controller.text);
-                              await MongoDB.delete(
-                                  collectionname: 'linknet',
-                                  deletelist: {
-                                    'username': usercode,
-                                  });
+
                               await MongoDB.add(
                                   collectionname: 'linknet',
                                   addlist: {
                                     'username': usercode,
                                     'link': updatelist,
                                   });
+                              await MongoDB.add(
+                                  collectionname: 'pinchannel',
+                                  addlist: {
+                                    'username': usercode,
+                                    'linkname': controller.text,
+                                  });
                             }).whenComplete(() {
                               var id = '';
+                              uiset.setloading(false);
+                              Get.back();
                               firestore
                                   .collection('Linknet')
                                   .get()
@@ -1028,17 +1140,35 @@ contentforth(BuildContext context, FocusNode searchNode,
                                   });
                                 }
                               }).whenComplete(() {
+                                firestore
+                                    .collection('Pinchannel')
+                                    .get()
+                                    .then((value) {
+                                  for (int i = 0; i < value.docs.length; i++) {
+                                    if (value.docs[i].get('linkname') == link) {
+                                      if (value.docs[i].get('username') ==
+                                          usercode) {
+                                        id = value.docs[i].id;
+                                      }
+                                    }
+                                  }
+                                  firestore
+                                      .collection('Pinchannel')
+                                      .doc(id)
+                                      .update({
+                                    'linkname': controller.text,
+                                  });
+                                });
                                 linkspaceset.resetspacelink();
                                 for (int k = 0; k < updatelist.length; k++) {
                                   linkspaceset.setspacelink(updatelist[k]);
                                 }
                                 linkspaceset.setcompleted(true);
-                                controller.clear();
-                                Get.back();
                               });
                             });
                           } else {
                             updatelist.clear();
+                            uiset.setloading(true);
                             var id = '';
                             firestore.collection('Linknet').get().then((value) {
                               for (int i = 0; i < value.docs.length; i++) {
@@ -1054,65 +1184,80 @@ contentforth(BuildContext context, FocusNode searchNode,
                                   id = value.docs[i].id;
                                 }
                               }
-                              if (updatelist.isEmpty) {
-                              } else {
-                                firestore
-                                    .collection('Linknet')
-                                    .doc(id)
-                                    .delete();
-                                updatelist.add(controller.text);
-                                firestore.collection('Linknet').add({
-                                  'username': usercode,
-                                  'title': updatelist,
-                                });
-                              }
+                              firestore.collection('Linknet').doc(id).delete();
+                              updatelist.add(controller.text);
+                              firestore.collection('Linknet').add({
+                                'username': usercode,
+                                'title': updatelist,
+                              });
                             }).whenComplete(() {
-                              controller.clear();
+                              uiset.setloading(false);
+                              Get.back();
+                              firestore
+                                  .collection('Pinchannel')
+                                  .get()
+                                  .then((value) {
+                                for (int i = 0; i < value.docs.length; i++) {
+                                  if (value.docs[i].get('linkname') == link) {
+                                    if (value.docs[i].get('username') ==
+                                        usercode) {
+                                      id = value.docs[i].id;
+                                    }
+                                  }
+                                }
+                                firestore
+                                    .collection('Pinchannel')
+                                    .doc(id)
+                                    .update({
+                                  'linkname': controller.text,
+                                });
+                              });
                               linkspaceset.resetspacelink();
                               for (int k = 0; k < updatelist.length; k++) {
                                 linkspaceset.setspacelink(updatelist[k]);
                               }
                               linkspaceset.setcompleted(true);
-                              Get.back();
                             });
                           }
                         }
                       },
-                      child: Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            uisetting().loading == true
-                                ? Center(
-                                    child: NeumorphicText(
-                                      '처리중',
-                                      style: const NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: Colors.white,
+                      child: GetBuilder<uisetting>(
+                        builder: (_) => Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              uiset.loading == true
+                                  ? Center(
+                                      child: NeumorphicText(
+                                        '처리중',
+                                        style: const NeumorphicStyle(
+                                          shape: NeumorphicShape.flat,
+                                          depth: 3,
+                                          color: Colors.white,
+                                        ),
+                                        textStyle: NeumorphicTextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                        ),
                                       ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
+                                    )
+                                  : Center(
+                                      child: NeumorphicText(
+                                        '변경',
+                                        style: const NeumorphicStyle(
+                                          shape: NeumorphicShape.flat,
+                                          depth: 3,
+                                          color: Colors.white,
+                                        ),
+                                        textStyle: NeumorphicTextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : Center(
-                                    child: NeumorphicText(
-                                      '변경',
-                                      style: const NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: Colors.white,
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                      ),
-                                    ),
-                                  )
-                          ],
+                                    )
+                            ],
+                          ),
                         ),
                       )),
                 )

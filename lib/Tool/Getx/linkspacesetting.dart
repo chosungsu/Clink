@@ -9,6 +9,9 @@ import '../BGColor.dart';
 class linkspacesetting extends GetxController {
   List spacelink = [];
   bool iscompleted = false;
+  Color color = Hive.box('user_setting').get('colorlinkpage') != null
+      ? Color(Hive.box('user_setting').get('colorlinkpage'))
+      : BGColor();
 
   void setspacelink(String title) {
     spacelink.add(title);
@@ -30,6 +33,12 @@ class linkspacesetting extends GetxController {
 
   void resetcompleted() {
     iscompleted = false;
+    update();
+    notifyChildrens();
+  }
+
+  void setcolor() {
+    color = Color(Hive.box('user_setting').get('colorlinkpage'));
     update();
     notifyChildrens();
   }

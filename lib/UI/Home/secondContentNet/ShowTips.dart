@@ -109,11 +109,7 @@ class ShowTips extends StatelessWidget {
                                                 width: 130,
                                                 child: GestureDetector(
                                                   onTap: () async {
-                                                    if (await canLaunchUrl(
-                                                        eventurl[index])) {
-                                                      launchUrl(
-                                                          eventurl[index]);
-                                                    }
+                                                    launchUrl(eventurl[index]);
                                                   },
                                                   child: Column(
                                                     mainAxisSize:
@@ -248,11 +244,7 @@ class ShowTips extends StatelessWidget {
                                                 width: 130,
                                                 child: GestureDetector(
                                                   onTap: () async {
-                                                    if (await canLaunchUrl(
-                                                        eventurl[index])) {
-                                                      launchUrl(
-                                                          eventurl[index]);
-                                                    }
+                                                    launchUrl(eventurl[index]);
                                                   },
                                                   child: Column(
                                                     mainAxisSize:

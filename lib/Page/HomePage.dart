@@ -1,25 +1,18 @@
 import 'dart:async';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/Tool/AppBarCustom.dart';
-import 'package:clickbyme/UI/Events/ADEvents.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/ChooseCalendar.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayNoteHome.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/HomeView.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/ShowTips.dart';
-import 'package:clickbyme/Route/initScreenLoading.dart';
 import 'package:clickbyme/mongoDB/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:package_info/package_info.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
@@ -27,10 +20,8 @@ import '../Route/subuiroute.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/Widgets/ViewSet.dart';
-import '../Route/mainroute.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
-import 'NotiAlarm.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.secondname}) : super(key: key);

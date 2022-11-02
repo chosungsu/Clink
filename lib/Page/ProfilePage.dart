@@ -1621,9 +1621,7 @@ class _ProfilePageState extends State<ProfilePage>
                           });*/
                           var url = Uri.parse(
                               'https://linkaiteam.github.io/LINKAITEAM/전체');
-                          if (await canLaunchUrl(url)) {
-                            launchUrl(url);
-                          }
+                          launchUrl(url);
                         },
                         child: SizedBox(
                           height: 50,
@@ -2141,9 +2139,7 @@ class _ProfilePageState extends State<ProfilePage>
                     if (index == 0) {
                       var url = Uri.parse(
                           'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
-                      if (await canLaunchUrl(url)) {
-                        launchUrl(url);
-                      }
+                      launchUrl(url);
                     } else {
                       Get.to(() => ShowLicense(),
                           transition: Transition.rightToLeft);

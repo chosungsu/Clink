@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'Getx/navibool.dart';
 import 'IconBtn.dart';
+import 'TextSize.dart';
 
 class AppBarCustom extends StatelessWidget {
   const AppBarCustom({
@@ -29,7 +30,7 @@ class AppBarCustom extends StatelessWidget {
               height: 60,
               child: Padding(
                 padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 5, bottom: 5),
+                    left: 20, right: 10, top: 5, bottom: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -88,10 +89,10 @@ class AppBarCustom extends StatelessWidget {
                         : const SizedBox(),
                     SizedBox(
                         width: draw.navi == 0
-                            ? MediaQuery.of(context).size.width - 70
-                            : MediaQuery.of(context).size.width - 20,
+                            ? MediaQuery.of(context).size.width - 80
+                            : MediaQuery.of(context).size.width - 30,
                         child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.only(left: 10, right: 10),
                             child: Row(
                               children: [
                                 Flexible(
@@ -105,7 +106,7 @@ class AppBarCustom extends StatelessWidget {
                                         color: Colors.blue.shade200),
                                     textStyle: NeumorphicTextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 25,
+                                      fontSize: mainTitleTextsize(),
                                     ),
                                   ),
                                 ),

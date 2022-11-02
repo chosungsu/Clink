@@ -5,14 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../DB/PageList.dart';
 import '../Page/LoginSignPage.dart';
 import '../Tool/BGColor.dart';
-import '../Tool/ContainerDesign.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/TextSize.dart';
-import '../mongoDB/mongodatabase.dart';
 import 'mainroute.dart';
 
 void pressed1() {
@@ -29,7 +26,7 @@ void pressed2() {
 GoToMain(BuildContext context) async {
   //await initScreen();
   Timer? _time = Timer(const Duration(seconds: 0), () {
-    Get.to(() => mainroute(index: 0), transition: Transition.leftToRight);
+    Get.to(() => const mainroute(index: 0), transition: Transition.leftToRight);
     Hive.box('user_setting').put('page_index', 0);
   });
   return _time;
@@ -63,9 +60,7 @@ CompanyNotice(
                   GestureDetector(
                     onTap: () async {
                       draw.setclose();
-                      if (await canLaunchUrl(Uri.parse(urlon))) {
-                        launchUrl(Uri.parse(urlon));
-                      }
+                      launchUrl(Uri.parse(urlon));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
@@ -140,18 +135,7 @@ CompanyNotice(
                           GestureDetector(
                             onTap: () async {
                               draw.setclose();
-                              /*Hive.box('user_setting').put('page_index', 3);
-                              Navigator.of(context).pushReplacement(
-                                PageTransition(
-                                  type: PageTransitionType.rightToLeft,
-                                  child: const MyHomePage(
-                                    index: 3,
-                                  ),
-                                ),
-                              );*/
-                              if (await canLaunchUrl(url)) {
-                                launchUrl(url);
-                              }
+                              launchUrl(Uri.parse(urlon));
                             },
                             child: Container(
                               padding: const EdgeInsets.all(10),

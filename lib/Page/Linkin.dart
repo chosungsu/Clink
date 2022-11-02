@@ -1,10 +1,12 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
+import 'package:clickbyme/sheets/linksettingsheet.dart';
 import 'package:clickbyme/sheets/pushalarmsettingmemo.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,8 +31,10 @@ import '../UI/Home/Widgets/SortMenuHolder.dart';
 import '../UI/Home/secondContentNet/ClickShowEachNote.dart';
 
 class Linkin extends StatefulWidget {
-  const Linkin({Key? key, required this.isfromwhere}) : super(key: key);
+  const Linkin({Key? key, required this.isfromwhere, required this.name})
+      : super(key: key);
   final String isfromwhere;
+  final String name;
   @override
   State<StatefulWidget> createState() => _LinkinState();
 }
@@ -41,11 +45,13 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
   double myWidth = 0.0;
   int searchmemo_fromsheet = 0;
   final controll_memo = Get.put(memosetting());
+  final linkspaceset = Get.put(linkspacesetting());
   final scollection = Get.put(selectcollection());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final searchNode = FocusNode();
   final setalarmhourNode = FocusNode();
   final setalarmminuteNode = FocusNode();
+  final changenamenode = FocusNode();
   String username = Hive.box('user_info').get(
     'id',
   );
@@ -54,6 +60,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
   String tmpsummary = '';
   DateTime Date = DateTime.now();
   TextEditingController controller = TextEditingController();
+  TextEditingController controller2 = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool isresponsive = false;
   bool canAuthenticate = false;
@@ -93,6 +100,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
     Hive.box('user_setting').put('sort_memo_card', 0);
     controll_memo.sort = Hive.box('user_setting').get('sort_memo_card');
     controller = TextEditingController();
+    controller2 = TextEditingController();
     scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -142,6 +150,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     scrollController.dispose();
     controller.dispose();
+    controller2.dispose();
   }
 
   Speeddialmemo(
@@ -260,257 +269,188 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
         ? isresponsive = true
         : isresponsive = false;
     return SafeArea(
-        child: Scaffold(
-            backgroundColor: BGColor(),
-            body: WillPopScope(
-              onWillPop: _onWillPop,
-              child: UI(),
-            ),
-            floatingActionButton: Speeddialmemo(
-                context,
-                uisetting().showtopbutton,
-                username,
-                controller,
-                searchNode,
-                scollection,
-                isresponsive,
-                scrollController)));
+        child: GetBuilder<linkspacesetting>(
+      builder: (_) => Scaffold(
+          backgroundColor: linkspaceset.color,
+          body: WillPopScope(
+            onWillPop: _onWillPop,
+            child: UI(),
+          ),
+          floatingActionButton: Speeddialmemo(
+              context,
+              uisetting().showtopbutton,
+              username,
+              controller,
+              searchNode,
+              scollection,
+              isresponsive,
+              scrollController)),
+    ));
   }
 
   UI() {
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: height,
-      child: Container(
-          decoration: BoxDecoration(color: BGColor()),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                  height: 80,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 10, right: 10, top: 20, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                            fit: FlexFit.tight,
-                            child: Row(
-                              children: [
-                                IconBtn(
-                                    child: IconButton(
-                                        onPressed: () {
-                                          Future.delayed(
-                                              const Duration(seconds: 0), () {
-                                            if (widget.isfromwhere == 'home') {
-                                              GoToMain(context);
-                                            } else {
-                                              Get.back();
-                                            }
-                                          });
-                                        },
-                                        icon: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.keyboard_arrow_left,
-                                            size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: TextColor(),
-                                                lightSource:
-                                                    LightSource.topLeft),
+        height: height,
+        child: GetBuilder<linkspacesetting>(
+          builder: (_) => Container(
+              decoration: BoxDecoration(color: linkspaceset.color),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      height: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 10, top: 5, bottom: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Flexible(
+                                fit: FlexFit.tight,
+                                child: Row(
+                                  children: [
+                                    IconBtn(
+                                        child: IconButton(
+                                            onPressed: () {
+                                              Future.delayed(
+                                                  const Duration(seconds: 0),
+                                                  () {
+                                                if (widget.isfromwhere ==
+                                                    'home') {
+                                                  GoToMain(context);
+                                                } else {
+                                                  Get.back();
+                                                }
+                                              });
+                                            },
+                                            icon: Container(
+                                              alignment: Alignment.center,
+                                              width: 30,
+                                              height: 30,
+                                              child: NeumorphicIcon(
+                                                Icons.keyboard_arrow_left,
+                                                size: 30,
+                                                style: NeumorphicStyle(
+                                                    shape:
+                                                        NeumorphicShape.convex,
+                                                    depth: 2,
+                                                    surfaceIntensity: 0.5,
+                                                    color: TextColor(),
+                                                    lightSource:
+                                                        LightSource.topLeft),
+                                              ),
+                                            )),
+                                        color: TextColor()),
+                                    SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                80,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Text('',
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          mainTitleTextsize(),
+                                                      color: TextColor(),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
+                                              ),
+                                              IconBtn(
+                                                  child: IconButton(
+                                                      onPressed: () async {
+                                                        linksetting(
+                                                            context,
+                                                            widget.name,
+                                                            controller2,
+                                                            changenamenode);
+                                                      },
+                                                      icon: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        width: 30,
+                                                        height: 30,
+                                                        child: NeumorphicIcon(
+                                                          Icons.more_horiz,
+                                                          size: 30,
+                                                          style: NeumorphicStyle(
+                                                              shape:
+                                                                  NeumorphicShape
+                                                                      .convex,
+                                                              depth: 2,
+                                                              surfaceIntensity:
+                                                                  0.5,
+                                                              color:
+                                                                  TextColor(),
+                                                              lightSource:
+                                                                  LightSource
+                                                                      .topLeft),
+                                                        ),
+                                                      )),
+                                                  color: TextColor()),
+                                            ],
                                           ),
                                         )),
-                                    color: TextColor()),
-                                SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 70,
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text('Memo',
-                                                  style: GoogleFonts.lobster(
-                                                    fontSize: 25,
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                            SortMenuHolder(
-                                                controll_memo.sort, '메모'),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            IconBtn(
-                                                child: IconButton(
-                                                    onPressed: () async {
-                                                      await firestore
-                                                          .collection(
-                                                              'MemoAllAlarm')
-                                                          .doc(usercode)
-                                                          .get()
-                                                          .then(
-                                                        (value) {
-                                                          if (value.exists) {
-                                                            hour = value
-                                                                        .data()![
-                                                                            'alarmtime']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            0]
-                                                                        .length ==
-                                                                    1
-                                                                ? '0' +
-                                                                    value
-                                                                        .data()![
-                                                                            'alarmtime']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            0]
-                                                                        .toString()
-                                                                : value
-                                                                    .data()![
-                                                                        'alarmtime']
-                                                                    .toString()
-                                                                    .split(
-                                                                        ':')[0]
-                                                                    .toString();
-                                                            minute = value
-                                                                        .data()![
-                                                                            'alarmtime']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            1]
-                                                                        .length ==
-                                                                    1
-                                                                ? '0' +
-                                                                    value
-                                                                        .data()![
-                                                                            'alarmtime']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            1]
-                                                                        .toString()
-                                                                : value
-                                                                    .data()![
-                                                                        'alarmtime']
-                                                                    .toString()
-                                                                    .split(
-                                                                        ':')[1]
-                                                                    .toString();
-                                                          }
-                                                        },
-                                                      );
-                                                      controll_memo
-                                                          .settimeminute(
-                                                              int.parse(hour),
-                                                              int.parse(minute),
-                                                              '',
-                                                              '');
-                                                      pushalarmsettingmemo(
-                                                          context,
-                                                          setalarmhourNode,
-                                                          setalarmminuteNode,
-                                                          hour,
-                                                          minute,
-                                                          '',
-                                                          '',
-                                                          fToast);
-                                                    },
-                                                    icon: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: NeumorphicIcon(
-                                                        Icons.settings,
-                                                        size: 30,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    )),
-                                                color: TextColor()),
-                                          ],
-                                        ))),
-                              ],
-                            )),
-                      ],
-                    ),
-                  )),
-              ADBox(),
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: SizedBox(
-                    child: ScrollConfiguration(
-                      behavior: NoBehavior(),
-                      child: SingleChildScrollView(
-                          controller: scrollController,
-                          physics: const ScrollPhysics(),
-                          child: StatefulBuilder(
-                              builder: (_, StateSetter setState) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    height: 20,
+                                  ],
+                                )),
+                          ],
+                        ),
+                      )),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ADSHOW(height),
+                  Flexible(
+                      fit: FlexFit.tight,
+                      child: SizedBox(
+                        child: ScrollConfiguration(
+                          behavior: NoBehavior(),
+                          child: SingleChildScrollView(
+                              controller: scrollController,
+                              physics: const ScrollPhysics(),
+                              child: StatefulBuilder(
+                                  builder: (_, StateSetter setState) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      GetBuilder<memosetting>(builder: (_) {
+                                        return controll_memo
+                                                    .ischeckedpushmemoalarm ==
+                                                false
+                                            ? Column(
+                                                children: [
+                                                  SetRoom(),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                ],
+                                              )
+                                            : const SizedBox();
+                                      }),
+                                      listy_My(),
+                                    ],
                                   ),
-                                  GetBuilder<memosetting>(builder: (_) {
-                                    return controll_memo
-                                                .ischeckedpushmemoalarm ==
-                                            false
-                                        ? Column(
-                                            children: [
-                                              SetRoom(),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                            ],
-                                          )
-                                        : const SizedBox();
-                                  }),
-                                  listy_My(),
-                                ],
-                              ),
-                            );
-                          })),
-                    ),
-                  )),
-            ],
-          )),
-    );
-  }
-
-  ADBox() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ADEvents(context),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
-    );
+                                );
+                              })),
+                        ),
+                      )),
+                ],
+              )),
+        ));
   }
 
   SetRoom() {
