@@ -1,8 +1,10 @@
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 
 import '../Tool/TextSize.dart';
 import '../mongoDB/mongodatabase.dart';
@@ -90,6 +92,7 @@ content(
   TextEditingController controller2,
   FocusNode changenamenode,
 ) {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   String usercode = Hive.box('user_setting').get('usercode');
   final linkspaceset = Get.put(linkspacesetting());
 
@@ -98,7 +101,6 @@ content(
       children: [
         GestureDetector(
           onTap: () {
-            //Get.back();
             showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -167,12 +169,45 @@ content(
                                 ),
                               );
                             }),
-                            onColorChanged: (Color color) {
+                            onColorChanged: (Color color) async {
+                              var id;
                               setState(() {
                                 Hive.box('user_setting')
                                     .put('colorlinkpage', color.value.toInt());
                               });
                               linkspaceset.setcolor();
+                              StatusBarControl.setColor(linkspaceset.color,
+                                  animated: true);
+                              await MongoDB.delete(
+                                  collectionname: 'pinchannel',
+                                  deletelist: {
+                                    'username': usercode,
+                                    'linkname': name,
+                                  });
+                              await MongoDB.add(
+                                  collectionname: 'pinchannel',
+                                  addlist: {
+                                    'username': usercode,
+                                    'linkname': name,
+                                    'color': color.value.toInt()
+                                  });
+                              await firestore
+                                  .collection('Pinchannel')
+                                  .get()
+                                  .then((value) {
+                                for (int i = 0; i < value.docs.length; i++) {
+                                  if (value.docs[i].get('linkname') == name) {
+                                    if (value.docs[i].get('username') ==
+                                        usercode) {
+                                      id = value.docs[i].id;
+                                    }
+                                  }
+                                }
+                                firestore
+                                    .collection('Pinchannel')
+                                    .doc(id)
+                                    .update({'color': color.value.toInt()});
+                              });
                             },
                             pickerColor: linkspacesetting().color,
                           )));

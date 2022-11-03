@@ -4,6 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Tool/BGColor.dart';
+import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/selectcollection.dart';
 import '../Tool/TextSize.dart';
@@ -512,38 +513,21 @@ contentthird(
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
-        TextField(
-          minLines: 2,
-          maxLines: 2,
-          focusNode: searchNode_add_section,
-          style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade400,
-                width: 2,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
+        ContainerDesign(
+          color: Colors.white,
+          child: TextField(
+            focusNode: searchNode_add_section,
+            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 10),
+              border: InputBorder.none,
+              isCollapsed: true,
+              hintText: '추가할 컬렉션 입력',
+              hintStyle:
+                  TextStyle(fontSize: contentTextsize(), color: Colors.black45),
             ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.blue,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
-            contentPadding: const EdgeInsets.only(left: 10),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
-            filled: true,
-            fillColor: Colors.grey.shade200,
-            isCollapsed: true,
-            hintText: '추가할 컬렉션 입력',
-            hintStyle:
-                TextStyle(fontSize: contentTextsize(), color: Colors.black45),
+            controller: textEditingController_add_sheet,
           ),
-          controller: textEditingController_add_sheet,
         ),
         const SizedBox(
           height: 30,
@@ -1113,6 +1097,7 @@ contentforth(BuildContext context, FocusNode searchNode,
                                   addlist: {
                                     'username': usercode,
                                     'linkname': controller.text,
+                                    'color': BGColor().value.toInt()
                                   });
                             }).whenComplete(() {
                               var id = '';
@@ -1157,6 +1142,7 @@ contentforth(BuildContext context, FocusNode searchNode,
                                       .doc(id)
                                       .update({
                                     'linkname': controller.text,
+                                    'color': BGColor().value.toInt()
                                   });
                                 });
                                 linkspaceset.resetspacelink();
@@ -1210,6 +1196,7 @@ contentforth(BuildContext context, FocusNode searchNode,
                                     .doc(id)
                                     .update({
                                   'linkname': controller.text,
+                                  'color': BGColor().value.toInt()
                                 });
                               });
                               linkspaceset.resetspacelink();

@@ -4,30 +4,30 @@ import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/linksettingsheet.dart';
 import 'package:clickbyme/sheets/pushalarmsettingmemo.dart';
 import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import '../Route/subuiroute.dart';
 import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../mongoDB/mongodatabase.dart';
 import '../sheets/infoshow.dart';
-import '../UI/Home/Widgets/SortMenuHolder.dart';
 import '../UI/Home/secondContentNet/ClickShowEachNote.dart';
 
 class Linkin extends StatefulWidget {
@@ -35,6 +35,7 @@ class Linkin extends StatefulWidget {
       : super(key: key);
   final String isfromwhere;
   final String name;
+
   @override
   State<StatefulWidget> createState() => _LinkinState();
 }
@@ -97,6 +98,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
     fToast = FToast();
     fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
+    StatusBarControl.setColor(linkspaceset.color, animated: true);
     Hive.box('user_setting').put('sort_memo_card', 0);
     controll_memo.sort = Hive.box('user_setting').get('sort_memo_card');
     controller = TextEditingController();
@@ -202,10 +204,10 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                 ),
                 backgroundColor: Colors.blue.shade200,
                 onTap: () {
-                  addmemocollector(context, username, controller, searchNode,
+                  addhashtagcollector(context, username, controller, searchNode,
                       'outside', scollection, isresponsive);
                 },
-                label: '메모태그 추가',
+                label: '해시태그 추가',
                 labelStyle: TextStyle(
                     color: Colors.black45,
                     fontWeight: FontWeight.bold,
@@ -223,21 +225,8 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                       lightSource: LightSource.topLeft),
                 ),
                 backgroundColor: Colors.orange.shade200,
-                onTap: () {
-                  Get.to(
-                      () => DayScript(
-                            firstdate: DateTime.now(),
-                            lastdate: DateTime.now(),
-                            position: 'note',
-                            id: '',
-                            share: const [],
-                            orig: '',
-                            calname: '',
-                            isfromwhere: 'memohome',
-                          ),
-                      transition: Transition.downToUp);
-                },
-                label: '메모 추가',
+                onTap: () {},
+                label: '필드 추가',
                 labelStyle: TextStyle(
                     color: Colors.black45,
                     fontWeight: FontWeight.bold,
@@ -253,6 +242,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
       if (isDialOpen.value == true) {
         isDialOpen.value = false;
       } else {
+        StatusBarControl.setColor(BGColor(), animated: true);
         if (widget.isfromwhere == 'home') {
           GoToMain(context);
         } else {
@@ -311,37 +301,41 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                 child: Row(
                                   children: [
                                     IconBtn(
-                                        child: IconButton(
-                                            onPressed: () {
-                                              Future.delayed(
-                                                  const Duration(seconds: 0),
-                                                  () {
-                                                if (widget.isfromwhere ==
-                                                    'home') {
-                                                  GoToMain(context);
-                                                } else {
-                                                  Get.back();
-                                                }
-                                              });
-                                            },
-                                            icon: Container(
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                              height: 30,
-                                              child: NeumorphicIcon(
-                                                Icons.keyboard_arrow_left,
-                                                size: 30,
-                                                style: NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    depth: 2,
-                                                    surfaceIntensity: 0.5,
-                                                    color: TextColor(),
-                                                    lightSource:
-                                                        LightSource.topLeft),
-                                              ),
-                                            )),
-                                        color: TextColor()),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            Future.delayed(
+                                                const Duration(seconds: 0), () {
+                                              if (widget.isfromwhere ==
+                                                  'home') {
+                                                GoToMain(context);
+                                              } else {
+                                                Get.back();
+                                              }
+                                            });
+                                          },
+                                          icon: Container(
+                                            alignment: Alignment.center,
+                                            width: 30,
+                                            height: 30,
+                                            child: NeumorphicIcon(
+                                              Icons.keyboard_arrow_left,
+                                              size: 30,
+                                              style: NeumorphicStyle(
+                                                  shape: NeumorphicShape.convex,
+                                                  depth: 2,
+                                                  surfaceIntensity: 0.5,
+                                                  color: linkspaceset.color ==
+                                                          Colors.black
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  lightSource:
+                                                      LightSource.topLeft),
+                                            ),
+                                          )),
+                                      color: linkspaceset.color == Colors.black
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
                                     SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width -
@@ -357,43 +351,248 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                     style: TextStyle(
                                                       fontSize:
                                                           mainTitleTextsize(),
-                                                      color: TextColor(),
+                                                      color:
+                                                          linkspaceset.color ==
+                                                                  Colors.black
+                                                              ? Colors.white
+                                                              : Colors.black,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     )),
                                               ),
-                                              IconBtn(
-                                                  child: IconButton(
-                                                      onPressed: () async {
-                                                        linksetting(
-                                                            context,
-                                                            widget.name,
-                                                            controller2,
-                                                            changenamenode);
-                                                      },
-                                                      icon: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 30,
-                                                        height: 30,
-                                                        child: NeumorphicIcon(
-                                                          Icons.more_horiz,
-                                                          size: 30,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              surfaceIntensity:
-                                                                  0.5,
+                                              FocusedMenuHolder(
+                                                menuItems: [
+                                                  FocusedMenuItem(
+                                                      trailingIcon: const Icon(
+                                                        Icons.palette,
+                                                        size: 30,
+                                                        color: Colors.black,
+                                                      ),
+                                                      title: Text('배경색 설정',
+                                                          style: TextStyle(
                                                               color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      )),
-                                                  color: TextColor()),
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize())),
+                                                      onPressed: () async {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                              ),
+                                                              title: Text('선택',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTitleTextsize())),
+                                                              content: Builder(
+                                                                builder:
+                                                                    (context) {
+                                                                  return SizedBox(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width *
+                                                                          0.85,
+                                                                      child: SingleChildScrollView(
+                                                                          child: BlockPicker(
+                                                                        availableColors: [
+                                                                          Colors
+                                                                              .red,
+                                                                          Colors
+                                                                              .pink,
+                                                                          Colors
+                                                                              .deepOrangeAccent,
+                                                                          Colors
+                                                                              .yellowAccent,
+                                                                          Colors
+                                                                              .green,
+                                                                          Colors
+                                                                              .lightGreen,
+                                                                          Colors
+                                                                              .lightGreenAccent,
+                                                                          Colors
+                                                                              .greenAccent
+                                                                              .shade200,
+                                                                          Colors
+                                                                              .indigo,
+                                                                          Colors
+                                                                              .blue,
+                                                                          Colors
+                                                                              .lightBlue,
+                                                                          Colors
+                                                                              .lightBlueAccent,
+                                                                          Colors
+                                                                              .purple,
+                                                                          Colors
+                                                                              .deepPurple,
+                                                                          Colors
+                                                                              .blueGrey
+                                                                              .shade300,
+                                                                          Colors
+                                                                              .grey,
+                                                                          Colors
+                                                                              .amber,
+                                                                          Colors
+                                                                              .brown,
+                                                                          Colors
+                                                                              .white,
+                                                                          Colors
+                                                                              .black,
+                                                                        ],
+                                                                        itemBuilder: ((color,
+                                                                            isCurrentColor,
+                                                                            changeColor) {
+                                                                          return GestureDetector(
+                                                                            onTap:
+                                                                                () async {
+                                                                              changeColor();
+                                                                            },
+                                                                            child:
+                                                                                Container(
+                                                                              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.black, width: 1)),
+                                                                              child: isCurrentColor
+                                                                                  ? CircleAvatar(
+                                                                                      backgroundColor: color,
+                                                                                      child: Center(
+                                                                                        child: Icon(
+                                                                                          Icons.check,
+                                                                                          color: color != Colors.black ? Colors.black : Colors.white,
+                                                                                        ),
+                                                                                      ),
+                                                                                    )
+                                                                                  : CircleAvatar(
+                                                                                      backgroundColor: color,
+                                                                                    ),
+                                                                            ),
+                                                                          );
+                                                                        }),
+                                                                        onColorChanged:
+                                                                            (Color
+                                                                                color) async {
+                                                                          var id;
+                                                                          setState(
+                                                                              () {
+                                                                            Hive.box('user_setting').put('colorlinkpage',
+                                                                                color.value.toInt());
+                                                                          });
+                                                                          linkspaceset
+                                                                              .setcolor();
+                                                                          StatusBarControl.setColor(
+                                                                              linkspaceset.color,
+                                                                              animated: true);
+                                                                          await MongoDB.delete(
+                                                                              collectionname: 'pinchannel',
+                                                                              deletelist: {
+                                                                                'username': usercode,
+                                                                                'linkname': widget.name,
+                                                                              });
+                                                                          await MongoDB.add(
+                                                                              collectionname: 'pinchannel',
+                                                                              addlist: {
+                                                                                'username': usercode,
+                                                                                'linkname': widget.name,
+                                                                                'color': color.value.toInt()
+                                                                              });
+                                                                          await firestore
+                                                                              .collection('Pinchannel')
+                                                                              .get()
+                                                                              .then((value) {
+                                                                            for (int i = 0;
+                                                                                i < value.docs.length;
+                                                                                i++) {
+                                                                              if (value.docs[i].get('linkname') == widget.name) {
+                                                                                if (value.docs[i].get('username') == usercode) {
+                                                                                  id = value.docs[i].id;
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                            firestore.collection('Pinchannel').doc(id).update({
+                                                                              'color': color.value.toInt()
+                                                                            });
+                                                                          });
+                                                                        },
+                                                                        pickerColor:
+                                                                            linkspacesetting().color,
+                                                                      )));
+                                                                },
+                                                              ),
+                                                              actions: <Widget>[
+                                                                ElevatedButton(
+                                                                  child:
+                                                                      const Text(
+                                                                          '반영하기'),
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      }),
+                                                ],
+                                                duration:
+                                                    const Duration(seconds: 0),
+                                                animateMenuItems: true,
+                                                menuOffset: 20,
+                                                bottomOffsetHeight: 10,
+                                                menuWidth:
+                                                    (MediaQuery.of(context)
+                                                                .size
+                                                                .width -
+                                                            40) /
+                                                        1.5,
+                                                openWithTap: true,
+                                                onPressed: () {},
+                                                child: IconBtn(
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    width: 30,
+                                                    height: 30,
+                                                    margin:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    child: NeumorphicIcon(
+                                                      Icons.more_horiz,
+                                                      size: 30,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          surfaceIntensity: 0.5,
+                                                          color: linkspaceset
+                                                                      .color ==
+                                                                  Colors.black
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ),
+                                                  color: linkspaceset.color ==
+                                                          Colors.black
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                ),
+                                              )
                                             ],
                                           ),
                                         )),

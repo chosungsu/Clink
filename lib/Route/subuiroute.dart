@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
 import '../Page/LoginSignPage.dart';
 import '../Tool/BGColor.dart';
+import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/TextSize.dart';
 import 'mainroute.dart';
@@ -190,6 +191,7 @@ CompanyNotice(
 }
 
 ADSHOW(double height) {
+  final linkspaceset = Get.put(linkspacesetting());
   //프로버전 구매시 보이지 않게 함
   /*Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,8 +203,16 @@ ADSHOW(double height) {
     height: 60,
     decoration: BoxDecoration(
         border: Border(
-            top: BorderSide(color: TextColor_shadowcolor(), width: 1),
-            bottom: BorderSide(color: TextColor_shadowcolor(), width: 1))),
+            top: BorderSide(
+                color: linkspaceset.color == Colors.black
+                    ? Colors.white60
+                    : Colors.black38,
+                width: 1),
+            bottom: BorderSide(
+                color: linkspaceset.color == Colors.black
+                    ? Colors.white60
+                    : Colors.black38,
+                width: 1))),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -211,7 +221,9 @@ ADSHOW(double height) {
           child: Text(
             '광고공간입니다',
             style: TextStyle(
-                color: TextColor_shadowcolor(),
+                color: linkspaceset.color == Colors.black
+                    ? Colors.white60
+                    : Colors.black38,
                 fontWeight: FontWeight.bold,
                 fontSize: contentTextsize()),
             overflow: TextOverflow.ellipsis,

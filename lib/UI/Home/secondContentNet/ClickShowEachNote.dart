@@ -563,7 +563,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                             scollection.memolistcontentin[i] =
                                 scollection.controllersall[i].text;
                           }
-                          addmemocollector(
+                          addhashtagcollector(
                               context,
                               username,
                               textEditingController_add_sheet,

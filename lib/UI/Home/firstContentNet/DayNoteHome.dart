@@ -197,7 +197,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                 ),
                 backgroundColor: Colors.blue.shade200,
                 onTap: () {
-                  addmemocollector(context, username, controller, searchNode,
+                  addhashtagcollector(context, username, controller, searchNode,
                       'outside', scollection, isresponsive);
                 },
                 label: '메모태그 추가',

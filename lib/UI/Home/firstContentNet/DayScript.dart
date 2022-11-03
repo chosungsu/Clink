@@ -1285,7 +1285,7 @@ class _DayScriptState extends State<DayScript> {
                                 scollection.memolistcontentin[i] =
                                     scollection.controllersall[i].text;
                               }
-                              addmemocollector(
+                              addhashtagcollector(
                                   context,
                                   username,
                                   textEditingController_add_sheet,
@@ -2605,7 +2605,7 @@ class _DayScriptState extends State<DayScript> {
   }
 }
 
-addmemocollector(
+addhashtagcollector(
     BuildContext context,
     String username,
     TextEditingController textEditingController_add_sheet,
