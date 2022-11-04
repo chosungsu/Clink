@@ -1,11 +1,15 @@
 import 'package:clickbyme/Page/NotiAlarm.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/sheets/movetolinkspace.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../Route/subuiroute.dart';
+import 'AndroidIOS.dart';
 import 'Getx/navibool.dart';
+import 'Getx/notishow.dart';
 import 'IconBtn.dart';
 import 'TextSize.dart';
 
@@ -21,9 +25,55 @@ class AppBarCustom extends StatelessWidget {
   final IconData iconname;
   @override
   Widget build(BuildContext context) {
-    func1() => Get.to(() => const NotiAlarm(), transition: Transition.upToDown);
-    func2() => movetolinkspace(context);
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    var updateid = '';
+    var updateusername = [];
+    final notilist = Get.put(notishow());
     final draw = Get.put(navibool());
+    String name = Hive.box('user_info').get('id');
+
+    func1() => Get.to(() => const NotiAlarm(), transition: Transition.upToDown);
+    func2() async {
+      final reloadpage = await Get.dialog(OSDialog(
+              context,
+              '경고',
+              Text('알림들을 삭제하시겠습니까?',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize(),
+                      color: Colors.blueGrey)),
+              pressed2)) ??
+          false;
+      if (reloadpage) {
+        firestore.collection('AppNoticeByUsers').get().then((value) {
+          for (var element in value.docs) {
+            if (element.get('sharename').toString().contains(name) == true) {
+              updateid = element.id;
+              updateusername =
+                  element.get('sharename').toString().split(',').toList();
+              if (updateusername.length == 1) {
+                firestore.collection('AppNoticeByUsers').doc(updateid).delete();
+              } else {
+                updateusername.removeWhere(
+                    (element) => element.toString().contains(name));
+                firestore
+                    .collection('AppNoticeByUsers')
+                    .doc(updateid)
+                    .update({'sharename': updateusername});
+              }
+            } else {
+              if (element.get('username').toString() == name) {
+                updateid = element.id;
+                firestore.collection('AppNoticeByUsers').doc(updateid).delete();
+              } else {}
+            }
+          }
+        }).whenComplete(() {
+          notilist.isreadnoti();
+        });
+      }
+    }
+
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<navibool>(
           builder: (_) => SizedBox(
@@ -103,7 +153,7 @@ class AppBarCustom extends StatelessWidget {
                                     style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: Colors.blue.shade200),
+                                        color: TextColor()),
                                     textStyle: NeumorphicTextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: mainTitleTextsize(),

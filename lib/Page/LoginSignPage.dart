@@ -1,9 +1,12 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:sign_button/constants.dart';
+import 'package:sign_button/create_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Auth/GoogleSignInController.dart';
 import '../Route/subuiroute.dart';
@@ -11,7 +14,6 @@ import '../Tool/AndroidIOS.dart';
 import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
-import '../Route/initScreenLoading.dart';
 
 class LoginSignPage extends StatefulWidget {
   const LoginSignPage({Key? key, required this.first}) : super(key: key);
@@ -167,7 +169,7 @@ class _LoginSignPageState extends State<LoginSignPage>
     );
   }
 
-  LoginPlus(BuildContext context, bool ischecked, double height) {
+  Widget LoginPlus(BuildContext context, bool ischecked, double height) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,10 +185,10 @@ class _LoginSignPageState extends State<LoginSignPage>
         SizedBox(
           height: height * 0.25,
         ),
-        InkWell(
-            onTap: () async {
-              /*await Provider.of<GoogleSignInController>(context, listen: false)
-                  .login(context, ischecked);*/
+        SignInButton(
+            buttonType: ButtonType.google,
+            buttonSize: ButtonSize.medium, // small(default), medium, large
+            onPressed: () async {
               setState(() {
                 loading = true;
               });
@@ -196,48 +198,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                 loading = false;
               });
               CreateCalandmemoSuccessFlushbar('로그인완료', fToast);
-              /*await Navigator.of(context).pushReplacement(
-                PageTransition(
-                  type: PageTransitionType.bottomToTop,
-                  child: const MyHomePage(
-                    index: 1,
-                  ),
-                ),
-              );
-              Hive.box('user_setting').put('page_index', 1);*/
-            },
-            child: SizedBox(
-              width: 200 * (MediaQuery.of(context).size.width / 392),
-              height: 50,
-              child: Image.asset(
-                'assets/images/google_signin.png',
-                fit: BoxFit.fitWidth,
-              ),
-            )),
-        /*const SizedBox(
-        height: 10,
-      ),
-      InkWell(
-          onTap: () async {
-            await Provider.of<KakaoSignInController>(context, listen: false)
-                .login(context, ischecked);
-            await Navigator.of(context).pushReplacement(
-              PageTransition(
-                type: PageTransitionType.bottomToTop,
-                child: const MyHomePage(
-                  index: 0,
-                ),
-              ),
-            );
-          },
-          child: SizedBox(
-            width: 200 * (MediaQuery.of(context).size.width / 392),
-            height: 50,
-            child: Image.asset(
-              'assets/images/kakao_login_medium_wide.png',
-              fit: BoxFit.fitWidth,
-            ),
-          )),*/
+            }),
       ],
     );
   }

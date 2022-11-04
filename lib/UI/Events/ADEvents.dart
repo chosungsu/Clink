@@ -1,7 +1,4 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-
-import '../../main.dart';
 
 ADEvents(BuildContext context) {
   /*TargetPlatform os = Theme.of(context).platform;

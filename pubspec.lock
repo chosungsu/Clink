@@ -189,7 +189,7 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "0.1.3"
   dbus:
     dependency: transitive
     description:
@@ -891,6 +891,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  outline_gradient_button:
+    dependency: "direct main"
+    description:
+      name: outline_gradient_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0+1"
   package_info:
     dependency: "direct main"
     description:
@@ -1157,6 +1164,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  responsive_sizer:
+    dependency: "direct main"
+    description:
+      name: responsive_sizer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.1"
   rxdart:
     dependency: "direct main"
     description:
@@ -1283,6 +1297,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  sign_button:
+    dependency: "direct main"
+    description:
+      name: sign_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   simple_gesture_detector:
     dependency: transitive
     description:

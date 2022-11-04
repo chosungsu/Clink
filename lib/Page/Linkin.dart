@@ -1,18 +1,12 @@
+import 'dart:async';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
 import 'package:clickbyme/sheets/linksettingsheet.dart';
-import 'package:clickbyme/sheets/pushalarmsettingmemo.dart';
-import 'package:clickbyme/sheets/settingsecurityform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -22,13 +16,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../Route/subuiroute.dart';
-import '../../../Sub/SecureAuth.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../mongoDB/mongodatabase.dart';
-import '../sheets/infoshow.dart';
-import '../UI/Home/secondContentNet/ClickShowEachNote.dart';
 
 class Linkin extends StatefulWidget {
   const Linkin({Key? key, required this.isfromwhere, required this.name})
@@ -44,46 +34,20 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  int searchmemo_fromsheet = 0;
-  final controll_memo = Get.put(memosetting());
   final linkspaceset = Get.put(linkspacesetting());
   final scollection = Get.put(selectcollection());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final searchNode = FocusNode();
-  final setalarmhourNode = FocusNode();
-  final setalarmminuteNode = FocusNode();
   final changenamenode = FocusNode();
   String username = Hive.box('user_info').get(
     'id',
   );
   String usercode = Hive.box('user_setting').get('usercode');
-  List<String> textsummary = [];
-  String tmpsummary = '';
-  DateTime Date = DateTime.now();
   TextEditingController controller = TextEditingController();
-  TextEditingController controller2 = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool isresponsive = false;
-  bool canAuthenticate = false;
-  LocalAuthentication auth = LocalAuthentication();
-  bool can_auth = false;
-  String hour = '';
-  String minute = '';
   late FToast fToast;
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
-
-  Future<void> _checkBiometrics() async {
-    bool check = false;
-
-    try {
-      check = await auth.canCheckBiometrics;
-      canAuthenticate = check && await auth.isDeviceSupported();
-    } on PlatformException catch (e) {}
-    if (!mounted) return;
-    setState(() {
-      can_auth = canAuthenticate;
-    });
-  }
 
   @override
   void didChangeDependencies() {
@@ -94,15 +58,12 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    _checkBiometrics();
     fToast = FToast();
     fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
     StatusBarControl.setColor(linkspaceset.color, animated: true);
     Hive.box('user_setting').put('sort_memo_card', 0);
-    controll_memo.sort = Hive.box('user_setting').get('sort_memo_card');
     controller = TextEditingController();
-    controller2 = TextEditingController();
     scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -113,37 +74,6 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
           }
         });
       });
-    firestore.collection('MemoAllAlarm').doc(usercode).get().then((value) {
-      if (value.exists) {
-        value.data()!.forEach((key, value) {
-          if (key == 'alarmtime') {
-            Hive.box('user_setting').put(
-                'alarm_memo_hour', int.parse(value.toString().split(':')[0]));
-            Hive.box('user_setting').put(
-                'alarm_memo_minute', int.parse(value.toString().split(':')[1]));
-            firestore.collection('MemoAllAlarm').doc(usercode).update({
-              'alarmtime': value.toString().split(':')[0] +
-                  ':' +
-                  value.toString().split(':')[1]
-            });
-            /*controll_memo.settimeminute(
-                int.parse(value.toString().split(':')[0]),
-                int.parse(value.toString().split(':')[1]),
-                '',
-                '');*/
-          } else if (key == 'ok') {
-            Hive.box('user_setting').put('alarm_memo', value);
-            controll_memo.ischeckedpushmemoalarm = value;
-          } else {}
-        });
-      } else {
-        firestore
-            .collection('MemoAllAlarm')
-            .doc(usercode)
-            .set({'ok': false, 'alarmtime': '99:99'});
-        Hive.box('user_setting').put('alarm_memo', false);
-      }
-    });
   }
 
   @override
@@ -152,105 +82,6 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     scrollController.dispose();
     controller.dispose();
-    controller2.dispose();
-  }
-
-  Speeddialmemo(
-      BuildContext context,
-      bool showBackToTopButton,
-      String username,
-      TextEditingController controller,
-      FocusNode searchNode,
-      selectcollection scollection,
-      bool isresponsive,
-      ScrollController scrollController) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        showBackToTopButton == false
-            ? const SizedBox()
-            : FloatingActionButton(
-                onPressed: () {
-                  scrollToTop(scrollController);
-                },
-                backgroundColor: BGColor(),
-                child: Icon(
-                  Icons.arrow_upward,
-                  color: TextColor(),
-                ),
-              ),
-        const SizedBox(width: 10),
-        SpeedDial(
-            openCloseDial: isDialOpen,
-            activeIcon: Icons.close,
-            icon: Icons.add,
-            backgroundColor: Colors.blue,
-            overlayColor: BGColor(),
-            overlayOpacity: 0.4,
-            spacing: 10,
-            spaceBetweenChildren: 10,
-            children: [
-              SpeedDialChild(
-                child: NeumorphicIcon(
-                  Icons.local_offer,
-                  size: 30,
-                  style: NeumorphicStyle(
-                      shape: NeumorphicShape.convex,
-                      depth: 2,
-                      surfaceIntensity: 0.5,
-                      color: TextColor(),
-                      lightSource: LightSource.topLeft),
-                ),
-                backgroundColor: Colors.blue.shade200,
-                onTap: () {
-                  addhashtagcollector(context, username, controller, searchNode,
-                      'outside', scollection, isresponsive);
-                },
-                label: '해시태그 추가',
-                labelStyle: TextStyle(
-                    color: Colors.black45,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize()),
-              ),
-              SpeedDialChild(
-                child: NeumorphicIcon(
-                  Icons.add,
-                  size: 30,
-                  style: NeumorphicStyle(
-                      shape: NeumorphicShape.convex,
-                      depth: 2,
-                      surfaceIntensity: 0.5,
-                      color: TextColor(),
-                      lightSource: LightSource.topLeft),
-                ),
-                backgroundColor: Colors.orange.shade200,
-                onTap: () {},
-                label: '필드 추가',
-                labelStyle: TextStyle(
-                    color: Colors.black45,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize()),
-              ),
-            ]),
-      ],
-    );
-  }
-
-  Future<bool> _onWillPop() async {
-    Future.delayed(const Duration(seconds: 0), () {
-      if (isDialOpen.value == true) {
-        isDialOpen.value = false;
-      } else {
-        StatusBarControl.setColor(BGColor(), animated: true);
-        if (widget.isfromwhere == 'home') {
-          GoToMain(context);
-        } else {
-          Get.back();
-        }
-      }
-    });
-    return false;
   }
 
   @override
@@ -269,12 +100,13 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
           floatingActionButton: Speeddialmemo(
               context,
               uisetting().showtopbutton,
-              username,
+              usercode,
               controller,
               searchNode,
               scollection,
+              scrollController,
               isresponsive,
-              scrollController)),
+              isDialOpen)),
     ));
   }
 
@@ -378,173 +210,9 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                               fontSize:
                                                                   contentTextsize())),
                                                       onPressed: () async {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return AlertDialog(
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
-                                                              ),
-                                                              title: Text('선택',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          contentTitleTextsize())),
-                                                              content: Builder(
-                                                                builder:
-                                                                    (context) {
-                                                                  return SizedBox(
-                                                                      width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width *
-                                                                          0.85,
-                                                                      child: SingleChildScrollView(
-                                                                          child: BlockPicker(
-                                                                        availableColors: [
-                                                                          Colors
-                                                                              .red,
-                                                                          Colors
-                                                                              .pink,
-                                                                          Colors
-                                                                              .deepOrangeAccent,
-                                                                          Colors
-                                                                              .yellowAccent,
-                                                                          Colors
-                                                                              .green,
-                                                                          Colors
-                                                                              .lightGreen,
-                                                                          Colors
-                                                                              .lightGreenAccent,
-                                                                          Colors
-                                                                              .greenAccent
-                                                                              .shade200,
-                                                                          Colors
-                                                                              .indigo,
-                                                                          Colors
-                                                                              .blue,
-                                                                          Colors
-                                                                              .lightBlue,
-                                                                          Colors
-                                                                              .lightBlueAccent,
-                                                                          Colors
-                                                                              .purple,
-                                                                          Colors
-                                                                              .deepPurple,
-                                                                          Colors
-                                                                              .blueGrey
-                                                                              .shade300,
-                                                                          Colors
-                                                                              .grey,
-                                                                          Colors
-                                                                              .amber,
-                                                                          Colors
-                                                                              .brown,
-                                                                          Colors
-                                                                              .white,
-                                                                          Colors
-                                                                              .black,
-                                                                        ],
-                                                                        itemBuilder: ((color,
-                                                                            isCurrentColor,
-                                                                            changeColor) {
-                                                                          return GestureDetector(
-                                                                            onTap:
-                                                                                () async {
-                                                                              changeColor();
-                                                                            },
-                                                                            child:
-                                                                                Container(
-                                                                              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.black, width: 1)),
-                                                                              child: isCurrentColor
-                                                                                  ? CircleAvatar(
-                                                                                      backgroundColor: color,
-                                                                                      child: Center(
-                                                                                        child: Icon(
-                                                                                          Icons.check,
-                                                                                          color: color != Colors.black ? Colors.black : Colors.white,
-                                                                                        ),
-                                                                                      ),
-                                                                                    )
-                                                                                  : CircleAvatar(
-                                                                                      backgroundColor: color,
-                                                                                    ),
-                                                                            ),
-                                                                          );
-                                                                        }),
-                                                                        onColorChanged:
-                                                                            (Color
-                                                                                color) async {
-                                                                          var id;
-                                                                          setState(
-                                                                              () {
-                                                                            Hive.box('user_setting').put('colorlinkpage',
-                                                                                color.value.toInt());
-                                                                          });
-                                                                          linkspaceset
-                                                                              .setcolor();
-                                                                          StatusBarControl.setColor(
-                                                                              linkspaceset.color,
-                                                                              animated: true);
-                                                                          await MongoDB.delete(
-                                                                              collectionname: 'pinchannel',
-                                                                              deletelist: {
-                                                                                'username': usercode,
-                                                                                'linkname': widget.name,
-                                                                              });
-                                                                          await MongoDB.add(
-                                                                              collectionname: 'pinchannel',
-                                                                              addlist: {
-                                                                                'username': usercode,
-                                                                                'linkname': widget.name,
-                                                                                'color': color.value.toInt()
-                                                                              });
-                                                                          await firestore
-                                                                              .collection('Pinchannel')
-                                                                              .get()
-                                                                              .then((value) {
-                                                                            for (int i = 0;
-                                                                                i < value.docs.length;
-                                                                                i++) {
-                                                                              if (value.docs[i].get('linkname') == widget.name) {
-                                                                                if (value.docs[i].get('username') == usercode) {
-                                                                                  id = value.docs[i].id;
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                            firestore.collection('Pinchannel').doc(id).update({
-                                                                              'color': color.value.toInt()
-                                                                            });
-                                                                          });
-                                                                        },
-                                                                        pickerColor:
-                                                                            linkspacesetting().color,
-                                                                      )));
-                                                                },
-                                                              ),
-                                                              actions: <Widget>[
-                                                                ElevatedButton(
-                                                                  child:
-                                                                      const Text(
-                                                                          '반영하기'),
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            );
-                                                          },
+                                                        linksetting(
+                                                          context,
+                                                          widget.name,
                                                         );
                                                       }),
                                                 ],
@@ -605,6 +273,9 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                     height: 10,
                   ),
                   ADSHOW(height),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Flexible(
                       fit: FlexFit.tight,
                       child: SizedBox(
@@ -623,23 +294,6 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      GetBuilder<memosetting>(builder: (_) {
-                                        return controll_memo
-                                                    .ischeckedpushmemoalarm ==
-                                                false
-                                            ? Column(
-                                                children: [
-                                                  SetRoom(),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                ],
-                                              )
-                                            : const SizedBox();
-                                      }),
                                       listy_My(),
                                     ],
                                   ),
@@ -652,817 +306,28 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
         ));
   }
 
-  SetRoom() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.6,
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: Colors.blue,
-                      letterSpacing: 2),
-                  text: '알림설정',
-                ),
-                TextSpan(
-                  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: contentTextsize(),
-                      color: TextColor(),
-                      letterSpacing: 2),
-                  text: '을 통해 매일 메모 알림을 받아보세요',
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        ListTile(
-          dense: true,
-          minLeadingWidth: 30,
-          horizontalTitleGap: 10,
-          leading: Icon(
-            Icons.notification_add,
-            color: Colors.yellow.shade400,
-          ),
-          onTap: () async {
-            //alarm 설정시트 띄우기
-            await firestore.collection('MemoAllAlarm').doc(usercode).get().then(
-              (value) {
-                hour = value
-                    .data()!['alarmtime']
-                    .toString()
-                    .split(':')[0]
-                    .toString();
-                minute = value
-                    .data()!['alarmtime']
-                    .toString()
-                    .split(':')[1]
-                    .toString();
-                print(hour + ':' + minute);
-              },
-            );
-            controll_memo.settimeminute(
-                int.parse(hour), int.parse(minute), '', '');
-            pushalarmsettingmemo(context, setalarmhourNode, setalarmminuteNode,
-                hour, minute, '', '', fToast);
-
-            /*Get.to(
-                () => SecureAuth(
-                    string: '지문',
-                    id: id,
-                    doc_secret_bool: doc,
-                    doc_pin_number: doc_pin_number,
-                    unlock: false),
-                transition: Transition.downToUp);*/
-          },
-          trailing:
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400),
-          title: Text('알람 설정하러가기',
-              style: TextStyle(
-                  color: TextColor(),
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize())),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Divider(
-          height: 20,
-          color: Colors.grey.shade400,
-          thickness: 0.5,
-          indent: 30.0,
-          endIndent: 0,
-        ),
-      ],
-    );
-  }
-
   listy_My() {
     String realusername = '';
     return StatefulBuilder(builder: (_, StateSetter setState) {
-      return GetBuilder<memosetting>(
-          builder: (_) => StreamBuilder<QuerySnapshot>(
-                stream: firestore
-                    .collection('MemoDataBase')
-                    .where('OriginalUser', isEqualTo: usercode)
-                    .orderBy('EditDate',
-                        descending: controll_memo.sort == 0 ? true : false)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return snapshot.data!.docs.isEmpty
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: NeumorphicText(
-                                  '생성된 메모가 없습니다.\n추가 버튼으로 생성해보세요~',
-                                  style: NeumorphicStyle(
-                                    shape: NeumorphicShape.flat,
-                                    depth: 3,
-                                    color: TextColor(),
-                                  ),
-                                  textStyle: NeumorphicTextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTitleTextsize(),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                        : GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 3 / 6,
-                                    mainAxisSpacing: 10,
-                                    crossAxisSpacing: 10),
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.docs.length,
-                            padding: const EdgeInsets.only(left: 5, right: 5),
-                            itemBuilder: (context, index) {
-                              tmpsummary = '';
-                              if (snapshot.data!.docs[index]['memolist'] !=
-                                  null) {
-                                for (String textsummarytmp
-                                    in snapshot.data!.docs[index]['memolist']) {
-                                  tmpsummary += textsummarytmp + '\n';
-                                }
-                              } else {
-                                tmpsummary = '홈에서 직접 생성한 메모장입니다.';
-                              }
-
-                              textsummary.insert(index, tmpsummary);
-                              return Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  GestureDetector(
-                                      child: FocusedMenuHolder(
-                                    menuItems: [
-                                      FocusedMenuItem(
-                                          trailingIcon: const Icon(
-                                            Icons.style,
-                                            size: 30,
-                                          ),
-                                          title: Text('카드정보',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                          onPressed: () async {
-                                            //카드별 설정 ex.공유자 권한설정
-                                            await firestore
-                                                .collection('User')
-                                                .where('code',
-                                                    isEqualTo: snapshot
-                                                            .data!.docs[index]
-                                                        ['OriginalUser'])
-                                                .get()
-                                                .then(
-                                              (value) {
-                                                realusername =
-                                                    value.docs[0]['subname'];
-                                              },
-                                            );
-                                            infoshow(
-                                                index,
-                                                snapshot.data!.docs[index]
-                                                    ['Date'],
-                                                snapshot.data!.docs[index]
-                                                    ['EditDate'],
-                                                snapshot.data!.docs[index]
-                                                    ['memoTitle'],
-                                                context,
-                                                realusername,
-                                                snapshot.data!.docs[index]
-                                                    ['Collection'],
-                                                'memo');
-                                          }),
-                                      FocusedMenuItem(
-                                          trailingIcon: Icon(
-                                            snapshot.data!.docs[index]
-                                                        ['alarmok'] ==
-                                                    false
-                                                ? Icons.notifications_off
-                                                : Icons.notifications_active,
-                                            color: snapshot.data!.docs[index]
-                                                        ['alarmok'] ==
-                                                    false
-                                                ? Colors.black
-                                                : Colors.yellow.shade400,
-                                          ),
-                                          title: Text(
-                                              snapshot.data!.docs[index]
-                                                          ['alarmok'] ==
-                                                      false
-                                                  ? '알람On'
-                                                  : '알람Off',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                          onPressed: () {
-                                            setState(() {
-                                              controll_memo.settimeminute(
-                                                  int.parse(snapshot.data!
-                                                      .docs[index]['alarmtime']
-                                                      .toString()
-                                                      .split(':')[0]),
-                                                  int.parse(snapshot.data!
-                                                      .docs[index]['alarmtime']
-                                                      .toString()
-                                                      .split(':')[1]),
-                                                  snapshot.data!.docs[index]
-                                                      ['memoTitle'],
-                                                  snapshot
-                                                      .data!.docs[index].id);
-                                              pushalarmsettingmemo(
-                                                  context,
-                                                  setalarmhourNode,
-                                                  setalarmminuteNode,
-                                                  snapshot.data!
-                                                      .docs[index]['alarmtime']
-                                                      .toString()
-                                                      .split(':')[0],
-                                                  snapshot.data!
-                                                      .docs[index]['alarmtime']
-                                                      .toString()
-                                                      .split(':')[1],
-                                                  snapshot.data!.docs[index]
-                                                      ['memoTitle'],
-                                                  snapshot.data!.docs[index].id,
-                                                  fToast);
-                                            });
-                                          }),
-                                      FocusedMenuItem(
-                                          trailingIcon: Icon(
-                                            snapshot.data!.docs[index]
-                                                        ['homesave'] ==
-                                                    false
-                                                ? Icons.launch
-                                                : Icons.block,
-                                            color: snapshot.data!.docs[index]
-                                                        ['homesave'] ==
-                                                    false
-                                                ? Colors.blue.shade400
-                                                : Colors.red.shade400,
-                                          ),
-                                          title: Text(
-                                              snapshot.data!.docs[index]
-                                                          ['homesave'] ==
-                                                      false
-                                                  ? '내보내기'
-                                                  : '내보내기 중단',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                          onPressed: () {
-                                            setState(() {
-                                              snapshot.data!.docs[index]
-                                                          ['homesave'] ==
-                                                      false
-                                                  ? firestore
-                                                      .collection(
-                                                          'MemoDataBase')
-                                                      .doc(snapshot
-                                                          .data!.docs[index].id)
-                                                      .update({
-                                                      'homesave': true,
-                                                    })
-                                                  : firestore
-                                                      .collection(
-                                                          'MemoDataBase')
-                                                      .doc(snapshot
-                                                          .data!.docs[index].id)
-                                                      .update({
-                                                      'homesave': false,
-                                                    });
-                                            });
-                                          }),
-                                      FocusedMenuItem(
-                                          trailingIcon: Icon(
-                                            snapshot.data!.docs[index]
-                                                        ['security'] ==
-                                                    false
-                                                ? Icons.lock_open
-                                                : Icons.lock,
-                                            color: snapshot.data!.docs[index]
-                                                        ['security'] ==
-                                                    false
-                                                ? Colors.blue.shade400
-                                                : Colors.red.shade400,
-                                          ),
-                                          title: Text(
-                                              snapshot.data!.docs[index]
-                                                          ['security'] ==
-                                                      false
-                                                  ? '잠금설정'
-                                                  : '잠금해제',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize())),
-                                          onPressed: () {
-                                            setState(() {
-                                              //하단 시트로 지문, 얼굴인식 로직 띄우기
-                                              settingsecurityform(
-                                                  context,
-                                                  snapshot.data!.docs[index].id,
-                                                  snapshot.data!.docs[index]
-                                                      ['security'],
-                                                  snapshot.data!.docs[index]
-                                                      ['pinnumber'],
-                                                  snapshot.data!.docs[index]
-                                                      ['securewith'],
-                                                  can_auth);
-                                            });
-                                          }),
-                                    ],
-                                    duration: const Duration(seconds: 0),
-                                    animateMenuItems: true,
-                                    menuOffset: 20,
-                                    bottomOffsetHeight: 10,
-                                    menuWidth:
-                                        (MediaQuery.of(context).size.width -
-                                                50) /
-                                            1.5,
-                                    openWithTap: false,
-                                    onPressed: () async {
-                                      //개별 노트로 이동로직
-                                      if (snapshot.data!.docs[index]
-                                                  ['security'] ==
-                                              false ||
-                                          snapshot.data!.docs[index]
-                                                  ['securewith'] ==
-                                              999) {
-                                        Get.to(
-                                            () => ClickShowEachNote(
-                                                  date: snapshot.data!
-                                                      .docs[index]['Date'],
-                                                  doc: snapshot
-                                                      .data!.docs[index].id,
-                                                  doccollection:
-                                                      snapshot.data!.docs[index]
-                                                              ['Collection'] ??
-                                                          '',
-                                                  doccolor: snapshot.data!
-                                                      .docs[index]['color'],
-                                                  doccolorfont: snapshot.data!
-                                                      .docs[index]['colorfont'],
-                                                  docindex:
-                                                      snapshot.data!.docs[index]
-                                                              ['memoindex'] ??
-                                                          [],
-                                                  docname: snapshot.data!
-                                                      .docs[index]['memoTitle'],
-                                                  docsummary:
-                                                      snapshot.data!.docs[index]
-                                                              ['memolist'] ??
-                                                          [],
-                                                  editdate: snapshot.data!
-                                                      .docs[index]['EditDate'],
-                                                  image:
-                                                      snapshot.data!.docs[index]
-                                                              ['photoUrl'] ??
-                                                          [],
-                                                  securewith:
-                                                      snapshot.data!.docs[index]
-                                                              ['securewith'] ??
-                                                          999,
-                                                  isfromwhere: 'memohome',
-                                                ),
-                                            transition: Transition.downToUp);
-                                      } else if (snapshot.data!.docs[index]
-                                              ['securewith'] ==
-                                          0) {
-                                        if (GetPlatform.isAndroid) {
-                                          final reloadpage = await Get.to(
-                                              () => SecureAuth(
-                                                  string: '지문',
-                                                  id: snapshot
-                                                      .data!.docs[index].id,
-                                                  doc_secret_bool: snapshot
-                                                      .data!
-                                                      .docs[index]['security'],
-                                                  doc_pin_number: snapshot.data!
-                                                      .docs[index]['pinnumber'],
-                                                  unlock: true),
-                                              transition: Transition.downToUp);
-                                          if (reloadpage != null &&
-                                              reloadpage == true) {
-                                            Get.to(
-                                                () => ClickShowEachNote(
-                                                      date: snapshot.data!
-                                                          .docs[index]['Date'],
-                                                      doc: snapshot
-                                                          .data!.docs[index].id,
-                                                      doccollection: snapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                              ['Collection'] ??
-                                                          '',
-                                                      doccolor: snapshot.data!
-                                                          .docs[index]['color'],
-                                                      doccolorfont: snapshot
-                                                              .data!.docs[index]
-                                                          ['colorfont'],
-                                                      docindex: snapshot.data!
-                                                                  .docs[index]
-                                                              ['memoindex'] ??
-                                                          [],
-                                                      docname: snapshot
-                                                              .data!.docs[index]
-                                                          ['memoTitle'],
-                                                      docsummary: snapshot.data!
-                                                                  .docs[index]
-                                                              ['memolist'] ??
-                                                          [],
-                                                      editdate: snapshot
-                                                              .data!.docs[index]
-                                                          ['EditDate'],
-                                                      image: snapshot.data!
-                                                                  .docs[index]
-                                                              ['photoUrl'] ??
-                                                          [],
-                                                      securewith: snapshot.data!
-                                                                  .docs[index]
-                                                              ['securewith'] ??
-                                                          999,
-                                                      isfromwhere: 'memohome',
-                                                    ),
-                                                transition:
-                                                    Transition.downToUp);
-                                          }
-                                        } else {
-                                          final reloadpage = await Get.to(
-                                              () => SecureAuth(
-                                                  string: '얼굴',
-                                                  id: snapshot
-                                                      .data!.docs[index].id,
-                                                  doc_secret_bool: snapshot
-                                                      .data!
-                                                      .docs[index]['security'],
-                                                  doc_pin_number: snapshot.data!
-                                                      .docs[index]['pinnumber'],
-                                                  unlock: true),
-                                              transition: Transition.downToUp);
-                                          if (reloadpage != null &&
-                                              reloadpage == true) {
-                                            Get.to(
-                                                () => ClickShowEachNote(
-                                                      date: snapshot.data!
-                                                          .docs[index]['Date'],
-                                                      doc: snapshot
-                                                          .data!.docs[index].id,
-                                                      doccollection: snapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                              ['Collection'] ??
-                                                          '',
-                                                      doccolor: snapshot.data!
-                                                          .docs[index]['color'],
-                                                      doccolorfont: snapshot
-                                                              .data!.docs[index]
-                                                          ['colorfont'],
-                                                      docindex: snapshot.data!
-                                                                  .docs[index]
-                                                              ['memoindex'] ??
-                                                          [],
-                                                      docname: snapshot
-                                                              .data!.docs[index]
-                                                          ['memoTitle'],
-                                                      docsummary: snapshot.data!
-                                                                  .docs[index]
-                                                              ['memolist'] ??
-                                                          [],
-                                                      editdate: snapshot
-                                                              .data!.docs[index]
-                                                          ['EditDate'],
-                                                      image: snapshot.data!
-                                                                  .docs[index]
-                                                              ['photoUrl'] ??
-                                                          [],
-                                                      securewith: snapshot.data!
-                                                                  .docs[index]
-                                                              ['securewith'] ??
-                                                          999,
-                                                      isfromwhere: 'memohome',
-                                                    ),
-                                                transition:
-                                                    Transition.downToUp);
-                                          }
-                                        }
-                                      } else {
-                                        final reloadpage = await Get.to(
-                                            () => SecureAuth(
-                                                string: '핀',
-                                                id: snapshot
-                                                    .data!.docs[index].id,
-                                                doc_secret_bool: snapshot.data!
-                                                    .docs[index]['security'],
-                                                doc_pin_number: snapshot.data!
-                                                    .docs[index]['pinnumber'],
-                                                unlock: true),
-                                            transition: Transition.downToUp);
-                                        if (reloadpage != null &&
-                                            reloadpage == true) {
-                                          Get.to(
-                                              () => ClickShowEachNote(
-                                                    date: snapshot.data!
-                                                        .docs[index]['Date'],
-                                                    doc: snapshot
-                                                        .data!.docs[index].id,
-                                                    doccollection: snapshot
-                                                                .data!
-                                                                .docs[index]
-                                                            ['Collection'] ??
-                                                        '',
-                                                    doccolor: snapshot.data!
-                                                        .docs[index]['color'],
-                                                    doccolorfont: snapshot
-                                                            .data!.docs[index]
-                                                        ['colorfont'],
-                                                    docindex: snapshot.data!
-                                                                .docs[index]
-                                                            ['memoindex'] ??
-                                                        [],
-                                                    docname: snapshot
-                                                            .data!.docs[index]
-                                                        ['memoTitle'],
-                                                    docsummary: snapshot.data!
-                                                                .docs[index]
-                                                            ['memolist'] ??
-                                                        [],
-                                                    editdate: snapshot
-                                                            .data!.docs[index]
-                                                        ['EditDate'],
-                                                    image: snapshot
-                                                            .data!.docs[index]
-                                                        ['photoUrl'],
-                                                    securewith: snapshot.data!
-                                                                .docs[index]
-                                                            ['securewith'] ??
-                                                        999,
-                                                    isfromwhere: 'memohome',
-                                                  ),
-                                              transition: Transition.downToUp);
-                                        }
-                                      }
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        ContainerDesign(
-                                            child: SizedBox(
-                                                height: 260,
-                                                width: (MediaQuery.of(context)
-                                                            .size
-                                                            .width -
-                                                        80) /
-                                                    2,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10, right: 10),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      SizedBox(
-                                                          height: 60,
-                                                          child:
-                                                              SingleChildScrollView(
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            physics:
-                                                                const BouncingScrollPhysics(),
-                                                            child: Text(
-                                                              snapshot.data!
-                                                                          .docs[
-                                                                      index]
-                                                                  ['memoTitle'],
-                                                              maxLines: 2,
-                                                              softWrap: true,
-                                                              style: TextStyle(
-                                                                color:
-                                                                    TextColor(),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    contentTitleTextsize(),
-                                                              ),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
-                                                          )),
-                                                    ],
-                                                  ),
-                                                )),
-                                            color: BGColor()),
-                                        SizedBox(
-                                          height: 200,
-                                          width: (MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  40) /
-                                              2,
-                                          child: ContainerDesign(
-                                              child: Column(
-                                                children: [
-                                                  Flexible(
-                                                      fit: FlexFit.tight,
-                                                      child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 10,
-                                                                  right: 10),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              SizedBox(
-                                                                height: 110,
-                                                                child: snapshot
-                                                                            .data!
-                                                                            .docs[index]['security'] ==
-                                                                        false
-                                                                    ? Text(
-                                                                        textsummary[
-                                                                            index],
-                                                                        softWrap:
-                                                                            true,
-                                                                        maxLines:
-                                                                            3,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color: Color(snapshot
-                                                                              .data!
-                                                                              .docs[index]['colorfont']),
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontSize:
-                                                                              contentTextsize(),
-                                                                        ),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      )
-                                                                    : Container(
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        child:
-                                                                            NeumorphicIcon(
-                                                                          Icons
-                                                                              .lock,
-                                                                          size:
-                                                                              50,
-                                                                          style: NeumorphicStyle(
-                                                                              shape: NeumorphicShape.convex,
-                                                                              depth: 2,
-                                                                              surfaceIntensity: 0.5,
-                                                                              color: Color(snapshot.data!.docs[index]['colorfont']),
-                                                                              lightSource: LightSource.topLeft),
-                                                                        ),
-                                                                      ),
-                                                              ),
-                                                            ],
-                                                          ))),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      RotatedBox(
-                                                        quarterTurns: 0,
-                                                        child: TextButton.icon(
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                            textStyle: TextStyle(
-                                                                color: Color(snapshot
-                                                                        .data!
-                                                                        .docs[index]
-                                                                    [
-                                                                    'colorfont'])),
-                                                            backgroundColor: snapshot
-                                                                            .data!
-                                                                            .docs[index]
-                                                                        [
-                                                                        'color'] !=
-                                                                    null
-                                                                ? Color(snapshot
-                                                                        .data!
-                                                                        .docs[index]
-                                                                    ['color'])
-                                                                : Colors.white,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          24.0),
-                                                            ),
-                                                          ),
-                                                          onPressed: () => {},
-                                                          icon: Icon(
-                                                              Icons.local_offer,
-                                                              color: Color(snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index][
-                                                                  'colorfont'])),
-                                                          label: Text(
-                                                            snapshot.data!.docs[
-                                                                        index][
-                                                                    'Collection'] ??
-                                                                '지정안됨',
-                                                            softWrap: true,
-                                                            maxLines: 2,
-                                                            style: TextStyle(
-                                                              color: Color(snapshot
-                                                                          .data!
-                                                                          .docs[
-                                                                      index][
-                                                                  'colorfont']),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              color: snapshot.data!.docs[index]
-                                                          ['color'] !=
-                                                      null
-                                                  ? Color(snapshot.data!
-                                                      .docs[index]['color'])
-                                                  : Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ))
-                                ],
-                              );
-                            });
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Center(child: CircularProgressIndicator())
-                      ],
-                    );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: NeumorphicText(
-                          '생성된 메모컬렉션이 없습니다.\n추가 버튼으로 생성해보세요~',
-                          style: NeumorphicStyle(
-                            shape: NeumorphicShape.flat,
-                            depth: 3,
-                            color: TextColor(),
-                          ),
-                          textStyle: NeumorphicTextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                },
-              ));
+      return Column(
+        children: [],
+      );
     });
+  }
+
+  Future<bool> _onWillPop() async {
+    Future.delayed(const Duration(seconds: 0), () {
+      if (isDialOpen.value == true) {
+        isDialOpen.value = false;
+      } else {
+        StatusBarControl.setColor(BGColor(), animated: true);
+        if (widget.isfromwhere == 'home') {
+          GoToMain(context);
+        } else {
+          Get.back();
+        }
+      }
+    });
+    return false;
   }
 }

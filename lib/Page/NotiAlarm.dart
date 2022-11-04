@@ -8,9 +8,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../Route/subuiroute.dart';
-import '../Tool/AndroidIOS.dart';
+import '../Tool/AppBarCustom.dart';
 import '../Tool/Getx/navibool.dart';
-import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
@@ -28,31 +27,20 @@ class _NotiAlarmState extends State<NotiAlarm>
   double translateX = 0.0;
   double translateY = 0.0;
   double myWidth = 0.0;
-  int whatwantnotice = 0;
   String name = Hive.box('user_info').get('id');
-  final List notinamelist = [
-    '공지글',
-    '푸쉬알림',
-  ];
   final List<PageList> _list_ad = [];
   var userlist = [Hive.box('user_info').get('id')];
-  var updateid = '';
-  var updateusername = [];
   final notilist = Get.put(notishow());
   final draw = Get.put(navibool());
   final readlist = [];
   final listid = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  //late TabController tabController;
-  int pageindex = 0;
   late Animation animation;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    Hive.box('user_setting').put('noti_home_click', 0);
-    whatwantnotice = notilist.whatnoticepagenum;
   }
 
   @override
@@ -101,161 +89,11 @@ class _NotiAlarmState extends State<NotiAlarm>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          GetBuilder<navibool>(
-                              builder: (_) => SizedBox(
-                                  height: 80,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10,
-                                        right: 10,
-                                        top: 20,
-                                        bottom: 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(),
-                                        SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width -
-                                                20,
-                                            child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
-                                                child: Row(
-                                                  children: [
-                                                    Flexible(
-                                                      fit: FlexFit.tight,
-                                                      child: Text('알림',
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                secondTitleTextsize(),
-                                                            color: TextColor(),
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          )),
-                                                    ),
-                                                    IconBtn(
-                                                        child: IconButton(
-                                                            onPressed:
-                                                                () async {
-                                                              final reloadpage = await Get.dialog(OSDialog(
-                                                                      context,
-                                                                      '경고',
-                                                                      Text(
-                                                                          '알림들을 삭제하시겠습니까?',
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: contentTextsize(),
-                                                                              color: Colors.blueGrey)),
-                                                                      pressed2)) ??
-                                                                  false;
-                                                              if (reloadpage) {
-                                                                firestore
-                                                                    .collection(
-                                                                        'AppNoticeByUsers')
-                                                                    .get()
-                                                                    .then(
-                                                                        (value) {
-                                                                  for (var element
-                                                                      in value
-                                                                          .docs) {
-                                                                    if (element
-                                                                            .get('sharename')
-                                                                            .toString()
-                                                                            .contains(name) ==
-                                                                        true) {
-                                                                      updateid =
-                                                                          element
-                                                                              .id;
-                                                                      updateusername = element
-                                                                          .get(
-                                                                              'sharename')
-                                                                          .toString()
-                                                                          .split(
-                                                                              ',')
-                                                                          .toList();
-                                                                      if (updateusername
-                                                                              .length ==
-                                                                          1) {
-                                                                        firestore
-                                                                            .collection('AppNoticeByUsers')
-                                                                            .doc(updateid)
-                                                                            .delete();
-                                                                      } else {
-                                                                        updateusername.removeWhere((element) => element
-                                                                            .toString()
-                                                                            .contains(name));
-                                                                        firestore
-                                                                            .collection(
-                                                                                'AppNoticeByUsers')
-                                                                            .doc(
-                                                                                updateid)
-                                                                            .update({
-                                                                          'sharename':
-                                                                              updateusername
-                                                                        });
-                                                                      }
-                                                                    } else {
-                                                                      if (element
-                                                                              .get('username')
-                                                                              .toString() ==
-                                                                          name) {
-                                                                        updateid =
-                                                                            element.id;
-                                                                        firestore
-                                                                            .collection('AppNoticeByUsers')
-                                                                            .doc(updateid)
-                                                                            .delete();
-                                                                      } else {}
-                                                                    }
-                                                                  }
-                                                                }).whenComplete(
-                                                                        () {
-                                                                  setState(() {
-                                                                    notilist
-                                                                        .isreadnoti();
-                                                                    Hive.box(
-                                                                            'user_setting')
-                                                                        .put(
-                                                                            'noti_home_click',
-                                                                            0);
-                                                                    whatwantnotice =
-                                                                        0;
-                                                                  });
-                                                                });
-                                                              }
-                                                            },
-                                                            icon: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              width: 30,
-                                                              height: 30,
-                                                              child:
-                                                                  NeumorphicIcon(
-                                                                Icons.delete,
-                                                                size: 30,
-                                                                style: NeumorphicStyle(
-                                                                    shape: NeumorphicShape
-                                                                        .convex,
-                                                                    depth: 2,
-                                                                    surfaceIntensity:
-                                                                        0.5,
-                                                                    color:
-                                                                        TextColor(),
-                                                                    lightSource:
-                                                                        LightSource
-                                                                            .topLeft),
-                                                              ),
-                                                            )),
-                                                        color: TextColor()),
-                                                  ],
-                                                ))),
-                                      ],
-                                    ),
-                                  ))),
+                          const AppBarCustom(
+                            title: '알림',
+                            righticon: true,
+                            iconname: Icons.delete,
+                          ),
                           allread(),
                           Flexible(
                               fit: FlexFit.tight,

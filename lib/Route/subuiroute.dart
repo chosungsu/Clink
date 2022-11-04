@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,7 +12,11 @@ import '../Page/LoginSignPage.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
+import '../Tool/Getx/selectcollection.dart';
+import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
+import '../UI/Home/firstContentNet/DayScript.dart';
+import '../sheets/linksettingsheet.dart';
 import 'mainroute.dart';
 
 void pressed1() {
@@ -25,7 +31,6 @@ void pressed2() {
 }
 
 GoToMain(BuildContext context) async {
-  //await initScreen();
   Timer? _time = Timer(const Duration(seconds: 0), () {
     Get.to(() => const mainroute(index: 0), transition: Transition.leftToRight);
     Hive.box('user_setting').put('page_index', 0);
@@ -36,8 +41,6 @@ GoToMain(BuildContext context) async {
 GoToLogin(BuildContext context, String s) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
     Get.to(() => LoginSignPage(first: s));
-    /*Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => const LoginSignPage()));*/
   });
 
   return _time;
@@ -231,5 +234,90 @@ ADSHOW(double height) {
         )
       ],
     ),
+  );
+}
+
+Speeddialmemo(
+    BuildContext context,
+    bool showBackToTopButton,
+    String usercode,
+    TextEditingController controller,
+    FocusNode searchNode,
+    selectcollection scollection,
+    ScrollController scrollController,
+    bool isresponsive,
+    ValueNotifier<bool> isDialOpen) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.end,
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      showBackToTopButton == false
+          ? const SizedBox()
+          : FloatingActionButton(
+              onPressed: () {
+                scrollToTop(scrollController);
+              },
+              backgroundColor: BGColor(),
+              child: Icon(
+                Icons.arrow_upward,
+                color: TextColor(),
+              ),
+            ),
+      const SizedBox(width: 10),
+      SpeedDial(
+          openCloseDial: isDialOpen,
+          activeIcon: Icons.close,
+          icon: Icons.add,
+          backgroundColor: Colors.blue,
+          overlayColor: BGColor(),
+          overlayOpacity: 0.4,
+          spacing: 10,
+          spaceBetweenChildren: 10,
+          children: [
+            SpeedDialChild(
+              child: NeumorphicIcon(
+                Icons.local_offer,
+                size: 30,
+                style: NeumorphicStyle(
+                    shape: NeumorphicShape.convex,
+                    depth: 2,
+                    surfaceIntensity: 0.5,
+                    color: TextColor(),
+                    lightSource: LightSource.topLeft),
+              ),
+              backgroundColor: Colors.blue.shade200,
+              onTap: () {
+                addhashtagcollector(context, usercode, controller, searchNode,
+                    'outside', scollection, isresponsive);
+              },
+              label: '해시태그 추가',
+              labelStyle: TextStyle(
+                  color: Colors.black45,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize()),
+            ),
+            SpeedDialChild(
+              child: NeumorphicIcon(
+                Icons.add,
+                size: 30,
+                style: NeumorphicStyle(
+                    shape: NeumorphicShape.convex,
+                    depth: 2,
+                    surfaceIntensity: 0.5,
+                    color: TextColor(),
+                    lightSource: LightSource.topLeft),
+              ),
+              backgroundColor: Colors.orange.shade200,
+              onTap: () {
+                linkmadeplace(context, usercode);
+              },
+              label: '필드 추가',
+              labelStyle: TextStyle(
+                  color: Colors.black45,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize()),
+            ),
+          ]),
+    ],
   );
 }

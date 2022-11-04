@@ -259,7 +259,8 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   }
 
   M_Container0(double height) {
-    final link = [];
+    var link = [];
+    var user = '';
 
     return SizedBox(
         width: double.infinity,
@@ -364,7 +365,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                         if (value.isEmpty) {
                         } else {
                           for (int j = 0; j < value.length; j++) {
-                            final user = value[j]['username'];
+                            user = value[j]['username'];
                             if (user == usercode) {
                               for (int i = 0;
                                   i < value[j]['link'].length;
@@ -580,7 +581,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                           listpinlink.clear();
                           final valuespace = snapshot.data!.docs;
                           for (var sp in valuespace) {
-                            final user = sp.get('username');
+                            user = sp.get('username');
                             if (user == usercode) {
                               for (int i = 0; i < sp.get('link').length; i++) {
                                 listpinlink

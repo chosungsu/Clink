@@ -34,6 +34,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: 
   intl: 
+  responsive_sizer:
   #애니메이션효과를 주기 위함
   animated_text_kit: 
   flutter_spinkit: 
@@ -73,7 +74,9 @@ dependencies:
   flutter_email_sender: 
   path_provider: 
   device_info_plus: 
-  #UI
+  #UI-buttons
+  outline_gradient_button:
+  sign_button:
   fab_circular_menu:
   expandable_page_view:
   badges:
