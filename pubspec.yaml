@@ -35,6 +35,7 @@ dependencies:
   cupertino_icons: 
   intl: 
   responsive_sizer:
+  device_preview:
   #애니메이션효과를 주기 위함
   animated_text_kit: 
   flutter_spinkit: 
@@ -108,6 +109,7 @@ dependencies:
   flutter_time_picker_spinner: 
   fluttertoast:
   status_bar_control:
+  reorderable_grid:
   #local db
   encrypt:
   hive: 

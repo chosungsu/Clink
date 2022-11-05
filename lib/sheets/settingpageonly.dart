@@ -1,15 +1,239 @@
-import 'package:clickbyme/Tool/TextSize.dart';
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:clickbyme/sheets/sheetmultiprofile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
 
 import '../Auth/GoogleSignInController.dart';
-import '../Route/subuiroute.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
+import '../Route/subuiroute.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/TextSize.dart';
+
+setUsers(
+  BuildContext context,
+  FocusNode node,
+  TextEditingController controller,
+  String name,
+) {
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    )),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: userdev(context, node, controller, name),
+              )),
+        );
+      }).whenComplete(() {});
+}
+
+userdev(
+  BuildContext context,
+  FocusNode node,
+  TextEditingController controller,
+  String name,
+) {
+  return SizedBox(
+      child: Padding(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  height: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          alignment: Alignment.topCenter,
+                          color: Colors.black45),
+                    ],
+                  )),
+              const SizedBox(
+                height: 20,
+              ),
+              title(context),
+              const SizedBox(
+                height: 20,
+              ),
+              content(context, node, controller, name),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          )));
+}
+
+title(
+  BuildContext context,
+) {
+  return SizedBox(
+      height: 50,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text('MY 정보',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25))
+        ],
+      ));
+}
+
+content(
+  BuildContext context,
+  FocusNode node,
+  TextEditingController controller,
+  String name,
+) {
+  return StatefulBuilder(builder: (_, StateSetter setState) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Get.back();
+            sheetmultiprofile(context, node, controller, name);
+          },
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.badge,
+                        size: 30,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('닉네임 변경',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize())),
+                        ],
+                      ),
+                    ],
+                  )),
+              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        GestureDetector(
+          onTap: () async {
+            Get.back();
+            GoogleSignInController()
+                .logout(context, Hive.box('user_info').get('id'));
+            GoToLogin(context, 'isnotfirst');
+          },
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.manage_accounts,
+                        size: 30,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('다른 아이디 로그인',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize())),
+                        ],
+                      ),
+                    ],
+                  )),
+              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        GestureDetector(
+          onTap: () async {
+            Get.back();
+            DeleteUserVerify(context, Hive.box('user_info').get('id'));
+          },
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.account_circle,
+                        size: 30,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('회원탈퇴',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize())),
+                        ],
+                      ),
+                    ],
+                  )),
+              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
+            ],
+          ),
+        )
+      ],
+    );
+  });
+}
 
 DeleteUserVerify(BuildContext context, String name) {
   bool isloading = false;
@@ -22,6 +246,15 @@ DeleteUserVerify(BuildContext context, String name) {
   showModalBottomSheet(
       context: context,
       isDismissible: false,
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: ((context, setState) {
           return Container(

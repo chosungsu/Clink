@@ -22,7 +22,8 @@ showreadycontent(
       isScrollControlled: true,
       builder: (context) {
         return Container(
-          margin: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
           child: Padding(
               padding: MediaQuery.of(context).viewInsets,
               child: Container(

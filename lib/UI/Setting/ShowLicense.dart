@@ -1,18 +1,18 @@
-import 'dart:io';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:clickbyme/DB/Expandable.dart';
-import 'package:clickbyme/DB/PageList.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/licenseget.dart';
-import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:get/get.dart';
-import '../../../Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../../../../Tool/NoBehavior.dart';
-import '../../Tool/ContainerDesign.dart';
+import '../../Tool/AppBarCustom.dart';
 
 class ShowLicense extends StatefulWidget {
+  const ShowLicense({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _ShowLicenseState();
 }
@@ -24,7 +24,7 @@ class _ShowLicenseState extends State<ShowLicense> {
   bool isChecked = false;
   List eventsmalltitle = List.empty(growable: true);
   List eventsmallcontent = List.empty(growable: true);
-  List<Expandable> _data = [];
+  final List<Expandable> _data = [];
   List listid_list = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final getlicense = Get.put(licenseget());
@@ -44,39 +44,20 @@ class _ShowLicenseState extends State<ShowLicense> {
                 isExpanded: false));
       }
     });
-    /*firestore.collection("AppLicense").get().then((value) {
-      listid_list = value.docs.id;
-    }).whenComplete(() {
-      for (int i = 1; i < listid_list + 1; i++) {
-        firestore.collection("AppLicense").doc('$i').get().then((value) {
-          /*eventsmalltitle.add(value.get('licensetitle'));
-          eventsmallcontent.add(value.get('content'));*/
-          getlicense.setlicense(
-              value.get('licensetitle'), value.get('content'));
-          _data.insert(
-              0,
-              Expandable(
-                  title: value.get('licensetitle'),
-                  sub: value.get('content'),
-                  isExpanded: false));
-        });
-      }
-    });*/
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      body: license(),
-    ));
+    return Scaffold(
+        backgroundColor: BGColor(),
+        body: SafeArea(
+          child: license(),
+        ));
   }
 
   license() {
@@ -90,55 +71,11 @@ class _ShowLicenseState extends State<ShowLicense> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                  height: 80,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 10, right: 10, top: 20, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width - 20,
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  child: Text(
-                                    '',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTitleTextsize(),
-                                        color: TextColor()),
-                                  ),
-                                ),
-                                IconBtn(
-                                    child: IconButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        icon: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.close,
-                                            size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: TextColor(),
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                        )),
-                                    color: TextColor())
-                              ],
-                            )),
-                      ],
-                    ),
-                  )),
+              const AppBarCustom(
+                title: 'License',
+                righticon: true,
+                iconname: Icons.close,
+              ),
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(
@@ -180,7 +117,7 @@ class _ShowLicenseState extends State<ShowLicense> {
         children: _data.map<ExpansionPanel>((Expandable expandable) {
           return ExpansionPanel(
               canTapOnHeader: true,
-              backgroundColor: TextColor_shadowcolor(),
+              backgroundColor: Colors.grey.shade300,
               headerBuilder: ((context, isExpanded) {
                 return ListTile(
                   title: Text(
@@ -188,7 +125,7 @@ class _ShowLicenseState extends State<ShowLicense> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: contentTitleTextsize(),
-                        color: BGColor()),
+                        color: Colors.black),
                   ),
                 );
               }),
@@ -198,7 +135,7 @@ class _ShowLicenseState extends State<ShowLicense> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize(),
-                      color: BGColor_shadowcolor()),
+                      color: Colors.black),
                 ),
               ),
               isExpanded: expandable.isExpanded);

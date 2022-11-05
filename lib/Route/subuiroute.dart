@@ -206,16 +206,8 @@ ADSHOW(double height) {
     height: 60,
     decoration: BoxDecoration(
         border: Border(
-            top: BorderSide(
-                color: linkspaceset.color == Colors.black
-                    ? Colors.white60
-                    : Colors.black38,
-                width: 1),
-            bottom: BorderSide(
-                color: linkspaceset.color == Colors.black
-                    ? Colors.white60
-                    : Colors.black38,
-                width: 1))),
+            top: BorderSide(color: Colors.grey.shade300, width: 1),
+            bottom: BorderSide(color: Colors.grey.shade300, width: 1))),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -224,9 +216,7 @@ ADSHOW(double height) {
           child: Text(
             '광고공간입니다',
             style: TextStyle(
-                color: linkspaceset.color == Colors.black
-                    ? Colors.white60
-                    : Colors.black38,
+                color: Colors.grey.shade300,
                 fontWeight: FontWeight.bold,
                 fontSize: contentTextsize()),
             overflow: TextOverflow.ellipsis,
@@ -246,7 +236,8 @@ Speeddialmemo(
     selectcollection scollection,
     ScrollController scrollController,
     bool isresponsive,
-    ValueNotifier<bool> isDialOpen) {
+    ValueNotifier<bool> isDialOpen,
+    String name) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.end,
     mainAxisAlignment: MainAxisAlignment.end,
@@ -274,7 +265,7 @@ Speeddialmemo(
           spacing: 10,
           spaceBetweenChildren: 10,
           children: [
-            SpeedDialChild(
+            /*SpeedDialChild(
               child: NeumorphicIcon(
                 Icons.local_offer,
                 size: 30,
@@ -295,7 +286,7 @@ Speeddialmemo(
                   color: Colors.black45,
                   fontWeight: FontWeight.bold,
                   fontSize: contentTextsize()),
-            ),
+            ),*/
             SpeedDialChild(
               child: NeumorphicIcon(
                 Icons.add,
@@ -309,7 +300,7 @@ Speeddialmemo(
               ),
               backgroundColor: Colors.orange.shade200,
               onTap: () {
-                linkmadeplace(context, usercode);
+                linkmadeplace(context, usercode, name);
               },
               label: '필드 추가',
               labelStyle: TextStyle(

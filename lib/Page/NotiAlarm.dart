@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AppBarCustom.dart';
 import '../Tool/Getx/navibool.dart';
@@ -28,8 +29,6 @@ class _NotiAlarmState extends State<NotiAlarm>
   double translateY = 0.0;
   double myWidth = 0.0;
   String name = Hive.box('user_info').get('id');
-  final List<PageList> _list_ad = [];
-  var userlist = [Hive.box('user_info').get('id')];
   final notilist = Get.put(notishow());
   final draw = Get.put(navibool());
   final readlist = [];
@@ -52,16 +51,17 @@ class _NotiAlarmState extends State<NotiAlarm>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: BGColor(),
-            body: GetBuilder<navibool>(
-              builder: (_) => Stack(
-                children: [
-                  UI(),
-                ],
-              ),
-            )));
+    return Scaffold(
+        backgroundColor: BGColor(),
+        body: SafeArea(
+          child: GetBuilder<navibool>(
+            builder: (_) => Stack(
+              children: [
+                UI(),
+              ],
+            ),
+          ),
+        ));
   }
 
   UI() {

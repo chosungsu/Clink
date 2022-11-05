@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types
+
 import 'package:clickbyme/Page/MYPage.dart';
 import 'package:clickbyme/Page/addWhole_update.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
@@ -18,7 +20,6 @@ import '../Page/ProfilePage.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
-import '../Tool/Getx/notishow.dart';
 
 class mainroute extends StatefulWidget {
   const mainroute({Key? key, required this.index}) : super(key: key);
@@ -29,30 +30,18 @@ class mainroute extends StatefulWidget {
 
 class _mainrouteState extends State<mainroute>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  //curved navi index
   late FToast fToast;
   late DateTime backbuttonpressedTime;
-  //late AnimationController noticontroller;
-  //late Animation animation;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
   String name = Hive.box('user_info').get('id');
   late DateTime Date = DateTime.now();
   final draw = Get.put(navibool());
-  final peopleadd = Get.put(PeopleAdd());
-  final notilist = Get.put(notishow());
   List updateid = [];
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final cal_share_person = Get.put(PeopleAdd());
   final uiset = Get.put(uisetting());
-  List defaulthomeviewlist = [
-    '오늘의 일정',
-    '공유된 오늘의 일정',
-    '최근에 수정된 메모',
-    '홈뷰에 저장된 메모',
-  ];
-  List userviewlist = [];
   bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
@@ -62,24 +51,6 @@ class _mainrouteState extends State<mainroute>
     uiset.pagenumber = widget.index;
     fToast = FToast();
     fToast.init(context);
-    /*notilist.noticontroller = AnimationController(
-        duration: const Duration(milliseconds: 300),
-        vsync: this,
-        value: 0,
-        upperBound: 1.05,
-        lowerBound: 0.95);
-    animation = CurvedAnimation(
-        parent: notilist.noticontroller, curve: Curves.decelerate);
-    notilist.noticontroller.forward();
-    // forward면 AnimationStatus.completed
-    // reverse면 AnimationStatus.dismissed
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        notilist.noticontroller.reverse(from: 1.0);
-      } else if (status == AnimationStatus.dismissed) {
-        notilist.noticontroller.forward();
-      }
-    });*/
   }
 
   @override
@@ -150,10 +121,7 @@ class _mainrouteState extends State<mainroute>
       const MYPage(),
       HomePage(secondname: cal_share_person.secondname),
       const ProfilePage(),
-      //const NotiAlarm(),
     ];
-
-    //noticontroller.forward();
     return GetBuilder<navibool>(
         builder: (_) => GetBuilder<uisetting>(builder: ((_) {
               return Scaffold(
@@ -165,76 +133,80 @@ class _mainrouteState extends State<mainroute>
                       child: pages[uiset.pagenumber]),
                   bottomNavigationBar: draw.navi == 1
                       ? Container(
-                          height: 70,
                           decoration: BoxDecoration(
                               border: Border(
                                   top:
                                       BorderSide(color: draw.color, width: 1))),
-                          child: BottomNavigationBar(
-                            type: BottomNavigationBarType.fixed,
-                            onTap: (_index) async {
-                              //Handle button tap
-                              uiset.setloading(true);
-                              if (_index == 2) {
-                                Hive.box('user_setting').put('page_index',
-                                    Hive.box('user_setting').get('page_index'));
-                                uiset.setpageindex(
-                                    Hive.box('user_setting').get('page_index'));
-                                /*addWhole(context, searchNode, controller, name,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              BottomNavigationBar(
+                                type: BottomNavigationBarType.fixed,
+                                onTap: (_index) async {
+                                  //Handle button tap
+                                  uiset.setloading(true);
+                                  if (_index == 2) {
+                                    Hive.box('user_setting').put(
+                                        'page_index',
+                                        Hive.box('user_setting')
+                                            .get('page_index'));
+                                    uiset.setpageindex(Hive.box('user_setting')
+                                        .get('page_index'));
+                                    /*addWhole(context, searchNode, controller, name,
                                 Date, 'home', fToast);*/
-                                addWhole_update(context, searchNode, controller,
-                                    name, Date, 'home', fToast);
-                              } else {
-                                Hive.box('user_setting')
-                                    .put('page_index', _index);
-                                uiset.setpageindex(
-                                    Hive.box('user_setting').get('page_index'));
-                              }
+                                    addWhole_update(context, searchNode,
+                                        controller, name, Date, 'home', fToast);
+                                  } else {
+                                    Hive.box('user_setting')
+                                        .put('page_index', _index);
+                                    uiset.setpageindex(Hive.box('user_setting')
+                                        .get('page_index'));
+                                  }
 
-                              uiset.setloading(false);
-                            },
-                            backgroundColor: BGColor(),
-                            selectedFontSize: contentTextsize(),
-                            unselectedFontSize: contentTextsize(),
-                            selectedItemColor: NaviColor(true),
-                            unselectedItemColor: NaviColor(false),
-                            showSelectedLabels: true,
-                            showUnselectedLabels: true,
-                            currentIndex: uiset.pagenumber,
-                            items: <BottomNavigationBarItem>[
-                              BottomNavigationBarItem(
+                                  uiset.setloading(false);
+                                },
                                 backgroundColor: BGColor(),
-                                icon: const Icon(
-                                  Icons.home,
-                                  size: 25,
-                                ),
-                                label: '홈',
-                              ),
-                              BottomNavigationBarItem(
-                                backgroundColor: BGColor(),
-                                icon: const Icon(
-                                  Icons.list_alt,
-                                  size: 25,
-                                ),
-                                label: '마이룸',
-                              ),
-                              BottomNavigationBarItem(
-                                backgroundColor: BGColor(),
-                                icon: const Icon(
-                                  Icons.add_outlined,
-                                  size: 25,
-                                ),
-                                label: '추가',
-                              ),
-                              BottomNavigationBarItem(
-                                backgroundColor: BGColor(),
-                                icon: const Icon(
-                                  Icons.account_circle_outlined,
-                                  size: 25,
-                                ),
-                                label: '설정',
-                              ),
-                              /*BottomNavigationBarItem(
+                                selectedFontSize: 18,
+                                unselectedFontSize: 18,
+                                selectedItemColor: NaviColor(true),
+                                unselectedItemColor: NaviColor(false),
+                                showSelectedLabels: true,
+                                showUnselectedLabels: true,
+                                currentIndex: uiset.pagenumber,
+                                items: <BottomNavigationBarItem>[
+                                  BottomNavigationBarItem(
+                                    backgroundColor: BGColor(),
+                                    icon: const Icon(
+                                      Icons.home,
+                                      size: 25,
+                                    ),
+                                    label: '홈',
+                                  ),
+                                  BottomNavigationBarItem(
+                                    backgroundColor: BGColor(),
+                                    icon: const Icon(
+                                      Icons.list_alt,
+                                      size: 25,
+                                    ),
+                                    label: '마이룸',
+                                  ),
+                                  BottomNavigationBarItem(
+                                    backgroundColor: BGColor(),
+                                    icon: const Icon(
+                                      Icons.add_outlined,
+                                      size: 25,
+                                    ),
+                                    label: '추가',
+                                  ),
+                                  BottomNavigationBarItem(
+                                    backgroundColor: BGColor(),
+                                    icon: const Icon(
+                                      Icons.account_circle_outlined,
+                                      size: 25,
+                                    ),
+                                    label: '설정',
+                                  ),
+                                  /*BottomNavigationBarItem(
                                 backgroundColor: BGColor(),
                                 icon: GetBuilder<notishow>(
                                   builder: (_) => notilist.isread == true
@@ -260,9 +232,10 @@ class _mainrouteState extends State<mainroute>
                                 ),
                                 label: '알림',
                               ),*/
+                                ],
+                              ),
                             ],
-                          ),
-                        )
+                          ))
                       : const SizedBox(
                           height: 0,
                         ));

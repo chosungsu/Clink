@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Events/ADEvents.dart';
@@ -9,9 +11,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
+import '../Route/subuiroute.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
@@ -229,10 +233,10 @@ class _ProfilePageState extends State<ProfilePage>
                                                         height: 20,
                                                       ),
                                                       S_Container1(height),
-                                                      /*const SizedBox(
+                                                      const SizedBox(
                                                         height: 20,
                                                       ),
-                                                      ADBox(),*/
+                                                      ADSHOW(height),
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
@@ -257,7 +261,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                             height: 20,
                                                           ),
                                                           T_Container0(height),
-                                                          ADBox()
+                                                          ADSHOW(height),
                                                         ],
                                                       ))
                                                   : Padding(
@@ -280,7 +284,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                                 height: 20,
                                                               ),*/
                                                           G_Container1(height),
-                                                          ADBox()
+                                                          ADSHOW(height),
                                                         ],
                                                       )));
                                         }),
@@ -586,39 +590,6 @@ class _ProfilePageState extends State<ProfilePage>
       ),
     );
   }
-
-  ADBox() {
-    /*return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ADEvents(context),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
-    )*/
-    return SizedBox(
-      height: 60,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              '광고공간입니다',
-              style: TextStyle(
-                  color: TextColor_shadowcolor(),
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize()),
-              overflow: TextOverflow.ellipsis,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   /*G_Container(double height) {
     return SizedBox(
       width: MediaQuery.of(context).size.width - 40,
@@ -1090,7 +1061,9 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   S_Container1(double height) {
-    return SizedBox(
+    return Container(
+      width: 100.w,
+      alignment: Alignment.center,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -1610,15 +1583,6 @@ class _ProfilePageState extends State<ProfilePage>
                     children: [
                       GestureDetector(
                         onTap: () async {
-                          //showreadycontent(context);
-                          /*setState(() {
-                            pagesetnumber = 0;
-                            _scrollToTop();
-                            draw.currentpage = 2;
-                            _pController2.nextPage(
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.ease);
-                          });*/
                           var url = Uri.parse(
                               'https://linkaiteam.github.io/LINKAITEAM/전체');
                           launchUrl(url);
@@ -1674,153 +1638,6 @@ class _ProfilePageState extends State<ProfilePage>
                     ],
                   );
           }),
-    );
-  }
-
-  CompanyNotice() {
-    final List<PageList> _list_ad = [];
-    return StreamBuilder<QuerySnapshot>(
-      stream: firestore
-          .collection('CompanyNotice')
-          .orderBy('date', descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _list_ad.clear();
-          final valuespace = snapshot.data!.docs;
-          for (var sp in valuespace) {
-            final messageText = sp.get('title');
-            final messageDate = sp.get('date');
-            _list_ad.add(PageList(
-              title: messageText,
-              sub: messageDate,
-            ));
-          }
-
-          return _list_ad.isEmpty
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width - 60,
-                  height: draw.navi == 0
-                      ? MediaQuery.of(context).size.height - 80 - 20 - 90
-                      : MediaQuery.of(context).size.height - 80 - 70 - 20 - 90,
-                  //MediaQuery.of(context).size.height - 310,
-                  child: Center(
-                    child: Text(
-                      '공지사항이 없습니다.',
-                      style: TextStyle(
-                          color: TextColor_shadowcolor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: secondTitleTextsize()),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ))
-              : SizedBox(
-                  height: draw.navi == 0
-                      ? MediaQuery.of(context).size.height - 80 - 20 - 90
-                      : MediaQuery.of(context).size.height - 80 - 70 - 20 - 90,
-                  width: MediaQuery.of(context).size.width - 40,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: _list_ad.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  ContainerDesign(
-                                    color: BGColor(),
-                                    child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                80,
-                                        height: 100,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      _list_ad[index].title,
-                                                      softWrap: true,
-                                                      maxLines: 2,
-                                                      style: TextStyle(
-                                                          color: TextColor(),
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize()),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    )
-                                                  ],
-                                                )),
-                                            Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  _list_ad[index]
-                                                      .sub
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: TextColor(),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize()),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        )),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  )
-                                ],
-                              );
-                            }),
-                      ],
-                    ),
-                  ));
-        }
-        return SizedBox(
-            width: MediaQuery.of(context).size.width - 60,
-            height: draw.navi == 0
-                ? MediaQuery.of(context).size.height - 80 - 20 - 90
-                : MediaQuery.of(context).size.height - 80 - 70 - 20 - 90,
-            child: Center(
-              child: Text(
-                '공지사항이 없습니다.',
-                style: TextStyle(
-                    color: TextColor_shadowcolor(),
-                    fontWeight: FontWeight.bold,
-                    fontSize: secondTitleTextsize()),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ));
-      },
     );
   }
 
@@ -2141,7 +1958,7 @@ class _ProfilePageState extends State<ProfilePage>
                           'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
                       launchUrl(url);
                     } else {
-                      Get.to(() => ShowLicense(),
+                      Get.to(() => const ShowLicense(),
                           transition: Transition.rightToLeft);
                     }
                   },

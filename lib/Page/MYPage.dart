@@ -92,62 +92,62 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: BGColor(),
-            floatingActionButton: uiset.showtopbutton == false
-                ? null
-                : FloatingActionButton(
-                    onPressed: (() {
-                      scrollToTop(scrollController);
-                    }),
-                    backgroundColor: BGColor(),
-                    child: Icon(
-                      Icons.arrow_upward,
-                      color: TextColor(),
-                    ),
-                  ),
-            body: GetBuilder<navibool>(
-              builder: (_) => draw.navi == 0
-                  ? (draw.drawopen == true
-                      ? Stack(
-                          children: [
-                            SizedBox(
-                              width: 80,
-                              child: DrawerScreen(
-                                index:
-                                    Hive.box('user_setting').get('page_index'),
-                              ),
+    return Scaffold(
+        backgroundColor: BGColor(),
+        floatingActionButton: uiset.showtopbutton == false
+            ? null
+            : FloatingActionButton(
+                onPressed: (() {
+                  scrollToTop(scrollController);
+                }),
+                backgroundColor: BGColor(),
+                child: Icon(
+                  Icons.arrow_upward,
+                  color: TextColor(),
+                ),
+              ),
+        body: SafeArea(
+          child: GetBuilder<navibool>(
+            builder: (_) => draw.navi == 0
+                ? (draw.drawopen == true
+                    ? Stack(
+                        children: [
+                          SizedBox(
+                            width: 80,
+                            child: DrawerScreen(
+                              index: Hive.box('user_setting').get('page_index'),
                             ),
-                            GroupBody(context),
-                            uiset.loading == true
-                                ? const Loader(
-                                    wherein: 'route',
-                                  )
-                                : Container()
-                          ],
-                        )
-                      : Stack(
-                          children: [
-                            GroupBody(context),
-                            uiset.loading == true
-                                ? const Loader(
-                                    wherein: 'route',
-                                  )
-                                : Container()
-                          ],
-                        ))
-                  : Stack(
-                      children: [
-                        GroupBody(context),
-                        uiset.loading == true
-                            ? const Loader(
-                                wherein: 'route',
-                              )
-                            : Container()
-                      ],
-                    ),
-            )));
+                          ),
+                          GroupBody(context),
+                          uiset.loading == true
+                              ? const Loader(
+                                  wherein: 'route',
+                                )
+                              : Container()
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          GroupBody(context),
+                          uiset.loading == true
+                              ? const Loader(
+                                  wherein: 'route',
+                                )
+                              : Container()
+                        ],
+                      ))
+                : Stack(
+                    children: [
+                      GroupBody(context),
+                      uiset.loading == true
+                          ? const Loader(
+                              wherein: 'route',
+                            )
+                          : Container()
+                    ],
+                  ),
+          ),
+        ));
   }
 
   Widget GroupBody(BuildContext context) {
@@ -175,7 +175,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                       child: Column(
                         children: [
                           const AppBarCustom(
-                            title: '',
+                            title: 'MY',
                             righticon: false,
                             iconname: Icons.search,
                           ),
@@ -359,7 +359,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
             GetBuilder<linkspacesetting>(builder: (_) {
               return serverstatus == true
                   ? FutureBuilder(
-                      future: MongoDB.getData(collectionname: 'linknet')
+                      future: MongoDB.getData(collectionname: 'pinchannel')
                           .then((value) {
                         listpinlink.clear();
                         if (value.isEmpty) {
@@ -367,12 +367,8 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                           for (int j = 0; j < value.length; j++) {
                             user = value[j]['username'];
                             if (user == usercode) {
-                              for (int i = 0;
-                                  i < value[j]['link'].length;
-                                  i++) {
-                                listpinlink
-                                    .add(Linkpage(link: value[j]['link'][i]));
-                              }
+                              listpinlink
+                                  .add(Linkpage(link: value[j]['linkname']));
                             }
                           }
                         }
@@ -411,166 +407,80 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                     itemCount: listpinlink.length,
                                     itemBuilder: ((context, index) {
                                       return GestureDetector(
-                                          onTap: () async {},
-                                          child: FocusedMenuHolder(
-                                              menuItems: [
-                                                FocusedMenuItem(
-                                                    trailingIcon: const Icon(
-                                                      Icons.style,
-                                                      size: 30,
-                                                    ),
-                                                    title: Text('상세정보',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize())),
-                                                    onPressed: () async {
-                                                      var realusername;
-                                                      await firestore
-                                                          .collection('User')
-                                                          .where('code',
-                                                              isEqualTo:
-                                                                  usercode)
-                                                          .get()
-                                                          .then(
-                                                        (value) {
-                                                          realusername =
-                                                              value.docs[0]
-                                                                  ['subname'];
-                                                        },
-                                                      );
-                                                      infoshow(
-                                                          index,
-                                                          '',
-                                                          '',
-                                                          listpinlink[index]
-                                                              .link,
-                                                          context,
-                                                          realusername,
-                                                          '',
-                                                          'link');
-                                                    }),
-                                                FocusedMenuItem(
-                                                    trailingIcon: const Icon(
-                                                      Icons.share,
-                                                      size: 30,
-                                                    ),
-                                                    title: Text('Sharing 설정',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize())),
-                                                    onPressed: () async {}),
-                                                FocusedMenuItem(
-                                                    trailingIcon: const Icon(
-                                                      Icons.edit,
-                                                      size: 30,
-                                                    ),
-                                                    backgroundColor:
-                                                        Colors.red.shade200,
-                                                    title: Text('변경 및 삭제',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize())),
-                                                    onPressed: () async {
-                                                      _controller.text =
-                                                          listpinlink[index]
-                                                              .link;
-                                                      _controller.selection =
-                                                          TextSelection.fromPosition(
-                                                              TextPosition(
-                                                                  offset: listpinlink[
-                                                                          index]
-                                                                      .link
-                                                                      .length));
-                                                      SetChangeLink(
-                                                          context,
-                                                          _controller,
-                                                          searchNode,
-                                                          listpinlink[index]
-                                                              .link);
-                                                    }),
-                                              ],
-                                              duration:
-                                                  const Duration(seconds: 0),
-                                              animateMenuItems: true,
-                                              menuOffset: 20,
-                                              bottomOffsetHeight: 10,
-                                              menuWidth: MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  40,
-                                              openWithTap: false,
-                                              onPressed: () {
-                                                index == 0
-                                                    ? Get.to(
-                                                        () =>
-                                                            const ChooseCalendar(
-                                                                isfromwhere:
-                                                                    'mypagehome',
-                                                                index: 0),
-                                                        transition: Transition
-                                                            .rightToLeft)
-                                                    : Get.to(
-                                                        () => Linkin(
-                                                              isfromwhere:
-                                                                  'mypagehome',
-                                                              name: listpinlink[
-                                                                      index]
-                                                                  .link,
-                                                            ),
-                                                        transition: Transition
-                                                            .rightToLeft);
-                                              },
-                                              child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.rectangle,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                    color: Colors.grey.shade200,
-                                                  ),
-                                                  child: SizedBox(
-                                                      child: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                        Flexible(
-                                                            fit: FlexFit.tight,
-                                                            child: Text(
+                                          onLongPress: () {
+                                            _controller.text =
+                                                listpinlink[index].link;
+                                            _controller.selection =
+                                                TextSelection.fromPosition(
+                                                    TextPosition(
+                                                        offset:
+                                                            listpinlink[index]
+                                                                .link
+                                                                .length));
+                                            SetChangeLink(
+                                                context,
+                                                _controller,
+                                                searchNode,
+                                                listpinlink[index].link);
+                                          },
+                                          onTap: () async {
+                                            index == 0
+                                                ? Get.to(
+                                                    () => const ChooseCalendar(
+                                                        isfromwhere:
+                                                            'mypagehome',
+                                                        index: 0),
+                                                    transition:
+                                                        Transition.rightToLeft)
+                                                : Get.to(
+                                                    () => Linkin(
+                                                          isfromwhere:
+                                                              'mypagehome',
+                                                          name:
                                                               listpinlink[index]
-                                                                  .link
-                                                                  .toString(),
-                                                              maxLines: 2,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black45,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      contentTextsize()),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ))
-                                                      ])))));
+                                                                  .link,
+                                                        ),
+                                                    transition:
+                                                        Transition.rightToLeft);
+                                          },
+                                          child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.rectangle,
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                color: Colors.grey.shade200,
+                                              ),
+                                              child: SizedBox(
+                                                  child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                    Flexible(
+                                                        fit: FlexFit.tight,
+                                                        child: Text(
+                                                          listpinlink[index]
+                                                              .link
+                                                              .toString(),
+                                                          maxLines: 2,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .black45,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize()),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ))
+                                                  ]))));
                                     })));
                       },
                     )

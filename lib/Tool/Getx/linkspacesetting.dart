@@ -1,13 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../../LocalNotiPlatform/NotificationApi.dart';
 import '../BGColor.dart';
 
 class linkspacesetting extends GetxController {
   List spacelink = [];
+  List indexcnt = List.generate(0, (index) => index, growable: true);
   bool iscompleted = false;
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))
@@ -39,6 +39,18 @@ class linkspacesetting extends GetxController {
 
   void setcolor() {
     color = Color(Hive.box('user_setting').get('colorlinkpage'));
+    update();
+    notifyChildrens();
+  }
+
+  void setspacein(int index, dynamic dynamics) {
+    indexcnt.insert(index, dynamics);
+    update();
+    notifyChildrens();
+  }
+
+  void minusspacein(int index) {
+    indexcnt.removeAt(index);
     update();
     notifyChildrens();
   }

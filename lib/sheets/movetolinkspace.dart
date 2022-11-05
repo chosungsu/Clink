@@ -32,7 +32,8 @@ movetolinkspace(
       isScrollControlled: true,
       builder: (context) {
         return Container(
-          margin: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
           child: Padding(
               padding: MediaQuery.of(context).viewInsets,
               child: Container(
@@ -155,47 +156,6 @@ content(
             ],
           ),
         ),
-        /*const SizedBox(
-          height: 30,
-        ),
-        GestureDetector(
-          onTap: () async {
-            Get.back();
-            movetolinkspacesecond(context, 'MY');
-          },
-          child: Row(
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.workspaces,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('나의 다른 스페이스',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                          Text('계정 이동없는 간편한 이동',
-                              style: TextStyle(
-                                  color: Colors.grey.shade400, fontSize: 15)),
-                        ],
-                      ),
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
-            ],
-          ),
-        )*/
       ],
     );
   });
@@ -333,46 +293,6 @@ contentsecond(BuildContext context, String str) {
             ],
           ),
         ),
-        /*const SizedBox(
-          height: 30,
-        ),
-        GestureDetector(
-          onTap: () async {
-            Get.back();
-          },
-          child: Row(
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.workspaces,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('나의 다른 스페이스',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                          Text('계정 이동없는 간편한 이동',
-                              style: TextStyle(
-                                  color: Colors.grey.shade400, fontSize: 15)),
-                        ],
-                      ),
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
-            ],
-          ),
-        )*/
       ],
     );
   });
@@ -387,7 +307,8 @@ addmylink(
 ) {
   Get.bottomSheet(
           Container(
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(
+                left: 10, right: 10, bottom: kBottomNavigationBarHeight),
             child: Padding(
                 padding: MediaQuery.of(context).viewInsets,
                 child: Container(
@@ -682,7 +603,8 @@ SetChangeLink(
             builder: (_) => Padding(
                 padding: MediaQuery.of(context).viewInsets,
                 child: Container(
-                  margin: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(
+                      left: 10, right: 10, bottom: kBottomNavigationBarHeight),
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../Route/subuiroute.dart';
+import '../../../Tool/AppBarCustom.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -61,14 +62,14 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: UI(),
-      ),
-    ));
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: WillPopScope(
+            onWillPop: _onWillPop,
+            child: UI(),
+          ),
+        ));
   }
 
   UI() {
@@ -82,7 +83,12 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const AppBarCustom(
+                title: '',
+                righticon: true,
+                iconname: Icons.close,
+              ),
+              /*SizedBox(
                   height: 80,
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -133,7 +139,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                             )),
                       ],
                     ),
-                  )),
+                  )),*/
               Flexible(
                   fit: FlexFit.tight,
                   child: SizedBox(

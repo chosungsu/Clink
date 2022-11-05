@@ -1,4 +1,5 @@
 import 'package:clickbyme/mongoDB/mongodb_constant.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
@@ -17,7 +18,8 @@ class MongoDB {
       collection_noticebyusers,
       collection_howtouse,
       collection_linknet,
-      collection_pinchannel;
+      collection_pinchannel,
+      collection_pinchannelin;
 
   static connect() async {
     var db = await Db.create(MONGO_URL);
@@ -38,6 +40,7 @@ class MongoDB {
     collection_howtouse = db.collection(HOWTOUSE_COLLECTION);
     collection_linknet = db.collection(LINKNET_COLLECTION);
     collection_pinchannel = db.collection(PINCHANNEL_COLLECTION);
+    collection_pinchannelin = db.collection(PINUSERDATAIN_COLLECTION);
   }
 
   static Future getData({required String collectionname}) async {
@@ -84,6 +87,9 @@ class MongoDB {
     } else if (collectionname == 'pinchannel') {
       arrdata = await collection_pinchannel.find().toList();
       return arrdata;
+    } else if (collectionname == 'pinchannelin') {
+      arrdata = await collection_pinchannelin.find().toList();
+      return arrdata;
     } else {
       return [];
     }
@@ -118,6 +124,8 @@ class MongoDB {
       await collection_linknet.insertOne(addlist);
     } else if (collectionname == 'pinchannel') {
       await collection_pinchannel.insertOne(addlist);
+    } else if (collectionname == 'pinchannelin') {
+      await collection_pinchannelin.insertOne(addlist);
     }
   }
 
@@ -217,6 +225,49 @@ class MongoDB {
             modify.set(
                 updatelist.keys.toList()[i], updatelist.values.toList()[i]));
       }
+    } else if (collectionname == 'pinchannelin') {
+      for (int i = 0; i < updatelist.length; i++) {
+        await collection_pinchannelin.update(
+            where.eq(query, what),
+            modify.set(
+                updatelist.keys.toList()[i], updatelist.values.toList()[i]));
+      }
+    }
+  }
+
+  static updatewwithtwoquery(
+      {required String collectionname,
+      required String query1,
+      required String what1,
+      required String query2,
+      required String what2,
+      required Map<String, dynamic> updatelist}) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    if (collectionname == 'pinchannelin') {
+      await MongoDB.getData(collectionname: collectionname);
+      if (MongoDB.res != null) {
+        for (int i = 0; i < updatelist.length; i++) {
+          await collection_pinchannel.update(
+              {query1: what1, query2: what2},
+              modify.set(updatelist.keys.toList()[i],
+                  [updatelist.values.toList()[i]]));
+        }
+      } else {
+        await MongoDB.add(collectionname: collectionname, addlist: {
+          query1: what1,
+          query2: what2,
+          updatelist.keys.toList()[0]: [updatelist.values.toList()[0]],
+          updatelist.keys.toList()[1]: [updatelist.values.toList()[1]]
+        });
+      }
+      await firestore.collection('Pinchannelin').get().then((value) {
+        firestore.collection('Pinchannelin').add({
+          query1: what1,
+          query2: what2,
+          updatelist.keys.toList()[0]: [updatelist.values.toList()[0]],
+          updatelist.keys.toList()[1]: [updatelist.values.toList()[1]]
+        });
+      });
     }
   }
 
@@ -248,6 +299,8 @@ class MongoDB {
     } else if (collectionname == 'linknet') {
       await collection_linknet.deleteOne(deletelist);
     } else if (collectionname == 'pinchannel') {
+      await collection_pinchannel.deleteOne(deletelist);
+    } else if (collectionname == 'pinchannelin') {
       await collection_pinchannel.deleteOne(deletelist);
     }
   }
@@ -307,6 +360,10 @@ class MongoDB {
       });
     } else if (collectionname == 'pinchannel') {
       res = await collection_pinchannel.find({query: what}).forEach((v) {
+        res = v;
+      });
+    } else if (collectionname == 'pinchannelin') {
+      res = await collection_pinchannelin.find({query: what}).forEach((v) {
         res = v;
       });
     }

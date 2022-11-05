@@ -5,8 +5,10 @@ import 'package:clickbyme/Route/initScreenLoading.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/mongoDB/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -30,7 +32,12 @@ void main() async {
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
   await MongoDB.connect();
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const MyApp(), // Wrap your app
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -40,9 +47,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: ((p0, p1, p2) {
-      return const GetMaterialApp(
+      return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashPage(),
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+        home: const SplashPage(),
       );
     }));
   }
