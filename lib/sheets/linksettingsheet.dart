@@ -4,10 +4,14 @@ import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/Linkpage.dart';
+import '../Tool/BGColor.dart';
+import '../Tool/ContainerDesign.dart';
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/firstContentNet/HomeView.dart';
@@ -701,6 +705,8 @@ linkplacechangeoptions(
   String name,
   String link,
   int index,
+  FocusNode changenamenode,
+  TextEditingController controller,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -731,7 +737,8 @@ linkplacechangeoptions(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: changeoptplace(context, name, link, index),
+                child: changeoptplace(
+                    context, name, link, index, changenamenode, controller),
               )),
         );
       }).whenComplete(() {});
@@ -742,6 +749,8 @@ changeoptplace(
   String name,
   String link,
   int index,
+  FocusNode changenamenode,
+  TextEditingController controller,
 ) {
   return SizedBox(
       child: Padding(
@@ -765,7 +774,8 @@ changeoptplace(
               const SizedBox(
                 height: 20,
               ),
-              contentthird(context, name, link, index),
+              contentthird(
+                  context, name, link, index, changenamenode, controller),
               const SizedBox(
                 height: 20,
               ),
@@ -778,6 +788,8 @@ contentthird(
   String name,
   String link,
   int index,
+  FocusNode changenamenode,
+  TextEditingController controller,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
@@ -792,7 +804,9 @@ contentthird(
         GestureDetector(
           onTap: () async {
             Get.back();
-            linkmadeplace(context, name, link, 'edit', index);
+            //linkmadeplace(context, name, link, 'edit', index);
+            linkplacenamechange(
+                context, name, link, index, changenamenode, controller);
           },
           child: Row(
             children: [
@@ -887,6 +901,300 @@ contentthird(
               ),
             ],
           ),
+        ),
+      ],
+    );
+  });
+}
+
+linkplacenamechange(
+  BuildContext context,
+  String name,
+  String link,
+  int index,
+  FocusNode node,
+  TextEditingController controller,
+) {
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: GestureDetector(
+                onTap: () {
+                  node.unfocus();
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: changenameplace(
+                      context, name, link, index, node, controller),
+                ),
+              )),
+        );
+      }).whenComplete(() {
+    final linkspaceset = Get.put(linkspacesetting());
+
+    linkspaceset.setspecificspacein(
+        index, Linkspacepage(index: index, placestr: controller.text));
+    linkspaceset.minusspacein(index + 1);
+    controller.text == '';
+  });
+}
+
+changenameplace(
+  BuildContext context,
+  String name,
+  String link,
+  int index,
+  FocusNode node,
+  TextEditingController controller,
+) {
+  return SizedBox(
+      child: Padding(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  height: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          alignment: Alignment.topCenter,
+                          color: Colors.black45),
+                    ],
+                  )),
+              const SizedBox(
+                height: 20,
+              ),
+              titleforth(
+                context,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              contentforth(context, name, link, index, node, controller),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          )));
+}
+
+titleforth(
+  BuildContext context,
+) {
+  return SizedBox(
+      child: Row(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: const [
+      Text('무엇으로 변경할까요?',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25)),
+    ],
+  ));
+}
+
+contentforth(
+  BuildContext context,
+  String name,
+  String link,
+  int index,
+  FocusNode node,
+  TextEditingController controller,
+) {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  final List<Linkspacepage> listspacepageset = [];
+  bool isloading = false;
+  bool serverstatus = Hive.box('user_info').get('server_status');
+  var id;
+  var updateid = [];
+  var updateindex = [];
+
+  return StatefulBuilder(builder: (_, StateSetter setState) {
+    return Column(
+      children: [
+        ContainerDesign(
+          color: Colors.white,
+          child: TextField(
+            focusNode: node,
+            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 10),
+              border: InputBorder.none,
+              isCollapsed: true,
+              hintText: '변경할 제목입력',
+              hintStyle:
+                  TextStyle(fontSize: contentTextsize(), color: Colors.black45),
+            ),
+            controller: controller,
+          ),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        SizedBox(
+          height: 50,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                primary: ButtonColor(),
+              ),
+              onPressed: () async {
+                setState(() {
+                  isloading = true;
+                });
+                if (controller.text.isEmpty) {
+                  Snack.show(
+                      context: context,
+                      title: '알림',
+                      content: '변경할 이름이 비어있어요!',
+                      snackType: SnackType.warning,
+                      behavior: SnackBarBehavior.floating);
+                } else {
+                  if (serverstatus) {
+                    await MongoDB.getData(collectionname: 'pinchannelin')
+                        .then((value) {
+                      for (int j = 0; j < value.length; j++) {
+                        final messageuser = value[j]['username'];
+                        final messagelinkname = value[j]['linkname'];
+                        final messageindex = value[j]['index'];
+                        if (messageindex == index &&
+                            messagelinkname == link &&
+                            messageuser == name) {
+                          MongoDB.updatewwithqueries(
+                              collectionname: 'pinchannelin',
+                              query1: 'username',
+                              what1: messageuser,
+                              query2: 'linkname',
+                              what2: messagelinkname,
+                              query3: 'index',
+                              what3: messageindex.toString(),
+                              updatelist: {'placestr': controller.text});
+                        }
+                      }
+                    });
+                    await firestore
+                        .collection('Pinchannelin')
+                        .get()
+                        .then((value) {
+                      if (value.docs.isNotEmpty) {
+                        for (int j = 0; j < value.docs.length; j++) {
+                          final messageuser = value.docs[j]['username'];
+                          final messagelinkname = value.docs[j]['linkname'];
+                          final messageindex = value.docs[j]['index'];
+                          final messageid = value.docs[j].id;
+                          if (messageindex == index &&
+                              messagelinkname == link &&
+                              messageuser == name) {
+                            firestore
+                                .collection('Pinchannelin')
+                                .doc(messageid)
+                                .update({'placestr': controller.text});
+                          }
+                        }
+                      }
+                    });
+                  } else {
+                    await firestore
+                        .collection('Pinchannelin')
+                        .get()
+                        .then((value) {
+                      if (value.docs.isNotEmpty) {
+                        for (int j = 0; j < value.docs.length; j++) {
+                          final messageuser = value.docs[j]['username'];
+                          final messagelinkname = value.docs[j]['linkname'];
+                          final messageindex = value.docs[j]['index'];
+                          final messageid = value.docs[j].id;
+                          if (messageindex == index &&
+                              messagelinkname == link &&
+                              messageuser == name) {
+                            firestore
+                                .collection('Pinchannelin')
+                                .doc(messageid)
+                                .update({'placestr': controller.text});
+                          }
+                        }
+                      }
+                    });
+                  }
+                }
+                setState(() {
+                  isloading = false;
+                });
+                Get.back();
+              },
+              child: Center(
+                child: isloading
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            '변경중...',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: contentTextsize(),
+                              fontWeight: FontWeight.bold, // bold
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: NeumorphicText(
+                              '변경하기',
+                              style: const NeumorphicStyle(
+                                shape: NeumorphicShape.flat,
+                                depth: 3,
+                                color: Colors.white,
+                              ),
+                              textStyle: NeumorphicTextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+              )),
         ),
       ],
     );

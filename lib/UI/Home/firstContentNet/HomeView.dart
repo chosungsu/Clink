@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, non_constant_identifier_names, unused_local_variable
+
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
@@ -157,7 +159,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   }
 
   BuildContent() {
-    var user, linkname;
+    var user, linkname, updateid1, updateid2;
     return widget.where == 'home'
         ? GetBuilder<PeopleAdd>(
             builder: (_) => Column(
@@ -726,6 +728,39 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                   updatelist: {
                                     'index': oldIndex,
                                   });
+                              firestore
+                                  .collection('Pinchannelin')
+                                  .get()
+                                  .then((value) {
+                                if (value.docs.isNotEmpty) {
+                                  for (int i = 0; i < value.docs.length; i++) {
+                                    if (value.docs[i].get('username') ==
+                                            usercode &&
+                                        value.docs[i].get('linkname') ==
+                                            linkname) {
+                                      if (value.docs[i].get('index') ==
+                                          newIndex) {
+                                        updateid1 = value.docs[i].id;
+                                        firestore
+                                            .collection('Pinchannelin')
+                                            .doc(updateid1)
+                                            .update({
+                                          'index': oldIndex,
+                                        });
+                                      } else if (value.docs[i].get('index') ==
+                                          oldIndex) {
+                                        updateid2 = value.docs[i].id;
+                                        firestore
+                                            .collection('Pinchannelin')
+                                            .doc(updateid2)
+                                            .update({
+                                          'index': newIndex,
+                                        });
+                                      }
+                                    }
+                                  }
+                                }
+                              });
                             },
                             proxyDecorator: (Widget child, int index,
                                 Animation<double> animation) {

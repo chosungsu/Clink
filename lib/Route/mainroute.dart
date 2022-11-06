@@ -47,7 +47,7 @@ class _mainrouteState extends State<mainroute>
   @override
   void initState() {
     super.initState();
-    MongoDB.connect();
+
     WidgetsBinding.instance.addObserver(this);
     uiset.pagenumber = widget.index;
     fToast = FToast();
@@ -97,7 +97,7 @@ class _mainrouteState extends State<mainroute>
       );
     } else {
       Hive.box('user_setting').put('page_index', 0);
-      await MongoDB.connect();
+
       Navigator.of(context).pushReplacement(
         PageTransition(
           type: PageTransitionType.leftToRight,
@@ -113,6 +113,7 @@ class _mainrouteState extends State<mainroute>
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    MongoDB.connect();
     List pages = [
       HomePage(secondname: cal_share_person.secondname),
       const MYPage(),

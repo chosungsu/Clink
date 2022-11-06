@@ -214,7 +214,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                 margin:
                                                     const EdgeInsets.all(10),
                                                 child: NeumorphicIcon(
-                                                  Icons.more_horiz,
+                                                  Icons.settings,
                                                   size: 30,
                                                   style: NeumorphicStyle(
                                                       shape: NeumorphicShape
@@ -314,7 +314,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 1,
-                                  childAspectRatio: 3 / 2,
+                                  childAspectRatio: 5 / 4,
                                   crossAxisSpacing: 20,
                                   mainAxisSpacing: 20),
                           itemCount: linkspaceset.indexcnt.length,
@@ -347,56 +347,36 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                   children: [
                                                     Flexible(
                                                       fit: FlexFit.tight,
-                                                      child: RichText(
-                                                          text: TextSpan(
-                                                              children: [
-                                                            WidgetSpan(
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                    fontSize:
-                                                                        contentTextsize(),
-                                                                    color:
-                                                                        TextColor_shadowcolor()),
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    linkplacechangeoptions(
-                                                                        context,
-                                                                        usercode,
-                                                                        widget
-                                                                            .name,
-                                                                        index);
-                                                                  },
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        linkspaceset
-                                                                            .indexcnt[index]
-                                                                            .placestr
-                                                                            .toString(),
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.black45,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: contentTextsize()),
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            10,
-                                                                      ),
-                                                                      const Icon(
-                                                                        Icons
-                                                                            .swap_horiz,
-                                                                        color: Colors
-                                                                            .black45,
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                )),
-                                                          ])),
+                                                      child: Text(
+                                                        linkspaceset
+                                                            .indexcnt[index]
+                                                            .placestr
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black45,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize()),
+                                                      ),
                                                     ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        controller.text = '';
+                                                        linkplacechangeoptions(
+                                                            context,
+                                                            usercode,
+                                                            widget.name,
+                                                            index,
+                                                            changenamenode,
+                                                            controller);
+                                                      },
+                                                      child: const Icon(
+                                                        Icons.more_horiz,
+                                                        color: Colors.black45,
+                                                      ),
+                                                    )
                                                   ])
                                             ],
                                           )))),
@@ -453,7 +433,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 1,
-                                    childAspectRatio: 3 / 2,
+                                    childAspectRatio: 5 / 4,
                                     crossAxisSpacing: 20,
                                     mainAxisSpacing: 20),
                             itemCount: linkspaceset.indexcnt.length,
@@ -484,57 +464,47 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                   children: [
                                                     Flexible(
                                                       fit: FlexFit.tight,
-                                                      child: RichText(
-                                                          text: TextSpan(
-                                                              children: [
-                                                            WidgetSpan(
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                    fontSize:
-                                                                        contentTextsize(),
-                                                                    color:
-                                                                        TextColor_shadowcolor()),
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    linkplacechangeoptions(
-                                                                        context,
-                                                                        usercode,
-                                                                        widget
-                                                                            .name,
-                                                                        index);
-                                                                  },
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        linkspaceset
-                                                                            .indexcnt[index]
-                                                                            .placestr
-                                                                            .toString(),
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.black45,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontSize: contentTextsize()),
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            10,
-                                                                      ),
-                                                                      const Icon(
-                                                                        Icons
-                                                                            .swap_horiz,
-                                                                        color: Colors
-                                                                            .black45,
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                )),
-                                                          ])),
+                                                      child: Text(
+                                                        linkspaceset
+                                                            .indexcnt[index]
+                                                            .placestr
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black45,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize()),
+                                                      ),
                                                     ),
-                                                  ])
+                                                    InkWell(
+                                                      onTap: () {
+                                                        controller.text = '';
+                                                        linkplacechangeoptions(
+                                                            context,
+                                                            usercode,
+                                                            widget.name,
+                                                            index,
+                                                            changenamenode,
+                                                            controller);
+                                                      },
+                                                      child: const Icon(
+                                                        Icons.more_horiz,
+                                                        color: Colors.black45,
+                                                      ),
+                                                    )
+                                                  ]),
+                                              linkspaceset.indexcnt[index]
+                                                          .placestr ==
+                                                      'board'
+                                                  ? Row()
+                                                  : (linkspaceset
+                                                              .indexcnt[index]
+                                                              .placestr ==
+                                                          'card'
+                                                      ? Row()
+                                                      : Row())
                                             ],
                                           )))),
                                   const SizedBox(
