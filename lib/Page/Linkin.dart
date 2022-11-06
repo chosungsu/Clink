@@ -285,39 +285,33 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
 
   listy_My() {
     var user, linkname;
-    void _onReorder(int oldIndex, int newIndex) {
-      setState(() {
-        final item = linkspaceset.indexcnt.removeAt(oldIndex);
-        linkspaceset.indexcnt.insert(newIndex, item);
-      });
-    }
 
     return GetBuilder<linkspacesetting>(
         builder: (_) => serverstatus == true
             ? FutureBuilder(
                 future: MongoDB.getData(collectionname: 'pinchannelin')
                     .then((value) {
-                  listspacepageset.clear();
                   linkspaceset.indexcnt.clear();
+
+                  //listspacepageset.clear();
                   if (value.isEmpty) {
                   } else {
-                    for (int j = 0; j < value.length; j++) {
-                      user = value[j]['username'];
-                      linkname = value[j]['linkname'];
-                      if (user == usercode && linkname == widget.name) {
-                        for (int i = 0; i < value[j]['placestr'].length; i++) {
-                          linkspaceset.setspacein(linkspaceset.indexcnt.length,
-                              value[j]['placestr'][i]);
-                          listspacepageset.add(Linksapcepage(
-                              index: value[j]['index'][i],
-                              placestr: value[j]['placestr'][i]));
-                        }
+                    for (var sp in value) {
+                      user = sp['username'];
+                      linkname = sp['linkname'];
+                      if (usercode == user && widget.name == linkname) {
+                        linkspaceset.indexcnt.add(Linksapcepage(
+                            index: int.parse(sp['index'].toString()),
+                            placestr: sp['placestr']));
                       }
                     }
+                    linkspaceset.indexcnt.sort(((a, b) {
+                      return a.index.compareTo(b.index);
+                    }));
                   }
                 }),
                 builder: (context, snapshot) {
-                  return listspacepageset.isEmpty
+                  return linkspaceset.indexcnt.isEmpty
                       ? SizedBox(
                           child: Center(
                           child: NeumorphicText(
@@ -334,191 +328,125 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                             textAlign: TextAlign.center,
                           ),
                         ))
-                      : Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              linkspaceset.indexcnt.isEmpty
-                                  ? SizedBox(
-                                      child: Center(
-                                      child: NeumorphicText(
-                                        '텅! 비어있어요~',
-                                        style: NeumorphicStyle(
-                                          shape: NeumorphicShape.flat,
-                                          depth: 3,
-                                          color: TextColor_shadowcolor(),
-                                        ),
-                                        textStyle: NeumorphicTextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTitleTextsize(),
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ))
-                                  : ReorderableGridView.builder(
-                                      physics: const ScrollPhysics(),
-                                      itemCount: linkspaceset.indexcnt.length,
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 1,
-                                              childAspectRatio: 2 / 1,
-                                              crossAxisSpacing: 20,
-                                              mainAxisSpacing: 20),
-                                      onReorder: _onReorder,
-                                      shrinkWrap: true,
-                                      itemBuilder: ((context, index) {
-                                        return Column(
-                                          key: ValueKey(index.toString() +
-                                              String.fromCharCodes(
-                                                  Iterable.generate(
-                                                      5,
-                                                      (_) => _chars.codeUnitAt(
-                                                          _rnd.nextInt(_chars
-                                                              .length))))),
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Flexible(
-                                                fit: FlexFit.tight,
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    print('here');
-                                                    linkplacechangeoptions(
-                                                        context,
-                                                        usercode,
-                                                        widget.name,
-                                                        index);
-                                                  },
-                                                  child: Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              10),
-                                                      decoration: BoxDecoration(
-                                                        shape:
-                                                            BoxShape.rectangle,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                        color: Colors
-                                                            .grey.shade200,
-                                                      ),
-                                                      child: SizedBox(
-                                                          child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
+                      : Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GridView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: const ScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 1,
+                                        childAspectRatio: 3 / 2,
+                                        crossAxisSpacing: 20,
+                                        mainAxisSpacing: 20),
+                                itemCount: linkspaceset.indexcnt.length,
+                                itemBuilder: ((context, index) {
+                                  return GestureDetector(
+                                      onTap: () async {},
+                                      child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: Colors.grey.shade200,
+                                          ),
+                                          child: SizedBox(
+                                              child: Column(
+                                            children: [
+                                              Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Flexible(
+                                                      fit: FlexFit.tight,
+                                                      child: RichText(
+                                                          text: TextSpan(
                                                               children: [
-                                                            Flexible(
-                                                                fit: FlexFit
-                                                                    .tight,
-                                                                child: Text(
-                                                                  linkspaceset
-                                                                          .indexcnt[
-                                                                      index],
-                                                                  maxLines: 2,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black45,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          contentTextsize()),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ))
-                                                          ]))),
-                                                )),
-                                          ],
-                                        );
-                                      }),
-                                    ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          )
-
-                          /*GridView.builder(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              physics: const ScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 1,
-                                      childAspectRatio: 3 / 1,
-                                      crossAxisSpacing: 20,
-                                      mainAxisSpacing: 20),
-                              itemCount: listspacepageset.length,
-                              itemBuilder: ((context, index) {
-                                return GestureDetector(
-                                    onLongPress: () {},
-                                    onTap: () async {},
-                                    child: Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          color: Colors.grey.shade200,
-                                        ),
-                                        child: SizedBox(
-                                            child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                              Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Text(
-                                                    listspacepageset[index]
-                                                        .placestr
-                                                        .toString(),
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.black45,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentTextsize()),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ))
-                                            ]))));
-                              }))*/
-                          );
+                                                            WidgetSpan(
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                    color:
+                                                                        TextColor_shadowcolor()),
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    linkplacechangeoptions(
+                                                                        context,
+                                                                        usercode,
+                                                                        widget
+                                                                            .name,
+                                                                        index);
+                                                                  },
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        linkspaceset
+                                                                            .indexcnt[index]
+                                                                            .placestr
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black45,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontSize: contentTextsize()),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                      Icon(
+                                                                        Icons
+                                                                            .swap_horiz,
+                                                                        color:
+                                                                            TextColor_shadowcolor(),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )),
+                                                          ])),
+                                                    ),
+                                                  ])
+                                            ],
+                                          ))));
+                                })),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        );
                 },
               )
             : StreamBuilder<QuerySnapshot>(
                 stream: firestore.collection('Pinchannelin').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    listspacepageset.clear();
+                    //listspacepageset.clear();
+                    linkspaceset.indexcnt.clear();
                     final valuespace = snapshot.data!.docs;
                     for (var sp in valuespace) {
                       user = sp.get('username');
                       linkname = sp.get('linkname');
                       if (user == usercode && linkname == widget.name) {
-                        for (int i = 0; i < sp.get('placestr').length; i++) {
-                          listspacepageset.add(Linksapcepage(
-                              index: sp.get('index')[i],
-                              placestr: sp.get('placestr')[i]));
-                        }
+                        linkspaceset.indexcnt.add(Linksapcepage(
+                            index: int.parse(sp.get('index').toString()),
+                            placestr: sp.get('placestr')));
                       }
                     }
-                    return listspacepageset.isEmpty
+                    linkspaceset.indexcnt.sort(((a, b) {
+                      return a.index.compareTo(b.index);
+                    }));
+                    return linkspaceset.indexcnt.isEmpty
                         ? SizedBox(
                             child: Center(
                             child: NeumorphicText(
@@ -535,57 +463,72 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                               textAlign: TextAlign.center,
                             ),
                           ))
-                        : Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: GridView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 1,
-                                        childAspectRatio: 3 / 1,
-                                        crossAxisSpacing: 20,
-                                        mainAxisSpacing: 20),
-                                itemCount: listspacepageset.length,
-                                itemBuilder: ((context, index) {
-                                  return GestureDetector(
-                                      onTap: () async {},
-                                      child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            color: Colors.grey.shade200,
-                                          ),
-                                          child: SizedBox(
-                                              child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                Flexible(
-                                                    fit: FlexFit.tight,
-                                                    child: Text(
-                                                      listspacepageset[index]
-                                                          .placestr
-                                                          .toString(),
-                                                      maxLines: 2,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.black45,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize()),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ))
-                                              ]))));
-                                })));
+                        : Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              GridView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  physics: const ScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 1,
+                                          childAspectRatio: 3 / 2,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 20),
+                                  itemCount: linkspaceset.indexcnt.length,
+                                  itemBuilder: ((context, index) {
+                                    return GestureDetector(
+                                        onLongPress: () {
+                                          linkplacechangeoptions(context,
+                                              usercode, widget.name, index);
+                                        },
+                                        onTap: () async {},
+                                        child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.rectangle,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              color: Colors.grey.shade200,
+                                            ),
+                                            child: SizedBox(
+                                                child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                  Flexible(
+                                                      fit: FlexFit.tight,
+                                                      child: Text(
+                                                        linkspaceset
+                                                            .indexcnt[index]
+                                                            .placestr
+                                                            .toString(),
+                                                        maxLines: 2,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black45,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize()),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ))
+                                                ]))));
+                                  })),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          );
                   }
                   return LinearProgressIndicator(
                     backgroundColor: BGColor(),

@@ -300,7 +300,7 @@ Speeddialmemo(
               ),
               backgroundColor: Colors.orange.shade200,
               onTap: () {
-                linkmadeplace(context, usercode, name);
+                linkmadeplace(context, usercode, name, 'add', -1);
               },
               label: '필드 추가',
               labelStyle: TextStyle(

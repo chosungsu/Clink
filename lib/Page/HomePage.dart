@@ -360,7 +360,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       query: 'usercode',
                       what: Hive.box('user_setting').get('usercode'));
                   peopleadd.setcode();
-                  Get.to(() => HomeView(), transition: Transition.zoom);
+                  Get.to(
+                      () => const HomeView(
+                            where: 'home',
+                            link: '',
+                          ),
+                      transition: Transition.zoom);
                 },
                 child: Text('홈뷰설정',
                     style: TextStyle(

@@ -7,7 +7,7 @@ import '../BGColor.dart';
 
 class linkspacesetting extends GetxController {
   List spacelink = [];
-  List indexcnt = List.generate(0, (index) => index, growable: true);
+  List indexcnt = [];
   bool iscompleted = false;
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))
@@ -43,8 +43,8 @@ class linkspacesetting extends GetxController {
     notifyChildrens();
   }
 
-  void setspacein(int index, dynamic dynamics) {
-    indexcnt.insert(index, dynamics);
+  void setspacein(dynamic dynamics) {
+    indexcnt.add(dynamics);
     update();
     notifyChildrens();
   }

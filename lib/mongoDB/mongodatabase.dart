@@ -19,7 +19,8 @@ class MongoDB {
       collection_howtouse,
       collection_linknet,
       collection_pinchannel,
-      collection_pinchannelin;
+      collection_pinchannelin,
+      arrdata;
 
   static connect() async {
     var db = await Db.create(MONGO_URL);
@@ -44,7 +45,6 @@ class MongoDB {
   }
 
   static Future getData({required String collectionname}) async {
-    final arrdata;
     if (collectionname == 'user') {
       arrdata = await collection_user.find().toList();
       return arrdata;
@@ -228,46 +228,33 @@ class MongoDB {
     } else if (collectionname == 'pinchannelin') {
       for (int i = 0; i < updatelist.length; i++) {
         await collection_pinchannelin.update(
-            where.eq(query, what),
+            where.eq(query, int.parse(what)),
             modify.set(
                 updatelist.keys.toList()[i], updatelist.values.toList()[i]));
       }
     }
   }
 
-  static updatewwithtwoquery(
+  static updatewwithqueries(
       {required String collectionname,
       required String query1,
       required String what1,
       required String query2,
       required String what2,
+      required String query3,
+      required String what3,
       required Map<String, dynamic> updatelist}) async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
     if (collectionname == 'pinchannelin') {
-      await MongoDB.getData(collectionname: collectionname);
-      if (MongoDB.res != null) {
-        for (int i = 0; i < updatelist.length; i++) {
-          await collection_pinchannel.update(
-              {query1: what1, query2: what2},
-              modify.set(updatelist.keys.toList()[i],
-                  [updatelist.values.toList()[i]]));
-        }
-      } else {
-        await MongoDB.add(collectionname: collectionname, addlist: {
-          query1: what1,
-          query2: what2,
-          updatelist.keys.toList()[0]: [updatelist.values.toList()[0]],
-          updatelist.keys.toList()[1]: [updatelist.values.toList()[1]]
-        });
+      for (int i = 0; i < updatelist.length; i++) {
+        await collection_pinchannelin.update(
+            {
+              query1: what1,
+              query2: what2,
+              query3: int.parse(what3),
+            },
+            modify.set(
+                updatelist.keys.toList()[i], updatelist.values.toList()[i]));
       }
-      await firestore.collection('Pinchannelin').get().then((value) {
-        firestore.collection('Pinchannelin').add({
-          query1: what1,
-          query2: what2,
-          updatelist.keys.toList()[0]: [updatelist.values.toList()[0]],
-          updatelist.keys.toList()[1]: [updatelist.values.toList()[1]]
-        });
-      });
     }
   }
 
@@ -301,7 +288,7 @@ class MongoDB {
     } else if (collectionname == 'pinchannel') {
       await collection_pinchannel.deleteOne(deletelist);
     } else if (collectionname == 'pinchannelin') {
-      await collection_pinchannel.deleteOne(deletelist);
+      await collection_pinchannelin.deleteOne(deletelist);
     }
   }
 

@@ -47,6 +47,7 @@ class _mainrouteState extends State<mainroute>
   @override
   void initState() {
     super.initState();
+    MongoDB.connect();
     WidgetsBinding.instance.addObserver(this);
     uiset.pagenumber = widget.index;
     fToast = FToast();
@@ -96,11 +97,7 @@ class _mainrouteState extends State<mainroute>
       );
     } else {
       Hive.box('user_setting').put('page_index', 0);
-      if (serverstatus) {
-      } else {
-        await MongoDB.connect();
-      }
-
+      await MongoDB.connect();
       Navigator.of(context).pushReplacement(
         PageTransition(
           type: PageTransitionType.leftToRight,
