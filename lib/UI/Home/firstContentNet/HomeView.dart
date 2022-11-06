@@ -12,7 +12,6 @@ import '../../../Route/subuiroute.dart';
 import '../../../Tool/AppBarCustom.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
-import '../../../Tool/IconBtn.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../mongoDB/mongodatabase.dart';
@@ -43,7 +42,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   List userviewlist = [];
   final peopleadd = Get.put(PeopleAdd());
   final linkspaceset = Get.put(linkspacesetting());
-  final List<Linksapcepage> listspacepageset = [];
+  final List<Linkspacepage> listspacepageset = [];
   bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
@@ -79,6 +78,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: BGColor(),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: WillPopScope(
@@ -602,154 +602,151 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                             })
                   ],
                 ))
-        : FutureBuilder(
-            future:
-                MongoDB.getData(collectionname: 'pinchannelin').then((value) {
-              linkspaceset.indexcnt.clear();
-              if (value.isEmpty) {
-              } else {
-                for (var sp in value) {
-                  user = sp['username'];
-                  linkname = sp['linkname'];
-                  if (usercode == user && widget.link == linkname) {
-                    linkspaceset.indexcnt.add(Linksapcepage(
-                        index: int.parse(sp['index'].toString()),
-                        placestr: sp['placestr']));
+        : GetBuilder<linkspacesetting>(
+            builder: (_) => FutureBuilder(
+              future:
+                  MongoDB.getData(collectionname: 'pinchannelin').then((value) {
+                linkspaceset.indexcnt.clear();
+                if (value.isEmpty) {
+                } else {
+                  for (var sp in value) {
+                    user = sp['username'];
+                    linkname = sp['linkname'];
+                    if (usercode == user && widget.link == linkname) {
+                      linkspaceset.indexcnt.add(Linkspacepage(
+                          index: int.parse(sp['index'].toString()),
+                          placestr: sp['placestr']));
+                    }
                   }
+                  linkspaceset.indexcnt.sort(((a, b) {
+                    return a.index.compareTo(b.index);
+                  }));
                 }
-                linkspaceset.indexcnt.sort(((a, b) {
-                  return a.index.compareTo(b.index);
-                }));
-              }
-            }),
-            builder: (context, snapshot) {
-              return linkspaceset.indexcnt.isEmpty
-                  ? SizedBox(
-                      child: Center(
-                      child: NeumorphicText(
-                        '텅! 비어있어요~',
-                        style: NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: TextColor_shadowcolor(),
+              }),
+              builder: (context, snapshot) {
+                return linkspaceset.indexcnt.isEmpty
+                    ? SizedBox(
+                        child: Center(
+                        child: NeumorphicText(
+                          '텅! 비어있어요~',
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: TextColor_shadowcolor(),
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTitleTextsize(),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ))
-                  : Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ReorderableListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: linkspaceset.indexcnt.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return SizedBox(
-                              key: ValueKey(index),
-                              height: 80,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: ListTile(
+                      ))
+                    : Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ReorderableListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: linkspaceset.indexcnt.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return SizedBox(
+                                key: ValueKey(index),
+                                height: 80,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    GestureDetector(
                                       onTap: () {},
-                                      horizontalTitleGap: 10,
-                                      dense: true,
-                                      trailing: Icon(
-                                        Icons.drag_indicator,
-                                        color: TextColor(),
-                                      ),
-                                      title: GetBuilder<linkspacesetting>(
-                                        builder: (controller) => Text(
-                                            linkspaceset
-                                                .indexcnt[index].placestr
-                                                .toString(),
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize())),
+                                      child: ListTile(
+                                        onTap: () {},
+                                        horizontalTitleGap: 10,
+                                        dense: true,
+                                        trailing: Icon(
+                                          Icons.drag_indicator,
+                                          color: TextColor(),
+                                        ),
+                                        title: GetBuilder<linkspacesetting>(
+                                          builder: (controller) => Text(
+                                              linkspaceset
+                                                  .indexcnt[index].placestr
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: TextColor(),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize())),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          onReorder: (int oldIndex, int newIndex) {
-                            setState(() {
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            onReorder: (int oldIndex, int newIndex) {
                               if (oldIndex < newIndex) {
                                 newIndex -= 1;
                               }
                               final item =
                                   linkspaceset.indexcnt.removeAt(oldIndex);
-                              linkspaceset.indexcnt.insert(newIndex, item);
-                            });
-                            /*if (serverstatus) {
-                                      MongoDB.update(
-                                        collectionname: 'homeview',
-                                        query: 'usercode',
-                                        what: Hive.box('user_setting')
-                                            .get('usercode'),
-                                        updatelist: {
-                                          'viewcategory':
-                                              peopleadd.defaulthomeviewlist,
-                                        },
-                                      );
-                                      firestore
-                                          .collection('HomeViewCategories')
-                                          .doc(Hive.box('user_setting')
-                                              .get('usercode'))
-                                          .update(
-                                        {
-                                          'viewcategory':
-                                              peopleadd.defaulthomeviewlist,
-                                        },
-                                      );
-                                    } else {
-                                      firestore
-                                          .collection('HomeViewCategories')
-                                          .doc(Hive.box('user_setting')
-                                              .get('usercode'))
-                                          .update(
-                                        {
-                                          'viewcategory':
-                                              peopleadd.defaulthomeviewlist,
-                                        },
-                                      );
-                                    }*/
-                          },
-                          proxyDecorator: (Widget child, int index,
-                              Animation<double> animation) {
-                            return Material(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: TextColor_shadowcolor(),
-                                        width: 1)),
-                                child: child,
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    );
-            },
+                              linkspaceset.setspecificspacein(newIndex, item);
+                              MongoDB.updatewwithqueries(
+                                  collectionname: 'pinchannelin',
+                                  query1: 'username',
+                                  what1: usercode,
+                                  query2: 'linkname',
+                                  what2: linkname,
+                                  query3: 'index',
+                                  what3: oldIndex.toString(),
+                                  query4: 'placestr',
+                                  what4: linkspaceset
+                                      .indexcnt[newIndex].placestr
+                                      .toString(),
+                                  updatelist: {
+                                    'index': newIndex,
+                                  });
+                              MongoDB.updatewwithqueries(
+                                  collectionname: 'pinchannelin',
+                                  query1: 'username',
+                                  what1: usercode,
+                                  query2: 'linkname',
+                                  what2: linkname,
+                                  query3: 'index',
+                                  what3: newIndex.toString(),
+                                  query4: 'placestr',
+                                  what4: linkspaceset
+                                      .indexcnt[oldIndex].placestr
+                                      .toString(),
+                                  updatelist: {
+                                    'index': oldIndex,
+                                  });
+                            },
+                            proxyDecorator: (Widget child, int index,
+                                Animation<double> animation) {
+                              return Material(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: BGColor(),
+                                      border: Border.all(
+                                          color: TextColor(), width: 1)),
+                                  child: child,
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      );
+              },
+            ),
           );
   }
 }

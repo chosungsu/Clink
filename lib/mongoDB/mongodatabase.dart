@@ -243,17 +243,33 @@ class MongoDB {
       required String what2,
       required String query3,
       required String what3,
+      String? query4,
+      String? what4,
       required Map<String, dynamic> updatelist}) async {
     if (collectionname == 'pinchannelin') {
-      for (int i = 0; i < updatelist.length; i++) {
-        await collection_pinchannelin.update(
-            {
-              query1: what1,
-              query2: what2,
-              query3: int.parse(what3),
-            },
-            modify.set(
-                updatelist.keys.toList()[i], updatelist.values.toList()[i]));
+      if (query4 == null) {
+        for (int i = 0; i < updatelist.length; i++) {
+          await collection_pinchannelin.update(
+              {
+                query1: what1,
+                query2: what2,
+                query3: int.parse(what3),
+              },
+              modify.set(
+                  updatelist.keys.toList()[i], updatelist.values.toList()[i]));
+        }
+      } else {
+        for (int i = 0; i < updatelist.length; i++) {
+          await collection_pinchannelin.update(
+              {
+                query1: what1,
+                query2: what2,
+                query3: int.parse(what3),
+                query4: what4,
+              },
+              modify.set(
+                  updatelist.keys.toList()[i], updatelist.values.toList()[i]));
+        }
       }
     }
   }

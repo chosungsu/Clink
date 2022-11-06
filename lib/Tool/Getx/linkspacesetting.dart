@@ -49,6 +49,12 @@ class linkspacesetting extends GetxController {
     notifyChildrens();
   }
 
+  void setspecificspacein(int index, dynamic dynamics) {
+    indexcnt.insert(index, dynamics);
+    update();
+    notifyChildrens();
+  }
+
   void minusspacein(int index) {
     indexcnt.removeAt(index);
     update();

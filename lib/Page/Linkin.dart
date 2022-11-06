@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables
+
 import 'dart:async';
 import 'dart:math';
 import 'package:clickbyme/Tool/BGColor.dart';
@@ -9,18 +11,14 @@ import 'package:clickbyme/sheets/linksettingsheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:reorderable_grid/reorderable_grid.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/Linkpage.dart';
 import '../Route/subuiroute.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
-import '../../../Tool/NoBehavior.dart';
 import '../mongoDB/mongodatabase.dart';
 
 class Linkin extends StatefulWidget {
@@ -56,10 +54,10 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
   bool isresponsive = false;
   late FToast fToast;
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
-  final List<Linksapcepage> listspacepageset = [];
-  final _chars =
+  final List<Linkspacepage> listspacepageset = [];
+  final chars =
       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  final Random _rnd = Random();
+  final Random rnd = Random();
   bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
@@ -254,30 +252,10 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                     height: 10,
                   ),
                   Flexible(
-                      fit: FlexFit.tight,
-                      child: SizedBox(
-                        child: ScrollConfiguration(
-                          behavior: NoBehavior(),
-                          child: SingleChildScrollView(
-                              controller: scrollController,
-                              physics: const ScrollPhysics(),
-                              child: StatefulBuilder(
-                                  builder: (_, StateSetter setState) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      listy_My(),
-                                    ],
-                                  ),
-                                );
-                              })),
-                        ),
-                      )),
+                    fit: FlexFit.tight,
+                    child: GetBuilder<linkspacesetting>(
+                        builder: (_) => listy_My()),
+                  ),
                 ],
               )),
         ));
@@ -300,7 +278,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                       user = sp['username'];
                       linkname = sp['linkname'];
                       if (usercode == user && widget.name == linkname) {
-                        linkspaceset.indexcnt.add(Linksapcepage(
+                        linkspaceset.indexcnt.add(Linkspacepage(
                             index: int.parse(sp['index'].toString()),
                             placestr: sp['placestr']));
                       }
@@ -328,24 +306,27 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                             textAlign: TextAlign.center,
                           ),
                         ))
-                      : Column(
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            GridView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 1,
-                                        childAspectRatio: 3 / 2,
-                                        crossAxisSpacing: 20,
-                                        mainAxisSpacing: 20),
-                                itemCount: linkspaceset.indexcnt.length,
-                                itemBuilder: ((context, index) {
-                                  return GestureDetector(
+                      : GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          physics: const ScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 1,
+                                  childAspectRatio: 3 / 2,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20),
+                          itemCount: linkspaceset.indexcnt.length,
+                          itemBuilder: ((context, index) {
+                            return Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: GestureDetector(
                                       onTap: () async {},
                                       child: Container(
                                           padding: const EdgeInsets.all(10),
@@ -405,11 +386,11 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                                         width:
                                                                             10,
                                                                       ),
-                                                                      Icon(
+                                                                      const Icon(
                                                                         Icons
                                                                             .swap_horiz,
-                                                                        color:
-                                                                            TextColor_shadowcolor(),
+                                                                        color: Colors
+                                                                            .black45,
                                                                       ),
                                                                     ],
                                                                   ),
@@ -418,13 +399,14 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                     ),
                                                   ])
                                             ],
-                                          ))));
-                                })),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        );
+                                          )))),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            );
+                          }));
                 },
               )
             : StreamBuilder<QuerySnapshot>(
@@ -438,7 +420,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                       user = sp.get('username');
                       linkname = sp.get('linkname');
                       if (user == usercode && linkname == widget.name) {
-                        linkspaceset.indexcnt.add(Linksapcepage(
+                        linkspaceset.indexcnt.add(Linkspacepage(
                             index: int.parse(sp.get('index').toString()),
                             placestr: sp.get('placestr')));
                       }
@@ -463,72 +445,104 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                               textAlign: TextAlign.center,
                             ),
                           ))
-                        : Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              GridView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  physics: const ScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 1,
-                                          childAspectRatio: 3 / 2,
-                                          crossAxisSpacing: 20,
-                                          mainAxisSpacing: 20),
-                                  itemCount: linkspaceset.indexcnt.length,
-                                  itemBuilder: ((context, index) {
-                                    return GestureDetector(
-                                        onLongPress: () {
-                                          linkplacechangeoptions(context,
-                                              usercode, widget.name, index);
-                                        },
-                                        onTap: () async {},
-                                        child: Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.rectangle,
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              color: Colors.grey.shade200,
-                                            ),
-                                            child: SizedBox(
-                                                child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                  Flexible(
+                        : GridView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            physics: const ScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1,
+                                    childAspectRatio: 3 / 2,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20),
+                            itemCount: linkspaceset.indexcnt.length,
+                            itemBuilder: ((context, index) {
+                              return Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GestureDetector(
+                                      onTap: () async {},
+                                      child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: Colors.grey.shade200,
+                                          ),
+                                          child: SizedBox(
+                                              child: Column(
+                                            children: [
+                                              Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Flexible(
                                                       fit: FlexFit.tight,
-                                                      child: Text(
-                                                        linkspaceset
-                                                            .indexcnt[index]
-                                                            .placestr
-                                                            .toString(),
-                                                        maxLines: 2,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black45,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize()),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ))
-                                                ]))));
-                                  })),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          );
+                                                      child: RichText(
+                                                          text: TextSpan(
+                                                              children: [
+                                                            WidgetSpan(
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    fontSize:
+                                                                        contentTextsize(),
+                                                                    color:
+                                                                        TextColor_shadowcolor()),
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    linkplacechangeoptions(
+                                                                        context,
+                                                                        usercode,
+                                                                        widget
+                                                                            .name,
+                                                                        index);
+                                                                  },
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        linkspaceset
+                                                                            .indexcnt[index]
+                                                                            .placestr
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black45,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontSize: contentTextsize()),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                      const Icon(
+                                                                        Icons
+                                                                            .swap_horiz,
+                                                                        color: Colors
+                                                                            .black45,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )),
+                                                          ])),
+                                                    ),
+                                                  ])
+                                            ],
+                                          )))),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              );
+                            }));
                   }
                   return LinearProgressIndicator(
                     backgroundColor: BGColor(),

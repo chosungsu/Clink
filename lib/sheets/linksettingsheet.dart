@@ -451,7 +451,7 @@ contentsecond(
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String usercode = Hive.box('user_setting').get('usercode');
   final linkspaceset = Get.put(linkspacesetting());
-  final List<Linksapcepage> listspacepageset = [];
+  final List<Linkspacepage> listspacepageset = [];
   var id;
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -472,7 +472,7 @@ contentsecond(
                 'placestr': 'board',
                 'index': linkspaceset.indexcnt.length
               });
-              linkspaceset.setspacein(Linksapcepage(
+              linkspaceset.setspacein(Linkspacepage(
                   index: linkspaceset.indexcnt.length, placestr: 'board'));
             } else {
               await MongoDB.updatewwithqueries(
@@ -498,7 +498,7 @@ contentsecond(
                     .update({'placestr': 'board'});
               });
               linkspaceset
-                  .setspacein(Linksapcepage(index: index, placestr: 'board'));
+                  .setspacein(Linkspacepage(index: index, placestr: 'board'));
             }
 
             Get.back();
@@ -551,7 +551,7 @@ contentsecond(
                 'placestr': 'card',
                 'index': linkspaceset.indexcnt.length
               });
-              linkspaceset.setspacein(Linksapcepage(
+              linkspaceset.setspacein(Linkspacepage(
                   index: linkspaceset.indexcnt.length, placestr: 'card'));
             } else {
               await MongoDB.updatewwithqueries(
@@ -577,7 +577,7 @@ contentsecond(
                     .update({'placestr': 'card'});
               });
               linkspaceset
-                  .setspacein(Linksapcepage(index: index, placestr: 'card'));
+                  .setspacein(Linkspacepage(index: index, placestr: 'card'));
             }
 
             Get.back();
@@ -630,7 +630,7 @@ contentsecond(
                 'placestr': 'calendar',
                 'index': linkspaceset.indexcnt.length
               });
-              linkspaceset.setspacein(Linksapcepage(
+              linkspaceset.setspacein(Linkspacepage(
                   index: linkspaceset.indexcnt.length, placestr: 'calendar'));
             } else {
               await MongoDB.updatewwithqueries(
@@ -656,7 +656,7 @@ contentsecond(
                     .update({'placestr': 'calendar'});
               });
               linkspaceset.setspacein(
-                  Linksapcepage(index: index, placestr: 'calendar'));
+                  Linkspacepage(index: index, placestr: 'calendar'));
             }
 
             Get.back();
@@ -781,7 +781,7 @@ contentthird(
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
-  final List<Linksapcepage> listspacepageset = [];
+  final List<Linkspacepage> listspacepageset = [];
   var id;
   var updateid = [];
   var updateindex = [];

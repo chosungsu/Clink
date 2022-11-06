@@ -32,15 +32,15 @@ void main() async {
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
   await MongoDB.connect();
-  runApp(
-    const MyApp(),
-  );
   /*runApp(
+    const MyApp(),
+  );*/
+  runApp(
     DevicePreview(
       enabled: !kReleaseMode,
       builder: (context) => const MyApp(), // Wrap your app
     ),
-  );*/
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -52,9 +52,9 @@ class MyApp extends StatelessWidget {
     return ResponsiveSizer(builder: ((p0, p1, p2) {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        //useInheritedMediaQuery: true,
+        useInheritedMediaQuery: true,
         locale: DevicePreview.locale(context),
-        //builder: DevicePreview.appBuilder,
+        builder: DevicePreview.appBuilder,
         home: const SplashPage(),
       );
     }));

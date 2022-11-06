@@ -4,13 +4,13 @@ class Linkpage {
   Linkpage({required this.link});
 }
 
-class Linksapcepage {
+class Linkspacepage {
   final String placestr;
   final int index;
   final int? subindex;
   final String? date;
 
-  Linksapcepage({
+  Linkspacepage({
     required this.placestr,
     required this.index,
     this.subindex,
