@@ -263,11 +263,6 @@ content(
         GestureDetector(
           onTap: () async {
             Get.back();
-            await MongoDB.find(
-                collectionname: 'homeview',
-                query: 'usercode',
-                what: Hive.box('user_setting').get('usercode'));
-            peopleadd.setcode();
             Get.to(() => HomeView(where: 'MY', link: name),
                 transition: Transition.zoom);
           },

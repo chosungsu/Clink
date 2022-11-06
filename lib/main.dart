@@ -148,10 +148,10 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                             child: AnimatedTextKit(
                               animatedTexts: [
                                 TyperAnimatedText('로그인중입니다...',
-                                    textStyle: const TextStyle(
+                                    textStyle: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
-                                        color: Colors.black),
+                                        color: TextColor()),
                                     speed: const Duration(milliseconds: 150)),
                               ],
                               totalRepeatCount: 2,
