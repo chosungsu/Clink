@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import '../Tool/BGColor.dart';
 import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/selectcollection.dart';
+import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/firstContentNet/DayScript.dart';
@@ -229,7 +232,6 @@ ADSHOW(double height) {
 
 Speeddialmemo(
     BuildContext context,
-    bool showBackToTopButton,
     String usercode,
     TextEditingController controller,
     FocusNode searchNode,
@@ -238,34 +240,36 @@ Speeddialmemo(
     bool isresponsive,
     ValueNotifier<bool> isDialOpen,
     String name) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.end,
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: [
-      showBackToTopButton == false
-          ? const SizedBox()
-          : FloatingActionButton(
-              onPressed: () {
-                scrollToTop(scrollController);
-              },
-              backgroundColor: BGColor(),
-              child: Icon(
-                Icons.arrow_upward,
-                color: TextColor(),
-              ),
-            ),
-      const SizedBox(width: 10),
-      SpeedDial(
-          openCloseDial: isDialOpen,
-          activeIcon: Icons.close,
-          icon: Icons.add,
-          backgroundColor: Colors.blue,
-          overlayColor: BGColor(),
-          overlayOpacity: 0.4,
-          spacing: 10,
-          spaceBetweenChildren: 10,
-          children: [
-            /*SpeedDialChild(
+  final uiset = Get.put(uisetting());
+  return GetBuilder<uisetting>(
+      builder: (_) => Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              uiset.showtopbutton == false
+                  ? const SizedBox()
+                  : FloatingActionButton(
+                      onPressed: () {
+                        scrollToTop(scrollController);
+                      },
+                      backgroundColor: BGColor(),
+                      child: Icon(
+                        Icons.arrow_upward,
+                        color: TextColor(),
+                      ),
+                    ),
+              //const SizedBox(width: 10),
+              /*SpeedDial(
+                  openCloseDial: isDialOpen,
+                  activeIcon: Icons.close,
+                  icon: Icons.add,
+                  backgroundColor: Colors.blue,
+                  overlayColor: BGColor(),
+                  overlayOpacity: 0.4,
+                  spacing: 10,
+                  spaceBetweenChildren: 10,
+                  children: [
+                    /*SpeedDialChild(
               child: NeumorphicIcon(
                 Icons.local_offer,
                 size: 30,
@@ -287,28 +291,28 @@ Speeddialmemo(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTextsize()),
             ),*/
-            SpeedDialChild(
-              child: NeumorphicIcon(
-                Icons.add,
-                size: 30,
-                style: NeumorphicStyle(
-                    shape: NeumorphicShape.convex,
-                    depth: 2,
-                    surfaceIntensity: 0.5,
-                    color: TextColor(),
-                    lightSource: LightSource.topLeft),
-              ),
-              backgroundColor: Colors.orange.shade200,
-              onTap: () {
-                linkmadeplace(context, usercode, name, 'add', -1);
-              },
-              label: '필드 추가',
-              labelStyle: TextStyle(
-                  color: Colors.black45,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize()),
-            ),
-          ]),
-    ],
-  );
+                    SpeedDialChild(
+                      child: NeumorphicIcon(
+                        Icons.add,
+                        size: 30,
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.convex,
+                            depth: 2,
+                            surfaceIntensity: 0.5,
+                            color: TextColor(),
+                            lightSource: LightSource.topLeft),
+                      ),
+                      backgroundColor: Colors.orange.shade200,
+                      onTap: () {
+                        linkmadeplace(context, usercode, name, 'add', -1);
+                      },
+                      label: '필드 추가',
+                      labelStyle: TextStyle(
+                          color: Colors.black45,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                    ),
+                  ]),*/
+            ],
+          ));
 }

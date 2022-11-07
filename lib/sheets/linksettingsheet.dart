@@ -524,7 +524,7 @@ contentsecond(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('보드형 플레이스 추가',
+                          Text(s == 'add' ? '보드형 플레이스 추가' : '보드형 플레이스',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -603,7 +603,7 @@ contentsecond(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('카드형 플레이스 추가',
+                          Text(s == 'add' ? '카드형 플레이스 추가' : '카드형 플레이스',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -616,85 +616,101 @@ contentsecond(
             ],
           ),
         ),
-        const SizedBox(
-          height: 20,
-        ),
-        GestureDetector(
-          onTap: () async {
-            if (s == 'add') {
-              await MongoDB.add(collectionname: 'pinchannelin', addlist: {
-                'username': usercode,
-                'linkname': link,
-                'placestr': 'calendar',
-                'index': linkspaceset.indexcnt.length
-              });
-              await firestore.collection('Pinchannelin').add({
-                'username': usercode,
-                'linkname': link,
-                'placestr': 'calendar',
-                'index': linkspaceset.indexcnt.length
-              });
-              linkspaceset.setspacein(Linkspacepage(
-                  index: linkspaceset.indexcnt.length, placestr: 'calendar'));
-            } else {
-              await MongoDB.updatewwithqueries(
-                  collectionname: 'pinchannelin',
-                  query1: 'username',
-                  what1: usercode,
-                  query2: 'linkname',
-                  what2: link,
-                  query3: 'index',
-                  what3: index.toString(),
-                  updatelist: {'placestr': 'calendar', 'index': index});
-              await firestore.collection('Pinchannelin').get().then((value) {
-                for (int i = 0; i < value.docs.length; i++) {
-                  if (value.docs[i].get('username') == usercode &&
-                      value.docs[i].get('linkname') == link &&
-                      value.docs[i].get('index') == index) {
-                    id = value.docs[i].id;
-                  }
-                }
-                firestore
-                    .collection('Pinchannelin')
-                    .doc(id)
-                    .update({'placestr': 'calendar'});
-              });
-              linkspaceset.setspacein(
-                  Linkspacepage(index: index, placestr: 'calendar'));
-            }
+        s == 'add'
+            ? Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      if (s == 'add') {
+                        await MongoDB.add(
+                            collectionname: 'pinchannelin',
+                            addlist: {
+                              'username': usercode,
+                              'linkname': link,
+                              'placestr': 'calendar',
+                              'index': linkspaceset.indexcnt.length
+                            });
+                        await firestore.collection('Pinchannelin').add({
+                          'username': usercode,
+                          'linkname': link,
+                          'placestr': 'calendar',
+                          'index': linkspaceset.indexcnt.length
+                        });
+                        linkspaceset.setspacein(Linkspacepage(
+                            index: linkspaceset.indexcnt.length,
+                            placestr: 'calendar'));
+                      } else {
+                        await MongoDB.updatewwithqueries(
+                            collectionname: 'pinchannelin',
+                            query1: 'username',
+                            what1: usercode,
+                            query2: 'linkname',
+                            what2: link,
+                            query3: 'index',
+                            what3: index.toString(),
+                            updatelist: {
+                              'placestr': 'calendar',
+                              'index': index
+                            });
+                        await firestore
+                            .collection('Pinchannelin')
+                            .get()
+                            .then((value) {
+                          for (int i = 0; i < value.docs.length; i++) {
+                            if (value.docs[i].get('username') == usercode &&
+                                value.docs[i].get('linkname') == link &&
+                                value.docs[i].get('index') == index) {
+                              id = value.docs[i].id;
+                            }
+                          }
+                          firestore
+                              .collection('Pinchannelin')
+                              .doc(id)
+                              .update({'placestr': 'calendar'});
+                        });
+                        linkspaceset.setspacein(
+                            Linkspacepage(index: index, placestr: 'calendar'));
+                      }
 
-            Get.back();
-          },
-          child: Row(
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.calendar_month,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('캘린더형 플레이스 추가',
-                              style: TextStyle(
+                      Get.back();
+                    },
+                    child: Row(
+                      children: [
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.calendar_month,
+                                  size: 30,
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
-            ],
-          ),
-        )
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('캘린더형 플레이스 추가',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTitleTextsize())),
+                                  ],
+                                ),
+                              ],
+                            )),
+                        Icon(Icons.keyboard_arrow_right,
+                            color: Colors.grey.shade400)
+                      ],
+                    ),
+                  )
+                ],
+              )
+            : const SizedBox()
       ],
     );
   });
@@ -801,12 +817,45 @@ contentthird(
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
+        /*GestureDetector(
+          onTap: () async {
+            Get.back();
+            linkplacenamechange(
+                context, name, link, index, changenamenode, controller);
+          },
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('카테고리 설정',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize())),
+                        ],
+                      ),
+                    ],
+                  )),
+              const Icon(
+                Icons.swap_horiz,
+                size: 30,
+                color: Colors.black,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),*/
         GestureDetector(
           onTap: () async {
             Get.back();
-            //linkmadeplace(context, name, link, 'edit', index);
-            linkplacenamechange(
-                context, name, link, index, changenamenode, controller);
+            linkmadeplace(context, name, link, 'edit', index);
           },
           child: Row(
             children: [

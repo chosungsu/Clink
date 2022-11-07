@@ -6,6 +6,7 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
+import 'package:clickbyme/Tool/NoBehavior.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/linksettingsheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,6 +42,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
   final linkspaceset = Get.put(linkspacesetting());
   final scollection = Get.put(selectcollection());
   final controll_memo = Get.put(memosetting());
+  final uiset = Get.put(uisetting());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final searchNode = FocusNode();
   final changenamenode = FocusNode();
@@ -77,13 +79,11 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
     controller = TextEditingController();
     scrollController = ScrollController()
       ..addListener(() {
-        setState(() {
-          if (scrollController.offset >= 150) {
-            uisetting().showtopbutton = true; // show the back-to-top button
-          } else {
-            uisetting().showtopbutton = false; // hide the back-to-top button
-          }
-        });
+        if (scrollController.offset >= 50) {
+          uiset.settopbutton(true); // show the back-to-top button
+        } else {
+          uiset.settopbutton(false); // hide the back-to-top button
+        }
       });
   }
 
@@ -111,7 +111,6 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
           ),
           floatingActionButton: Speeddialmemo(
               context,
-              uisetting().showtopbutton,
               usercode,
               controller,
               searchNode,
@@ -201,6 +200,44 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                           ),
                                           InkWell(
                                             onTap: () {
+                                              linkmadeplace(context, usercode,
+                                                  widget.name, 'add', -1);
+                                            },
+                                            child: IconBtn(
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 30,
+                                                height: 30,
+                                                margin:
+                                                    const EdgeInsets.all(10),
+                                                child: NeumorphicIcon(
+                                                  Icons.add,
+                                                  size: 30,
+                                                  style: NeumorphicStyle(
+                                                      shape: NeumorphicShape
+                                                          .convex,
+                                                      depth: 2,
+                                                      surfaceIntensity: 0.5,
+                                                      color:
+                                                          linkspaceset.color ==
+                                                                  Colors.black
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                      lightSource:
+                                                          LightSource.topLeft),
+                                                ),
+                                              ),
+                                              color: linkspaceset.color ==
+                                                      Colors.black
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
                                               linksetting(
                                                 context,
                                                 widget.name,
@@ -251,11 +288,14 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                   const SizedBox(
                     height: 10,
                   ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: GetBuilder<linkspacesetting>(
-                        builder: (_) => listy_My()),
-                  ),
+                  ScrollConfiguration(
+                    behavior: NoBehavior(),
+                    child: Flexible(
+                      fit: FlexFit.tight,
+                      child: GetBuilder<linkspacesetting>(
+                          builder: (_) => listy_My()),
+                    ),
+                  )
                 ],
               )),
         ));
@@ -307,6 +347,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                           ),
                         ))
                       : GridView.builder(
+                          controller: scrollController,
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -360,6 +401,17 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                             fontSize:
                                                                 contentTextsize()),
                                                       ),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons
+                                                            .add_circle_outline,
+                                                        color: Colors.black45,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
                                                     ),
                                                     InkWell(
                                                       onTap: () {
@@ -426,6 +478,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                             ),
                           ))
                         : GridView.builder(
+                            controller: scrollController,
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -477,6 +530,17 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                             fontSize:
                                                                 contentTextsize()),
                                                       ),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons
+                                                            .add_circle_outline,
+                                                        color: Colors.black45,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
                                                     ),
                                                     InkWell(
                                                       onTap: () {
