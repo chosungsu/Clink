@@ -302,7 +302,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
   }
 
   listy_My() {
-    var user, linkname;
+    var user, linkname, placestr;
 
     return GetBuilder<linkspacesetting>(
         builder: (_) => serverstatus == true
@@ -310,8 +310,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                 future: MongoDB.getData(collectionname: 'pinchannelin')
                     .then((value) {
                   linkspaceset.indexcnt.clear();
-
-                  //listspacepageset.clear();
+                  //linkspaceset.indextreecnt.clear();
                   if (value.isEmpty) {
                   } else {
                     for (var sp in value) {
@@ -321,11 +320,32 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                         linkspaceset.indexcnt.add(Linkspacepage(
                             index: int.parse(sp['index'].toString()),
                             placestr: sp['placestr']));
+                        /*if (sp['treelist'][0].isNotEmpty) {
+                          print(sp['treelist'][0]['name']);
+                        }
+
+                        if (sp['treelist'][0].isNotEmpty) {
+                          print('1');
+                          for (int i = 0; i < sp['treelist'].length; i++) {
+                            linkspaceset.indextreecnt.add(Linkspacepage(
+                                index: int.parse(sp['index'].toString() +
+                                    sp['treelist'][i]['index'].toString()),
+                                placestr: sp['treelist'][i]['name'] ?? '제목없음'));
+                          }
+                        } else {
+                          print('2');
+                          linkspaceset.indextreecnt.add(Linkspacepage(
+                              index: int.parse(sp['index'].toString()),
+                              placestr: '제목없음'));
+                        }*/
                       }
                     }
                     linkspaceset.indexcnt.sort(((a, b) {
                       return a.index.compareTo(b.index);
                     }));
+                    /*linkspaceset.indextreecnt.sort(((a, b) {
+                      return a.index.compareTo(b.index);
+                    }));*/
                   }
                 }),
                 builder: (context, snapshot) {
@@ -381,6 +401,8 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                               child: Column(
                                             children: [
                                               Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   mainAxisAlignment:
@@ -403,7 +425,14 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                       ),
                                                     ),
                                                     InkWell(
-                                                      onTap: () {},
+                                                      onTap: () {
+                                                        linkmadetreeplace(
+                                                            context,
+                                                            usercode,
+                                                            widget.name,
+                                                            'addtree',
+                                                            index);
+                                                      },
                                                       child: const Icon(
                                                         Icons
                                                             .add_circle_outline,
@@ -422,14 +451,72 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                             widget.name,
                                                             index,
                                                             changenamenode,
-                                                            controller);
+                                                            controller,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .placestr);
                                                       },
                                                       child: const Icon(
                                                         Icons.more_horiz,
                                                         color: Colors.black45,
                                                       ),
                                                     )
-                                                  ])
+                                                  ]),
+                                              linkspaceset.indexcnt[index]
+                                                          .placestr ==
+                                                      'board'
+                                                  ? Row()
+                                                  /*Flexible(
+                                                      fit: FlexFit.tight,
+                                                      child: GridView.builder(
+                                                          scrollDirection:
+                                                              Axis.vertical,
+                                                          shrinkWrap: true,
+                                                          physics:
+                                                              const ScrollPhysics(),
+                                                          gridDelegate:
+                                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                  crossAxisCount:
+                                                                      2,
+                                                                  childAspectRatio:
+                                                                      3 / 5,
+                                                                  crossAxisSpacing:
+                                                                      20,
+                                                                  mainAxisSpacing:
+                                                                      20),
+                                                          itemCount:
+                                                              linkspaceset
+                                                                  .indextreecnt
+                                                                  .length,
+                                                          itemBuilder:
+                                                              ((context,
+                                                                  index2) {
+                                                            return Column(
+                                                              children: [
+                                                                Text(
+                                                                  linkspaceset
+                                                                      .indextreecnt[
+                                                                          index2]
+                                                                      .placestr
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black45,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTextsize()),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          })))*/
+                                                  : (linkspaceset
+                                                              .indexcnt[index]
+                                                              .placestr ==
+                                                          'card'
+                                                      ? Row()
+                                                      : Row())
                                             ],
                                           )))),
                                 ),
@@ -510,6 +597,8 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                               child: Column(
                                             children: [
                                               Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   mainAxisAlignment:
@@ -532,7 +621,14 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                       ),
                                                     ),
                                                     InkWell(
-                                                      onTap: () {},
+                                                      onTap: () {
+                                                        linkmadetreeplace(
+                                                            context,
+                                                            usercode,
+                                                            widget.name,
+                                                            'addtree',
+                                                            index);
+                                                      },
                                                       child: const Icon(
                                                         Icons
                                                             .add_circle_outline,
@@ -551,7 +647,10 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                             widget.name,
                                                             index,
                                                             changenamenode,
-                                                            controller);
+                                                            controller,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .placestr);
                                                       },
                                                       child: const Icon(
                                                         Icons.more_horiz,

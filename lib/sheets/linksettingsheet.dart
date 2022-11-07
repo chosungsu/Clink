@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable
 
+import 'dart:math';
+
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -468,13 +470,15 @@ contentsecond(
                 'username': usercode,
                 'linkname': link,
                 'placestr': 'board',
-                'index': linkspaceset.indexcnt.length
+                'index': linkspaceset.indexcnt.length,
+                'treelist': []
               });
               await firestore.collection('Pinchannelin').add({
                 'username': usercode,
                 'linkname': link,
                 'placestr': 'board',
-                'index': linkspaceset.indexcnt.length
+                'index': linkspaceset.indexcnt.length,
+                'treelist': []
               });
               linkspaceset.setspacein(Linkspacepage(
                   index: linkspaceset.indexcnt.length, placestr: 'board'));
@@ -547,13 +551,15 @@ contentsecond(
                 'username': usercode,
                 'linkname': link,
                 'placestr': 'card',
-                'index': linkspaceset.indexcnt.length
+                'index': linkspaceset.indexcnt.length,
+                'treelist': []
               });
               await firestore.collection('Pinchannelin').add({
                 'username': usercode,
                 'linkname': link,
                 'placestr': 'card',
-                'index': linkspaceset.indexcnt.length
+                'index': linkspaceset.indexcnt.length,
+                'treelist': []
               });
               linkspaceset.setspacein(Linkspacepage(
                   index: linkspaceset.indexcnt.length, placestr: 'card'));
@@ -631,13 +637,15 @@ contentsecond(
                               'username': usercode,
                               'linkname': link,
                               'placestr': 'calendar',
-                              'index': linkspaceset.indexcnt.length
+                              'index': linkspaceset.indexcnt.length,
+                              'treelist': []
                             });
                         await firestore.collection('Pinchannelin').add({
                           'username': usercode,
                           'linkname': link,
                           'placestr': 'calendar',
-                          'index': linkspaceset.indexcnt.length
+                          'index': linkspaceset.indexcnt.length,
+                          'treelist': []
                         });
                         linkspaceset.setspacein(Linkspacepage(
                             index: linkspaceset.indexcnt.length,
@@ -723,6 +731,7 @@ linkplacechangeoptions(
   int index,
   FocusNode changenamenode,
   TextEditingController controller,
+  String placestr,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -753,8 +762,8 @@ linkplacechangeoptions(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: changeoptplace(
-                    context, name, link, index, changenamenode, controller),
+                child: changeoptplace(context, name, link, index,
+                    changenamenode, controller, placestr),
               )),
         );
       }).whenComplete(() {});
@@ -767,6 +776,7 @@ changeoptplace(
   int index,
   FocusNode changenamenode,
   TextEditingController controller,
+  String placestr,
 ) {
   return SizedBox(
       child: Padding(
@@ -790,8 +800,8 @@ changeoptplace(
               const SizedBox(
                 height: 20,
               ),
-              contentthird(
-                  context, name, link, index, changenamenode, controller),
+              contentthird(context, name, link, index, changenamenode,
+                  controller, placestr),
               const SizedBox(
                 height: 20,
               ),
@@ -806,6 +816,7 @@ contentthird(
   int index,
   FocusNode changenamenode,
   TextEditingController controller,
+  String placestr,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
@@ -854,8 +865,11 @@ contentthird(
         ),*/
         GestureDetector(
           onTap: () async {
-            Get.back();
-            linkmadeplace(context, name, link, 'edit', index);
+            if (placestr == 'calendar') {
+            } else {
+              Get.back();
+              linkmadeplace(context, name, link, 'edit', index);
+            }
           },
           child: Row(
             children: [
@@ -868,17 +882,21 @@ contentthird(
                         children: [
                           Text('필드 변경',
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: placestr == 'calendar'
+                                      ? Colors.grey.shade300
+                                      : Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTitleTextsize())),
                         ],
                       ),
                     ],
                   )),
-              const Icon(
+              Icon(
                 Icons.swap_horiz,
                 size: 30,
-                color: Colors.black,
+                color: placestr == 'calendar'
+                    ? Colors.grey.shade300
+                    : Colors.black,
               ),
             ],
           ),
@@ -1244,6 +1262,264 @@ contentforth(
                         ],
                       ),
               )),
+        ),
+      ],
+    );
+  });
+}
+
+linkmadetreeplace(
+  BuildContext context,
+  String name,
+  String link,
+  String s,
+  int index,
+) {
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    )),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: treeplace(context, name, link, s, index),
+              )),
+        );
+      }).whenComplete(() {});
+}
+
+treeplace(
+  BuildContext context,
+  String name,
+  String link,
+  String s,
+  int index,
+) {
+  return SizedBox(
+      child: Padding(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  height: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          alignment: Alignment.topCenter,
+                          color: Colors.black45),
+                    ],
+                  )),
+              const SizedBox(
+                height: 20,
+              ),
+              titlefifth(context, s),
+              const SizedBox(
+                height: 20,
+              ),
+              contentfifth(
+                context,
+                name,
+                link,
+                s,
+                index,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          )));
+}
+
+titlefifth(
+  BuildContext context,
+  String s,
+) {
+  return SizedBox(
+      child: Row(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: const [
+      Text('생성하기',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25)),
+    ],
+  ));
+}
+
+contentfifth(
+  BuildContext context,
+  String name,
+  String link,
+  String s,
+  int index,
+) {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  String usercode = Hive.box('user_setting').get('usercode');
+  final linkspaceset = Get.put(linkspacesetting());
+  final List<Linkspacepage> listspacepageset = [];
+  var id;
+  const chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  final Random rnd = Random();
+  String code = '';
+
+  return StatefulBuilder(builder: (_, StateSetter setState) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () async {
+            code = String.fromCharCodes(Iterable.generate(
+                5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
+            if (s == 'board') {
+              await MongoDB.updatewwithqueries(
+                  collectionname: 'pinchannelin',
+                  query1: 'username',
+                  what1: usercode,
+                  query2: 'linkname',
+                  what2: link,
+                  query3: 'index',
+                  what3: index.toString(),
+                  updatelist: {
+                    'treelist': [
+                      {'index': 0, 'name': null, 'uniqueid': code}
+                    ]
+                  });
+              await firestore.collection('Pinchannelin').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('username') == usercode &&
+                      value.docs[i].get('linkname') == link &&
+                      value.docs[i].get('index') == index) {
+                    id = value.docs[i].id;
+                  }
+                }
+                firestore.collection('Pinchannelin').doc(id).update({
+                  'treelist': [
+                    {'index': 0, 'name': null, 'uniqueid': code}
+                  ]
+                });
+              });
+              linkspaceset.setspacein(Linkspacepage(
+                  index: linkspaceset.indexcnt.length, placestr: 'board'));
+            } else if (s == 'card') {
+              await MongoDB.updatewwithqueries(
+                  collectionname: 'pinchannelin',
+                  query1: 'username',
+                  what1: usercode,
+                  query2: 'linkname',
+                  what2: link,
+                  query3: 'index',
+                  what3: index.toString(),
+                  updatelist: {
+                    'treelist': [
+                      {'index': 0, 'name': null, 'uniqueid': code}
+                    ]
+                  });
+              await firestore.collection('Pinchannelin').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('username') == usercode &&
+                      value.docs[i].get('linkname') == link &&
+                      value.docs[i].get('index') == index) {
+                    id = value.docs[i].id;
+                  }
+                }
+                firestore.collection('Pinchannelin').doc(id).update({
+                  'treelist': [
+                    {'index': 0, 'name': null, 'uniqueid': code}
+                  ]
+                });
+              });
+              linkspaceset.setspacein(Linkspacepage(
+                  index: linkspaceset.indexcnt.length, placestr: 'board'));
+            } else {
+              await MongoDB.updatewwithqueries(
+                  collectionname: 'pinchannelin',
+                  query1: 'username',
+                  what1: usercode,
+                  query2: 'linkname',
+                  what2: link,
+                  query3: 'index',
+                  what3: index.toString(),
+                  updatelist: {
+                    'treelist': [
+                      {'index': 0, 'name': null, 'uniqueid': code}
+                    ]
+                  });
+              await firestore.collection('Pinchannelin').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('username') == usercode &&
+                      value.docs[i].get('linkname') == link &&
+                      value.docs[i].get('index') == index) {
+                    id = value.docs[i].id;
+                  }
+                }
+                firestore.collection('Pinchannelin').doc(id).update({
+                  'treelist': [
+                    {'index': 0, 'name': null, 'uniqueid': code}
+                  ]
+                });
+              });
+              linkspaceset
+                  .setspacein(Linkspacepage(index: index, placestr: 'board'));
+            }
+
+            Get.back();
+          },
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.add_circle_outline,
+                        size: 30,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('이 타입 추가하기',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize())),
+                        ],
+                      ),
+                    ],
+                  )),
+              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
+            ],
+          ),
         ),
       ],
     );

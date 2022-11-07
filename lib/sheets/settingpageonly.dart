@@ -210,6 +210,7 @@ content(
                       const Icon(
                         Icons.account_circle,
                         size: 30,
+                        color: Colors.red,
                       ),
                       const SizedBox(
                         width: 10,
@@ -219,7 +220,7 @@ content(
                         children: [
                           Text('회원탈퇴',
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.red,
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTextsize())),
                         ],
