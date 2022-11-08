@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoDB {
-  MongoDB();
+  MongoDB(Function() connect);
   static var res,
       collection_user,
       collection_share,
@@ -25,9 +25,14 @@ class MongoDB {
 
   static connect() async {
     var db = await Db.create(MONGO_URL);
-    await db.open().then((success) {
+    await db.close().then((value) async {
+      await db.open();
       Hive.box('user_info').put('server_status', db.isConnected);
     });
+    /*await db.open().then((success) {
+      print(db.isConnected);
+      Hive.box('user_info').put('server_status', db.isConnected);
+    });*/
     collection_user = db.collection(USER_COLLECTION);
     collection_share = db.collection(SHARE_COLLECTION);
     collection_people = db.collection(PEOPLE_COLLECTION);
@@ -96,7 +101,7 @@ class MongoDB {
         return [];
       }
     } else {
-      MongoDB();
+      MongoDB(connect);
       if (collectionname == 'user') {
         arrdata = await collection_user.find().toList();
         return arrdata;
@@ -182,7 +187,7 @@ class MongoDB {
         await collection_pinchannelin.insertOne(addlist);
       }
     } else {
-      MongoDB();
+      MongoDB(connect);
       if (collectionname == 'user') {
         await collection_user.insertOne(addlist);
       } else if (collectionname == 'sharehome') {
@@ -321,7 +326,7 @@ class MongoDB {
         }
       }
     } else {
-      MongoDB();
+      MongoDB(connect);
       if (collectionname == 'user') {
         for (int i = 0; i < updatelist.length; i++) {
           await collection_user.update(
@@ -463,7 +468,7 @@ class MongoDB {
         }
       }
     } else {
-      MongoDB();
+      MongoDB(connect);
       if (collectionname == 'pinchannelin') {
         if (query4 == null) {
           for (int i = 0; i < updatelist.length; i++) {
@@ -527,7 +532,7 @@ class MongoDB {
         await collection_pinchannelin.deleteOne(deletelist);
       }
     } else {
-      MongoDB();
+      MongoDB(connect);
       if (collectionname == 'user') {
         await collection_user.deleteOne(deletelist);
       } else if (collectionname == 'sharehome') {
@@ -624,7 +629,7 @@ class MongoDB {
         });
       }
     } else {
-      MongoDB();
+      MongoDB(connect);
       if (collectionname == 'user') {
         await collection_user.find({query: what}).forEach((v) {
           res = v;

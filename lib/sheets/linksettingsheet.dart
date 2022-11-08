@@ -381,7 +381,10 @@ linkmadeplace(
                 child: place(context, name, link, s, index),
               )),
         );
-      }).whenComplete(() {});
+      }).whenComplete(() {
+    final linkspaceset = Get.put(linkspacesetting());
+    linkspaceset.indextreetmp.add(List.empty(growable: true));
+  });
 }
 
 place(
@@ -459,29 +462,37 @@ contentsecond(
   final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
   var id;
+  const chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  final Random rnd = Random();
+  String code = '';
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
         GestureDetector(
           onTap: () async {
+            code = String.fromCharCodes(Iterable.generate(
+                5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
             if (s == 'add') {
               await MongoDB.add(collectionname: 'pinchannelin', addlist: {
                 'username': usercode,
                 'linkname': link,
                 'placestr': 'board',
                 'index': linkspaceset.indexcnt.length,
-                'treelist': []
+                'uniquecode': code
               });
               await firestore.collection('Pinchannelin').add({
                 'username': usercode,
                 'linkname': link,
                 'placestr': 'board',
                 'index': linkspaceset.indexcnt.length,
-                'treelist': []
+                'uniquecode': code
               });
               linkspaceset.setspacein(Linkspacepage(
-                  index: linkspaceset.indexcnt.length, placestr: 'board'));
+                  index: linkspaceset.indexcnt.length,
+                  placestr: 'board',
+                  uniquecode: code));
             } else {
               await MongoDB.updatewwithqueries(
                   collectionname: 'pinchannelin',
@@ -505,8 +516,8 @@ contentsecond(
                     .doc(id)
                     .update({'placestr': 'board'});
               });
-              linkspaceset
-                  .setspacein(Linkspacepage(index: index, placestr: 'board'));
+              linkspaceset.setspacein(Linkspacepage(
+                  index: index, placestr: 'board', uniquecode: code));
             }
 
             Get.back();
@@ -546,23 +557,27 @@ contentsecond(
         ),
         GestureDetector(
           onTap: () async {
+            code = String.fromCharCodes(Iterable.generate(
+                5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
             if (s == 'add') {
               await MongoDB.add(collectionname: 'pinchannelin', addlist: {
                 'username': usercode,
                 'linkname': link,
                 'placestr': 'card',
                 'index': linkspaceset.indexcnt.length,
-                'treelist': []
+                'uniquecode': code
               });
               await firestore.collection('Pinchannelin').add({
                 'username': usercode,
                 'linkname': link,
                 'placestr': 'card',
                 'index': linkspaceset.indexcnt.length,
-                'treelist': []
+                'uniquecode': code
               });
               linkspaceset.setspacein(Linkspacepage(
-                  index: linkspaceset.indexcnt.length, placestr: 'card'));
+                  index: linkspaceset.indexcnt.length,
+                  placestr: 'card',
+                  uniquecode: code));
             } else {
               await MongoDB.updatewwithqueries(
                   collectionname: 'pinchannelin',
@@ -586,8 +601,8 @@ contentsecond(
                     .doc(id)
                     .update({'placestr': 'card'});
               });
-              linkspaceset
-                  .setspacein(Linkspacepage(index: index, placestr: 'card'));
+              linkspaceset.setspacein(Linkspacepage(
+                  index: index, placestr: 'card', uniquecode: code));
             }
 
             Get.back();
@@ -630,6 +645,8 @@ contentsecond(
                   ),
                   GestureDetector(
                     onTap: () async {
+                      code = String.fromCharCodes(Iterable.generate(5,
+                          (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
                       if (s == 'add') {
                         await MongoDB.add(
                             collectionname: 'pinchannelin',
@@ -638,18 +655,19 @@ contentsecond(
                               'linkname': link,
                               'placestr': 'calendar',
                               'index': linkspaceset.indexcnt.length,
-                              'treelist': []
+                              'uniquecode': code
                             });
                         await firestore.collection('Pinchannelin').add({
                           'username': usercode,
                           'linkname': link,
                           'placestr': 'calendar',
                           'index': linkspaceset.indexcnt.length,
-                          'treelist': []
+                          'uniquecode': code
                         });
                         linkspaceset.setspacein(Linkspacepage(
                             index: linkspaceset.indexcnt.length,
-                            placestr: 'calendar'));
+                            placestr: 'calendar',
+                            uniquecode: code));
                       } else {
                         await MongoDB.updatewwithqueries(
                             collectionname: 'pinchannelin',
@@ -679,8 +697,10 @@ contentsecond(
                               .doc(id)
                               .update({'placestr': 'calendar'});
                         });
-                        linkspaceset.setspacein(
-                            Linkspacepage(index: index, placestr: 'calendar'));
+                        linkspaceset.setspacein(Linkspacepage(
+                            index: index,
+                            placestr: 'calendar',
+                            uniquecode: code));
                       }
 
                       Get.back();
@@ -906,11 +926,21 @@ contentthird(
         ),
         GestureDetector(
           onTap: () async {
+            linkspaceset.minusspacein(index);
+            Get.back();
+
             await MongoDB.delete(collectionname: 'pinchannelin', deletelist: {
               'username': name,
               'linkname': link,
               'index': index
             });
+            for (int i = index + 1; i <= linkspaceset.indexcnt.length; i++) {
+              await MongoDB.update(
+                  collectionname: 'pinchannelin',
+                  query: 'index',
+                  what: i.toString(),
+                  updatelist: {'index': i - 1});
+            }
             await firestore.collection('Pinchannelin').get().then((value) {
               for (int i = 0; i < value.docs.length; i++) {
                 if (value.docs[i].get('username') == name &&
@@ -922,26 +952,16 @@ contentthird(
                   updateindex.add(value.docs[i].get('index'));
                 }
               }
-              firestore.collection('Linknet').doc(id).delete();
+              firestore.collection('Pinchannelin').doc(id).delete();
               if (updateid.isNotEmpty) {
                 for (int j = 0; j < updateid.length; j++) {
                   firestore
-                      .collection('Linknet')
+                      .collection('Pinchannelin')
                       .doc(updateid[j])
                       .update({'index': updateindex[j]--});
                 }
               }
             });
-            for (int i = index + 1; i <= linkspaceset.indexcnt.length; i++) {
-              await MongoDB.update(
-                  collectionname: 'pinchannelin',
-                  query: 'index',
-                  what: i.toString(),
-                  updatelist: {'index': i - 1});
-            }
-
-            Get.back();
-            linkspaceset.minusspacein(index);
           },
           child: Row(
             children: [
@@ -977,54 +997,67 @@ contentthird(
 linkplacenamechange(
   BuildContext context,
   String name,
-  String link,
+  String code,
   int index,
+  String origintext,
   FocusNode node,
   TextEditingController controller,
+  String placestr,
 ) {
-  showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        bottomLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
-        bottomRight: Radius.circular(20),
-      )),
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: GestureDetector(
-                onTap: () {
-                  node.unfocus();
-                },
+  Get.bottomSheet(
+          Container(
+            margin: const EdgeInsets.only(
+                left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+            child: Padding(
+                padding: MediaQuery.of(context).viewInsets,
                 child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: changenameplace(
-                      context, name, link, index, node, controller),
-                ),
-              )),
-        );
-      }).whenComplete(() {
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        )),
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: StatefulBuilder(
+                      builder: ((context, setState) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              node.unfocus();
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                )),
+                            child: changenameplace(context, name, code, index,
+                                node, controller, origintext),
+                          ),
+                        );
+                      }),
+                    ))),
+          ),
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+      .whenComplete(() {
     final linkspaceset = Get.put(linkspacesetting());
-
     linkspaceset.setspecificspacein(
-        index, Linkspacepage(index: index, placestr: controller.text));
+        index,
+        Linkspacetreepage(
+            subindex: linkspaceset.indextreecnt.length,
+            placestr: placestr,
+            uniqueid: code));
     linkspaceset.minusspacein(index + 1);
     controller.text == '';
   });
@@ -1033,10 +1066,11 @@ linkplacenamechange(
 changenameplace(
   BuildContext context,
   String name,
-  String link,
+  String code,
   int index,
   FocusNode node,
   TextEditingController controller,
+  String origintext,
 ) {
   return SizedBox(
       child: Padding(
@@ -1066,7 +1100,8 @@ changenameplace(
               const SizedBox(
                 height: 20,
               ),
-              contentforth(context, name, link, index, node, controller),
+              contentforth(
+                  context, name, code, index, node, controller, origintext),
               const SizedBox(
                 height: 20,
               ),
@@ -1092,10 +1127,11 @@ titleforth(
 contentforth(
   BuildContext context,
   String name,
-  String link,
+  String code,
   int index,
   FocusNode node,
   TextEditingController controller,
+  String origintext,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -1149,66 +1185,44 @@ contentforth(
                       behavior: SnackBarBehavior.floating);
                 } else {
                   if (serverstatus) {
-                    await MongoDB.getData(collectionname: 'pinchannelin')
-                        .then((value) {
-                      for (int j = 0; j < value.length; j++) {
-                        final messageuser = value[j]['username'];
-                        final messagelinkname = value[j]['linkname'];
-                        final messageindex = value[j]['index'];
-                        if (messageindex == index &&
-                            messagelinkname == link &&
-                            messageuser == name) {
-                          MongoDB.updatewwithqueries(
-                              collectionname: 'pinchannelin',
-                              query1: 'username',
-                              what1: messageuser,
-                              query2: 'linkname',
-                              what2: messagelinkname,
-                              query3: 'index',
-                              what3: messageindex.toString(),
-                              updatelist: {'placestr': controller.text});
-                        }
-                      }
-                    });
-                    await firestore
-                        .collection('Pinchannelin')
-                        .get()
-                        .then((value) {
+                    await MongoDB.update(
+                        collectionname: 'linknet',
+                        query: 'uniquecode',
+                        what: code,
+                        updatelist: {'addname': controller.text});
+                    await firestore.collection('Linknet').get().then((value) {
                       if (value.docs.isNotEmpty) {
                         for (int j = 0; j < value.docs.length; j++) {
                           final messageuser = value.docs[j]['username'];
-                          final messagelinkname = value.docs[j]['linkname'];
+                          final messageuniquecode = value.docs[j]['uniquecode'];
                           final messageindex = value.docs[j]['index'];
                           final messageid = value.docs[j].id;
                           if (messageindex == index &&
-                              messagelinkname == link &&
+                              messageuniquecode == code &&
                               messageuser == name) {
                             firestore
-                                .collection('Pinchannelin')
+                                .collection('Linknet')
                                 .doc(messageid)
-                                .update({'placestr': controller.text});
+                                .update({'addname': controller.text});
                           }
                         }
                       }
                     });
                   } else {
-                    await firestore
-                        .collection('Pinchannelin')
-                        .get()
-                        .then((value) {
+                    await firestore.collection('Linknet').get().then((value) {
                       if (value.docs.isNotEmpty) {
                         for (int j = 0; j < value.docs.length; j++) {
                           final messageuser = value.docs[j]['username'];
-                          final messagelinkname = value.docs[j]['linkname'];
+                          final messageuniquecode = value.docs[j]['uniquecode'];
                           final messageindex = value.docs[j]['index'];
                           final messageid = value.docs[j].id;
                           if (messageindex == index &&
-                              messagelinkname == link &&
+                              messageuniquecode == code &&
                               messageuser == name) {
                             firestore
-                                .collection('Pinchannelin')
+                                .collection('Linknet')
                                 .doc(messageid)
-                                .update({'placestr': controller.text});
+                                .update({'addname': controller.text});
                           }
                         }
                       }
@@ -1274,6 +1288,7 @@ linkmadetreeplace(
   String link,
   String s,
   int index,
+  String uniquecode,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -1304,7 +1319,7 @@ linkmadetreeplace(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: treeplace(context, name, link, s, index),
+                child: treeplace(context, name, link, s, index, uniquecode),
               )),
         );
       }).whenComplete(() {});
@@ -1316,6 +1331,7 @@ treeplace(
   String link,
   String s,
   int index,
+  String uniquecode,
 ) {
   return SizedBox(
       child: Padding(
@@ -1343,13 +1359,7 @@ treeplace(
               const SizedBox(
                 height: 20,
               ),
-              contentfifth(
-                context,
-                name,
-                link,
-                s,
-                index,
-              ),
+              contentfifth(context, name, link, s, index, uniquecode),
               const SizedBox(
                 height: 20,
               ),
@@ -1379,114 +1389,76 @@ contentfifth(
   String link,
   String s,
   int index,
+  String uniquecode,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String usercode = Hive.box('user_setting').get('usercode');
   final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
   var id;
-  const chars =
-      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  final Random rnd = Random();
-  String code = '';
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
         GestureDetector(
           onTap: () async {
-            code = String.fromCharCodes(Iterable.generate(
-                5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
             if (s == 'board') {
-              await MongoDB.updatewwithqueries(
-                  collectionname: 'pinchannelin',
-                  query1: 'username',
-                  what1: usercode,
-                  query2: 'linkname',
-                  what2: link,
-                  query3: 'index',
-                  what3: index.toString(),
-                  updatelist: {
-                    'treelist': [
-                      {'index': 0, 'name': null, 'uniqueid': code}
-                    ]
-                  });
-              await firestore.collection('Pinchannelin').get().then((value) {
-                for (int i = 0; i < value.docs.length; i++) {
-                  if (value.docs[i].get('username') == usercode &&
-                      value.docs[i].get('linkname') == link &&
-                      value.docs[i].get('index') == index) {
-                    id = value.docs[i].id;
-                  }
-                }
-                firestore.collection('Pinchannelin').doc(id).update({
-                  'treelist': [
-                    {'index': 0, 'name': null, 'uniqueid': code}
-                  ]
-                });
+              await MongoDB.add(collectionname: 'linknet', addlist: {
+                'username': usercode,
+                'addname': '',
+                'placestr': 'board',
+                'index': linkspaceset.indextreecnt.length,
+                'uniquecode': uniquecode
               });
-              linkspaceset.setspacein(Linkspacepage(
-                  index: linkspaceset.indexcnt.length, placestr: 'board'));
+              await firestore.collection('Linknet').add({
+                'username': usercode,
+                'addname': '',
+                'placestr': 'board',
+                'index': linkspaceset.indextreecnt.length,
+                'uniquecode': uniquecode
+              });
+              linkspaceset.setspacetreein(Linkspacetreepage(
+                  subindex: linkspaceset.indextreecnt.length,
+                  placestr: 'board',
+                  uniqueid: uniquecode));
             } else if (s == 'card') {
-              await MongoDB.updatewwithqueries(
-                  collectionname: 'pinchannelin',
-                  query1: 'username',
-                  what1: usercode,
-                  query2: 'linkname',
-                  what2: link,
-                  query3: 'index',
-                  what3: index.toString(),
-                  updatelist: {
-                    'treelist': [
-                      {'index': 0, 'name': null, 'uniqueid': code}
-                    ]
-                  });
-              await firestore.collection('Pinchannelin').get().then((value) {
-                for (int i = 0; i < value.docs.length; i++) {
-                  if (value.docs[i].get('username') == usercode &&
-                      value.docs[i].get('linkname') == link &&
-                      value.docs[i].get('index') == index) {
-                    id = value.docs[i].id;
-                  }
-                }
-                firestore.collection('Pinchannelin').doc(id).update({
-                  'treelist': [
-                    {'index': 0, 'name': null, 'uniqueid': code}
-                  ]
-                });
+              await MongoDB.add(collectionname: 'linknet', addlist: {
+                'username': usercode,
+                'addname': '',
+                'placestr': 'card',
+                'index': linkspaceset.indextreecnt.length,
+                'uniquecode': uniquecode
               });
-              linkspaceset.setspacein(Linkspacepage(
-                  index: linkspaceset.indexcnt.length, placestr: 'board'));
+              await firestore.collection('Linknet').add({
+                'username': usercode,
+                'addname': '',
+                'placestr': 'card',
+                'index': linkspaceset.indextreecnt.length,
+                'uniquecode': uniquecode
+              });
+              linkspaceset.setspacetreein(Linkspacetreepage(
+                  subindex: linkspaceset.indextreecnt.length,
+                  placestr: 'card',
+                  uniqueid: uniquecode));
             } else {
-              await MongoDB.updatewwithqueries(
-                  collectionname: 'pinchannelin',
-                  query1: 'username',
-                  what1: usercode,
-                  query2: 'linkname',
-                  what2: link,
-                  query3: 'index',
-                  what3: index.toString(),
-                  updatelist: {
-                    'treelist': [
-                      {'index': 0, 'name': null, 'uniqueid': code}
-                    ]
-                  });
-              await firestore.collection('Pinchannelin').get().then((value) {
-                for (int i = 0; i < value.docs.length; i++) {
-                  if (value.docs[i].get('username') == usercode &&
-                      value.docs[i].get('linkname') == link &&
-                      value.docs[i].get('index') == index) {
-                    id = value.docs[i].id;
-                  }
-                }
-                firestore.collection('Pinchannelin').doc(id).update({
-                  'treelist': [
-                    {'index': 0, 'name': null, 'uniqueid': code}
-                  ]
-                });
+              await MongoDB.add(collectionname: 'linknet', addlist: {
+                'username': usercode,
+                'addname': '',
+                'placestr': 'calendar',
+                'index': linkspaceset.indextreecnt.length,
+                'uniquecode': uniquecode
               });
-              linkspaceset
-                  .setspacein(Linkspacepage(index: index, placestr: 'board'));
+              await firestore.collection('Linknet').add({
+                'username': usercode,
+                'addname': '',
+                'placestr': 'calendar',
+                'index': linkspaceset.indextreecnt.length,
+                'uniquecode': uniquecode
+              });
+              linkspaceset.setspacetreein(Linkspacetreepage(
+                  subindex: linkspaceset.indextreecnt.length,
+                  placestr: 'calendar',
+                  uniqueid: uniquecode));
             }
 
             Get.back();

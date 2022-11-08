@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable
+
 import 'package:clickbyme/DB/Linkpage.dart';
 import 'package:clickbyme/Page/Linkin.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
@@ -424,6 +426,82 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                 listpinlink[index].link);
                                           },
                                           onTap: () async {
+                                            var user, linkname, placestr;
+                                            if (serverstatus) {
+                                              await MongoDB.getData(
+                                                      collectionname:
+                                                          'pinchannelin')
+                                                  .then((value) {
+                                                linkspaceset.indexcnt.clear();
+                                                linkspaceset.indextreetmp
+                                                    .clear();
+                                                if (value.isEmpty) {
+                                                } else {
+                                                  for (var sp in value) {
+                                                    user = sp['username'];
+                                                    linkname = sp['linkname'];
+                                                    if (usercode == user &&
+                                                        listpinlink[index]
+                                                                .link ==
+                                                            linkname) {
+                                                      linkspaceset.indextreetmp
+                                                          .add(List.empty(
+                                                              growable: true));
+                                                      linkspaceset.indexcnt.add(
+                                                          Linkspacepage(
+                                                              index: int.parse(sp[
+                                                                      'index']
+                                                                  .toString()),
+                                                              placestr: sp[
+                                                                  'placestr'],
+                                                              uniquecode: sp[
+                                                                  'uniquecode']));
+                                                    }
+                                                  }
+                                                  linkspaceset.indexcnt
+                                                      .sort(((a, b) {
+                                                    return a.index
+                                                        .compareTo(b.index);
+                                                  }));
+                                                }
+                                              });
+                                            } else {
+                                              await firestore
+                                                  .collection('Pinchannelin')
+                                                  .get()
+                                                  .then((value) {
+                                                linkspaceset.indextreetmp
+                                                    .clear();
+                                                linkspaceset.indexcnt.clear();
+                                                final valuespace = value.docs;
+                                                for (var sp in valuespace) {
+                                                  user = sp.get('username');
+                                                  linkname = sp.get('linkname');
+                                                  if (user == usercode &&
+                                                      linkname ==
+                                                          listpinlink[index]
+                                                              .link) {
+                                                    linkspaceset.indextreetmp
+                                                        .add(List.empty(
+                                                            growable: true));
+                                                    linkspaceset.indexcnt.add(
+                                                        Linkspacepage(
+                                                            index: int.parse(sp
+                                                                .get('index')
+                                                                .toString()),
+                                                            placestr: sp.get(
+                                                                'placestr'),
+                                                            uniquecode: sp.get(
+                                                                'uniquecode')));
+                                                  }
+                                                }
+                                                linkspaceset.indexcnt
+                                                    .sort(((a, b) {
+                                                  return a.uniqueid
+                                                      .compareTo(b.uniqueid);
+                                                }));
+                                              });
+                                            }
                                             index == 0
                                                 ? Get.to(
                                                     () => const ChooseCalendar(

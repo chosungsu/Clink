@@ -9,10 +9,17 @@ class linkspacesetting extends GetxController {
   List spacelink = [];
   List indexcnt = [];
   List indextreecnt = [];
+  List<List> indextreetmp = [];
   bool iscompleted = false;
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))
       : BGColor();
+
+  void setindextreetmp() {
+    indextreetmp.add(List.empty(growable: true));
+    update();
+    notifyChildrens();
+  }
 
   void setspacelink(String title) {
     spacelink.add(title);

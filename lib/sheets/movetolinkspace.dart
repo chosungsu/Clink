@@ -469,86 +469,34 @@ contentthird(
                       context: context,
                       snackType: SnackType.warning);
                 } else {
+                  linkspaceset.setcompleted(false);
                   if (serverstatus) {
-                    await MongoDB.find(
-                        collectionname: 'linknet',
-                        query: 'username',
-                        what: username);
-                    if (MongoDB.res == null) {
-                      await MongoDB.add(collectionname: 'linknet', addlist: {
-                        'username': username,
-                        'link': [textEditingController_add_sheet.text],
-                      });
-                      linkspaceset
-                          .setspacelink(textEditingController_add_sheet.text);
-                    } else {
-                      await MongoDB.getData(collectionname: 'linknet')
-                          .then((value) async {
-                        updatelist.clear();
-                        for (int j = 0; j < value.length; j++) {
-                          final user = value[j]['username'];
-                          if (user == username) {
-                            for (int i = 0; i < value[j]['link'].length; i++) {
-                              updatelist.add(value[j]['link'][i]);
-                            }
-                          }
-                        }
-                        await MongoDB.delete(
-                            collectionname: 'linknet',
-                            deletelist: {
-                              'username': username,
-                            });
-                      });
-                      updatelist.add(textEditingController_add_sheet.text);
-                      await MongoDB.add(collectionname: 'linknet', addlist: {
-                        'username': username,
-                        'link': updatelist,
-                      });
-                      for (int k = 0; k < updatelist.length; k++) {
-                        linkspaceset.setspacelink(updatelist[k]);
-                      }
-                    }
-                    linkspaceset.setcompleted(true);
-                    Get.back();
-                    var id = '';
-                    firestore.collection('Linknet').get().then((value) {
-                      for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('username') == username) {
-                          id = value.docs[i].id;
-                        }
-                      }
-                      firestore.collection('Linknet').doc(id).delete();
-                    });
-                    firestore.collection('Linknet').add({
+                    await MongoDB.add(collectionname: 'pinchannel', addlist: {
                       'username': username,
-                      'title': updatelist,
-                    }).whenComplete(() {});
-                  } else {
-                    updatelist.clear();
-                    var id = '';
-                    firestore.collection('Linknet').get().then((value) {
-                      for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('username') == username) {
-                          for (int j = 0;
-                              j < value.docs[i].get('link').length;
-                              j++) {
-                            updatelist.add(value.docs[i].get('link')[j]);
-                          }
-                          id = value.docs[i].id;
-                        }
-                      }
-                      firestore.collection('Linknet').doc(id).delete();
+                      'linkname': textEditingController_add_sheet.text,
+                      'color': BGColor().value.toInt()
                     });
-                    updatelist.add(textEditingController_add_sheet.text);
-                    firestore.collection('Linknet').add({
+
+                    firestore.collection('pinchannel').add({
                       'username': username,
-                      'title': updatelist,
+                      'linkname': textEditingController_add_sheet.text,
+                      'color': BGColor().value.toInt()
                     }).whenComplete(() {
                       linkspaceset.setcompleted(true);
+                      linkspaceset
+                          .setspacelink(textEditingController_add_sheet.text);
                       Get.back();
-                      for (int k = 0; k < updatelist.length; k++) {
-                        linkspaceset.setspacelink(updatelist[k]);
-                      }
+                    });
+                  } else {
+                    firestore.collection('pinchannel').add({
+                      'username': username,
+                      'linkname': textEditingController_add_sheet.text,
+                      'color': BGColor().value.toInt()
+                    }).whenComplete(() {
+                      linkspaceset.setcompleted(true);
+                      linkspaceset
+                          .setspacelink(textEditingController_add_sheet.text);
+                      Get.back();
                     });
                   }
                 }
@@ -560,7 +508,7 @@ contentthird(
                   children: [
                     Center(
                       child: NeumorphicText(
-                        '생성하기',
+                        linkspaceset.iscompleted == true ? '생성하기' : '처리중...',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,

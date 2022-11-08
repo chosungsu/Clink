@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
@@ -32,15 +34,15 @@ void main() async {
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
   await MongoDB.connect();
-  /*runApp(
-    const MyApp(),
-  );*/
   runApp(
+    const MyApp(),
+  );
+  /*runApp(
     DevicePreview(
       enabled: !kReleaseMode,
       builder: (context) => const MyApp(), // Wrap your app
     ),
-  );
+  );*/
 }
 
 class MyApp extends StatelessWidget {
@@ -52,9 +54,9 @@ class MyApp extends StatelessWidget {
     return ResponsiveSizer(builder: ((p0, p1, p2) {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
+        //useInheritedMediaQuery: true,
+        //locale: DevicePreview.locale(context),
+        //builder: DevicePreview.appBuilder,
         home: const SplashPage(),
       );
     }));
