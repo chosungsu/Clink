@@ -484,7 +484,12 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                                   .indexcnt[
                                                                       index]
                                                                   .placestr ==
-                                                              placestr) {
+                                                              placestr &&
+                                                          linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .uniquecode ==
+                                                              sp['uniquecode']) {
                                                         linkspaceset
                                                             .indextreetmp[index]
                                                             .add(Linkspacetreepage(

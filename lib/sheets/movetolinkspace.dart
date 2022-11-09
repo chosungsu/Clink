@@ -576,12 +576,11 @@ SetChangeLink(
       }).whenComplete(() async {
     final linkspaceset = Get.put(linkspacesetting());
     if (linkspaceset.iscompleted) {
-      controller.clear();
       linkspaceset.resetcompleted();
       Snack.show(
           context: context,
           title: '알림',
-          content: '정상적으로 추가되었습니다.',
+          content: '정상적으로 처리되었습니다.',
           snackType: SnackType.info,
           behavior: SnackBarBehavior.floating);
     } else {}
@@ -645,6 +644,7 @@ contentforth(BuildContext context, FocusNode searchNode,
   String usercode = Hive.box('user_setting').get('usercode');
   bool serverstatus = Hive.box('user_info').get('server_status');
   final updatelist = [];
+  final uniquecodelist = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
   final uiset = Get.put(uisetting());
@@ -733,136 +733,191 @@ contentforth(BuildContext context, FocusNode searchNode,
                       if (reloadpage) {
                         if (serverstatus) {
                           uiset.setloading(true);
-                          await MongoDB.getData(collectionname: 'linknet')
+                          await MongoDB.delete(
+                              collectionname: 'pinchannel',
+                              deletelist: {
+                                'username': usercode,
+                                'linkname': controller.text,
+                              });
+                          await MongoDB.getData(collectionname: 'pinchannelin')
                               .then((value) async {
                             updatelist.clear();
-                            await MongoDB.delete(
-                                collectionname: 'linknet',
-                                deletelist: {
-                                  'username': usercode,
-                                });
-                            await MongoDB.delete(
-                                collectionname: 'pinchannel',
-                                deletelist: {
-                                  'username': usercode,
-                                  'linkname': link,
-                                });
-                            for (int j = 0; j < value.length; j++) {
-                              final user = value[j]['username'];
-                              if (user == usercode) {
-                                for (int i = 0;
-                                    i < value[j]['link'].length;
-                                    i++) {
-                                  if (link != value[j]['link'][i]) {
-                                    updatelist.add(value[j]['link'][i]);
-                                  }
+                            if (value.isEmpty) {
+                            } else {
+                              for (var sp in value) {
+                                if (sp['username'] == usercode &&
+                                    sp['linkname'] == controller.text) {
+                                  uniquecodelist.add(sp['uniquecode']);
+                                  await MongoDB.delete(
+                                      collectionname: 'pinchannelin',
+                                      deletelist: {
+                                        'username': usercode,
+                                        'linkname': controller.text,
+                                      });
+                                } else {
+                                  updatelist.add(sp['linkname']);
                                 }
                               }
                             }
-                            await MongoDB.add(
-                                collectionname: 'linknet',
-                                addlist: {
-                                  'username': usercode,
-                                  'link': updatelist,
-                                });
+                          }).whenComplete(() async {
+                            await MongoDB.getData(collectionname: 'linknet')
+                                .then((value) async {
+                              if (value.isEmpty) {
+                              } else {
+                                for (var sp in value) {
+                                  for (int i = 0;
+                                      i < uniquecodelist.length;
+                                      i++) {
+                                    if (sp['uniquecode'] == uniquecodelist[i]) {
+                                      await MongoDB.delete(
+                                          collectionname: 'linknet',
+                                          deletelist: {
+                                            'username': usercode,
+                                            'uniquecode': uniquecodelist[i],
+                                          });
+                                    } else {}
+                                  }
+                                }
+                              }
+                            });
                             var id = '';
                             await firestore
-                                .collection('Linknet')
-                                .get()
-                                .then((value) {
-                              for (int i = 0; i < value.docs.length; i++) {
-                                if (value.docs[i].get('username') == usercode) {
-                                  id = value.docs[i].id;
-                                }
-                              }
-                              firestore.collection('Linknet').doc(id).delete();
-                            }).whenComplete(() {
-                              firestore.collection('Linknet').add({
-                                'username': usercode,
-                                'title': updatelist,
-                              });
-                              firestore
-                                  .collection('Pinchannel')
-                                  .get()
-                                  .then((value) {
-                                for (int i = 0; i < value.docs.length; i++) {
-                                  if (value.docs[i].get('linkname') == link) {
-                                    if (value.docs[i].get('username') ==
-                                        usercode) {
-                                      id = value.docs[i].id;
-                                    }
-                                  }
-                                }
-                                firestore
-                                    .collection('Pinchannel')
-                                    .doc(id)
-                                    .delete();
-                              });
-                            });
-                          }).whenComplete(() {
-                            controller.clear();
-                            uiset.setloading(false);
-                            Get.back();
-                            linkspaceset.resetspacelink();
-                            for (int k = 0; k < updatelist.length; k++) {
-                              linkspaceset.setspacelink(updatelist[k]);
-                            }
-                            linkspaceset.setcompleted(true);
-                          });
-                        } else {
-                          uiset.setloading(true);
-                          updatelist.clear();
-                          var id = '';
-
-                          await firestore
-                              .collection('Linknet')
-                              .get()
-                              .then((value) {
-                            for (int i = 0; i < value.docs.length; i++) {
-                              if (value.docs[i].get('username') == usercode) {
-                                for (int j = 0;
-                                    j < value.docs[i].get('link').length;
-                                    j++) {
-                                  if (link != value.docs[i].get('link')[j]) {
-                                    updatelist
-                                        .add(value.docs[i].get('link')[j]);
-                                  }
-                                }
-                                id = value.docs[i].id;
-                              }
-                            }
-                            firestore.collection('Linknet').doc(id).delete();
-                          });
-                          firestore.collection('Linknet').add({
-                            'username': usercode,
-                            'title': updatelist,
-                          }).whenComplete(() {
-                            controller.clear();
-                            uiset.setloading(false);
-                            Get.back();
-
-                            linkspaceset.resetspacelink();
-                            firestore
                                 .collection('Pinchannel')
                                 .get()
                                 .then((value) {
                               for (int i = 0; i < value.docs.length; i++) {
-                                if (value.docs[i].get('linkname') == link) {
-                                  if (value.docs[i].get('username') ==
-                                      usercode) {
-                                    id = value.docs[i].id;
-                                  }
+                                if (value.docs[i].get('username') == usercode &&
+                                    value.docs[i].get('linkname') ==
+                                        controller.text) {
+                                  id = value.docs[i].id;
+                                  firestore
+                                      .collection('Pinchannel')
+                                      .doc(id)
+                                      .delete();
                                 }
                               }
-                              firestore
-                                  .collection('Pinchannel')
-                                  .doc(id)
-                                  .delete();
+                            }).whenComplete(() async {
+                              final idlist = [];
+                              await firestore
+                                  .collection('Pinchannelin')
+                                  .get()
+                                  .then((value) {
+                                for (int i = 0; i < value.docs.length; i++) {
+                                  if (value.docs[i].get('username') ==
+                                          usercode &&
+                                      value.docs[i].get('linkname') ==
+                                          controller.text) {
+                                    id = value.docs[i].id;
+                                    uniquecodelist
+                                        .add(value.docs[i].get('uniquecode'));
+                                    firestore
+                                        .collection('Pinchannelin')
+                                        .doc(id)
+                                        .delete();
+                                  }
+                                }
+                              });
+
+                              await firestore
+                                  .collection('Linknet')
+                                  .get()
+                                  .then((value) async {
+                                for (int i = 0; i < value.docs.length; i++) {
+                                  for (int i = 0;
+                                      i < uniquecodelist.length;
+                                      i++) {
+                                    if (value.docs[i].get('uniquecode') ==
+                                        uniquecodelist[i]) {
+                                      id = value.docs[i].id;
+                                      for (int j = 0; j < idlist.length; j++) {
+                                        firestore
+                                            .collection('Linknet')
+                                            .doc(id)
+                                            .delete();
+                                      }
+                                    } else {}
+                                  }
+                                }
+                              }).whenComplete(() {
+                                uiset.setloading(false);
+
+                                linkspaceset.resetspacelink();
+                                for (int k = 0; k < updatelist.length; k++) {
+                                  linkspaceset.setspacelink(updatelist[k]);
+                                }
+                                Get.back();
+                                linkspaceset.setcompleted(true);
+                              });
                             });
-                            for (int k = 0; k < updatelist.length; k++) {
-                              linkspaceset.setspacelink(updatelist[k]);
+                          });
+                        } else {
+                          uiset.setloading(true);
+                          updatelist.clear();
+
+                          var id = '';
+                          await firestore
+                              .collection('Pinchannel')
+                              .get()
+                              .then((value) {
+                            for (int i = 0; i < value.docs.length; i++) {
+                              if (value.docs[i].get('username') == usercode &&
+                                  value.docs[i].get('linkname') ==
+                                      controller.text) {
+                                id = value.docs[i].id;
+                              }
                             }
-                            linkspaceset.setcompleted(true);
+                            firestore.collection('Pinchannel').doc(id).delete();
+                          }).whenComplete(() async {
+                            final idlist = [];
+                            await firestore
+                                .collection('Pinchannelin')
+                                .get()
+                                .then((value) {
+                              for (int i = 0; i < value.docs.length; i++) {
+                                if (value.docs[i].get('username') == usercode &&
+                                    value.docs[i].get('linkname') ==
+                                        controller.text) {
+                                  id = value.docs[i].id;
+                                  uniquecodelist
+                                      .add(value.docs[i].get('uniquecode'));
+                                  firestore
+                                      .collection('Pinchannelin')
+                                      .doc(id)
+                                      .delete();
+                                }
+                              }
+                            });
+
+                            await firestore
+                                .collection('Linknet')
+                                .get()
+                                .then((value) async {
+                              for (int i = 0; i < value.docs.length; i++) {
+                                for (int i = 0;
+                                    i < uniquecodelist.length;
+                                    i++) {
+                                  if (value.docs[i].get('uniquecode') ==
+                                      uniquecodelist[i]) {
+                                    id = value.docs[i].id;
+                                    for (int j = 0; j < idlist.length; j++) {
+                                      firestore
+                                          .collection('Linknet')
+                                          .doc(id)
+                                          .delete();
+                                    }
+                                  } else {}
+                                }
+                              }
+                            }).whenComplete(() {
+                              uiset.setloading(false);
+
+                              linkspaceset.resetspacelink();
+                              for (int k = 0; k < updatelist.length; k++) {
+                                linkspaceset.setspacelink(updatelist[k]);
+                              }
+                              Get.back();
+                              linkspaceset.setcompleted(true);
+                            });
                           });
                         }
                       }

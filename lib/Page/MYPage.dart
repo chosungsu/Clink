@@ -334,8 +334,11 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                             decoration: TextDecoration.underline,
                             color: TextColor_shadowcolor()),
                         child: GestureDetector(
-                          onTap: () => addmylink(context, usercode, _controller,
-                              searchNode, scollection),
+                          onTap: () {
+                            _controller.clear();
+                            addmylink(context, usercode, _controller,
+                                searchNode, scollection);
+                          },
                           child: Row(
                             children: [
                               Icon(
@@ -411,6 +414,8 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                     itemBuilder: ((context, index) {
                                       return GestureDetector(
                                           onLongPress: () {
+                                            _controller.clear();
+
                                             _controller.text =
                                                 listpinlink[index].link;
                                             _controller.selection =
@@ -503,24 +508,14 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                 }));
                                               });
                                             }
-                                            index == 0
-                                                ? Get.to(
-                                                    () => const ChooseCalendar(
-                                                        isfromwhere:
-                                                            'mypagehome',
-                                                        index: 0),
-                                                    transition:
-                                                        Transition.rightToLeft)
-                                                : Get.to(
-                                                    () => Linkin(
-                                                          isfromwhere:
-                                                              'mypagehome',
-                                                          name:
-                                                              listpinlink[index]
-                                                                  .link,
-                                                        ),
-                                                    transition:
-                                                        Transition.rightToLeft);
+                                            Get.to(
+                                                () => Linkin(
+                                                      isfromwhere: 'mypagehome',
+                                                      name: listpinlink[index]
+                                                          .link,
+                                                    ),
+                                                transition:
+                                                    Transition.rightToLeft);
                                           },
                                           child: Container(
                                               padding: const EdgeInsets.all(10),
