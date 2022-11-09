@@ -624,7 +624,7 @@ contentsecond(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(s == 'add' ? '카드형 플레이스 추가' : '카드형 플레이스',
+                          Text(s == 'add' ? '링크형 플레이스 추가' : '링크형 플레이스',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -668,6 +668,32 @@ contentsecond(
                             index: linkspaceset.indexcnt.length,
                             placestr: 'calendar',
                             uniquecode: code));
+                        linkspaceset.indextreetmp
+                            .add(List.empty(growable: true));
+                        await MongoDB.add(collectionname: 'linknet', addlist: {
+                          'username': name,
+                          'addname': '',
+                          'placestr': 'calendar',
+                          'index': linkspaceset
+                              .indextreetmp[linkspaceset.indexcnt.length - 1]
+                              .length,
+                          'uniquecode': code
+                        });
+                        await firestore.collection('Linknet').add({
+                          'username': name,
+                          'addname': '',
+                          'placestr': 'calendar',
+                          'index': linkspaceset
+                              .indextreetmp[linkspaceset.indexcnt.length - 1]
+                              .length,
+                          'uniquecode': code
+                        });
+                        linkspaceset.setspacetreein(Linkspacetreepage(
+                            subindex: linkspaceset
+                                .indextreetmp[linkspaceset.indexcnt.length - 1]
+                                .length,
+                            placestr: 'calendar',
+                            uniqueid: code));
                       } else {
                         await MongoDB.updatewwithqueries(
                             collectionname: 'pinchannelin',
@@ -752,6 +778,7 @@ linkplacechangeoptions(
   FocusNode changenamenode,
   TextEditingController controller,
   String placestr,
+  String uniquecode,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -783,7 +810,7 @@ linkplacechangeoptions(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
                 child: changeoptplace(context, name, link, index,
-                    changenamenode, controller, placestr),
+                    changenamenode, controller, placestr, uniquecode),
               )),
         );
       }).whenComplete(() {});
@@ -797,6 +824,7 @@ changeoptplace(
   FocusNode changenamenode,
   TextEditingController controller,
   String placestr,
+  String uniquecode,
 ) {
   return SizedBox(
       child: Padding(
@@ -821,7 +849,7 @@ changeoptplace(
                 height: 20,
               ),
               contentthird(context, name, link, index, changenamenode,
-                  controller, placestr),
+                  controller, placestr, uniquecode),
               const SizedBox(
                 height: 20,
               ),
@@ -837,6 +865,7 @@ contentthird(
   FocusNode changenamenode,
   TextEditingController controller,
   String placestr,
+  String uniquecode,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
@@ -883,7 +912,7 @@ contentthird(
         const SizedBox(
           height: 20,
         ),*/
-        GestureDetector(
+        /*GestureDetector(
           onTap: () async {
             if (placestr == 'calendar') {
             } else {
@@ -923,7 +952,7 @@ contentthird(
         ),
         const SizedBox(
           height: 20,
-        ),
+        ),*/
         GestureDetector(
           onTap: () async {
             linkspaceset.minusspacein(index);
@@ -941,6 +970,11 @@ contentthird(
                   what: i.toString(),
                   updatelist: {'index': i - 1});
             }
+            await MongoDB.delete(collectionname: 'linknet', deletelist: {
+              'username': name,
+              'uniquecode': uniquecode,
+              'placestr': placestr
+            });
             await firestore.collection('Pinchannelin').get().then((value) {
               for (int i = 0; i < value.docs.length; i++) {
                 if (value.docs[i].get('username') == name &&
@@ -961,6 +995,20 @@ contentthird(
                       .update({'index': updateindex[j]--});
                 }
               }
+            }).whenComplete(() {
+              updateid.clear();
+            });
+            await firestore.collection('Linknet').get().then((value) {
+              for (int i = 0; i < value.docs.length; i++) {
+                if (value.docs[i].get('username') == name &&
+                    value.docs[i].get('uniquecode') == uniquecode &&
+                    value.docs[i].get('placestr') == placestr) {
+                  updateid.add(value.docs[i].id);
+                }
+              }
+              for (int j = 0; j < updateid.length; j++) {
+                firestore.collection('Linknet').doc(updateid[j]).delete();
+              }
             });
           },
           child: Row(
@@ -972,7 +1020,12 @@ contentthird(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('필드 삭제',
+                          Text(
+                              placestr == 'board'
+                                  ? '보드 플레이스 삭제'
+                                  : (placestr == 'card'
+                                      ? '링크 및 파일 플레이스 삭제'
+                                      : '캘린더 플레이스 삭제'),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -1289,40 +1342,63 @@ linkmadetreeplace(
   String s,
   int index,
   String uniquecode,
-) {
-  showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        bottomLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
-        bottomRight: Radius.circular(20),
-      )),
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: treeplace(context, name, link, s, index, uniquecode),
-              )),
-        );
-      }).whenComplete(() {});
+) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final linkspaceset = Get.put(linkspacesetting());
+  final List<Linkspacepage> listspacepageset = [];
+  var id;
+  if (s == 'board') {
+    await MongoDB.add(collectionname: 'linknet', addlist: {
+      'username': name,
+      'addname': '',
+      'placestr': 'board',
+      'index': index,
+      'uniquecode': uniquecode
+    });
+    await firestore.collection('Linknet').add({
+      'username': name,
+      'addname': '',
+      'placestr': 'board',
+      'index': index,
+      'uniquecode': uniquecode
+    });
+    linkspaceset.setspacetreein(Linkspacetreepage(
+        subindex: index, placestr: 'board', uniqueid: uniquecode));
+  } else if (s == 'card') {
+    await MongoDB.add(collectionname: 'linknet', addlist: {
+      'username': name,
+      'addname': '',
+      'placestr': 'card',
+      'index': index,
+      'uniquecode': uniquecode
+    });
+    await firestore.collection('Linknet').add({
+      'username': name,
+      'addname': '',
+      'placestr': 'card',
+      'index': index,
+      'uniquecode': uniquecode
+    });
+    linkspaceset.setspacetreein(Linkspacetreepage(
+        subindex: index, placestr: 'card', uniqueid: uniquecode));
+  } else {
+    await MongoDB.add(collectionname: 'linknet', addlist: {
+      'username': name,
+      'addname': '',
+      'placestr': 'calendar',
+      'index': index,
+      'uniquecode': uniquecode
+    });
+    await firestore.collection('Linknet').add({
+      'username': name,
+      'addname': '',
+      'placestr': 'calendar',
+      'index': index,
+      'uniquecode': uniquecode
+    });
+    linkspaceset.setspacetreein(Linkspacetreepage(
+        subindex: index, placestr: 'calendar', uniqueid: uniquecode));
+  }
 }
 
 treeplace(

@@ -67,6 +67,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     listpinlink.clear();
+    uiset.showtopbutton = false;
     Hive.box('user_setting').put('page_index', 1);
     fToast = FToast();
     fToast.init(context);

@@ -223,7 +223,7 @@ class MongoDB {
   static update(
       {required String collectionname,
       required String query,
-      required String what,
+      required String? what,
       required Map<String, dynamic> updatelist}) async {
     if (Hive.box('user_info').get('server_status') == true) {
       if (collectionname == 'user') {
@@ -319,10 +319,17 @@ class MongoDB {
         }
       } else if (collectionname == 'pinchannelin') {
         for (int i = 0; i < updatelist.length; i++) {
-          await collection_pinchannelin.update(
-              where.eq(query, int.parse(what)),
-              modify.set(
-                  updatelist.keys.toList()[i], updatelist.values.toList()[i]));
+          if (query == 'index') {
+            await collection_pinchannelin.update(
+                where.eq(query, int.parse(what!)),
+                modify.set(updatelist.keys.toList()[i],
+                    updatelist.values.toList()[i]));
+          } else {
+            await collection_pinchannelin.update(
+                where.eq(query, what),
+                modify.set(updatelist.keys.toList()[i],
+                    updatelist.values.toList()[i]));
+          }
         }
       }
     } else {
@@ -420,10 +427,17 @@ class MongoDB {
         }
       } else if (collectionname == 'pinchannelin') {
         for (int i = 0; i < updatelist.length; i++) {
-          await collection_pinchannelin.update(
-              where.eq(query, int.parse(what)),
-              modify.set(
-                  updatelist.keys.toList()[i], updatelist.values.toList()[i]));
+          if (query == 'index') {
+            await collection_pinchannelin.update(
+                where.eq(query, int.parse(what!)),
+                modify.set(updatelist.keys.toList()[i],
+                    updatelist.values.toList()[i]));
+          } else {
+            await collection_pinchannelin.update(
+                where.eq(query, what),
+                modify.set(updatelist.keys.toList()[i],
+                    updatelist.values.toList()[i]));
+          }
         }
       }
     }

@@ -21,6 +21,7 @@ import '../DB/Linkpage.dart';
 import '../Route/subuiroute.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
+import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../mongoDB/mongodatabase.dart';
 
 class Linkin extends StatefulWidget {
@@ -75,12 +76,13 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
     fToast = FToast();
     fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
+    uiset.showtopbutton = false;
     StatusBarControl.setColor(linkspaceset.color, animated: true);
     Hive.box('user_setting').put('sort_memo_card', 0);
     controller = TextEditingController();
     scrollController = ScrollController()
       ..addListener(() {
-        if (scrollController.offset >= 50) {
+        if (scrollController.offset >= 300) {
           uiset.settopbutton(true); // show the back-to-top button
         } else {
           uiset.settopbutton(false); // hide the back-to-top button
@@ -349,18 +351,12 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                             textAlign: TextAlign.center,
                           ),
                         ))
-                      : GridView.builder(
+                      : ListView.builder(
                           controller: scrollController,
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           physics: const ScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 1,
-                                  childAspectRatio: 5 / 4,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
                           itemCount: linkspaceset.indexcnt.length,
                           itemBuilder: ((context, index) {
                             return Column(
@@ -368,234 +364,297 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  child: GestureDetector(
-                                      onTap: () async {},
-                                      child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            color: Colors.grey.shade200,
-                                          ),
-                                          child: SizedBox(
-                                              child: Column(
-                                            children: [
-                                              Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Flexible(
-                                                      fit: FlexFit.tight,
-                                                      child: Text(
-                                                        linkspaceset
-                                                            .indexcnt[index]
-                                                            .placestr
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black45,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize()),
-                                                      ),
+                                GestureDetector(
+                                    onTap: () async {},
+                                    child: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          color: Colors.grey.shade200,
+                                        ),
+                                        child: SizedBox(
+                                            child: Column(
+                                          children: [
+                                            Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Flexible(
+                                                    fit: FlexFit.tight,
+                                                    child: Text(
+                                                      linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .placestr ==
+                                                              'board'
+                                                          ? '보드'
+                                                          : (linkspaceset
+                                                                      .indexcnt[
+                                                                          index]
+                                                                      .placestr ==
+                                                                  'card'
+                                                              ? '링크 및 파일'
+                                                              : '캘린더'),
+                                                      style: TextStyle(
+                                                          color: Colors.black45,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize()),
                                                     ),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        linkmadetreeplace(
-                                                            context,
-                                                            usercode,
-                                                            widget.name,
-                                                            linkspaceset
-                                                                .indexcnt[index]
-                                                                .placestr,
-                                                            index,
-                                                            linkspaceset
-                                                                .indexcnt[index]
-                                                                .uniquecode);
-                                                      },
-                                                      child: const Icon(
-                                                        Icons
-                                                            .add_circle_outline,
-                                                        color: Colors.black45,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        controller.text = '';
-                                                        linkplacechangeoptions(
-                                                            context,
-                                                            usercode,
-                                                            widget.name,
-                                                            index,
-                                                            changenamenode,
-                                                            controller,
-                                                            linkspaceset
-                                                                .indexcnt[index]
-                                                                .placestr);
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.more_horiz,
-                                                        color: Colors.black45,
-                                                      ),
-                                                    )
-                                                  ]),
-                                              FutureBuilder(
-                                                  future: MongoDB.getData(
-                                                    collectionname: 'linknet',
-                                                  ).then((value) {
-                                                    linkspaceset
-                                                        .indextreetmp[index]
-                                                        .clear();
-                                                    if (value.isEmpty) {
-                                                    } else {
-                                                      for (var sp in value) {
-                                                        user = sp['username'];
-                                                        placestr =
-                                                            sp['placestr'];
-                                                        if (usercode == user &&
-                                                            linkspaceset
+                                                  ),
+                                                  linkspaceset.indexcnt[index]
+                                                              .placestr ==
+                                                          'calendar'
+                                                      ? const SizedBox()
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            linkmadetreeplace(
+                                                                context,
+                                                                usercode,
+                                                                widget.name,
+                                                                linkspaceset
                                                                     .indexcnt[
                                                                         index]
-                                                                    .placestr ==
-                                                                placestr) {
+                                                                    .placestr,
+                                                                linkspaceset
+                                                                    .indextreetmp[
+                                                                        index]
+                                                                    .length,
+                                                                linkspaceset
+                                                                    .indexcnt[
+                                                                        index]
+                                                                    .uniquecode);
+                                                          },
+                                                          child: const Icon(
+                                                            Icons
+                                                                .add_circle_outline,
+                                                            color:
+                                                                Colors.black45,
+                                                          ),
+                                                        ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      controller.text = '';
+                                                      linkplacechangeoptions(
+                                                          context,
+                                                          usercode,
+                                                          widget.name,
+                                                          index,
+                                                          changenamenode,
+                                                          controller,
                                                           linkspaceset
-                                                              .indextreetmp[
-                                                                  index]
-                                                              .add(Linkspacetreepage(
-                                                                  subindex: linkspaceset
-                                                                      .indextreetmp[
-                                                                          index]
-                                                                      .length,
-                                                                  placestr: sp[
-                                                                      'addname'],
-                                                                  uniqueid: sp[
-                                                                      'uniquecode']));
-                                                        }
+                                                              .indexcnt[index]
+                                                              .placestr,
+                                                          linkspaceset
+                                                              .indexcnt[index]
+                                                              .uniquecode);
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.more_horiz,
+                                                      color: Colors.black45,
+                                                    ),
+                                                  )
+                                                ]),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            FutureBuilder(
+                                                future: MongoDB.getData(
+                                                  collectionname: 'linknet',
+                                                ).then((value) {
+                                                  linkspaceset
+                                                      .indextreetmp[index]
+                                                      .clear();
+                                                  if (value.isEmpty) {
+                                                  } else {
+                                                    for (var sp in value) {
+                                                      user = sp['username'];
+                                                      placestr = sp['placestr'];
+                                                      if (usercode == user &&
+                                                          linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .placestr ==
+                                                              placestr) {
+                                                        linkspaceset
+                                                            .indextreetmp[index]
+                                                            .add(Linkspacetreepage(
+                                                                subindex: linkspaceset
+                                                                    .indextreetmp[
+                                                                        index]
+                                                                    .length,
+                                                                placestr: sp[
+                                                                    'addname'],
+                                                                uniqueid: sp[
+                                                                    'uniquecode']));
                                                       }
-                                                      linkspaceset
-                                                          .indextreetmp[index]
-                                                          .sort(((a, b) {
-                                                        return a.subindex
-                                                            .compareTo(
-                                                                b.subindex);
-                                                      }));
                                                     }
-                                                  }),
-                                                  builder:
-                                                      ((context, snapshot) {
-                                                    if (linkspaceset
+                                                    linkspaceset
                                                         .indextreetmp[index]
-                                                        .isNotEmpty) {
-                                                      return Flexible(
-                                                          fit: FlexFit.tight,
-                                                          child:
-                                                              GridView.builder(
-                                                                  scrollDirection: Axis
-                                                                      .vertical,
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  physics:
-                                                                      const ScrollPhysics(),
-                                                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                      crossAxisCount:
-                                                                          2,
-                                                                      childAspectRatio:
-                                                                          1 /
-                                                                              1.2,
-                                                                      crossAxisSpacing:
-                                                                          20,
-                                                                      mainAxisSpacing:
-                                                                          20),
-                                                                  itemCount: linkspaceset
-                                                                      .indextreetmp[
-                                                                          index]
-                                                                      .length,
-                                                                  itemBuilder:
-                                                                      ((context,
-                                                                          index2) {
-                                                                    return ContainerDesign(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      child:
-                                                                          Column(
-                                                                        children: [
-                                                                          InkWell(
-                                                                            onTap:
-                                                                                () {
-                                                                              controller.text = linkspaceset.indextreetmp[index][index2].placestr == '' ? '' : linkspaceset.indextreetmp[index][index2].placestr;
-                                                                              linkplacenamechange(context, usercode, linkspaceset.indextreetmp[index][index2].uniqueid, index2, linkspaceset.indextreetmp[index][index2].placestr, changenamenode, controller, linkspaceset.indexcnt[index].placestr);
-                                                                            },
-                                                                            child:
-                                                                                Row(
-                                                                              children: [
-                                                                                Flexible(
-                                                                                  fit: FlexFit.tight,
-                                                                                  child: Text(
-                                                                                    linkspaceset.indextreetmp[index][index2].placestr == '' ? '제목없음' : linkspaceset.indextreetmp[index][index2].placestr,
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(color: Colors.black45, fontWeight: FontWeight.bold, fontSize: contentTextsize()),
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                  ),
+                                                        .sort(((a, b) {
+                                                      return a.subindex
+                                                          .compareTo(
+                                                              b.subindex);
+                                                    }));
+                                                  }
+                                                }),
+                                                builder: ((context, snapshot) {
+                                                  if (linkspaceset
+                                                      .indextreetmp[index]
+                                                      .isNotEmpty) {
+                                                    return SizedBox(
+                                                        height: linkspaceset.indexcnt[index].placestr == 'board'
+                                                            ? (linkspaceset
+                                                                    .indextreetmp[
+                                                                        index]
+                                                                    .length) *
+                                                                200
+                                                            : (linkspaceset.indexcnt[index].placestr == 'card'
+                                                                ? (linkspaceset
+                                                                        .indextreetmp[
+                                                                            index]
+                                                                        .length) *
+                                                                    130
+                                                                : 130),
+                                                        child: ListView.builder(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                              left: 10,
+                                                              right: 10,
+                                                            ),
+                                                            scrollDirection:
+                                                                Axis.vertical,
+                                                            shrinkWrap: true,
+                                                            physics:
+                                                                const ScrollPhysics(),
+                                                            itemCount: linkspaceset
+                                                                        .indexcnt[
+                                                                            index]
+                                                                        .placestr ==
+                                                                    'calendar'
+                                                                ? 1
+                                                                : linkspaceset
+                                                                    .indextreetmp[index]
+                                                                    .length,
+                                                            itemBuilder: ((context, index2) {
+                                                              return Column(
+                                                                children: [
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      if (linkspaceset
+                                                                              .indexcnt[index]
+                                                                              .placestr ==
+                                                                          'calendar') {
+                                                                        Get.to(
+                                                                            () =>
+                                                                                const ChooseCalendar(isfromwhere: 'mypagehome', index: 0),
+                                                                            transition: Transition.rightToLeft);
+                                                                      } else {}
+                                                                    },
+                                                                    child: ContainerDesign(
+                                                                        color: Colors.white,
+                                                                        child: SizedBox(
+                                                                          height: linkspaceset.indexcnt[index].placestr == 'board'
+                                                                              ? 150
+                                                                              : (linkspaceset.indexcnt[index].placestr == 'card' ? 80 : 80),
+                                                                          child:
+                                                                              Column(
+                                                                            children: [
+                                                                              InkWell(
+                                                                                onTap: () {
+                                                                                  controller.text = linkspaceset.indextreetmp[index][index2].placestr == '' ? '' : linkspaceset.indextreetmp[index][index2].placestr;
+                                                                                  linkplacenamechange(context, usercode, linkspaceset.indextreetmp[index][index2].uniqueid, index2, linkspaceset.indextreetmp[index][index2].placestr, changenamenode, controller, linkspaceset.indexcnt[index].placestr);
+                                                                                },
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                                  children: [
+                                                                                    Flexible(
+                                                                                      fit: FlexFit.tight,
+                                                                                      child: Text(
+                                                                                        linkspaceset.indextreetmp[index][index2].placestr == '' ? '제목없음' : linkspaceset.indextreetmp[index][index2].placestr,
+                                                                                        textAlign: TextAlign.start,
+                                                                                        style: TextStyle(color: Colors.black45, fontWeight: FontWeight.bold, fontSize: contentTextsize()),
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                      ),
+                                                                                    ),
+                                                                                    const SizedBox(
+                                                                                      width: 10,
+                                                                                    ),
+                                                                                    const Icon(
+                                                                                      Icons.edit,
+                                                                                      color: Colors.black45,
+                                                                                    ),
+                                                                                  ],
                                                                                 ),
-                                                                                const SizedBox(
-                                                                                  width: 10,
-                                                                                ),
-                                                                                const Icon(
-                                                                                  Icons.edit,
-                                                                                  color: Colors.black45,
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    );
-                                                                  })));
-                                                    } else {
-                                                      return Flexible(
-                                                          fit: FlexFit.tight,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Center(
-                                                                child: Text(
-                                                                  '보드 공간은 이미지, 링크를 클립보드 형식으로 보여주는 공간입니다.',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black45,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          contentTextsize()),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ));
-                                                    }
-                                                  }))
-                                            ],
-                                          )))),
-                                ),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        )),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            })));
+                                                  } else {
+                                                    return SizedBox(
+                                                      height: 100,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Center(
+                                                            child: Text(
+                                                              linkspaceset
+                                                                          .indexcnt[
+                                                                              index]
+                                                                          .placestr ==
+                                                                      'board'
+                                                                  ? '보드 공간은 이미지모음, 메모를 클립보드 형식으로 보여주는 공간입니다.'
+                                                                  : (linkspaceset
+                                                                              .indexcnt[index]
+                                                                              .placestr ==
+                                                                          'card'
+                                                                      ? '카드 공간은 링크 및 파일을 바로가기 카드뷰로 보여주는 공간입니다.'
+                                                                      : '캘린더 공간은 캘린더 형식만을 보여주는 공간입니다.'),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black45,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      contentTextsize()),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }
+                                                }))
+                                          ],
+                                        )))),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -643,18 +702,12 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                               textAlign: TextAlign.center,
                             ),
                           ))
-                        : GridView.builder(
+                        : ListView.builder(
                             controller: scrollController,
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                             physics: const ScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 1,
-                                    childAspectRatio: 5 / 4,
-                                    crossAxisSpacing: 20,
-                                    mainAxisSpacing: 20),
                             itemCount: linkspaceset.indexcnt.length,
                             itemBuilder: ((context, index) {
                               return Column(
@@ -687,9 +740,18 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                       fit: FlexFit.tight,
                                                       child: Text(
                                                         linkspaceset
-                                                            .indexcnt[index]
-                                                            .placestr
-                                                            .toString(),
+                                                                    .indexcnt[
+                                                                        index]
+                                                                    .placestr ==
+                                                                'board'
+                                                            ? '보드'
+                                                            : (linkspaceset
+                                                                        .indexcnt[
+                                                                            index]
+                                                                        .placestr ==
+                                                                    'card'
+                                                                ? '링크 및 파일'
+                                                                : '캘린더'),
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.black45,
@@ -705,7 +767,9 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                             context,
                                                             usercode,
                                                             widget.name,
-                                                            'addtree',
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .placestr,
                                                             index,
                                                             linkspaceset
                                                                 .indexcnt[index]
@@ -732,7 +796,10 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                             controller,
                                                             linkspaceset
                                                                 .indexcnt[index]
-                                                                .placestr);
+                                                                .placestr,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .uniquecode);
                                                       },
                                                       child: const Icon(
                                                         Icons.more_horiz,
@@ -740,24 +807,22 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                       ),
                                                     )
                                                   ]),
-                                              StreamBuilder<QuerySnapshot>(
-                                                  stream: firestore
-                                                      .collection('Linknet')
-                                                      .snapshots(),
-                                                  builder:
-                                                      ((context, snapshot) {
-                                                    if (snapshot.hasData) {
-                                                      linkspaceset
-                                                          .indextreetmp[index]
-                                                          .clear();
-                                                      final valuespace =
-                                                          snapshot.data!.docs;
-                                                      for (var sp
-                                                          in valuespace) {
-                                                        user =
-                                                            sp.get('username');
-                                                        linkname =
-                                                            sp.get('placestr');
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              FutureBuilder(
+                                                  future: MongoDB.getData(
+                                                    collectionname: 'linknet',
+                                                  ).then((value) {
+                                                    linkspaceset
+                                                        .indextreetmp[index]
+                                                        .clear();
+                                                    if (value.isEmpty) {
+                                                    } else {
+                                                      for (var sp in value) {
+                                                        user = sp['username'];
+                                                        placestr =
+                                                            sp['placestr'];
                                                         if (usercode == user &&
                                                             linkspaceset
                                                                     .indexcnt[
@@ -772,10 +837,10 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                                       .indextreetmp[
                                                                           index]
                                                                       .length,
-                                                                  placestr: sp.get(
-                                                                      'addname'),
-                                                                  uniqueid: sp.get(
-                                                                      'uniquecode')));
+                                                                  placestr: sp[
+                                                                      'addname'],
+                                                                  uniqueid: sp[
+                                                                      'uniquecode']));
                                                         }
                                                       }
                                                       linkspaceset
@@ -785,131 +850,147 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                             .compareTo(
                                                                 b.subindex);
                                                       }));
-                                                      return linkspaceset
-                                                              .indextreetmp[
-                                                                  index]
-                                                              .isEmpty
-                                                          ? Flexible(
-                                                              fit:
-                                                                  FlexFit.tight,
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Center(
-                                                                    child: Text(
-                                                                      '보드 공간은 이미지, 링크를 클립보드 형식으로 보여주는 공간입니다.',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .black45,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontSize:
-                                                                              contentTextsize()),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ))
-                                                          : Flexible(
-                                                              fit:
-                                                                  FlexFit.tight,
-                                                              child: GridView
-                                                                  .builder(
-                                                                      scrollDirection:
-                                                                          Axis
-                                                                              .vertical,
-                                                                      shrinkWrap:
-                                                                          true,
-                                                                      physics:
-                                                                          const ScrollPhysics(),
-                                                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                          crossAxisCount:
-                                                                              2,
-                                                                          childAspectRatio: 1 /
-                                                                              1.2,
-                                                                          crossAxisSpacing:
-                                                                              20,
-                                                                          mainAxisSpacing:
-                                                                              20),
-                                                                      itemCount: linkspaceset
+                                                    }
+                                                  }),
+                                                  builder:
+                                                      ((context, snapshot) {
+                                                    if (linkspaceset
+                                                        .indextreetmp[index]
+                                                        .isNotEmpty) {
+                                                      return SizedBox(
+                                                          height: linkspaceset
+                                                                      .indexcnt[
+                                                                          index]
+                                                                      .placestr ==
+                                                                  'board'
+                                                              ? (linkspaceset
+                                                                      .indextreetmp[
+                                                                          index]
+                                                                      .length) *
+                                                                  200
+                                                              : (linkspaceset.indexcnt[index].placestr ==
+                                                                      'card'
+                                                                  ? (linkspaceset
                                                                           .indextreetmp[
                                                                               index]
-                                                                          .length,
-                                                                      itemBuilder:
-                                                                          ((context,
-                                                                              index2) {
-                                                                        return ContainerDesign(
-                                                                          color:
-                                                                              Colors.white,
-                                                                          child:
-                                                                              Column(
-                                                                            children: [
-                                                                              InkWell(
-                                                                                onTap: () {
-                                                                                  controller.text = linkspaceset.indextreetmp[index][index2].placestr == '' ? '' : linkspaceset.indextreetmp[index][index2].placestr;
-                                                                                  linkplacenamechange(context, usercode, linkspaceset.indextreetmp[index][index2].uniqueid, index2, linkspaceset.indextreetmp[index][index2].placestr, changenamenode, controller, linkspaceset.indexcnt[index].placestr);
-                                                                                },
-                                                                                child: Row(
-                                                                                  children: [
-                                                                                    Flexible(
-                                                                                      fit: FlexFit.tight,
-                                                                                      child: Text(
-                                                                                        linkspaceset.indextreetmp[index][index2].placestr == '' ? '제목없음' : linkspaceset.indextreetmp[index][index2].placestr,
-                                                                                        textAlign: TextAlign.center,
-                                                                                        style: TextStyle(color: Colors.black45, fontWeight: FontWeight.bold, fontSize: contentTextsize()),
-                                                                                        overflow: TextOverflow.ellipsis,
-                                                                                      ),
+                                                                          .length) *
+                                                                      130
+                                                                  : (linkspaceset
+                                                                          .indextreetmp[
+                                                                              index]
+                                                                          .length) *
+                                                                      130),
+                                                          child:
+                                                              ListView.builder(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                    left: 10,
+                                                                    right: 10,
+                                                                  ),
+                                                                  scrollDirection:
+                                                                      Axis
+                                                                          .vertical,
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  physics:
+                                                                      const ScrollPhysics(),
+                                                                  itemCount: linkspaceset
+                                                                      .indextreetmp[
+                                                                          index]
+                                                                      .length,
+                                                                  itemBuilder:
+                                                                      ((context,
+                                                                          index2) {
+                                                                    return Column(
+                                                                      children: [
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        ContainerDesign(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            child: SizedBox(
+                                                                              height: linkspaceset.indexcnt[index].placestr == 'board' ? 150 : (linkspaceset.indexcnt[index].placestr == 'card' ? 80 : 80),
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  InkWell(
+                                                                                    onTap: () {
+                                                                                      controller.text = linkspaceset.indextreetmp[index][index2].placestr == '' ? '' : linkspaceset.indextreetmp[index][index2].placestr;
+                                                                                      linkplacenamechange(context, usercode, linkspaceset.indextreetmp[index][index2].uniqueid, index2, linkspaceset.indextreetmp[index][index2].placestr, changenamenode, controller, linkspaceset.indexcnt[index].placestr);
+                                                                                    },
+                                                                                    child: Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                                      children: [
+                                                                                        Flexible(
+                                                                                          fit: FlexFit.tight,
+                                                                                          child: Text(
+                                                                                            linkspaceset.indextreetmp[index][index2].placestr == '' ? '제목없음' : linkspaceset.indextreetmp[index][index2].placestr,
+                                                                                            textAlign: TextAlign.start,
+                                                                                            style: TextStyle(color: Colors.black45, fontWeight: FontWeight.bold, fontSize: contentTextsize()),
+                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                          ),
+                                                                                        ),
+                                                                                        const SizedBox(
+                                                                                          width: 10,
+                                                                                        ),
+                                                                                        const Icon(
+                                                                                          Icons.edit,
+                                                                                          color: Colors.black45,
+                                                                                        ),
+                                                                                      ],
                                                                                     ),
-                                                                                    const SizedBox(
-                                                                                      width: 10,
-                                                                                    ),
-                                                                                    const Icon(
-                                                                                      Icons.edit,
-                                                                                      color: Colors.black45,
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              )
-                                                                            ],
-                                                                          ),
-                                                                        );
-                                                                      })));
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            )),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  })));
                                                     } else {
-                                                      return Flexible(
-                                                          fit: FlexFit.tight,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Center(
-                                                                child: Text(
-                                                                  '보드 공간은 이미지, 링크를 클립보드 형식으로 보여주는 공간입니다.',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black45,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          contentTextsize()),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ));
+                                                      return SizedBox(
+                                                        height: 100,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Center(
+                                                              child: Text(
+                                                                linkspaceset
+                                                                            .indexcnt[
+                                                                                index]
+                                                                            .placestr ==
+                                                                        'board'
+                                                                    ? '보드 공간은 이미지모음, 메모를 클립보드 형식으로 보여주는 공간입니다.'
+                                                                    : (linkspaceset.indexcnt[index].placestr ==
+                                                                            'card'
+                                                                        ? '카드 공간은 링크 및 파일을 바로가기 카드뷰로 보여주는 공간입니다.'
+                                                                        : '캘린더 공간은 캘린더 형식만을 보여주는 공간입니다.'),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black45,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        contentTextsize()),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      );
                                                     }
                                                   }))
                                             ],

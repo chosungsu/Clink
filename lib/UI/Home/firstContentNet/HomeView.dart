@@ -622,7 +622,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                     }
                   }
                   linkspaceset.indexcnt.sort(((a, b) {
-                    return a.uniqueid.compareTo(b.uniqueid);
+                    return a.index.compareTo(b.index);
                   }));
                 }
               }),
@@ -704,13 +704,12 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                   query1: 'username',
                                   what1: usercode,
                                   query2: 'linkname',
-                                  what2: linkname,
+                                  what2: widget.link,
                                   query3: 'index',
                                   what3: oldIndex.toString(),
                                   query4: 'placestr',
-                                  what4: linkspaceset
-                                      .indexcnt[newIndex].placestr
-                                      .toString(),
+                                  what4:
+                                      linkspaceset.indexcnt[newIndex].placestr,
                                   updatelist: {
                                     'index': newIndex,
                                   });
@@ -719,16 +718,16 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                   query1: 'username',
                                   what1: usercode,
                                   query2: 'linkname',
-                                  what2: linkname,
+                                  what2: widget.link,
                                   query3: 'index',
                                   what3: newIndex.toString(),
                                   query4: 'placestr',
-                                  what4: linkspaceset
-                                      .indexcnt[oldIndex].placestr
-                                      .toString(),
+                                  what4:
+                                      linkspaceset.indexcnt[oldIndex].placestr,
                                   updatelist: {
                                     'index': oldIndex,
                                   });
+
                               firestore
                                   .collection('Pinchannelin')
                                   .get()
@@ -740,7 +739,10 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                         value.docs[i].get('linkname') ==
                                             linkname) {
                                       if (value.docs[i].get('index') ==
-                                          newIndex) {
+                                              newIndex &&
+                                          value.docs[i].get('placestr') ==
+                                              linkspaceset.indexcnt[oldIndex]
+                                                  .placestr) {
                                         updateid1 = value.docs[i].id;
                                         firestore
                                             .collection('Pinchannelin')
@@ -749,7 +751,10 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                           'index': oldIndex,
                                         });
                                       } else if (value.docs[i].get('index') ==
-                                          oldIndex) {
+                                              oldIndex &&
+                                          value.docs[i].get('placestr') ==
+                                              linkspaceset.indexcnt[newIndex]
+                                                  .placestr) {
                                         updateid2 = value.docs[i].id;
                                         firestore
                                             .collection('Pinchannelin')

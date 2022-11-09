@@ -508,7 +508,7 @@ contentthird(
                   children: [
                     Center(
                       child: NeumorphicText(
-                        linkspaceset.iscompleted == true ? '생성하기' : '처리중...',
+                        linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,

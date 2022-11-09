@@ -24,7 +24,6 @@ import '../../../Tool/NoBehavior.dart';
 import 'package:focused_menu/focused_menu.dart';
 import '../../../sheets/infoshow.dart';
 import '../../../sheets/settingChoiceC_Cards.dart';
-import '../Widgets/CreateCalandmemo.dart';
 import '../secondContentNet/PeopleGroup.dart';
 
 class ChooseCalendar extends StatefulWidget {
@@ -167,10 +166,10 @@ class _ChooseCalendarState extends State<ChooseCalendar>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                    height: 80,
+                    height: 60,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 10, right: 10, top: 20, bottom: 10),
+                          left: 20, right: 10, top: 5, bottom: 5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -208,71 +207,61 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                             ),
                                           )),
                                       color: TextColor()),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          80,
+                                  Flexible(
                                       child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10),
-                                          child: Row(
-                                            children: [
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Text('일정표 목록',
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          contentTitleTextsize(),
-                                                      color: TextColor(),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    )),
-                                              ),
-                                              SortMenuHolder(
-                                                  cal_sort.sort, '캘린더'),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              IconBtn(
-                                                  child: IconButton(
-                                                      onPressed: () async {
-                                                        //리스트 추가하는 창 띄우기
-                                                        Hive.box('user_setting')
-                                                            .put('typecalendar',
-                                                                0);
-                                                        addWhole_update(
-                                                            context,
-                                                            searchNode,
-                                                            controller,
-                                                            username,
-                                                            Date,
-                                                            'cal',
-                                                            fToast);
-                                                      },
-                                                      icon: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 30,
-                                                        height: 30,
-                                                        child: NeumorphicIcon(
-                                                          Icons.add,
-                                                          size: 30,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              surfaceIntensity:
-                                                                  0.5,
-                                                              color:
-                                                                  TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      )),
-                                                  color: TextColor()),
-                                            ],
-                                          ))),
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text('일정표 목록',
+                                              style: TextStyle(
+                                                fontSize: mainTitleTextsize(),
+                                                color: TextColor(),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                        ),
+                                        SortMenuHolder(cal_sort.sort, '캘린더'),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        IconBtn(
+                                            child: IconButton(
+                                                onPressed: () async {
+                                                  //리스트 추가하는 창 띄우기
+                                                  Hive.box('user_setting')
+                                                      .put('typecalendar', 0);
+                                                  addWhole_update(
+                                                      context,
+                                                      searchNode,
+                                                      controller,
+                                                      username,
+                                                      Date,
+                                                      'cal',
+                                                      fToast);
+                                                },
+                                                icon: Container(
+                                                  alignment: Alignment.center,
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: NeumorphicIcon(
+                                                    Icons.add,
+                                                    size: 30,
+                                                    style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .convex,
+                                                        depth: 2,
+                                                        surfaceIntensity: 0.5,
+                                                        color: TextColor(),
+                                                        lightSource: LightSource
+                                                            .topLeft),
+                                                  ),
+                                                )),
+                                            color: TextColor()),
+                                      ],
+                                    ),
+                                  )),
                                 ],
                               )),
                         ],
