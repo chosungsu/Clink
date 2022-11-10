@@ -71,7 +71,7 @@ class _ShowLicenseState extends State<ShowLicense> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AppBarCustom(
+              AppBarCustom(
                 title: 'License',
                 righticon: true,
                 iconname: Icons.close,

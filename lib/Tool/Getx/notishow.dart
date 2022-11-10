@@ -21,7 +21,7 @@ class notishow extends GetxController {
   }
 
   void setnoti(String a, String b) async {
-    listad.add(PageList(title: a, sub: b));
+    listad.add(CompanyPageList(title: a, url: b));
     update();
     notifyChildrens();
   }

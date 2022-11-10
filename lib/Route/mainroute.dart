@@ -86,12 +86,12 @@ class _mainrouteState extends State<mainroute>
     }
     if (draw.currentpage == 2) {
       draw.currentpage = 1;
-      Hive.box('user_setting').put('page_index', 3);
+      Hive.box('user_setting').put('page_index', 2);
       Navigator.of(context).pushReplacement(
         PageTransition(
           type: PageTransitionType.leftToRight,
           child: const mainroute(
-            index: 3,
+            index: 2,
           ),
         ),
       );
@@ -115,7 +115,7 @@ class _mainrouteState extends State<mainroute>
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     MongoDB.connect();
     List pages = [
-      HomePage(secondname: cal_share_person.secondname),
+      //HomePage(secondname: cal_share_person.secondname),
       const MYPage(),
       HomePage(secondname: cal_share_person.secondname),
       const ProfilePage(),
@@ -123,27 +123,27 @@ class _mainrouteState extends State<mainroute>
     return GetBuilder<navibool>(
         builder: (_) => GetBuilder<uisetting>(builder: ((_) {
               return Scaffold(
-                  backgroundColor: BGColor(),
-                  body: WillPopScope(
-                      onWillPop: Hive.box('user_setting').get('page_index') == 0
-                          ? _onWillPop
-                          : _onWillPop2,
-                      child: pages[uiset.pagenumber]),
-                  bottomNavigationBar: draw.navi == 1
-                      ? Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  top:
-                                      BorderSide(color: draw.color, width: 1))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              BottomNavigationBar(
-                                type: BottomNavigationBarType.fixed,
-                                onTap: (_index) async {
-                                  //Handle button tap
-                                  uiset.setloading(true);
-                                  if (_index == 2) {
+                backgroundColor: BGColor(),
+                body: WillPopScope(
+                    onWillPop: Hive.box('user_setting').get('page_index') == 0
+                        ? _onWillPop
+                        : _onWillPop2,
+                    child: pages[uiset.pagenumber]),
+                bottomNavigationBar: draw.navi == 1
+                    ? Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                top: BorderSide(color: draw.color, width: 1))),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ADSHOW(),
+                            BottomNavigationBar(
+                              type: BottomNavigationBarType.fixed,
+                              onTap: (_index) async {
+                                //Handle button tap
+                                uiset.setloading(true);
+                                /*if (_index == 2) {
                                     Hive.box('user_setting').put(
                                         'page_index',
                                         Hive.box('user_setting')
@@ -154,57 +154,48 @@ class _mainrouteState extends State<mainroute>
                                 Date, 'home', fToast);*/
                                     addWhole_update(context, searchNode,
                                         controller, name, Date, 'home', fToast);
-                                  } else {
-                                    Hive.box('user_setting')
-                                        .put('page_index', _index);
-                                    uiset.setpageindex(Hive.box('user_setting')
-                                        .get('page_index'));
-                                  }
+                                  } */
+                                Hive.box('user_setting')
+                                    .put('page_index', _index);
+                                uiset.setpageindex(
+                                    Hive.box('user_setting').get('page_index'));
 
-                                  uiset.setloading(false);
-                                },
-                                backgroundColor: BGColor(),
-                                selectedFontSize: 18,
-                                unselectedFontSize: 18,
-                                selectedItemColor: NaviColor(true),
-                                unselectedItemColor: NaviColor(false),
-                                showSelectedLabels: true,
-                                showUnselectedLabels: true,
-                                currentIndex: uiset.pagenumber,
-                                items: <BottomNavigationBarItem>[
-                                  BottomNavigationBarItem(
-                                    backgroundColor: BGColor(),
-                                    icon: const Icon(
-                                      Icons.home,
-                                      size: 25,
-                                    ),
-                                    label: '홈',
+                                uiset.setloading(false);
+                              },
+                              backgroundColor: BGColor(),
+                              selectedFontSize: 18,
+                              unselectedFontSize: 18,
+                              selectedItemColor: NaviColor(true),
+                              unselectedItemColor: NaviColor(false),
+                              showSelectedLabels: false,
+                              showUnselectedLabels: false,
+                              currentIndex: uiset.pagenumber,
+                              items: <BottomNavigationBarItem>[
+                                BottomNavigationBarItem(
+                                  backgroundColor: BGColor(),
+                                  icon: const Icon(
+                                    Icons.view_stream,
+                                    size: 25,
                                   ),
-                                  BottomNavigationBarItem(
-                                    backgroundColor: BGColor(),
-                                    icon: const Icon(
-                                      Icons.list_alt,
-                                      size: 25,
-                                    ),
-                                    label: '마이룸',
+                                  label: '홈',
+                                ),
+                                BottomNavigationBarItem(
+                                  backgroundColor: BGColor(),
+                                  icon: const Icon(
+                                    Icons.search,
+                                    size: 25,
                                   ),
-                                  BottomNavigationBarItem(
-                                    backgroundColor: BGColor(),
-                                    icon: const Icon(
-                                      Icons.add_outlined,
-                                      size: 25,
-                                    ),
-                                    label: '추가',
+                                  label: '검색',
+                                ),
+                                BottomNavigationBarItem(
+                                  backgroundColor: BGColor(),
+                                  icon: const Icon(
+                                    Icons.settings,
+                                    size: 25,
                                   ),
-                                  BottomNavigationBarItem(
-                                    backgroundColor: BGColor(),
-                                    icon: const Icon(
-                                      Icons.account_circle_outlined,
-                                      size: 25,
-                                    ),
-                                    label: '설정',
-                                  ),
-                                  /*BottomNavigationBarItem(
+                                  label: '설정',
+                                ),
+                                /*BottomNavigationBarItem(
                                 backgroundColor: BGColor(),
                                 icon: GetBuilder<notishow>(
                                   builder: (_) => notilist.isread == true
@@ -230,13 +221,12 @@ class _mainrouteState extends State<mainroute>
                                 ),
                                 label: '알림',
                               ),*/
-                                ],
-                              ),
-                            ],
-                          ))
-                      : const SizedBox(
-                          height: 0,
-                        ));
+                              ],
+                            ),
+                          ],
+                        ))
+                    : ADSHOW(),
+              );
             })));
   }
 }

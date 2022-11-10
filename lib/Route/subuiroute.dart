@@ -8,6 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
 import '../Page/LoginSignPage.dart';
@@ -19,6 +20,7 @@ import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/firstContentNet/DayScript.dart';
+import '../mongoDB/mongodatabase.dart';
 import '../sheets/linksettingsheet.dart';
 import 'mainroute.dart';
 
@@ -50,68 +52,89 @@ GoToLogin(BuildContext context, String s) {
 }
 
 CompanyNotice(
-    String str, bool serverstatus, String listcompanytouserson, urlon) {
+  String str,
+) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final List<PageList> listcompanytousers = [];
+  final List<CompanyPageList> listcompanytousers = [];
   var url;
   final draw = Get.put(navibool());
+  bool serverstatus = Hive.box('user_info').get('server_status');
+  final uiset = Get.put(uisetting());
 
   return serverstatus == true
-      ? listcompanytouserson.isEmpty
-          ? const SizedBox()
-          : Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      draw.setclose();
-                      launchUrl(Uri.parse(urlon));
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey.shade200,
-                      ),
-                      child: SizedBox(
-                        height: 30,
-                        width: double.infinity,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.campaign,
-                              color: Colors.black45,
-                              size: 30,
+      ? FutureBuilder(
+          future:
+              MongoDB.getData(collectionname: 'companynotice').then((value) {
+            for (int j = 0; j < value.length; j++) {
+              final messageyes = value[j]['showthisinapp'];
+              final messagewhere = value[j]['where'];
+              if (messageyes == 'yes' && messagewhere == 'home') {
+                listcompanytousers.add(CompanyPageList(
+                  title: value[j]['title'],
+                  url: value[j]['url'],
+                ));
+                url = Uri.parse(value[j]['url']);
+              }
+            }
+          }),
+          builder: ((context, snapshot) {
+            return listcompanytousers.isEmpty
+                ? const SizedBox()
+                : Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            draw.setclose();
+                            launchUrl(Uri.parse(listcompanytousers[0].url));
+                          },
+                          child: Container(
+                            height: 10.h,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.grey.shade200,
                             ),
-                            const SizedBox(
-                              width: 10,
+                            child: SizedBox(
+                              height: 15.h,
+                              width: double.infinity,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.campaign,
+                                    color: Colors.black45,
+                                    size: 30,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Text(
+                                        listcompanytousers[0].title,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            color: Colors.black45,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize()),
+                                        overflow: TextOverflow.ellipsis,
+                                      )),
+                                ],
+                              ),
                             ),
-                            Flexible(
-                                fit: FlexFit.tight,
-                                child: Text(
-                                  listcompanytouserson,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color: Colors.black45,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ))
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ));
+          }))
       : StreamBuilder<QuerySnapshot>(
           stream: firestore.collection('CompanyNotice').snapshots(),
           builder: (context, snapshot) {
@@ -124,9 +147,9 @@ CompanyNotice(
                 final messageyes = sp.get('showthisinapp');
                 final messagewhere = sp.get('where');
                 if (messageyes == 'yes' && messagewhere == str) {
-                  listcompanytousers.add(PageList(
+                  listcompanytousers.add(CompanyPageList(
                     title: messageText,
-                    sub: messageDate,
+                    url: messageDate,
                   ));
                   url = Uri.parse(sp.get('url'));
                 }
@@ -142,7 +165,7 @@ CompanyNotice(
                           GestureDetector(
                             onTap: () async {
                               draw.setclose();
-                              launchUrl(Uri.parse(urlon));
+                              launchUrl(Uri.parse(listcompanytousers[0].url));
                             },
                             child: Container(
                               padding: const EdgeInsets.all(10),
@@ -196,7 +219,7 @@ CompanyNotice(
         );
 }
 
-ADSHOW(double height) {
+ADSHOW() {
   final linkspaceset = Get.put(linkspacesetting());
   //프로버전 구매시 보이지 않게 함
   /*Column(
@@ -207,10 +230,6 @@ ADSHOW(double height) {
     )*/
   return Container(
     height: 60,
-    decoration: BoxDecoration(
-        border: Border(
-            top: BorderSide(color: Colors.grey.shade300, width: 1),
-            bottom: BorderSide(color: Colors.grey.shade300, width: 1))),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -235,9 +254,7 @@ Speeddialmemo(
     String usercode,
     TextEditingController controller,
     FocusNode searchNode,
-    selectcollection scollection,
     ScrollController scrollController,
-    bool isresponsive,
     ValueNotifier<bool> isDialOpen,
     String name) {
   final uiset = Get.put(uisetting());

@@ -39,6 +39,7 @@ class _NotiAlarmState extends State<NotiAlarm>
   @override
   void initState() {
     super.initState();
+    Hive.box('user_setting').put('page_index', 3);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -89,7 +90,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const AppBarCustom(
+                          AppBarCustom(
                             title: '알림',
                             righticon: true,
                             iconname: Icons.delete,
@@ -107,7 +108,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                                   ),
                                 ),
                               )),
-                          ADSHOW(height),
+                          ADSHOW(),
                         ],
                       )),
                 ),
@@ -181,7 +182,7 @@ class _NotiAlarmState extends State<NotiAlarm>
               readlist.add(sp.get('read'));
               listid.add(sp.id);
               notilist.listad
-                  .add(PageList(title: messageText, sub: messageDate));
+                  .add(CompanyPageList(title: messageText, url: messageDate));
             }
           }
           return notilist.listad.isEmpty
@@ -281,7 +282,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                     CrossAxisAlignment.end,
                                                 children: [
                                                   Text(
-                                                    notilist.listad[index].sub
+                                                    notilist.listad[index].url
                                                         .toString(),
                                                     style: TextStyle(
                                                         color: TextColor(),

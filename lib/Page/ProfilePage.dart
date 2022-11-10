@@ -107,7 +107,7 @@ class _ProfilePageState extends State<ProfilePage>
 
     fToast = FToast();
     fToast.init(context);
-    Hive.box('user_setting').put('page_index', 3);
+    Hive.box('user_setting').put('page_index', 2);
     _controller = TextEditingController();
     _pController1 = PageController(initialPage: 0, viewportFraction: 1);
     _pController2 = PageController(initialPage: 0, viewportFraction: 1);
@@ -187,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage>
                       color: BGColor(),
                       child: Column(
                         children: [
-                          const AppBarCustom(
+                          AppBarCustom(
                             title: '',
                             righticon: false,
                             iconname: Icons.abc,
@@ -236,7 +236,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
-                                                      ADSHOW(height),
+                                                      ADSHOW(),
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
@@ -261,7 +261,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                             height: 20,
                                                           ),
                                                           T_Container0(height),
-                                                          ADSHOW(height),
+                                                          ADSHOW(),
                                                         ],
                                                       ))
                                                   : Padding(
@@ -284,7 +284,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                                 height: 20,
                                                               ),*/
                                                           G_Container1(height),
-                                                          ADSHOW(height),
+                                                          ADSHOW(),
                                                         ],
                                                       )));
                                         }),
@@ -1776,125 +1776,67 @@ class _ProfilePageState extends State<ProfilePage>
           physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: 3,
+          itemCount: 2,
           itemBuilder: (context, index) {
             return Column(
               children: [
-                index == 0
+                (index == 0
                     ? GestureDetector(
-                        onTap: () async {},
-                        child: GetBuilder<PeopleAdd>(
-                          builder: (_) => SizedBox(
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RichText(
-                                    text: TextSpan(children: [
-                                  TextSpan(
-                                    text: '개인코드',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                        color: TextColor()),
-                                  ),
-                                  const WidgetSpan(
-                                      child: SizedBox(
-                                    width: 10,
-                                  )),
-                                  WidgetSpan(
-                                      child: GestureDetector(
-                                    onTap: () {
-                                      Clipboard.setData(
-                                          ClipboardData(text: peopleadd.code));
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.content_copy,
-                                          color: TextColor_shadowcolor(),
-                                        ),
-                                        Text(
-                                          '복사',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: contentTextsize(),
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              color: TextColor_shadowcolor()),
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                                ])),
-                                Text(peopleadd.code,
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize())),
-                              ],
-                            ),
+                        onTap: () async {
+                          addgroupmember(
+                              context, searchNode, _controller, peopleadd.code);
+                        },
+                        child: SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '친구검색하기',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: TextColor()),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: TextColor(),
+                              ),
+                            ],
                           ),
-                        ))
-                    : (index == 1
-                        ? GestureDetector(
-                            onTap: () async {
-                              addgroupmember(context, searchNode, _controller,
-                                  peopleadd.code);
-                            },
-                            child: SizedBox(
-                              height: 50,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '친구검색하기',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                        color: TextColor()),
-                                  ),
-                                  Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: TextColor(),
-                                  ),
-                                ],
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            pagesetnumber = 2;
+                            draw.currentpage = 2;
+                            scrollToTop(scrollController);
+                            _pController2.animateToPage(1,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeIn);
+                          });
+                        },
+                        child: SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '친구목록',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: TextColor()),
                               ),
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: () async {
-                              setState(() {
-                                pagesetnumber = 2;
-                                draw.currentpage = 2;
-                                scrollToTop(scrollController);
-                                _pController2.animateToPage(1,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeIn);
-                              });
-                            },
-                            child: SizedBox(
-                              height: 50,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '친구목록',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                        color: TextColor()),
-                                  ),
-                                  Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: TextColor(),
-                                  ),
-                                ],
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: TextColor(),
                               ),
-                            ),
-                          ))
+                            ],
+                          ),
+                        ),
+                      ))
               ],
             );
           }),

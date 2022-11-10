@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    Hive.box('user_setting').put('page_index', 0);
+    Hive.box('user_setting').put('page_index', 1);
     docid = Hive.box('user_setting').get('usercode') ?? '';
     _pController2 =
         PageController(initialPage: currentPage2, viewportFraction: 1);
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     PageController pController,
   ) {
     double height = MediaQuery.of(context).size.height;
-    final List<PageList> listcompanytousers = [];
+    final List<CompanyPageList> listcompanytousers = [];
     var url;
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
@@ -179,9 +179,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const AppBarCustom(
+                          AppBarCustom(
                             title: 'LinkAI',
-                            righticon: true,
+                            righticon: false,
                             iconname: Icons.notifications_none,
                           ),
                           Flexible(
@@ -218,9 +218,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                         messagewhere ==
                                                             'home') {
                                                       listcompanytousers
-                                                          .add(PageList(
+                                                          .add(CompanyPageList(
                                                         title: messageText,
-                                                        sub: messageDate,
+                                                        url: messageDate,
                                                       ));
                                                       url = Uri.parse(
                                                           value[j]['url']);
@@ -233,10 +233,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                 }),
                                                 builder: ((context, snapshot) {
                                                   return CompanyNotice(
-                                                      'home',
-                                                      serverstatus,
-                                                      uiset.eventtitle,
-                                                      uiset.eventurl);
+                                                    'home',
+                                                  );
                                                 })),
                                             const SizedBox(
                                               height: 10,

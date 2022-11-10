@@ -101,7 +101,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AppBarCustom(
+              AppBarCustom(
                 title: '',
                 righticon: true,
                 iconname: Icons.close,
@@ -618,7 +618,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                       linkspaceset.indexcnt.add(Linkspacepage(
                           index: int.parse(sp['index'].toString()),
                           placestr: sp['placestr'],
-                          uniquecode: sp['linkname']));
+                          uniquecode: sp['uniquecode']));
                     }
                   }
                   linkspaceset.indexcnt.sort(((a, b) {
@@ -675,9 +675,16 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                         ),
                                         title: GetBuilder<linkspacesetting>(
                                           builder: (controller) => Text(
-                                              linkspaceset
-                                                  .indexcnt[index].placestr
-                                                  .toString(),
+                                              linkspaceset.indexcnt[index]
+                                                          .placestr ==
+                                                      'board'
+                                                  ? '보드'
+                                                  : (linkspaceset
+                                                              .indexcnt[index]
+                                                              .placestr ==
+                                                          'card'
+                                                      ? '링크 및 파일'
+                                                      : '캘린더'),
                                               style: TextStyle(
                                                   color: TextColor(),
                                                   fontWeight: FontWeight.bold,
@@ -692,14 +699,22 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                 ),
                               );
                             },
-                            onReorder: (int oldIndex, int newIndex) {
+                            onReorder: (int oldIndex, int newIndex) async {
                               if (oldIndex < newIndex) {
                                 newIndex -= 1;
                               }
-                              final item =
-                                  linkspaceset.indexcnt.removeAt(oldIndex);
-                              linkspaceset.setspecificspacein(newIndex, item);
-                              MongoDB.updatewwithqueries(
+                              var item;
+                              if (newIndex < oldIndex) {
+                                item = linkspaceset.indexcnt[oldIndex];
+                                linkspaceset.indexcnt.insert(newIndex, item);
+                                linkspaceset.indexcnt.removeAt(oldIndex + 1);
+                              } else {
+                                item = linkspaceset.indexcnt[newIndex];
+                                linkspaceset.indexcnt.insert(oldIndex, item);
+                                linkspaceset.indexcnt.removeAt(newIndex + 1);
+                              }
+
+                              await MongoDB.updatewwithqueries(
                                   collectionname: 'pinchannelin',
                                   query1: 'username',
                                   what1: usercode,
@@ -707,13 +722,14 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                   what2: widget.link,
                                   query3: 'index',
                                   what3: oldIndex.toString(),
-                                  query4: 'placestr',
-                                  what4:
-                                      linkspaceset.indexcnt[newIndex].placestr,
+                                  query4: 'uniquecode',
+                                  what4: linkspaceset
+                                      .indexcnt[newIndex].uniquecode
+                                      .toString(),
                                   updatelist: {
                                     'index': newIndex,
                                   });
-                              MongoDB.updatewwithqueries(
+                              await MongoDB.updatewwithqueries(
                                   collectionname: 'pinchannelin',
                                   query1: 'username',
                                   what1: usercode,
@@ -721,14 +737,15 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                   what2: widget.link,
                                   query3: 'index',
                                   what3: newIndex.toString(),
-                                  query4: 'placestr',
-                                  what4:
-                                      linkspaceset.indexcnt[oldIndex].placestr,
+                                  query4: 'uniquecode',
+                                  what4: linkspaceset
+                                      .indexcnt[oldIndex].uniquecode
+                                      .toString(),
                                   updatelist: {
                                     'index': oldIndex,
                                   });
 
-                              firestore
+                              await firestore
                                   .collection('Pinchannelin')
                                   .get()
                                   .then((value) {
@@ -740,9 +757,10 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                             linkname) {
                                       if (value.docs[i].get('index') ==
                                               newIndex &&
-                                          value.docs[i].get('placestr') ==
-                                              linkspaceset.indexcnt[oldIndex]
-                                                  .placestr) {
+                                          value.docs[i].get('uniquecode') ==
+                                              linkspaceset
+                                                  .indexcnt[oldIndex].uniquecode
+                                                  .toString()) {
                                         updateid1 = value.docs[i].id;
                                         firestore
                                             .collection('Pinchannelin')
@@ -752,9 +770,10 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                         });
                                       } else if (value.docs[i].get('index') ==
                                               oldIndex &&
-                                          value.docs[i].get('placestr') ==
-                                              linkspaceset.indexcnt[newIndex]
-                                                  .placestr) {
+                                          value.docs[i].get('uniquecode') ==
+                                              linkspaceset
+                                                  .indexcnt[newIndex].uniquecode
+                                                  .toString()) {
                                         updateid2 = value.docs[i].id;
                                         firestore
                                             .collection('Pinchannelin')
@@ -767,6 +786,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                   }
                                 }
                               });
+                              linkspaceset.setcompleted(true);
                             },
                             proxyDecorator: (Widget child, int index,
                                 Animation<double> animation) {

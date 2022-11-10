@@ -1,3 +1,4 @@
+import 'package:clickbyme/DB/PageList.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -9,7 +10,6 @@ import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/selectcollection.dart';
 import '../Tool/TextSize.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/memosetting.dart';
@@ -18,6 +18,9 @@ import '../mongoDB/mongodatabase.dart';
 
 movetolinkspace(
   BuildContext context,
+  List<PageList> pagelist,
+  TextEditingController textEditingController,
+  FocusNode searhnode,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -48,9 +51,8 @@ movetolinkspace(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: space(
-                  context,
-                ),
+                child:
+                    space(context, pagelist, textEditingController, searhnode),
               )),
         );
       }).whenComplete(() {});
@@ -58,6 +60,9 @@ movetolinkspace(
 
 space(
   BuildContext context,
+  List<PageList> pagelist,
+  TextEditingController textEditingController,
+  FocusNode searhnode,
 ) {
   return SizedBox(
       child: Padding(
@@ -85,12 +90,7 @@ space(
               const SizedBox(
                 height: 20,
               ),
-              content(
-                context,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              content(context, pagelist, textEditingController, searhnode),
             ],
           )));
 }
@@ -102,62 +102,123 @@ title(
       height: 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('스페이스 이동',
+        children: [
+          Text('스페이스 전환',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 25))
+                  fontSize: secondTitleTextsize()))
         ],
       ));
 }
 
 content(
   BuildContext context,
+  List<PageList> pagelist,
+  TextEditingController textEditingController,
+  FocusNode searhnode,
 ) {
+  String usercode = Hive.box('user_setting').get('usercode');
   return StatefulBuilder(builder: (_, StateSetter setState) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            Get.back();
-            movetolinkspacesecond(context, '공유');
-          },
-          child: Row(
+    return ListView.builder(
+        physics: const ScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: pagelist.length + 1,
+        itemBuilder: ((context, index) {
+          return Column(
             children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.groups,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              index == 0
+                  ? GestureDetector(
+                      onTap: () async {
+                        Get.back();
+                        textEditingController.clear();
+                        addmylink(
+                          context,
+                          usercode,
+                          textEditingController,
+                          searhnode,
+                        );
+                      },
+                      child: Row(
                         children: [
-                          Text('공유 스페이스',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                          Text('지인과 함께 사용하는 스페이스',
-                              style: TextStyle(
-                                  color: Colors.grey.shade400, fontSize: 15)),
+                          Flexible(
+                              fit: FlexFit.tight,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.add_box,
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('새로운 스페이스 생성하기',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  contentTitleTextsize())),
+                                    ],
+                                  )
+                                ],
+                              )),
+                          Icon(Icons.keyboard_arrow_right,
+                              color: Colors.grey.shade400)
                         ],
-                      )
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: () async {
+                        Get.back();
+                        //movetolinkspacesecond(context, '공유');
+                      },
+                      child: Row(
+                        children: [
+                          Flexible(
+                              fit: FlexFit.tight,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.view_in_ar,
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(pagelist[index - 1].title,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  contentTitleTextsize())),
+                                      Text(pagelist[index - 1].username,
+                                          style: TextStyle(
+                                              color: Colors.grey.shade400,
+                                              fontSize: 15)),
+                                    ],
+                                  )
+                                ],
+                              )),
+                          Icon(Icons.keyboard_arrow_right,
+                              color: Colors.grey.shade400)
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: 15,
+              )
             ],
-          ),
-        ),
-      ],
-    );
+          );
+        }));
   });
 }
 
@@ -303,7 +364,6 @@ addmylink(
   String username,
   TextEditingController textEditingController_add_sheet,
   FocusNode searchNode_add_section,
-  selectcollection scollection,
 ) {
   Get.bottomSheet(
           Container(
@@ -335,7 +395,6 @@ addmylink(
                               context,
                               textEditingController_add_sheet,
                               searchNode_add_section,
-                              scollection,
                               username),
                         );
                       }),
@@ -364,7 +423,6 @@ linkstation(
   BuildContext context,
   TextEditingController textEditingController_add_sheet,
   FocusNode searchNode_add_section,
-  selectcollection scollection,
   String username,
 ) {
   return SizedBox(
@@ -393,7 +451,7 @@ linkstation(
           height: 20,
         ),
         contentthird(context, textEditingController_add_sheet,
-            searchNode_add_section, scollection, username),
+            searchNode_add_section, username),
         const SizedBox(
           height: 20,
         ),
@@ -423,7 +481,6 @@ contentthird(
   BuildContext context,
   TextEditingController textEditingController_add_sheet,
   FocusNode searchNode_add_section,
-  selectcollection scollection,
   String username,
 ) {
   bool serverstatus = Hive.box('user_info').get('server_status');

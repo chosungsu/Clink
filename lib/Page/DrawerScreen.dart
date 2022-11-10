@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:clickbyme/Enums/Drawer_item.dart';
 import 'package:clickbyme/Page/addWhole_update.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
@@ -10,7 +12,6 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
-import 'NotiAlarm.dart';
 import '../Route/mainroute.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -65,54 +66,40 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   padding: const EdgeInsets.only(top: 30, bottom: 30),
                   child: InkWell(
                     onTap: () {
-                      if (element.containsValue(Icons.home)) {
+                      if (element.containsValue(Icons.view_stream)) {
                         draw.setclose();
                         Hive.box('user_setting').put('page_index', 0);
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: mainroute(
+                            child: const mainroute(
                               index: 0,
                             ),
                           ),
                         );
-                      } else if (element.containsValue(Icons.add_outlined)) {
+                      } else if (element.containsValue(Icons.search)) {
                         //draw.setclose();
-                        addWhole_update(context, searchNode, controller, name,
-                            Date, 'home', fToast);
-                      } else if (element.containsValue(Icons.list_alt)) {
-                        //draw.setclose();
+                        /*addWhole_update(context, searchNode, controller, name,
+                            Date, 'home', fToast);*/
                         draw.setclose();
                         Hive.box('user_setting').put('page_index', 1);
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: mainroute(
+                            child: const mainroute(
                               index: 1,
                             ),
                           ),
                         );
-                      } else if (element
-                          .containsValue(Icons.account_circle_outlined)) {
+                      } else if (element.containsValue(Icons.settings)) {
+                        //draw.setclose();
                         draw.setclose();
-                        Hive.box('user_setting').put('page_index', 3);
+                        Hive.box('user_setting').put('page_index', 2);
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: mainroute(
-                              index: 3,
-                            ),
-                          ),
-                        );
-                      } else {
-                        draw.setclose();
-                        //Get.to(() => NotiAlarm(), transition: Transition.zoom);
-                        Hive.box('user_setting').put('page_index', 4);
-                        Navigator.of(context).pushReplacement(
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: mainroute(
-                              index: 4,
+                            child: const mainroute(
+                              index: 2,
                             ),
                           ),
                         );

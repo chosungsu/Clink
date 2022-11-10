@@ -1,21 +1,16 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../Tool/Getx/notishow.dart';
-import '../Page/NotiAlarm.dart';
 
 List<Map> drawerItems = [
-  {'icon': Icons.home, 'title': '홈'},
-  {'icon': Icons.list_alt, 'title': 'MY'},
+  {'icon': Icons.view_stream, 'title': '홈'},
+  {'icon': Icons.search, 'title': '검색'},
   {
-    'icon': Icons.add_outlined,
-    'title': '추가',
-  },
-  {
-    'icon': Icons.account_circle_outlined,
+    'icon': Icons.settings,
     'title': '설정',
   },
+  /*{
+    'icon': Icons.account_circle_outlined,
+    'title': '설정',
+  },*/
   /*{
     'icon': Icons.notifications_none,
     'title': '알림',

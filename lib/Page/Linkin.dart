@@ -112,16 +112,8 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
               child: UI(),
             ),
           ),
-          floatingActionButton: Speeddialmemo(
-              context,
-              usercode,
-              controller,
-              searchNode,
-              scollection,
-              scrollController,
-              isresponsive,
-              isDialOpen,
-              widget.name)),
+          floatingActionButton: Speeddialmemo(context, usercode, controller,
+              searchNode, scrollController, isDialOpen, widget.name)),
     );
   }
 
@@ -156,6 +148,9 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                                                   'home') {
                                                 GoToMain(context);
                                               } else {
+                                                StatusBarControl.setColor(
+                                                    BGColor(),
+                                                    animated: true);
                                                 Get.back();
                                               }
                                             });
@@ -287,7 +282,7 @@ class _LinkinState extends State<Linkin> with WidgetsBindingObserver {
                   const SizedBox(
                     height: 10,
                   ),
-                  ADSHOW(height),
+                  ADSHOW(),
                   const SizedBox(
                     height: 10,
                   ),
