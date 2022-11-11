@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable, must_be_immutable
 
+import 'package:clickbyme/Page/AddTemplate.dart';
 import 'package:clickbyme/Page/NotiAlarm.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/sheets/movetolinkspace.dart';
@@ -18,7 +19,6 @@ import 'Getx/linkspacesetting.dart';
 import 'Getx/navibool.dart';
 import 'Getx/notishow.dart';
 import 'Getx/uisetting.dart';
-import 'IconBtn.dart';
 import 'TextSize.dart';
 
 class AppBarCustom extends StatelessWidget {
@@ -101,6 +101,8 @@ class AppBarCustom extends StatelessWidget {
           }
           Get.back();
         });
+    func4() =>
+        Get.to(() => const AddTemplate(), transition: Transition.upToDown);
 
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<navibool>(
@@ -452,14 +454,7 @@ class AppBarCustom extends StatelessWidget {
                                         ? IconButton(
                                             padding: EdgeInsets.zero, // 패딩 설정
                                             constraints: const BoxConstraints(),
-                                            onPressed: () {
-                                              linkmadeplace(
-                                                  context,
-                                                  usercode,
-                                                  uiset.pagelist[0].title,
-                                                  'add',
-                                                  -1);
-                                            },
+                                            onPressed: (() => func4()),
                                             icon: Container(
                                               alignment: Alignment.center,
                                               child: NeumorphicIcon(

@@ -13,10 +13,17 @@ class uisetting extends GetxController {
   String eventtitle = '';
   String eventurl = '';
   List<PageList> pagelist = [];
+  int currentstepper = 0;
   String usercode = Hive.box('user_setting').get('usercode');
 
   void setloading(bool what) {
     loading = what;
+    update();
+    notifyChildrens();
+  }
+
+  void setstepperindex(int what) {
+    currentstepper = what;
     update();
     notifyChildrens();
   }

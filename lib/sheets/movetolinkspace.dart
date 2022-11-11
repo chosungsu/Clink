@@ -7,7 +7,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
-import '../Tool/Getx/selectcollection.dart';
 import '../Tool/TextSize.dart';
 import 'package:flutter/material.dart';
 import '../Route/subuiroute.dart';
@@ -362,8 +361,8 @@ contentsecond(BuildContext context, String str) {
 addmylink(
   BuildContext context,
   String username,
-  TextEditingController textEditingController_add_sheet,
-  FocusNode searchNode_add_section,
+  TextEditingController textEditingControllerAddSheet,
+  FocusNode searchNodeAddSection,
 ) {
   Get.bottomSheet(
           Container(
@@ -388,13 +387,13 @@ addmylink(
                         return GestureDetector(
                           onTap: () {
                             setState(() {
-                              searchNode_add_section.unfocus();
+                              searchNodeAddSection.unfocus();
                             });
                           },
                           child: linkstation(
                               context,
-                              textEditingController_add_sheet,
-                              searchNode_add_section,
+                              textEditingControllerAddSheet,
+                              searchNodeAddSection,
                               username),
                         );
                       }),
@@ -407,7 +406,7 @@ addmylink(
       .whenComplete(() {
     final linkspaceset = Get.put(linkspacesetting());
     if (linkspaceset.iscompleted) {
-      textEditingController_add_sheet.clear();
+      textEditingControllerAddSheet.clear();
       linkspaceset.resetcompleted();
       Snack.show(
           context: context,
@@ -421,8 +420,8 @@ addmylink(
 
 linkstation(
   BuildContext context,
-  TextEditingController textEditingController_add_sheet,
-  FocusNode searchNode_add_section,
+  TextEditingController textEditingControllerAddSheet,
+  FocusNode searchNodeAddSection,
   String username,
 ) {
   return SizedBox(
@@ -450,8 +449,8 @@ linkstation(
         const SizedBox(
           height: 20,
         ),
-        contentthird(context, textEditingController_add_sheet,
-            searchNode_add_section, username),
+        contentthird(context, textEditingControllerAddSheet,
+            searchNodeAddSection, username),
         const SizedBox(
           height: 20,
         ),
@@ -468,7 +467,7 @@ titlethird(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
-          Text('컬렉션 추가',
+          Text('스페이스 추가',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -479,8 +478,8 @@ titlethird(
 
 contentthird(
   BuildContext context,
-  TextEditingController textEditingController_add_sheet,
-  FocusNode searchNode_add_section,
+  TextEditingController textEditingControllerAddSheet,
+  FocusNode searchNodeAddSection,
   String username,
 ) {
   bool serverstatus = Hive.box('user_info').get('server_status');
@@ -494,17 +493,17 @@ contentthird(
         ContainerDesign(
           color: Colors.white,
           child: TextField(
-            focusNode: searchNode_add_section,
+            focusNode: searchNodeAddSection,
             style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 10),
               border: InputBorder.none,
               isCollapsed: true,
-              hintText: '추가할 컬렉션 입력',
+              hintText: '추가할 스페이스 제목 입력',
               hintStyle:
                   TextStyle(fontSize: contentTextsize(), color: Colors.black45),
             ),
-            controller: textEditingController_add_sheet,
+            controller: textEditingControllerAddSheet,
           ),
         ),
         const SizedBox(
@@ -519,10 +518,10 @@ contentthird(
                 primary: ButtonColor(),
               ),
               onPressed: () async {
-                if (textEditingController_add_sheet.text.isEmpty) {
+                if (textEditingControllerAddSheet.text.isEmpty) {
                   Snack.show(
                       title: '알림',
-                      content: '추가할 컬렉션이 비어있어요!',
+                      content: '추가할 스페이스 제목이 비어있어요!',
                       context: context,
                       snackType: SnackType.warning);
                 } else {
@@ -530,29 +529,29 @@ contentthird(
                   if (serverstatus) {
                     await MongoDB.add(collectionname: 'pinchannel', addlist: {
                       'username': username,
-                      'linkname': textEditingController_add_sheet.text,
+                      'linkname': textEditingControllerAddSheet.text,
                       'color': BGColor().value.toInt()
                     });
 
                     firestore.collection('pinchannel').add({
                       'username': username,
-                      'linkname': textEditingController_add_sheet.text,
+                      'linkname': textEditingControllerAddSheet.text,
                       'color': BGColor().value.toInt()
                     }).whenComplete(() {
                       linkspaceset.setcompleted(true);
                       linkspaceset
-                          .setspacelink(textEditingController_add_sheet.text);
+                          .setspacelink(textEditingControllerAddSheet.text);
                       Get.back();
                     });
                   } else {
                     firestore.collection('pinchannel').add({
                       'username': username,
-                      'linkname': textEditingController_add_sheet.text,
+                      'linkname': textEditingControllerAddSheet.text,
                       'color': BGColor().value.toInt()
                     }).whenComplete(() {
                       linkspaceset.setcompleted(true);
                       linkspaceset
-                          .setspacelink(textEditingController_add_sheet.text);
+                          .setspacelink(textEditingControllerAddSheet.text);
                       Get.back();
                     });
                   }

@@ -39,6 +39,7 @@ class _NotiAlarmState extends State<NotiAlarm>
   @override
   void initState() {
     super.initState();
+    draw.navi = 1;
     Hive.box('user_setting').put('page_index', 3);
     WidgetsBinding.instance.addObserver(this);
   }
@@ -55,12 +56,9 @@ class _NotiAlarmState extends State<NotiAlarm>
     return Scaffold(
         backgroundColor: BGColor(),
         body: SafeArea(
-          child: GetBuilder<navibool>(
-            builder: (_) => Stack(
-              children: [
-                UI(),
-              ],
-            ),
+          child: WillPopScope(
+            onWillPop: _onWillPop,
+            child: UI(),
           ),
         ));
   }
@@ -340,5 +338,15 @@ class _NotiAlarmState extends State<NotiAlarm>
         );
       },
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    Future.delayed(const Duration(seconds: 0), () {
+      StatusBarControl.setColor(BGColor(), animated: true);
+      draw.setnavi();
+      Hive.box('user_setting').put('page_index', 0);
+      Get.back();
+    });
+    return false;
   }
 }

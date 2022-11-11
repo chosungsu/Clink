@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_local_variable
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';

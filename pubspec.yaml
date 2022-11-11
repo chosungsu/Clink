@@ -80,6 +80,7 @@ dependencies:
   sign_button:
   fab_circular_menu:
   expandable_page_view:
+  another_stepper:
   badges:
   numberpicker: 
   flutter_neumorphic: 
