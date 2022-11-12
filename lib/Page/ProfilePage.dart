@@ -43,7 +43,6 @@ class _ProfilePageState extends State<ProfilePage>
   String secondname = '';
   final draw = Get.put(navibool());
   var _controller = TextEditingController();
-  late final PageController _pController1;
   late final PageController _pController2;
   ScrollController scrollController = ScrollController();
   bool showsharegroups = false;
@@ -65,8 +64,6 @@ class _ProfilePageState extends State<ProfilePage>
   final notilist = Get.put(notishow());
   final friendnamelist = [];
   final calnamelist = [];
-  final sharelist = [];
-  final colorlist = [];
   late PackageInfo info;
   String versioninfo = '';
   int pagesetnumber = 0;
@@ -82,7 +79,6 @@ class _ProfilePageState extends State<ProfilePage>
     fToast.init(context);
     Hive.box('user_setting').put('page_index', 2);
     _controller = TextEditingController();
-    _pController1 = PageController(initialPage: 0, viewportFraction: 1);
     _pController2 = PageController(initialPage: 0, viewportFraction: 1);
     //peopleadd.secondnameset(name);
   }

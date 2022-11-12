@@ -128,7 +128,7 @@ content(
             softWrap: true,
             textAlign: TextAlign.start,
             style: TextStyle(
-                color: TextColor(),
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: contentTextsize()),
             overflow: TextOverflow.ellipsis,

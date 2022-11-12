@@ -42,6 +42,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   final uiset = Get.put(uisetting());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final sharelist = [];
+  final updateid = [];
   final colorlist = [];
   final calnamelist = [];
   final friendnamelist = [];
@@ -66,6 +67,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     listpinlink.clear();
     uiset.showtopbutton = false;
     Hive.box('user_setting').put('page_index', 0);
+    uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage');
     fToast = FToast();
     fToast.init(context);
     scrollController = ScrollController();
@@ -160,13 +162,15 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                       color: BGColor(),
                       child: Column(
                         children: [
-                          AppBarCustom(
-                            title: 'MY',
-                            righticon: true,
-                            iconname: Icons.notifications_none,
-                            textEditingController: _controller,
-                            focusNode: searchNode,
-                            myindex: uiset.mypagelistindex,
+                          GetBuilder<uisetting>(
+                            builder: (_) => AppBarCustom(
+                              title: 'MY',
+                              righticon: true,
+                              iconname: Icons.notifications_none,
+                              textEditingController: _controller,
+                              focusNode: searchNode,
+                              myindex: uiset.mypagelistindex,
+                            ),
                           ),
                           ScrollConfiguration(
                               behavior: NoBehavior(), child: listy_My())

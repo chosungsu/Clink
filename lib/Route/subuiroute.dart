@@ -45,7 +45,6 @@ void pressed2() {
 GoToMain(BuildContext context) async {
   Timer? _time = Timer(const Duration(seconds: 0), () {
     Get.to(() => const mainroute(index: 0), transition: Transition.leftToRight);
-    Hive.box('user_setting').put('page_index', 0);
   });
   return _time;
 }

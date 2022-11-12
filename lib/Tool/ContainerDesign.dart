@@ -19,12 +19,12 @@ class ContainerDesign extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                   color: TextColor(),
-                  blurRadius: 5,
+                  blurRadius: 2,
                   spreadRadius: 0,
                   offset: const Offset(1, 1)),
               BoxShadow(
                   color: BGColor(),
-                  blurRadius: 5,
+                  blurRadius: 2,
                   spreadRadius: 0,
                   offset: const Offset(-1, -1)),
             ]));

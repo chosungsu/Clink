@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'subuiroute.dart';
-import '../Page/HomePage.dart';
+import '../Page/SearchPage.dart';
 import '../Page/ProfilePage.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/PeopleAdd.dart';
@@ -46,7 +46,7 @@ class _mainrouteState extends State<mainroute>
   @override
   void initState() {
     super.initState();
-
+    uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     WidgetsBinding.instance.addObserver(this);
     uiset.pagenumber = widget.index;
     fToast = FToast();
@@ -79,6 +79,8 @@ class _mainrouteState extends State<mainroute>
 
   Future<bool> _onWillPop2() async {
     final draw = Get.put(navibool());
+    uiset
+        .setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
     if (draw.drawopen == true) {
       draw.setclose();
       Hive.box('user_setting').put('page_opened', false);
@@ -116,7 +118,7 @@ class _mainrouteState extends State<mainroute>
     List pages = [
       //HomePage(secondname: cal_share_person.secondname),
       const MYPage(),
-      HomePage(secondname: cal_share_person.secondname),
+      SearchPage(secondname: cal_share_person.secondname),
       const ProfilePage(),
     ];
     return GetBuilder<navibool>(
@@ -142,18 +144,10 @@ class _mainrouteState extends State<mainroute>
                               onTap: (_index) async {
                                 //Handle button tap
                                 uiset.setloading(true);
-                                /*if (_index == 2) {
-                                    Hive.box('user_setting').put(
-                                        'page_index',
-                                        Hive.box('user_setting')
-                                            .get('page_index'));
-                                    uiset.setpageindex(Hive.box('user_setting')
-                                        .get('page_index'));
-                                    /*addWhole(context, searchNode, controller, name,
-                                Date, 'home', fToast);*/
-                                    addWhole_update(context, searchNode,
-                                        controller, name, Date, 'home', fToast);
-                                  } */
+                                uiset.setmypagelistindex(
+                                    Hive.box('user_setting')
+                                            .get('currentmypage') ??
+                                        0);
                                 Hive.box('user_setting')
                                     .put('page_index', _index);
                                 uiset.setpageindex(

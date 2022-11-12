@@ -12,7 +12,9 @@ class uisetting extends GetxController {
   String eventtitle = '';
   String eventurl = '';
   List<PageList> pagelist = [];
-  int mypagelistindex = 0;
+  List<PageList> searchpagelist = [];
+  List<PageList> favorpagelist = [];
+  int mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
   int currentstepper = 0;
   String usercode = Hive.box('user_setting').get('usercode');
 
@@ -23,6 +25,7 @@ class uisetting extends GetxController {
   }
 
   void setmypagelistindex(int what) {
+    Hive.box('user_setting').put('currentmypage', what);
     mypagelistindex = what;
     update();
     notifyChildrens();
@@ -55,6 +58,18 @@ class uisetting extends GetxController {
 
   void setuserspace(String title, String user) {
     pagelist.add(PageList(title: title, username: user));
+    update();
+    notifyChildrens();
+  }
+
+  void setsearchspace(String title, String user) {
+    searchpagelist.add(PageList(title: title, username: user));
+    update();
+    notifyChildrens();
+  }
+
+  void setfavorspace(String title, String user) {
+    favorpagelist.add(PageList(title: title, username: user));
     update();
     notifyChildrens();
   }

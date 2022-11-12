@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields, prefer_typing_uninitialized_variables, prefer_const_constructors
+
 import 'dart:async';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
@@ -13,25 +15,27 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:package_info/package_info.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/PageList.dart';
 import '../DB/SpaceContent.dart';
 import '../DB/Category.dart';
 import '../Route/subuiroute.dart';
+import '../Tool/ContainerDesign.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../UI/Home/Widgets/ViewSet.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.secondname}) : super(key: key);
+class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key, required this.secondname}) : super(key: key);
   final String secondname;
   @override
-  State<StatefulWidget> createState() => _HomePageState();
+  State<StatefulWidget> createState() => _SearchPageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  bool isresponsive = false;
+class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   int categorynumber = 0;
   List<SpaceContent> sc = [];
   late DateTime Date = DateTime.now();
@@ -47,18 +51,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     '홈뷰에 저장된 메모',
   ];
   List userviewlist = [];
-  static final List<Category> fillcategory = [];
-  late final PageController _pController2;
   int currentPage2 = 0;
   //프로 버전 구매시 사용하게될 코드
   bool isbought = false;
   TextEditingController controller = TextEditingController();
+  FocusNode searchnode = FocusNode();
   ScrollController _scrollController = ScrollController();
   var searchNode = FocusNode();
   var newversion;
   var status;
   bool sameversion = true;
   List updateid = [];
+  String textchangelistener = '';
   bool isread = false;
   final notilist = Get.put(notishow());
   late Animation animation;
@@ -76,8 +80,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     Hive.box('user_setting').put('page_index', 1);
     docid = Hive.box('user_setting').get('usercode') ?? '';
-    _pController2 =
-        PageController(initialPage: currentPage2, viewportFraction: 1);
+    controller = TextEditingController();
     /*firestore.collection('MemoAllAlarm').get().then((value) {
       if (value.docs.isNotEmpty) {
         for (int i = 0; i < value.docs.length; i++) {
@@ -92,26 +95,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    _pController2.dispose();
     _scrollController.dispose();
+    controller.dispose();
+    searchnode.unfocus();
     //notilist.noticontroller.dispose();
-  }
-
-  /*void _scrollToBottom() {
-    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
-  }*/
-
-  Future<void> _getAppInfo() async {
-    info = await PackageInfo.fromPlatform();
-    versioninfo = info.version;
   }
 
   @override
   Widget build(BuildContext context) {
-    MediaQuery.of(context).size.height > 900
-        ? isresponsive = true
-        : isresponsive = false;
     return SafeArea(
         child: Scaffold(
       backgroundColor: BGColor(),
@@ -126,32 +117,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         child: DrawerScreen(
                             index: Hive.box('user_setting').get('page_index')),
                       ),
-                      HomeUi(
-                        _pController2,
-                      ),
+                      HomeUi(),
                     ],
                   )
                 : Stack(
                     children: [
-                      HomeUi(
-                        _pController2,
-                      ),
+                      HomeUi(),
                     ],
                   ))
             : Stack(
                 children: [
-                  HomeUi(
-                    _pController2,
-                  ),
+                  HomeUi(),
                 ],
               ),
       ),
     ));
   }
 
-  HomeUi(
-    PageController pController,
-  ) {
+  HomeUi() {
     double height = MediaQuery.of(context).size.height;
     final List<CompanyPageList> listcompanytousers = [];
     var url;
@@ -163,6 +146,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               duration: const Duration(milliseconds: 250),
               child: GestureDetector(
                 onTap: () {
+                  searchnode.unfocus();
                   draw.drawopen == true
                       ? setState(() {
                           draw.drawopen = false;
@@ -180,7 +164,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppBarCustom(
-                            title: 'LinkAI',
+                            title: '',
                             righticon: false,
                             iconname: Icons.notifications_none,
                           ),
@@ -195,10 +179,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           builder: (_, StateSetter setState) {
                                         return Column(
                                           children: [
-                                            const SizedBox(
+                                            SizedBox(
                                               height: 20,
                                             ),
-                                            FutureBuilder(
+                                            Se_Container0(height),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Se_Container01(height),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Se_Container1(height),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Se_Container11(height),
+                                            /*FutureBuilder(
                                                 future: MongoDB.getData(
                                                         collectionname:
                                                             'companynotice')
@@ -240,7 +237,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               height: 10,
                                             ),
                                             H_Container_0(
-                                                height, _pController2),
+                                              height,
+                                            ),
 
                                             /*const SizedBox(
                                               height: 20,
@@ -261,7 +259,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             H_Container_4(height),
                                             const SizedBox(
                                               height: 50,
-                                            ),
+                                            ),*/
                                           ],
                                         );
                                       })),
@@ -274,7 +272,154 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ));
   }
 
-  H_Container_0(double height, PageController pController) {
+  Se_Container0(
+    double height,
+  ) {
+    //프로버전 구매시 보이지 않게 함
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: SizedBox(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: TextColor(), width: 2)),
+              child: TextField(
+                onChanged: ((value) {
+                  setState(() {
+                    textchangelistener = value;
+                  });
+                }),
+                controller: controller,
+                maxLines: 1,
+                focusNode: searchnode,
+                textAlign: TextAlign.start,
+                textAlignVertical: TextAlignVertical.center,
+                style: TextStyle(
+                    color: TextColor(),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: BGColor(),
+                  border: InputBorder.none,
+                  hintMaxLines: 2,
+                  hintText: '탐색하실 페이지 제목 입력',
+                  hintStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: TextColor()),
+                  isCollapsed: true,
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: TextColor_shadowcolor(),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Se_Container01(
+    double height,
+  ) {
+    return GetBuilder<uisetting>(
+        builder: (_) => Padding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: firestore.collection('Pinchannel').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    uiset.searchpagelist.clear();
+                    final valuespace = snapshot.data!.docs;
+                    for (var sp in valuespace) {
+                      final messageuser = sp.get('username');
+                      final messagetitle = sp.get('linkname');
+                      if (textchangelistener == '') {
+                      } else {
+                        if (messagetitle
+                            .toString()
+                            .contains(textchangelistener)) {
+                          uiset.searchpagelist.add(PageList(
+                              title: messagetitle, username: messageuser));
+                        }
+                      }
+                    }
+
+                    return uiset.searchpagelist.isEmpty
+                        ? ContainerDesign(
+                            child: SizedBox(
+                              height: 40.h,
+                              child: Center(
+                                child: NeumorphicText(
+                                  '검색 결과 없음',
+                                  style: NeumorphicStyle(
+                                    shape: NeumorphicShape.flat,
+                                    depth: 3,
+                                    color: TextColor_shadowcolor(),
+                                  ),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize(),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            color: Colors.transparent)
+                        : ContainerDesign(
+                            color: Colors.transparent,
+                            child: ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: uiset.searchpagelist.length,
+                                itemBuilder: (context, index) {
+                                  return SizedBox(
+                                      height: 50,
+                                      child: SizedBox(
+                                          child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                uiset.searchpagelist[index]
+                                                    .title,
+                                                softWrap: true,
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: TextColor(),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        contentTextsize()),
+                                                overflow: TextOverflow.ellipsis,
+                                              )),
+                                        ],
+                                      )));
+                                }),
+                          );
+                  }
+                  return LinearProgressIndicator(
+                    backgroundColor: BGColor(),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.blue),
+                  );
+                },
+              ),
+            ));
+  }
+
+  Se_Container1(
+    double height,
+  ) {
     //프로버전 구매시 보이지 않게 함
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -285,27 +430,122 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           children: [
             Row(
               children: [
-                Text(
-                  '이렇게 해보세요',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor()),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '즐겨찾기 페이지',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: TextColor()),
+                  ),
                 ),
               ],
             ),
             const SizedBox(
               height: 20,
             ),
-            ShowTips(
+            /*ShowTips(
               height: height,
               pageController: pController,
               pageindex: 0,
-            ),
+            ),*/
           ],
         ),
       ),
     );
+  }
+
+  Se_Container11(
+    double height,
+  ) {
+    return GetBuilder<uisetting>(
+        builder: (_) => Padding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: firestore.collection('Favorpage').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    uiset.favorpagelist.clear();
+                    final valuespace = snapshot.data!.docs;
+                    for (var sp in valuespace) {
+                      final messageuser = sp.get('username');
+                      final messagetitle = sp.get('linkname');
+                      if (messageuser == usercode) {
+                        uiset.favorpagelist.add(PageList(
+                            title: messagetitle, username: messageuser));
+                      }
+                    }
+
+                    return uiset.favorpagelist.isEmpty
+                        ? ContainerDesign(
+                            child: SizedBox(
+                              height: 40.h,
+                              child: Center(
+                                child: NeumorphicText(
+                                  '즐겨찾기 설정하신 페이지가 없네요',
+                                  style: NeumorphicStyle(
+                                    shape: NeumorphicShape.flat,
+                                    depth: 3,
+                                    color: TextColor_shadowcolor(),
+                                  ),
+                                  textStyle: NeumorphicTextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize(),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            color: Colors.transparent)
+                        : SizedBox(
+                            child: ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: uiset.favorpagelist.length,
+                                itemBuilder: (context, index) {
+                                  return ContainerDesign(
+                                      child: SizedBox(
+                                          height: (uiset.favorpagelist.length
+                                                  .toDouble()) *
+                                              50,
+                                          child: SizedBox(
+                                              child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Flexible(
+                                                  fit: FlexFit.tight,
+                                                  child: Text(
+                                                    uiset.favorpagelist[index]
+                                                        .title,
+                                                    softWrap: true,
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                        color: TextColor(),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            contentTextsize()),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  )),
+                                            ],
+                                          ))),
+                                      color: Colors.transparent);
+                                }),
+                          );
+                  }
+                  return LinearProgressIndicator(
+                    backgroundColor: BGColor(),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.blue),
+                  );
+                },
+              ),
+            ));
   }
 
   H_Container_3(double height) {
