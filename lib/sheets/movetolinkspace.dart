@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:clickbyme/DB/PageList.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,12 +17,12 @@ import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/uisetting.dart';
 import '../mongoDB/mongodatabase.dart';
 
-movetolinkspace(
-  BuildContext context,
-  List<PageList> pagelist,
-  TextEditingController textEditingController,
-  FocusNode searhnode,
-) {
+settingseparatedlinkspace(
+    BuildContext context,
+    List<PageList> pagelist,
+    TextEditingController textEditingController,
+    FocusNode searchnode,
+    int index) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
@@ -50,8 +52,8 @@ movetolinkspace(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child:
-                    space(context, pagelist, textEditingController, searhnode),
+                child: space(context, pagelist, textEditingController,
+                    searchnode, index),
               )),
         );
       }).whenComplete(() {});
@@ -61,7 +63,8 @@ space(
   BuildContext context,
   List<PageList> pagelist,
   TextEditingController textEditingController,
-  FocusNode searhnode,
+  FocusNode searchnode,
+  int index,
 ) {
   return SizedBox(
       child: Padding(
@@ -85,139 +88,138 @@ space(
               const SizedBox(
                 height: 20,
               ),
-              title(context),
-              const SizedBox(
-                height: 20,
-              ),
-              content(context, pagelist, textEditingController, searhnode),
+              content(
+                  context, pagelist, textEditingController, searchnode, index),
             ],
           )));
-}
-
-title(
-  BuildContext context,
-) {
-  return SizedBox(
-      height: 50,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('스페이스 전환',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: secondTitleTextsize()))
-        ],
-      ));
 }
 
 content(
   BuildContext context,
   List<PageList> pagelist,
   TextEditingController textEditingController,
-  FocusNode searhnode,
+  FocusNode searchnode,
+  int index,
 ) {
   String usercode = Hive.box('user_setting').get('usercode');
+  bool serverstatus = Hive.box('user_info').get('server_status');
+  final uiset = Get.put(uisetting());
+  final linkspaceset = Get.put(linkspacesetting());
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final updatelist = [];
+  final uniquecodelist = [];
+
   return StatefulBuilder(builder: (_, StateSetter setState) {
-    return ListView.builder(
-        physics: const ScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: pagelist.length + 1,
-        itemBuilder: ((context, index) {
-          return Column(
-            children: [
-              index == 0
-                  ? GestureDetector(
-                      onTap: () async {
-                        Get.back();
-                        textEditingController.clear();
-                        addmylink(
-                          context,
-                          usercode,
-                          textEditingController,
-                          searhnode,
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                              fit: FlexFit.tight,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.add_box,
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('새로운 스페이스 생성하기',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  contentTitleTextsize())),
-                                    ],
-                                  )
-                                ],
-                              )),
-                          Icon(Icons.keyboard_arrow_right,
-                              color: Colors.grey.shade400)
-                        ],
+    return Column(
+      children: [
+        ListTile(
+          onTap: () {
+            Get.back();
+            textEditingController.text = pagelist[index].title;
+            SetChangeLink(context, textEditingController, searchnode,
+                pagelist[index].title);
+          },
+          trailing: const Icon(
+            Icons.edit,
+            color: Colors.black,
+          ),
+          title: Text(
+            '이름 바꾸기',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: TextColor(),
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        ListTile(
+          onTap: () async {
+            final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
+                  builder: (context) {
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: SingleChildScrollView(
+                        child: Text('정말 이 링크를 삭제하시겠습니까?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.blueGrey)),
                       ),
-                    )
-                  : GestureDetector(
-                      onTap: () async {
-                        Get.back();
-                        //movetolinkspacesecond(context, '공유');
-                      },
-                      child: Row(
-                        children: [
-                          Flexible(
-                              fit: FlexFit.tight,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.view_in_ar,
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(pagelist[index - 1].title,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  contentTitleTextsize())),
-                                      Text(pagelist[index - 1].username,
-                                          style: TextStyle(
-                                              color: Colors.grey.shade400,
-                                              fontSize: 15)),
-                                    ],
-                                  )
-                                ],
-                              )),
-                          Icon(Icons.keyboard_arrow_right,
-                              color: Colors.grey.shade400)
-                        ],
-                      ),
-                    ),
-              SizedBox(
-                height: 15,
-              )
-            ],
-          );
-        }));
+                    );
+                  },
+                ), pressed2)) ??
+                false;
+            if (reloadpage) {
+              uiset.setloading(true);
+              updatelist.clear();
+
+              var id = '';
+              await firestore.collection('Pinchannel').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('username') == usercode &&
+                      value.docs[i].get('linkname') == pagelist[index].title) {
+                    id = value.docs[i].id;
+                  }
+                }
+                firestore.collection('Pinchannel').doc(id).delete();
+              }).whenComplete(() async {
+                final idlist = [];
+                await firestore.collection('Pinchannelin').get().then((value) {
+                  for (int i = 0; i < value.docs.length; i++) {
+                    if (value.docs[i].get('username') == usercode &&
+                        value.docs[i].get('linkname') ==
+                            pagelist[index].title) {
+                      id = value.docs[i].id;
+                      uniquecodelist.add(value.docs[i].get('uniquecode'));
+                      firestore.collection('Pinchannelin').doc(id).delete();
+                    }
+                  }
+                });
+
+                await firestore.collection('Linknet').get().then((value) async {
+                  for (int i = 0; i < value.docs.length; i++) {
+                    for (int i = 0; i < uniquecodelist.length; i++) {
+                      if (value.docs[i].get('uniquecode') ==
+                          uniquecodelist[i]) {
+                        id = value.docs[i].id;
+                        for (int j = 0; j < idlist.length; j++) {
+                          firestore.collection('Linknet').doc(id).delete();
+                        }
+                      } else {}
+                    }
+                  }
+                }).whenComplete(() {
+                  uiset.setloading(false);
+
+                  linkspaceset.resetspacelink();
+                  for (int k = 0; k < updatelist.length; k++) {
+                    linkspaceset.setspacelink(updatelist[k]);
+                  }
+                  Get.back();
+                  linkspaceset.setcompleted(true);
+                });
+              });
+            }
+          },
+          trailing: const Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
+          title: Text(
+            '삭제하기',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        )
+      ],
+    );
   });
 }
 
@@ -526,35 +528,15 @@ contentthird(
                       snackType: SnackType.warning);
                 } else {
                   linkspaceset.setcompleted(false);
-                  if (serverstatus) {
-                    await MongoDB.add(collectionname: 'pinchannel', addlist: {
-                      'username': username,
-                      'linkname': textEditingControllerAddSheet.text,
-                      'color': BGColor().value.toInt()
-                    });
-
-                    firestore.collection('pinchannel').add({
-                      'username': username,
-                      'linkname': textEditingControllerAddSheet.text,
-                      'color': BGColor().value.toInt()
-                    }).whenComplete(() {
-                      linkspaceset.setcompleted(true);
-                      linkspaceset
-                          .setspacelink(textEditingControllerAddSheet.text);
-                      Get.back();
-                    });
-                  } else {
-                    firestore.collection('pinchannel').add({
-                      'username': username,
-                      'linkname': textEditingControllerAddSheet.text,
-                      'color': BGColor().value.toInt()
-                    }).whenComplete(() {
-                      linkspaceset.setcompleted(true);
-                      linkspaceset
-                          .setspacelink(textEditingControllerAddSheet.text);
-                      Get.back();
-                    });
-                  }
+                  firestore.collection('Pinchannel').add({
+                    'username': username,
+                    'linkname': textEditingControllerAddSheet.text,
+                  }).whenComplete(() {
+                    linkspaceset.setcompleted(true);
+                    linkspaceset
+                        .setspacelink(textEditingControllerAddSheet.text);
+                    Get.back();
+                  });
                 }
               },
               child: Center(
@@ -686,7 +668,7 @@ titleforth(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('설정',
+          Text('이름 변경',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -711,49 +693,21 @@ contentforth(BuildContext context, FocusNode searchNode,
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 30,
-          child: Text('링크이름 변경',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTitleTextsize())),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        TextField(
-          minLines: 2,
-          maxLines: 2,
-          focusNode: searchNode,
-          style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade400,
-                width: 2,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
+        ContainerDesign(
+          color: Colors.white,
+          child: TextField(
+            focusNode: searchNode,
+            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 10),
+              border: InputBorder.none,
+              isCollapsed: true,
+              hintText: '변경할 제목입력',
+              hintStyle:
+                  TextStyle(fontSize: contentTextsize(), color: Colors.black45),
             ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.blue,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
-            contentPadding: const EdgeInsets.only(left: 10),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
-            filled: true,
-            fillColor: Colors.grey.shade200,
-            isCollapsed: true,
-            hintText: '링크 이름 입력',
-            hintStyle:
-                TextStyle(fontSize: contentTextsize(), color: Colors.black45),
+            controller: controller,
           ),
-          controller: controller,
         ),
         const SizedBox(
           height: 20,
@@ -762,264 +716,6 @@ contentforth(BuildContext context, FocusNode searchNode,
             height: 50,
             child: Row(
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100)),
-                      primary: Colors.white,
-                    ),
-                    onPressed: () async {
-                      final reloadpage =
-                          await Get.dialog(OSDialog(context, '경고', Builder(
-                                builder: (context) {
-                                  return SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.85,
-                                    child: SingleChildScrollView(
-                                      child: Text('정말 이 링크를 삭제하시겠습니까?',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize(),
-                                              color: Colors.blueGrey)),
-                                    ),
-                                  );
-                                },
-                              ), pressed2)) ??
-                              false;
-                      if (reloadpage) {
-                        if (serverstatus) {
-                          uiset.setloading(true);
-                          await MongoDB.delete(
-                              collectionname: 'pinchannel',
-                              deletelist: {
-                                'username': usercode,
-                                'linkname': controller.text,
-                              });
-                          await MongoDB.getData(collectionname: 'pinchannelin')
-                              .then((value) async {
-                            updatelist.clear();
-                            if (value.isEmpty) {
-                            } else {
-                              for (var sp in value) {
-                                if (sp['username'] == usercode &&
-                                    sp['linkname'] == controller.text) {
-                                  uniquecodelist.add(sp['uniquecode']);
-                                  await MongoDB.delete(
-                                      collectionname: 'pinchannelin',
-                                      deletelist: {
-                                        'username': usercode,
-                                        'linkname': controller.text,
-                                      });
-                                } else {
-                                  updatelist.add(sp['linkname']);
-                                }
-                              }
-                            }
-                          }).whenComplete(() async {
-                            await MongoDB.getData(collectionname: 'linknet')
-                                .then((value) async {
-                              if (value.isEmpty) {
-                              } else {
-                                for (var sp in value) {
-                                  for (int i = 0;
-                                      i < uniquecodelist.length;
-                                      i++) {
-                                    if (sp['uniquecode'] == uniquecodelist[i]) {
-                                      await MongoDB.delete(
-                                          collectionname: 'linknet',
-                                          deletelist: {
-                                            'username': usercode,
-                                            'uniquecode': uniquecodelist[i],
-                                          });
-                                    } else {}
-                                  }
-                                }
-                              }
-                            });
-                            var id = '';
-                            await firestore
-                                .collection('Pinchannel')
-                                .get()
-                                .then((value) {
-                              for (int i = 0; i < value.docs.length; i++) {
-                                if (value.docs[i].get('username') == usercode &&
-                                    value.docs[i].get('linkname') ==
-                                        controller.text) {
-                                  id = value.docs[i].id;
-                                  firestore
-                                      .collection('Pinchannel')
-                                      .doc(id)
-                                      .delete();
-                                }
-                              }
-                            }).whenComplete(() async {
-                              final idlist = [];
-                              await firestore
-                                  .collection('Pinchannelin')
-                                  .get()
-                                  .then((value) {
-                                for (int i = 0; i < value.docs.length; i++) {
-                                  if (value.docs[i].get('username') ==
-                                          usercode &&
-                                      value.docs[i].get('linkname') ==
-                                          controller.text) {
-                                    id = value.docs[i].id;
-                                    uniquecodelist
-                                        .add(value.docs[i].get('uniquecode'));
-                                    firestore
-                                        .collection('Pinchannelin')
-                                        .doc(id)
-                                        .delete();
-                                  }
-                                }
-                              });
-
-                              await firestore
-                                  .collection('Linknet')
-                                  .get()
-                                  .then((value) async {
-                                for (int i = 0; i < value.docs.length; i++) {
-                                  for (int i = 0;
-                                      i < uniquecodelist.length;
-                                      i++) {
-                                    if (value.docs[i].get('uniquecode') ==
-                                        uniquecodelist[i]) {
-                                      id = value.docs[i].id;
-                                      for (int j = 0; j < idlist.length; j++) {
-                                        firestore
-                                            .collection('Linknet')
-                                            .doc(id)
-                                            .delete();
-                                      }
-                                    } else {}
-                                  }
-                                }
-                              }).whenComplete(() {
-                                uiset.setloading(false);
-
-                                linkspaceset.resetspacelink();
-                                for (int k = 0; k < updatelist.length; k++) {
-                                  linkspaceset.setspacelink(updatelist[k]);
-                                }
-                                Get.back();
-                                linkspaceset.setcompleted(true);
-                              });
-                            });
-                          });
-                        } else {
-                          uiset.setloading(true);
-                          updatelist.clear();
-
-                          var id = '';
-                          await firestore
-                              .collection('Pinchannel')
-                              .get()
-                              .then((value) {
-                            for (int i = 0; i < value.docs.length; i++) {
-                              if (value.docs[i].get('username') == usercode &&
-                                  value.docs[i].get('linkname') ==
-                                      controller.text) {
-                                id = value.docs[i].id;
-                              }
-                            }
-                            firestore.collection('Pinchannel').doc(id).delete();
-                          }).whenComplete(() async {
-                            final idlist = [];
-                            await firestore
-                                .collection('Pinchannelin')
-                                .get()
-                                .then((value) {
-                              for (int i = 0; i < value.docs.length; i++) {
-                                if (value.docs[i].get('username') == usercode &&
-                                    value.docs[i].get('linkname') ==
-                                        controller.text) {
-                                  id = value.docs[i].id;
-                                  uniquecodelist
-                                      .add(value.docs[i].get('uniquecode'));
-                                  firestore
-                                      .collection('Pinchannelin')
-                                      .doc(id)
-                                      .delete();
-                                }
-                              }
-                            });
-
-                            await firestore
-                                .collection('Linknet')
-                                .get()
-                                .then((value) async {
-                              for (int i = 0; i < value.docs.length; i++) {
-                                for (int i = 0;
-                                    i < uniquecodelist.length;
-                                    i++) {
-                                  if (value.docs[i].get('uniquecode') ==
-                                      uniquecodelist[i]) {
-                                    id = value.docs[i].id;
-                                    for (int j = 0; j < idlist.length; j++) {
-                                      firestore
-                                          .collection('Linknet')
-                                          .doc(id)
-                                          .delete();
-                                    }
-                                  } else {}
-                                }
-                              }
-                            }).whenComplete(() {
-                              uiset.setloading(false);
-
-                              linkspaceset.resetspacelink();
-                              for (int k = 0; k < updatelist.length; k++) {
-                                linkspaceset.setspacelink(updatelist[k]);
-                              }
-                              Get.back();
-                              linkspaceset.setcompleted(true);
-                            });
-                          });
-                        }
-                      }
-                    },
-                    child: GetBuilder<uisetting>(
-                      builder: (_) => Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            uiset.loading == true
-                                ? Center(
-                                    child: NeumorphicText(
-                                      '대기',
-                                      style: const NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: Colors.red,
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                      ),
-                                    ),
-                                  )
-                                : Center(
-                                    child: NeumorphicText(
-                                      '삭제',
-                                      style: const NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        depth: 3,
-                                        color: Colors.red,
-                                      ),
-                                      textStyle: NeumorphicTextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                      ),
-                                    ),
-                                  )
-                          ],
-                        ),
-                      ),
-                    )),
-                const SizedBox(
-                  width: 10,
-                ),
                 Flexible(
                   fit: FlexFit.tight,
                   child: ElevatedButton(
@@ -1037,156 +733,27 @@ contentforth(BuildContext context, FocusNode searchNode,
                               snackType: SnackType.warning,
                               behavior: SnackBarBehavior.floating);
                         } else {
-                          if (serverstatus) {
-                            uiset.setloading(true);
-                            await MongoDB.getData(collectionname: 'linknet')
-                                .then((value) async {
-                              updatelist.clear();
-                              await MongoDB.delete(
-                                  collectionname: 'linknet',
-                                  deletelist: {
-                                    'username': usercode,
-                                  });
-                              await MongoDB.delete(
-                                  collectionname: 'pinchannel',
-                                  deletelist: {
-                                    'username': usercode,
-                                    'linkname': link,
-                                  });
-                              for (int j = 0; j < value.length; j++) {
-                                final user = value[j]['username'];
-                                if (user == usercode) {
-                                  for (int i = 0;
-                                      i < value[j]['link'].length;
-                                      i++) {
-                                    if (link != value[j]['link'][i]) {
-                                      updatelist.add(value[j]['link'][i]);
-                                    }
-                                  }
-                                }
-                              }
-                              updatelist.add(controller.text);
-
-                              await MongoDB.add(
-                                  collectionname: 'linknet',
-                                  addlist: {
-                                    'username': usercode,
-                                    'link': updatelist,
-                                  });
-                              await MongoDB.add(
-                                  collectionname: 'pinchannel',
-                                  addlist: {
-                                    'username': usercode,
-                                    'linkname': controller.text,
-                                    'color': BGColor().value.toInt()
-                                  });
-                            }).whenComplete(() {
-                              var id = '';
-                              uiset.setloading(false);
-                              Get.back();
-                              firestore
-                                  .collection('Linknet')
-                                  .get()
-                                  .then((value) {
-                                for (int i = 0; i < value.docs.length; i++) {
-                                  if (value.docs[i].get('username') ==
-                                      usercode) {
-                                    id = value.docs[i].id;
-                                  }
-                                }
-                                if (updatelist.isEmpty) {
-                                } else {
-                                  firestore
-                                      .collection('Linknet')
-                                      .doc(id)
-                                      .delete();
-                                  firestore.collection('Linknet').add({
-                                    'username': usercode,
-                                    'title': updatelist,
-                                  });
-                                }
-                              }).whenComplete(() {
-                                firestore
-                                    .collection('Pinchannel')
-                                    .get()
-                                    .then((value) {
-                                  for (int i = 0; i < value.docs.length; i++) {
-                                    if (value.docs[i].get('linkname') == link) {
-                                      if (value.docs[i].get('username') ==
-                                          usercode) {
-                                        id = value.docs[i].id;
-                                      }
-                                    }
-                                  }
-                                  firestore
-                                      .collection('Pinchannel')
-                                      .doc(id)
-                                      .update({
-                                    'linkname': controller.text,
-                                    'color': BGColor().value.toInt()
-                                  });
-                                });
-                                linkspaceset.resetspacelink();
-                                for (int k = 0; k < updatelist.length; k++) {
-                                  linkspaceset.setspacelink(updatelist[k]);
-                                }
-                                linkspaceset.setcompleted(true);
-                              });
-                            });
-                          } else {
-                            updatelist.clear();
-                            uiset.setloading(true);
-                            var id = '';
-                            firestore.collection('Linknet').get().then((value) {
-                              for (int i = 0; i < value.docs.length; i++) {
+                          updatelist.clear();
+                          uiset.setloading(true);
+                          var id = '';
+                          uiset.setloading(false);
+                          Get.back();
+                          firestore
+                              .collection('Pinchannel')
+                              .get()
+                              .then((value) {
+                            for (int i = 0; i < value.docs.length; i++) {
+                              if (value.docs[i].get('linkname') == link) {
                                 if (value.docs[i].get('username') == usercode) {
-                                  for (int j = 0;
-                                      j < value.docs[i].get('link').length;
-                                      j++) {
-                                    if (link != value.docs[i].get('link')[j]) {
-                                      updatelist
-                                          .add(value.docs[i].get('link')[j]);
-                                    }
-                                  }
                                   id = value.docs[i].id;
                                 }
                               }
-                              firestore.collection('Linknet').doc(id).delete();
-                              updatelist.add(controller.text);
-                              firestore.collection('Linknet').add({
-                                'username': usercode,
-                                'title': updatelist,
-                              });
-                            }).whenComplete(() {
-                              uiset.setloading(false);
-                              Get.back();
-                              firestore
-                                  .collection('Pinchannel')
-                                  .get()
-                                  .then((value) {
-                                for (int i = 0; i < value.docs.length; i++) {
-                                  if (value.docs[i].get('linkname') == link) {
-                                    if (value.docs[i].get('username') ==
-                                        usercode) {
-                                      id = value.docs[i].id;
-                                    }
-                                  }
-                                }
-                                firestore
-                                    .collection('Pinchannel')
-                                    .doc(id)
-                                    .update({
-                                  'linkname': controller.text,
-                                  'color': BGColor().value.toInt()
-                                });
-                              });
-                              linkspaceset.resetspacelink();
-                              for (int k = 0; k < updatelist.length; k++) {
-                                linkspaceset.setspacelink(updatelist[k]);
-                              }
-                              linkspaceset.setcompleted(true);
+                            }
+                            firestore.collection('Pinchannel').doc(id).update({
+                              'linkname': controller.text,
                             });
-                          }
+                          });
+                          linkspaceset.setcompleted(true);
                         }
                       },
                       child: GetBuilder<uisetting>(

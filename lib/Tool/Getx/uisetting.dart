@@ -9,15 +9,21 @@ class uisetting extends GetxController {
   bool loading = false;
   int pagenumber = 0;
   bool showtopbutton = false;
-  bool showcompanynotice = true;
   String eventtitle = '';
   String eventurl = '';
   List<PageList> pagelist = [];
+  int mypagelistindex = 0;
   int currentstepper = 0;
   String usercode = Hive.box('user_setting').get('usercode');
 
   void setloading(bool what) {
     loading = what;
+    update();
+    notifyChildrens();
+  }
+
+  void setmypagelistindex(int what) {
+    mypagelistindex = what;
     update();
     notifyChildrens();
   }
@@ -47,8 +53,8 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
-  void setuserspace(String title, int color) {
-    pagelist.add(PageList(title: title, color: color, username: usercode));
+  void setuserspace(String title, String user) {
+    pagelist.add(PageList(title: title, username: user));
     update();
     notifyChildrens();
   }

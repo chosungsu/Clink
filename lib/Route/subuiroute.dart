@@ -9,12 +9,18 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
+import '../Page/AddTemplate.dart';
 import '../Page/LoginSignPage.dart';
+import '../Page/NotiAlarm.dart';
+import '../Page/Spacepage.dart';
+import '../Tool/AndroidIOS.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
+import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/selectcollection.dart';
 import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
@@ -22,6 +28,7 @@ import '../Tool/TextSize.dart';
 import '../UI/Home/firstContentNet/DayScript.dart';
 import '../mongoDB/mongodatabase.dart';
 import '../sheets/linksettingsheet.dart';
+import '../sheets/movetolinkspace.dart';
 import 'mainroute.dart';
 
 void pressed1() {
@@ -49,6 +56,70 @@ GoToLogin(BuildContext context, String s) {
   });
 
   return _time;
+}
+
+func1() => Get.to(() => const NotiAlarm(), transition: Transition.upToDown);
+func2(BuildContext context) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  var updateid = '';
+  var updateusername = [];
+  String name = Hive.box('user_info').get('id');
+  final notilist = Get.put(notishow());
+  final reloadpage = await Get.dialog(OSDialog(
+          context,
+          '경고',
+          Text('알림들을 삭제하시겠습니까?',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize(),
+                  color: Colors.blueGrey)),
+          pressed2)) ??
+      false;
+  if (reloadpage) {
+    firestore.collection('AppNoticeByUsers').get().then((value) {
+      for (var element in value.docs) {
+        if (element.get('sharename').toString().contains(name) == true) {
+          updateid = element.id;
+          updateusername =
+              element.get('sharename').toString().split(',').toList();
+          if (updateusername.length == 1) {
+            firestore.collection('AppNoticeByUsers').doc(updateid).delete();
+          } else {
+            updateusername
+                .removeWhere((element) => element.toString().contains(name));
+            firestore
+                .collection('AppNoticeByUsers')
+                .doc(updateid)
+                .update({'sharename': updateusername});
+          }
+        } else {
+          if (element.get('username').toString() == name) {
+            updateid = element.id;
+            firestore.collection('AppNoticeByUsers').doc(updateid).delete();
+          } else {}
+        }
+      }
+    }).whenComplete(() {
+      notilist.isreadnoti();
+    });
+  }
+}
+
+func3() => Future.delayed(const Duration(seconds: 0), () {
+      final linkspaceset = Get.put(linkspacesetting());
+      if (linkspaceset.color == BGColor()) {
+        StatusBarControl.setColor(BGColor(), animated: true);
+      } else {
+        StatusBarControl.setColor(linkspaceset.color, animated: true);
+      }
+      Get.back();
+    });
+func4() => Get.to(() => const AddTemplate(), transition: Transition.upToDown);
+func5() => Get.to(() => const Spaceapage(), transition: Transition.upToDown);
+func6(BuildContext context, TextEditingController textEditingController,
+    FocusNode searchnode) {
+  String usercode = Hive.box('user_setting').get('usercode');
+  addmylink(context, usercode, textEditingController, searchnode);
 }
 
 CompanyNotice(

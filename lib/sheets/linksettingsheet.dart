@@ -494,15 +494,6 @@ contentsecond(
                   placestr: 'board',
                   uniquecode: code));
             } else {
-              await MongoDB.updatewwithqueries(
-                  collectionname: 'pinchannelin',
-                  query1: 'username',
-                  what1: usercode,
-                  query2: 'linkname',
-                  what2: link,
-                  query3: 'index',
-                  what3: index.toString(),
-                  updatelist: {'placestr': 'board', 'index': index});
               await firestore.collection('Pinchannelin').get().then((value) {
                 for (int i = 0; i < value.docs.length; i++) {
                   if (value.docs[i].get('username') == usercode &&
@@ -579,15 +570,6 @@ contentsecond(
                   placestr: 'card',
                   uniquecode: code));
             } else {
-              await MongoDB.updatewwithqueries(
-                  collectionname: 'pinchannelin',
-                  query1: 'username',
-                  what1: usercode,
-                  query2: 'linkname',
-                  what2: link,
-                  query3: 'index',
-                  what3: index.toString(),
-                  updatelist: {'placestr': 'card', 'index': index});
               await firestore.collection('Pinchannelin').get().then((value) {
                 for (int i = 0; i < value.docs.length; i++) {
                   if (value.docs[i].get('username') == usercode &&
@@ -695,18 +677,6 @@ contentsecond(
                             placestr: 'calendar',
                             uniqueid: code));
                       } else {
-                        await MongoDB.updatewwithqueries(
-                            collectionname: 'pinchannelin',
-                            query1: 'username',
-                            what1: usercode,
-                            query2: 'linkname',
-                            what2: link,
-                            query3: 'index',
-                            what3: index.toString(),
-                            updatelist: {
-                              'placestr': 'calendar',
-                              'index': index
-                            });
                         await firestore
                             .collection('Pinchannelin')
                             .get()

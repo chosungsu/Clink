@@ -1,4 +1,4 @@
-import 'package:clickbyme/Sub/SecureAuth.dart';
+import 'package:clickbyme/Auth/SecureAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';

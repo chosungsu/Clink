@@ -10,12 +10,10 @@ class CompanyPageList {
 
 class PageList {
   final String title;
-  final int color;
   final String username;
 
   PageList({
     required this.title,
-    required this.color,
     required this.username,
   });
 }

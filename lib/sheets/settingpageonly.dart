@@ -117,9 +117,49 @@ content(
   TextEditingController controller,
   String name,
 ) {
+  String usercode = Hive.box('user_setting').get('usercode');
+
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
+        GestureDetector(
+          onTap: () {},
+          child: Row(
+            children: [
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.vpn_key,
+                        size: 30,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('고유 코드',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize())),
+                        ],
+                      ),
+                    ],
+                  )),
+              SelectableText(usercode,
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
         GestureDetector(
           onTap: () {
             Get.back();

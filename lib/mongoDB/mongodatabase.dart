@@ -18,9 +18,6 @@ class MongoDB {
       collection_noticebycompany,
       collection_noticebyusers,
       collection_howtouse,
-      collection_linknet,
-      collection_pinchannel,
-      collection_pinchannelin,
       arrdata;
 
   static connect() async {
@@ -45,9 +42,6 @@ class MongoDB {
     collection_noticebycompany = db.collection(APPNOTICEBYCOMPANY_COLLECTION);
     collection_noticebyusers = db.collection(APPNOTICEBYUSERS_COLLECTION);
     collection_howtouse = db.collection(HOWTOUSE_COLLECTION);
-    collection_linknet = db.collection(LINKNET_COLLECTION);
-    collection_pinchannel = db.collection(PINCHANNEL_COLLECTION);
-    collection_pinchannelin = db.collection(PINUSERDATAIN_COLLECTION);
   }
 
   static Future getData({required String collectionname}) async {
@@ -88,15 +82,6 @@ class MongoDB {
       } else if (collectionname == 'howtouse') {
         arrdata = await collection_howtouse.find().toList();
         return arrdata;
-      } else if (collectionname == 'linknet') {
-        arrdata = await collection_linknet.find().toList();
-        return arrdata;
-      } else if (collectionname == 'pinchannel') {
-        arrdata = await collection_pinchannel.find().toList();
-        return arrdata;
-      } else if (collectionname == 'pinchannelin') {
-        arrdata = await collection_pinchannelin.find().toList();
-        return arrdata;
       } else {
         return [];
       }
@@ -138,15 +123,6 @@ class MongoDB {
       } else if (collectionname == 'howtouse') {
         arrdata = await collection_howtouse.find().toList();
         return arrdata;
-      } else if (collectionname == 'linknet') {
-        arrdata = await collection_linknet.find().toList();
-        return arrdata;
-      } else if (collectionname == 'pinchannel') {
-        arrdata = await collection_pinchannel.find().toList();
-        return arrdata;
-      } else if (collectionname == 'pinchannelin') {
-        arrdata = await collection_pinchannelin.find().toList();
-        return arrdata;
       } else {
         return [];
       }
@@ -179,12 +155,6 @@ class MongoDB {
         await collection_noticebycompany.insertOne(addlist);
       } else if (collectionname == 'notibyusers') {
         await collection_noticebyusers.insertOne(addlist);
-      } else if (collectionname == 'linknet') {
-        await collection_linknet.insertOne(addlist);
-      } else if (collectionname == 'pinchannel') {
-        await collection_pinchannel.insertOne(addlist);
-      } else if (collectionname == 'pinchannelin') {
-        await collection_pinchannelin.insertOne(addlist);
       }
     } else {
       MongoDB(connect);
@@ -210,12 +180,6 @@ class MongoDB {
         await collection_noticebycompany.insertOne(addlist);
       } else if (collectionname == 'notibyusers') {
         await collection_noticebyusers.insertOne(addlist);
-      } else if (collectionname == 'linknet') {
-        await collection_linknet.insertOne(addlist);
-      } else if (collectionname == 'pinchannel') {
-        await collection_pinchannel.insertOne(addlist);
-      } else if (collectionname == 'pinchannelin') {
-        await collection_pinchannelin.insertOne(addlist);
       }
     }
   }
@@ -303,34 +267,6 @@ class MongoDB {
               modify.set(
                   updatelist.keys.toList()[i], updatelist.values.toList()[i]));
         }
-      } else if (collectionname == 'linknet') {
-        for (int i = 0; i < updatelist.length; i++) {
-          await collection_linknet.update(
-              where.eq(query, what),
-              modify.set(
-                  updatelist.keys.toList()[i], updatelist.values.toList()[i]));
-        }
-      } else if (collectionname == 'pinchannel') {
-        for (int i = 0; i < updatelist.length; i++) {
-          await collection_pinchannel.update(
-              where.eq(query, what),
-              modify.set(
-                  updatelist.keys.toList()[i], updatelist.values.toList()[i]));
-        }
-      } else if (collectionname == 'pinchannelin') {
-        for (int i = 0; i < updatelist.length; i++) {
-          if (query == 'index') {
-            await collection_pinchannelin.update(
-                where.eq(query, int.parse(what!)),
-                modify.set(updatelist.keys.toList()[i],
-                    updatelist.values.toList()[i]));
-          } else {
-            await collection_pinchannelin.update(
-                where.eq(query, what),
-                modify.set(updatelist.keys.toList()[i],
-                    updatelist.values.toList()[i]));
-          }
-        }
       }
     } else {
       MongoDB(connect);
@@ -411,103 +347,6 @@ class MongoDB {
               modify.set(
                   updatelist.keys.toList()[i], updatelist.values.toList()[i]));
         }
-      } else if (collectionname == 'linknet') {
-        for (int i = 0; i < updatelist.length; i++) {
-          await collection_linknet.update(
-              where.eq(query, what),
-              modify.set(
-                  updatelist.keys.toList()[i], updatelist.values.toList()[i]));
-        }
-      } else if (collectionname == 'pinchannel') {
-        for (int i = 0; i < updatelist.length; i++) {
-          await collection_pinchannel.update(
-              where.eq(query, what),
-              modify.set(
-                  updatelist.keys.toList()[i], updatelist.values.toList()[i]));
-        }
-      } else if (collectionname == 'pinchannelin') {
-        for (int i = 0; i < updatelist.length; i++) {
-          if (query == 'index') {
-            await collection_pinchannelin.update(
-                where.eq(query, int.parse(what!)),
-                modify.set(updatelist.keys.toList()[i],
-                    updatelist.values.toList()[i]));
-          } else {
-            await collection_pinchannelin.update(
-                where.eq(query, what),
-                modify.set(updatelist.keys.toList()[i],
-                    updatelist.values.toList()[i]));
-          }
-        }
-      }
-    }
-  }
-
-  static updatewwithqueries(
-      {required String collectionname,
-      required String query1,
-      required String what1,
-      required String query2,
-      required String what2,
-      required String query3,
-      required String what3,
-      String? query4,
-      String? what4,
-      required Map<String, dynamic> updatelist}) async {
-    if (Hive.box('user_info').get('server_status') == true) {
-      if (collectionname == 'pinchannelin') {
-        if (query4 == null) {
-          for (int i = 0; i < updatelist.length; i++) {
-            await collection_pinchannelin.update(
-                {
-                  query1: what1,
-                  query2: what2,
-                  query3: int.parse(what3),
-                },
-                modify.set(updatelist.keys.toList()[i],
-                    updatelist.values.toList()[i]));
-          }
-        } else {
-          for (int i = 0; i < updatelist.length; i++) {
-            await collection_pinchannelin.update(
-                {
-                  query1: what1,
-                  query2: what2,
-                  query3: int.parse(what3),
-                  query4: what4,
-                },
-                modify.set(updatelist.keys.toList()[i],
-                    updatelist.values.toList()[i]));
-          }
-        }
-      }
-    } else {
-      MongoDB(connect);
-      if (collectionname == 'pinchannelin') {
-        if (query4 == null) {
-          for (int i = 0; i < updatelist.length; i++) {
-            await collection_pinchannelin.update(
-                {
-                  query1: what1,
-                  query2: what2,
-                  query3: int.parse(what3),
-                },
-                modify.set(updatelist.keys.toList()[i],
-                    updatelist.values.toList()[i]));
-          }
-        } else {
-          for (int i = 0; i < updatelist.length; i++) {
-            await collection_pinchannelin.update(
-                {
-                  query1: what1,
-                  query2: what2,
-                  query3: int.parse(what3),
-                  query4: what4,
-                },
-                modify.set(updatelist.keys.toList()[i],
-                    updatelist.values.toList()[i]));
-          }
-        }
       }
     }
   }
@@ -538,12 +377,6 @@ class MongoDB {
         await collection_noticebycompany.deleteOne(deletelist);
       } else if (collectionname == 'notibyusers') {
         await collection_noticebyusers.deleteOne(deletelist);
-      } else if (collectionname == 'linknet') {
-        await collection_linknet.deleteOne(deletelist);
-      } else if (collectionname == 'pinchannel') {
-        await collection_pinchannel.deleteOne(deletelist);
-      } else if (collectionname == 'pinchannelin') {
-        await collection_pinchannelin.deleteOne(deletelist);
       }
     } else {
       MongoDB(connect);
@@ -569,12 +402,6 @@ class MongoDB {
         await collection_noticebycompany.deleteOne(deletelist);
       } else if (collectionname == 'notibyusers') {
         await collection_noticebyusers.deleteOne(deletelist);
-      } else if (collectionname == 'linknet') {
-        await collection_linknet.deleteOne(deletelist);
-      } else if (collectionname == 'pinchannel') {
-        await collection_pinchannel.deleteOne(deletelist);
-      } else if (collectionname == 'pinchannelin') {
-        await collection_pinchannelin.deleteOne(deletelist);
       }
     }
   }
@@ -629,18 +456,6 @@ class MongoDB {
         res = await collection_howtouse.find({query: what}).forEach((v) {
           res = v;
         });
-      } else if (collectionname == 'linknet') {
-        res = await collection_linknet.find({query: what}).forEach((v) {
-          res = v;
-        });
-      } else if (collectionname == 'pinchannel') {
-        res = await collection_pinchannel.find({query: what}).forEach((v) {
-          res = v;
-        });
-      } else if (collectionname == 'pinchannelin') {
-        res = await collection_pinchannelin.find({query: what}).forEach((v) {
-          res = v;
-        });
       }
     } else {
       MongoDB(connect);
@@ -686,18 +501,6 @@ class MongoDB {
         });
       } else if (collectionname == 'howtouse') {
         res = await collection_howtouse.find({query: what}).forEach((v) {
-          res = v;
-        });
-      } else if (collectionname == 'linknet') {
-        res = await collection_linknet.find({query: what}).forEach((v) {
-          res = v;
-        });
-      } else if (collectionname == 'pinchannel') {
-        res = await collection_pinchannel.find({query: what}).forEach((v) {
-          res = v;
-        });
-      } else if (collectionname == 'pinchannelin') {
-        res = await collection_pinchannelin.find({query: what}).forEach((v) {
           res = v;
         });
       }

@@ -333,7 +333,8 @@ content(
                     await firestore.collection('User').get().then((value) {
                       if (value.docs.isEmpty) {
                       } else {
-                        cal_share_person.secondnameset(value.docs[0]['name']);
+                        cal_share_person.secondnameset(
+                            value.docs[0]['name'], value.docs[0].get('code'));
                       }
                     });
 
@@ -445,22 +446,6 @@ content(
                         changepeople.clear();
                       }
                     });
-                    /*await firestore
-                        .collection('MemoCollections')
-                        .get()
-                        .then((value) {
-                      for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('madeUser') ==
-                            cal_share_person.secondname) {
-                          firestore
-                              .collection('MemoCollections')
-                              .doc(value.docs[i].id)
-                              .update({
-                            'madeUser': Hive.box('user_info').get('id')
-                          });
-                        }
-                      }
-                    });*/
                     await firestore
                         .collection('PeopleList')
                         .get()
@@ -487,7 +472,8 @@ content(
                     await firestore.collection('User').get().then((value) {
                       if (value.docs.isEmpty) {
                       } else {
-                        cal_share_person.secondnameset(value.docs[0]['name']);
+                        cal_share_person.secondnameset(
+                            value.docs[0]['name'], value.docs[0].get('code'));
                       }
                     });
                   } else {
@@ -586,7 +572,8 @@ content(
                     await firestore.collection('User').get().then((value) {
                       if (value.docs.isEmpty) {
                       } else {
-                        cal_share_person.secondnameset(controller.text);
+                        cal_share_person.secondnameset(
+                            controller.text, value.docs[0].get('code'));
                       }
                     });
                   }

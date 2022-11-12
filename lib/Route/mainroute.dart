@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
 import 'package:clickbyme/Page/MYPage.dart';
-import 'package:clickbyme/Page/addWhole_update.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';

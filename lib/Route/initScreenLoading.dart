@@ -1,18 +1,22 @@
+// ignore_for_file: body_might_complete_normally_nullable, non_constant_identifier_names, unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../DB/Event.dart';
+import '../DB/PageList.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/notishow.dart';
+import '../Tool/Getx/uisetting.dart';
 import '../mongoDB/mongodatabase.dart';
 
 Future<Widget?> initScreen() async {
   final peopleadd = Get.put(PeopleAdd());
   final notilist = Get.put(notishow());
   final controll_memo = Get.put(memosetting());
+  final uiset = Get.put(uisetting());
   List updateid = [];
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -34,7 +38,10 @@ Future<Widget?> initScreen() async {
       await MongoDB.find(collectionname: 'user', query: 'name', what: name);
       if (MongoDB.res == null) {
       } else {
-        peopleadd.secondnameset(MongoDB.res['subname']);
+        var usercodetmp;
+        peopleadd.secondnameset(MongoDB.res['subname'], MongoDB.res['code']);
+        usercodetmp = MongoDB.res['code'];
+        Hive.box('user_setting').put('usercode', usercodetmp);
       }
       await MongoDB.find(
           collectionname: 'homeview',
@@ -108,6 +115,16 @@ Future<Widget?> initScreen() async {
           userviewlist = peopleadd.userviewlist;
         }
       });
+      await firestore
+          .collection('User')
+          .where('name', isEqualTo: name)
+          .get()
+          .then(
+        (value) {
+          peopleadd.secondnameset(
+              value.docs[0].get('subname'), value.docs[0].get('code'));
+        },
+      );
       await firestore.collection('AppNoticeByUsers').get().then((value) {
         for (var element in value.docs) {
           if (element.data()['username'] == name ||
@@ -123,12 +140,28 @@ Future<Widget?> initScreen() async {
           notilist.isread = true;
         }
       });
-    } else {
-      await firestore.collection('User').doc(name).get().then((value) {
-        if (value.exists) {
-          peopleadd.secondnameset(value.data()!['subname']);
+      await firestore.collection('Pinchannel').get().then((value) {
+        updateid.clear();
+        for (var element in value.docs) {
+          if (element.data()['username'] == usercode) {
+            updateid.add(element.data()['linkname']);
+          }
+        }
+        if (updateid.isEmpty) {
+          uiset.pagelist.clear();
+          firestore
+              .collection('Pinchannel')
+              .add({'username': usercode, 'linkname': '빈 스페이스'});
+          uiset.setuserspace('빈 스페이스', usercode);
+        } else {
+          uiset.pagelist.clear();
+          for (int j = 0; j < updateid.length; j++) {
+            final messagetitle = updateid[j];
+            uiset.setuserspace(messagetitle, usercode);
+          }
         }
       });
+    } else {
       await firestore
           .collection('HomeViewCategories')
           .doc(Hive.box('user_setting').get('usercode'))
@@ -168,6 +201,17 @@ Future<Widget?> initScreen() async {
           userviewlist = peopleadd.userviewlist;
         }
       });
+      await firestore
+          .collection('User')
+          .where('name', isEqualTo: name)
+          .get()
+          .then(
+        (value) {
+          peopleadd.secondnameset(
+              value.docs[0].get('subname'), value.docs[0].get('code'));
+          Hive.box('user_setting').put('usercode', value.docs[0].get('code'));
+        },
+      );
       await firestore.collection('AppNoticeByUsers').get().then((value) {
         for (var element in value.docs) {
           if (element.data()['username'] == name ||
@@ -181,6 +225,27 @@ Future<Widget?> initScreen() async {
         } else {
           isread = true;
           notilist.isread = true;
+        }
+      });
+      await firestore.collection('Pinchannel').get().then((value) {
+        updateid.clear();
+        for (var element in value.docs) {
+          if (element.data()['username'] == usercode) {
+            updateid.add(element.data()['linkname']);
+          }
+        }
+        if (updateid.isEmpty) {
+          uiset.pagelist.clear();
+          firestore
+              .collection('Pinchannel')
+              .add({'username': usercode, 'linkname': '빈 스페이스'});
+          uiset.setuserspace('빈 스페이스', usercode);
+        } else {
+          uiset.pagelist.clear();
+          for (int j = 0; j < updateid.length; j++) {
+            final messagetitle = updateid[j]['linkname'];
+            uiset.setuserspace(messagetitle, usercode);
+          }
         }
       });
     }

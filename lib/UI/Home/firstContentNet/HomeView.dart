@@ -714,37 +714,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                 linkspaceset.indexcnt.removeAt(newIndex + 1);
                               }
 
-                              await MongoDB.updatewwithqueries(
-                                  collectionname: 'pinchannelin',
-                                  query1: 'username',
-                                  what1: usercode,
-                                  query2: 'linkname',
-                                  what2: widget.link,
-                                  query3: 'index',
-                                  what3: oldIndex.toString(),
-                                  query4: 'uniquecode',
-                                  what4: linkspaceset
-                                      .indexcnt[newIndex].uniquecode
-                                      .toString(),
-                                  updatelist: {
-                                    'index': newIndex,
-                                  });
-                              await MongoDB.updatewwithqueries(
-                                  collectionname: 'pinchannelin',
-                                  query1: 'username',
-                                  what1: usercode,
-                                  query2: 'linkname',
-                                  what2: widget.link,
-                                  query3: 'index',
-                                  what3: newIndex.toString(),
-                                  query4: 'uniquecode',
-                                  what4: linkspaceset
-                                      .indexcnt[oldIndex].uniquecode
-                                      .toString(),
-                                  updatelist: {
-                                    'index': oldIndex,
-                                  });
-
                               await firestore
                                   .collection('Pinchannelin')
                                   .get()

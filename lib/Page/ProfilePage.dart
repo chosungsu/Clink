@@ -77,33 +77,6 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    if (serverstatus) {
-      MongoDB.find(collectionname: 'user', query: 'name', what: name);
-      if (MongoDB.res == null) {
-      } else {
-        firestore
-            .collection('User')
-            .doc(Hive.box('user_info').get('id'))
-            .update({'subname': name});
-        peopleadd.secondname = MongoDB.res['subname'];
-        peopleadd.code = MongoDB.res['code'];
-      }
-    } else {
-      firestore.collection('User').doc(name).get().then((value) {
-        if (value.exists) {
-          peopleadd.secondnameset(value.data()!['subname']);
-        }
-      });
-      firestore
-          .collection('User')
-          .where('name', isEqualTo: Hive.box('user_info').get('id'))
-          .get()
-          .then(
-        (value) {
-          peopleadd.code = value.docs[0]['code'];
-        },
-      );
-    }
 
     fToast = FToast();
     fToast.init(context);

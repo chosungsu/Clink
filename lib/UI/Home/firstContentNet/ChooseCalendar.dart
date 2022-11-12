@@ -14,7 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../Route/subuiroute.dart';
-import '../../../Page/addWhole_update.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
@@ -228,19 +227,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                         ),
                                         IconBtn(
                                             child: IconButton(
-                                                onPressed: () async {
-                                                  //리스트 추가하는 창 띄우기
-                                                  Hive.box('user_setting')
-                                                      .put('typecalendar', 0);
-                                                  addWhole_update(
-                                                      context,
-                                                      searchNode,
-                                                      controller,
-                                                      username,
-                                                      Date,
-                                                      'cal',
-                                                      fToast);
-                                                },
+                                                onPressed: () async {},
                                                 icon: Container(
                                                   alignment: Alignment.center,
                                                   width: 30,

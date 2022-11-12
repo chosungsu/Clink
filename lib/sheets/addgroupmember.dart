@@ -115,31 +115,6 @@ content(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-                height: 30,
-                child: Row(
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Text('고유 Code',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize())),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    SelectableText(code,
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize())),
-                  ],
-                )),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
               height: 40,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

@@ -152,11 +152,12 @@ class PeopleAdd extends GetxController {
     notifyChildrens();
   }
 
-  void secondnameset(String name) {
+  void secondnameset(String name, String code) {
     firestore
         .collection('User')
         .doc(Hive.box('user_info').get('id'))
         .update({'subname': name});
+    code = code;
 
     secondname = name;
     update();

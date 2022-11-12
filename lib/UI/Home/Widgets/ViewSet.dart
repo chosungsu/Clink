@@ -3,7 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../../DB/SpaceContent.dart';
-import '../../../Sub/SecureAuth.dart';
+import '../../../Auth/SecureAuth.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
