@@ -202,7 +202,7 @@ content(
             Get.back();
             GoogleSignInController()
                 .logout(context, Hive.box('user_info').get('id'));
-            GoToLogin(context, 'isnotfirst');
+            GoToLogin('isnotfirst');
           },
           child: Row(
             children: [
@@ -437,7 +437,6 @@ DeleteUserVerify(BuildContext context, String name) {
                                 isloading = false;
                               });
                               GoToLogin(
-                                context,
                                 'first',
                               );
                             },

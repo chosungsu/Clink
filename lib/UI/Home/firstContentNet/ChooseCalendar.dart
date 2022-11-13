@@ -117,7 +117,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
   Future<bool> _onWillPop() async {
     Future.delayed(const Duration(seconds: 0), () {
       if (widget.isfromwhere == 'home') {
-        GoToMain(context);
+        GoToMain();
       } else {
         Get.back();
       }
@@ -183,7 +183,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                 const Duration(seconds: 0), () {
                                               if (widget.isfromwhere ==
                                                   'home') {
-                                                GoToMain(context);
+                                                GoToMain();
                                               } else {
                                                 Get.back();
                                               }

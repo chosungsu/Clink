@@ -81,6 +81,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     Hive.box('user_setting').put('page_index', 1);
     docid = Hive.box('user_setting').get('usercode') ?? '';
     controller = TextEditingController();
+    uiset.searchpagemove = '';
     /*firestore.collection('MemoAllAlarm').get().then((value) {
       if (value.docs.isNotEmpty) {
         for (int i = 0; i < value.docs.length; i++) {
@@ -138,6 +139,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     double height = MediaQuery.of(context).size.height;
     final List<CompanyPageList> listcompanytousers = [];
     var url;
+    var checkid = '';
+
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
@@ -160,42 +163,94 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                   child: Container(
                       color: BGColor(),
                       //decoration: BoxDecoration(color: colorselection),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppBarCustom(
-                            title: '',
-                            righticon: false,
-                            iconname: Icons.notifications_none,
-                          ),
-                          Flexible(
-                              fit: FlexFit.tight,
-                              child: SizedBox(
-                                child: ScrollConfiguration(
-                                  behavior: NoBehavior(),
-                                  child: SingleChildScrollView(
-                                      controller: _scrollController,
-                                      child: StatefulBuilder(
-                                          builder: (_, StateSetter setState) {
-                                        return Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Se_Container0(height),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Se_Container01(height),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Se_Container1(height),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Se_Container11(height),
-                                            /*FutureBuilder(
+                      child: GetBuilder<uisetting>(
+                        builder: (_) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            uiset.searchpagemove == ''
+                                ? AppBarCustom(
+                                    title: '',
+                                    righticon: false,
+                                    iconname: Icons.notifications_none,
+                                  )
+                                : GetBuilder<uisetting>(
+                                    builder: (_) => FutureBuilder(
+                                        future: firestore
+                                            .collection('Favorplace')
+                                            .get()
+                                            .then((value) {
+                                          checkid = '';
+                                          if (value.docs.isEmpty) {
+                                            checkid = '';
+                                          } else {
+                                            final valuespace = value.docs;
+
+                                            for (int i = 0;
+                                                i < valuespace.length;
+                                                i++) {
+                                              if (valuespace[i]
+                                                      ['favoradduser'] ==
+                                                  usercode) {
+                                                if (valuespace[i]['title'] ==
+                                                    (Hive.box('user_setting').get(
+                                                            'currenteditpage') ??
+                                                        '')) {
+                                                  checkid = valuespace[i].id;
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }),
+                                        builder: ((context, snapshot) {
+                                          if (checkid != '') {
+                                            return AppBarCustom(
+                                              title: uiset.searchpagemove,
+                                              righticon: true,
+                                              iconname: Icons.star,
+                                            );
+                                          } else {
+                                            return AppBarCustom(
+                                              title: uiset.searchpagemove,
+                                              righticon: true,
+                                              iconname: Icons.star_border,
+                                            );
+                                          }
+                                        }))),
+                            uiset.searchpagemove == ''
+                                ? Flexible(
+                                    fit: FlexFit.tight,
+                                    child: SizedBox(
+                                      child: ScrollConfiguration(
+                                        behavior: NoBehavior(),
+                                        child: SingleChildScrollView(
+                                            controller: _scrollController,
+                                            child: StatefulBuilder(builder:
+                                                (_, StateSetter setState) {
+                                              return GetBuilder<uisetting>(
+                                                  builder: (_) => Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          /*Se_Container0(height),
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),*/
+                                                          Se_Container01(
+                                                              height),
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Se_Container1(height),
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Se_Container11(
+                                                              height),
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          /*FutureBuilder(
                                                 future: MongoDB.getData(
                                                         collectionname:
                                                             'companynotice')
@@ -260,12 +315,14 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                             const SizedBox(
                                               height: 50,
                                             ),*/
-                                          ],
-                                        );
-                                      })),
-                                ),
-                              )),
-                        ],
+                                                        ],
+                                                      ));
+                                            })),
+                                      ),
+                                    ))
+                                : Flexible(child: Se_Container2()),
+                          ],
+                        ),
                       )),
                 ),
               ),
@@ -283,9 +340,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: TextColor(), width: 2)),
+            ContainerDesign(
+              color: BGColor(),
               child: TextField(
                 onChanged: ((value) {
                   setState(() {
@@ -336,75 +392,248 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     uiset.searchpagelist.clear();
+                    uiset.editpagelist.clear();
                     final valuespace = snapshot.data!.docs;
                     for (var sp in valuespace) {
                       final messageuser = sp.get('username');
                       final messagetitle = sp.get('linkname');
+                      final messageemail = sp.get('email');
                       if (textchangelistener == '') {
                       } else {
                         if (messagetitle
                             .toString()
                             .contains(textchangelistener)) {
                           uiset.searchpagelist.add(PageList(
-                              title: messagetitle, username: messageuser));
+                              title: messagetitle,
+                              username: messageuser,
+                              email: messageemail));
                         }
                       }
                     }
 
                     return uiset.searchpagelist.isEmpty
-                        ? ContainerDesign(
-                            child: SizedBox(
-                              height: 40.h,
-                              child: Center(
-                                child: NeumorphicText(
-                                  '검색 결과 없음',
-                                  style: NeumorphicStyle(
-                                    shape: NeumorphicShape.flat,
-                                    depth: 3,
-                                    color: TextColor_shadowcolor(),
+                        ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ContainerDesign(
+                                color: BGColor(),
+                                child: TextField(
+                                  onChanged: ((value) {
+                                    setState(() {
+                                      textchangelistener = value;
+                                    });
+                                  }),
+                                  controller: controller,
+                                  maxLines: 1,
+                                  focusNode: searchnode,
+                                  textAlign: TextAlign.start,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  style: TextStyle(
+                                      color: TextColor(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: BGColor(),
+                                    border: InputBorder.none,
+                                    hintMaxLines: 2,
+                                    hintText: '탐색하실 페이지 제목 입력',
+                                    hintStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: TextColor()),
+                                    isCollapsed: true,
+                                    prefixIcon: Icon(
+                                      Icons.search,
+                                      color: TextColor_shadowcolor(),
+                                    ),
                                   ),
-                                  textStyle: NeumorphicTextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTitleTextsize(),
-                                  ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                            ),
-                            color: Colors.transparent)
-                        : ContainerDesign(
-                            color: Colors.transparent,
-                            child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: uiset.searchpagelist.length,
-                                itemBuilder: (context, index) {
-                                  return SizedBox(
-                                      height: 50,
-                                      child: SizedBox(
-                                          child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text(
-                                                uiset.searchpagelist[index]
-                                                    .title,
-                                                softWrap: true,
-                                                maxLines: 2,
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        contentTextsize()),
-                                                overflow: TextOverflow.ellipsis,
-                                              )),
-                                        ],
-                                      )));
-                                }),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ContainerDesign(
+                                  child: SizedBox(
+                                    height: 40.h,
+                                    child: Center(
+                                      child: NeumorphicText(
+                                        '검색 결과 없음',
+                                        style: NeumorphicStyle(
+                                          shape: NeumorphicShape.flat,
+                                          depth: 3,
+                                          color: TextColor_shadowcolor(),
+                                        ),
+                                        textStyle: NeumorphicTextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTitleTextsize(),
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                  color: Colors.transparent)
+                            ],
+                          )
+                        : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ContainerDesign(
+                                color: BGColor(),
+                                child: TextField(
+                                  onChanged: ((value) {
+                                    setState(() {
+                                      textchangelistener = value;
+                                    });
+                                  }),
+                                  controller: controller,
+                                  maxLines: 1,
+                                  focusNode: searchnode,
+                                  textAlign: TextAlign.start,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  style: TextStyle(
+                                      color: TextColor(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: BGColor(),
+                                    border: InputBorder.none,
+                                    hintMaxLines: 2,
+                                    hintText: '탐색하실 페이지 제목 입력',
+                                    hintStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: TextColor()),
+                                    isCollapsed: true,
+                                    prefixIcon: Icon(
+                                      Icons.search,
+                                      color: TextColor_shadowcolor(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ContainerDesign(
+                                  color: Colors.transparent,
+                                  child: GetBuilder<uisetting>(
+                                    builder: (_) => ListView.builder(
+                                        physics: const BouncingScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: uiset.searchpagelist.length,
+                                        itemBuilder: (context, index) {
+                                          return Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              GestureDetector(
+                                                  onTap: () {
+                                                    searchnode.unfocus();
+                                                    Hive.box('user_setting')
+                                                        .put('page_index', 11);
+                                                    uiset.setsearchpageindex(
+                                                        index);
+                                                    uiset.seteditpage(
+                                                        uiset
+                                                            .searchpagelist[
+                                                                index]
+                                                            .title,
+                                                        uiset
+                                                            .searchpagelist[
+                                                                index]
+                                                            .username
+                                                            .toString(),
+                                                        uiset
+                                                            .searchpagelist[
+                                                                index]
+                                                            .email
+                                                            .toString());
+                                                  },
+                                                  child: ContainerDesign(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Flexible(
+                                                            fit: FlexFit.tight,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  uiset
+                                                                      .searchpagelist[
+                                                                          index]
+                                                                      .title,
+                                                                  softWrap:
+                                                                      true,
+                                                                  maxLines: 2,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          TextColor(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTextsize()),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                                Text(
+                                                                  uiset
+                                                                      .searchpagelist[
+                                                                          index]
+                                                                      .email
+                                                                      .toString(),
+                                                                  softWrap:
+                                                                      true,
+                                                                  maxLines: 2,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          TextColor(),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTextsize()),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                )
+                                                              ],
+                                                            )),
+                                                        Icon(
+                                                          Icons.chevron_right,
+                                                          color:
+                                                              TextColor_shadowcolor(),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    color: BGColor(),
+                                                  )),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                  ))
+                            ],
                           );
                   }
                   return LinearProgressIndicator(
@@ -442,9 +671,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
             /*ShowTips(
               height: height,
               pageController: pController,
@@ -463,17 +689,22 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         builder: (_) => Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: StreamBuilder<QuerySnapshot>(
-                stream: firestore.collection('Favorpage').snapshots(),
+                stream: firestore.collection('Favorplace').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     uiset.favorpagelist.clear();
+                    uiset.editpagelist.clear();
                     final valuespace = snapshot.data!.docs;
                     for (var sp in valuespace) {
-                      final messageuser = sp.get('username');
-                      final messagetitle = sp.get('linkname');
-                      if (messageuser == usercode) {
+                      final messageuser = sp.get('originuser');
+                      final messagetitle = sp.get('title');
+                      final messageadduser = sp.get('favoradduser');
+                      final messageemail = sp.get('email');
+                      if (messageadduser == usercode) {
                         uiset.favorpagelist.add(PageList(
-                            title: messagetitle, username: messageuser));
+                            title: messagetitle,
+                            email: messageemail,
+                            username: messageuser));
                       }
                     }
 
@@ -498,44 +729,100 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                               ),
                             ),
                             color: Colors.transparent)
-                        : SizedBox(
+                        : ContainerDesign(
                             child: ListView.builder(
                                 physics: const BouncingScrollPhysics(),
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                                 itemCount: uiset.favorpagelist.length,
                                 itemBuilder: (context, index) {
-                                  return ContainerDesign(
-                                      child: SizedBox(
-                                          height: (uiset.favorpagelist.length
-                                                  .toDouble()) *
-                                              50,
-                                          child: SizedBox(
-                                              child: Row(
+                                  return Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          searchnode.unfocus();
+                                          Hive.box('user_setting')
+                                              .put('page_index', 21);
+                                          uiset.setfavorpageindex(index);
+                                          uiset.seteditpage(
+                                              uiset.favorpagelist[index].title,
+                                              uiset
+                                                  .favorpagelist[index].username
+                                                  .toString(),
+                                              uiset.favorpagelist[index].email
+                                                  .toString());
+                                        },
+                                        child: ContainerDesign(
+                                          color: BGColor(),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
                                               Flexible(
                                                   fit: FlexFit.tight,
-                                                  child: Text(
-                                                    uiset.favorpagelist[index]
-                                                        .title,
-                                                    softWrap: true,
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                        color: TextColor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentTextsize()),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        uiset
+                                                            .favorpagelist[
+                                                                index]
+                                                            .title,
+                                                        softWrap: true,
+                                                        maxLines: 2,
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            color: TextColor(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize()),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      Text(
+                                                        uiset
+                                                            .favorpagelist[
+                                                                index]
+                                                            .email
+                                                            .toString(),
+                                                        softWrap: true,
+                                                        maxLines: 2,
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            color: TextColor(),
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize()),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      )
+                                                    ],
                                                   )),
+                                              Icon(
+                                                Icons.chevron_right,
+                                                color: TextColor_shadowcolor(),
+                                              ),
                                             ],
-                                          ))),
-                                      color: Colors.transparent);
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      )
+                                    ],
+                                  );
                                 }),
+                            color: BGColor(),
                           );
                   }
                   return LinearProgressIndicator(
@@ -546,6 +833,24 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 },
               ),
             ));
+  }
+
+  Se_Container2() {
+    return Center(
+      child: NeumorphicText(
+        '비어 있어요',
+        style: NeumorphicStyle(
+          shape: NeumorphicShape.flat,
+          depth: 3,
+          color: TextColor_shadowcolor(),
+        ),
+        textStyle: NeumorphicTextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: contentTitleTextsize(),
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   H_Container_3(double height) {

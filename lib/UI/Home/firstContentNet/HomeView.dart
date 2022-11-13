@@ -68,7 +68,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   Future<bool> _onWillPop() async {
     widget.where == 'home'
         ? Future.delayed(const Duration(seconds: 0), () {
-            GoToMain(context);
+            GoToMain();
           })
         : Future.delayed(const Duration(seconds: 0), () {
             StatusBarControl.setColor(linkspaceset.color, animated: true);

@@ -96,6 +96,17 @@ class _mainrouteState extends State<mainroute>
           ),
         ),
       );
+    } else if (uiset.searchpagemove != '') {
+      uiset.searchpagemove = '';
+      Hive.box('user_setting').put('page_index', 1);
+      Navigator.of(context).pushReplacement(
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          child: const mainroute(
+            index: 1,
+          ),
+        ),
+      );
     } else {
       Hive.box('user_setting').put('page_index', 0);
 
@@ -144,6 +155,7 @@ class _mainrouteState extends State<mainroute>
                               onTap: (_index) async {
                                 //Handle button tap
                                 uiset.setloading(true);
+                                uiset.searchpagemove = '';
                                 uiset.setmypagelistindex(
                                     Hive.box('user_setting')
                                             .get('currentmypage') ??

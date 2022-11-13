@@ -180,13 +180,13 @@ class NotificationApi {
     }
   }
 
-  static void runWhileAppIsTerminated(BuildContext context) async {
+  static void runWhileAppIsTerminated() async {
     var details = await _notifications.getNotificationAppLaunchDetails();
 
     if (details!.didNotificationLaunchApp) {
       if (details.payload != null) {
         if (details.payload == 'memo') {
-          GoToMain(context);
+          GoToMain();
           Future.delayed(const Duration(seconds: 1), () {
             Get.to(
                 () => const DayNoteHome(
@@ -196,17 +196,17 @@ class NotificationApi {
                 transition: Transition.downToUp);
           });
         } else {
-          GoToMain(context);
+          GoToMain();
           Future.delayed(const Duration(seconds: 1), () {
             Get.to(() => DayContentHome(id: details.payload.toString()),
                 transition: Transition.downToUp);
           });
         }
       } else {
-        GoToMain(context);
+        GoToMain();
       }
     } else {
-      GoToMain(context);
+      GoToMain();
     }
   }
 }

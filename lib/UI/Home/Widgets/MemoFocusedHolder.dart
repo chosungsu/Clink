@@ -648,7 +648,7 @@ void autodeletelogic(
     }).whenComplete(() {
       uisetting().setloading(false);
       CreateCalandmemoSuccessFlushbar('메모삭제 완료!', fToast);
-      isfromwhere == 'home' ? GoToMain(context) : Get.back();
+      isfromwhere == 'home' ? GoToMain() : Get.back();
     });
   }
 }
@@ -751,7 +751,7 @@ void autosavelogic(
       Future.delayed(const Duration(seconds: 1), () {
         uisetting().setloading(false);
         if (isfromwhere == 'home') {
-          GoToMain(context);
+          GoToMain();
         } else {
           Get.back();
         }

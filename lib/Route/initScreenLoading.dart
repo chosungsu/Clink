@@ -1,11 +1,13 @@
 // ignore_for_file: body_might_complete_normally_nullable, non_constant_identifier_names, unused_local_variable
 
+import 'package:clickbyme/Route/subuiroute.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../DB/PageList.dart';
+import '../LocalNotiPlatform/NotificationApi.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/notishow.dart';
@@ -22,6 +24,7 @@ Future<Widget?> initScreen() async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id') ?? '';
   String usercode = Hive.box('user_setting').get('usercode');
+  String useremail = Hive.box('user_info').get('email');
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',
@@ -33,7 +36,7 @@ Future<Widget?> initScreen() async {
 
   if (name == '') {
   } else {
-    await MongoDB.connect();
+    //await MongoDB.connect();
     if (serverstatus) {
       await MongoDB.find(collectionname: 'user', query: 'name', what: name);
       if (MongoDB.res == null) {
@@ -149,15 +152,14 @@ Future<Widget?> initScreen() async {
         }
         if (updateid.isEmpty) {
           uiset.pagelist.clear();
-          firestore
-              .collection('Pinchannel')
-              .add({'username': usercode, 'linkname': '빈 스페이스'});
-          uiset.setuserspace('빈 스페이스', usercode);
+          firestore.collection('Pinchannel').add(
+              {'username': usercode, 'linkname': '빈 스페이스', 'email': useremail});
+          uiset.setuserspace('빈 스페이스', usercode, useremail);
         } else {
           uiset.pagelist.clear();
           for (int j = 0; j < updateid.length; j++) {
             final messagetitle = updateid[j];
-            uiset.setuserspace(messagetitle, usercode);
+            uiset.setuserspace(messagetitle, usercode, useremail);
           }
         }
       });
@@ -236,15 +238,14 @@ Future<Widget?> initScreen() async {
         }
         if (updateid.isEmpty) {
           uiset.pagelist.clear();
-          firestore
-              .collection('Pinchannel')
-              .add({'username': usercode, 'linkname': '빈 스페이스'});
-          uiset.setuserspace('빈 스페이스', usercode);
+          firestore.collection('Pinchannel').add(
+              {'username': usercode, 'linkname': '빈 스페이스', 'email': useremail});
+          uiset.setuserspace('빈 스페이스', usercode, useremail);
         } else {
           uiset.pagelist.clear();
           for (int j = 0; j < updateid.length; j++) {
             final messagetitle = updateid[j]['linkname'];
-            uiset.setuserspace(messagetitle, usercode);
+            uiset.setuserspace(messagetitle, usercode, useremail);
           }
         }
       });

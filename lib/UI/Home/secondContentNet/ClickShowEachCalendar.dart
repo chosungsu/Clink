@@ -222,7 +222,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                 loading = false;
               });
               CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
-              widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+              widget.isfromwhere == 'home' ? GoToMain() : Get.back();
               firestore
                   .collection('CalendarDataBase')
                   .doc(deleteidsingle)
@@ -241,7 +241,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                   loading = false;
                 });
                 CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
-                widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+                widget.isfromwhere == 'home' ? GoToMain() : Get.back();
                 firestore
                     .collection('CalendarDataBase')
                     .doc(deleteidsingle)
@@ -281,7 +281,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     loading = false;
                   });
                   CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
-                  widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+                  widget.isfromwhere == 'home' ? GoToMain() : Get.back();
                   for (int i = 0; i <= deleterepeatdate; i++) {
                     firestore
                         .collection('CalendarDataBase')
@@ -301,7 +301,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     loading = false;
                   });
                   CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
-                  widget.isfromwhere == 'home' ? GoToMain(context) : Get.back();
+                  widget.isfromwhere == 'home' ? GoToMain() : Get.back();
                   firestore
                       .collection('CalendarDataBase')
                       .doc(deleteidsingle)
@@ -449,7 +449,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
         CreateCalandmemoSuccessFlushbar('저장완료', fToast);
         Future.delayed(const Duration(seconds: 1), () {
           if (widget.isfromwhere == 'home') {
-            GoToMain(context);
+            GoToMain();
           } else {
             Get.back();
           }

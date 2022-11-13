@@ -3,6 +3,7 @@
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -93,10 +94,9 @@ class _AddTemplateState extends State<AddTemplate>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          AppBarCustom(
-                            title: '작성하기',
-                            righticon: false,
-                            iconname: Icons.done,
+                          SizedBox(
+                            height: 60,
+                            child: title(),
                           ),
                           Flexible(
                               fit: FlexFit.tight,
@@ -122,7 +122,38 @@ class _AddTemplateState extends State<AddTemplate>
 
   Pagination() {
     return Column(
-      children: [GetBuilder<uisetting>(builder: (_) => choosecategory())],
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        GetBuilder<uisetting>(builder: (_) => choosecategory())
+      ],
+    );
+  }
+
+  title() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
+      child: RichText(
+          text: TextSpan(children: [
+        WidgetSpan(
+          style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: mainTitleTextsize(),
+              color: TextColor_shadowcolor()),
+          child: Row(
+            children: [
+              Text(
+                '작성폼',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: mainTitleTextsize(),
+                    color: TextColor()),
+              ),
+            ],
+          ),
+        ),
+      ])),
     );
   }
 
@@ -173,15 +204,18 @@ class _AddTemplateState extends State<AddTemplate>
     ];
     return Column(
       children: [
-        Container(
-            color: Colors.grey.shade300,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
+        ContainerDesign(
+            color: BGColor(),
             child: GetBuilder<uisetting>(
               builder: (_) => AnotherStepper(
                 activeIndex: uiset.currentstepper,
                 stepperList: stepperData,
                 stepperDirection: Axis.horizontal,
                 inverted: true,
+                titleTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize(),
+                    color: TextColor()),
               ),
             ))
 
@@ -214,7 +248,12 @@ class _AddTemplateState extends State<AddTemplate>
     Future.delayed(const Duration(seconds: 0), () {
       StatusBarControl.setColor(BGColor(), animated: true);
       draw.setnavi();
-      Hive.box('user_setting').put('page_index', 0);
+      if (uiset.searchpagemove != '') {
+        Hive.box('user_setting').put('page_index', 11);
+      } else {
+        Hive.box('user_setting').put('page_index', 0);
+      }
+
       Get.back();
     });
     return false;

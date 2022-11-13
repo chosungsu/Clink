@@ -249,7 +249,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
         isDialOpen.value = false;
       } else {
         if (widget.isfromwhere == 'home') {
-          GoToMain(context);
+          GoToMain();
         } else {
           Get.back();
         }
@@ -308,7 +308,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                                           Future.delayed(
                                               const Duration(seconds: 0), () {
                                             if (widget.isfromwhere == 'home') {
-                                              GoToMain(context);
+                                              GoToMain();
                                             } else {
                                               Get.back();
                                             }

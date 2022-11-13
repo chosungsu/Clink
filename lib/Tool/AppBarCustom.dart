@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, must_be_immutable
+// ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names
 
 import 'package:clickbyme/Page/AddTemplate.dart';
 import 'package:clickbyme/Page/NotiAlarm.dart';
@@ -23,15 +23,15 @@ import 'Getx/uisetting.dart';
 import 'TextSize.dart';
 
 class AppBarCustom extends StatelessWidget {
-  AppBarCustom(
-      {Key? key,
-      required this.title,
-      required this.righticon,
-      required this.iconname,
-      textEditingController,
-      focusNode,
-      myindex})
-      : super(key: key);
+  AppBarCustom({
+    Key? key,
+    required this.title,
+    required this.righticon,
+    required this.iconname,
+    textEditingController,
+    focusNode,
+    myindex,
+  }) : super(key: key);
   final String title;
   final bool righticon;
   final IconData iconname;
@@ -238,65 +238,117 @@ class AppBarCustom extends StatelessWidget {
                                       Hive.box('user_setting')
                                                   .get('page_index') ==
                                               0
-                                          ? IconButton(
-                                              padding: EdgeInsets.zero, // 패딩 설정
-                                              constraints:
-                                                  const BoxConstraints(),
-                                              onPressed: (() => func4()),
-                                              icon: Container(
-                                                alignment: Alignment.center,
-                                                child: NeumorphicIcon(
-                                                  Icons.add_box,
-                                                  size: 30,
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .concave,
-                                                      depth: 2,
-                                                      surfaceIntensity: 0.5,
-                                                      color: TextColor(),
-                                                      lightSource:
-                                                          LightSource.topLeft),
-                                                ),
+                                          ? GestureDetector(
+                                              onTap: () => func4(),
+                                              child: NeumorphicIcon(
+                                                Icons.add_box,
+                                                size: 30,
+                                                style: NeumorphicStyle(
+                                                    shape: NeumorphicShape.flat,
+                                                    depth: 5,
+                                                    surfaceIntensity: 0.3,
+                                                    border: NeumorphicBorder(
+                                                        color:
+                                                            TextColor_shadowcolor(),
+                                                        width: 0.5),
+                                                    color: TextColor(),
+                                                    lightSource:
+                                                        LightSource.topLeft),
                                               ))
-                                          : const SizedBox(),
+                                          : (Hive.box('user_setting')
+                                                          .get('page_index') ==
+                                                      11 ||
+                                                  Hive.box('user_setting')
+                                                          .get('page_index') ==
+                                                      21
+                                              ? GestureDetector(
+                                                  onTap: () => func4(),
+                                                  child: NeumorphicIcon(
+                                                    Icons.add_box,
+                                                    size: 30,
+                                                    style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .flat,
+                                                        depth: 5,
+                                                        surfaceIntensity: 0.3,
+                                                        border: NeumorphicBorder(
+                                                            color:
+                                                                TextColor_shadowcolor(),
+                                                            width: 0.5),
+                                                        color: TextColor(),
+                                                        lightSource: LightSource
+                                                            .topLeft),
+                                                  ),
+                                                )
+                                              : const SizedBox()),
                                       Hive.box('user_setting')
                                                   .get('page_index') ==
                                               0
                                           ? const SizedBox(
                                               width: 20,
                                             )
-                                          : const SizedBox(),
+                                          : (uiset.searchpagemove != ''
+                                              ? const SizedBox(
+                                                  width: 20,
+                                                )
+                                              : const SizedBox()),
                                       righticon == true
-                                          ? IconButton(
-                                              padding: EdgeInsets.zero, // 패딩 설정
-                                              constraints:
-                                                  const BoxConstraints(),
-                                              onPressed: () => iconname ==
-                                                      Icons.notifications_none
-                                                  ? func1()
-                                                  : (iconname == Icons.delete
-                                                      ? func2(context)
-                                                      : (iconname == Icons.close
-                                                          ? func3()
-                                                          : func6(
-                                                              context,
-                                                              textEditingController,
-                                                              searchnode))),
-                                              icon: Container(
-                                                alignment: Alignment.center,
-                                                child: NeumorphicIcon(
-                                                  iconname,
-                                                  size: 30,
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .concave,
-                                                      depth: 2,
-                                                      surfaceIntensity: 0.5,
-                                                      color: TextColor(),
-                                                      lightSource:
-                                                          LightSource.topLeft),
-                                                ),
-                                              ))
+                                          ? GetBuilder<uisetting>(
+                                              builder: (_) => GestureDetector(
+                                                  onTap: () => iconname ==
+                                                          Icons
+                                                              .notifications_none
+                                                      ? func1()
+                                                      : (iconname ==
+                                                              Icons.delete
+                                                          ? func2(context)
+                                                          : (iconname ==
+                                                                  Icons.close
+                                                              ? func3()
+                                                              : (iconname ==
+                                                                          Icons
+                                                                              .star_border ||
+                                                                      iconname ==
+                                                                          Icons
+                                                                              .star
+                                                                  ? func7(
+                                                                      uiset
+                                                                          .editpagelist[
+                                                                              0]
+                                                                          .title,
+                                                                      uiset
+                                                                          .editpagelist[
+                                                                              0]
+                                                                          .email
+                                                                          .toString(),
+                                                                      uiset
+                                                                          .editpagelist[
+                                                                              0]
+                                                                          .username
+                                                                          .toString())
+                                                                  : func6(
+                                                                      context,
+                                                                      textEditingController,
+                                                                      searchnode)))),
+                                                  child: NeumorphicIcon(
+                                                    iconname,
+                                                    size: 30,
+                                                    style: NeumorphicStyle(
+                                                        shape: NeumorphicShape
+                                                            .flat,
+                                                        depth: 5,
+                                                        surfaceIntensity: 0.3,
+                                                        border: NeumorphicBorder(
+                                                            color:
+                                                                TextColor_shadowcolor(),
+                                                            width: 0.5),
+                                                        color: iconname ==
+                                                                Icons.star
+                                                            ? Colors.yellow
+                                                            : TextColor(),
+                                                        lightSource: LightSource
+                                                            .topLeft),
+                                                  )))
                                           : const SizedBox()
                                     ],
                                   ),

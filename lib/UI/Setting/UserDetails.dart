@@ -27,7 +27,7 @@ class UserDetails extends StatelessWidget {
         child: Hive.box('user_info').get('id') == null
             ? GestureDetector(
                 onTap: () {
-                  GoToLogin(context, 'isnotfirst');
+                  GoToLogin('isnotfirst');
                 },
                 child: GetBuilder<PeopleAdd>(
                   builder: (_) => ContainerDesign(

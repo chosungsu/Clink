@@ -120,8 +120,8 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
         height: height,
         child: Column(
           children: [
-            SizedBox(
-                height: height * 0.55,
+            Flexible(
+                flex: 3,
                 child: Center(
                   child: NeumorphicText(
                     'LinkAI',
@@ -136,38 +136,40 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                     ),
                   ),
                 )),
-            FutureBuilder(
-                future: initScreen(),
-                builder: ((context, snapshot) {
-                  return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: height * 0.45,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          DefaultTextStyle(
-                            style: const TextStyle(fontSize: 15.0),
-                            child: AnimatedTextKit(
-                              animatedTexts: [
-                                TyperAnimatedText('로그인중입니다...',
-                                    textStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: TextColor()),
-                                    speed: const Duration(milliseconds: 150)),
-                              ],
-                              totalRepeatCount: 2,
-                              onFinished: () {
-                                NotificationApi.runWhileAppIsTerminated(
-                                    context);
-                                GoToMain(context);
-                              },
-                              //displayFullTextOnTap: false,
-                            ),
-                          ),
-                        ],
-                      ));
-                }))
+            Flexible(
+                flex: 1,
+                child: FutureBuilder(
+                    future: initScreen(),
+                    builder: ((context, snapshot) {
+                      return SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: height * 0.45,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              DefaultTextStyle(
+                                style: const TextStyle(fontSize: 15.0),
+                                child: AnimatedTextKit(
+                                  animatedTexts: [
+                                    TyperAnimatedText('로그인중입니다...',
+                                        textStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: TextColor()),
+                                        speed:
+                                            const Duration(milliseconds: 150)),
+                                  ],
+                                  totalRepeatCount: 1,
+                                  onFinished: (() {
+                                    NotificationApi.runWhileAppIsTerminated();
+                                    GoToMain();
+                                  }),
+                                  //displayFullTextOnTap: false,
+                                ),
+                              ),
+                            ],
+                          ));
+                    })))
           ],
         ));
   }
@@ -179,8 +181,8 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
         height: height,
         child: Column(
           children: [
-            SizedBox(
-                height: height * 0.55,
+            Flexible(
+                flex: 3,
                 child: Center(
                   child: NeumorphicText(
                     'LinkAI',
@@ -195,42 +197,43 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                     ),
                   ),
                 )),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: height * 0.45,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    OutlineGradientButton(
-                      child: SizedBox(
-                          width: 80.w,
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text('Login',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: contentTextsize())),
-                              ],
-                            ),
-                          )),
-                      gradient: const LinearGradient(
-                        colors: [Colors.blue, Colors.blueGrey],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      strokeWidth: 2,
-                      backgroundColor: Colors.blue.shade300,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      radius: const Radius.circular(10),
-                      onTap: () {
-                        GoToLogin(context, 'first');
-                      },
-                    ),
-                  ],
-                )),
+            Flexible(
+                flex: 1,
+                child: SizedBox(
+                    height: 50,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OutlineGradientButton(
+                          child: SizedBox(
+                              width: 80.w,
+                              child: Center(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Login',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: contentTextsize())),
+                                  ],
+                                ),
+                              )),
+                          gradient: const LinearGradient(
+                            colors: [Colors.blue, Colors.blueGrey],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          strokeWidth: 2,
+                          backgroundColor: Colors.blue.shade300,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          radius: const Radius.circular(10),
+                          onTap: () {
+                            GoToLogin('first');
+                          },
+                        ),
+                      ],
+                    ))),
           ],
         ));
   }

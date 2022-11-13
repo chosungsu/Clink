@@ -10,10 +10,8 @@ class CompanyPageList {
 
 class PageList {
   final String title;
-  final String username;
+  String? username;
+  String? email;
 
-  PageList({
-    required this.title,
-    required this.username,
-  });
+  PageList({required this.title, this.email, this.username});
 }

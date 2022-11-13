@@ -42,14 +42,14 @@ void pressed2() {
   Get.back(result: true);
 }
 
-GoToMain(BuildContext context) async {
+GoToMain() async {
   Timer? _time = Timer(const Duration(seconds: 0), () {
     Get.to(() => const mainroute(index: 0), transition: Transition.leftToRight);
   });
   return _time;
 }
 
-GoToLogin(BuildContext context, String s) {
+GoToLogin(String s) {
   Timer? _time = Timer(const Duration(seconds: 0), () {
     Get.to(() => LoginSignPage(first: s));
   });
@@ -119,6 +119,45 @@ func6(BuildContext context, TextEditingController textEditingController,
     FocusNode searchnode) {
   String usercode = Hive.box('user_setting').get('usercode');
   addmylink(context, usercode, textEditingController, searchnode);
+}
+
+func7(String title, String email, String origin) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final uiset = Get.put(uisetting());
+  var deleteid = '';
+  String usercode = Hive.box('user_setting').get('usercode');
+
+  await firestore.collection('Favorplace').get().then((value) {
+    if (value.docs.isEmpty) {
+      firestore.collection('Favorplace').add({
+        'title': title,
+        'email': email,
+        'originuser': origin,
+        'favoradduser': usercode
+      });
+    } else {
+      final valuespace = value.docs;
+      for (int i = 0; i < valuespace.length; i++) {
+        if (valuespace[i]['favoradduser'] == usercode) {
+          if (valuespace[i]['title'] == title) {
+            deleteid = valuespace[i].id;
+          }
+        }
+      }
+      if (deleteid == '') {
+        firestore.collection('Favorplace').add({
+          'title': title,
+          'email': email,
+          'originuser': origin,
+          'favoradduser': usercode
+        });
+      } else {
+        firestore.collection('Favorplace').doc(deleteid).delete();
+        Hive.box('user_setting').put('currenteditpage', null);
+      }
+    }
+    uiset.setloading(false);
+  });
 }
 
 CompanyNotice(

@@ -21,6 +21,7 @@ import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
+import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/Setting/ShowLicense.dart';
@@ -61,6 +62,7 @@ class _ProfilePageState extends State<ProfilePage>
   final searchNode = FocusNode();
   String name = Hive.box('user_info').get('id');
   final peopleadd = Get.put(PeopleAdd());
+  final uiset = Get.put(uisetting());
   final notilist = Get.put(notishow());
   final friendnamelist = [];
   final calnamelist = [];
@@ -74,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-
+    uiset.searchpagemove = '';
     fToast = FToast();
     fToast.init(context);
     Hive.box('user_setting').put('page_index', 2);
@@ -205,10 +207,6 @@ class _ProfilePageState extends State<ProfilePage>
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
-                                                      ADSHOW(),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
                                                       OptionChoice(
                                                           height, context),
                                                       const SizedBox(
@@ -230,7 +228,6 @@ class _ProfilePageState extends State<ProfilePage>
                                                             height: 20,
                                                           ),
                                                           T_Container0(height),
-                                                          ADSHOW(),
                                                         ],
                                                       ))
                                                   : Padding(
@@ -253,7 +250,6 @@ class _ProfilePageState extends State<ProfilePage>
                                                                 height: 20,
                                                               ),*/
                                                           G_Container1(height),
-                                                          ADSHOW(),
                                                         ],
                                                       )));
                                         }),

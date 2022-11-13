@@ -102,7 +102,7 @@ class GoogleSignInController extends GetxController {
         }
       });
       await initScreen();
-      GoToMain(context);
+      GoToMain();
     } else {
       firestore.collection('User').doc(nick).get().then((value) async {
         if (value.exists) {
@@ -138,7 +138,7 @@ class GoogleSignInController extends GetxController {
         }
       });
       await initScreen();
-      GoToMain(context);
+      GoToMain();
     }
 
     update();
