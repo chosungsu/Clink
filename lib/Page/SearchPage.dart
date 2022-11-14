@@ -406,7 +406,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                           uiset.searchpagelist.add(PageList(
                               title: messagetitle,
                               username: messageuser,
-                              email: messageemail));
+                              email: messageemail,
+                              id: sp.id));
                         }
                       }
                     }
@@ -553,6 +554,11 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                             .searchpagelist[
                                                                 index]
                                                             .email
+                                                            .toString(),
+                                                        uiset
+                                                            .searchpagelist[
+                                                                index]
+                                                            .id
                                                             .toString());
                                                   },
                                                   child: ContainerDesign(
@@ -700,11 +706,13 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       final messagetitle = sp.get('title');
                       final messageadduser = sp.get('favoradduser');
                       final messageemail = sp.get('email');
+                      final messageid = sp.get('id');
                       if (messageadduser == usercode) {
                         uiset.favorpagelist.add(PageList(
                             title: messagetitle,
                             email: messageemail,
-                            username: messageuser));
+                            username: messageuser,
+                            id: messageid));
                       }
                     }
 
@@ -753,6 +761,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                   .favorpagelist[index].username
                                                   .toString(),
                                               uiset.favorpagelist[index].email
+                                                  .toString(),
+                                              uiset.favorpagelist[index].id
                                                   .toString());
                                         },
                                         child: ContainerDesign(

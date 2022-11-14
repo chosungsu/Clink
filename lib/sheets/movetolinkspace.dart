@@ -753,6 +753,22 @@ contentforth(BuildContext context, FocusNode searchNode,
                               'linkname': controller.text,
                             });
                           });
+                          firestore
+                              .collection('Favorplace')
+                              .get()
+                              .then((value) {
+                            for (int i = 0; i < value.docs.length; i++) {
+                              if (value.docs[i].get('title') == link) {
+                                if (value.docs[i].get('originuser') ==
+                                    usercode) {
+                                  id = value.docs[i].id;
+                                }
+                              }
+                            }
+                            firestore.collection('Favorplace').doc(id).update({
+                              'title': controller.text,
+                            });
+                          });
                           linkspaceset.setcompleted(true);
                         }
                       },

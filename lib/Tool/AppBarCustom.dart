@@ -325,6 +325,11 @@ class AppBarCustom extends StatelessWidget {
                                                                           .editpagelist[
                                                                               0]
                                                                           .username
+                                                                          .toString(),
+                                                                      uiset
+                                                                          .editpagelist[
+                                                                              0]
+                                                                          .id
                                                                           .toString())
                                                                   : func6(
                                                                       context,

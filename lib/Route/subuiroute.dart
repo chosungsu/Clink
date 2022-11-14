@@ -113,7 +113,52 @@ func3() => Future.delayed(const Duration(seconds: 0), () {
       }
       Get.back();
     });
-func4() => Get.to(() => const AddTemplate(), transition: Transition.upToDown);
+func4() async {
+  final uiset = Get.put(uisetting());
+  var checkid = '';
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  if (Hive.box('user_setting').get('page_index') == 11 ||
+      Hive.box('user_setting').get('page_index') == 21) {
+    await firestore.collection('Favorplace').get().then((value) {
+      checkid = '';
+      if (value.docs.isEmpty) {
+        checkid = '';
+      } else {
+        final valuespace = value.docs;
+
+        for (int i = 0; i < valuespace.length; i++) {
+          if (valuespace[i]['title'] ==
+              (Hive.box('user_setting').get('currenteditpage') ?? '')) {
+            checkid = valuespace[i]['id'];
+          }
+        }
+      }
+    });
+  } else {
+    await firestore.collection('Pinchannel').get().then((value) {
+      checkid = '';
+      if (value.docs.isEmpty) {
+        checkid = '';
+      } else {
+        final valuespace = value.docs;
+
+        for (int i = 0; i < valuespace.length; i++) {
+          if (valuespace[i]['linkname'] ==
+              uiset.pagelist[uiset.mypagelistindex].title) {
+            checkid = valuespace[i].id;
+          }
+        }
+      }
+    });
+  }
+
+  Get.to(
+      () => AddTemplate(
+            id: checkid,
+          ),
+      transition: Transition.upToDown);
+}
+
 func5() => Get.to(() => const Spaceapage(), transition: Transition.upToDown);
 func6(BuildContext context, TextEditingController textEditingController,
     FocusNode searchnode) {
@@ -121,7 +166,7 @@ func6(BuildContext context, TextEditingController textEditingController,
   addmylink(context, usercode, textEditingController, searchnode);
 }
 
-func7(String title, String email, String origin) async {
+func7(String title, String email, String origin, String id) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final uiset = Get.put(uisetting());
   var deleteid = '';
@@ -133,7 +178,8 @@ func7(String title, String email, String origin) async {
         'title': title,
         'email': email,
         'originuser': origin,
-        'favoradduser': usercode
+        'favoradduser': usercode,
+        'id': id
       });
     } else {
       final valuespace = value.docs;
@@ -149,7 +195,8 @@ func7(String title, String email, String origin) async {
           'title': title,
           'email': email,
           'originuser': origin,
-          'favoradduser': usercode
+          'favoradduser': usercode,
+          'id': id
         });
       } else {
         firestore.collection('Favorplace').doc(deleteid).delete();

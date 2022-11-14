@@ -14,6 +14,7 @@ class uisetting extends GetxController {
   List<PageList> searchpagelist = [];
   List<PageList> favorpagelist = [];
   List<PageList> editpagelist = [];
+  List<PageviewList> pageviewlist = [];
   int searchindex = 0;
   int favorindex = 0;
   int mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
@@ -39,9 +40,50 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
-  void seteditpage(String what, String username, String email) {
+  void setpageviewlist(String what, String username, int index, int subindex,
+      String space, contents) {
+    if (space == 'url') {
+      pageviewlist.add(PageviewList(
+        title: what,
+        seperatedindex: index,
+        boxseperatedindex: subindex,
+        username: username,
+        urlcontent: contents,
+      ));
+    } else if (space == 'calendar') {
+      pageviewlist.add(PageviewList(
+        title: what,
+        seperatedindex: index,
+        boxseperatedindex: subindex,
+        username: username,
+        calendarcontent: contents,
+      ));
+    } else if (space == 'todo') {
+      pageviewlist.add(PageviewList(
+        title: what,
+        seperatedindex: index,
+        boxseperatedindex: subindex,
+        username: username,
+        todolistcontent: contents,
+      ));
+    } else if (space == 'memo') {
+      pageviewlist.add(PageviewList(
+        title: what,
+        seperatedindex: index,
+        boxseperatedindex: subindex,
+        username: username,
+        memocontent: contents,
+      ));
+    }
+
+    update();
+    notifyChildrens();
+  }
+
+  void seteditpage(String what, String username, String email, String id) {
     searchpagemove = what;
-    editpagelist.add(PageList(title: what, email: email, username: username));
+    editpagelist
+        .add(PageList(title: what, email: email, username: username, id: id));
     Hive.box('user_setting').put('currenteditpage', what);
     update();
     notifyChildrens();
