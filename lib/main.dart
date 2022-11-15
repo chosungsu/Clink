@@ -159,7 +159,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                                         speed:
                                             const Duration(milliseconds: 150)),
                                   ],
-                                  totalRepeatCount: 1,
+                                  totalRepeatCount: 2,
                                   onFinished: (() {
                                     NotificationApi.runWhileAppIsTerminated();
                                     GoToMain();

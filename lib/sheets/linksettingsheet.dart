@@ -745,8 +745,6 @@ linkplacechangeoptions(
   String name,
   String link,
   int index,
-  FocusNode changenamenode,
-  TextEditingController controller,
   String placestr,
   String uniquecode,
   int type,
@@ -780,8 +778,8 @@ linkplacechangeoptions(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: changeoptplace(context, name, link, index,
-                    changenamenode, controller, placestr, uniquecode, type),
+                child: changeoptplace(
+                    context, name, link, index, placestr, uniquecode, type),
               )),
         );
       }).whenComplete(() {});
@@ -792,8 +790,6 @@ changeoptplace(
   String name,
   String link,
   int index,
-  FocusNode changenamenode,
-  TextEditingController controller,
   String placestr,
   String uniquecode,
   int type,
@@ -820,8 +816,8 @@ changeoptplace(
               const SizedBox(
                 height: 20,
               ),
-              contentthird(context, name, link, index, changenamenode,
-                  controller, placestr, uniquecode, type),
+              contentthird(
+                  context, name, link, index, placestr, uniquecode, type),
               const SizedBox(
                 height: 20,
               ),
@@ -834,8 +830,6 @@ contentthird(
   String name,
   String link,
   int index,
-  FocusNode changenamenode,
-  TextEditingController controller,
   String placestr,
   String uniquecode,
   int type,

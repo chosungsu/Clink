@@ -320,7 +320,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                             })),
                                       ),
                                     ))
-                                : Flexible(child: Se_Container2()),
+                                : Flexible(
+                                    child: Se_Container2(uiset.searchpagemove)),
                           ],
                         ),
                       )),
@@ -856,22 +857,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             ));
   }
 
-  Se_Container2() {
-    return Center(
-      child: NeumorphicText(
-        '비어 있어요',
-        style: NeumorphicStyle(
-          shape: NeumorphicShape.flat,
-          depth: 3,
-          color: TextColor_shadowcolor(),
-        ),
-        textStyle: NeumorphicTextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: contentTitleTextsize(),
-        ),
-        textAlign: TextAlign.center,
-      ),
-    );
+  Se_Container2(String searchpagemove) {
+    return listy_My(searchpagemove);
   }
 
   H_Container_3(double height) {
