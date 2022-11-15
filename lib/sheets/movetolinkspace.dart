@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unused_local_variable
 
 import 'package:clickbyme/DB/PageList.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
@@ -384,6 +384,9 @@ addmylink(
   String username,
   TextEditingController textEditingControllerAddSheet,
   FocusNode searchNodeAddSection,
+  String where,
+  String id,
+  int categorynumber,
 ) {
   Get.bottomSheet(
           Container(
@@ -415,7 +418,10 @@ addmylink(
                               context,
                               textEditingControllerAddSheet,
                               searchNodeAddSection,
-                              username),
+                              username,
+                              where,
+                              id,
+                              categorynumber),
                         );
                       }),
                     ))),
@@ -444,6 +450,9 @@ linkstation(
   TextEditingController textEditingControllerAddSheet,
   FocusNode searchNodeAddSection,
   String username,
+  String where,
+  String id,
+  int categorynumber,
 ) {
   return SizedBox(
       child: Padding(
@@ -466,12 +475,12 @@ linkstation(
         const SizedBox(
           height: 20,
         ),
-        titlethird(context),
+        titlethird(context, where),
         const SizedBox(
           height: 20,
         ),
         contentthird(context, textEditingControllerAddSheet,
-            searchNodeAddSection, username),
+            searchNodeAddSection, username, where, id, categorynumber),
         const SizedBox(
           height: 20,
         ),
@@ -482,14 +491,15 @@ linkstation(
 
 titlethird(
   BuildContext context,
+  String where,
 ) {
   return SizedBox(
       height: 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('스페이스 추가',
-              style: TextStyle(
+        children: [
+          Text(where == 'addtemplate' ? '스페이스 추가' : '페이지 추가',
+              style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 25))
@@ -502,10 +512,14 @@ contentthird(
   TextEditingController textEditingControllerAddSheet,
   FocusNode searchNodeAddSection,
   String username,
+  String where,
+  String id,
+  int categorynumber,
 ) {
   bool serverstatus = Hive.box('user_info').get('server_status');
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final updatelist = [];
+  final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
@@ -520,7 +534,8 @@ contentthird(
               contentPadding: const EdgeInsets.only(left: 10),
               border: InputBorder.none,
               isCollapsed: true,
-              hintText: '추가할 스페이스 제목 입력',
+              hintText:
+                  where == 'addtemplate' ? '추가할 스페이스 제목 입력' : '추가할 페이지 제목 입력',
               hintStyle:
                   TextStyle(fontSize: contentTextsize(), color: Colors.black45),
             ),
@@ -542,21 +557,38 @@ contentthird(
                 if (textEditingControllerAddSheet.text.isEmpty) {
                   Snack.show(
                       title: '알림',
-                      content: '추가할 스페이스 제목이 비어있어요!',
+                      content: where == 'addtemplate'
+                          ? '추가할 스페이스 제목이 비어있어요!'
+                          : '추가할 페이지 제목이 비어있어요!',
                       context: context,
                       snackType: SnackType.warning);
                 } else {
                   linkspaceset.setcompleted(false);
-                  firestore.collection('Pinchannel').add({
-                    'username': username,
-                    'linkname': textEditingControllerAddSheet.text,
-                    'setting': 'block'
-                  }).whenComplete(() {
-                    linkspaceset.setcompleted(true);
-                    linkspaceset
-                        .setspacelink(textEditingControllerAddSheet.text);
-                    Get.back();
-                  });
+                  if (where == 'addtemplate') {
+                    firestore.collection('PageView').add({
+                      'id': id,
+                      'spacename': textEditingControllerAddSheet.text,
+                      'urllist': [],
+                      'pagename': uiset.pagelist[uiset.mypagelistindex].title,
+                      'type': categorynumber
+                    }).whenComplete(() {
+                      linkspaceset.setcompleted(true);
+                      linkspaceset
+                          .setspacelink(textEditingControllerAddSheet.text);
+                      Get.back();
+                    });
+                  } else {
+                    firestore.collection('Pinchannel').add({
+                      'username': username,
+                      'linkname': textEditingControllerAddSheet.text,
+                      'setting': 'block'
+                    }).whenComplete(() {
+                      linkspaceset.setcompleted(true);
+                      linkspaceset
+                          .setspacelink(textEditingControllerAddSheet.text);
+                      Get.back();
+                    });
+                  }
                 }
               },
               child: Center(

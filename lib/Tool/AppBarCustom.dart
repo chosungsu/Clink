@@ -334,7 +334,10 @@ class AppBarCustom extends StatelessWidget {
                                                                   : func6(
                                                                       context,
                                                                       textEditingController,
-                                                                      searchnode)))),
+                                                                      searchnode,
+                                                                      'addpage',
+                                                                      '',
+                                                                      99)))),
                                                   child: NeumorphicIcon(
                                                     iconname,
                                                     size: 30,

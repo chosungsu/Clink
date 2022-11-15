@@ -6,20 +6,20 @@ class Linkpage {
 
 class Linkspacepage {
   final String placestr;
-  final int index;
+  final int type;
   final String uniquecode;
   final String? date;
 
   Linkspacepage({
     required this.placestr,
-    required this.index,
+    required this.type,
     required this.uniquecode,
     this.date,
   });
   Map<String, dynamic> toMap() {
     return {
       'placestr': placestr,
-      'index': index,
+      'index': type,
       'subindex': uniquecode,
       'date': date
     };

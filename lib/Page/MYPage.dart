@@ -183,30 +183,32 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   }
 
   listy_My() {
-    var user, linkname, placestr;
+    var pagename, spacename, type;
+    List spacein = [];
 
     return GetBuilder<linkspacesetting>(
         builder: (_) => StreamBuilder<QuerySnapshot>(
-              stream: firestore.collection('Pinchannelin').snapshots(),
+              stream: firestore.collection('PageView').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   linkspaceset.indextreetmp.clear();
                   linkspaceset.indexcnt.clear();
                   final valuespace = snapshot.data!.docs;
                   for (var sp in valuespace) {
-                    user = sp.get('username');
-                    linkname = sp.get('linkname');
-                    if (user == usercode &&
-                        linkname == uiset.pagelist[0].title) {
+                    pagename = sp.get('pagename');
+                    spacename = sp.get('spacename');
+                    type = sp.get('type');
+                    if (pagename ==
+                        uiset.pagelist[uiset.mypagelistindex].title) {
                       linkspaceset.indextreetmp.add(List.empty(growable: true));
                       linkspaceset.indexcnt.add(Linkspacepage(
-                          index: int.parse(sp.get('index').toString()),
-                          placestr: sp.get('placestr'),
-                          uniquecode: sp.get('uniquecode')));
+                          type: sp.get('type'),
+                          placestr: sp.get('spacename'),
+                          uniquecode: sp.get('id')));
                     }
                   }
                   linkspaceset.indexcnt.sort(((a, b) {
-                    return a.uniquecode.compareTo(b.uniquecode);
+                    return a.placestr.compareTo(b.placestr);
                   }));
                   return linkspaceset.indexcnt.isEmpty
                       ? Flexible(
@@ -264,18 +266,8 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                     fit: FlexFit.tight,
                                                     child: Text(
                                                       linkspaceset
-                                                                  .indexcnt[
-                                                                      index]
-                                                                  .placestr ==
-                                                              'board'
-                                                          ? '보드'
-                                                          : (linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .placestr ==
-                                                                  'card'
-                                                              ? '링크 및 파일'
-                                                              : '캘린더'),
+                                                          .indexcnt[index]
+                                                          .placestr,
                                                       style: TextStyle(
                                                           color: Colors.black45,
                                                           fontWeight:
@@ -284,7 +276,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                               contentTextsize()),
                                                     ),
                                                   ),
-                                                  InkWell(
+                                                  /*InkWell(
                                                     onTap: () {
                                                       linkmadetreeplace(
                                                           context,
@@ -306,7 +298,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                   ),
                                                   const SizedBox(
                                                     width: 10,
-                                                  ),
+                                                  ),*/
                                                   InkWell(
                                                     onTap: () {
                                                       _controller.text = '';
@@ -323,7 +315,10 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                               .placestr,
                                                           linkspaceset
                                                               .indexcnt[index]
-                                                              .uniquecode);
+                                                              .uniquecode,
+                                                          linkspaceset
+                                                              .indexcnt[index]
+                                                              .type);
                                                     },
                                                     child: const Icon(
                                                       Icons.more_horiz,
@@ -331,12 +326,12 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                     ),
                                                   )
                                                 ]),
-                                            const SizedBox(
+                                            /*const SizedBox(
                                               height: 10,
                                             ),
                                             FutureBuilder(
                                                 future: MongoDB.getData(
-                                                  collectionname: 'linknet',
+                                                  collectionname: 'PageView',
                                                 ).then((value) {
                                                   linkspaceset
                                                       .indextreetmp[index]
@@ -344,14 +339,24 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                   if (value.isEmpty) {
                                                   } else {
                                                     for (var sp in value) {
-                                                      user = sp['username'];
-                                                      placestr = sp['placestr'];
-                                                      if (usercode == user &&
+                                                      pagename =
+                                                          sp.get('pagename');
+                                                      spacename =
+                                                          sp.get('spacename');
+                                                      type = sp.get('type');
+                                                      spacein =
+                                                          sp.get('urllist');
+                                                          
+                                                      if (linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .type ==
+                                                              type &&
                                                           linkspaceset
                                                                   .indexcnt[
                                                                       index]
                                                                   .placestr ==
-                                                              placestr) {
+                                                              spacename) {
                                                         linkspaceset
                                                             .indextreetmp[index]
                                                             .add(Linkspacetreepage(
@@ -362,15 +367,15 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                                 placestr: sp[
                                                                     'addname'],
                                                                 uniqueid: sp[
-                                                                    'uniquecode']));
+                                                                    'id']));
                                                       }
                                                     }
                                                     linkspaceset
                                                         .indextreetmp[index]
                                                         .sort(((a, b) {
-                                                      return a.subindex
+                                                      return a.placestr
                                                           .compareTo(
-                                                              b.subindex);
+                                                              b.placestr);
                                                     }));
                                                   }
                                                 }),
@@ -520,7 +525,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                       ),
                                                     );
                                                   }
-                                                }))
+                                                }))*/
                                           ],
                                         )))),
                                 const SizedBox(
@@ -529,6 +534,24 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                               ],
                             );
                           }));
+                } else if (!snapshot.hasData) {
+                  return Flexible(
+                      fit: FlexFit.tight,
+                      child: Center(
+                        child: NeumorphicText(
+                          '텅! 비어있어요~',
+                          style: NeumorphicStyle(
+                            shape: NeumorphicShape.flat,
+                            depth: 3,
+                            color: TextColor_shadowcolor(),
+                          ),
+                          textStyle: NeumorphicTextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ));
                 }
                 return SizedBox(
                   height: 2,

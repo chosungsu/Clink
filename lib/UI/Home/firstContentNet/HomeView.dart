@@ -616,13 +616,13 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                     linkname = sp['linkname'];
                     if (usercode == user && widget.link == linkname) {
                       linkspaceset.indexcnt.add(Linkspacepage(
-                          index: int.parse(sp['index'].toString()),
+                          type: int.parse(sp['index'].toString()),
                           placestr: sp['placestr'],
                           uniquecode: sp['uniquecode']));
                     }
                   }
                   linkspaceset.indexcnt.sort(((a, b) {
-                    return a.index.compareTo(b.index);
+                    return a.type.compareTo(b.type);
                   }));
                 }
               }),

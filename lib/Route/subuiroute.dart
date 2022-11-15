@@ -174,15 +174,17 @@ func4(BuildContext context) async {
         title: '알림',
         content: '접근권한이 없습니다!',
         snackType: SnackType.info,
-        behavior: SnackBarBehavior.floating);
+        behavior: SnackBarBehavior.floating,
+        position: SnackPosition.TOP);
   }
 }
 
 func5() => Get.to(() => const Spaceapage(), transition: Transition.upToDown);
 func6(BuildContext context, TextEditingController textEditingController,
-    FocusNode searchnode) {
+    FocusNode searchnode, String where, String id, int categorypicknumber) {
   String usercode = Hive.box('user_setting').get('usercode');
-  addmylink(context, usercode, textEditingController, searchnode);
+  addmylink(context, usercode, textEditingController, searchnode, where, id,
+      categorypicknumber);
 }
 
 func7(String title, String email, String origin, String id) async {

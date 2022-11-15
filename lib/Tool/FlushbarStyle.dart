@@ -53,7 +53,8 @@ class Snack {
       required String content,
       SnackType snackType = SnackType.info,
       SnackBarBehavior behavior = SnackBarBehavior.fixed,
-      required BuildContext context}) {
+      required BuildContext context,
+      SnackPosition position = SnackPosition.BOTTOM}) {
     Get.snackbar('', '',
         borderRadius: 20,
         titleText: Text(
@@ -74,7 +75,7 @@ class Snack {
         dismissDirection: DismissDirection.horizontal,
         forwardAnimationCurve: Curves.easeOutBack,
         margin: const EdgeInsets.all(15),
-        snackPosition: SnackPosition.BOTTOM);
+        snackPosition: position);
   }
 
   static actionshow(

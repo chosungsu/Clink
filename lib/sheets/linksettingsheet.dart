@@ -490,7 +490,7 @@ contentsecond(
                 'uniquecode': code
               });
               linkspaceset.setspacein(Linkspacepage(
-                  index: linkspaceset.indexcnt.length,
+                  type: linkspaceset.indexcnt.length,
                   placestr: 'board',
                   uniquecode: code));
             } else {
@@ -508,7 +508,7 @@ contentsecond(
                     .update({'placestr': 'board'});
               });
               linkspaceset.setspacein(Linkspacepage(
-                  index: index, placestr: 'board', uniquecode: code));
+                  type: index, placestr: 'board', uniquecode: code));
             }
 
             Get.back();
@@ -566,7 +566,7 @@ contentsecond(
                 'uniquecode': code
               });
               linkspaceset.setspacein(Linkspacepage(
-                  index: linkspaceset.indexcnt.length,
+                  type: linkspaceset.indexcnt.length,
                   placestr: 'card',
                   uniquecode: code));
             } else {
@@ -584,7 +584,7 @@ contentsecond(
                     .update({'placestr': 'card'});
               });
               linkspaceset.setspacein(Linkspacepage(
-                  index: index, placestr: 'card', uniquecode: code));
+                  type: index, placestr: 'card', uniquecode: code));
             }
 
             Get.back();
@@ -647,7 +647,7 @@ contentsecond(
                           'uniquecode': code
                         });
                         linkspaceset.setspacein(Linkspacepage(
-                            index: linkspaceset.indexcnt.length,
+                            type: linkspaceset.indexcnt.length,
                             placestr: 'calendar',
                             uniquecode: code));
                         linkspaceset.indextreetmp
@@ -694,7 +694,7 @@ contentsecond(
                               .update({'placestr': 'calendar'});
                         });
                         linkspaceset.setspacein(Linkspacepage(
-                            index: index,
+                            type: index,
                             placestr: 'calendar',
                             uniquecode: code));
                       }
@@ -749,6 +749,7 @@ linkplacechangeoptions(
   TextEditingController controller,
   String placestr,
   String uniquecode,
+  int type,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -780,7 +781,7 @@ linkplacechangeoptions(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
                 child: changeoptplace(context, name, link, index,
-                    changenamenode, controller, placestr, uniquecode),
+                    changenamenode, controller, placestr, uniquecode, type),
               )),
         );
       }).whenComplete(() {});
@@ -795,6 +796,7 @@ changeoptplace(
   TextEditingController controller,
   String placestr,
   String uniquecode,
+  int type,
 ) {
   return SizedBox(
       child: Padding(
@@ -819,7 +821,7 @@ changeoptplace(
                 height: 20,
               ),
               contentthird(context, name, link, index, changenamenode,
-                  controller, placestr, uniquecode),
+                  controller, placestr, uniquecode, type),
               const SizedBox(
                 height: 20,
               ),
@@ -836,6 +838,7 @@ contentthird(
   TextEditingController controller,
   String placestr,
   String uniquecode,
+  int type,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
@@ -927,58 +930,29 @@ contentthird(
           onTap: () async {
             linkspaceset.minusspacein(index);
             Get.back();
-
-            await MongoDB.delete(collectionname: 'pinchannelin', deletelist: {
-              'username': name,
-              'linkname': link,
-              'index': index
-            });
-            for (int i = index + 1; i <= linkspaceset.indexcnt.length; i++) {
-              await MongoDB.update(
-                  collectionname: 'pinchannelin',
-                  query: 'index',
-                  what: i.toString(),
-                  updatelist: {'index': i - 1});
-            }
-            await MongoDB.delete(collectionname: 'linknet', deletelist: {
-              'username': name,
-              'uniquecode': uniquecode,
-              'placestr': placestr
-            });
-            await firestore.collection('Pinchannelin').get().then((value) {
+            await firestore.collection('PageView').get().then((value) {
               for (int i = 0; i < value.docs.length; i++) {
-                if (value.docs[i].get('username') == name &&
-                    value.docs[i].get('linkname') == link &&
-                    value.docs[i].get('index') == index) {
+                if (value.docs[i].get('spacename') == placestr &&
+                    value.docs[i].get('id') == uniquecode &&
+                    value.docs[i].get('type') == type) {
                   id = value.docs[i].id;
-                } else if (value.docs[i].get('index') > index) {
+                }
+                /*else if (value.docs[i].get('index') > index) {
                   updateid.add(value.docs[i].id);
                   updateindex.add(value.docs[i].get('index'));
-                }
+                }*/
               }
-              firestore.collection('Pinchannelin').doc(id).delete();
-              if (updateid.isNotEmpty) {
+              firestore.collection('PageView').doc(id).delete();
+              /*if (updateid.isNotEmpty) {
                 for (int j = 0; j < updateid.length; j++) {
                   firestore
                       .collection('Pinchannelin')
                       .doc(updateid[j])
                       .update({'index': updateindex[j]--});
                 }
-              }
+              }*/
             }).whenComplete(() {
-              updateid.clear();
-            });
-            await firestore.collection('Linknet').get().then((value) {
-              for (int i = 0; i < value.docs.length; i++) {
-                if (value.docs[i].get('username') == name &&
-                    value.docs[i].get('uniquecode') == uniquecode &&
-                    value.docs[i].get('placestr') == placestr) {
-                  updateid.add(value.docs[i].id);
-                }
-              }
-              for (int j = 0; j < updateid.length; j++) {
-                firestore.collection('Linknet').doc(updateid[j]).delete();
-              }
+              //updateid.clear();
             });
           },
           child: Row(
@@ -990,12 +964,7 @@ contentthird(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              placestr == 'board'
-                                  ? '보드 플레이스 삭제'
-                                  : (placestr == 'card'
-                                      ? '링크 및 파일 플레이스 삭제'
-                                      : '캘린더 플레이스 삭제'),
+                          Text('이 플레이스 삭제',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
