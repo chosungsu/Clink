@@ -398,6 +398,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       final messageuser = sp.get('username');
                       final messagetitle = sp.get('linkname');
                       final messageemail = sp.get('email');
+                      final messagesetting = sp.get('setting');
                       if (textchangelistener == '') {
                       } else {
                         if (messagetitle
@@ -407,7 +408,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                               title: messagetitle,
                               username: messageuser,
                               email: messageemail,
-                              id: sp.id));
+                              id: sp.id,
+                              setting: messagesetting));
                         }
                       }
                     }
@@ -559,6 +561,11 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                             .searchpagelist[
                                                                 index]
                                                             .id
+                                                            .toString(),
+                                                        uiset
+                                                            .searchpagelist[
+                                                                index]
+                                                            .setting
                                                             .toString());
                                                   },
                                                   child: ContainerDesign(
@@ -707,12 +714,14 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       final messageadduser = sp.get('favoradduser');
                       final messageemail = sp.get('email');
                       final messageid = sp.get('id');
+                      final messagesetting = sp.get('setting');
                       if (messageadduser == usercode) {
                         uiset.favorpagelist.add(PageList(
                             title: messagetitle,
                             email: messageemail,
                             username: messageuser,
-                            id: messageid));
+                            id: messageid,
+                            setting: messagesetting));
                       }
                     }
 
@@ -763,6 +772,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                               uiset.favorpagelist[index].email
                                                   .toString(),
                                               uiset.favorpagelist[index].id
+                                                  .toString(),
+                                              uiset.favorpagelist[index].setting
                                                   .toString());
                                         },
                                         child: ContainerDesign(

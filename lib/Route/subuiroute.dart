@@ -18,6 +18,7 @@ import '../Page/NotiAlarm.dart';
 import '../Page/Spacepage.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/BGColor.dart';
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
@@ -113,8 +114,9 @@ func3() => Future.delayed(const Duration(seconds: 0), () {
       }
       Get.back();
     });
-func4() async {
+func4(BuildContext context) async {
   final uiset = Get.put(uisetting());
+  String usercode = Hive.box('user_setting').get('usercode');
   var checkid = '';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   if (Hive.box('user_setting').get('page_index') == 11 ||
@@ -129,7 +131,10 @@ func4() async {
         for (int i = 0; i < valuespace.length; i++) {
           if (valuespace[i]['title'] ==
               (Hive.box('user_setting').get('currenteditpage') ?? '')) {
-            checkid = valuespace[i]['id'];
+            if (valuespace[i]['setting'] == 'block') {
+            } else {
+              checkid = valuespace[i]['id'];
+            }
           }
         }
       }
@@ -145,18 +150,32 @@ func4() async {
         for (int i = 0; i < valuespace.length; i++) {
           if (valuespace[i]['linkname'] ==
               uiset.pagelist[uiset.mypagelistindex].title) {
-            checkid = valuespace[i].id;
+            if (valuespace[i]['setting'] == 'block') {
+              if (valuespace[i]['username'] == usercode) {
+                checkid = valuespace[i].id;
+              } else {}
+            } else {
+              checkid = valuespace[i].id;
+            }
           }
         }
       }
     });
   }
-
-  Get.to(
-      () => AddTemplate(
-            id: checkid,
-          ),
-      transition: Transition.upToDown);
+  if (checkid != '') {
+    Get.to(
+        () => AddTemplate(
+              id: checkid,
+            ),
+        transition: Transition.upToDown);
+  } else {
+    Snack.show(
+        context: context,
+        title: '알림',
+        content: '접근권한이 없습니다!',
+        snackType: SnackType.info,
+        behavior: SnackBarBehavior.floating);
+  }
 }
 
 func5() => Get.to(() => const Spaceapage(), transition: Transition.upToDown);

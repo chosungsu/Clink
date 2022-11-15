@@ -115,6 +115,25 @@ content(
         ListTile(
           onTap: () {
             Get.back();
+          },
+          trailing: const Icon(
+            Icons.settings,
+            color: Colors.black,
+          ),
+          title: Text(
+            '접근 권한 설정',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        ListTile(
+          onTap: () {
+            Get.back();
             textEditingController.text = pagelist[index].title;
             SetChangeLink(context, textEditingController, searchnode,
                 pagelist[index].title);
@@ -531,6 +550,7 @@ contentthird(
                   firestore.collection('Pinchannel').add({
                     'username': username,
                     'linkname': textEditingControllerAddSheet.text,
+                    'setting': 'block'
                   }).whenComplete(() {
                     linkspaceset.setcompleted(true);
                     linkspaceset

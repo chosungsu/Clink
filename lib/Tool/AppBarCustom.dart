@@ -239,7 +239,7 @@ class AppBarCustom extends StatelessWidget {
                                                   .get('page_index') ==
                                               0
                                           ? GestureDetector(
-                                              onTap: () => func4(),
+                                              onTap: () => func4(context),
                                               child: NeumorphicIcon(
                                                 Icons.add_box,
                                                 size: 30,
@@ -262,7 +262,7 @@ class AppBarCustom extends StatelessWidget {
                                                           .get('page_index') ==
                                                       21
                                               ? GestureDetector(
-                                                  onTap: () => func4(),
+                                                  onTap: () => func4(context),
                                                   child: NeumorphicIcon(
                                                     Icons.add_box,
                                                     size: 30,

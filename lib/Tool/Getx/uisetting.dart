@@ -80,10 +80,15 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
-  void seteditpage(String what, String username, String email, String id) {
+  void seteditpage(
+      String what, String username, String email, String id, String setting) {
     searchpagemove = what;
-    editpagelist
-        .add(PageList(title: what, email: email, username: username, id: id));
+    editpagelist.add(PageList(
+        title: what,
+        email: email,
+        username: username,
+        id: id,
+        setting: setting));
     Hive.box('user_setting').put('currenteditpage', what);
     update();
     notifyChildrens();

@@ -117,7 +117,8 @@ class _AddTemplateState extends State<AddTemplate>
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               20, 0, 20, 0),
-                                          child: Pagination(),
+                                          child: GetBuilder<category>(
+                                              builder: (_) => Pagination()),
                                         ),
                                       )),
                                 )),
@@ -223,7 +224,7 @@ class _AddTemplateState extends State<AddTemplate>
                 height: 20,
               ),
               Text(
-                '이미 존재하는 스페이스일 경우 본문작성 탭에서 선택 및 추가가 가능합니다.',
+                '아래 스페이스 중 원하시는 스페이스를 선택하시면 됩니다.',
                 style: TextStyle(
                   fontSize: contentTextsize(),
                   color: TextColor_shadowcolor(),
@@ -237,6 +238,12 @@ class _AddTemplateState extends State<AddTemplate>
               const SizedBox(
                 height: 50,
               ),
+              cg.categorypicknumber != 99 ? Page2() : const SizedBox(),
+              cg.categorypicknumber != 99
+                  ? const SizedBox(
+                      height: 50,
+                    )
+                  : const SizedBox(),
               moveaction(),
             ],
           )
@@ -452,84 +459,403 @@ class _AddTemplateState extends State<AddTemplate>
       children: [
         FutureBuilder(
             future: firestore.collection('PageView').get().then((value) {
+              uiset.pageviewlist.clear();
               if (value.docs.isEmpty) {
               } else {
                 uiset.pageviewlist.clear();
                 final valuespace = value.docs;
                 for (int i = 0; i < valuespace.length; i++) {
-                  if (valuespace[i]['username'] == usercode) {
-                    if (valuespace[i]['title'] ==
-                            uiset.pagelist[uiset.mypagelistindex].title &&
-                        valuespace[i]['space'] == cg.categorypicknumber) {
-                      if (cg.categorypicknumber == 0) {
-                        for (int i = 0;
-                            i < valuespace[i]['urllist'].length;
-                            i++) {
-                          spaceindata.add(valuespace[i]['urllist'][i]);
-                        }
-                        uiset.pageviewlist.add(PageviewList(
-                          title: valuespace[i]['title'],
-                          seperatedindex: valuespace[i]['seperatedindex'],
-                          boxseperatedindex: valuespace[i]['boxseperatedindex'],
-                          username: valuespace[i]['username'],
-                          urlcontent: spaceindata,
-                        ));
-                      } else if (cg.categorypicknumber == 1) {
-                        uiset.pageviewlist.add(PageviewList(
-                          title: valuespace[i]['title'],
-                          seperatedindex: valuespace[i]['seperatedindex'],
-                          boxseperatedindex: valuespace[i]['boxseperatedindex'],
-                          username: valuespace[i]['username'],
-                          calendarcontent: valuespace[i]['calendarname'],
-                        ));
-                      } else if (cg.categorypicknumber == 2) {
-                        for (int i = 0;
-                            i < valuespace[i]['todolist'].length;
-                            i++) {
-                          spaceindata.add(valuespace[i]['todolist'][i]);
-                        }
-                        uiset.pageviewlist.add(PageviewList(
-                          title: valuespace[i]['title'],
-                          seperatedindex: valuespace[i]['seperatedindex'],
-                          boxseperatedindex: valuespace[i]['boxseperatedindex'],
-                          username: valuespace[i]['username'],
-                          todolistcontent: spaceindata,
-                        ));
-                      } else if (cg.categorypicknumber == 3) {
-                        for (int i = 0;
-                            i < valuespace[i]['memolist'].length;
-                            i++) {
-                          spaceindata.add(valuespace[i]['memolist'][i]);
-                        }
-                        uiset.pageviewlist.add(PageviewList(
-                          title: valuespace[i]['title'],
-                          seperatedindex: valuespace[i]['seperatedindex'],
-                          boxseperatedindex: valuespace[i]['boxseperatedindex'],
-                          username: valuespace[i]['username'],
-                          memocontent: spaceindata,
-                        ));
-                      } else {}
-                    }
+                  if (valuespace[i]['id'] == widget.id) {
+                    if (cg.categorypicknumber == 0) {
+                      for (int i = 0;
+                          i < valuespace[i]['urllist'].length;
+                          i++) {
+                        spaceindata.add(valuespace[i]['urllist'][i]);
+                      }
+                      uiset.pageviewlist.add(PageviewList(
+                        title: valuespace[i]['title'],
+                        seperatedindex: valuespace[i]['seperatedindex'],
+                        boxseperatedindex: valuespace[i]['boxseperatedindex'],
+                        username: valuespace[i]['username'],
+                        urlcontent: spaceindata,
+                      ));
+                    } else if (cg.categorypicknumber == 1) {
+                      uiset.pageviewlist.add(PageviewList(
+                        title: valuespace[i]['title'],
+                        seperatedindex: valuespace[i]['seperatedindex'],
+                        boxseperatedindex: valuespace[i]['boxseperatedindex'],
+                        username: valuespace[i]['username'],
+                        calendarcontent: valuespace[i]['calendarname'],
+                      ));
+                    } else if (cg.categorypicknumber == 2) {
+                      for (int i = 0;
+                          i < valuespace[i]['todolist'].length;
+                          i++) {
+                        spaceindata.add(valuespace[i]['todolist'][i]);
+                      }
+                      uiset.pageviewlist.add(PageviewList(
+                        title: valuespace[i]['title'],
+                        seperatedindex: valuespace[i]['seperatedindex'],
+                        boxseperatedindex: valuespace[i]['boxseperatedindex'],
+                        username: valuespace[i]['username'],
+                        todolistcontent: spaceindata,
+                      ));
+                    } else if (cg.categorypicknumber == 3) {
+                      for (int i = 0;
+                          i < valuespace[i]['memolist'].length;
+                          i++) {
+                        spaceindata.add(valuespace[i]['memolist'][i]);
+                      }
+                      uiset.pageviewlist.add(PageviewList(
+                        title: valuespace[i]['title'],
+                        seperatedindex: valuespace[i]['seperatedindex'],
+                        boxseperatedindex: valuespace[i]['boxseperatedindex'],
+                        username: valuespace[i]['username'],
+                        memocontent: spaceindata,
+                      ));
+                    } else {}
                   }
                 }
               }
             }),
             builder: ((context, snapshot) {
-              return Column(
-                children: [
-                  Text(
-                    '현재 이 페이지에 있는 스페이스 목록',
-                    style: TextStyle(
-                      fontSize: contentTextsize(),
-                      color: TextColor_shadowcolor(),
-                      fontWeight: FontWeight.normal,
+              if (snapshot.hasData) {
+                if (uiset.pageviewlist.isEmpty) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '현재 이 페이지에 있는 해당 스페이스 목록',
+                        style: TextStyle(
+                          fontSize: contentTextsize(),
+                          color: TextColor_shadowcolor(),
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ContainerDesign(
+                          color: BGColor(),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: RichText(
+                                    text: TextSpan(children: [
+                                  WidgetSpan(
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: mainTitleTextsize(),
+                                        color: TextColor_shadowcolor()),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          color: TextColor_shadowcolor(),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          '새 스페이스로 추가',
+                                          maxLines: 3,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ])),
+                              )
+                            ],
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ContainerDesign(
+                          color: BGColor(),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  '스페이스가 비어있습니다.',
+                                  maxLines: 3,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: contentTextsize(),
+                                    color: TextColor(),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
+                          )),
+                    ],
+                  );
+                } else {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '현재 이 페이지에 있는 해당 스페이스 목록',
+                        style: TextStyle(
+                          fontSize: contentTextsize(),
+                          color: TextColor_shadowcolor(),
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ContainerDesign(
+                          color: BGColor(),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: RichText(
+                                    text: TextSpan(children: [
+                                  WidgetSpan(
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: mainTitleTextsize(),
+                                        color: TextColor_shadowcolor()),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          color: TextColor_shadowcolor(),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          '새 스페이스로 추가',
+                                          maxLines: 3,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: TextColor(),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ])),
+                              )
+                            ],
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ContainerDesign(
+                          color: BGColor(),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  '스페이스를 찾았습니다.',
+                                  maxLines: 3,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: contentTextsize(),
+                                    color: TextColor(),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
+                          )),
+                    ],
+                  );
+                }
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '현재 이 페이지에 있는 해당 스페이스 목록',
+                      style: TextStyle(
+                        fontSize: contentTextsize(),
+                        color: TextColor_shadowcolor(),
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              );
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ContainerDesign(
+                        color: BGColor(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: RichText(
+                                  text: TextSpan(children: [
+                                WidgetSpan(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: mainTitleTextsize(),
+                                      color: TextColor_shadowcolor()),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        color: TextColor_shadowcolor(),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        '새 스페이스로 추가',
+                                        maxLines: 3,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: contentTextsize(),
+                                          color: TextColor(),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ])),
+                            )
+                          ],
+                        )),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ContainerDesign(
+                        color: BGColor(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                '불러오는 중입니다.',
+                                maxLines: 3,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: contentTextsize(),
+                                  color: TextColor(),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
+                          ],
+                        )),
+                  ],
+                );
+              } else {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '현재 이 페이지에 있는 해당 스페이스 목록',
+                      style: TextStyle(
+                        fontSize: contentTextsize(),
+                        color: TextColor_shadowcolor(),
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ContainerDesign(
+                        color: BGColor(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: RichText(
+                                  text: TextSpan(children: [
+                                WidgetSpan(
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: mainTitleTextsize(),
+                                      color: TextColor_shadowcolor()),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        color: TextColor_shadowcolor(),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        '새 스페이스로 추가',
+                                        maxLines: 3,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: contentTextsize(),
+                                          color: TextColor(),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ])),
+                            )
+                          ],
+                        )),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ContainerDesign(
+                        color: BGColor(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                '스페이스가 비어있습니다.',
+                                maxLines: 3,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: contentTextsize(),
+                                  color: TextColor(),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
+                          ],
+                        )),
+                  ],
+                );
+              }
             }))
       ],
     );

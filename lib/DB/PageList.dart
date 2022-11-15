@@ -13,8 +13,10 @@ class PageList {
   String? username;
   String? email;
   String? id;
+  String? setting;
 
-  PageList({required this.title, this.email, this.username, this.id});
+  PageList(
+      {required this.title, this.email, this.username, this.id, this.setting});
 }
 
 class PageviewList {
