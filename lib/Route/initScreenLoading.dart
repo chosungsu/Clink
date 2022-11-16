@@ -23,8 +23,8 @@ Future<Widget?> initScreen() async {
   bool isread = false;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String name = Hive.box('user_info').get('id') ?? '';
-  String usercode = Hive.box('user_setting').get('usercode');
-  String useremail = Hive.box('user_info').get('email');
+  String usercode = Hive.box('user_setting').get('usercode') ?? '';
+  String useremail = Hive.box('user_info').get('email') ?? '';
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',

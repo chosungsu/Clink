@@ -47,7 +47,6 @@ class _mainrouteState extends State<mainroute>
   }
 
   Future<bool> _onWillPop() async {
-    final draw = Get.put(navibool());
     if (draw.drawopen == true) {
       draw.setclose();
     }
@@ -64,7 +63,6 @@ class _mainrouteState extends State<mainroute>
   }
 
   Future<bool> _onWillPop2() async {
-    final draw = Get.put(navibool());
     uiset
         .setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
     if (draw.drawopen == true) {
