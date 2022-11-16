@@ -53,7 +53,7 @@ class GoogleSignInController extends GetxController {
           'autologin': ischecked,
           'code': code
         });
-        Hive.box('user_setting').put('usercode', MongoDB.res['code']);
+        Hive.box('user_setting').put('usercode', code);
       } else {
         await MongoDB.update(
             collectionname: 'user',

@@ -12,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -93,6 +94,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
   void initState() {
     super.initState();
     checkForInitialMessage();
+    initScreen();
   }
 
   @override
@@ -138,38 +140,24 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                 )),
             Flexible(
                 flex: 1,
-                child: FutureBuilder(
-                    future: initScreen(),
-                    builder: ((context, snapshot) {
-                      return SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: height * 0.45,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              DefaultTextStyle(
-                                style: const TextStyle(fontSize: 15.0),
-                                child: AnimatedTextKit(
-                                  animatedTexts: [
-                                    TyperAnimatedText('로그인중입니다...',
-                                        textStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: TextColor()),
-                                        speed:
-                                            const Duration(milliseconds: 150)),
-                                  ],
-                                  totalRepeatCount: 2,
-                                  onFinished: (() {
-                                    NotificationApi.runWhileAppIsTerminated();
-                                    GoToMain();
-                                  }),
-                                  //displayFullTextOnTap: false,
-                                ),
-                              ),
-                            ],
-                          ));
-                    })))
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: height * 0.45,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SpinKitThreeBounce(
+                          size: 25,
+                          itemBuilder: (BuildContext context, int index) {
+                            return DecoratedBox(
+                              decoration: BoxDecoration(
+                                  color: Colors.blue.shade200,
+                                  shape: BoxShape.circle),
+                            );
+                          },
+                        ),
+                      ],
+                    )))
           ],
         ));
   }
@@ -200,38 +188,42 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
             Flexible(
                 flex: 1,
                 child: SizedBox(
-                    height: 50,
+                    height: height * 0.45,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        OutlineGradientButton(
-                          child: SizedBox(
-                              width: 80.w,
-                              child: Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text('Login',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: contentTextsize())),
-                                  ],
-                                ),
-                              )),
-                          gradient: const LinearGradient(
-                            colors: [Colors.blue, Colors.blueGrey],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                        SizedBox(
+                          height: 50,
+                          child: OutlineGradientButton(
+                            child: SizedBox(
+                                width: 60.w,
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text('Login',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: contentTextsize())),
+                                    ],
+                                  ),
+                                )),
+                            gradient: const LinearGradient(
+                              colors: [Colors.blue, Colors.blueGrey],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            strokeWidth: 2,
+                            backgroundColor: Colors.blue.shade300,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                            radius: const Radius.circular(10),
+                            onTap: () {
+                              GoToLogin('first');
+                            },
                           ),
-                          strokeWidth: 2,
-                          backgroundColor: Colors.blue.shade300,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          radius: const Radius.circular(10),
-                          onTap: () {
-                            GoToLogin('first');
-                          },
-                        ),
+                        )
                       ],
                     ))),
           ],

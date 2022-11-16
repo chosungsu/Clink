@@ -1,13 +1,9 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:page_transition/page_transition.dart';
 
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
-import '../Route/mainroute.dart';
 import 'TextSize.dart';
 
 const kPadding = 8.0; // up to you

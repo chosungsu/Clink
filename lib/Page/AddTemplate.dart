@@ -10,16 +10,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/PageList.dart';
 import '../Route/subuiroute.dart';
-import '../Tool/AppBarCustom.dart';
 import '../Tool/Getx/category.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
+import '../sheets/linksettingsheet.dart';
 
 class AddTemplate extends StatefulWidget {
   const AddTemplate({Key? key, required this.id}) : super(key: key);
@@ -39,6 +38,7 @@ class _AddTemplateState extends State<AddTemplate>
   final uiset = Get.put(uisetting());
   final draw = Get.put(navibool());
   final cg = Get.put(category());
+  final linkspaceset = Get.put(linkspacesetting());
   final readlist = [];
   final listid = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -243,7 +243,7 @@ class _AddTemplateState extends State<AddTemplate>
               const SizedBox(
                 height: 50,
               ),
-              cg.categorypicknumber != 99 ? Page2() : const SizedBox(),
+              cg.categorypicknumber != 99 ? Page1_2() : const SizedBox(),
               cg.categorypicknumber != 99
                   ? const SizedBox(
                       height: 50,
@@ -271,7 +271,7 @@ class _AddTemplateState extends State<AddTemplate>
                   const SizedBox(
                     height: 20,
                   ),
-                  Page2(),
+                  //Page2(),
                   const SizedBox(
                     height: 50,
                   ),
@@ -462,38 +462,39 @@ class _AddTemplateState extends State<AddTemplate>
     );
   }
 
-  Page2() {
+  Page1_2() {
     return Column(
       children: [
         GetBuilder<category>(
             builder: (_) => FutureBuilder(
                 future: firestore.collection('PageView').get().then((value) {
                   spaceindata.clear();
+                  uiset.pageviewlist.clear();
                   if (value.docs.isEmpty) {
                   } else {
                     final valuespace = value.docs;
                     for (int i = 0; i < valuespace.length; i++) {
                       if (valuespace[i]['id'] == widget.id) {
                         if (cg.categorypicknumber == 0) {
-                          uiset.pageviewlist.clear();
                           for (int j = 0;
                               j < valuespace[i]['urllist'].length;
                               j++) {
                             spaceindata.add(valuespace[i]['urllist'][j]);
                           }
                           uiset.pageviewlist.add(PageviewList(
-                            title: valuespace[i]['spacename'],
-                            urlcontent: spaceindata,
-                          ));
+                              title: valuespace[i]['spacename'],
+                              urlcontent: spaceindata,
+                              type: valuespace[i]['type'],
+                              uniquecode: valuespace[i]['id']));
                         } else if (cg.categorypicknumber == 1) {
-                          uiset.pageviewlist.clear();
                           uiset.pageviewlist.add(PageviewList(
                             title: valuespace[i]['spacename'],
+                            type: valuespace[i]['type'],
+                            uniquecode: valuespace[i]['id'],
                             calendarcontent:
                                 valuespace[i]['calendarname'] ?? '',
                           ));
                         } else if (cg.categorypicknumber == 2) {
-                          uiset.pageviewlist.clear();
                           for (int j = 0;
                               j < valuespace[i]['todolist'].length;
                               j++) {
@@ -501,10 +502,11 @@ class _AddTemplateState extends State<AddTemplate>
                           }
                           uiset.pageviewlist.add(PageviewList(
                             title: valuespace[i]['spacename'],
+                            type: valuespace[i]['type'],
+                            uniquecode: valuespace[i]['id'],
                             todolistcontent: spaceindata,
                           ));
                         } else if (cg.categorypicknumber == 3) {
-                          uiset.pageviewlist.clear();
                           for (int j = 0;
                               j < valuespace[i]['memolist'].length;
                               j++) {
@@ -512,11 +514,16 @@ class _AddTemplateState extends State<AddTemplate>
                           }
                           uiset.pageviewlist.add(PageviewList(
                             title: valuespace[i]['spacename'],
+                            type: valuespace[i]['type'],
+                            uniquecode: valuespace[i]['id'],
                             memocontent: spaceindata,
                           ));
                         } else {}
                       }
                     }
+                    uiset.pageviewlist.sort(((a, b) {
+                      return a.title.compareTo(b.title);
+                    }));
                   }
                 }),
                 builder: ((context, snapshot) {
@@ -602,45 +609,114 @@ class _AddTemplateState extends State<AddTemplate>
                                     itemCount: uiset.pageviewlist.length,
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
+                                    physics: const ScrollPhysics(),
                                     // display each item of the product list
                                     itemBuilder: (context, index) {
-                                      return SizedBox(
-                                        width: double.infinity,
-                                        child: RichText(
-                                            text: TextSpan(children: [
-                                          WidgetSpan(
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: mainTitleTextsize(),
-                                                color: TextColor_shadowcolor()),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Icon(
-                                                  Icons.ads_click,
-                                                  color:
-                                                      TextColor_shadowcolor(),
+                                      return Column(
+                                        children: [
+                                          index == 1
+                                              ? const Divider(
+                                                  height: 10,
+                                                  color: Colors.grey,
+                                                  thickness: 0.5,
+                                                  indent: 0,
+                                                  endIndent: 0,
+                                                )
+                                              : const SizedBox(
+                                                  height: 0,
                                                 ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  uiset.pageviewlist[index]
-                                                      .title,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                    fontSize: contentTextsize(),
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ],
-                                            ),
+                                          const SizedBox(
+                                            height: 20,
                                           ),
-                                        ])),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: RichText(
+                                                text: TextSpan(children: [
+                                              WidgetSpan(
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize:
+                                                        mainTitleTextsize(),
+                                                    color:
+                                                        TextColor_shadowcolor()),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.ads_click,
+                                                      color:
+                                                          TextColor_shadowcolor(),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Flexible(
+                                                      fit: FlexFit.tight,
+                                                      child: Text(
+                                                        uiset
+                                                            .pageviewlist[index]
+                                                            .title,
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                          color: TextColor(),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        print(linkspaceset
+                                                            .indexcnt[index]
+                                                            .placestr);
+                                                        linkplacechangeoptions(
+                                                            context,
+                                                            usercode,
+                                                            uiset.pagelist[0]
+                                                                .title,
+                                                            index,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .placestr,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .uniquecode,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .type);
+                                                      },
+                                                      child: const Icon(
+                                                        Icons.more_horiz,
+                                                        color: Colors.black45,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ])),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          index == 0
+                                              ? const SizedBox(
+                                                  height: 0,
+                                                )
+                                              : const Divider(
+                                                  height: 10,
+                                                  color: Colors.grey,
+                                                  thickness: 0.5,
+                                                  indent: 0,
+                                                  endIndent: 0,
+                                                ),
+                                        ],
                                       );
                                     })
                               ],
@@ -844,6 +920,12 @@ class _AddTemplateState extends State<AddTemplate>
                   }
                 })))
       ],
+    );
+  }
+
+  Page2() {
+    return Column(
+      children: [],
     );
   }
 

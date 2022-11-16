@@ -10,12 +10,10 @@ class ShowTips extends StatelessWidget {
   ShowTips({
     Key? key,
     required this.height,
-    required this.pageController,
     required this.pageindex,
   }) : super(key: key);
   final double height;
   final int pageindex;
-  final PageController pageController;
   final double translateX = 0.0;
   final double translateY = 0.0;
   final myWidth = 0;

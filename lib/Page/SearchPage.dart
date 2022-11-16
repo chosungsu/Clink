@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields, prefer_typing_uninitialized_variables, prefer_const_constructors
 
-import 'dart:async';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
@@ -16,15 +15,12 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:package_info/package_info.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/PageList.dart';
 import '../DB/SpaceContent.dart';
-import '../DB/Category.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
-import '../UI/Home/Widgets/ViewSet.dart';
 import '../sheets/readycontent.dart';
 import 'DrawerScreen.dart';
 
@@ -232,10 +228,10 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                           SizedBox(
                                                             height: 20,
                                                           ),
-                                                          /*Se_Container0(height),
+                                                          Se_Container0(height),
                                                           SizedBox(
                                                             height: 20,
-                                                          ),*/
+                                                          ),
                                                           Se_Container01(
                                                               height),
                                                           SizedBox(
@@ -250,77 +246,17 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                           SizedBox(
                                                             height: 20,
                                                           ),
-                                                          /*FutureBuilder(
-                                                future: MongoDB.getData(
-                                                        collectionname:
-                                                            'companynotice')
-                                                    .then((value) {
-                                                  for (int j = 0;
-                                                      j < value.length;
-                                                      j++) {
-                                                    final messageText =
-                                                        value[j]['title'];
-                                                    final messageDate =
-                                                        value[j]['date'];
-                                                    final messageyes = value[j]
-                                                        ['showthisinapp'];
-                                                    final messagewhere =
-                                                        value[j]['where'];
-                                                    if (messageyes == 'yes' &&
-                                                        messagewhere ==
-                                                            'home') {
-                                                      listcompanytousers
-                                                          .add(CompanyPageList(
-                                                        title: messageText,
-                                                        url: messageDate,
-                                                      ));
-                                                      url = Uri.parse(
-                                                          value[j]['url']);
-                                                      uiset.seteventspace(
-                                                          listcompanytousers[0]
-                                                              .title,
-                                                          value[j]['url']);
-                                                    }
-                                                  }
-                                                }),
-                                                builder: ((context, snapshot) {
-                                                  return CompanyNotice(
-                                                    'home',
-                                                  );
-                                                })),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            H_Container_0(
-                                              height,
-                                            ),
-
-                                            /*const SizedBox(
-                                              height: 20,
-                                            ),
-                                            H_Container_3(height),*/
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            GetBuilder<PeopleAdd>(
-                                                builder: (_) => ViewSet(
-                                                    peopleadd
-                                                        .defaulthomeviewlist,
-                                                    peopleadd.userviewlist,
-                                                    usercode)),
-                                            const SizedBox(
-                                              height: 50,
-                                            ),
-                                            H_Container_4(height),
-                                            const SizedBox(
-                                              height: 50,
-                                            ),*/
+                                                          Se_Container3(height),
+                                                          SizedBox(
+                                                            height: 50,
+                                                          ),
                                                         ],
                                                       ));
                                             })),
                                       ),
                                     ))
-                                : Flexible(
+                                : ScrollConfiguration(
+                                    behavior: NoBehavior(),
                                     child: Se_Container2(uiset.searchpagemove)),
                           ],
                         ),
@@ -400,17 +336,19 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       final messagetitle = sp.get('linkname');
                       final messageemail = sp.get('email');
                       final messagesetting = sp.get('setting');
-                      if (textchangelistener == '') {
-                      } else {
-                        if (messagetitle
-                            .toString()
-                            .contains(textchangelistener)) {
-                          uiset.searchpagelist.add(PageList(
-                              title: messagetitle,
-                              username: messageuser,
-                              email: messageemail,
-                              id: sp.id,
-                              setting: messagesetting));
+                      if (messageuser == usercode) {
+                        if (textchangelistener == '') {
+                        } else {
+                          if (messagetitle
+                              .toString()
+                              .contains(textchangelistener)) {
+                            uiset.searchpagelist.add(PageList(
+                                title: messagetitle,
+                                username: messageuser,
+                                email: messageemail,
+                                id: sp.id,
+                                setting: messagesetting));
+                          }
                         }
                       }
                     }
@@ -420,44 +358,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ContainerDesign(
-                                color: BGColor(),
-                                child: TextField(
-                                  onChanged: ((value) {
-                                    setState(() {
-                                      textchangelistener = value;
-                                    });
-                                  }),
-                                  controller: controller,
-                                  maxLines: 1,
-                                  focusNode: searchnode,
-                                  textAlign: TextAlign.start,
-                                  textAlignVertical: TextAlignVertical.center,
-                                  style: TextStyle(
-                                      color: TextColor(),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: BGColor(),
-                                    border: InputBorder.none,
-                                    hintMaxLines: 2,
-                                    hintText: '탐색하실 페이지 제목 입력',
-                                    hintStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: TextColor()),
-                                    isCollapsed: true,
-                                    prefixIcon: Icon(
-                                      Icons.search,
-                                      color: TextColor_shadowcolor(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
                               ContainerDesign(
                                   child: SizedBox(
                                     height: 40.h,
@@ -484,44 +384,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ContainerDesign(
-                                color: BGColor(),
-                                child: TextField(
-                                  onChanged: ((value) {
-                                    setState(() {
-                                      textchangelistener = value;
-                                    });
-                                  }),
-                                  controller: controller,
-                                  maxLines: 1,
-                                  focusNode: searchnode,
-                                  textAlign: TextAlign.start,
-                                  textAlignVertical: TextAlignVertical.center,
-                                  style: TextStyle(
-                                      color: TextColor(),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: BGColor(),
-                                    border: InputBorder.none,
-                                    hintMaxLines: 2,
-                                    hintText: '탐색하실 페이지 제목 입력',
-                                    hintStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: TextColor()),
-                                    isCollapsed: true,
-                                    prefixIcon: Icon(
-                                      Icons.search,
-                                      color: TextColor_shadowcolor(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
                               ContainerDesign(
                                   color: Colors.transparent,
                                   child: GetBuilder<uisetting>(
@@ -650,11 +512,26 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             ],
                           );
                   }
-                  return LinearProgressIndicator(
-                    backgroundColor: BGColor(),
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Colors.blue),
-                  );
+                  return ContainerDesign(
+                      child: SizedBox(
+                        height: 40.h,
+                        child: Center(
+                          child: NeumorphicText(
+                            '검색 결과 없음',
+                            style: NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 3,
+                              color: TextColor_shadowcolor(),
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      color: Colors.transparent);
                 },
               ),
             ));
@@ -685,11 +562,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            /*ShowTips(
-              height: height,
-              pageController: pController,
-              pageindex: 0,
-            ),*/
           ],
         ),
       ),
@@ -778,7 +650,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                   .toString());
                                         },
                                         child: ContainerDesign(
-                                          color: BGColor(),
+                                          color: Colors.transparent,
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -844,14 +716,29 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                     ],
                                   );
                                 }),
-                            color: BGColor(),
+                            color: Colors.transparent,
                           );
                   }
-                  return LinearProgressIndicator(
-                    backgroundColor: BGColor(),
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Colors.blue),
-                  );
+                  return ContainerDesign(
+                      child: SizedBox(
+                        height: 40.h,
+                        child: Center(
+                          child: NeumorphicText(
+                            '즐겨찾기 설정하신 페이지가 없네요',
+                            style: NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 3,
+                              color: TextColor_shadowcolor(),
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      color: Colors.transparent);
                 },
               ),
             ));
@@ -859,6 +746,44 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
   Se_Container2(String searchpagemove) {
     return listy_My(searchpagemove);
+  }
+
+  Se_Container3(
+    double height,
+  ) {
+    //프로버전 구매시 보이지 않게 함
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: SizedBox(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Text(
+                    '페이지 팁',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize(),
+                        color: TextColor()),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            ShowTips(
+              height: height,
+              pageindex: 0,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   H_Container_3(double height) {

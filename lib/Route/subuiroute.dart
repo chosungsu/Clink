@@ -201,7 +201,8 @@ func7(String title, String email, String origin, String id) async {
         'email': email,
         'originuser': origin,
         'favoradduser': usercode,
-        'id': id
+        'id': id,
+        'setting': 'block'
       });
     } else {
       final valuespace = value.docs;
@@ -218,7 +219,8 @@ func7(String title, String email, String origin, String id) async {
           'email': email,
           'originuser': origin,
           'favoradduser': usercode,
-          'id': id
+          'id': id,
+          'setting': 'block'
         });
       } else {
         firestore.collection('Favorplace').doc(deleteid).delete();

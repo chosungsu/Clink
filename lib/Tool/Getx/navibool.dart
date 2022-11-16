@@ -1,9 +1,10 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 
-import '../BGColor.dart';
 import '../MyTheme.dart';
 
 class navibool extends GetxController {

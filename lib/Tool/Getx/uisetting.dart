@@ -40,46 +40,6 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
-  void setpageviewlist(String what, String username, int index, int subindex,
-      String space, contents) {
-    if (space == 'url') {
-      pageviewlist.add(PageviewList(
-        title: what,
-        seperatedindex: index,
-        boxseperatedindex: subindex,
-        username: username,
-        urlcontent: contents,
-      ));
-    } else if (space == 'calendar') {
-      pageviewlist.add(PageviewList(
-        title: what,
-        seperatedindex: index,
-        boxseperatedindex: subindex,
-        username: username,
-        calendarcontent: contents,
-      ));
-    } else if (space == 'todo') {
-      pageviewlist.add(PageviewList(
-        title: what,
-        seperatedindex: index,
-        boxseperatedindex: subindex,
-        username: username,
-        todolistcontent: contents,
-      ));
-    } else if (space == 'memo') {
-      pageviewlist.add(PageviewList(
-        title: what,
-        seperatedindex: index,
-        boxseperatedindex: subindex,
-        username: username,
-        memocontent: contents,
-      ));
-    }
-
-    update();
-    notifyChildrens();
-  }
-
   void seteditpage(
       String what, String username, String email, String id, String setting) {
     searchpagemove = what;

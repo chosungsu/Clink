@@ -40,6 +40,7 @@ Future<Widget?> initScreen() async {
     if (serverstatus) {
       await MongoDB.find(collectionname: 'user', query: 'name', what: name);
       if (MongoDB.res == null) {
+        peopleadd.secondnameset(MongoDB.res['subname'], usercode);
       } else {
         var usercodetmp;
         peopleadd.secondnameset(MongoDB.res['subname'], MongoDB.res['code']);
@@ -124,8 +125,12 @@ Future<Widget?> initScreen() async {
           .get()
           .then(
         (value) {
-          peopleadd.secondnameset(
-              value.docs[0].get('subname'), value.docs[0].get('code'));
+          if (value.docs.isEmpty) {
+            peopleadd.secondnameset(name, usercode);
+          } else {
+            peopleadd.secondnameset(
+                value.docs[0].get('subname'), value.docs[0].get('code'));
+          }
         },
       );
       await firestore.collection('AppNoticeByUsers').get().then((value) {
@@ -152,8 +157,12 @@ Future<Widget?> initScreen() async {
         }
         if (updateid.isEmpty) {
           uiset.pagelist.clear();
-          firestore.collection('Pinchannel').add(
-              {'username': usercode, 'linkname': '빈 스페이스', 'email': useremail});
+          firestore.collection('Pinchannel').add({
+            'username': usercode,
+            'linkname': '빈 스페이스',
+            'email': useremail,
+            'setting': 'block'
+          });
           uiset.setuserspace('빈 스페이스', usercode, useremail);
         } else {
           uiset.pagelist.clear();
@@ -162,6 +171,9 @@ Future<Widget?> initScreen() async {
             uiset.setuserspace(messagetitle, usercode, useremail);
           }
         }
+      }).whenComplete(() {
+        NotificationApi.runWhileAppIsTerminated();
+        GoToMain();
       });
     } else {
       await firestore
@@ -209,9 +221,12 @@ Future<Widget?> initScreen() async {
           .get()
           .then(
         (value) {
-          peopleadd.secondnameset(
-              value.docs[0].get('subname'), value.docs[0].get('code'));
-          Hive.box('user_setting').put('usercode', value.docs[0].get('code'));
+          if (value.docs.isEmpty) {
+            peopleadd.secondnameset(name, usercode);
+          } else {
+            peopleadd.secondnameset(
+                value.docs[0].get('subname'), value.docs[0].get('code'));
+          }
         },
       );
       await firestore.collection('AppNoticeByUsers').get().then((value) {
@@ -238,8 +253,12 @@ Future<Widget?> initScreen() async {
         }
         if (updateid.isEmpty) {
           uiset.pagelist.clear();
-          firestore.collection('Pinchannel').add(
-              {'username': usercode, 'linkname': '빈 스페이스', 'email': useremail});
+          firestore.collection('Pinchannel').add({
+            'username': usercode,
+            'linkname': '빈 스페이스',
+            'email': useremail,
+            'setting': 'block'
+          });
           uiset.setuserspace('빈 스페이스', usercode, useremail);
         } else {
           uiset.pagelist.clear();
@@ -248,6 +267,9 @@ Future<Widget?> initScreen() async {
             uiset.setuserspace(messagetitle, usercode, useremail);
           }
         }
+      }).whenComplete(() {
+        NotificationApi.runWhileAppIsTerminated();
+        GoToMain();
       });
     }
   }

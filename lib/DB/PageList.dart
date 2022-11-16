@@ -21,6 +21,8 @@ class PageList {
 
 class PageviewList {
   final String title;
+  final int type;
+  final String uniquecode;
   String? username;
   String? calendarcontent;
   List? urlcontent;
@@ -31,6 +33,8 @@ class PageviewList {
 
   PageviewList(
       {required this.title,
+      required this.type,
+      required this.uniquecode,
       this.seperatedindex,
       this.username,
       this.boxseperatedindex,

@@ -1,10 +1,6 @@
 // ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names
 
-import 'package:clickbyme/Page/AddTemplate.dart';
-import 'package:clickbyme/Page/NotiAlarm.dart';
-import 'package:clickbyme/Page/Spacepage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/sheets/movetolinkspace.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -13,9 +9,6 @@ import 'package:status_bar_control/status_bar_control.dart';
 
 import '../DB/PageList.dart';
 import '../Route/subuiroute.dart';
-import '../mongoDB/mongodatabase.dart';
-import '../sheets/linksettingsheet.dart';
-import 'AndroidIOS.dart';
 import 'Getx/linkspacesetting.dart';
 import 'Getx/navibool.dart';
 import 'Getx/notishow.dart';

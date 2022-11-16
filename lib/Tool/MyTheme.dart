@@ -1,7 +1,6 @@
-import 'package:clickbyme/Tool/BGColor.dart';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class MyTheme {
   MyTheme._();
