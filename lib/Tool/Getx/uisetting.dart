@@ -20,7 +20,6 @@ class uisetting extends GetxController {
   int mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
   int currentstepper = 0;
   String searchpagemove = '';
-  String usercode = Hive.box('user_setting').get('usercode');
 
   void setloading(bool what) {
     loading = what;
@@ -99,8 +98,8 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
-  void setuserspace(String title, String user, String email) {
-    pagelist.add(PageList(title: title, username: user, email: email));
+  void setuserspace(String title, String user, String email, String id) {
+    pagelist.add(PageList(title: title, username: user, email: email, id: id));
     update();
     notifyChildrens();
   }

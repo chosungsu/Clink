@@ -922,7 +922,7 @@ contentthird(
         ),*/
         GestureDetector(
           onTap: () async {
-            linkspaceset.minusspacein(index);
+            //linkspaceset.minusspacein(index);
             Get.back();
             await firestore.collection('PageView').get().then((value) {
               for (int i = 0; i < value.docs.length; i++) {
@@ -946,6 +946,7 @@ contentthird(
                 }
               }*/
             }).whenComplete(() {
+              linkspaceset.setcompleted(false);
               //updateid.clear();
             });
           },

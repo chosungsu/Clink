@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
+import '../Enums/Variables.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Route/mainroute.dart';
@@ -68,6 +69,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       if (element.containsValue(Icons.view_stream)) {
                         draw.setclose();
                         Hive.box('user_setting').put('page_index', 0);
+                        uiset.setmypagelistindex(0);
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
@@ -82,6 +84,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             Date, 'home', fToast);*/
                         draw.setclose();
                         Hive.box('user_setting').put('page_index', 1);
+                        uiset.setmypagelistindex(1);
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
@@ -94,6 +97,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         //draw.setclose();
                         draw.setclose();
                         Hive.box('user_setting').put('page_index', 2);
+                        uiset.setmypagelistindex(2);
                         Navigator.of(context).pushReplacement(
                           PageTransition(
                             type: PageTransitionType.rightToLeft,

@@ -142,8 +142,10 @@ class _SpaceapageState extends State<Spaceapage>
                     final messageuser = sp.get('username');
                     final messagetitle = sp.get('linkname');
                     if (messageuser == usercode) {
-                      uiset.pagelist.add(
-                          PageList(title: messagetitle, username: messageuser));
+                      uiset.pagelist.add(PageList(
+                          title: messagetitle,
+                          username: messageuser,
+                          id: sp.id));
                     }
                   }
 

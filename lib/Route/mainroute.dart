@@ -5,11 +5,9 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/mongoDB/mongodatabase.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
@@ -29,19 +27,9 @@ class mainroute extends StatefulWidget {
 
 class _mainrouteState extends State<mainroute>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  late FToast fToast;
-  late DateTime backbuttonpressedTime;
-  TextEditingController controller = TextEditingController();
-  var searchNode = FocusNode();
-  String name = Hive.box('user_info').get('id');
-  late DateTime Date = DateTime.now();
-  final draw = Get.put(navibool());
-  List updateid = [];
-  bool isread = false;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final cal_share_person = Get.put(PeopleAdd());
   final uiset = Get.put(uisetting());
-  bool serverstatus = Hive.box('user_info').get('server_status');
+  final peopleadd = Get.put(PeopleAdd());
+  final draw = Get.put(navibool());
 
   @override
   void initState() {
@@ -49,8 +37,6 @@ class _mainrouteState extends State<mainroute>
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     WidgetsBinding.instance.addObserver(this);
     uiset.pagenumber = widget.index;
-    fToast = FToast();
-    fToast.init(context);
   }
 
   @override
@@ -129,7 +115,7 @@ class _mainrouteState extends State<mainroute>
     List pages = [
       //HomePage(secondname: cal_share_person.secondname),
       const MYPage(),
-      SearchPage(secondname: cal_share_person.secondname),
+      SearchPage(secondname: peopleadd.secondname),
       const ProfilePage(),
     ];
     return GetBuilder<navibool>(

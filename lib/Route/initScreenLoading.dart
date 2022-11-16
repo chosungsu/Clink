@@ -148,31 +148,32 @@ Future<Widget?> initScreen() async {
           notilist.isread = true;
         }
       });
-      await firestore.collection('Pinchannel').get().then((value) {
+      await firestore.collection('Pinchannel').get().then((value) async {
         updateid.clear();
+        uiset.pagelist.clear();
         for (var element in value.docs) {
           if (element.data()['username'] == usercode) {
             updateid.add(element.data()['linkname']);
+            uiset.pagelist.add(
+                PageList(title: element.data()['linkname'], id: element.id));
           }
         }
         if (updateid.isEmpty) {
           uiset.pagelist.clear();
-          firestore.collection('Pinchannel').add({
+          await firestore.collection('Pinchannel').add({
             'username': usercode,
             'linkname': '빈 스페이스',
             'email': useremail,
             'setting': 'block'
+          }).then((value1) {
+            uiset.pagelist.add(PageList(title: '빈 스페이스', id: value1.id));
           });
-          uiset.setuserspace('빈 스페이스', usercode, useremail);
-        } else {
-          uiset.pagelist.clear();
-          for (int j = 0; j < updateid.length; j++) {
-            final messagetitle = updateid[j];
-            uiset.setuserspace(messagetitle, usercode, useremail);
-          }
         }
       }).whenComplete(() {
         NotificationApi.runWhileAppIsTerminated();
+        Hive.box('user_setting').put('currentmypage',
+            Hive.box('user_setting').get('currentmypage') ?? 0);
+
         GoToMain();
       });
     } else {
@@ -244,31 +245,31 @@ Future<Widget?> initScreen() async {
           notilist.isread = true;
         }
       });
-      await firestore.collection('Pinchannel').get().then((value) {
+      await firestore.collection('Pinchannel').get().then((value) async {
         updateid.clear();
+        uiset.pagelist.clear();
         for (var element in value.docs) {
           if (element.data()['username'] == usercode) {
             updateid.add(element.data()['linkname']);
+            uiset.pagelist.add(
+                PageList(title: element.data()['linkname'], id: element.id));
           }
         }
         if (updateid.isEmpty) {
           uiset.pagelist.clear();
-          firestore.collection('Pinchannel').add({
+          await firestore.collection('Pinchannel').add({
             'username': usercode,
             'linkname': '빈 스페이스',
             'email': useremail,
             'setting': 'block'
+          }).then((value1) {
+            uiset.pagelist.add(PageList(title: '빈 스페이스', id: value1.id));
           });
-          uiset.setuserspace('빈 스페이스', usercode, useremail);
-        } else {
-          uiset.pagelist.clear();
-          for (int j = 0; j < updateid.length; j++) {
-            final messagetitle = updateid[j]['linkname'];
-            uiset.setuserspace(messagetitle, usercode, useremail);
-          }
         }
       }).whenComplete(() {
         NotificationApi.runWhileAppIsTerminated();
+        Hive.box('user_setting').put('currentmypage',
+            Hive.box('user_setting').get('currentmypage') ?? 0);
         GoToMain();
       });
     }

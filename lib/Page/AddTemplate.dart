@@ -243,7 +243,9 @@ class _AddTemplateState extends State<AddTemplate>
               const SizedBox(
                 height: 50,
               ),
-              cg.categorypicknumber != 99 ? Page1_2() : const SizedBox(),
+              cg.categorypicknumber != 99
+                  ? GetBuilder<linkspacesetting>(builder: (_) => Page1_2())
+                  : const SizedBox(),
               cg.categorypicknumber != 99
                   ? const SizedBox(
                       height: 50,
@@ -673,23 +675,23 @@ class _AddTemplateState extends State<AddTemplate>
                                                     ),
                                                     InkWell(
                                                       onTap: () {
-                                                        print(linkspaceset
-                                                            .indexcnt[index]
-                                                            .placestr);
                                                         linkplacechangeoptions(
                                                             context,
                                                             usercode,
                                                             uiset.pagelist[0]
                                                                 .title,
                                                             index,
-                                                            linkspaceset
-                                                                .indexcnt[index]
-                                                                .placestr,
-                                                            linkspaceset
-                                                                .indexcnt[index]
+                                                            uiset
+                                                                .pageviewlist[
+                                                                    index]
+                                                                .title,
+                                                            uiset
+                                                                .pageviewlist[
+                                                                    index]
                                                                 .uniquecode,
-                                                            linkspaceset
-                                                                .indexcnt[index]
+                                                            uiset
+                                                                .pageviewlist[
+                                                                    index]
                                                                 .type);
                                                       },
                                                       child: const Icon(

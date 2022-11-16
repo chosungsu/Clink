@@ -13,12 +13,10 @@ import 'package:package_info/package_info.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../Enums/Variables.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
-import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/navibool.dart';
-import '../Tool/Getx/notishow.dart';
-import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/Setting/ShowLicense.dart';
@@ -37,38 +35,10 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
-  bool login_state = false;
-  String secondname = '';
-  final draw = Get.put(navibool());
   var _controller = TextEditingController();
   late final PageController _pController2;
   ScrollController scrollController = ScrollController();
-  bool showsharegroups = false;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final List<String> list_app_setting = <String>[
-    '배경색',
-    '글자크기',
-    '메뉴바 위치',
-  ];
-  final List<String> list_user_setting = <String>[
-    '개인정보 수집 및 이용 동의',
-    '라이선스',
-  ];
-  String appuserversion = '';
-  String appstoreversion = '';
-  final searchNode = FocusNode();
-  String name = Hive.box('user_info').get('id');
-  final peopleadd = Get.put(PeopleAdd());
-  final uiset = Get.put(uisetting());
-  final notilist = Get.put(notishow());
-  final friendnamelist = [];
-  final calnamelist = [];
-  late PackageInfo info;
-  String versioninfo = '';
-  int pagesetnumber = 0;
   late FToast fToast;
-  String usercode = Hive.box('user_setting').get('usercode');
-  bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
   void initState() {
@@ -236,16 +206,9 @@ class _ProfilePageState extends State<ProfilePage>
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          /*G_Container(
-                                                                  height),*/
                                                           const SizedBox(
                                                             height: 20,
                                                           ),
-                                                          /*G_Container0(
-                                                                  height),
-                                                              const SizedBox(
-                                                                height: 20,
-                                                              ),*/
                                                           G_Container1(height),
                                                         ],
                                                       )));
@@ -552,34 +515,6 @@ class _ProfilePageState extends State<ProfilePage>
       ),
     );
   }
-  /*G_Container(double height) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width - 40,
-      height: 50,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.keyboard_double_arrow_right,
-            color: TextColor_shadowcolor(),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Text('왼쪽으로 스와이프하여 설정페이지 이동',
-                maxLines: 2,
-                softWrap: true,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: TextColor_shadowcolor(),
-                    overflow: TextOverflow.fade)),
-          )
-        ],
-      ),
-    );
-  }*/
 
   G_Container1(double height) {
     return SizedBox(
