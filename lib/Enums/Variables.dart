@@ -45,7 +45,6 @@ bool showsharegroups = false;
 final List<String> list_app_setting = <String>[
   '배경색',
   '글자크기',
-  '메뉴바 위치',
 ];
 final List<String> list_user_setting = <String>[
   '개인정보 수집 및 이용 동의',

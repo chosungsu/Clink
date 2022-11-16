@@ -26,7 +26,6 @@ class DrawerScreen extends StatefulWidget {
 
 class _DrawerScreenState extends State<DrawerScreen> {
   bool selected = false;
-  Color colorselection = Colors.white;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
   String name = Hive.box('user_info').get('id');
@@ -41,11 +40,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
-    Hive.box('user_setting').get('which_color_background') == null
-        ? colorselection = MyTheme.colorWhite_drawer
-        : (Hive.box('user_setting').get('which_color_background') == 0
-            ? colorselection = MyTheme.colorWhite_drawer
-            : colorselection = MyTheme.colorblack_drawer);
   }
 
   @override
@@ -112,7 +106,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       children: [
                         Icon(
                           element['icon'],
-                          color: NaviColor(selected),
+                          color: selected
+                              ? Colors.purple.shade300
+                              : (draw.color == Colors.white
+                                  ? Colors.black
+                                  : Colors.white),
                         ),
                         const SizedBox(
                           height: 20,

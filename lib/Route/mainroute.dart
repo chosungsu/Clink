@@ -151,11 +151,13 @@ class _mainrouteState extends State<mainroute>
 
                                 uiset.setloading(false);
                               },
-                              backgroundColor: BGColor(),
+                              backgroundColor: draw.color,
                               selectedFontSize: 18,
                               unselectedFontSize: 18,
-                              selectedItemColor: NaviColor(true),
-                              unselectedItemColor: NaviColor(false),
+                              selectedItemColor: Colors.purple.shade300,
+                              unselectedItemColor: draw.color == Colors.white
+                                  ? Colors.black
+                                  : Colors.white,
                               showSelectedLabels: false,
                               showUnselectedLabels: false,
                               currentIndex: uiset.pagenumber,

@@ -58,19 +58,3 @@ Color TextColor_shadowcolor() {
           : color_textstatus = MyTheme.colorWhitestatus);
   return color_textstatus;
 }
-
-Color NaviColor(bool select) {
-  Color color_navi = Colors.white;
-  select == true
-      ? (Hive.box('user_setting').get('which_color_background') == null
-          ? color_navi = MyTheme.colorselected_drawer
-          : (Hive.box('user_setting').get('which_color_background') == 0
-              ? color_navi = MyTheme.colorselected_drawer
-              : color_navi = MyTheme.colorselected_black_drawer))
-      : (Hive.box('user_setting').get('which_color_background') == null
-          ? color_navi = MyTheme.colornotselected_drawer
-          : (Hive.box('user_setting').get('which_color_background') == 0
-              ? color_navi = MyTheme.colornotselected_drawer
-              : color_navi = MyTheme.colornotselected_black_drawer));
-  return color_navi;
-}

@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +19,7 @@ class navibool extends GetxController {
       : (Hive.box('user_setting').get('which_color_background') == 0
           ? MyTheme.colorWhite
           : MyTheme.colorblack);
+  var color_navi;
 
   void setpagecurrent(int what) {
     currentpage = what;
