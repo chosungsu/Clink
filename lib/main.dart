@@ -35,7 +35,7 @@ void main() async {
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
-  await MongoDB.connect();
+  //await MongoDB.connect();
   runApp(
     const MyApp(),
   );

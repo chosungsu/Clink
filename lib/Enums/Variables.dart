@@ -26,7 +26,6 @@ final peopleadd = Get.put(PeopleAdd());
 final scollection = Get.put(selectcollection());
 final searchNode = FocusNode();
 FirebaseFirestore firestore = FirebaseFirestore.instance;
-bool serverstatus = Hive.box('user_info').get('server_status');
 //Here are PageUI Variables
 var pagename;
 var spacename;

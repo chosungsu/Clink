@@ -1,12 +1,9 @@
 // ignore_for_file: non_constant_identifier_names, prefer_const_literals_to_create_immutables
 
-import 'package:another_stepper/dto/stepper_data.dart';
-import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -15,6 +12,7 @@ import '../DB/PageList.dart';
 import '../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AppBarCustom.dart';
+import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/category.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/uisetting.dart';
@@ -97,7 +95,7 @@ class _AddTemplateState extends State<AddTemplate>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppBarCustom(
-                            title: '스페이스 추가',
+                            title: '스페이스 리스트',
                             righticon: false,
                             iconname: Icons.add_box,
                           ),
@@ -165,7 +163,19 @@ class _AddTemplateState extends State<AddTemplate>
         Flexible(
             flex: 1,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if (cg.categorypicknumber == 99) {
+                  Snack.show(
+                      context: context,
+                      title: '알림',
+                      content: '스페이스 선택해주세요!',
+                      snackType: SnackType.info,
+                      behavior: SnackBarBehavior.floating);
+                } else {
+                  func6(context, _controller, searchNode, 'addtemplate',
+                      widget.id, cg.categorypicknumber);
+                }
+              },
               child: ContainerDesign(
                   color: draw.backgroundcolor,
                   child: Row(
@@ -232,7 +242,7 @@ class _AddTemplateState extends State<AddTemplate>
                                           )
                                         : Icon(
                                             Icons.ads_click,
-                                            color: TextColor(),
+                                            color: draw.color_textstatus,
                                             size: 25,
                                           ),
                                     const SizedBox(
@@ -246,7 +256,7 @@ class _AddTemplateState extends State<AddTemplate>
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                           fontSize: contentTextsize(),
-                                          color: TextColor(),
+                                          color: draw.color_textstatus,
                                           fontWeight: FontWeight.bold,
                                         ),
                                         overflow: TextOverflow.clip,
@@ -740,7 +750,7 @@ class _AddTemplateState extends State<AddTemplate>
 
   Future<bool> _onWillPop() async {
     Future.delayed(const Duration(seconds: 0), () {
-      StatusBarControl.setColor(BGColor(), animated: true);
+      StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       draw.setnavi();
       if (uiset.searchpagemove != '') {
         Hive.box('user_setting').put('page_index', 11);

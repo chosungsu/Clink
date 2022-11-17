@@ -138,6 +138,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                               myindex: uiset.mypagelistindex,
                             ),
                           ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           ScrollConfiguration(
                               behavior: NoBehavior(),
                               child: PageUI1(

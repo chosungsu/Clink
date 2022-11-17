@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +17,6 @@ class GoogleSignInController extends GetxController {
   GoogleSignInAccount? googleSignInAccount;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late int count;
-  bool serverstatus = Hive.box('user_info').get('server_status');
 
   login(BuildContext context, bool ischecked) async {
     count = 1;
@@ -42,104 +43,42 @@ class GoogleSignInController extends GetxController {
             5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
     //firestore 저장
-    if (serverstatus) {
-      await MongoDB.find(collectionname: 'user', query: 'name', what: nick);
-      if (MongoDB.res == null) {
-        await MongoDB.add(collectionname: 'user', addlist: {
+
+    firestore.collection('User').doc(nick).get().then((value) async {
+      if (value.exists) {
+        await firestore.collection('User').doc(nick).update({
+          'name': nick,
+          'email': email,
+          'login_where': 'google_user',
+          'autologin': ischecked,
+        }).whenComplete(() {
+          firestore
+              .collection('User')
+              .doc(Hive.box('user_info').get('id'))
+              .get()
+              .then((value) async {
+            if (value.exists) {
+              await Hive.box('user_setting')
+                  .put('usercode', value.data()!['code']);
+            } else {}
+          });
+        });
+      } else {
+        await firestore.collection('User').doc(nick).set({
           'name': nick,
           'subname': nick,
           'email': email,
           'login_where': 'google_user',
+          'time': DateTime.now(),
           'autologin': ischecked,
           'code': code
+        }, SetOptions(merge: true)).whenComplete(() async {
+          await Hive.box('user_setting').put('usercode', code);
         });
-        Hive.box('user_setting').put('usercode', code);
-      } else {
-        await MongoDB.update(
-            collectionname: 'user',
-            query: 'name',
-            what: nick,
-            updatelist: {
-              'name': nick,
-              'email': email,
-              'login_where': 'google_user',
-              'autologin': ischecked,
-            });
-        Hive.box('user_setting').put('usercode', MongoDB.res['code']);
       }
-
-      firestore.collection('User').doc(nick).get().then((value) async {
-        if (value.exists) {
-          await firestore.collection('User').doc(nick).update({
-            'name': nick,
-            'email': email,
-            'login_where': 'google_user',
-            'autologin': ischecked,
-          }).whenComplete(() {
-            firestore
-                .collection('User')
-                .doc(Hive.box('user_info').get('id'))
-                .get()
-                .then((value) async {
-              if (value.exists) {
-                await Hive.box('user_setting')
-                    .put('usercode', value.data()!['code']);
-              } else {}
-            });
-          });
-        } else {
-          await firestore.collection('User').doc(nick).set({
-            'name': nick,
-            'subname': nick,
-            'email': email,
-            'login_where': 'google_user',
-            'time': DateTime.now(),
-            'autologin': ischecked,
-            'code': code
-          }, SetOptions(merge: true)).whenComplete(() async {
-            await Hive.box('user_setting').put('usercode', code);
-          });
-        }
-      });
-      await initScreen();
-      GoToMain();
-    } else {
-      firestore.collection('User').doc(nick).get().then((value) async {
-        if (value.exists) {
-          await firestore.collection('User').doc(nick).update({
-            'name': nick,
-            'email': email,
-            'login_where': 'google_user',
-            'autologin': ischecked,
-          }).whenComplete(() {
-            firestore
-                .collection('User')
-                .doc(Hive.box('user_info').get('id'))
-                .get()
-                .then((value) async {
-              if (value.exists) {
-                await Hive.box('user_setting')
-                    .put('usercode', value.data()!['code']);
-              } else {}
-            });
-          });
-        } else {
-          await firestore.collection('User').doc(nick).set({
-            'name': nick,
-            'subname': nick,
-            'email': email,
-            'login_where': 'google_user',
-            'time': DateTime.now(),
-            'autologin': ischecked,
-            'code': code
-          }, SetOptions(merge: true)).whenComplete(() async {
-            await Hive.box('user_setting').put('usercode', code);
-          });
-        }
-      });
-      await initScreen();
-      GoToMain();
-    }
+    });
+    await initScreen();
+    GoToMain();
 
     update();
     notifyChildrens();

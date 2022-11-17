@@ -222,165 +222,90 @@ CompanyNotice(
   final List<CompanyPageList> listcompanytousers = [];
   var url;
   final draw = Get.put(navibool());
-  bool serverstatus = Hive.box('user_info').get('server_status');
   final uiset = Get.put(uisetting());
 
-  return serverstatus == true
-      ? FutureBuilder(
-          future:
-              MongoDB.getData(collectionname: 'companynotice').then((value) {
-            for (int j = 0; j < value.length; j++) {
-              final messageyes = value[j]['showthisinapp'];
-              final messagewhere = value[j]['where'];
-              if (messageyes == 'yes' && messagewhere == 'home') {
-                listcompanytousers.add(CompanyPageList(
-                  title: value[j]['title'],
-                  url: value[j]['url'],
-                ));
-                url = Uri.parse(value[j]['url']);
-              }
-            }
-          }),
-          builder: ((context, snapshot) {
-            return listcompanytousers.isEmpty
-                ? const SizedBox()
-                : Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            draw.setclose();
-                            launchUrl(Uri.parse(listcompanytousers[0].url));
-                          },
-                          child: Container(
-                            height: 10.h,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.grey.shade200,
-                            ),
-                            child: SizedBox(
-                              height: 15.h,
-                              width: double.infinity,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Icon(
-                                    Icons.campaign,
-                                    color: Colors.black45,
-                                    size: 30,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Text(
-                                        listcompanytousers[0].title,
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                            color: Colors.black45,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize()),
-                                        overflow: TextOverflow.ellipsis,
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ));
-          }))
-      : StreamBuilder<QuerySnapshot>(
-          stream: firestore.collection('CompanyNotice').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              listcompanytousers.clear();
-              final valuespace = snapshot.data!.docs;
-              for (var sp in valuespace) {
-                final messageText = sp.get('title');
-                final messageDate = sp.get('date');
-                final messageyes = sp.get('showthisinapp');
-                final messagewhere = sp.get('where');
-                if (messageyes == 'yes' && messagewhere == str) {
-                  listcompanytousers.add(CompanyPageList(
-                    title: messageText,
-                    url: messageDate,
-                  ));
-                  url = Uri.parse(sp.get('url'));
-                }
-              }
+  return StreamBuilder<QuerySnapshot>(
+    stream: firestore.collection('CompanyNotice').snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        listcompanytousers.clear();
+        final valuespace = snapshot.data!.docs;
+        for (var sp in valuespace) {
+          final messageText = sp.get('title');
+          final messageDate = sp.get('date');
+          final messageyes = sp.get('showthisinapp');
+          final messagewhere = sp.get('where');
+          if (messageyes == 'yes' && messagewhere == str) {
+            listcompanytousers.add(CompanyPageList(
+              title: messageText,
+              url: messageDate,
+            ));
+            url = Uri.parse(sp.get('url'));
+          }
+        }
 
-              return listcompanytousers.isEmpty
-                  ? const SizedBox()
-                  : Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              draw.setclose();
-                              launchUrl(Uri.parse(listcompanytousers[0].url));
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey.shade200,
+        return listcompanytousers.isEmpty
+            ? const SizedBox()
+            : Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        draw.setclose();
+                        launchUrl(Uri.parse(listcompanytousers[0].url));
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.grey.shade200,
+                        ),
+                        child: SizedBox(
+                          height: 30,
+                          width: double.infinity,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.campaign,
+                                color: Colors.black45,
+                                size: 30,
                               ),
-                              child: SizedBox(
-                                height: 30,
-                                width: double.infinity,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Icon(
-                                      Icons.campaign,
-                                      color: Colors.black45,
-                                      size: 30,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Flexible(
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          listcompanytousers[0].title,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                              color: Colors.black45,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentTextsize()),
-                                          overflow: TextOverflow.ellipsis,
-                                        )),
-                                  ],
-                                ),
+                              const SizedBox(
+                                width: 10,
                               ),
-                            ),
+                              Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Text(
+                                    listcompanytousers[0].title,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: Colors.black45,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize()),
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                            ],
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ));
-            }
-            return LinearProgressIndicator(
-              backgroundColor: BGColor(),
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-            );
-          },
-        );
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ));
+      }
+      return LinearProgressIndicator(
+        backgroundColor: BGColor(),
+        valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+      );
+    },
+  );
 }
 
 ADSHOW() {

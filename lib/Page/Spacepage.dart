@@ -40,7 +40,6 @@ class _SpaceapageState extends State<Spaceapage>
   var _controller = TextEditingController();
   final searchNode = FocusNode();
   late Animation animation;
-  bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
   void initState() {
@@ -101,6 +100,9 @@ class _SpaceapageState extends State<Spaceapage>
                             title: 'MY',
                             righticon: true,
                             iconname: Icons.add_box,
+                          ),
+                          const SizedBox(
+                            height: 20,
                           ),
                           Flexible(
                               fit: FlexFit.tight,
@@ -256,7 +258,7 @@ class _SpaceapageState extends State<Spaceapage>
 
   Future<bool> _onWillPop() async {
     Future.delayed(const Duration(seconds: 0), () {
-      StatusBarControl.setColor(BGColor(), animated: true);
+      StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       draw.setnavi();
       Hive.box('user_setting').put('page_index', 0);
       Get.back();

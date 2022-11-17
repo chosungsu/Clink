@@ -16,7 +16,6 @@ import '../Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/uisetting.dart';
-import '../mongoDB/mongodatabase.dart';
 
 settingseparatedlinkspace(
     BuildContext context,
@@ -102,8 +101,6 @@ content(
   FocusNode searchnode,
   int index,
 ) {
-  String usercode = Hive.box('user_setting').get('usercode');
-  bool serverstatus = Hive.box('user_info').get('server_status');
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -517,8 +514,6 @@ contentthird(
   String id,
   int categorynumber,
 ) {
-  bool serverstatus = Hive.box('user_info').get('server_status');
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   final updatelist = [];
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
@@ -566,18 +561,59 @@ contentthird(
                 } else {
                   linkspaceset.setcompleted(false);
                   if (where == 'addtemplate') {
-                    firestore.collection('PageView').add({
-                      'id': id,
-                      'spacename': textEditingControllerAddSheet.text,
-                      'urllist': [],
-                      'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                      'type': categorynumber
-                    }).whenComplete(() {
-                      linkspaceset.setcompleted(true);
-                      linkspaceset
-                          .setspacelink(textEditingControllerAddSheet.text);
-                      Get.back();
-                    });
+                    if (categorynumber == 0) {
+                      firestore.collection('PageView').add({
+                        'id': id,
+                        'spacename': textEditingControllerAddSheet.text,
+                        'urllist': [],
+                        'pagename': uiset.pagelist[uiset.mypagelistindex].title,
+                        'type': categorynumber
+                      }).whenComplete(() {
+                        linkspaceset.setcompleted(true);
+                        linkspaceset
+                            .setspacelink(textEditingControllerAddSheet.text);
+                        Get.back();
+                      });
+                    } else if (categorynumber == 1) {
+                      firestore.collection('PageView').add({
+                        'id': id,
+                        'spacename': textEditingControllerAddSheet.text,
+                        'calendarname': textEditingControllerAddSheet.text,
+                        'pagename': uiset.pagelist[uiset.mypagelistindex].title,
+                        'type': categorynumber
+                      }).whenComplete(() {
+                        linkspaceset.setcompleted(true);
+                        linkspaceset
+                            .setspacelink(textEditingControllerAddSheet.text);
+                        Get.back();
+                      });
+                    } else if (categorynumber == 2) {
+                      firestore.collection('PageView').add({
+                        'id': id,
+                        'spacename': textEditingControllerAddSheet.text,
+                        'todolist': [],
+                        'pagename': uiset.pagelist[uiset.mypagelistindex].title,
+                        'type': categorynumber
+                      }).whenComplete(() {
+                        linkspaceset.setcompleted(true);
+                        linkspaceset
+                            .setspacelink(textEditingControllerAddSheet.text);
+                        Get.back();
+                      });
+                    } else if (categorynumber == 3) {
+                      firestore.collection('PageView').add({
+                        'id': id,
+                        'spacename': textEditingControllerAddSheet.text,
+                        'memolist': [],
+                        'pagename': uiset.pagelist[uiset.mypagelistindex].title,
+                        'type': categorynumber
+                      }).whenComplete(() {
+                        linkspaceset.setcompleted(true);
+                        linkspaceset
+                            .setspacelink(textEditingControllerAddSheet.text);
+                        Get.back();
+                      });
+                    }
                   } else {
                     firestore.collection('Pinchannel').add({
                       'username': username,
@@ -732,8 +768,6 @@ titleforth(
 
 contentforth(BuildContext context, FocusNode searchNode,
     TextEditingController controller, String link) {
-  String usercode = Hive.box('user_setting').get('usercode');
-  bool serverstatus = Hive.box('user_info').get('server_status');
   final updatelist = [];
   final uniquecodelist = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;

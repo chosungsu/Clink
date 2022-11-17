@@ -45,7 +45,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   final peopleadd = Get.put(PeopleAdd());
   final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
-  bool serverstatus = Hive.box('user_info').get('server_status');
 
   @override
   void didChangeDependencies() {
@@ -218,56 +217,21 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                                           peopleadd
                                                               .defaulthomeviewlist
                                                               .removeAt(index);
-                                                          if (serverstatus) {
-                                                            MongoDB.update(
-                                                                collectionname:
-                                                                    'homeview',
-                                                                query:
-                                                                    'usercode',
-                                                                what: Hive.box(
-                                                                        'user_setting')
-                                                                    .get(
-                                                                        'usercode'),
-                                                                updatelist: {
-                                                                  'viewcategory':
-                                                                      peopleadd
-                                                                          .defaulthomeviewlist,
-                                                                  'hidecategory':
-                                                                      peopleadd
-                                                                          .userviewlist
-                                                                });
-                                                            firestore
-                                                                .collection(
-                                                                    'HomeViewCategories')
-                                                                .doc(Hive.box(
-                                                                        'user_setting')
-                                                                    .get(
-                                                                        'usercode'))
-                                                                .update({
-                                                              'viewcategory':
-                                                                  peopleadd
-                                                                      .defaulthomeviewlist,
-                                                              'hidecategory':
-                                                                  peopleadd
-                                                                      .userviewlist
-                                                            });
-                                                          } else {
-                                                            firestore
-                                                                .collection(
-                                                                    'HomeViewCategories')
-                                                                .doc(Hive.box(
-                                                                        'user_setting')
-                                                                    .get(
-                                                                        'usercode'))
-                                                                .update({
-                                                              'viewcategory':
-                                                                  peopleadd
-                                                                      .defaulthomeviewlist,
-                                                              'hidecategory':
-                                                                  peopleadd
-                                                                      .userviewlist
-                                                            });
-                                                          }
+                                                          firestore
+                                                              .collection(
+                                                                  'HomeViewCategories')
+                                                              .doc(Hive.box(
+                                                                      'user_setting')
+                                                                  .get(
+                                                                      'usercode'))
+                                                              .update({
+                                                            'viewcategory':
+                                                                peopleadd
+                                                                    .defaulthomeviewlist,
+                                                            'hidecategory':
+                                                                peopleadd
+                                                                    .userviewlist
+                                                          });
                                                         } else {
                                                           Snack.show(
                                                               title: '알림',
@@ -359,39 +323,16 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                       peopleadd.defaulthomeviewlist
                                           .insert(newIndex, element);
                                     });
-                                    if (serverstatus) {
-                                      MongoDB.update(
-                                        collectionname: 'homeview',
-                                        query: 'usercode',
-                                        what: Hive.box('user_setting')
-                                            .get('usercode'),
-                                        updatelist: {
-                                          'viewcategory':
-                                              peopleadd.defaulthomeviewlist,
-                                        },
-                                      );
-                                      firestore
-                                          .collection('HomeViewCategories')
-                                          .doc(Hive.box('user_setting')
-                                              .get('usercode'))
-                                          .update(
-                                        {
-                                          'viewcategory':
-                                              peopleadd.defaulthomeviewlist,
-                                        },
-                                      );
-                                    } else {
-                                      firestore
-                                          .collection('HomeViewCategories')
-                                          .doc(Hive.box('user_setting')
-                                              .get('usercode'))
-                                          .update(
-                                        {
-                                          'viewcategory':
-                                              peopleadd.defaulthomeviewlist,
-                                        },
-                                      );
-                                    }
+                                    firestore
+                                        .collection('HomeViewCategories')
+                                        .doc(Hive.box('user_setting')
+                                            .get('usercode'))
+                                        .update(
+                                      {
+                                        'viewcategory':
+                                            peopleadd.defaulthomeviewlist,
+                                      },
+                                    );
                                     peopleadd.setcategory();
                                   },
                                   proxyDecorator: (Widget child, int index,
@@ -474,47 +415,18 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                                         .userviewlist[index]);
                                                 peopleadd.userviewlist
                                                     .removeAt(index);
-                                                if (serverstatus) {
-                                                  MongoDB.update(
-                                                      collectionname:
-                                                          'homeview',
-                                                      query: 'usercode',
-                                                      what: Hive.box(
-                                                              'user_setting')
-                                                          .get('usercode'),
-                                                      updatelist: {
-                                                        'viewcategory': peopleadd
-                                                            .defaulthomeviewlist,
-                                                        'hidecategory':
-                                                            peopleadd
-                                                                .userviewlist
-                                                      });
-                                                  firestore
-                                                      .collection(
-                                                          'HomeViewCategories')
-                                                      .doc(Hive.box(
-                                                              'user_setting')
-                                                          .get('usercode'))
-                                                      .update({
-                                                    'viewcategory': peopleadd
-                                                        .defaulthomeviewlist,
-                                                    'hidecategory':
-                                                        peopleadd.userviewlist
-                                                  });
-                                                } else {
-                                                  firestore
-                                                      .collection(
-                                                          'HomeViewCategories')
-                                                      .doc(Hive.box(
-                                                              'user_setting')
-                                                          .get('usercode'))
-                                                      .update({
-                                                    'viewcategory': peopleadd
-                                                        .defaulthomeviewlist,
-                                                    'hidecategory':
-                                                        peopleadd.userviewlist
-                                                  });
-                                                }
+                                                firestore
+                                                    .collection(
+                                                        'HomeViewCategories')
+                                                    .doc(
+                                                        Hive.box('user_setting')
+                                                            .get('usercode'))
+                                                    .update({
+                                                  'viewcategory': peopleadd
+                                                      .defaulthomeviewlist,
+                                                  'hidecategory':
+                                                      peopleadd.userviewlist
+                                                });
                                               });
                                             },
                                             child: Text('보기',

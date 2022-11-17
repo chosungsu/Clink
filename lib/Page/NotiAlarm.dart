@@ -116,7 +116,7 @@ class _NotiAlarmState extends State<NotiAlarm>
 
   allread() {
     return Padding(
-      padding: const EdgeInsets.only(left: 30, right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,7 +353,7 @@ class _NotiAlarmState extends State<NotiAlarm>
 
   Future<bool> _onWillPop() async {
     Future.delayed(const Duration(seconds: 0), () {
-      StatusBarControl.setColor(BGColor(), animated: true);
+      StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       draw.setnavi();
       Hive.box('user_setting').put('page_index', 0);
       Get.back();

@@ -1124,7 +1124,6 @@ contentforth(
 
   final List<Linkspacepage> listspacepageset = [];
   bool isloading = false;
-  bool serverstatus = Hive.box('user_info').get('server_status');
   var id;
   var updateid = [];
   var updateindex = [];
@@ -1171,50 +1170,24 @@ contentforth(
                       snackType: SnackType.warning,
                       behavior: SnackBarBehavior.floating);
                 } else {
-                  if (serverstatus) {
-                    await MongoDB.update(
-                        collectionname: 'linknet',
-                        query: 'uniquecode',
-                        what: code,
-                        updatelist: {'addname': controller.text});
-                    await firestore.collection('Linknet').get().then((value) {
-                      if (value.docs.isNotEmpty) {
-                        for (int j = 0; j < value.docs.length; j++) {
-                          final messageuser = value.docs[j]['username'];
-                          final messageuniquecode = value.docs[j]['uniquecode'];
-                          final messageindex = value.docs[j]['index'];
-                          final messageid = value.docs[j].id;
-                          if (messageindex == index &&
-                              messageuniquecode == code &&
-                              messageuser == name) {
-                            firestore
-                                .collection('Linknet')
-                                .doc(messageid)
-                                .update({'addname': controller.text});
-                          }
+                  await firestore.collection('Linknet').get().then((value) {
+                    if (value.docs.isNotEmpty) {
+                      for (int j = 0; j < value.docs.length; j++) {
+                        final messageuser = value.docs[j]['username'];
+                        final messageuniquecode = value.docs[j]['uniquecode'];
+                        final messageindex = value.docs[j]['index'];
+                        final messageid = value.docs[j].id;
+                        if (messageindex == index &&
+                            messageuniquecode == code &&
+                            messageuser == name) {
+                          firestore
+                              .collection('Linknet')
+                              .doc(messageid)
+                              .update({'addname': controller.text});
                         }
                       }
-                    });
-                  } else {
-                    await firestore.collection('Linknet').get().then((value) {
-                      if (value.docs.isNotEmpty) {
-                        for (int j = 0; j < value.docs.length; j++) {
-                          final messageuser = value.docs[j]['username'];
-                          final messageuniquecode = value.docs[j]['uniquecode'];
-                          final messageindex = value.docs[j]['index'];
-                          final messageid = value.docs[j].id;
-                          if (messageindex == index &&
-                              messageuniquecode == code &&
-                              messageuser == name) {
-                            firestore
-                                .collection('Linknet')
-                                .doc(messageid)
-                                .update({'addname': controller.text});
-                          }
-                        }
-                      }
-                    });
-                  }
+                    }
+                  });
                 }
                 setState(() {
                   isloading = false;

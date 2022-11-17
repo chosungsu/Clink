@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names
 
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:status_bar_control/status_bar_control.dart';
 
 import '../DB/PageList.dart';
 import '../Route/subuiroute.dart';
+import '../sheets/settingpageonly.dart';
 import 'Getx/linkspacesetting.dart';
 import 'Getx/navibool.dart';
 import 'Getx/notishow.dart';
@@ -42,7 +44,6 @@ class AppBarCustom extends StatelessWidget {
     final linkspaceset = Get.put(linkspacesetting());
     final uiset = Get.put(uisetting());
     final draw = Get.put(navibool());
-    bool serverstatus = Hive.box('user_info').get('server_status');
     StatusBarControl.setColor(draw.backgroundcolor, animated: true);
 
     return StatefulBuilder(builder: ((context, setState) {
@@ -52,7 +53,7 @@ class AppBarCustom extends StatelessWidget {
                   height: 60,
                   child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 20, right: 20, top: 5, bottom: 5),
+                          left: 20, right: 10, top: 5, bottom: 5),
                       child: GetBuilder<navibool>(
                         builder: (_) => Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -120,17 +121,17 @@ class AppBarCustom extends StatelessWidget {
                                 ? MediaQuery.of(context).size.width - 80
                                 : MediaQuery.of(context).size.width - 30,*/
                                 child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10),
+                                    padding: const EdgeInsets.only(right: 10),
                                     child: GetBuilder<uisetting>(
                                       builder: (_) => Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Hive.box('user_setting')
                                                       .get('page_index') ==
                                                   0
                                               ? uiset.pagelist.isEmpty
-                                                  ? Flexible(
-                                                      fit: FlexFit.tight,
+                                                  ? ContainerDesign(
                                                       child: GestureDetector(
                                                         onTap: (() => func5()),
                                                         child: RichText(
@@ -142,7 +143,7 @@ class AppBarCustom extends StatelessWidget {
                                                                         FontWeight
                                                                             .normal,
                                                                     fontSize:
-                                                                        mainTitleTextsize(),
+                                                                        contentTitleTextsize(),
                                                                     color: draw
                                                                         .color_textstatus),
                                                                 child: Row(
@@ -153,7 +154,7 @@ class AppBarCustom extends StatelessWidget {
                                                                           fontWeight: FontWeight
                                                                               .bold,
                                                                           fontSize:
-                                                                              mainTitleTextsize(),
+                                                                              contentTitleTextsize(),
                                                                           color:
                                                                               draw.color_textstatus),
                                                                     ),
@@ -170,9 +171,10 @@ class AppBarCustom extends StatelessWidget {
                                                                 ),
                                                               ),
                                                             ])),
-                                                      ))
-                                                  : Flexible(
-                                                      fit: FlexFit.tight,
+                                                      ),
+                                                      color:
+                                                          draw.backgroundcolor)
+                                                  : ContainerDesign(
                                                       child: GestureDetector(
                                                         onTap: (() => func5()),
                                                         child: RichText(
@@ -184,7 +186,7 @@ class AppBarCustom extends StatelessWidget {
                                                                         FontWeight
                                                                             .normal,
                                                                     fontSize:
-                                                                        mainTitleTextsize(),
+                                                                        contentTitleTextsize(),
                                                                     color: draw
                                                                         .color_textstatus),
                                                                 child: Row(
@@ -200,7 +202,7 @@ class AppBarCustom extends StatelessWidget {
                                                                           fontWeight: FontWeight
                                                                               .bold,
                                                                           fontSize:
-                                                                              mainTitleTextsize(),
+                                                                              contentTitleTextsize(),
                                                                           color: draw
                                                                               .color_textstatus,
                                                                           overflow:
@@ -219,130 +221,44 @@ class AppBarCustom extends StatelessWidget {
                                                                 ),
                                                               ),
                                                             ])),
-                                                      ))
-                                              : Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: NeumorphicText(
-                                                    title.toString(),
-                                                    textAlign: TextAlign.start,
-                                                    style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .flat,
-                                                        depth: 3,
-                                                        color: draw
-                                                            .color_textstatus),
-                                                    textStyle:
-                                                        NeumorphicTextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          mainTitleTextsize(),
-                                                    ),
-                                                  ),
-                                                ),
-                                          Hive.box('user_setting')
-                                                      .get('page_index') ==
-                                                  0
-                                              ? GestureDetector(
-                                                  onTap: () => func4(context),
-                                                  child: NeumorphicIcon(
-                                                    Icons.add_box,
-                                                    size: 30,
-                                                    style: NeumorphicStyle(
-                                                        shape: NeumorphicShape
-                                                            .flat,
-                                                        depth: 5,
-                                                        surfaceIntensity: 0.3,
-                                                        border: NeumorphicBorder(
-                                                            color: draw
-                                                                .backgroundcolor,
-                                                            width: 0.5),
-                                                        color: draw
-                                                            .color_textstatus,
-                                                        lightSource: LightSource
-                                                            .topLeft),
-                                                  ))
-                                              : (Hive.box('user_setting').get(
-                                                              'page_index') ==
-                                                          11 ||
-                                                      Hive.box('user_setting')
-                                                              .get(
-                                                                  'page_index') ==
-                                                          21
-                                                  ? GestureDetector(
-                                                      onTap: () =>
-                                                          func4(context),
-                                                      child: NeumorphicIcon(
-                                                        Icons.add_box,
-                                                        size: 30,
+                                                      ),
+                                                      color:
+                                                          draw.backgroundcolor)
+                                              : (title.toString() == ''
+                                                  ? const SizedBox()
+                                                  : ContainerDesign(
+                                                      child: NeumorphicText(
+                                                        title.toString(),
+                                                        textAlign:
+                                                            TextAlign.start,
                                                         style: NeumorphicStyle(
                                                             shape:
                                                                 NeumorphicShape
                                                                     .flat,
-                                                            depth: 5,
-                                                            surfaceIntensity:
-                                                                0.3,
-                                                            border: NeumorphicBorder(
-                                                                color: draw
-                                                                    .backgroundcolor,
-                                                                width: 0.5),
+                                                            depth: 3,
                                                             color: draw
-                                                                .color_textstatus,
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
+                                                                .color_textstatus),
+                                                        textStyle:
+                                                            NeumorphicTextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTitleTextsize(),
+                                                        ),
                                                       ),
-                                                    )
-                                                  : const SizedBox()),
-                                          Hive.box('user_setting')
-                                                      .get('page_index') ==
-                                                  0
-                                              ? const SizedBox(
-                                                  width: 20,
-                                                )
-                                              : (uiset.searchpagemove != ''
-                                                  ? const SizedBox(
-                                                      width: 20,
-                                                    )
-                                                  : const SizedBox()),
-                                          righticon == true
-                                              ? GetBuilder<uisetting>(
-                                                  builder: (_) =>
-                                                      GestureDetector(
-                                                          onTap: () => iconname ==
-                                                                  Icons
-                                                                      .notifications_none
-                                                              ? func1()
-                                                              : (iconname ==
-                                                                      Icons
-                                                                          .delete
-                                                                  ? func2(
-                                                                      context)
-                                                                  : (iconname ==
-                                                                          Icons
-                                                                              .close
-                                                                      ? func3()
-                                                                      : (iconname == Icons.star_border || iconname == Icons.star
-                                                                          ? func7(
-                                                                              uiset
-                                                                                  .editpagelist[
-                                                                                      0]
-                                                                                  .title,
-                                                                              uiset.editpagelist[0].email
-                                                                                  .toString(),
-                                                                              uiset.editpagelist[0].username
-                                                                                  .toString(),
-                                                                              uiset.editpagelist[0].id
-                                                                                  .toString())
-                                                                          : func6(
-                                                                              context,
-                                                                              textEditingController,
-                                                                              searchnode,
-                                                                              'addpage',
-                                                                              '',
-                                                                              99)))),
+                                                      color: draw
+                                                          .backgroundcolor)),
+                                          Row(
+                                            children: [
+                                              Hive.box('user_setting')
+                                                          .get('page_index') ==
+                                                      0
+                                                  ? ContainerDesign(
+                                                      child: GestureDetector(
+                                                          onTap: () =>
+                                                              func4(context),
                                                           child: NeumorphicIcon(
-                                                            iconname,
+                                                            Icons.add_box,
                                                             size: 30,
                                                             style: NeumorphicStyle(
                                                                 shape:
@@ -355,18 +271,96 @@ class AppBarCustom extends StatelessWidget {
                                                                     color: draw
                                                                         .backgroundcolor,
                                                                     width: 0.5),
-                                                                color: iconname ==
-                                                                        Icons
-                                                                            .star
-                                                                    ? Colors
-                                                                        .yellow
-                                                                    : draw
-                                                                        .color_textstatus,
+                                                                color: draw
+                                                                    .color_textstatus,
                                                                 lightSource:
                                                                     LightSource
                                                                         .topLeft),
-                                                          )))
-                                              : const SizedBox()
+                                                          )),
+                                                      color:
+                                                          draw.backgroundcolor)
+                                                  : (Hive.box('user_setting').get(
+                                                                  'page_index') ==
+                                                              11 ||
+                                                          Hive.box('user_setting')
+                                                                  .get(
+                                                                      'page_index') ==
+                                                              21
+                                                      ? ContainerDesign(
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () =>
+                                                                func4(context),
+                                                            child:
+                                                                NeumorphicIcon(
+                                                              Icons.add_box,
+                                                              size: 30,
+                                                              style: NeumorphicStyle(
+                                                                  shape:
+                                                                      NeumorphicShape
+                                                                          .flat,
+                                                                  depth: 5,
+                                                                  surfaceIntensity:
+                                                                      0.3,
+                                                                  border: NeumorphicBorder(
+                                                                      color: draw
+                                                                          .backgroundcolor,
+                                                                      width:
+                                                                          0.5),
+                                                                  color: draw
+                                                                      .color_textstatus,
+                                                                  lightSource:
+                                                                      LightSource
+                                                                          .topLeft),
+                                                            ),
+                                                          ),
+                                                          color: draw
+                                                              .backgroundcolor)
+                                                      : const SizedBox()),
+                                              Hive.box('user_setting')
+                                                          .get('page_index') ==
+                                                      0
+                                                  ? const SizedBox(
+                                                      width: 10,
+                                                    )
+                                                  : (uiset.searchpagemove != ''
+                                                      ? const SizedBox(
+                                                          width: 10,
+                                                        )
+                                                      : const SizedBox()),
+                                              righticon == true
+                                                  ? GetBuilder<uisetting>(
+                                                      builder: (_) =>
+                                                          ContainerDesign(
+                                                              child:
+                                                                  GestureDetector(
+                                                                      onTap: () => iconname ==
+                                                                              Icons
+                                                                                  .notifications_none
+                                                                          ? func1()
+                                                                          : (iconname == Icons.delete
+                                                                              ? func2(context)
+                                                                              : (iconname == Icons.close ? func3() : (iconname == Icons.star_border || iconname == Icons.star ? func7(uiset.editpagelist[0].title, uiset.editpagelist[0].email.toString(), uiset.editpagelist[0].username.toString(), uiset.editpagelist[0].id.toString()) : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : func6(context, textEditingController, searchnode, 'addpage', '', 99))))),
+                                                                      child: NeumorphicIcon(
+                                                                        iconname,
+                                                                        size:
+                                                                            30,
+                                                                        style: NeumorphicStyle(
+                                                                            shape: NeumorphicShape
+                                                                                .flat,
+                                                                            depth:
+                                                                                5,
+                                                                            surfaceIntensity:
+                                                                                0.3,
+                                                                            border:
+                                                                                NeumorphicBorder(color: draw.backgroundcolor, width: 0.5),
+                                                                            color: iconname == Icons.star ? Colors.yellow : draw.color_textstatus,
+                                                                            lightSource: LightSource.topLeft),
+                                                                      )),
+                                                              color: draw.backgroundcolor))
+                                                  : const SizedBox()
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ))),

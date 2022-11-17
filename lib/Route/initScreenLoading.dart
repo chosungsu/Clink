@@ -12,7 +12,6 @@ import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/uisetting.dart';
-import '../mongoDB/mongodatabase.dart';
 
 Future<Widget?> initScreen() async {
   final peopleadd = Get.put(PeopleAdd());
@@ -32,246 +31,103 @@ Future<Widget?> initScreen() async {
     '홈뷰에 저장된 메모',
   ];
   List userviewlist = [];
-  bool serverstatus = Hive.box('user_info').get('server_status');
 
   if (name == '') {
   } else {
-    //await MongoDB.connect();
-    if (serverstatus) {
-      await MongoDB.find(collectionname: 'user', query: 'name', what: name);
-      if (MongoDB.res == null) {
-        peopleadd.secondnameset(MongoDB.res['subname'], usercode);
-      } else {
-        var usercodetmp;
-        peopleadd.secondnameset(MongoDB.res['subname'], MongoDB.res['code']);
-        usercodetmp = MongoDB.res['code'];
-        Hive.box('user_setting').put('usercode', usercodetmp);
-      }
-      await MongoDB.find(
-          collectionname: 'homeview',
-          query: 'usercode',
-          what: Hive.box('user_setting').get('usercode'));
-      if (MongoDB.res == null) {
-        peopleadd.defaulthomeviewlist.clear();
-        peopleadd.userviewlist.clear();
-        peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
-        peopleadd.userviewlist.add(userviewlist);
-        MongoDB.add(collectionname: 'homeview', addlist: {
+    await firestore
+        .collection('HomeViewCategories')
+        .doc(Hive.box('user_setting').get('usercode'))
+        .get()
+        .then((value) {
+      peopleadd.defaulthomeviewlist.clear();
+      peopleadd.userviewlist.clear();
+      if (value.exists) {
+        for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
+          peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
+        }
+        for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
+          peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
+        }
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
           'usercode': Hive.box('user_setting').get('usercode'),
           'viewcategory': peopleadd.defaulthomeviewlist,
           'hidecategory': peopleadd.userviewlist
-        });
+        }, SetOptions(merge: true));
+        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+        userviewlist = peopleadd.userviewlist;
       } else {
-        peopleadd.defaulthomeviewlist.clear();
-        peopleadd.userviewlist.clear();
-        for (int i = 0; i < MongoDB.res['viewcategory'].length; i++) {
-          peopleadd.defaulthomeviewlist.add(MongoDB.res['viewcategory'][i]);
-        }
-        for (int j = 0; j < MongoDB.res['hidecategory'].length; j++) {
-          peopleadd.userviewlist.add(MongoDB.res['hidecategory'][j]);
-        }
-        MongoDB.update(
-            collectionname: 'homeview',
-            query: 'usercode',
-            what: Hive.box('user_setting').get('usercode'),
-            updatelist: {
-              'usercode': Hive.box('user_setting').get('usercode'),
-              'viewcategory': peopleadd.defaulthomeviewlist,
-              'hidecategory': peopleadd.userviewlist
-            });
+        peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
+        peopleadd.userviewlist.add(userviewlist);
+        firestore
+            .collection('HomeViewCategories')
+            .doc(Hive.box('user_setting').get('usercode'))
+            .set({
+          'usercode': Hive.box('user_setting').get('usercode'),
+          'viewcategory': peopleadd.defaulthomeviewlist,
+          'hidecategory': peopleadd.userviewlist
+        }, SetOptions(merge: true));
+        defaulthomeviewlist = peopleadd.defaulthomeviewlist;
+        userviewlist = peopleadd.userviewlist;
       }
-      await firestore
-          .collection('HomeViewCategories')
-          .doc(Hive.box('user_setting').get('usercode'))
-          .get()
-          .then((value) {
-        peopleadd.defaulthomeviewlist.clear();
-        peopleadd.userviewlist.clear();
-        if (value.exists) {
-          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-            peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
-          }
-          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-            peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
-          }
-          firestore
-              .collection('HomeViewCategories')
-              .doc(Hive.box('user_setting').get('usercode'))
-              .set({
-            'usercode': Hive.box('user_setting').get('usercode'),
-            'viewcategory': peopleadd.defaulthomeviewlist,
-            'hidecategory': peopleadd.userviewlist
-          }, SetOptions(merge: true));
-          defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-          userviewlist = peopleadd.userviewlist;
+    });
+    await firestore
+        .collection('User')
+        .where('name', isEqualTo: name)
+        .get()
+        .then(
+      (value) {
+        if (value.docs.isEmpty) {
+          peopleadd.secondnameset(name, usercode);
         } else {
-          peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
-          peopleadd.userviewlist.add(userviewlist);
-          firestore
-              .collection('HomeViewCategories')
-              .doc(Hive.box('user_setting').get('usercode'))
-              .set({
-            'usercode': Hive.box('user_setting').get('usercode'),
-            'viewcategory': peopleadd.defaulthomeviewlist,
-            'hidecategory': peopleadd.userviewlist
-          }, SetOptions(merge: true));
-          defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-          userviewlist = peopleadd.userviewlist;
+          peopleadd.secondnameset(
+              value.docs[0].get('subname'), value.docs[0].get('code'));
         }
-      });
-      await firestore
-          .collection('User')
-          .where('name', isEqualTo: name)
-          .get()
-          .then(
-        (value) {
-          if (value.docs.isEmpty) {
-            peopleadd.secondnameset(name, usercode);
-          } else {
-            peopleadd.secondnameset(
-                value.docs[0].get('subname'), value.docs[0].get('code'));
-          }
-        },
-      );
-      await firestore.collection('AppNoticeByUsers').get().then((value) {
-        for (var element in value.docs) {
-          if (element.data()['username'] == name ||
-              element.data()['sharename'].toString().contains(name)) {
-            updateid.add(element.data()['read']);
-          }
+      },
+    );
+    await firestore.collection('AppNoticeByUsers').get().then((value) {
+      for (var element in value.docs) {
+        if (element.data()['username'] == name ||
+            element.data()['sharename'].toString().contains(name)) {
+          updateid.add(element.data()['read']);
         }
-        if (updateid.contains('no')) {
-          isread = false;
-          notilist.isread = false;
-        } else {
-          isread = true;
-          notilist.isread = true;
+      }
+      if (updateid.contains('no')) {
+        isread = false;
+        notilist.isread = false;
+      } else {
+        isread = true;
+        notilist.isread = true;
+      }
+    });
+    await firestore.collection('Pinchannel').get().then((value) async {
+      updateid.clear();
+      uiset.pagelist.clear();
+      for (var element in value.docs) {
+        if (element.data()['username'] == usercode) {
+          updateid.add(element.data()['linkname']);
+          uiset.pagelist
+              .add(PageList(title: element.data()['linkname'], id: element.id));
         }
-      });
-      await firestore.collection('Pinchannel').get().then((value) async {
-        updateid.clear();
+      }
+      if (updateid.isEmpty) {
         uiset.pagelist.clear();
-        for (var element in value.docs) {
-          if (element.data()['username'] == usercode) {
-            updateid.add(element.data()['linkname']);
-            uiset.pagelist.add(
-                PageList(title: element.data()['linkname'], id: element.id));
-          }
-        }
-        if (updateid.isEmpty) {
-          uiset.pagelist.clear();
-          await firestore.collection('Pinchannel').add({
-            'username': usercode,
-            'linkname': '빈 스페이스',
-            'email': useremail,
-            'setting': 'block'
-          }).then((value1) {
-            uiset.pagelist.add(PageList(title: '빈 스페이스', id: value1.id));
-          });
-        }
-      }).whenComplete(() {
-        NotificationApi.runWhileAppIsTerminated();
-        Hive.box('user_setting').put('currentmypage',
-            Hive.box('user_setting').get('currentmypage') ?? 0);
-
-        GoToMain();
-      });
-    } else {
-      await firestore
-          .collection('HomeViewCategories')
-          .doc(Hive.box('user_setting').get('usercode'))
-          .get()
-          .then((value) {
-        peopleadd.defaulthomeviewlist.clear();
-        peopleadd.userviewlist.clear();
-        if (value.exists) {
-          for (int i = 0; i < value.data()!['viewcategory'].length; i++) {
-            peopleadd.defaulthomeviewlist.add(value.data()!['viewcategory'][i]);
-          }
-          for (int j = 0; j < value.data()!['hidecategory'].length; j++) {
-            peopleadd.userviewlist.add(value.data()!['hidecategory'][j]);
-          }
-          firestore
-              .collection('HomeViewCategories')
-              .doc(Hive.box('user_setting').get('usercode'))
-              .set({
-            'usercode': Hive.box('user_setting').get('usercode'),
-            'viewcategory': peopleadd.defaulthomeviewlist,
-            'hidecategory': peopleadd.userviewlist
-          }, SetOptions(merge: true));
-          defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-          userviewlist = peopleadd.userviewlist;
-        } else {
-          peopleadd.defaulthomeviewlist.add(defaulthomeviewlist);
-          peopleadd.userviewlist.add(userviewlist);
-          firestore
-              .collection('HomeViewCategories')
-              .doc(Hive.box('user_setting').get('usercode'))
-              .set({
-            'usercode': Hive.box('user_setting').get('usercode'),
-            'viewcategory': peopleadd.defaulthomeviewlist,
-            'hidecategory': peopleadd.userviewlist
-          }, SetOptions(merge: true));
-          defaulthomeviewlist = peopleadd.defaulthomeviewlist;
-          userviewlist = peopleadd.userviewlist;
-        }
-      });
-      await firestore
-          .collection('User')
-          .where('name', isEqualTo: name)
-          .get()
-          .then(
-        (value) {
-          if (value.docs.isEmpty) {
-            peopleadd.secondnameset(name, usercode);
-          } else {
-            peopleadd.secondnameset(
-                value.docs[0].get('subname'), value.docs[0].get('code'));
-          }
-        },
-      );
-      await firestore.collection('AppNoticeByUsers').get().then((value) {
-        for (var element in value.docs) {
-          if (element.data()['username'] == name ||
-              element.data()['sharename'].toString().contains(name)) {
-            updateid.add(element.data()['read']);
-          }
-        }
-        if (updateid.contains('no')) {
-          isread = false;
-          notilist.isread = false;
-        } else {
-          isread = true;
-          notilist.isread = true;
-        }
-      });
-      await firestore.collection('Pinchannel').get().then((value) async {
-        updateid.clear();
-        uiset.pagelist.clear();
-        for (var element in value.docs) {
-          if (element.data()['username'] == usercode) {
-            updateid.add(element.data()['linkname']);
-            uiset.pagelist.add(
-                PageList(title: element.data()['linkname'], id: element.id));
-          }
-        }
-        if (updateid.isEmpty) {
-          uiset.pagelist.clear();
-          await firestore.collection('Pinchannel').add({
-            'username': usercode,
-            'linkname': '빈 스페이스',
-            'email': useremail,
-            'setting': 'block'
-          }).then((value1) {
-            uiset.pagelist.add(PageList(title: '빈 스페이스', id: value1.id));
-          });
-        }
-      }).whenComplete(() {
-        NotificationApi.runWhileAppIsTerminated();
-        Hive.box('user_setting').put('currentmypage',
-            Hive.box('user_setting').get('currentmypage') ?? 0);
-        GoToMain();
-      });
-    }
+        await firestore.collection('Pinchannel').add({
+          'username': usercode,
+          'linkname': '빈 스페이스',
+          'email': useremail,
+          'setting': 'block'
+        }).then((value1) {
+          uiset.pagelist.add(PageList(title: '빈 스페이스', id: value1.id));
+        });
+      }
+    }).whenComplete(() {
+      NotificationApi.runWhileAppIsTerminated();
+      Hive.box('user_setting').put(
+          'currentmypage', Hive.box('user_setting').get('currentmypage') ?? 0);
+      GoToMain();
+    });
   }
 }

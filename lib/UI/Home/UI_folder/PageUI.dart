@@ -13,7 +13,6 @@ import '../../../Tool/TextSize.dart';
 import '../../../sheets/linksettingsheet.dart';
 
 PageUI1(String title, String id) {
-  print(id);
   return GetBuilder<linkspacesetting>(
       builder: (_) => StreamBuilder<QuerySnapshot>(
             stream: firestore.collection('PageView').snapshots(),
@@ -27,7 +26,6 @@ PageUI1(String title, String id) {
                   spacename = sp.get('spacename');
                   type = sp.get('type');
                   if (sp.get('id') == id) {
-                    print('here');
                     linkspaceset.indextreetmp.add(List.empty(growable: true));
                     linkspaceset.indexcnt.add(Linkspacepage(
                         type: sp.get('type'),

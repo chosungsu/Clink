@@ -29,281 +29,136 @@ class ShowTips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool serverstatus = Hive.box('user_info').get('server_status');
-
     return SizedBox(
         width: MediaQuery.of(context).size.width - 40,
-        child: serverstatus == true
-            ? FutureBuilder(
-                future:
-                    MongoDB.getData(collectionname: 'howtouse').then(((value) {
-                  eventtitle.clear();
-                  eventurl.clear();
-                  for (int i = 0; i < value.length; i++) {
-                    final where = value[i]['where'];
-                    if (where == 'home') {
-                      eventtitle.add(value[i]['what']);
-                      eventurl.add(Uri.parse(value[i]['url']));
-                    }
-                  }
-                })),
-                builder: (context, future) => future.connectionState ==
-                        ConnectionState.waiting
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: 80,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    '사용법 페이지 불러오는중...',
-                                    style: NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: TextColor(),
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTitleTextsize(),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      )
-                    : SizedBox(
-                        height: 150,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
+        child: FutureBuilder(
+            future: firestore
+                .collection("EventNoticeDataBase")
+                .where('eventpage', isEqualTo: 'home')
+                .get()
+                .then(((QuerySnapshot querySnapshot) => {
+                      eventtitle.clear(),
+                      querySnapshot.docs.forEach((doc) {
+                        eventtitle.add(doc.get('eventname'));
+                        eventurl.add(Uri.parse(doc.get('url')));
+                      }),
+                    })),
+            builder: (context, future) => future.connectionState ==
+                    ConnectionState.waiting
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 80,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Flexible(
-                                fit: FlexFit.tight,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemCount: eventtitle.length,
-                                    itemBuilder: ((context, index) {
-                                      return Row(
-                                        children: [
-                                          Container(
-                                              padding: const EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.rectangle,
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                color: Colors.amber,
-                                              ),
-                                              child: SizedBox(
-                                                height: 150,
-                                                width: 130,
-                                                child: GestureDetector(
-                                                  onTap: () async {
-                                                    launchUrl(eventurl[index]);
-                                                  },
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: SizedBox(
-                                                          height: 30,
-                                                          width: 30,
-                                                          child: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              child:
-                                                                  const CircleAvatar(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .transparent,
-                                                                child: Icon(
-                                                                  Icons
-                                                                      .bubble_chart,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              )),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Text(
-                                                          eventtitle[index]
-                                                              .toString(),
-                                                          maxLines: 3,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 18),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                        ],
-                                      );
-                                    }))),
+                            Center(
+                              child: NeumorphicText(
+                                '사용법 페이지 불러오는중...',
+                                style: NeumorphicStyle(
+                                  shape: NeumorphicShape.flat,
+                                  depth: 3,
+                                  color: TextColor(),
+                                ),
+                                textStyle: NeumorphicTextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize(),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
                           ],
                         ),
-                      ))
-            : FutureBuilder(
-                future: firestore
-                    .collection("EventNoticeDataBase")
-                    .where('eventpage', isEqualTo: 'home')
-                    .get()
-                    .then(((QuerySnapshot querySnapshot) => {
-                          eventtitle.clear(),
-                          querySnapshot.docs.forEach((doc) {
-                            eventtitle.add(doc.get('eventname'));
-                            eventurl.add(Uri.parse(doc.get('url')));
-                          }),
-                        })),
-                builder: (context, future) => future.connectionState ==
-                        ConnectionState.waiting
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: 80,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: NeumorphicText(
-                                    '사용법 페이지 불러오는중...',
-                                    style: NeumorphicStyle(
-                                      shape: NeumorphicShape.flat,
-                                      depth: 3,
-                                      color: TextColor(),
-                                    ),
-                                    textStyle: NeumorphicTextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTitleTextsize(),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
                       )
-                    : SizedBox(
-                        height: 150,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                                fit: FlexFit.tight,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemCount: eventtitle.length,
-                                    itemBuilder: ((context, index) {
-                                      return Row(
-                                        children: [
-                                          Container(
-                                              padding: const EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.rectangle,
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                color: Colors.amber,
-                                              ),
-                                              child: SizedBox(
-                                                height: 150,
-                                                width: 130,
-                                                child: GestureDetector(
-                                                  onTap: () async {
-                                                    launchUrl(eventurl[index]);
-                                                  },
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: SizedBox(
-                                                          height: 30,
-                                                          width: 30,
-                                                          child: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              child:
-                                                                  const CircleAvatar(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .transparent,
-                                                                child: Icon(
-                                                                  Icons
-                                                                      .bubble_chart,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              )),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Text(
-                                                          eventtitle[index]
-                                                              .toString(),
-                                                          maxLines: 3,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 18),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )),
-                                          const SizedBox(
-                                            width: 20,
+                    ],
+                  )
+                : SizedBox(
+                    height: 150,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: eventtitle.length,
+                                itemBuilder: ((context, index) {
+                                  return Row(
+                                    children: [
+                                      Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: Colors.amber,
                                           ),
-                                        ],
-                                      );
-                                    }))),
-                          ],
-                        ),
-                      )));
+                                          child: SizedBox(
+                                            height: 150,
+                                            width: 130,
+                                            child: GestureDetector(
+                                              onTap: () async {
+                                                launchUrl(eventurl[index]);
+                                              },
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: SizedBox(
+                                                      height: 30,
+                                                      width: 30,
+                                                      child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child:
+                                                              const CircleAvatar(
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            child: Icon(
+                                                              Icons
+                                                                  .bubble_chart,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          )),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      eventtitle[index]
+                                                          .toString(),
+                                                      maxLines: 3,
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                    ],
+                                  );
+                                }))),
+                      ],
+                    ),
+                  )));
   }
 }
